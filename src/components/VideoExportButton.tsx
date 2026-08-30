@@ -25,11 +25,13 @@ export default function VideoExportButton({ videoUrl, cues, narrationText }: Pro
   const [status, setStatus] = useState<Status>("idle");
   const [progress, setProgress] = useState(0);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const objectUrlRef = useRef<string | null>(null);
 
   async function handleExport() {
     setStatus("fetchingAudio");
     setProgress(0);
+    setErrorMessage(null);
 
     try {
       const res = await fetch("/api/tts", {
@@ -58,6 +60,7 @@ export default function VideoExportButton({ videoUrl, cues, narrationText }: Pro
       setStatus("done");
     } catch (err) {
       console.error("Video export failed:", err);
+      setErrorMessage(err instanceof Error ? err.message : String(err));
       setStatus("error");
     }
   }
@@ -82,9 +85,14 @@ export default function VideoExportButton({ videoUrl, cues, narrationText }: Pro
           : t("generator.result.exportStart");
 
   return (
-    <button type="button" className="btn-secondary btn btn-sm" onClick={handleExport} disabled={isBusy} style={{ alignSelf: "flex-start" }}>
-      <Icon name={isBusy ? "sparkles" : "upload"} size={14} />
-      {label}
-    </button>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6 }}>
+      <button type="button" className="btn-secondary btn btn-sm" onClick={handleExport} disabled={isBusy}>
+        <Icon name={isBusy ? "sparkles" : "upload"} size={14} />
+        {label}
+      </button>
+      {status === "error" && errorMessage && (
+        <p style={{ fontSize: 12, color: "var(--danger)" }}>{errorMessage}</p>
+      )}
+    </div>
   );
 }
