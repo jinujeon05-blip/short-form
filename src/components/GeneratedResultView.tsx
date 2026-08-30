@@ -3,6 +3,7 @@ import type { GeneratedResult } from "../types";
 import Icon from "./ui/Icon";
 import VideoWithSubtitles from "./VideoWithSubtitles";
 import NarrationPreviewButton from "./NarrationPreviewButton";
+import VideoExportButton from "./VideoExportButton";
 
 interface Props {
   result: GeneratedResult;
@@ -75,7 +76,14 @@ export default function GeneratedResultView({ result, onSave, saved }: Props) {
           {result.subtitleGuide.styleNote}
         </p>
         {result.input.sourceVideo && (
-          <p style={{ marginTop: 10, fontSize: 12, color: "var(--sub)" }}>{t("generator.result.bakeNote")}</p>
+          <div style={{ marginTop: 14 }}>
+            <VideoExportButton
+              videoUrl={result.input.sourceVideo.url}
+              cues={result.subtitleGuide.cues}
+              narrationText={`${result.narrationScript.hook} ${result.narrationScript.body}`}
+            />
+            <p style={{ marginTop: 8, fontSize: 12, color: "var(--sub)" }}>{t("generator.result.exportNote")}</p>
+          </div>
         )}
       </section>
 
