@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useHistory } from "../context/HistoryContext";
 import { PLATFORM_LABELS } from "../data/mockResults";
+import { EXAMPLES } from "../data/examples";
 import { generateContent } from "../lib/api";
 import type { GeneratedResult, GeneratorInput, Platform } from "../types";
 import Icon from "../components/ui/Icon";
@@ -27,9 +28,20 @@ export default function GeneratorPage() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const exampleIndexRef = useRef(0);
 
   function update<K extends keyof GeneratorInput>(key: K, value: GeneratorInput[K]) {
     setInput((prev) => ({ ...prev, [key]: value }));
+    setSaved(false);
+  }
+
+  function handleFillExample() {
+    const examples = EXAMPLES[language];
+    const example = examples[exampleIndexRef.current % examples.length];
+    exampleIndexRef.current += 1;
+    setInput((prev) => ({ ...prev, ...example }));
+    setError(false);
+    setApiError(null);
     setSaved(false);
   }
 
@@ -84,7 +96,13 @@ export default function GeneratorPage() {
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 20px 64px" }}>
       <h1 style={{ fontSize: 26 }}>{t("generator.title")}</h1>
-      <p style={{ color: "var(--sub)", marginTop: 8, marginBottom: 28 }}>{t("generator.subtitle")}</p>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginTop: 8, marginBottom: 28 }}>
+        <p style={{ color: "var(--sub)" }}>{t("generator.subtitle")}</p>
+        <button type="button" className="btn-secondary btn-sm" onClick={handleFillExample} style={{ flexShrink: 0 }}>
+          <Icon name="sparkles" size={14} />
+          {t("generator.fillExample")}
+        </button>
+      </div>
 
       <form onSubmit={handleSubmit} className="card" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <Field icon="video" label={t("generator.form.sourceInfo")}>

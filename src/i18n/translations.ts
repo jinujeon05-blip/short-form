@@ -8,6 +8,7 @@ export const translations: Record<Language, Record<string, string>> = {
 
     "generator.title": "숏폼 제품 영상 리퍼포징",
     "generator.subtitle": "원본 영상 정보를 입력하면 새로운 나레이션 대본과 자막 가이드를 만들어드려요",
+    "generator.fillExample": "예시로 채우기",
     "generator.form.sourceInfo": "원본 영상 링크 또는 주요 특징 요약",
     "generator.form.sourceInfoPlaceholder": "예: 무선 목걸이 선풍기 언박싱 영상, 또는 영상 URL",
     "generator.form.platform": "타겟 플랫폼",
@@ -69,6 +70,7 @@ export const translations: Record<Language, Record<string, string>> = {
 
     "generator.title": "Short-form Product Video Repurposing",
     "generator.subtitle": "Enter your source video info to get a fresh narration script and subtitle guide",
+    "generator.fillExample": "Fill with example",
     "generator.form.sourceInfo": "Source video link or key features",
     "generator.form.sourceInfoPlaceholder": "e.g. Unboxing video of a wireless neck fan, or a video URL",
     "generator.form.platform": "Target platform",
@@ -130,6 +132,7 @@ export const translations: Record<Language, Record<string, string>> = {
 
     "generator.title": "Tái Chế Video Sản Phẩm Dạng Ngắn",
     "generator.subtitle": "Nhập thông tin video gốc để nhận kịch bản lồng tiếng và hướng dẫn phụ đề mới",
+    "generator.fillExample": "Điền ví dụ mẫu",
     "generator.form.sourceInfo": "Liên kết video gốc hoặc tóm tắt đặc điểm chính",
     "generator.form.sourceInfoPlaceholder": "VD: Video mở hộp quạt mini đeo cổ không dây, hoặc URL video",
     "generator.form.platform": "Nền tảng mục tiêu",
