@@ -1,38 +1,59 @@
 import { useEffect, useRef, useState } from "react";
-import type { CSSProperties } from "react";
 import type { SubtitleCue } from "../types";
 import { timestampToSeconds } from "../utils/time";
+import { drawBrandedHeader, drawCaptionBar, headerSafeTopHeight, loadCaptionFont, loadHeaderFont } from "../lib/brandedHeader";
+import Icon from "./ui/Icon";
 
 interface Props {
   src: string;
   cues: SubtitleCue[];
+  channel: string;
+  headline: string;
+  views?: string;
+  comments?: string;
 }
 
-function positionStyle(position: string): CSSProperties {
-  const base: CSSProperties = {
-    position: "absolute",
-    left: "50%",
-    transform: "translateX(-50%)",
-    maxWidth: "88%",
-    textAlign: "center",
-    padding: "5px 12px",
-    borderRadius: 6,
-    fontWeight: 700,
-    fontSize: 14,
-    lineHeight: 1.3,
-  };
-  if (position.includes("상단") || position.toLowerCase().includes("top")) {
-    return { ...base, top: 16, background: "rgba(255,255,255,0.95)", color: "#191F28" };
-  }
-  if (position.includes("하단") || position.toLowerCase().includes("bottom")) {
-    return { ...base, bottom: 16, background: "var(--primary)", color: "#fff" };
-  }
-  return { ...base, top: "50%", transform: "translate(-50%, -50%)", background: "rgba(0,0,0,0.6)", color: "#fff" };
-}
+const PREVIEW_WIDTH = 260;
+// 파란 헤더 맨 위 "빈 안전 여백"과 정확히 같은 높이 — 플랫폼 자체 내비게이션(검색창 등)은
+// 별도 공간을 차지하는 게 아니라 이 여백 위에 그대로 겹쳐진다(실제 게시 화면 스크린샷으로
+// 확인됨: 검색바가 파란 헤더를 밀어내리지 않고 그 위에 얹힌다).
+const SAFE_TOP_H = headerSafeTopHeight(PREVIEW_WIDTH);
 
-export default function VideoWithSubtitles({ src, cues }: Props) {
+export default function VideoWithSubtitles({ src, cues, channel, headline, views, comments }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const headerCanvasRef = useRef<HTMLCanvasElement>(null);
+  const captionCanvasRef = useRef<HTMLCanvasElement>(null);
   const [activeCue, setActiveCue] = useState<SubtitleCue | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadHeaderFont().then(() => {
+      if (cancelled) return;
+      const canvas = headerCanvasRef.current;
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      drawBrandedHeader(canvas, { width: PREVIEW_WIDTH * dpr, channel, headline, views, comments });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [channel, headline, views, comments]);
+
+  // 헤더 바로 아래 고정 자막바 — shorts_template.py와 동일하게 흰 배경에 노란 글씨(검은
+  // 테두리)로 현재 구간의 자막을 보여준다. 자막이 없는 순간에는 빈 흰 바만 보임.
+  useEffect(() => {
+    let cancelled = false;
+    loadCaptionFont().then(() => {
+      if (cancelled) return;
+      const canvas = captionCanvasRef.current;
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      drawCaptionBar(canvas, PREVIEW_WIDTH * dpr, activeCue?.text ?? "");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [activeCue]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -62,16 +83,135 @@ export default function VideoWithSubtitles({ src, cues }: Props) {
   return (
     <div
       style={{
-        position: "relative",
-        borderRadius: 12,
-        overflow: "hidden",
-        background: "#000",
         maxWidth: 260,
         margin: "0 auto 16px",
+        borderRadius: 20,
+        overflow: "hidden",
+        background: "#000",
+        color: "#fff",
+        fontFamily: "sans-serif",
       }}
     >
-      <video ref={videoRef} src={src} controls style={{ display: "block", width: "100%", maxHeight: 460 }} />
-      {activeCue && <span style={positionStyle(activeCue.position)}>{activeCue.text}</span>}
+      <div style={{ position: "relative" }}>
+        <canvas ref={headerCanvasRef} style={{ display: "block", width: "100%", height: "auto" }} />
+        <canvas ref={captionCanvasRef} style={{ display: "block", width: "100%", height: "auto" }} />
+        <video ref={videoRef} src={src} controls style={{ display: "block", width: "100%", maxHeight: 460 }} />
+
+        {/* 실제 틱톡 상단바 — 플랫폼 자체 UI는 파란 헤더 맨 위의 빈 안전 여백 위에 그대로
+            얹힌다(별도 공간을 차지하지 않음). 틱톡은 중앙에 팔로잉/추천 탭, 우측에 검색만
+            있고 LIVE 뱃지·햄버거 메뉴는 없다. */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: SAFE_TOP_H,
+            display: "flex",
+            alignItems: "center",
+            padding: "0 8px",
+            overflow: "hidden",
+            zIndex: 2,
+          }}
+        >
+          <div style={{ flex: 1 }} />
+          <div style={{ display: "flex", gap: 8, fontSize: 7, lineHeight: 1, whiteSpace: "nowrap", opacity: 0.85 }}>
+            <span>팔로잉</span>
+            <span style={{ fontWeight: 700, color: "#fff", opacity: 1, borderBottom: "1px solid #fff", paddingBottom: 1 }}>추천</span>
+          </div>
+          <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+            <Icon name="search" size={9} />
+          </div>
+        </div>
+
+        {/* 우측 참여(좋아요/댓글/저장/공유) 아이콘 컬럼 — 실제 앱에서 영상 위에 겹쳐 표시된다 */}
+        <div
+          style={{
+            position: "absolute",
+            right: 8,
+            bottom: 58,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 14,
+            textShadow: "0 1px 3px rgba(0,0,0,0.6)",
+          }}
+        >
+          <div
+            style={{
+              width: 30,
+              height: 30,
+              borderRadius: "50%",
+              background: "#333",
+              border: "2px solid #fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 12,
+              fontWeight: 700,
+            }}
+          >
+            {channel.trim().charAt(0) || "?"}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+            <Icon name="heart" size={24} />
+            <span style={{ fontSize: 10 }}>{comments || "0"}</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+            <Icon name="message" size={22} />
+            <span style={{ fontSize: 10 }}>{views || "0"}</span>
+          </div>
+          <Icon name="bookmark" size={22} />
+          <Icon name="share" size={22} />
+        </div>
+
+        {/* 좌측 하단 채널명 표시줄 — 실제 앱이 자체적으로 깔아주는 텍스트 영역이다 */}
+        <div
+          style={{
+            position: "absolute",
+            left: 10,
+            right: 56,
+            bottom: 8,
+            fontSize: 11,
+            fontWeight: 700,
+            textShadow: "0 1px 3px rgba(0,0,0,0.6)",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          @{channel || "channel"}
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          padding: "8px 0",
+          borderTop: "1px solid #222",
+        }}
+      >
+        <Icon name="home" size={18} />
+        <Icon name="users" size={18} />
+        <div
+          style={{
+            width: 26,
+            height: 20,
+            borderRadius: 6,
+            background: "#fff",
+            color: "#000",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Icon name="plus" size={14} />
+        </div>
+        <Icon name="message" size={18} />
+        <Icon name="user" size={18} />
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
+import { useEffect, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
-import type { GeneratedResult } from "../types";
+import type { GeneratedResult, SubtitleCue } from "../types";
 import Icon from "./ui/Icon";
 import VideoWithSubtitles from "./VideoWithSubtitles";
 import NarrationPreviewButton from "./NarrationPreviewButton";
@@ -13,6 +14,18 @@ interface Props {
 
 export default function GeneratedResultView({ result, onSave, saved }: Props) {
   const { t } = useLanguage();
+
+  // 자동 생성된 자막에 오타가 있을 수 있어서 직접 고칠 수 있게 로컬 편집 상태로 들고
+  // 있는다 — 미리보기와 내보내기 둘 다 이 편집된 값을 사용한다. 새로 생성하거나 이력에서
+  // 다른 결과를 열면(result.id가 바뀌면) 편집 상태를 그 결과의 원본 자막으로 초기화한다.
+  const [cues, setCues] = useState<SubtitleCue[]>(result.subtitleGuide.cues);
+  useEffect(() => {
+    setCues(result.subtitleGuide.cues);
+  }, [result.id, result.subtitleGuide.cues]);
+
+  function updateCueText(index: number, text: string) {
+    setCues((prev) => prev.map((cue, i) => (i === index ? { ...cue, text } : cue)));
+  }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -49,10 +62,18 @@ export default function GeneratedResultView({ result, onSave, saved }: Props) {
       <section className="card">
         <h2 style={{ fontSize: 17, marginBottom: 14 }}>{t("generator.result.subtitleTitle")}</h2>
         {result.input.sourceVideo && (
-          <VideoWithSubtitles src={result.input.sourceVideo.url} cues={result.subtitleGuide.cues} />
+          <VideoWithSubtitles
+            src={result.input.sourceVideo.url}
+            cues={cues}
+            channel={result.input.channel}
+            headline={result.input.headline}
+            views={result.input.views}
+            comments={result.input.comments}
+          />
         )}
+        <p style={{ fontSize: 12, color: "var(--sub)", marginBottom: 8 }}>{t("generator.result.cuesEditHint")}</p>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {result.subtitleGuide.cues.map((cue, i) => (
+          {cues.map((cue, i) => (
             <div
               key={i}
               style={{
@@ -66,7 +87,12 @@ export default function GeneratedResultView({ result, onSave, saved }: Props) {
               }}
             >
               <span style={{ color: "var(--sub)" }}>{cue.timestamp}</span>
-              <span style={{ fontWeight: 600 }}>{cue.text}</span>
+              <input
+                className="input"
+                style={{ fontWeight: 600, padding: "6px 10px", fontSize: 13 }}
+                value={cue.text}
+                onChange={(e) => updateCueText(i, e.target.value)}
+              />
               <span className="badge">{cue.position}</span>
             </div>
           ))}
@@ -79,10 +105,22 @@ export default function GeneratedResultView({ result, onSave, saved }: Props) {
           <div style={{ marginTop: 14 }}>
             <VideoExportButton
               videoUrl={result.input.sourceVideo.url}
-              cues={result.subtitleGuide.cues}
+              videoDurationSeconds={result.input.sourceVideo.durationSeconds}
+              cues={cues}
               narrationText={`${result.narrationScript.hook} ${result.narrationScript.body}`}
+              bgmUrl={result.bgm?.url}
+              channel={result.input.channel}
+              headline={result.input.headline}
+              views={result.input.views}
+              comments={result.input.comments}
             />
             <p style={{ marginTop: 8, fontSize: 12, color: "var(--sub)" }}>{t("generator.result.exportNote")}</p>
+            {result.bgm && (
+              <p style={{ marginTop: 4, fontSize: 12, color: "var(--sub)", display: "flex", alignItems: "center", gap: 4 }}>
+                <Icon name="volume" size={12} />
+                {t("generator.result.bgmAuto")}: {result.bgm.name}
+              </p>
+            )}
           </div>
         )}
       </section>

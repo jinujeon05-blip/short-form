@@ -3,9 +3,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
-import { GeneratedContentSchema } from "./generateSchema.js";
+import { GeneratedContentSchema, VideoAnalysisSchema } from "./generateSchema.js";
 import { pcmToWav, parseL16MimeType } from "./audio.js";
-import { listHistory, insertHistory } from "./db.js";
+import { listHistory, insertHistory, listKeywords, addKeyword, deleteKeyword } from "./db.js";
+import { pickBgm, bgmDir } from "./bgm.js";
+import { VideoSearchError, isVideoSearchPlatform, listVideoSearchPlatforms, searchVideos } from "./videoSearch.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isProd = process.env.NODE_ENV === "production";
@@ -25,8 +27,10 @@ const LANGUAGE_NAMES = {
 
 const SYSTEM_PROMPT = `너는 이커머스 마케팅 전문 영상 프로듀서이자 숏폼 콘텐츠 기획자야. 제공되는 제품 영상 정보를 분석해서, 플랫폼 알고리즘의 중복 콘텐츠 감지를 피하는 독창적인 리유즈 숏폼 영상의 시나리오, 나레이션 대본, 자막 가이드를 작성해.
 
-1. 영상 구조 분석: 영상을 훅(Hook)/문제 제기/제품 시연/CTA 4개 구간으로 나누고 각각 초 단위 타임코드(mm:ss - mm:ss)와 설명을 작성해. 전체 길이는 30초 내외로 가정하고, 원본 순서를 비틀어 재배치하는 재구성 가이드를 제시해.
+1. 영상 구조 분석: 영상을 훅(Hook)/문제 제기/제품 시연/CTA 4개 구간으로 나누고 각각 초 단위 타임코드(mm:ss - mm:ss)와 설명을 작성해. 입력에 "영상 전체 길이"가 주어지면 반드시 그 길이를 그대로 따르고(마지막 구간의 종료 타임코드가 그 길이와 정확히 일치해야 해), 주어지지 않으면 30초 내외로 가정해. 원본 순서를 비틀어 재배치하는 재구성 가이드를 제시해.
 2. 나레이션 스크립트: 처음 3초 안에 이탈을 막는 강력한 훅 문구와, 기능 나열이 아닌 고객의 불편함(Pain Point)을 해소하는 스토리텔링 구조의 구어체 본문 대본을 작성해.
+   - 본문 대본의 마지막 문장은 반드시 입력된 "댓글 유도 키워드"를 그대로 넣어서 댓글을 남기도록 유도하는 CTA로 끝나야 해(예: "댓글에 '키워드' 남겨주세요!"). 정확한 표현은 자연스럽게 바꿔도 되지만 키워드 단어 자체는 그대로 포함해야 해.
+   - 대본 전체 분량은 소리 내어 자연스러운 속도로 읽었을 때 "영상 전체 길이" 안에 끝나야 해(언어별 자연스러운 발화 속도 기준, 한국어는 대략 초당 4~5음절). 너무 길게 써서 영상보다 나레이션이 오래 걸리면 안 돼.
    - 실제 사람이 친구에게 편하게 말하듯 자연스러운 구어체로 써. 문어체 표현, 억지로 압축한 신조어, 문법이 꼬여서 뜻이 헷갈리는 문장(예: "누워서 태블릿 보다 얼굴로 들이받으세요?" 같은 모호한 구조)은 피해.
    - 소리 내어 읽었을 때 자연스럽게 들리는지 스스로 검토한 뒤 작성해. 한 문장은 짧고 명확하게, 주어-목적어-서술어 관계가 분명하게 써.
    - 호흡이나 톤 변화가 필요한 지점은 괄호 안에 지시문이 아니라 실제로 소리 내어 읽을 수 있는 짧은 감탄사·구어체 표현으로 넣어(예: "(어우)", "(진짜)") — "(강조)", "(한 박자 쉬고)" 같은 메타 지시문은 쓰지 마, TTS가 그대로 읽어버려.
@@ -37,15 +41,50 @@ const SYSTEM_PROMPT = `너는 이커머스 마케팅 전문 영상 프로듀서�
 
 모든 텍스트(structureAnalysis, narrationScript, subtitleGuide, actionPlan 전부)는 사용자가 지정한 출력 언어로 작성해. 그 언어를 쓰는 사람이 실제로 말하듯 자연스러운 구어체를 쓰고, 다른 언어를 직역한 듯한 어색한 표현은 피해.`;
 
+// Gemini SDK 에러의 err.message는 종종 {"error":{"code":503,...}} 같은 원본 JSON 문자열 그대로라서,
+// 그걸 그대로 사용자에게 보여주면 화면에 JSON이 그대로 노출됨 — 상태 코드별로 친절한 문구로 변환해서 응답
+function friendlyGeminiError(err, contextLabel) {
+  const status = err?.status;
+  if (status === 401 || status === 403) {
+    return { httpStatus: 500, message: "서버에 GEMINI_API_KEY가 올바르게 설정되지 않았어요." };
+  }
+  if (status === 429) {
+    return { httpStatus: 429, message: "요청이 몰려서 잠시 후 다시 시도해주세요." };
+  }
+  if (status === 503) {
+    return { httpStatus: 503, message: "AI 모델이 지금 요청이 많아 잠시 사용할 수 없어요. 잠시 후 다시 시도해주세요." };
+  }
+  if (status) {
+    return { httpStatus: 502, message: `${contextLabel} 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.` };
+  }
+  return { httpStatus: 500, message: "알 수 없는 오류가 발생했어요." };
+}
+
 const ai = new GoogleGenAI({});
 const responseJsonSchema = z.toJSONSchema(GeneratedContentSchema);
+const videoAnalysisJsonSchema = z.toJSONSchema(VideoAnalysisSchema);
 
+// 영상 파일을 base64로 인라인 전송하므로 기본 100kb 제한보다 넉넉하게 잡음(아래 MAX_VIDEO_BYTES
+// 참고) — base64 인코딩 자체가 원본보다 약 4/3배 부풀고 JSON 오버헤드도 붙으므로, 18MB 체크가
+// 실제로 걸리기 전에 이 한도에 먼저 막히지 않도록 여유를 넉넉히 둠(18MB * 4/3 ≈ 24MB)
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "30mb" }));
+// 로컬 BGM 폴더를 그대로 정적 서빙 — 내보내기(videoExport.ts)가 fetch로 받아서 ffmpeg.wasm에 넘김
+app.use("/bgm-files", express.static(bgmDir()));
+
+const COMMENT_CTA_FALLBACK = {
+  ko: (keyword) => `댓글에 "${keyword}" 남겨주세요!`,
+  en: (keyword) => `Drop a comment with "${keyword}"!`,
+  vi: (keyword) => `Để lại bình luận "${keyword}" nhé!`,
+};
 
 app.post("/api/generate", async (req, res) => {
-  const { sourceInfo, platform, targetAudience, sellingPoint, language } = req.body ?? {};
+  const { sourceInfo, platform, targetAudience, sellingPoint, commentKeyword, language, videoDurationSeconds } = req.body ?? {};
   const languageName = LANGUAGE_NAMES[language] ?? LANGUAGE_NAMES.ko;
+  const durationLine =
+    typeof videoDurationSeconds === "number" && Number.isFinite(videoDurationSeconds) && videoDurationSeconds > 0
+      ? `영상 전체 길이: ${Math.round(videoDurationSeconds)}초\n`
+      : "";
 
   if (
     typeof sourceInfo !== "string" ||
@@ -53,7 +92,9 @@ app.post("/api/generate", async (req, res) => {
     typeof targetAudience !== "string" ||
     !targetAudience.trim() ||
     typeof sellingPoint !== "string" ||
-    !sellingPoint.trim()
+    !sellingPoint.trim() ||
+    typeof commentKeyword !== "string" ||
+    !commentKeyword.trim()
   ) {
     res.status(400).json({ error: "필수 입력값이 누락됐어요." });
     return;
@@ -70,10 +111,11 @@ app.post("/api/generate", async (req, res) => {
     const response = await ai.models.generateContent({
       model: "gemini-3.6-flash",
       contents: `출력 언어: ${languageName}
-원본 영상 링크 또는 주요 특징 요약: ${sourceInfo}
+${durationLine}원본 영상 링크 또는 주요 특징 요약: ${sourceInfo}
 타겟 플랫폼: ${PLATFORM_LABELS[platform] ?? platform}
 주요 타겟층: ${targetAudience}
-핵심 소구점: ${sellingPoint}`,
+핵심 소구점: ${sellingPoint}
+댓글 유도 키워드: ${commentKeyword}`,
       config: {
         systemInstruction: SYSTEM_PROMPT,
         responseMimeType: "application/json",
@@ -95,21 +137,136 @@ app.post("/api/generate", async (req, res) => {
       return;
     }
 
+    // AI가 지시를 안 따라서 댓글 유도 문구를 빼먹는 경우에 대비해, 키워드가 실제로 안 들어가 있으면
+    // 항상 붙여줌(음성 멘트에 반드시 나와야 하는 요구사항이라 프롬프트만 믿을 수 없음)
+    if (!parsed.narrationScript.body.toLowerCase().includes(commentKeyword.trim().toLowerCase())) {
+      const cta = (COMMENT_CTA_FALLBACK[language] ?? COMMENT_CTA_FALLBACK.ko)(commentKeyword.trim());
+      parsed.narrationScript.body = `${parsed.narrationScript.body} ${cta}`;
+    }
+
+    // 배경음악 자동 선택 — 나레이션 훅+소구점의 분위기에 맞는 곡을 로컬 폴더에서 고른다.
+    // AI 응답 스키마(GeneratedContentSchema) 검증이 끝난 뒤에 붙이는 부가 필드라 스키마를
+    // 따로 손댈 필요는 없음(zod로 다시 파싱하지 않고 그대로 JSON 응답에 실어 보냄).
+    const bgmFile = pickBgm(`${parsed.narrationScript.hook} ${sellingPoint}`);
+    if (bgmFile) {
+      parsed.bgm = { url: `/bgm-files/${encodeURIComponent(bgmFile)}`, name: bgmFile };
+    }
+
     res.json(parsed);
   } catch (err) {
     console.error("Gemini API error:", err);
-    const status = err?.status;
-    if (status === 401 || status === 403) {
-      res.status(500).json({ error: "서버에 GEMINI_API_KEY가 올바르게 설정되지 않았어요." });
-    } else if (status === 429) {
-      res.status(429).json({ error: "요청이 몰려서 잠시 후 다시 시도해주세요." });
-    } else if (status) {
-      res.status(502).json({ error: `AI 생성 중 오류가 발생했어요: ${err.message}` });
-    } else {
-      res.status(500).json({ error: "알 수 없는 오류가 발생했어요." });
-    }
+    const { httpStatus, message } = friendlyGeminiError(err, "AI 생성");
+    res.status(httpStatus).json({ error: message });
   }
 });
+
+const MAX_VIDEO_BYTES = 18 * 1024 * 1024; // Gemini 인라인 데이터 권장 상한(20MB) 대비 여유
+
+app.post("/api/analyze-video", async (req, res) => {
+  const { data, mimeType, language } = req.body ?? {};
+  const languageName = LANGUAGE_NAMES[language] ?? LANGUAGE_NAMES.ko;
+
+  if (typeof data !== "string" || !data.trim() || typeof mimeType !== "string" || !mimeType.startsWith("video/")) {
+    res.status(400).json({ error: "분석할 영상 데이터가 없어요." });
+    return;
+  }
+
+  const approxBytes = (data.length * 3) / 4;
+  if (approxBytes > MAX_VIDEO_BYTES) {
+    res.status(413).json({ error: "영상 파일이 너무 커요. 18MB 이하 영상으로 시도해주세요." });
+    return;
+  }
+
+  if (!process.env.GEMINI_API_KEY) {
+    res.status(500).json({
+      error: "서버에 GEMINI_API_KEY가 설정돼 있지 않아요. .env 파일에 키를 추가한 뒤 서버를 다시 시작해주세요.",
+    });
+    return;
+  }
+
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: [
+        {
+          text: `너는 이커머스 숏폼 마케팅 영상 분석가야. 업로드된 영상을 보고 두 가지를 작성해.
+1. "원본 영상 정보" 요약(1~3문장): 어떤 제품인지, 영상이 어떤 장면들로 구성돼 있는지(예: 언박싱, 기능 시연, 사용 장면 등), 특징적으로 보이는 포인트를 담아.
+2. "핵심 소구점"(한 문장): 영상에서 드러나는 제품의 가장 매력적인 특징이나 장점을 구매 욕구를 자극하는 문구로 작성해(예: "손 안 대고 목에 걸기만 하면 끝"). 판매 링크나 URL이 아니라 실제 소구점 문구여야 해.
+둘 다 자연스러운 서술형 문장으로 쓰고, 출력 언어는 ${languageName}로 작성해.`,
+        },
+        { inlineData: { data, mimeType } },
+      ],
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: videoAnalysisJsonSchema,
+      },
+    });
+
+    if (!response.text) {
+      res.status(502).json({ error: "AI 응답을 해석하지 못했어요. 다시 시도해주세요." });
+      return;
+    }
+
+    let parsed;
+    try {
+      parsed = VideoAnalysisSchema.parse(JSON.parse(response.text));
+    } catch (parseErr) {
+      console.error("Gemini video analysis parse/validation error:", parseErr);
+      res.status(502).json({ error: "AI 응답 형식이 올바르지 않아요. 다시 시도해주세요." });
+      return;
+    }
+
+    res.json(parsed);
+  } catch (err) {
+    console.error("Gemini video analysis error:", err);
+    const { httpStatus, message } = friendlyGeminiError(err, "영상 분석");
+    res.status(httpStatus).json({ error: message });
+  }
+});
+
+// Gemini TTS는 목소리별 세부 톤(피치·감정)을 별도 파라미터로 조절하는 게 아니라, 입력 텍스트 앞에 자연어
+// 지시문("Say in a ... tone: ")을 붙이는 방식으로 스티어링함(공식 문서 패턴) — 이 지시문은 실제로 소리 내어
+// 읽히지 않고 스타일 지시로만 반영되는 것을 받아쓰기 테스트로 확인함. src/data/voices.ts의 한글 톤 설명과
+// 짝을 맞춰서, 목소리를 고를 때 설명한 그 톤에 실제로 더 가깝게 들리도록 함(예: Leda="젊고 발랄한 톤" 선택 시
+// 기본보다 더 젊고 높은 피치로 들림 — 사용자가 Google AI Studio에서 확인한 것과 동일한 효과)
+const VOICE_STYLE_HINTS = {
+  Zephyr: "bright",
+  Puck: "upbeat and playful",
+  Charon: "informative",
+  Kore: "firm and confident",
+  Fenrir: "excitable and energetic",
+  Leda: "youthful, lively, higher-pitched",
+  Orus: "firm",
+  Aoede: "breezy and fresh",
+  Callirrhoe: "easy-going",
+  Autonoe: "bright",
+  Enceladus: "breathy",
+  Iapetus: "clear",
+  Umbriel: "easy-going",
+  Algieba: "smooth",
+  Despina: "smooth",
+  Erinome: "clear",
+  Algenib: "gravelly",
+  Rasalgethi: "informative",
+  Laomedeia: "upbeat",
+  Achernar: "calm and soft",
+  Alnilam: "firm",
+  Schedar: "even and steady",
+  Gacrux: "mature",
+  Pulcherrima: "assertive",
+  Achird: "friendly",
+  Zubenelgenubi: "casual",
+  Vindemiatrix: "gentle and warm",
+  Sadachbia: "lively",
+  Sadaltager: "knowledgeable and professional",
+  Sulafat: "warm",
+};
+
+// Gemini에는 목소리별로 "더 어린 버전"이 따로 있는 게 아니라서, 같은 기반 목소리에 훨씬 강한 스타일 지시문을
+// 얹어서 흉내냄. 프론트에서 "Leda::young"처럼 "기반목소리::변형" 형태로 넘어오면 여기서 분리해서 처리함
+const VOICE_STYLE_VARIANTS = {
+  "Leda::young": "a very young teenage girl, bright, high-pitched, playful, bubbly",
+};
 
 app.post("/api/tts", async (req, res) => {
   const { text, voice } = req.body ?? {};
@@ -118,7 +275,11 @@ app.post("/api/tts", async (req, res) => {
     res.status(400).json({ error: "읽을 텍스트가 없어요." });
     return;
   }
-  const voiceName = typeof voice === "string" && voice.trim() ? voice : "Kore";
+  const requestedVoice = typeof voice === "string" && voice.trim() ? voice : "Kore";
+  const variantHint = VOICE_STYLE_VARIANTS[requestedVoice];
+  const voiceName = variantHint ? requestedVoice.split("::")[0] : requestedVoice;
+  const styleHint = variantHint ?? VOICE_STYLE_HINTS[voiceName];
+  const styledInput = styleHint ? `Say in a ${styleHint} tone at a natural pace: ${text}` : text;
 
   if (!process.env.GEMINI_API_KEY) {
     res.status(500).json({
@@ -130,7 +291,7 @@ app.post("/api/tts", async (req, res) => {
   try {
     const interaction = await ai.interactions.create({
       model: "gemini-3.1-flash-tts-preview",
-      input: text,
+      input: styledInput,
       response_format: { type: "audio" },
       generation_config: {
         speech_config: [{ voice: voiceName }],
@@ -150,16 +311,8 @@ app.post("/api/tts", async (req, res) => {
     res.send(wav);
   } catch (err) {
     console.error("Gemini TTS error:", err);
-    const status = err?.status;
-    if (status === 401 || status === 403) {
-      res.status(500).json({ error: "서버에 GEMINI_API_KEY가 올바르게 설정되지 않았어요." });
-    } else if (status === 429) {
-      res.status(429).json({ error: "요청이 몰려서 잠시 후 다시 시도해주세요." });
-    } else if (status) {
-      res.status(502).json({ error: `음성 생성 중 오류가 발생했어요: ${err.message}` });
-    } else {
-      res.status(500).json({ error: "알 수 없는 오류가 발생했어요." });
-    }
+    const { httpStatus, message } = friendlyGeminiError(err, "음성 생성");
+    res.status(httpStatus).json({ error: message });
   }
 });
 
@@ -186,6 +339,87 @@ app.post("/api/history", (req, res) => {
     console.error("History insert error:", err);
     res.status(500).json({ error: "이력 저장에 실패했어요." });
   }
+});
+
+app.get("/api/video-search/platforms", (_req, res) => {
+  res.json(listVideoSearchPlatforms());
+});
+
+app.get("/api/video-search/:platform", async (req, res) => {
+  const { platform } = req.params;
+  const query = typeof req.query.q === "string" ? req.query.q.trim() : "";
+  if (!isVideoSearchPlatform(platform)) {
+    res.status(404).json({ error: "지원하지 않는 플랫폼이에요." });
+    return;
+  }
+  if (!query) {
+    res.status(400).json({ error: "검색어를 입력해주세요." });
+    return;
+  }
+
+  try {
+    res.json(await searchVideos(platform, query, { shortOnly: req.query.short === "1" }));
+  } catch (err) {
+    if (err instanceof VideoSearchError) {
+      res.status(err.httpStatus).json({ error: err.message });
+      return;
+    }
+    console.error("Video search error:", err);
+    res.status(500).json({ error: "영상 검색 중 알 수 없는 오류가 발생했어요." });
+  }
+});
+
+const MAX_KEYWORD_LENGTH = 50;
+
+app.get("/api/search-keywords/:platform", (req, res) => {
+  const { platform } = req.params;
+  if (!isVideoSearchPlatform(platform)) {
+    res.status(404).json({ error: "지원하지 않는 플랫폼이에요." });
+    return;
+  }
+  res.json(listKeywords(platform));
+});
+
+app.post("/api/search-keywords/:platform", (req, res) => {
+  const { platform } = req.params;
+  const keyword = typeof req.body?.keyword === "string" ? req.body.keyword.trim() : "";
+  if (!isVideoSearchPlatform(platform)) {
+    res.status(404).json({ error: "지원하지 않는 플랫폼이에요." });
+    return;
+  }
+  if (!keyword || keyword.length > MAX_KEYWORD_LENGTH) {
+    res.status(400).json({ error: `검색어는 1~${MAX_KEYWORD_LENGTH}자로 입력해주세요.` });
+    return;
+  }
+  res.status(201).json(addKeyword(platform, keyword));
+});
+
+app.delete("/api/search-keywords/:id", (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || !deleteKeyword(id)) {
+    res.status(404).json({ error: "검색어를 찾을 수 없어요." });
+    return;
+  }
+  res.status(204).end();
+});
+
+// express.json()의 크기 제한(아래 25mb)을 넘는 요청은 라우트 핸들러(analyze-video의
+// 자체 MAX_VIDEO_BYTES 안내 메시지 포함)에 닿기도 전에 body-parser가 먼저 거절해버려서,
+// 프론트에는 JSON이 아닌 응답이 와 "요청이 실패했어요 (413)"라는 의미 없는 메시지만
+// 보였다 — 실제로 18MB짜리 영상도 base64로 부풀면(약 4/3배) + JSON 오버헤드가 겹치면
+// 25mb 한도에 걸릴 수 있었음. 에러 핸들링 미들웨어로 이 경우를 잡아서 무슨 상황인지
+// 알려주는 메시지로 바꿔준다.
+app.use((err, _req, res, next) => {
+  if (err?.type === "entity.too.large" || err?.status === 413) {
+    res.status(413).json({
+      error: "영상 파일이 너무 커요(요청 용량 제한 초과). \"영상 분석해서 채우기\"는 " +
+        "18MB 이하 영상에서만 동작해요 — 더 큰 영상이면 이 버튼은 건너뛰고 " +
+        "\"원본 영상 링크 또는 주요 특징 요약\"과 \"핵심 소구점\"을 직접 입력해주세요 " +
+        "(영상 자체는 대본/자막 생성에 필요 없고, 나중에 내보내기 할 때만 브라우저에서 씁니다).",
+    });
+    return;
+  }
+  next(err);
 });
 
 if (isProd) {

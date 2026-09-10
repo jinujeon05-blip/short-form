@@ -33,3 +33,12 @@ export const GeneratedContentSchema = z.object({
   }),
   actionPlan: z.array(ActionChecklistItemSchema).length(4),
 });
+
+export const VideoAnalysisSchema = z.object({
+  sourceInfo: z
+    .string()
+    .describe("업로드된 영상을 보고 작성한 1~3문장 요약: 어떤 제품인지, 영상이 어떤 장면들로 구성돼 있는지, 특징적인 포인트"),
+  sellingPoint: z
+    .string()
+    .describe("영상에서 드러나는 제품의 핵심 소구점(구매 욕구를 자극하는 특징·장점) 한 문장. 판매 링크나 URL이 아니라 실제 소구점 문구여야 함"),
+});

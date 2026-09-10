@@ -55,6 +55,9 @@ export default function Header() {
           <NavLink to="/history" style={navLinkStyle}>
             {t("nav.history")}
           </NavLink>
+          <NavLink to="/trends" style={navLinkStyle}>
+            {t("nav.trends")}
+          </NavLink>
           <label
             style={{
               marginLeft: 8,

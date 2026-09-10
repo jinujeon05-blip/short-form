@@ -11,6 +11,7 @@ export const VOICES: VoiceOption[] = [
   { id: "Kore", label: "Kore — 단단하고 확신에 찬 톤" },
   { id: "Fenrir", label: "Fenrir — 활기차고 들뜬 톤" },
   { id: "Leda", label: "Leda — 젊고 발랄한 톤" },
+  { id: "Leda::young", label: "Leda — 10대 소녀 느낌(더 어리고 높은 톤, 실험적)" },
   { id: "Orus", label: "Orus — 단단한 톤" },
   { id: "Aoede", label: "Aoede — 산뜻한 톤" },
   { id: "Callirrhoe", label: "Callirrhoe — 여유로운 톤" },

@@ -1,10 +1,11 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
 import { HistoryProvider } from "./context/HistoryContext";
 import Header from "./components/layout/Header";
 import GeneratorPage from "./pages/GeneratorPage";
 import HistoryPage from "./pages/HistoryPage";
 import HistoryDetailPage from "./pages/HistoryDetailPage";
+import TrendsPage from "./pages/TrendsPage";
 
 export default function App() {
   return (
@@ -17,6 +18,8 @@ export default function App() {
               <Route path="/" element={<GeneratorPage />} />
               <Route path="/history" element={<HistoryPage />} />
               <Route path="/history/:id" element={<HistoryDetailPage />} />
+              <Route path="/trends" element={<Navigate to="/trends/youtube" replace />} />
+              <Route path="/trends/:platform" element={<TrendsPage />} />
             </Routes>
           </div>
         </BrowserRouter>
