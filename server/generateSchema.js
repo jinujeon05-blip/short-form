@@ -34,6 +34,22 @@ export const GeneratedContentSchema = z.object({
   actionPlan: z.array(ActionChecklistItemSchema).length(4),
 });
 
+export const HookAnalysisSchema = z.object({
+  summary: z.string().describe("이 검색어의 인기 영상들이 전반적으로 어떤 식으로 만들어져 있는지 2~3문장 요약"),
+  patterns: z
+    .array(
+      z.object({
+        name: z.string().describe("훅 패턴 이름, 예: 가격 충격 / 실패담 고백 / 비교 실험"),
+        explanation: z.string().describe("이 패턴이 왜 통하는지 한두 문장 설명"),
+        examples: z.array(z.string()).min(1).max(3).describe("목록에서 실제로 이 패턴에 해당하는 제목"),
+      })
+    )
+    .min(3)
+    .max(6),
+  keywords: z.array(z.string()).min(3).max(12).describe("제목에서 반복적으로 등장하는 단어·표현"),
+  suggestions: z.array(z.string()).min(3).max(6).describe("이 분석을 바탕으로 바로 쓸 수 있는 새 훅 문구 제안"),
+});
+
 export const VideoAnalysisSchema = z.object({
   sourceInfo: z
     .string()

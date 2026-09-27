@@ -42,7 +42,7 @@ async function youtubeGet(endpoint, params) {
   return body;
 }
 
-async function searchYoutube(query, { shortOnly }) {
+async function searchYoutube(query, { shortOnly, publishedAfter }) {
   // search.list는 한 번에 최대 50개라 pageToken으로 4페이지까지 넘김.
   // order=viewCount라 유튜브 전체에서 조회수 높은 순으로 200개를 받아옴.
   const ids = [];
@@ -55,6 +55,9 @@ async function searchYoutube(query, { shortOnly }) {
       order: "viewCount",
       maxResults: 50,
       ...(shortOnly ? { videoDuration: "short" } : {}),
+      // 기간 필터는 검색 단계에서 걸어야 "그 기간 안에서 조회수가 높은 영상"이 나옴
+      // (200개를 받은 뒤 화면에서 거르면 오래된 영상만 남고 최근 영상은 후보에 들지도 못함)
+      ...(publishedAfter ? { publishedAfter } : {}),
       ...(pageToken ? { pageToken } : {}),
     });
     for (const item of page.items ?? []) {
@@ -116,7 +119,7 @@ export function listVideoSearchPlatforms() {
 
 const cache = new Map();
 
-export async function searchVideos(platform, query, { shortOnly = false } = {}) {
+export async function searchVideos(platform, query, { shortOnly = false, publishedAfter = null } = {}) {
   const status = platformStatus(platform);
   if (!status.available) {
     throw new VideoSearchError(
@@ -127,11 +130,11 @@ export async function searchVideos(platform, query, { shortOnly = false } = {}) 
     );
   }
 
-  const cacheKey = `${platform}|${shortOnly ? 1 : 0}|${query}`;
+  const cacheKey = `${platform}|${shortOnly ? 1 : 0}|${publishedAfter ?? ""}|${query}`;
   const cached = cache.get(cacheKey);
   if (cached && Date.now() - cached.at < CACHE_TTL_MS) return cached.items;
 
-  const items = await PLATFORMS[platform].search(query, { shortOnly });
+  const items = await PLATFORMS[platform].search(query, { shortOnly, publishedAfter });
   cache.set(cacheKey, { at: Date.now(), items });
   return items;
 }

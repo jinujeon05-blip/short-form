@@ -1,9 +1,9 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, createPartFromUri } from "@google/genai";
 import { z } from "zod";
-import { GeneratedContentSchema, VideoAnalysisSchema } from "./generateSchema.js";
+import { GeneratedContentSchema, VideoAnalysisSchema, HookAnalysisSchema } from "./generateSchema.js";
 import { pcmToWav, parseL16MimeType } from "./audio.js";
 import { listHistory, insertHistory, listKeywords, addKeyword, deleteKeyword } from "./db.js";
 import { pickBgm, bgmDir } from "./bgm.js";
@@ -29,7 +29,7 @@ const SYSTEM_PROMPT = `너는 이커머스 마케팅 전문 영상 프로듀서�
 
 1. 영상 구조 분석: 영상을 훅(Hook)/문제 제기/제품 시연/CTA 4개 구간으로 나누고 각각 초 단위 타임코드(mm:ss - mm:ss)와 설명을 작성해. 입력에 "영상 전체 길이"가 주어지면 반드시 그 길이를 그대로 따르고(마지막 구간의 종료 타임코드가 그 길이와 정확히 일치해야 해), 주어지지 않으면 30초 내외로 가정해. 원본 순서를 비틀어 재배치하는 재구성 가이드를 제시해.
 2. 나레이션 스크립트: 처음 3초 안에 이탈을 막는 강력한 훅 문구와, 기능 나열이 아닌 고객의 불편함(Pain Point)을 해소하는 스토리텔링 구조의 구어체 본문 대본을 작성해.
-   - 본문 대본의 마지막 문장은 반드시 입력된 "댓글 유도 키워드"를 그대로 넣어서 댓글을 남기도록 유도하는 CTA로 끝나야 해(예: "댓글에 '키워드' 남겨주세요!"). 정확한 표현은 자연스럽게 바꿔도 되지만 키워드 단어 자체는 그대로 포함해야 해.
+   - "댓글 유도 키워드"가 주어지면, 본문 대본의 마지막 문장은 반드시 그 키워드를 그대로 넣어서 댓글을 남기도록 유도하는 CTA로 끝나야 해(예: "댓글에 '키워드' 남겨주세요!"). 정확한 표현은 자연스럽게 바꿔도 되지만 키워드 단어 자체는 그대로 포함해야 해. 반대로 "(사용 안 함)"으로 주어지면 댓글 관련 멘트를 절대 넣지 말고 제품에 대한 관심을 남기는 문장으로 마무리해.
    - 대본 전체 분량은 소리 내어 자연스러운 속도로 읽었을 때 "영상 전체 길이" 안에 끝나야 해(언어별 자연스러운 발화 속도 기준, 한국어는 대략 초당 4~5음절). 너무 길게 써서 영상보다 나레이션이 오래 걸리면 안 돼.
    - 실제 사람이 친구에게 편하게 말하듯 자연스러운 구어체로 써. 문어체 표현, 억지로 압축한 신조어, 문법이 꼬여서 뜻이 헷갈리는 문장(예: "누워서 태블릿 보다 얼굴로 들이받으세요?" 같은 모호한 구조)은 피해.
    - 소리 내어 읽었을 때 자연스럽게 들리는지 스스로 검토한 뒤 작성해. 한 문장은 짧고 명확하게, 주어-목적어-서술어 관계가 분명하게 써.
@@ -63,6 +63,7 @@ function friendlyGeminiError(err, contextLabel) {
 const ai = new GoogleGenAI({});
 const responseJsonSchema = z.toJSONSchema(GeneratedContentSchema);
 const videoAnalysisJsonSchema = z.toJSONSchema(VideoAnalysisSchema);
+const hookAnalysisJsonSchema = z.toJSONSchema(HookAnalysisSchema);
 
 // 영상 파일을 base64로 인라인 전송하므로 기본 100kb 제한보다 넉넉하게 잡음(아래 MAX_VIDEO_BYTES
 // 참고) — base64 인코딩 자체가 원본보다 약 4/3배 부풀고 JSON 오버헤드도 붙으므로, 18MB 체크가
@@ -79,12 +80,31 @@ const COMMENT_CTA_FALLBACK = {
 };
 
 app.post("/api/generate", async (req, res) => {
-  const { sourceInfo, platform, targetAudience, sellingPoint, commentKeyword, language, videoDurationSeconds } = req.body ?? {};
+  const { sourceInfo, platform, targetAudience, sellingPoint, commentKeyword, language, videoDurationSeconds, photoCount } =
+    req.body ?? {};
   const languageName = LANGUAGE_NAMES[language] ?? LANGUAGE_NAMES.ko;
   const durationLine =
     typeof videoDurationSeconds === "number" && Number.isFinite(videoDurationSeconds) && videoDurationSeconds > 0
       ? `영상 전체 길이: ${Math.round(videoDurationSeconds)}초\n`
       : "";
+  // 사진 슬라이드쇼(photo 템플릿)는 장면 전환이 사진 단위로 끊기므로, 자막도 사진 수에 맞춰
+  // 배치해야 화면과 글자가 따로 놀지 않는다
+  const perPhotoSeconds =
+    typeof photoCount === "number" && photoCount > 0 && typeof videoDurationSeconds === "number" && videoDurationSeconds > 0
+      ? videoDurationSeconds / photoCount
+      : 3;
+  const photoLine =
+    typeof photoCount === "number" && Number.isFinite(photoCount) && photoCount > 0
+      ? `이 영상은 촬영된 영상이 아니라 제품 사진 ${Math.round(photoCount)}장을 같은 길이로 순서대로 보여주는 슬라이드쇼야` +
+        `(사진 한 장당 약 ${perPhotoSeconds.toFixed(1)}초). ` +
+        `자막 시점은 사진이 바뀌는 시점(0초, ${perPhotoSeconds.toFixed(1)}초, 그 배수)에 맞춰 잡고, ` +
+        `카메라 움직임·손으로 들어 보이는 시연처럼 정지 사진으로는 보여줄 수 없는 표현은 쓰지 마.\n`
+      : "";
+  // 댓글 유도 키워드는 선택 — 안 쓰면 CTA를 구매 유도로 바꾸도록 지시한다
+  const useCommentKeyword = typeof commentKeyword === "string" && commentKeyword.trim().length > 0;
+  const commentLine = useCommentKeyword
+    ? `댓글 유도 키워드: ${commentKeyword}`
+    : "댓글 유도 키워드: (사용 안 함) — 댓글을 남겨달라는 멘트는 넣지 말고, 마지막 문장은 제품에 관심을 갖게 만드는 자연스러운 마무리 문장으로 끝내.";
 
   if (
     typeof sourceInfo !== "string" ||
@@ -92,9 +112,7 @@ app.post("/api/generate", async (req, res) => {
     typeof targetAudience !== "string" ||
     !targetAudience.trim() ||
     typeof sellingPoint !== "string" ||
-    !sellingPoint.trim() ||
-    typeof commentKeyword !== "string" ||
-    !commentKeyword.trim()
+    !sellingPoint.trim()
   ) {
     res.status(400).json({ error: "필수 입력값이 누락됐어요." });
     return;
@@ -111,11 +129,11 @@ app.post("/api/generate", async (req, res) => {
     const response = await ai.models.generateContent({
       model: "gemini-3.6-flash",
       contents: `출력 언어: ${languageName}
-${durationLine}원본 영상 링크 또는 주요 특징 요약: ${sourceInfo}
+${durationLine}${photoLine}원본 영상 링크 또는 주요 특징 요약: ${sourceInfo}
 타겟 플랫폼: ${PLATFORM_LABELS[platform] ?? platform}
 주요 타겟층: ${targetAudience}
 핵심 소구점: ${sellingPoint}
-댓글 유도 키워드: ${commentKeyword}`,
+${commentLine}`,
       config: {
         systemInstruction: SYSTEM_PROMPT,
         responseMimeType: "application/json",
@@ -139,7 +157,7 @@ ${durationLine}원본 영상 링크 또는 주요 특징 요약: ${sourceInfo}
 
     // AI가 지시를 안 따라서 댓글 유도 문구를 빼먹는 경우에 대비해, 키워드가 실제로 안 들어가 있으면
     // 항상 붙여줌(음성 멘트에 반드시 나와야 하는 요구사항이라 프롬프트만 믿을 수 없음)
-    if (!parsed.narrationScript.body.toLowerCase().includes(commentKeyword.trim().toLowerCase())) {
+    if (useCommentKeyword && !parsed.narrationScript.body.toLowerCase().includes(commentKeyword.trim().toLowerCase())) {
       const cta = (COMMENT_CTA_FALLBACK[language] ?? COMMENT_CTA_FALLBACK.ko)(commentKeyword.trim());
       parsed.narrationScript.body = `${parsed.narrationScript.body} ${cta}`;
     }
@@ -160,20 +178,35 @@ ${durationLine}원본 영상 링크 또는 주요 특징 요약: ${sourceInfo}
   }
 });
 
-const MAX_VIDEO_BYTES = 18 * 1024 * 1024; // Gemini 인라인 데이터 권장 상한(20MB) 대비 여유
+// 예전엔 영상을 base64 인라인 데이터로 보내서 Gemini의 요청당 20MB 제한에 걸렸고(그래서 18MB 컷),
+// 이제는 Files API로 업로드한 뒤 URI로 참조함 — 파일당 2GB까지 가능해서 사실상 제한이 풀림.
+// 전송도 base64(원본의 4/3배) 대신 파일 바이트 그대로 받아서 낭비가 없음.
+const MAX_VIDEO_BYTES = 500 * 1024 * 1024;
 
-app.post("/api/analyze-video", async (req, res) => {
-  const { data, mimeType, language } = req.body ?? {};
-  const languageName = LANGUAGE_NAMES[language] ?? LANGUAGE_NAMES.ko;
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  if (typeof data !== "string" || !data.trim() || typeof mimeType !== "string" || !mimeType.startsWith("video/")) {
-    res.status(400).json({ error: "분석할 영상 데이터가 없어요." });
-    return;
+// 업로드 직후 파일은 PROCESSING 상태이고, 이때 바로 참조하면 요청이 실패함 — ACTIVE가 될 때까지 기다린다
+async function waitForActiveFile(file, timeoutMs = 5 * 60 * 1000) {
+  const startedAt = Date.now();
+  let current = file;
+  while (current.state === "PROCESSING") {
+    if (Date.now() - startedAt > timeoutMs) throw new Error("Gemini file processing timed out");
+    await sleep(2000);
+    current = await ai.files.get({ name: current.name });
   }
+  if (current.state !== "ACTIVE") throw new Error(`Gemini file state: ${current.state}`);
+  return current;
+}
 
-  const approxBytes = (data.length * 3) / 4;
-  if (approxBytes > MAX_VIDEO_BYTES) {
-    res.status(413).json({ error: "영상 파일이 너무 커요. 18MB 이하 영상으로 시도해주세요." });
+app.post(
+  "/api/analyze-video",
+  express.raw({ type: ["video/*", "application/octet-stream"], limit: MAX_VIDEO_BYTES }),
+  async (req, res) => {
+  const mimeType = (req.get("content-type") ?? "").split(";")[0].trim();
+  const languageName = LANGUAGE_NAMES[req.query.language] ?? LANGUAGE_NAMES.ko;
+
+  if (!Buffer.isBuffer(req.body) || req.body.length === 0 || !mimeType.startsWith("video/")) {
+    res.status(400).json({ error: "분석할 영상 데이터가 없어요." });
     return;
   }
 
@@ -184,7 +217,15 @@ app.post("/api/analyze-video", async (req, res) => {
     return;
   }
 
+  let uploadedName = null;
   try {
+    const uploaded = await ai.files.upload({
+      file: new Blob([req.body], { type: mimeType }),
+      config: { mimeType },
+    });
+    uploadedName = uploaded.name;
+    const file = await waitForActiveFile(uploaded);
+
     const response = await ai.models.generateContent({
       model: "gemini-3.6-flash",
       contents: [
@@ -194,7 +235,7 @@ app.post("/api/analyze-video", async (req, res) => {
 2. "핵심 소구점"(한 문장): 영상에서 드러나는 제품의 가장 매력적인 특징이나 장점을 구매 욕구를 자극하는 문구로 작성해(예: "손 안 대고 목에 걸기만 하면 끝"). 판매 링크나 URL이 아니라 실제 소구점 문구여야 해.
 둘 다 자연스러운 서술형 문장으로 쓰고, 출력 언어는 ${languageName}로 작성해.`,
         },
-        { inlineData: { data, mimeType } },
+        createPartFromUri(file.uri, file.mimeType ?? mimeType),
       ],
       config: {
         responseMimeType: "application/json",
@@ -221,8 +262,14 @@ app.post("/api/analyze-video", async (req, res) => {
     console.error("Gemini video analysis error:", err);
     const { httpStatus, message } = friendlyGeminiError(err, "영상 분석");
     res.status(httpStatus).json({ error: message });
+  } finally {
+    // 올린 파일은 48시간 뒤 자동 삭제되지만, 분석이 끝나면 바로 지워서 계정 저장 용량(20GB)을 아낌
+    if (uploadedName) {
+      await ai.files.delete({ name: uploadedName }).catch((err) => console.error("Gemini file delete error:", err));
+    }
   }
-});
+  }
+);
 
 // Gemini TTS는 목소리별 세부 톤(피치·감정)을 별도 파라미터로 조절하는 게 아니라, 입력 텍스트 앞에 자연어
 // 지시문("Say in a ... tone: ")을 붙이는 방식으로 스티어링함(공식 문서 패턴) — 이 지시문은 실제로 소리 내어
@@ -345,6 +392,18 @@ app.get("/api/video-search/platforms", (_req, res) => {
   res.json(listVideoSearchPlatforms());
 });
 
+const PERIOD_DAYS = { week: 7, month: 30, quarter: 90, year: 365 };
+
+// 기준 시각을 시간 단위로 내림 — 매 요청마다 초 단위로 달라지면 캐시 키가 계속 바뀌어서
+// 같은 조건을 다시 검색해도 캐시가 안 먹고 유튜브 쿼터만 새로 쓰게 됨
+function publishedAfterFor(period) {
+  const days = PERIOD_DAYS[period];
+  if (!days) return null;
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+  since.setMinutes(0, 0, 0);
+  return since.toISOString();
+}
+
 app.get("/api/video-search/:platform", async (req, res) => {
   const { platform } = req.params;
   const query = typeof req.query.q === "string" ? req.query.q.trim() : "";
@@ -358,7 +417,12 @@ app.get("/api/video-search/:platform", async (req, res) => {
   }
 
   try {
-    res.json(await searchVideos(platform, query, { shortOnly: req.query.short === "1" }));
+    res.json(
+      await searchVideos(platform, query, {
+        shortOnly: req.query.short === "1",
+        publishedAfter: publishedAfterFor(req.query.period),
+      })
+    );
   } catch (err) {
     if (err instanceof VideoSearchError) {
       res.status(err.httpStatus).json({ error: err.message });
@@ -366,6 +430,70 @@ app.get("/api/video-search/:platform", async (req, res) => {
     }
     console.error("Video search error:", err);
     res.status(500).json({ error: "영상 검색 중 알 수 없는 오류가 발생했어요." });
+  }
+});
+
+// 검색으로 찾은 인기 영상 제목들을 모아 어떤 훅이 통하는지 분석 — 영상은 보내지 않고
+// 제목 텍스트만 보내므로 토큰도 적게 들고 /api/generate 파이프라인과도 완전히 분리돼 있음
+app.post("/api/analyze-hooks", async (req, res) => {
+  const { titles, query, language } = req.body ?? {};
+  const languageName = LANGUAGE_NAMES[language] ?? LANGUAGE_NAMES.ko;
+
+  if (!Array.isArray(titles) || titles.length < 5) {
+    res.status(400).json({ error: "분석할 영상 제목이 충분하지 않아요. 먼저 검색을 해주세요." });
+    return;
+  }
+
+  if (!process.env.GEMINI_API_KEY) {
+    res.status(500).json({
+      error: "서버에 GEMINI_API_KEY가 설정돼 있지 않아요. .env 파일에 키를 추가한 뒤 서버를 다시 시작해주세요.",
+    });
+    return;
+  }
+
+  const titleList = titles
+    .filter((t) => typeof t === "string" && t.trim())
+    .slice(0, 200)
+    .map((t, i) => `${i + 1}. ${t.trim()}`)
+    .join("\n");
+
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: `너는 숏폼 콘텐츠 소재 조사 전문가야. 아래는 "${typeof query === "string" ? query : ""}"로 검색해서 나온 조회수 상위 숏폼 영상들의 제목 목록이야.
+이 제목들을 분석해서, 이 주제에서 실제로 통하는 훅(Hook) 패턴을 정리해줘.
+- 제목을 그대로 나열하지 말고, 공통된 구조·심리 트리거를 패턴으로 묶어서 이름을 붙여.
+- 각 패턴마다 목록에 실제로 있는 제목을 예시로 들어.
+- 반복적으로 등장하는 단어·표현도 뽑아줘.
+- 마지막으로 이 분석을 바탕으로 내가 바로 쓸 수 있는 새 훅 문구를 제안해줘(기존 제목 복사가 아니라 새로 쓴 문구여야 해).
+모든 텍스트는 ${languageName}로 작성해.
+
+${titleList}`,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: hookAnalysisJsonSchema,
+      },
+    });
+
+    if (!response.text) {
+      res.status(502).json({ error: "AI 응답을 해석하지 못했어요. 다시 시도해주세요." });
+      return;
+    }
+
+    let parsed;
+    try {
+      parsed = HookAnalysisSchema.parse(JSON.parse(response.text));
+    } catch (parseErr) {
+      console.error("Hook analysis parse/validation error:", parseErr);
+      res.status(502).json({ error: "AI 응답 형식이 올바르지 않아요. 다시 시도해주세요." });
+      return;
+    }
+
+    res.json(parsed);
+  } catch (err) {
+    console.error("Hook analysis error:", err);
+    const { httpStatus, message } = friendlyGeminiError(err, "훅 패턴 분석");
+    res.status(httpStatus).json({ error: message });
   }
 });
 
@@ -413,7 +541,7 @@ app.use((err, _req, res, next) => {
   if (err?.type === "entity.too.large" || err?.status === 413) {
     res.status(413).json({
       error: "영상 파일이 너무 커요(요청 용량 제한 초과). \"영상 분석해서 채우기\"는 " +
-        "18MB 이하 영상에서만 동작해요 — 더 큰 영상이면 이 버튼은 건너뛰고 " +
+        "500MB 이하 영상에서만 동작해요 — 더 큰 영상이면 이 버튼은 건너뛰고 " +
         "\"원본 영상 링크 또는 주요 특징 요약\"과 \"핵심 소구점\"을 직접 입력해주세요 " +
         "(영상 자체는 대본/자막 생성에 필요 없고, 나중에 내보내기 할 때만 브라우저에서 씁니다).",
     });

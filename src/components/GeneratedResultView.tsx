@@ -23,6 +23,16 @@ export default function GeneratedResultView({ result, onSave, saved }: Props) {
     setCues(result.subtitleGuide.cues);
   }, [result.id, result.subtitleGuide.cues]);
 
+  // 훅 문구도 만들어진 영상을 보고 바로 고칠 수 있게 — 미리보기와 내보내기 둘 다 이 값을 쓴다
+  const [headline, setHeadline] = useState(result.input.headline);
+  useEffect(() => {
+    setHeadline(result.input.headline);
+  }, [result.id, result.input.headline]);
+
+  // 사진 슬라이드쇼 템플릿에서만 사진을 쓴다(다른 템플릿으로 저장된 이력에 사진이 남아 있어도 무시)
+  const photos =
+    result.input.template === "photo" ? (result.input.sourcePhotos ?? []).map((photo) => photo.url) : [];
+
   function updateCueText(index: number, text: string) {
     setCues((prev) => prev.map((cue, i) => (i === index ? { ...cue, text } : cue)));
   }
@@ -61,14 +71,35 @@ export default function GeneratedResultView({ result, onSave, saved }: Props) {
 
       <section className="card">
         <h2 style={{ fontSize: 17, marginBottom: 14 }}>{t("generator.result.subtitleTitle")}</h2>
-        {result.input.sourceVideo && (
+
+        {/* 훅 문구는 영상에 크게 박히는 글자라 결과를 보고 바로 고칠 수 있어야 한다
+            (글자를 아예 안 넣는 none 템플릿에서는 쓸 일이 없어서 숨김) */}
+        {result.input.template !== "none" && (
+          <div style={{ marginBottom: 14 }}>
+            <label style={{ fontSize: 13, fontWeight: 700, color: "var(--primary)" }}>
+              {t("generator.result.headlineEdit")}
+            </label>
+            <input
+              className="input"
+              style={{ marginTop: 6 }}
+              value={headline}
+              onChange={(e) => setHeadline(e.target.value)}
+              placeholder={t("generator.form.headlinePlaceholder")}
+            />
+            <p style={{ fontSize: 12, color: "var(--sub)", marginTop: 4 }}>{t("generator.result.headlineEditHint")}</p>
+          </div>
+        )}
+
+        {(result.input.sourceVideo || photos.length > 0) && (
           <VideoWithSubtitles
-            src={result.input.sourceVideo.url}
+            src={result.input.sourceVideo?.url ?? ""}
+            photoUrls={photos}
             cues={cues}
             channel={result.input.channel}
-            headline={result.input.headline}
+            headline={headline}
             views={result.input.views}
             comments={result.input.comments}
+            template={result.input.template}
           />
         )}
         <p style={{ fontSize: 12, color: "var(--sub)", marginBottom: 8 }}>{t("generator.result.cuesEditHint")}</p>
@@ -101,18 +132,20 @@ export default function GeneratedResultView({ result, onSave, saved }: Props) {
           <strong>{t("generator.result.styleNote")}: </strong>
           {result.subtitleGuide.styleNote}
         </p>
-        {result.input.sourceVideo && (
+        {(result.input.sourceVideo || photos.length > 0) && (
           <div style={{ marginTop: 14 }}>
             <VideoExportButton
-              videoUrl={result.input.sourceVideo.url}
-              videoDurationSeconds={result.input.sourceVideo.durationSeconds}
+              videoUrl={result.input.sourceVideo?.url ?? ""}
+              photoUrls={photos}
+              videoDurationSeconds={result.input.sourceVideo?.durationSeconds}
               cues={cues}
               narrationText={`${result.narrationScript.hook} ${result.narrationScript.body}`}
               bgmUrl={result.bgm?.url}
               channel={result.input.channel}
-              headline={result.input.headline}
+              headline={headline}
               views={result.input.views}
               comments={result.input.comments}
+              template={result.input.template}
             />
             <p style={{ marginTop: 8, fontSize: 12, color: "var(--sub)" }}>{t("generator.result.exportNote")}</p>
             {result.bgm && (
@@ -122,6 +155,22 @@ export default function GeneratedResultView({ result, onSave, saved }: Props) {
               </p>
             )}
           </div>
+        )}
+        {/* 영상 파일이 없으면 내보내기 버튼 자체가 안 보여서 "왜 없지?"가 됨 — 이유와 방법을 알려줌
+            (탐색에서 "이 영상으로 만들기"로 넘어오면 글자 정보만 채워지고 영상 파일은 없는 상태) */}
+        {!result.input.sourceVideo && photos.length === 0 && (
+          <p
+            style={{
+              marginTop: 14,
+              fontSize: 13,
+              background: "#fffbea",
+              border: "1px solid var(--warning)",
+              borderRadius: 10,
+              padding: 12,
+            }}
+          >
+            {t("generator.result.exportNeedsVideo")}
+          </p>
         )}
       </section>
 

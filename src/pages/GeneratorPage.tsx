@@ -1,19 +1,23 @@
 import { useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { useHistory } from "../context/HistoryContext";
 import { PLATFORM_LABELS } from "../data/mockResults";
 import { EXAMPLES } from "../data/examples";
 import { analyzeVideo, generateContent } from "../lib/api";
 import { rescaleTimingToVideoDuration } from "../lib/subtitleTiming";
-import type { GeneratedResult, GeneratorInput, Platform } from "../types";
+import { PHOTO_SECONDS_PER_IMAGE, photoSlideshowSeconds } from "../lib/photoSlideshow";
+import type { GeneratedResult, GeneratorInput, Platform, VideoTemplate } from "../types";
 import Icon from "../components/ui/Icon";
 import GeneratedResultView from "../components/GeneratedResultView";
 
 const PLATFORMS: Platform[] = ["tiktok", "reels", "shorts"];
+const TEMPLATES: VideoTemplate[] = ["branded", "overlay", "none", "photo"];
 
 const emptyInput: GeneratorInput = {
   sourceInfo: "",
   platform: "tiktok",
+  template: "branded",
   targetAudience: "",
   sellingPoint: "",
   commentKeyword: "",
@@ -27,7 +31,12 @@ export default function GeneratorPage() {
   const { t, language } = useLanguage();
   const { addItem } = useHistory();
 
-  const [input, setInput] = useState<GeneratorInput>(emptyInput);
+  // 영상 탐색 페이지에서 "이 영상으로 만들기"로 넘어오면 그 영상 정보가 state로 실려 옴
+  const location = useLocation();
+  const [input, setInput] = useState<GeneratorInput>(() => {
+    const prefill = (location.state as { prefill?: Partial<GeneratorInput> } | null)?.prefill;
+    return prefill ? { ...emptyInput, ...prefill } : emptyInput;
+  });
   const [result, setResult] = useState<GeneratedResult | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState(false);
@@ -36,7 +45,23 @@ export default function GeneratorPage() {
   const [sourceVideoFile, setSourceVideoFile] = useState<File | null>(null);
   const [isAnalyzingVideo, setIsAnalyzingVideo] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const photoInputRef = useRef<HTMLInputElement>(null);
   const exampleIndexRef = useRef(0);
+  const photos = input.sourcePhotos ?? [];
+
+  // 사진은 올린 순서대로 슬라이드쇼가 되므로 기존 목록 뒤에 붙인다(같은 파일을 다시 고르면 또 추가됨)
+  function handlePhotosSelect(files: FileList | null) {
+    if (!files || files.length === 0) return;
+    const added = Array.from(files).map((file) => ({ name: file.name, url: URL.createObjectURL(file) }));
+    setInput((prev) => ({ ...prev, sourcePhotos: [...(prev.sourcePhotos ?? []), ...added] }));
+    setSaved(false);
+    if (photoInputRef.current) photoInputRef.current.value = "";
+  }
+
+  function handlePhotoRemove(url: string) {
+    setInput((prev) => ({ ...prev, sourcePhotos: (prev.sourcePhotos ?? []).filter((photo) => photo.url !== url) }));
+    setSaved(false);
+  }
 
   function update<K extends keyof GeneratorInput>(key: K, value: GeneratorInput[K]) {
     setInput((prev) => ({ ...prev, [key]: value }));
@@ -100,9 +125,11 @@ export default function GeneratorPage() {
       !input.sourceInfo.trim() ||
       !input.targetAudience.trim() ||
       !input.sellingPoint.trim() ||
-      !input.commentKeyword.trim() ||
-      !input.channel.trim() ||
-      !input.headline.trim()
+      // 댓글 유도 키워드는 체크를 켰을 때만 필수
+      (input.useCommentKeyword !== false && !input.commentKeyword.trim()) ||
+      // 채널명은 파란 브랜드 헤더에만 쓰이고, 훅 문구는 글자를 넣는 템플릿에서만 쓰인다
+      (input.template === "branded" || input.template === undefined ? !input.channel.trim() : false) ||
+      (input.template !== "none" && !input.headline.trim())
     ) {
       setError(true);
       return;
@@ -114,7 +141,7 @@ export default function GeneratorPage() {
 
     try {
       const content = await generateContent(input, language);
-      const durationSeconds = input.sourceVideo?.durationSeconds;
+      const durationSeconds = input.sourceVideo?.durationSeconds ?? photoSlideshowSeconds(input);
       const adjusted = durationSeconds ? rescaleTimingToVideoDuration(content, durationSeconds) : content;
       setResult({
         id: `result-${Date.now()}`,
@@ -162,6 +189,82 @@ export default function GeneratorPage() {
           />
         </Field>
 
+        {/* 사진 슬라이드쇼 템플릿은 영상 대신 사진 여러 장을 올린다 */}
+        {input.template === "photo" ? (
+          <Field icon="upload" label={t("generator.form.sourcePhotos")}>
+            <input
+              ref={photoInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              style={{ display: "none" }}
+              onChange={(e) => handlePhotosSelect(e.target.files)}
+            />
+            {photos.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {photos.map((photo, i) => (
+                  <div key={photo.url} style={{ position: "relative" }}>
+                    <img
+                      src={photo.url}
+                      alt=""
+                      style={{ width: 64, height: 96, objectFit: "cover", borderRadius: 8, display: "block", background: "var(--bg)" }}
+                    />
+                    <span
+                      style={{
+                        position: "absolute",
+                        left: 4,
+                        top: 4,
+                        background: "rgba(0,0,0,0.6)",
+                        color: "#fff",
+                        borderRadius: 6,
+                        fontSize: 11,
+                        fontWeight: 700,
+                        padding: "1px 5px",
+                      }}
+                    >
+                      {i + 1}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handlePhotoRemove(photo.url)}
+                      aria-label={`remove photo ${i + 1}`}
+                      style={{
+                        position: "absolute",
+                        right: 2,
+                        top: 2,
+                        background: "rgba(0,0,0,0.6)",
+                        border: "none",
+                        borderRadius: 6,
+                        cursor: "pointer",
+                        color: "#fff",
+                        display: "flex",
+                        padding: 2,
+                      }}
+                    >
+                      <Icon name="close" size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <button
+              type="button"
+              className="btn-secondary btn-sm"
+              style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", gap: 6, borderRadius: 8 }}
+              onClick={() => photoInputRef.current?.click()}
+            >
+              <Icon name="upload" size={14} />
+              {t("generator.form.sourcePhotosSelect")}
+            </button>
+            <span style={{ fontSize: 12, color: "var(--sub)" }}>
+              {photos.length > 0
+                ? t("generator.form.sourcePhotosCount")
+                    .replace("{count}", String(photos.length))
+                    .replace("{seconds}", String(photos.length * PHOTO_SECONDS_PER_IMAGE))
+                : t("generator.form.sourcePhotosHint")}
+            </span>
+          </Field>
+        ) : (
         <Field icon="upload" label={t("generator.form.sourceVideo")}>
           {input.sourceVideo ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -200,6 +303,10 @@ export default function GeneratorPage() {
                   {isAnalyzingVideo ? t("generator.form.analyzingVideo") : t("generator.form.analyzeVideo")}
                 </button>
               )}
+              {/* 큰 영상은 업로드+분석에 몇 분씩 걸려서(95MB 실측 약 3분 30초) 안내가 없으면 멈춘 걸로 보임 */}
+              {isAnalyzingVideo && (
+                <p style={{ fontSize: 12, color: "var(--sub)" }}>{t("generator.form.analyzingVideoNote")}</p>
+              )}
             </div>
           ) : (
             <>
@@ -223,6 +330,7 @@ export default function GeneratorPage() {
           )}
           <span style={{ fontSize: 12, color: "var(--sub)" }}>{t("generator.form.sourceVideoHint")}</span>
         </Field>
+        )}
 
         <Field icon="target" label={t("generator.form.platform")}>
           <select
@@ -236,6 +344,21 @@ export default function GeneratorPage() {
               </option>
             ))}
           </select>
+        </Field>
+
+        <Field icon="video" label={t("generator.form.template")}>
+          <select
+            className="input"
+            value={input.template ?? "branded"}
+            onChange={(e) => update("template", e.target.value as VideoTemplate)}
+          >
+            {TEMPLATES.map((tpl) => (
+              <option key={tpl} value={tpl}>
+                {t(`template.${tpl}`)}
+              </option>
+            ))}
+          </select>
+          <span style={{ fontSize: 12, color: "var(--sub)" }}>{t(`template.${input.template ?? "branded"}.hint`)}</span>
         </Field>
 
         <Field icon="users" label={t("generator.form.targetAudience")}>
@@ -257,35 +380,66 @@ export default function GeneratorPage() {
         </Field>
 
         <Field icon="message" label={t("generator.form.commentKeyword")}>
-          <input
-            className="input"
-            placeholder={t("generator.form.commentKeywordPlaceholder")}
-            value={input.commentKeyword}
-            onChange={(e) => update("commentKeyword", e.target.value)}
-          />
-          <span style={{ fontSize: 12, color: "var(--sub)" }}>{t("generator.form.commentKeywordHint")}</span>
+          {/* 체크를 끄면 대본에 댓글 유도 멘트를 아예 넣지 않는다(입력칸도 잠금) */}
+          <label style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              checked={input.useCommentKeyword !== false}
+              onChange={(e) => update("useCommentKeyword", e.target.checked)}
+            />
+            {t("generator.form.useCommentKeyword")}
+          </label>
+          {input.useCommentKeyword !== false && (
+            <>
+              <input
+                className="input"
+                placeholder={t("generator.form.commentKeywordPlaceholder")}
+                value={input.commentKeyword}
+                onChange={(e) => update("commentKeyword", e.target.value)}
+              />
+              <span style={{ fontSize: 12, color: "var(--sub)" }}>{t("generator.form.commentKeywordHint")}</span>
+            </>
+          )}
         </Field>
 
-        <Field icon="tag" label={t("generator.form.channel")}>
-          <input
-            className="input"
-            placeholder={t("generator.form.channelPlaceholder")}
-            value={input.channel}
-            onChange={(e) => update("channel", e.target.value)}
-          />
-        </Field>
+        {/* 채널명·조회수·댓글수는 파란 브랜드 헤더에만 들어가는 값이라 다른 템플릿에서는 숨긴다 */}
+        {(input.template ?? "branded") === "branded" && (
+          <Field icon="tag" label={t("generator.form.channel")}>
+            <input
+              className="input"
+              placeholder={t("generator.form.channelPlaceholder")}
+              value={input.channel}
+              onChange={(e) => update("channel", e.target.value)}
+            />
+          </Field>
+        )}
 
-        <Field icon="sparkles" label={t("generator.form.headline")}>
-          <input
-            className="input"
-            placeholder={t("generator.form.headlinePlaceholder")}
-            value={input.headline}
-            onChange={(e) => update("headline", e.target.value)}
-          />
-          <span style={{ fontSize: 12, color: "var(--sub)" }}>{t("generator.form.headlineHint")}</span>
-        </Field>
+        {/* 훅 문구는 화면에 글자를 얹는 템플릿에서만 쓰인다 */}
+        {input.template !== "none" && (
+          <Field icon="sparkles" label={t("generator.form.headline")}>
+            <input
+              className="input"
+              placeholder={t("generator.form.headlinePlaceholder")}
+              value={input.headline}
+              onChange={(e) => update("headline", e.target.value)}
+            />
+            <span style={{ fontSize: 12, color: "var(--sub)" }}>
+              {t(
+                (input.template ?? "branded") === "branded"
+                  ? "generator.form.headlineHint"
+                  : "generator.form.headlineHintOverlay"
+              )}
+            </span>
+          </Field>
+        )}
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div
+          style={{
+            display: (input.template ?? "branded") === "branded" ? "grid" : "none",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 12,
+          }}
+        >
           <Field icon="users" label={t("generator.form.views")}>
             <input
               className="input"

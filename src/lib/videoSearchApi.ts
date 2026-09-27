@@ -1,4 +1,12 @@
-import type { SearchKeyword, VideoSearchItem, VideoSearchPlatform, VideoSearchPlatformStatus } from "../types";
+import type {
+  HookAnalysis,
+  SearchKeyword,
+  SearchPeriod,
+  VideoSearchItem,
+  VideoSearchPlatform,
+  VideoSearchPlatformStatus,
+} from "../types";
+import type { Language } from "../i18n/translations";
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, init);
@@ -19,9 +27,25 @@ export function listVideoSearchPlatforms() {
   return request<VideoSearchPlatformStatus[]>("/api/video-search/platforms");
 }
 
-export function searchVideos(platform: VideoSearchPlatform, query: string, shortOnly: boolean) {
-  const params = new URLSearchParams({ q: query, ...(shortOnly ? { short: "1" } : {}) });
+export function searchVideos(
+  platform: VideoSearchPlatform,
+  query: string,
+  { shortOnly, period }: { shortOnly: boolean; period: SearchPeriod }
+) {
+  const params = new URLSearchParams({
+    q: query,
+    ...(shortOnly ? { short: "1" } : {}),
+    ...(period !== "all" ? { period } : {}),
+  });
   return request<VideoSearchItem[]>(`/api/video-search/${platform}?${params}`);
+}
+
+export function analyzeHooks(titles: string[], query: string, language: Language) {
+  return request<HookAnalysis>("/api/analyze-hooks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ titles, query, language }),
+  });
 }
 
 export function listKeywords(platform: VideoSearchPlatform) {

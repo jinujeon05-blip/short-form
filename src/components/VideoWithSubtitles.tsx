@@ -1,7 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import type { SubtitleCue } from "../types";
+import type { SubtitleCue, VideoTemplate } from "../types";
+import { drawOverlayTexts } from "../lib/overlayTemplate";
+import { PHOTO_SECONDS_PER_IMAGE, PHOTO_TRANSITION_SECONDS } from "../lib/photoSlideshow";
 import { timestampToSeconds } from "../utils/time";
-import { drawBrandedHeader, drawCaptionBar, headerSafeTopHeight, loadCaptionFont, loadHeaderFont } from "../lib/brandedHeader";
+import {
+  OUTPUT_CANVAS_H,
+  OUTPUT_CANVAS_W,
+  brandedHeaderHeight,
+  captionBarHeight,
+  drawBrandedHeader,
+  drawCaptionBar,
+  headerSafeTopHeight,
+  loadCaptionFont,
+  loadHeaderFont,
+} from "../lib/brandedHeader";
 import Icon from "./ui/Icon";
 
 interface Props {
@@ -11,6 +23,9 @@ interface Props {
   headline: string;
   views?: string;
   comments?: string;
+  template?: VideoTemplate;
+  /** photo 템플릿에서 슬라이드쇼로 보여줄 사진들 */
+  photoUrls?: string[];
 }
 
 const PREVIEW_WIDTH = 260;
@@ -18,12 +33,62 @@ const PREVIEW_WIDTH = 260;
 // 별도 공간을 차지하는 게 아니라 이 여백 위에 그대로 겹쳐진다(실제 게시 화면 스크린샷으로
 // 확인됨: 검색바가 파란 헤더를 밀어내리지 않고 그 위에 얹힌다).
 const SAFE_TOP_H = headerSafeTopHeight(PREVIEW_WIDTH);
+// 최종 mp4에서 영상이 실제로 보이는 영역(헤더·자막바를 뺀 나머지)의 가로세로 비율
+const VIDEO_AREA_RATIO =
+  OUTPUT_CANVAS_W / (OUTPUT_CANVAS_H - brandedHeaderHeight(OUTPUT_CANVAS_W) - captionBarHeight(OUTPUT_CANVAS_W));
+// 오버레이 템플릿은 영상이 9:16 전체를 차지한다
+const FULL_CANVAS_RATIO = OUTPUT_CANVAS_W / OUTPUT_CANVAS_H;
 
-export default function VideoWithSubtitles({ src, cues, channel, headline, views, comments }: Props) {
+// 주어진 시점(초)에 보여줄 자막 — 다음 자막이 시작하기 전까지(마지막은 3초) 유지된다
+function cueAt(cues: SubtitleCue[], seconds: number): SubtitleCue | null {
+  const sorted = [...cues].sort((a, b) => timestampToSeconds(a.timestamp) - timestampToSeconds(b.timestamp));
+  for (let i = 0; i < sorted.length; i++) {
+    const start = timestampToSeconds(sorted[i].timestamp);
+    const end = i + 1 < sorted.length ? timestampToSeconds(sorted[i + 1].timestamp) : start + 3;
+    if (seconds >= start && seconds < end) return sorted[i];
+  }
+  return null;
+}
+
+export default function VideoWithSubtitles({
+  src,
+  cues,
+  channel,
+  headline,
+  views,
+  comments,
+  template,
+  photoUrls = [],
+}: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const headerCanvasRef = useRef<HTMLCanvasElement>(null);
   const captionCanvasRef = useRef<HTMLCanvasElement>(null);
+  const overlayCanvasRef = useRef<HTMLCanvasElement>(null);
   const [activeCue, setActiveCue] = useState<SubtitleCue | null>(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [prevPhotoUrl, setPrevPhotoUrl] = useState<string | null>(null);
+  const [photoFadedIn, setPhotoFadedIn] = useState(true);
+  const shownPhotoIndexRef = useRef(0);
+  const isPhoto = template === "photo" && photoUrls.length > 0;
+  const isPlain = template === "none";
+  // 훅 문구·자막을 영상 위에 얹는 템플릿(사진 슬라이드쇼도 같은 글자 스타일을 쓴다)
+  const isOverlay = template === "overlay" || isPhoto;
+
+  // 오버레이 템플릿 — 훅 문구(항상)와 현재 자막을 영상 위 투명 캔버스에 그린다
+  useEffect(() => {
+    if (!isOverlay) return;
+    let cancelled = false;
+    Promise.all([loadHeaderFont(), loadCaptionFont()]).then(() => {
+      if (cancelled) return;
+      const canvas = overlayCanvasRef.current;
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      drawOverlayTexts(canvas, PREVIEW_WIDTH * dpr, { hook: headline, caption: activeCue?.text ?? "" });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [isOverlay, headline, activeCue]);
 
   useEffect(() => {
     let cancelled = false;
@@ -59,26 +124,38 @@ export default function VideoWithSubtitles({ src, cues, channel, headline, views
     const video = videoRef.current;
     if (!video) return;
 
-    const sorted = [...cues].sort((a, b) => timestampToSeconds(a.timestamp) - timestampToSeconds(b.timestamp));
-
     function handleTimeUpdate() {
       if (!video) return;
-      const t = video.currentTime;
-      let current: SubtitleCue | null = null;
-      for (let i = 0; i < sorted.length; i++) {
-        const start = timestampToSeconds(sorted[i].timestamp);
-        const end = i + 1 < sorted.length ? timestampToSeconds(sorted[i + 1].timestamp) : start + 3;
-        if (t >= start && t < end) {
-          current = sorted[i];
-          break;
-        }
-      }
-      setActiveCue(current);
+      setActiveCue(cueAt(cues, video.currentTime));
     }
 
     video.addEventListener("timeupdate", handleTimeUpdate);
     return () => video.removeEventListener("timeupdate", handleTimeUpdate);
   }, [cues]);
+
+  // 사진이 바뀌면 직전 사진을 바닥에 남긴 채 새 사진을 페이드로 띄운다
+  useEffect(() => {
+    if (!isPhoto || shownPhotoIndexRef.current === photoIndex) return;
+    setPrevPhotoUrl(photoUrls[shownPhotoIndexRef.current] ?? null);
+    shownPhotoIndexRef.current = photoIndex;
+    setPhotoFadedIn(false);
+    const frame = requestAnimationFrame(() => setPhotoFadedIn(true));
+    return () => cancelAnimationFrame(frame);
+  }, [isPhoto, photoIndex, photoUrls]);
+
+  // 사진 슬라이드쇼는 재생할 영상이 없으므로 자체 타이머로 사진을 넘기면서 그 시점의 자막을 보여준다
+  // (실제 내보내기에서는 나레이션 길이에 맞춰 장당 시간이 다시 계산된다)
+  useEffect(() => {
+    if (!isPhoto) return;
+    const total = photoUrls.length * PHOTO_SECONDS_PER_IMAGE;
+    const startedAt = Date.now();
+    const timer = window.setInterval(() => {
+      const elapsed = ((Date.now() - startedAt) / 1000) % total;
+      setPhotoIndex(Math.min(photoUrls.length - 1, Math.floor(elapsed / PHOTO_SECONDS_PER_IMAGE)));
+      setActiveCue(cueAt(cues, elapsed));
+    }, 250);
+    return () => window.clearInterval(timer);
+  }, [isPhoto, photoUrls.length, cues]);
 
   return (
     <div
@@ -93,9 +170,85 @@ export default function VideoWithSubtitles({ src, cues, channel, headline, views
       }}
     >
       <div style={{ position: "relative" }}>
-        <canvas ref={headerCanvasRef} style={{ display: "block", width: "100%", height: "auto" }} />
-        <canvas ref={captionCanvasRef} style={{ display: "block", width: "100%", height: "auto" }} />
-        <video ref={videoRef} src={src} controls style={{ display: "block", width: "100%", maxHeight: 460 }} />
+        {isPhoto ? (
+          // 사진 슬라이드쇼 — 영상 대신 사진이 순서대로 바뀌고, 그 위에 훅 문구·자막이 얹힌다
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              aspectRatio: String(FULL_CANVAS_RATIO),
+              overflow: "hidden",
+              background: "#000",
+            }}
+          >
+            {/* 이전 사진을 아래 깔고 새 사진을 서서히 띄워서 겹치게 넘긴다(내보내기는 사진마다
+                fade·wipe·circleopen 같은 서로 다른 전환 효과가 들어간다) */}
+            {prevPhotoUrl && (
+              <img
+                src={prevPhotoUrl}
+                alt=""
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            )}
+            <img
+              src={photoUrls[photoIndex]}
+              alt=""
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                opacity: photoFadedIn ? 1 : 0,
+                transition: `opacity ${PHOTO_TRANSITION_SECONDS}s ease`,
+              }}
+            />
+            <canvas
+              ref={overlayCanvasRef}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}
+            />
+          </div>
+        ) : isPlain ? (
+          // 글자 없음 — 원본 영상 그대로(음성·배경음만 입힘)
+          <div style={{ width: "100%", aspectRatio: String(FULL_CANVAS_RATIO), overflow: "hidden" }}>
+            <video
+              ref={videoRef}
+              src={src}
+              controls
+              style={{ display: "block", width: "100%", height: "100%", objectFit: "cover", objectPosition: "bottom" }}
+            />
+          </div>
+        ) : isOverlay ? (
+          // 훅+자막 오버레이 템플릿 — 헤더·자막바 없이 영상이 9:16 화면을 꽉 채우고,
+          // 그 위에 투명 캔버스로 훅 문구와 현재 자막만 얹는다
+          <div style={{ position: "relative", width: "100%", aspectRatio: String(FULL_CANVAS_RATIO), overflow: "hidden" }}>
+            <video
+              ref={videoRef}
+              src={src}
+              controls
+              style={{ display: "block", width: "100%", height: "100%", objectFit: "cover", objectPosition: "bottom" }}
+            />
+            <canvas
+              ref={overlayCanvasRef}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}
+            />
+          </div>
+        ) : (
+          <>
+            <canvas ref={headerCanvasRef} style={{ display: "block", width: "100%", height: "auto" }} />
+            <canvas ref={captionCanvasRef} style={{ display: "block", width: "100%", height: "auto" }} />
+            {/* 내보내기(videoExport.ts)와 똑같은 비율·기준으로 잘라서 보여준다 — 예전엔 미리보기가
+                원본 전체를 보여줘서 실제 mp4에서 무엇이 잘려나갈지 여기서는 알 수 없었다 */}
+            <div style={{ width: "100%", aspectRatio: String(VIDEO_AREA_RATIO), overflow: "hidden" }}>
+              <video
+                ref={videoRef}
+                src={src}
+                controls
+                style={{ display: "block", width: "100%", height: "100%", objectFit: "cover", objectPosition: "bottom" }}
+              />
+            </div>
+          </>
+        )}
 
         {/* 실제 틱톡 상단바 — 플랫폼 자체 UI는 파란 헤더 맨 위의 빈 안전 여백 위에 그대로
             얹힌다(별도 공간을 차지하지 않음). 틱톡은 중앙에 팔로잉/추천 탭, 우측에 검색만

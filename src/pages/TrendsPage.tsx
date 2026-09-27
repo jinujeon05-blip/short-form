@@ -1,14 +1,34 @@
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import { NavLink, Navigate, useParams } from "react-router-dom";
+import { NavLink, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
-import type { SearchKeyword, VideoSearchItem, VideoSearchPlatform, VideoSearchPlatformStatus } from "../types";
+import type {
+  GeneratorInput,
+  HookAnalysis,
+  Platform,
+  SearchKeyword,
+  SearchPeriod,
+  VideoSearchItem,
+  VideoSearchPlatform,
+  VideoSearchPlatformStatus,
+} from "../types";
 import * as videoSearchApi from "../lib/videoSearchApi";
 import Icon from "../components/ui/Icon";
 
 const PLATFORMS: VideoSearchPlatform[] = ["youtube", "tiktok", "instagram", "douyin", "xiaohongshu"];
 
-type SortKey = "views" | "comments";
+type SortKey = "views" | "comments" | "engagement";
+
+const PERIODS: SearchPeriod[] = ["all", "week", "month", "quarter", "year"];
+
+// 탐색한 영상을 생성기로 넘길 때, 그 플랫폼에서 만들 법한 결과물 형식을 기본값으로 고름
+const TARGET_PLATFORM: Record<VideoSearchPlatform, Platform> = {
+  youtube: "shorts",
+  instagram: "reels",
+  tiktok: "tiktok",
+  douyin: "tiktok",
+  xiaohongshu: "reels",
+};
 
 function isPlatform(value: string | undefined): value is VideoSearchPlatform {
   return PLATFORMS.includes(value as VideoSearchPlatform);
@@ -23,6 +43,7 @@ export default function TrendsPage() {
 
 function PlatformTrends({ platform }: { platform: VideoSearchPlatform }) {
   const { language, t } = useLanguage();
+  const navigate = useNavigate();
 
   const [statuses, setStatuses] = useState<VideoSearchPlatformStatus[]>([]);
   const [keywords, setKeywords] = useState<SearchKeyword[]>([]);
@@ -32,10 +53,15 @@ function PlatformTrends({ platform }: { platform: VideoSearchPlatform }) {
   const [query, setQuery] = useState("");
   const [searchedQuery, setSearchedQuery] = useState("");
   const [shortOnly, setShortOnly] = useState(true);
+  const [period, setPeriod] = useState<SearchPeriod>("all");
   const [sort, setSort] = useState<SortKey>("views");
   const [items, setItems] = useState<VideoSearchItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const [analysis, setAnalysis] = useState<HookAnalysis | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analysisError, setAnalysisError] = useState("");
 
   useEffect(() => {
     videoSearchApi.listVideoSearchPlatforms().then(setStatuses).catch(() => setStatuses([]));
@@ -50,8 +76,21 @@ function PlatformTrends({ platform }: { platform: VideoSearchPlatform }) {
     [language]
   );
 
+  // 조회수가 수백만인 숏폼에서 댓글 비율은 보통 0.01% 미만이라 소수점 자리수를 고정하면 전부 0.00%로
+  // 뭉개짐 — 유효숫자 2자리로 표시해서 0.00038%든 1.2%든 항상 차이가 보이게 함
+  const engagementFormat = useMemo(
+    () => new Intl.NumberFormat(language === "ko" ? "ko-KR" : language === "vi" ? "vi-VN" : "en-US", { maximumSignificantDigits: 2 }),
+    [language]
+  );
+
   const sorted = useMemo(() => {
-    const value = (item: VideoSearchItem) => (sort === "views" ? item.views : item.comments ?? -1);
+    // 참여율 = 댓글수 / 조회수. 조회수는 적어도 댓글이 유난히 많이 달린 영상(= 반응이 뜨거운 소재)을
+    // 찾으려는 것. 댓글을 막아둔 영상은 비교 대상이 아니라서 항상 맨 뒤로 보냄(-1)
+    const value = (item: VideoSearchItem) => {
+      if (sort === "views") return item.views;
+      if (sort === "comments") return item.comments ?? -1;
+      return item.comments == null || item.views === 0 ? -1 : item.comments / item.views;
+    };
     return [...items].sort((a, b) => value(b) - value(a));
   }, [items, sort]);
 
@@ -61,8 +100,12 @@ function PlatformTrends({ platform }: { platform: VideoSearchPlatform }) {
     setQuery(trimmed);
     setLoading(true);
     setError("");
+    setAnalysis(null);
+    setAnalysisError("");
     try {
-      setItems(await videoSearchApi.searchVideos(platform, trimmed, platform === "youtube" && shortOnly));
+      setItems(
+        await videoSearchApi.searchVideos(platform, trimmed, { shortOnly: platform === "youtube" && shortOnly, period })
+      );
       setSearchedQuery(trimmed);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -95,6 +138,39 @@ function PlatformTrends({ platform }: { platform: VideoSearchPlatform }) {
     } catch (err) {
       setKeywordError(err instanceof Error ? err.message : String(err));
     }
+  }
+
+  async function handleAnalyzeHooks() {
+    if (analyzing || sorted.length === 0) return;
+    setAnalyzing(true);
+    setAnalysisError("");
+    try {
+      setAnalysis(
+        await videoSearchApi.analyzeHooks(
+          sorted.map((item) => item.title),
+          searchedQuery,
+          language
+        )
+      );
+    } catch (err) {
+      setAnalysisError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setAnalyzing(false);
+    }
+  }
+
+  function handleUseVideo(item: VideoSearchItem) {
+    // 제목의 해시태그는 화면에 큰 글씨로 얹을 훅 문구로는 방해만 되므로 빼고 넘김
+    const headline = item.title.replace(/#[^\s#]+/g, "").replace(/\s+/g, " ").trim() || item.title;
+    const prefill: Partial<GeneratorInput> = {
+      sourceInfo: `${item.title}\n${item.url}`,
+      platform: TARGET_PLATFORM[platform],
+      channel: item.channel,
+      headline,
+      views: numberFormat.format(item.views),
+      comments: item.comments == null ? "" : numberFormat.format(item.comments),
+    };
+    navigate("/", { state: { prefill } });
   }
 
   const tabStyle = ({ isActive }: { isActive: boolean }) => ({
@@ -227,9 +303,23 @@ function PlatformTrends({ platform }: { platform: VideoSearchPlatform }) {
         <button type="submit" className="btn" disabled={!available || loading || !query.trim()}>
           {t("trends.search.button")}
         </button>
-        <select className="input" style={{ width: 150 }} value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
+        <select
+          className="input"
+          style={{ width: 140 }}
+          value={period}
+          onChange={(e) => setPeriod(e.target.value as SearchPeriod)}
+          disabled={!available}
+        >
+          {PERIODS.map((p) => (
+            <option key={p} value={p}>
+              {t(`trends.period.${p}`)}
+            </option>
+          ))}
+        </select>
+        <select className="input" style={{ width: 160 }} value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
           <option value="views">{t("trends.sort.views")}</option>
           <option value="comments">{t("trends.sort.comments")}</option>
+          <option value="engagement">{t("trends.sort.engagement")}</option>
         </select>
       </form>
 
@@ -254,23 +344,37 @@ function PlatformTrends({ platform }: { platform: VideoSearchPlatform }) {
         <p style={{ color: "var(--sub)", textAlign: "center", padding: "40px 0" }}>{t("trends.results.empty")}</p>
       ) : (
         <>
-          <p style={{ fontSize: 13, color: "var(--sub)", marginBottom: 10 }}>
-            {t("trends.results.count").replace("{query}", searchedQuery).replace("{count}", String(sorted.length))}
-            {sort === "comments" && platform === "youtube" && ` · ${t("trends.sort.commentsNote")}`}
-          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 10 }}>
+            <p style={{ fontSize: 13, color: "var(--sub)", flex: "1 1 240px" }}>
+              {t("trends.results.count").replace("{query}", searchedQuery).replace("{count}", String(sorted.length))}
+              {sort !== "views" && platform === "youtube" && ` · ${t("trends.sort.rerankNote")}`}
+            </p>
+            <button type="button" className="btn btn-secondary btn-sm" onClick={handleAnalyzeHooks} disabled={analyzing}>
+              <Icon name="sparkles" size={14} />
+              {analyzing ? t("trends.hooks.loading") : t("trends.hooks.button")}
+            </button>
+          </div>
+
+          {analysisError && (
+            <div className="card" style={{ borderColor: "var(--danger)", color: "var(--danger)", fontSize: 14, marginBottom: 12 }}>
+              {analysisError}
+            </div>
+          )}
+
+          {analysis && <HookReport analysis={analysis} t={t} onClose={() => setAnalysis(null)} />}
+
           <ol style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 8 }}>
             {sorted.map((item, index) => (
-              <li key={item.id}>
+              <li key={item.id} className="card" style={{ display: "flex", gap: 12, alignItems: "center", padding: 10 }}>
+                <span style={{ width: 32, flexShrink: 0, textAlign: "center", fontWeight: 700, color: index < 3 ? "var(--primary)" : "var(--sub)" }}>
+                  {index + 1}
+                </span>
                 <a
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="card"
-                  style={{ display: "flex", gap: 12, alignItems: "center", padding: 10 }}
+                  style={{ display: "flex", gap: 12, alignItems: "center", minWidth: 0, flex: 1 }}
                 >
-                  <span style={{ width: 32, flexShrink: 0, textAlign: "center", fontWeight: 700, color: index < 3 ? "var(--primary)" : "var(--sub)" }}>
-                    {index + 1}
-                  </span>
                   {item.thumbnail && (
                     <img
                       src={item.thumbnail}
@@ -304,14 +408,88 @@ function PlatformTrends({ platform }: { platform: VideoSearchPlatform }) {
                       <span style={{ fontWeight: sort === "comments" ? 700 : 500 }}>
                         {t("trends.stat.comments")} {item.comments == null ? t("trends.stat.commentsOff") : numberFormat.format(item.comments)}
                       </span>
+                      {item.comments != null && item.views > 0 && (
+                        <span style={{ fontWeight: sort === "engagement" ? 700 : 500, color: "var(--sub)" }}>
+                          {t("trends.stat.engagement")} {engagementFormat.format((item.comments / item.views) * 100)}%
+                        </span>
+                      )}
                     </p>
                   </div>
                 </a>
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  style={{ flexShrink: 0 }}
+                  onClick={() => handleUseVideo(item)}
+                >
+                  <Icon name="sparkles" size={14} />
+                  {t("trends.use")}
+                </button>
               </li>
             ))}
           </ol>
         </>
       )}
     </div>
+  );
+}
+
+function HookReport({
+  analysis,
+  t,
+  onClose,
+}: {
+  analysis: HookAnalysis;
+  t: (key: string) => string;
+  onClose: () => void;
+}) {
+  return (
+    <section className="card" style={{ marginBottom: 16, borderColor: "var(--primary)" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+        <h2 style={{ fontSize: 16, flex: 1 }}>{t("trends.hooks.title")}</h2>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t("trends.hooks.close")}
+          title={t("trends.hooks.close")}
+          style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--sub)", display: "inline-flex", padding: 4 }}
+        >
+          <Icon name="close" size={16} />
+        </button>
+      </div>
+
+      <p style={{ fontSize: 14, marginBottom: 16 }}>{analysis.summary}</p>
+
+      <h3 style={{ fontSize: 14, marginBottom: 8 }}>{t("trends.hooks.patterns")}</h3>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
+        {analysis.patterns.map((pattern) => (
+          <div key={pattern.name} style={{ background: "var(--bg)", borderRadius: 10, padding: 12 }}>
+            <p style={{ fontWeight: 700, color: "#191f28", fontSize: 14 }}>{pattern.name}</p>
+            <p style={{ fontSize: 13, marginTop: 4 }}>{pattern.explanation}</p>
+            <ul style={{ margin: "8px 0 0", paddingLeft: 18, fontSize: 12, color: "var(--sub)" }}>
+              {pattern.examples.map((example, i) => (
+                <li key={i}>{example}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <h3 style={{ fontSize: 14, marginBottom: 8 }}>{t("trends.hooks.keywords")}</h3>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 }}>
+        {analysis.keywords.map((keyword) => (
+          <span key={keyword} className="badge">
+            {keyword}
+          </span>
+        ))}
+      </div>
+
+      <h3 style={{ fontSize: 14, marginBottom: 8 }}>{t("trends.hooks.suggestions")}</h3>
+      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14, display: "flex", flexDirection: "column", gap: 6 }}>
+        {analysis.suggestions.map((suggestion, i) => (
+          <li key={i}>{suggestion}</li>
+        ))}
+      </ul>
+    </section>
   );
 }

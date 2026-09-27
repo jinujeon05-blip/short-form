@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { exportVideoWithSubtitlesAndNarration } from "../lib/videoExport";
 import { DEFAULT_VOICE, VOICES } from "../data/voices";
-import type { SubtitleCue } from "../types";
+import type { SubtitleCue, VideoTemplate } from "../types";
 import Icon from "./ui/Icon";
 
 const VOICE_STORAGE_KEY = "shortform-repurposing-voice";
@@ -22,6 +22,8 @@ interface Props {
   headline: string;
   views?: string;
   comments?: string;
+  template?: VideoTemplate;
+  photoUrls?: string[];
 }
 
 type Status = "idle" | "fetchingAudio" | "encoding" | "done" | "error";
@@ -54,6 +56,8 @@ export default function VideoExportButton({
   headline,
   views,
   comments,
+  template,
+  photoUrls,
 }: Props) {
   const { t } = useLanguage();
   const [status, setStatus] = useState<Status>("idle");
@@ -106,6 +110,8 @@ export default function VideoExportButton({
         headline,
         views,
         comments,
+        template,
+        photoUrls,
         onProgress: setProgress,
       });
 
@@ -135,15 +141,18 @@ export default function VideoExportButton({
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 10 }}>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 14 }}>
-        <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, cursor: "pointer" }}>
-          <input
-            type="checkbox"
-            checked={includeCaptions}
-            onChange={(e) => setIncludeCaptions(e.target.checked)}
-            disabled={isBusy}
-          />
-          {t("generator.result.exportIncludeCaptions")}
-        </label>
+        {/* "글자 없음" 템플릿은 애초에 자막을 안 넣으므로 이 선택지 자체가 의미 없다 */}
+        {template !== "none" && (
+          <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              checked={includeCaptions}
+              onChange={(e) => setIncludeCaptions(e.target.checked)}
+              disabled={isBusy}
+            />
+            {t("generator.result.exportIncludeCaptions")}
+          </label>
+        )}
         <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, cursor: "pointer" }}>
           <input
             type="checkbox"
