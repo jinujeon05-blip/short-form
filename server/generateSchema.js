@@ -50,6 +50,48 @@ export const HookAnalysisSchema = z.object({
   suggestions: z.array(z.string()).min(3).max(6).describe("이 분석을 바탕으로 바로 쓸 수 있는 새 훅 문구 제안"),
 });
 
+// 제품·모델 사진을 보고 "다른 영상 생성 AI(Dola·Gemini·Meta 등)에 그대로 붙여넣을 프롬프트"와
+// 그 영상에 쓸 멘트·문구·자막을 함께 만들어내는 스키마
+export const VideoPromptSchema = z.object({
+  productAnalysis: z.string().describe("사진에서 파악한 제품의 종류·형태·색상·소재·크기감·사용 맥락 요약(3~5문장)"),
+  modelAnalysis: z
+    .string()
+    .describe("모델(인물) 사진이 있으면 연령대·분위기·스타일·표정·포즈를 요약. 인물 사진이 없으면 빈 문자열"),
+  hook: z.string().describe("영상 첫 3초에 화면에 크게 띄울 훅 문구. 짧고 강하게"),
+  narration: z.string().describe("영상 전체에 깔 나레이션 멘트 전문. 구어체로, 지정된 영상 길이 안에 읽히는 분량"),
+  captions: z
+    .array(
+      z.object({
+        timestamp: z.string().describe("mm:ss 형식, 예: 0:05"),
+        text: z.string().describe("그 시점에 화면에 띄울 짧은 자막"),
+      })
+    )
+    .min(3)
+    .max(8),
+  scenes: z
+    .array(
+      z.object({
+        title: z.string().describe("장면 이름, 예: 훅 / 문제 제기 / 제품 클로즈업 / 사용 장면 / CTA"),
+        seconds: z.string().describe("구간, 예: 0-3초"),
+        visual: z.string().describe("화면 구성·카메라 움직임·분위기 설명"),
+        imageToUse: z.string().describe("이 장면에 쓰면 좋은 사진(예: 제품 사진 2번, 모델 사진 1번)"),
+      })
+    )
+    .min(3)
+    .max(6),
+  toolPrompts: z
+    .array(
+      z.object({
+        tool: z.string().describe("도구 이름(요청에 주어진 이름 그대로)"),
+        prompt: z.string().describe("그 도구 입력창에 그대로 붙여넣을 수 있는 상세 프롬프트. 장면·카메라·조명·분위기·자막 배치까지 구체적으로"),
+        tips: z.string().describe("그 도구에서 설정할 옵션이나 주의사항 1~2문장"),
+      })
+    )
+    .min(1)
+    .max(6),
+  hashtags: z.array(z.string()).min(3).max(12).describe("업로드할 때 쓸 해시태그(# 포함)"),
+});
+
 export const VideoAnalysisSchema = z.object({
   sourceInfo: z
     .string()

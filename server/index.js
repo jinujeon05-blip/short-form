@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { GoogleGenAI, createPartFromUri } from "@google/genai";
 import { z } from "zod";
-import { GeneratedContentSchema, VideoAnalysisSchema, HookAnalysisSchema } from "./generateSchema.js";
+import { GeneratedContentSchema, VideoAnalysisSchema, HookAnalysisSchema, VideoPromptSchema } from "./generateSchema.js";
 import { pcmToWav, parseL16MimeType } from "./audio.js";
 import { listHistory, insertHistory, listKeywords, addKeyword, deleteKeyword } from "./db.js";
 import { pickBgm, bgmDir } from "./bgm.js";
@@ -61,9 +61,30 @@ function friendlyGeminiError(err, contextLabel) {
 }
 
 const ai = new GoogleGenAI({});
+
+// 쓰던 모델이 "This model is currently experiencing high demand"(503)로 통째로 막히는 일이 실제로
+// 있었다(2026-09-29: gemini-3.6-flash가 계속 503, 사용자가 10번 넘게 실패). 한 모델이 막히면
+// 다음 모델로 자동으로 넘어가도록 순서대로 시도한다. 앞에 있는 것이 기본 모델.
+const TEXT_MODELS = ["gemini-3.8-flash", "gemini-3-flash-preview"];
+
+async function generateWithFallback(params) {
+  let lastError;
+  for (const model of TEXT_MODELS) {
+    try {
+      return await ai.models.generateContent({ ...params, model });
+    } catch (err) {
+      // 과부하(503)·쿼터(429)일 때만 다음 모델로 넘어간다 — 그 외 오류는 모델을 바꿔도 똑같다
+      if (err?.status !== 503 && err?.status !== 429) throw err;
+      lastError = err;
+      console.warn(`Gemini model ${model} unavailable (${err.status}), trying next model`);
+    }
+  }
+  throw lastError;
+}
 const responseJsonSchema = z.toJSONSchema(GeneratedContentSchema);
 const videoAnalysisJsonSchema = z.toJSONSchema(VideoAnalysisSchema);
 const hookAnalysisJsonSchema = z.toJSONSchema(HookAnalysisSchema);
+const videoPromptJsonSchema = z.toJSONSchema(VideoPromptSchema);
 
 // 영상 파일을 base64로 인라인 전송하므로 기본 100kb 제한보다 넉넉하게 잡음(아래 MAX_VIDEO_BYTES
 // 참고) — base64 인코딩 자체가 원본보다 약 4/3배 부풀고 JSON 오버헤드도 붙으므로, 18MB 체크가
@@ -126,8 +147,7 @@ app.post("/api/generate", async (req, res) => {
   }
 
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+    const response = await generateWithFallback({
       contents: `출력 언어: ${languageName}
 ${durationLine}${photoLine}원본 영상 링크 또는 주요 특징 요약: ${sourceInfo}
 타겟 플랫폼: ${PLATFORM_LABELS[platform] ?? platform}
@@ -226,8 +246,7 @@ app.post(
     uploadedName = uploaded.name;
     const file = await waitForActiveFile(uploaded);
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+    const response = await generateWithFallback({
       contents: [
         {
           text: `너는 이커머스 숏폼 마케팅 영상 분석가야. 업로드된 영상을 보고 두 가지를 작성해.
@@ -433,6 +452,145 @@ app.get("/api/video-search/:platform", async (req, res) => {
   }
 });
 
+// 제품·모델 사진을 보고 (1) 영상에 쓸 멘트·훅 문구·자막과 (2) Dola AI·Gemini·Meta AI 같은
+// 다른 영상 생성 AI에 그대로 붙여넣을 상세 프롬프트를 함께 만들어준다.
+// 사진은 영상보다 훨씬 작아서 Files API 없이 인라인으로 보낸다(프론트에서 미리 축소해서 올림).
+const MAX_PROMPT_IMAGES = 12;
+
+// 영상 컨셉 — 고른 컨셉에 따라 말투·카메라 앵글·장면 구성이 완전히 달라지므로, 각 컨셉이
+// 실제로 어떤 화면과 어떤 멘트를 뜻하는지 구체적으로 알려준다(이름만 주면 뻔한 결과가 나옴)
+const CONCEPT_GUIDE = {
+  ugc: `UGC(실사용자 후기) 컨셉: 광고처럼 보이면 안 된다. 일반인이 휴대폰으로 직접 찍은 느낌 —
+핸드헬드라 미세하게 흔들리고, 조명은 집·사무실의 자연광이나 형광등 그대로, 배경에 생활감이 있다.
+멘트는 "이거 진짜 사길 잘했어요" 같은 솔직한 후기 말투로 쓰고, 과장된 광고 문구나 성우 톤은 쓰지 마.
+자막도 손으로 친 듯 짧고 구어체로.`,
+  pov: `POV(1인칭 시점) 컨셉: 카메라가 시청자의 눈이다. 화면에 등장하는 건 손과 제품뿐이고,
+얼굴은 나오지 않는다. 눈높이에서 제품을 집어 들고, 만지고, 쓰는 과정을 그대로 따라간다.
+멘트와 자막은 "지금 막 열어봤는데", "여기를 누르면" 처럼 시청자가 직접 하고 있는 듯한 현재형으로 써.
+장면 지시에 "1인칭 시점, 손만 프레임에 등장, 눈높이 앵글"을 반드시 포함해.`,
+  unboxing: `언박싱 컨셉: 택배 상자가 도착한 순간부터 시작한다. 상자 개봉 → 포장재 제거 →
+제품 첫 등장 → 구성품 하나씩 확인 → 실제로 써보기 순서로 구성해. 포장을 뜯는 소리와 첫인상
+리액션이 핵심이고, 제품이 처음 모습을 드러내는 순간을 가장 공들여 연출해.
+멘트는 뜯으면서 실시간으로 반응하는 말투로 써.`,
+};
+
+app.post("/api/video-prompt", async (req, res) => {
+  const { images, productName, targetAudience, platform, durationSeconds, tools, language, extraNote, concepts } =
+    req.body ?? {};
+  const languageName = LANGUAGE_NAMES[language] ?? LANGUAGE_NAMES.ko;
+
+  if (!Array.isArray(images) || images.length === 0) {
+    res.status(400).json({ error: "제품 사진을 한 장 이상 올려주세요." });
+    return;
+  }
+  if (images.length > MAX_PROMPT_IMAGES) {
+    res.status(400).json({ error: `사진은 최대 ${MAX_PROMPT_IMAGES}장까지 분석할 수 있어요.` });
+    return;
+  }
+  const validImages = images.filter(
+    (img) => img && typeof img.data === "string" && img.data.trim() && typeof img.mimeType === "string" && img.mimeType.startsWith("image/")
+  );
+  if (validImages.length === 0) {
+    res.status(400).json({ error: "사진을 읽지 못했어요. 다시 올려주세요." });
+    return;
+  }
+
+  if (!process.env.GEMINI_API_KEY) {
+    res.status(500).json({
+      error: "서버에 GEMINI_API_KEY가 설정돼 있지 않아요. .env 파일에 키를 추가한 뒤 서버를 다시 시작해주세요.",
+    });
+    return;
+  }
+
+  const toolList =
+    Array.isArray(tools) && tools.length > 0
+      ? tools.filter((t) => typeof t === "string" && t.trim()).slice(0, 6)
+      : ["Dola AI", "Google Gemini (Veo)", "Meta AI", "공통(어떤 도구에나)"];
+  const seconds =
+    typeof durationSeconds === "number" && Number.isFinite(durationSeconds) && durationSeconds > 0
+      ? Math.round(durationSeconds)
+      : 30;
+
+  const selectedConcepts = Array.isArray(concepts) ? concepts.filter((c) => CONCEPT_GUIDE[c]) : [];
+  const conceptBlock =
+    selectedConcepts.length > 0
+      ? `\n[영상 컨셉 — 아래 지시를 멘트·자막·장면·프롬프트 전부에 반영해]\n${selectedConcepts
+          .map((c) => CONCEPT_GUIDE[c])
+          .join("\n")}\n${
+          selectedConcepts.length > 1
+            ? "여러 컨셉이 선택됐으면 하나로 자연스럽게 합쳐라(예: POV+언박싱이면 1인칭 시점으로 상자를 뜯는 영상).\n"
+            : ""
+        }`
+      : "";
+
+  // 어떤 사진이 제품이고 어떤 사진이 모델인지 모델에게 알려줘야 장면 지시가 정확해진다
+  const imageParts = [];
+  const labels = [];
+  let productIndex = 0;
+  let modelIndex = 0;
+  for (const img of validImages) {
+    const isModel = img.kind === "model";
+    const label = isModel ? `모델 사진 ${++modelIndex}번` : `제품 사진 ${++productIndex}번`;
+    labels.push(label);
+    imageParts.push({ text: `[${label}]` });
+    imageParts.push({ inlineData: { data: img.data, mimeType: img.mimeType } });
+  }
+
+  try {
+    const response = await generateWithFallback({
+      contents: [
+        {
+          text: `너는 이커머스 숏폼 영상 기획자이자 영상 생성 AI 프롬프트 전문가야. 아래 사진들을 직접 보고 작업해.
+
+[입력]
+제품명/설명: ${typeof productName === "string" && productName.trim() ? productName : "(사진을 보고 추정해)"}
+주요 타겟층: ${typeof targetAudience === "string" && targetAudience.trim() ? targetAudience : "(사진과 제품에 어울리게 정해)"}
+타겟 플랫폼: ${PLATFORM_LABELS[platform] ?? platform ?? "틱톡"}
+목표 영상 길이: ${seconds}초 (9:16 세로)
+첨부한 사진: ${labels.join(", ")}
+${typeof extraNote === "string" && extraNote.trim() ? `추가 요청: ${extraNote}\n` : ""}${conceptBlock}
+[할 일]
+1. 사진을 실제로 관찰해서 제품(그리고 인물)이 어떻게 생겼는지 구체적으로 적어. 색상·소재·형태·크기감처럼 눈에 보이는 것만 적고, 사진에 없는 기능을 지어내지 마.
+2. 그 분석을 바탕으로 ${seconds}초 영상에 쓸 훅 문구, 나레이션 멘트 전문, 시점별 자막을 써.
+3. 장면 구성을 나누고, 각 장면에 어떤 사진을 쓰면 좋은지 사진 번호로 지정해.
+4. 아래 도구들 각각에 **그대로 붙여넣을 수 있는** 상세 프롬프트를 써: ${toolList.join(", ")}
+   - 프롬프트에는 장면 순서, 카메라 움직임(예: 천천히 줌인, 슬로우 팬), 조명·분위기, 색감, 제품이 화면에서 차지하는 비중, 자막이 들어갈 위치, 영상 길이와 비율(9:16)을 구체적으로 적어.
+   - 도구마다 입력 방식이 다르니, 그 도구에 맞는 형태로 써(예: 이미지 업로드 기반 도구는 "업로드한 제품 사진 1번을 기준으로"처럼 사진을 가리키게, 텍스트만 받는 도구는 장면을 글로 묘사).
+   - 사진 속 제품의 생김새를 프롬프트 안에서 다시 묘사해서, 그 도구가 엉뚱한 제품을 만들지 않게 해.
+5. 업로드용 해시태그도 뽑아.
+
+모든 텍스트는 ${languageName}로 써. 다만 영어 프롬프트를 더 잘 받아들이는 도구라면 그 도구의 prompt 필드만 영어로 쓰고, tips에는 그 이유를 ${languageName}로 적어.`,
+        },
+        ...imageParts,
+      ],
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: videoPromptJsonSchema,
+      },
+    });
+
+    if (!response.text) {
+      res.status(502).json({ error: "AI 응답을 해석하지 못했어요. 다시 시도해주세요." });
+      return;
+    }
+
+    let parsed;
+    try {
+      parsed = VideoPromptSchema.parse(JSON.parse(response.text));
+    } catch (parseErr) {
+      console.error("Video prompt parse/validation error:", parseErr);
+      res.status(502).json({ error: "AI 응답 형식이 올바르지 않아요. 다시 시도해주세요." });
+      return;
+    }
+
+    res.json(parsed);
+  } catch (err) {
+    console.error("Video prompt error:", err);
+    const { httpStatus, message } = friendlyGeminiError(err, "프롬프트 생성");
+    res.status(httpStatus).json({ error: message });
+  }
+});
+
 // 검색으로 찾은 인기 영상 제목들을 모아 어떤 훅이 통하는지 분석 — 영상은 보내지 않고
 // 제목 텍스트만 보내므로 토큰도 적게 들고 /api/generate 파이프라인과도 완전히 분리돼 있음
 app.post("/api/analyze-hooks", async (req, res) => {
@@ -458,8 +616,7 @@ app.post("/api/analyze-hooks", async (req, res) => {
     .join("\n");
 
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+    const response = await generateWithFallback({
       contents: `너는 숏폼 콘텐츠 소재 조사 전문가야. 아래는 "${typeof query === "string" ? query : ""}"로 검색해서 나온 조회수 상위 숏폼 영상들의 제목 목록이야.
 이 제목들을 분석해서, 이 주제에서 실제로 통하는 훅(Hook) 패턴을 정리해줘.
 - 제목을 그대로 나열하지 말고, 공통된 구조·심리 트리거를 패턴으로 묶어서 이름을 붙여.
@@ -561,7 +718,11 @@ if (isProd) {
   const { createServer: createViteServer } = await import("vite");
   const vite = await createViteServer({
     root: path.join(__dirname, ".."),
-    server: { middlewareMode: true },
+    // 이 프로젝트는 OneDrive 폴더 안에 있어서 파일 변경 알림이 Vite까지 오지 않는 경우가 있다 —
+    // 그러면 소스를 고쳐도 서버가 예전에 변환해둔 코드를 계속 돌려줘서, 브라우저를 새로고침해도
+    // 옛 코드가 실행된다(실제로 "shrinkPhotoForExport is not defined"로 한참 헤맴).
+    // 폴링으로 직접 확인하게 해서 변경이 항상 반영되도록 한다.
+    server: { middlewareMode: true, watch: { usePolling: true, interval: 400 } },
     appType: "spa",
   });
   app.use(vite.middlewares);

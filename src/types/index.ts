@@ -129,6 +129,47 @@ export interface HookAnalysis {
   suggestions: string[];
 }
 
+/** 영상 컨셉 — 고르면 멘트 말투·카메라 앵글·장면 구성이 그 컨셉에 맞게 바뀐다 */
+export type PromptConcept = "ugc" | "pov" | "unboxing";
+
+/** 프롬프트 스튜디오에 올린 사진 — 제품 사진인지 모델(인물) 사진인지 구분해서 분석에 넘긴다 */
+export interface PromptImage {
+  id: string;
+  name: string;
+  /** 화면 미리보기용 object URL */
+  url: string;
+  kind: "product" | "model";
+}
+
+export interface PromptCaption {
+  timestamp: string;
+  text: string;
+}
+
+export interface PromptScene {
+  title: string;
+  seconds: string;
+  visual: string;
+  imageToUse: string;
+}
+
+export interface ToolPrompt {
+  tool: string;
+  prompt: string;
+  tips: string;
+}
+
+export interface VideoPromptResult {
+  productAnalysis: string;
+  modelAnalysis: string;
+  hook: string;
+  narration: string;
+  captions: PromptCaption[];
+  scenes: PromptScene[];
+  toolPrompts: ToolPrompt[];
+  hashtags: string[];
+}
+
 export interface GeneratedResult extends GeneratedContent {
   id: string;
   createdAt: string;

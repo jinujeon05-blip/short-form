@@ -6,6 +6,7 @@ import GeneratorPage from "./pages/GeneratorPage";
 import HistoryPage from "./pages/HistoryPage";
 import HistoryDetailPage from "./pages/HistoryDetailPage";
 import TrendsPage from "./pages/TrendsPage";
+import PromptStudioPage from "./pages/PromptStudioPage";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
               <Route path="/history/:id" element={<HistoryDetailPage />} />
               <Route path="/trends" element={<Navigate to="/trends/youtube" replace />} />
               <Route path="/trends/:platform" element={<TrendsPage />} />
+              <Route path="/prompt" element={<PromptStudioPage />} />
             </Routes>
           </div>
         </BrowserRouter>

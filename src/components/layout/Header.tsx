@@ -58,6 +58,9 @@ export default function Header() {
           <NavLink to="/trends" style={navLinkStyle}>
             {t("nav.trends")}
           </NavLink>
+          <NavLink to="/prompt" style={navLinkStyle}>
+            {t("nav.prompt")}
+          </NavLink>
           <label
             style={{
               marginLeft: 8,

@@ -27,6 +27,34 @@ import {
 } from "./overlayTemplate";
 import { PHOTO_SECONDS_PER_IMAGE, PHOTO_TRANSITION_SECONDS, photoTransitionAt } from "./photoSlideshow";
 
+// 휴대폰·카메라 사진은 3000x4000처럼 커서, 그대로 브라우저 안 ffmpeg(wasm)에 넣으면 한 장을
+// 펼치는 데만 수십 MB씩 먹는다 — 사진 여러 장이면 메모리가 터지면서 "Aborted()"로 인코딩이
+// 통째로 실패한다(실제로 3000x4000 7장으로 재현됨). 어차피 출력은 1080x1920이라, 화면을 덮을
+// 수 있는 최소 크기까지 미리 줄여서 넘긴다(작은 사진은 그대로 두고 절대 키우지 않는다).
+async function shrinkPhotoForExport(url: string): Promise<Blob> {
+  const original = await fetch(url).then((res) => res.blob());
+  const bitmap = await createImageBitmap(original);
+  const scale = Math.min(1, Math.max(OUTPUT_CANVAS_W / bitmap.width, OUTPUT_CANVAS_H / bitmap.height));
+  if (scale >= 1) {
+    bitmap.close();
+    return original;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext("2d")!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close();
+
+  return await new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => (blob ? resolve(blob) : reject(new Error("사진을 변환하지 못했어요."))),
+      "image/jpeg",
+      0.92
+    );
+  });
+}
+
 // 사진들을 같은 크기로 맞춘 뒤 xfade로 한 장씩 겹쳐 넘긴다. 전환 효과는 사진이 바뀔 때마다
 // 다른 것이 나오도록 순서대로 돌려 쓴다(fade → wipeleft → circleopen → ...).
 // fps/format/setpts를 맞춰두지 않으면 xfade가 사진마다 타임스탬프·픽셀 포맷이 달라 실패한다.
@@ -202,6 +230,14 @@ export async function exportVideoWithSubtitlesAndNarration({
 }: ExportOptions): Promise<Blob> {
   const ffmpeg = await loadFFmpeg();
 
+  // ffmpeg가 실패하면 마지막 로그에 진짜 이유가 찍힌다 — 화면 에러 메시지에 그대로 붙여주려고 모아둔다
+  const logLines: string[] = [];
+  const logHandler = ({ message }: { message: string }) => {
+    if (message.trim()) logLines.push(message);
+    if (logLines.length > 80) logLines.shift();
+  };
+  ffmpeg.on("log", logHandler);
+
   const unsubscribeProgress = onProgress
     ? (() => {
         const handler = ({ progress }: { progress: number }) => onProgress(Math.min(1, Math.max(0, progress)));
@@ -244,7 +280,7 @@ export async function exportVideoWithSubtitlesAndNarration({
     const photoNames: string[] = [];
     if (isPhoto) {
       for (let i = 0; i < photos.length; i++) {
-        const blob = await fetch(photos[i]).then((res) => res.blob());
+        const blob = await shrinkPhotoForExport(photos[i]);
         // ffmpeg는 확장자로 이미지 포맷을 짐작하므로 실제 타입에 맞는 이름으로 써준다
         const name = `p${i}.${blob.type === "image/png" ? "png" : blob.type === "image/webp" ? "webp" : "jpg"}`;
         await ffmpeg.writeFile(name, await fetchFile(blob));
@@ -397,7 +433,9 @@ export async function exportVideoWithSubtitlesAndNarration({
     // 음성도 BGM도 다 껐으면 오디오 트랙 없이 무음 영상으로 내보낸다.
     const filter = filterParts.join(";");
 
-    await ffmpeg.exec([
+    // exec은 실패해도 예외를 던지지 않고 종료 코드만 돌려준다 — 확인하지 않으면 그대로 진행하다가
+    // output.mp4를 읽는 데서 엉뚱한 에러가 나서 진짜 원인(필터 오류 등)이 보이지 않는다
+    const exitCode = await ffmpeg.exec([
       ...inputArgs,
       "-filter_complex",
       filter,
@@ -415,9 +453,16 @@ export async function exportVideoWithSubtitlesAndNarration({
       "output.mp4",
     ]);
 
+    if (exitCode !== 0) {
+      const tail = logLines.slice(-10).join("\n");
+      console.error("ffmpeg failed", { exitCode, filter, log: logLines });
+      throw new Error(`영상 인코딩에 실패했어요 (ffmpeg 종료 코드 ${exitCode}).\n${tail}`);
+    }
+
     const data = await ffmpeg.readFile("output.mp4");
     return new Blob([new Uint8Array(data as Uint8Array)], { type: "video/mp4" });
   } finally {
+    ffmpeg.off("log", logHandler);
     unsubscribeProgress?.();
     const cleanupFiles = [
       "input.mp4",

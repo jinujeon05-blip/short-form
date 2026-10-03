@@ -187,8 +187,11 @@ export default function VideoExportButton({
           </a>
         )}
       </div>
+      {/* ffmpeg 로그를 여러 줄로 붙여 보여주므로 줄바꿈을 살린다(원인 파악에 이 줄들이 필요함) */}
       {status === "error" && errorMessage && (
-        <p style={{ fontSize: 12, color: "var(--danger)" }}>{errorMessage}</p>
+        <p style={{ fontSize: 12, color: "var(--danger)", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+          {errorMessage}
+        </p>
       )}
     </div>
   );
