@@ -507,4 +507,20 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
   .month-table tr > :last-child { grid-column: 1 / -1; white-space: normal; }
   .month-table thead tr > :last-child { display: none; }
 }
+.hazard-controls { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; margin: 6px 0 14px; }
+.hazard-controls label { display: grid; gap: 4px; }
+.hazard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 12px 0; }
+.hazard-item { display: grid; gap: 4px; padding: 12px; border-radius: 10px; background: var(--bg2); border: 1px solid var(--line); }
+.hazard-item.is-bad { border-color: rgba(224, 128, 107, 0.45); }
+.hazard-verdict { display: flex; gap: 16px; font-weight: 700; font-size: 1.05rem; margin: 6px 0; }
+.hazard-table tbody tr { cursor: pointer; }
+.month-table tr.on { background: rgba(226, 192, 122, 0.08); }
+@media (max-width: 600px) {
+  .hazard-table tr { display: table-row; padding: 0; }
+  .hazard-table th, .hazard-table td { border-bottom: 1px solid var(--line); padding: 6px 3px; }
+  .hazard-table thead tr > :last-child { display: table-cell; }
+  .hazard-table th .muted { display: none; }
+  .hazard-table { font-size: 0.85rem; }
+  .hazard-table thead th { white-space: normal; vertical-align: bottom; }
+}
 .other-zodiacs { display: flex; flex-wrap: wrap; gap: 8px; }

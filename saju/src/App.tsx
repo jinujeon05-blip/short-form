@@ -7,6 +7,7 @@ import { CalendarPage } from './pages/CalendarPage';
 import { SajuPage } from './pages/SajuPage';
 import { MatchPage } from './pages/MatchPage';
 import { NamePage } from './pages/NamePage';
+import { HazardPage } from './pages/HazardPage';
 import { metaFor } from './meta';
 import { GuideIndexPage, GuidePage, InfoPage } from './pages/ArticlePages';
 import { YearlyIndexPage, YearlyZodiacPage } from './pages/YearlyPage';
@@ -113,6 +114,8 @@ function Shell({ route }: { route: Route }) {
           <MatchPage query={route.search} />
         ) : route.path === '/name' ? (
           <NamePage query={route.search} />
+        ) : route.path === '/samjae' ? (
+          <HazardPage query={route.search} />
         ) : route.path.startsWith('/fortune/') ? (
           <YearlyRoute path={route.path} />
         ) : route.path === '/guide' ? (
@@ -132,6 +135,7 @@ function Shell({ route }: { route: Route }) {
         <nav className="footer-links" aria-label="footer">
           {links.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
           <Link to="/fortune/2027">{YEARLY_LINK[lang]}</Link>
+          <Link to="/samjae">{SAMJAE_LINK[lang]}</Link>
           <Link to="/guide">{t.guide.title}</Link>
           <Link to="/about">{t.info.about}</Link>
           <Link to="/privacy">{t.info.privacy}</Link>
@@ -148,6 +152,7 @@ function Shell({ route }: { route: Route }) {
 }
 
 const YEARLY_LINK: Record<Lang, string> = { ko: '2027 신년운세', vi: 'Tử vi 2027' };
+const SAMJAE_LINK: Record<Lang, string> = { ko: '삼재 계산기', vi: 'Tam Tai · Kim Lâu' };
 
 function YearlyRoute({ path }: { path: string }) {
   const [, , year, slug] = path.split('/');
