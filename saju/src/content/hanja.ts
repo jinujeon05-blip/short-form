@@ -398,6 +398,88 @@ const RAW = `
 基|기|Cơ|터|nền móng|g
 宰|재|Tể|재상|tể tướng|g
 炫|현|Huyễn|밝다|rực sáng|g
+津|진|Tân|나루|bến đò|g
+秦|진|Tần|나라 이름|nhà Tần|g
+震|진|Chấn|우레·떨치다|sấm, chấn động|g
+昱|욱|Dục|햇빛 밝다|ánh nắng rực rỡ|g
+旭|욱|Húc|아침 해|mặt trời mọc|g
+煜|욱|Dục|빛나다|chói lọi|g
+郁|욱|Úc|향기롭다·성하다|thơm ngát|g
+泫|현|Huyễn|물 깊다·이슬 빛나다|nước sâu, giọt sương|g
+鉉|현|Huyễn|솥귀|quai đỉnh|g
+玹|현|Huyền|옥돌|ngọc huyền|g
+炅|경|Quýnh|빛나다|sáng rực|g
+炯|형|Quýnh|밝다|sáng sủa|g
+亨|형|Hanh|형통하다|hanh thông|g
+衡|형|Hành|저울·평형|cân bằng|g
+馨|형|Hinh|향기|hương thơm xa|g
+晟|성|Thịnh|밝다·성하다|rực rỡ|g
+誠|성|Thành|정성|thành thật|g
+昇|승|Thăng|오르다|thăng tiến|g
+炳|병|Bỉnh|밝다|sáng rõ|g
+秉|병|Bỉnh|잡다·지키다|giữ gìn|g
+棟|동|Đống|용마루·기둥|cột trụ|g
+桐|동|Đồng|오동나무|cây ngô đồng|g
+斗|두|Đẩu|말·북두성|sao Bắc Đẩu|g
+守|수|Thủ|지키다|giữ gìn|g
+壽|수|Thọ|목숨·장수|trường thọ|g
+樹|수|Thụ|나무|cây|g
+淳|순|Thuần|순박하다|thuần hậu|g
+舜|순|Thuấn|순임금|vua Thuấn|g
+湜|식|Thực|물 맑다|nước trong|g
+暎|영|Ánh|비치다|chiếu sáng|g
+瑛|영|Anh|옥빛|ánh ngọc|g
+寧|녕|Ninh|편안하다|an ninh|g
+叡|예|Duệ|밝다·슬기롭다|sáng suốt|g
+睿|예|Duệ|슬기롭다|thông tuệ|g
+完|완|Hoàn|완전하다|hoàn thiện|g
+婉|완|Uyển|순하다·예쁘다|dịu dàng|g
+堯|요|Nghiêu|요임금|vua Nghiêu|g
+鎔|용|Dung|녹이다·거푸집|đúc|g
+溶|용|Dung|녹다·넓다|hòa tan, bao la|g
+佑|우|Hựu|돕다|phù trợ|g
+侑|유|Hựu|권하다·돕다|giúp đỡ|g
+胤|윤|Dận|자손|con cháu|g
+誾|은|Ngân|온화하다|ôn hòa|g
+宜|의|Nghi|마땅하다|thích hợp|g
+益|익|Ích|더하다|lợi ích|g
+寅|인|Dần|범·공경하다|kính cẩn|g
+慈|자|Từ|사랑|từ bi|g
+哉|재|Tai|어조사·비롯하다|bắt đầu|g
+禎|정|Trinh|상서롭다|điềm lành|g
+庭|정|Đình|뜰|sân nhà|g
+婷|정|Đình|예쁘다|xinh đẹp|g
+鍾|종|Chung|쇠북·모으다|chuông|g
+宗|종|Tông|마루·근본|tông, gốc|g
+柱|주|Trụ|기둥|cột trụ|g
+宙|주|Trụ|집·우주|vũ trụ|g
+埈|준|Tuấn|높다|cao|g
+峻|준|Tuấn|높다·준엄하다|cao ngất|g
+駿|준|Tuấn|준마|ngựa tốt|g
+昌|창|Xương|창성하다|xương thịnh|g
+彰|창|Chương|드러나다|rõ ràng|g
+采|채|Thái|캐다·풍채|phong thái|g
+澈|철|Triệt|맑다|trong suốt|g
+喆|철|Triết|밝다|sáng suốt|g
+澤|택|Trạch|못·은혜|ân trạch|g
+太|태|Thái|크다|to lớn|g
+弼|필|Bật|돕다|phò tá|g
+翰|한|Hàn|글·날개|văn chương|g
+憲|헌|Hiến|법|hiến pháp|g
+弘|홍|Hoằng|넓다|rộng lớn|g
+晃|황|Hoảng|밝다|sáng chói|g
+希|희|Hy|바라다|hy vọng|g
+禧|희|Hy|복|phúc lành|g
+薰|훈|Huân|향풀·향기|cỏ thơm|g
+訓|훈|Huấn|가르치다|dạy dỗ|g
+揆|규|Quỹ|헤아리다|đo lường|g
+奭|석|Thích|크다·성하다|lớn lao|g
+始|시|Thủy|비롯하다|khởi đầu|g
+乾|건|Càn|하늘|trời|g
+昊|호|Hạo|하늘|bầu trời|g
+晧|호|Hạo|밝다|sáng|g
+鎬|호|Cảo|호경(서울 이름)|đất Hạo Kinh|g
+玟|민|Mân|옥돌|ngọc mân|g
 `;
 
 export type Role = 's' | 'g';
