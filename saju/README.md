@@ -35,7 +35,24 @@ npm test         # 계산 엔진 테스트
 npm run build    # dist/ 에 정적 사이트 생성
 ```
 
-## 배포 (무료)
+## 검색 노출 (SEO)
+- 주소: 한국어 `/`, `/calendar`, `/match`, `/name`, `/saju` · 베트남어 `/vi`, `/vi/calendar` … (예전 `/#/…` 링크는 자동으로 새 주소로 이동)
+- `npm run build`가 페이지·언어별 HTML(제목, 설명, canonical, hreflang, 미리보기 태그)과 `sitemap.xml`, `robots.txt`를 만듭니다 (`scripts/prerender.mjs`)
+- 페이지별 검색 제목·설명: `src/seo.json`
+- 사이트 주소·검색엔진 인증값: `site.config.json` (도메인을 바꾸면 `siteUrl`만 수정)
+- 링크 미리보기 이미지: `public/og-image.png` (1200×630)
+
+### 검색엔진 등록 순서
+1. **Google Search Console** (베트남 검색의 대부분, 한국도 중요)
+   - 속성 추가 → "URL 접두어"에 사이트 주소 입력 → 확인 방법 "HTML 태그" 선택
+   - 태그의 `content="…"` 값을 `site.config.json`의 `verification.google`에 넣고 배포 → "확인"
+   - 왼쪽 "Sitemaps"에 `sitemap.xml` 제출
+2. **네이버 서치어드바이저** (searchadvisor.naver.com)
+   - 웹마스터 도구 → 사이트 등록 → "HTML 태그" 방식 → 값을 `verification.naver`에 넣고 배포 → 소유 확인
+   - 요청 → 사이트맵 제출에 `sitemap.xml` 입력
+3. **Bing 웹마스터 도구**: Google Search Console에서 가져오기로 바로 등록 가능 (값은 `verification.bing`)
+
+
 정적 사이트라 Vercel / Cloudflare Pages / Netlify 무료 요금제로 배포할 수 있습니다.
 - Vercel: 새 프로젝트 → 이 저장소 선택 → Root Directory `saju` → Framework `Vite` → Deploy
 

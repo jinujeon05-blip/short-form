@@ -7,6 +7,7 @@ import { BirthFields, BirthForm, decodeBirth, defaultBirth, encodeBirth, toInput
 import { ELEMENT_CLASS, Section, localTodayJdn } from '../components/common';
 import { ShareImageButton } from '../components/ShareImage';
 import { drawMatchCard } from '../components/cards';
+import { Link, hrefFor, navigate } from '../router';
 
 export function MatchPage({ query }: { query: string }) {
   const { t, lang } = useI18n();
@@ -48,7 +49,7 @@ export function MatchPage({ query }: { query: string }) {
       calculateSaju(toInput(a));
       calculateSaju(toInput(b));
       setError('');
-      window.location.hash = `#/match?a=${encodeURIComponent(encodeBirth(a))}&b=${encodeURIComponent(encodeBirth(b))}`;
+      navigate(hrefFor('/match', lang, `?a=${encodeURIComponent(encodeBirth(a))}&b=${encodeURIComponent(encodeBirth(b))}`));
     } catch (err) {
       setError(err instanceof InvalidDateError ? t.saju.invalid : String(err));
     }
@@ -176,14 +177,14 @@ function MatchResultView({ m, names }: { m: MatchResult; names: [string, string]
           ) : (
             <p className="muted">{t.match.noGoodDays}</p>
           )}
-          <a href="#/calendar" className="small">{t.nav.calendar} →</a>
+          <Link to="/calendar" className="small">{t.nav.calendar} →</Link>
         </div>
       </div>
 
       <div className="result-actions">
         <ShareImageButton filename="myeongwol-match.png" draw={(ctx) => drawMatchCard(ctx, m, names, t, lang)} />
         <button className="btn btn-ghost" onClick={shareLink}>{copied ? t.result.copied : t.result.share}</button>
-        <a className="btn btn-ghost" href="#/match">{t.match.again}</a>
+        <Link className="btn btn-ghost" to="/match">{t.match.again}</Link>
       </div>
       <p className="muted small center">{t.match.disclaimer}</p>
     </Section>
