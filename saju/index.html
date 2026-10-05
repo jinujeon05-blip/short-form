@@ -9,11 +9,58 @@
     <!--seo:end-->
     <meta name="theme-color" content="#0b0d1a" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="명월" />
+    <style>
+      #intro { display: none; }
+      .app-intro #intro {
+        position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+        background: radial-gradient(circle at 50% 42%, #1b2246 0, #0b0d1a 70%); color: #e2c07a; transition: opacity .45s ease;
+        font-family: 'Noto Serif KR', 'Noto Serif', serif;
+      }
+      .app-intro #intro.out { opacity: 0; pointer-events: none; }
+      #intro svg { width: 112px; height: 112px; filter: drop-shadow(0 0 22px rgba(226, 192, 122, .45)); animation: mw-rise .9s ease-out both; }
+      #intro .t { font-size: 34px; font-weight: 900; letter-spacing: .08em; color: #f3e1b4; animation: mw-fade .9s .15s ease-out both; }
+      #intro .s { font-size: 12px; letter-spacing: .32em; color: #9c9db0; font-family: system-ui, sans-serif; animation: mw-fade .9s .3s ease-out both; }
+      #intro .m { margin-top: 18px; font-size: 14px; color: #e2c07a; opacity: .85; animation: mw-fade .9s .45s ease-out both; }
+      @keyframes mw-rise { from { opacity: 0; transform: translateY(14px) scale(.9); } to { opacity: 1; transform: none; } }
+      @keyframes mw-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    </style>
+    <script>
+      // Brief intro when launched from the home screen (installed app), once per launch.
+      (function () {
+        try {
+          var standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+          if (standalone && !sessionStorage.getItem('mw-intro')) {
+            sessionStorage.setItem('mw-intro', '1');
+            document.documentElement.classList.add('app-intro');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500;700;900&family=Noto+Serif:wght@500;700&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <div id="intro" aria-hidden="true">
+      <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="none" stroke="#e2c07a" stroke-width="1.2" opacity=".55"/><path d="M30 9a16 16 0 1 0 0 30a13 13 0 1 1 0-30z" fill="#e2c07a"/></svg>
+      <div class="t">명월 明月</div>
+      <div class="s">MINH NGUYỆT</div>
+      <div class="m">같은 달, 두 나라의 달력 · Cùng một vầng trăng</div>
+    </div>
+    <script>
+      (function () {
+        var el = document.getElementById('intro');
+        if (!document.documentElement.classList.contains('app-intro')) { el.remove(); return; }
+        setTimeout(function () { el.classList.add('out'); }, 1300);
+        setTimeout(function () { el.remove(); document.documentElement.classList.remove('app-intro'); }, 1800);
+      })();
+    </script>
     <div id="root"><!--seo:body--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
