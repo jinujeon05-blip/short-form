@@ -469,3 +469,42 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 .guide-card h3 { font-size: 1.08rem; }
 .ad-wrap { margin: 24px 0; text-align: center; min-height: 0; }
 .ad-label { display: block; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 4px; }
+
+/* ---------- yearly fortune ---------- */
+.year-banner {
+  display: flex; align-items: center; gap: 14px; margin: 16px 0 0; padding: 16px 18px;
+  border-radius: var(--radius); border: 1px solid var(--gold);
+  background: linear-gradient(90deg, rgba(226, 192, 122, 0.18), var(--panel)); color: var(--text);
+}
+.year-banner:hover { text-decoration: none; transform: translateY(-1px); }
+.year-banner > span:nth-child(2) { flex: 1; display: flex; flex-direction: column; }
+.year-banner-emoji { font-size: 2.2rem; }
+.yearly .find-zodiac input { width: 180px; }
+.rank-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.rank-item {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel); color: var(--text);
+}
+.rank-item:hover { text-decoration: none; border-color: var(--gold); }
+.rank-no { font-family: var(--serif); font-weight: 900; color: var(--gold); width: 1.6em; text-align: center; }
+.rank-emoji { font-size: 1.8rem; }
+.rank-body { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.rank-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.yearly-hero { display: flex; gap: 16px; align-items: center; }
+.yearly-emoji { font-size: 3.6rem; }
+.area-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.area-grid .panel { margin: 0; }
+.area-head { display: flex; justify-content: space-between; align-items: center; }
+@media (max-width: 640px) { .area-grid { grid-template-columns: 1fr; } }
+.table-wrap { overflow-x: auto; }
+.month-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.month-table th, .month-table td { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.month-table th { white-space: nowrap; font-weight: 600; }
+.month-table td:nth-child(2), .month-table td:nth-child(3) { white-space: nowrap; }
+@media (max-width: 600px) {
+  .month-table tr { display: grid; grid-template-columns: 1fr auto auto; align-items: baseline; column-gap: 8px; border-bottom: 1px solid var(--line); padding: 6px 0; }
+  .month-table th, .month-table td { border-bottom: 0; padding: 2px 4px; }
+  .month-table tr > :last-child { grid-column: 1 / -1; white-space: normal; }
+  .month-table thead tr > :last-child { display: none; }
+}
+.other-zodiacs { display: flex; flex-wrap: wrap; gap: 8px; }

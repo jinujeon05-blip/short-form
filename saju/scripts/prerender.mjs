@@ -1,9 +1,16 @@
 // Writes one HTML file per page and language with its own title, description,
 // canonical/hreflang links and share preview tags, plus sitemap.xml and robots.txt.
-// Runs after `vite build`.
+// Runs after `vite build` through vite-node, so it can import the app's TypeScript modules.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createElement } from 'react';
+import { renderToString } from 'react-dom/server';
+import { metaFor } from '../src/meta.ts';
+import { I18nProvider } from '../src/i18n/index.tsx';
+import { RouteContext } from '../src/router.tsx';
+import { ANIMAL_SLUGS, FORTUNE_YEARS } from '../src/engine/yearly.ts';
+import { YearlyIndexPage, YearlyZodiacPage } from '../src/pages/YearlyPage.tsx';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const dist = path.join(root, 'dist');
@@ -17,7 +24,8 @@ const adClient = config.adsense?.client ?? '';
 const TOOL_ROUTES = ['/', '/calendar', '/match', '/name', '/saju'];
 const INFO_ROUTES = ['/guide', '/about', '/privacy', '/terms'];
 const GUIDE_ROUTES = articles.guides.map((g) => `/guide/${g.slug}`);
-const ROUTES = [...TOOL_ROUTES, ...INFO_ROUTES, ...GUIDE_ROUTES];
+const FORTUNE_ROUTES = FORTUNE_YEARS.flatMap((y) => [`/fortune/${y}`, ...ANIMAL_SLUGS.map((a) => `/fortune/${y}/${a}`)]);
+const ROUTES = [...TOOL_ROUTES, ...FORTUNE_ROUTES, ...INFO_ROUTES, ...GUIDE_ROUTES];
 const LANGS = ['ko', 'vi'];
 const LOCALE = { ko: 'ko_KR', vi: 'vi_VN' };
 const NAV = {
@@ -39,9 +47,21 @@ function guideOf(route) {
 
 /** Title/description/h1 for any route */
 function metaOf(route, lang) {
-  const g = guideOf(route);
-  if (g) return { title: `${g[lang].title} | ${BRAND[lang]}`, description: g[lang].description, h1: g[lang].title };
-  return seo[lang][route];
+  return metaFor(route, lang);
+}
+
+/** Server-renders the yearly fortune page so its full text is in the HTML. */
+function renderFortune(route, lang) {
+  const [, , year, slug] = route.split('/');
+  const page = slug
+    ? createElement(YearlyZodiacPage, { year: Number(year), zodiac: ANIMAL_SLUGS.indexOf(slug) })
+    : createElement(YearlyIndexPage, { year: Number(year) });
+  const tree = createElement(
+    RouteContext.Provider,
+    { value: { lang, path: route, search: '' } },
+    createElement(I18nProvider, { lang, onChangeLang: () => {} }, page),
+  );
+  return `<main class="main">${renderToString(tree)}</main>`;
 }
 
 function blocksHtml(blocks, lang) {
@@ -105,6 +125,7 @@ function body(route, lang) {
   const info = ['/about', '/privacy', '/terms'].includes(route) ? articles.pages[route.slice(1)][lang] : null;
   const links = [...TOOL_ROUTES, '/guide'].map((r) => `<li><a href="${pathFor(r, lang)}">${esc(NAV[lang][r])}</a></li>`).join('');
   const other = lang === 'ko' ? 'vi' : 'ko';
+  if (route.startsWith('/fortune/')) return renderFortune(route, lang);
   if (g || info) {
     const doc = g ? g[lang] : info;
     return `<main class="main"><article class="article"><h1 class="article-title">${esc(doc.title)}</h1>${g ? `<p class="article-lead">${esc(doc.description)}</p>` : ''}${blocksHtml(doc.blocks, lang)}<ul class="footer-links">${links}</ul></article></main>`;
@@ -140,7 +161,7 @@ ${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${urlF
     <xhtml:link rel="alternate" hreflang="x-default" href="${urlFor(route, 'ko')}" />
     <lastmod>${today}</lastmod>
     <changefreq>${route === '/' || route === '/calendar' ? 'daily' : TOOL_ROUTES.includes(route) || route === '/guide' ? 'weekly' : 'monthly'}</changefreq>
-    <priority>${route === '/' ? '1.0' : TOOL_ROUTES.includes(route) ? '0.8' : route.startsWith('/guide') ? '0.7' : '0.3'}</priority>
+    <priority>${route === '/' ? '1.0' : TOOL_ROUTES.includes(route) || route.startsWith('/fortune/') ? '0.8' : route.startsWith('/guide') ? '0.7' : '0.3'}</priority>
   </url>`)).join('\n')}
 </urlset>
 `;
