@@ -4,6 +4,7 @@ import { MoonLogo } from './components/common';
 import { Home } from './pages/Home';
 import { CalendarPage } from './pages/CalendarPage';
 import { SajuPage } from './pages/SajuPage';
+import { MatchPage } from './pages/MatchPage';
 
 function parseHash() {
   const raw = window.location.hash.replace(/^#/, '') || '/';
@@ -30,6 +31,7 @@ export function App() {
   const links = [
     { href: '#/', path: '/', label: t.nav.today },
     { href: '#/calendar', path: '/calendar', label: t.nav.calendar },
+    { href: '#/match', path: '/match', label: t.nav.match },
     { href: '#/saju', path: '/saju', label: t.nav.saju },
   ];
 
@@ -57,7 +59,15 @@ export function App() {
       </header>
 
       <main className="main">
-        {route.path === '/calendar' ? <CalendarPage /> : route.path === '/saju' ? <SajuPage query={route.query} /> : <Home />}
+        {route.path === '/calendar' ? (
+          <CalendarPage />
+        ) : route.path === '/saju' ? (
+          <SajuPage query={route.query} />
+        ) : route.path === '/match' ? (
+          <MatchPage query={route.query} />
+        ) : (
+          <Home />
+        )}
       </main>
 
       <footer className="footer">

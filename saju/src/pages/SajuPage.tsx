@@ -1,110 +1,50 @@
 import { useEffect, useMemo, useState } from 'react';
 import { BRANCH_HANJA, STEM_HANJA, branchElement, cycleStem, stemElement, tenGod, yearCycle } from '../engine/ganzhi';
-import { BirthInput, InvalidDateError, SajuResult, calculateSaju } from '../engine/pillars';
-import { PLACES, getPlace } from '../engine/timezone';
+import { InvalidDateError, SajuResult, calculateSaju } from '../engine/pillars';
 import { useI18n } from '../i18n';
 import { ELEMENT_CLASS, GanzhiChip, Section, cycleName } from '../components/common';
+import { BirthFields, BirthForm, decodeBirth, defaultBirth, encodeBirth, toInput } from '../components/BirthFields';
+import { ShareImageButton } from '../components/ShareImage';
+import { drawSajuCard } from '../components/cards';
 
-interface FormState {
-  name: string;
-  calendar: 'solar' | 'lunar';
-  leap: boolean;
-  year: string;
-  month: string;
-  day: string;
-  hour: string;
-  minute: string;
-  unknownTime: boolean;
-  gender: 'M' | 'F';
-  place: string;
-  solarTime: boolean;
-  splitZi: boolean;
-}
-
-const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
-
-function toQuery(f: FormState): string {
-  const p = new URLSearchParams({
-    d: `${f.year}-${f.month}-${f.day}`,
-    c: f.calendar === 'lunar' ? (f.leap ? 'L' : 'l') : 's',
-    t: f.unknownTime ? 'x' : `${f.hour}:${f.minute}`,
-    g: f.gender,
-    p: f.place,
-    o: `${f.solarTime ? 1 : 0}${f.splitZi ? 1 : 0}`,
-  });
-  if (f.name) p.set('n', f.name);
-  return p.toString();
-}
-
-function fromQuery(q: string): FormState | null {
+/** Reads `b=` (current) or the first-release `d=&c=&t=…` link format. */
+function fromQuery(q: string): BirthForm | null {
   const p = new URLSearchParams(q);
-  const d = p.get('d')?.split('-');
-  if (!d || d.length !== 3) return null;
-  const tm = p.get('t') ?? 'x';
-  const [hh, mm] = tm === 'x' ? ['12', '0'] : tm.split(':');
-  const c = p.get('c') ?? 's';
-  const o = p.get('o') ?? '10';
-  return {
-    name: p.get('n') ?? '',
-    calendar: c === 's' ? 'solar' : 'lunar',
-    leap: c === 'L',
-    year: d[0], month: d[1], day: d[2],
-    hour: hh ?? '12', minute: mm ?? '0',
-    unknownTime: tm === 'x',
-    gender: p.get('g') === 'F' ? 'F' : 'M',
-    place: getPlace(p.get('p') ?? 'seoul').id,
-    solarTime: o[0] !== '0',
-    splitZi: o[1] === '1',
-  };
-}
-
-function toInput(f: FormState): BirthInput {
-  return {
-    calendar: f.calendar,
-    year: Number(f.year), month: Number(f.month), day: Number(f.day), leap: f.leap,
-    hour: f.unknownTime ? null : Number(f.hour),
-    minute: Number(f.minute),
-    gender: f.gender,
-    place: getPlace(f.place),
-    solarTime: f.solarTime,
-    splitZi: f.splitZi,
-  };
+  if (p.get('b')) return decodeBirth(p.get('b'));
+  const d = p.get('d');
+  if (!d) return null;
+  return decodeBirth([d, p.get('c') ?? 's', p.get('t') ?? 'x', p.get('g') ?? 'M', p.get('p') ?? 'seoul', p.get('o') ?? '10', p.get('n') ?? ''].join('~'));
 }
 
 export function SajuPage({ query }: { query: string }) {
   const { t, lang } = useI18n();
-  const [form, setForm] = useState<FormState>(() => fromQuery(query) ?? {
-    name: '', calendar: 'solar', leap: false, year: '1990', month: '1', day: '1', hour: '12', minute: '0',
-    unknownTime: false, gender: 'M', place: lang === 'vi' ? 'hanoi' : 'seoul', solarTime: true, splitZi: false,
-  });
+  const [form, setForm] = useState<BirthForm>(() => fromQuery(query) ?? defaultBirth(lang));
   const [error, setError] = useState('');
 
+  const parsed = useMemo(() => fromQuery(query), [query]);
   const result = useMemo<SajuResult | null>(() => {
-    if (!fromQuery(query)) return null;
+    if (!parsed) return null;
     try {
-      return calculateSaju(toInput(fromQuery(query)!));
+      return calculateSaju(toInput(parsed));
     } catch {
       return null;
     }
-  }, [query]);
+  }, [parsed]);
 
   useEffect(() => {
-    const f = fromQuery(query);
-    if (f) setForm(f);
-  }, [query]);
+    if (parsed) setForm(parsed);
+  }, [parsed]);
 
   useEffect(() => {
     if (result) document.getElementById('result')?.scrollIntoView({ behavior: 'smooth' });
   }, [result]);
-
-  const set = <K extends keyof FormState>(k: K, v: FormState[K]) => setForm((f) => ({ ...f, [k]: v }));
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     try {
       calculateSaju(toInput(form));
       setError('');
-      window.location.hash = `#/saju?${toQuery(form)}`;
+      window.location.hash = `#/saju?b=${encodeURIComponent(encodeBirth(form))}`;
     } catch (err) {
       setError(err instanceof InvalidDateError ? t.saju.invalid : String(err));
     }
@@ -116,82 +56,16 @@ export function SajuPage({ query }: { query: string }) {
     <>
       <Section eyebrow="四柱八字 · TỨ TRỤ" title={t.saju.title} desc={t.saju.desc}>
         <form className="saju-form panel" onSubmit={submit}>
-          <label className="field">
-            <span>{t.saju.name}</span>
-            <input value={form.name} maxLength={20} placeholder={t.saju.namePh} onChange={(e) => set('name', e.target.value)} />
-          </label>
-
-          <div className="field">
-            <span>{t.saju.calendar}</span>
-            <div className="seg">
-              <button type="button" className={form.calendar === 'solar' ? 'on' : ''} onClick={() => set('calendar', 'solar')}>{t.saju.solar}</button>
-              <button type="button" className={form.calendar === 'lunar' ? 'on' : ''} onClick={() => set('calendar', 'lunar')}>{t.saju.lunar}</button>
-              {form.calendar === 'lunar' && (
-                <label className="check inline">
-                  <input type="checkbox" checked={form.leap} onChange={(e) => set('leap', e.target.checked)} /> {t.saju.leap}
-                </label>
-              )}
-            </div>
-          </div>
-
-          <div className="field">
-            <span>{t.saju.birthDate}</span>
-            <div className="row3">
-              <select value={form.year} onChange={(e) => set('year', e.target.value)} aria-label={t.saju.year}>
-                {range(1930, thisYear).reverse().map((y) => <option key={y} value={y}>{y}{lang === 'ko' ? '년' : ''}</option>)}
-              </select>
-              <select value={form.month} onChange={(e) => set('month', e.target.value)} aria-label={t.saju.month}>
-                {range(1, 12).map((m) => <option key={m} value={m}>{lang === 'ko' ? `${m}월` : `${t.saju.month} ${m}`}</option>)}
-              </select>
-              <select value={form.day} onChange={(e) => set('day', e.target.value)} aria-label={t.saju.day}>
-                {range(1, form.calendar === 'lunar' ? 30 : 31).map((d) => <option key={d} value={d}>{lang === 'ko' ? `${d}일` : `${t.saju.day} ${d}`}</option>)}
-              </select>
-            </div>
-          </div>
-
-          <div className="field">
-            <span>{t.saju.time}</span>
-            <div className="row2">
-              <select value={form.hour} disabled={form.unknownTime} onChange={(e) => set('hour', e.target.value)} aria-label={t.saju.time}>
-                {range(0, 23).map((h) => <option key={h} value={h}>{String(h).padStart(2, '0')}{lang === 'ko' ? '시' : 'h'}</option>)}
-              </select>
-              <select value={form.minute} disabled={form.unknownTime} onChange={(e) => set('minute', e.target.value)} aria-label="minute">
-                {range(0, 59).map((m) => <option key={m} value={m}>{String(m).padStart(2, '0')}{lang === 'ko' ? '분' : "'"}</option>)}
-              </select>
-            </div>
-            <label className="check">
-              <input type="checkbox" checked={form.unknownTime} onChange={(e) => set('unknownTime', e.target.checked)} /> {t.saju.unknownTime}
-            </label>
-          </div>
-
-          <div className="field">
-            <span>{t.saju.gender}</span>
-            <div className="seg">
-              <button type="button" className={form.gender === 'M' ? 'on' : ''} onClick={() => set('gender', 'M')}>{t.saju.male}</button>
-              <button type="button" className={form.gender === 'F' ? 'on' : ''} onClick={() => set('gender', 'F')}>{t.saju.female}</button>
-            </div>
-          </div>
-
-          <label className="field">
-            <span>{t.saju.place}</span>
-            <select value={form.place} onChange={(e) => set('place', e.target.value)}>
-              <optgroup label={`🇰🇷 ${t.saju.placeKR}`}>
-                {PLACES.filter((p) => p.country === 'KR').map((p) => <option key={p.id} value={p.id}>{p[lang]}</option>)}
-              </optgroup>
-              <optgroup label={`🇻🇳 ${t.saju.placeVN}`}>
-                {PLACES.filter((p) => p.country === 'VN').map((p) => <option key={p.id} value={p.id}>{p[lang]}</option>)}
-              </optgroup>
-            </select>
-          </label>
+          <BirthFields value={form} onChange={setForm} />
 
           <details className="field advanced">
             <summary>{t.saju.advanced}</summary>
             <label className="check">
-              <input type="checkbox" checked={form.solarTime} onChange={(e) => set('solarTime', e.target.checked)} /> {t.saju.solarTime}
+              <input type="checkbox" checked={form.solarTime} onChange={(e) => setForm({ ...form, solarTime: e.target.checked })} /> {t.saju.solarTime}
             </label>
             <p className="muted small">{t.saju.solarTimeHelp}</p>
             <label className="check">
-              <input type="checkbox" checked={form.splitZi} onChange={(e) => set('splitZi', e.target.checked)} /> {t.saju.splitZi}
+              <input type="checkbox" checked={form.splitZi} onChange={(e) => setForm({ ...form, splitZi: e.target.checked })} /> {t.saju.splitZi}
             </label>
           </details>
 
@@ -201,7 +75,7 @@ export function SajuPage({ query }: { query: string }) {
         </form>
       </Section>
 
-      {result && <SajuResultView result={result} name={fromQuery(query)?.name ?? ''} thisYear={thisYear} />}
+      {result && <SajuResultView result={result} name={parsed?.name ?? ''} thisYear={thisYear} />}
     </>
   );
 }
@@ -350,7 +224,11 @@ function SajuResultView({ result: r, name, thisYear }: { result: SajuResult; nam
       </div>
 
       <div className="result-actions">
-        <button className="btn btn-gold" onClick={share}>{copied ? t.result.copied : t.result.share}</button>
+        <ShareImageButton
+          filename="myeongwol-saju.png"
+          draw={(ctx) => drawSajuCard(ctx, r, name, t, lang)}
+        />
+        <button className="btn btn-ghost" onClick={share}>{copied ? t.result.copied : t.result.share}</button>
         <a className="btn btn-ghost" href="#/saju">{t.result.again}</a>
       </div>
       <p className="muted small center">{t.result.disclaimer}</p>

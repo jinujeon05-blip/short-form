@@ -77,6 +77,14 @@ export function Home() {
 
       <section className="cta-band">
         <div>
+          <h2 className="section-title">💛 {t.match.title} 💙</h2>
+          <p className="section-desc">{t.match.desc}</p>
+        </div>
+        <a className="btn btn-gold" href="#/match">{t.match.submit} ♥</a>
+      </section>
+
+      <section className="cta-band">
+        <div>
           <h2 className="section-title">{t.saju.title}</h2>
           <p className="section-desc">{t.saju.desc}</p>
         </div>

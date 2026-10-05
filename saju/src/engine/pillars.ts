@@ -6,7 +6,7 @@ import {
   Element, branchElement, cycleBranch, cycleIndex, cycleStem, dayCycle, mainHiddenStem, mod,
   stemElement, stemYang, tenGod, TenGod, twelveStage, yearCycle, HIDDEN_STEMS,
 } from './ganzhi';
-import { lunarToSolar, CalendarCountry } from './lunar';
+import { lunarToSolar, solarToLunar, CalendarCountry } from './lunar';
 import { Place, localToUtc } from './timezone';
 
 export interface BirthInput {
@@ -60,6 +60,8 @@ export interface SajuResult {
   favorable: Element[];
   luck: { forward: boolean; startAgeYears: number; startAgeMonths: number; pillars: LuckPillar[] };
   nearTermBoundary: boolean;
+  /** Year cycle by the folk lunar new year (설날 / Tết) of the birthplace calendar — used for 띠 and 납음 */
+  lunarYearCycle: number;
 }
 
 export class InvalidDateError extends Error {}
@@ -205,6 +207,7 @@ export function calculateSaju(input: BirthInput): SajuResult {
     favorable,
     luck: { forward, startAgeYears, startAgeMonths, pillars: luckPillars },
     nearTermBoundary,
+    lunarYearCycle: yearCycle(solarToLunar(jdnFromYmd(solar.y, solar.m, solar.d), country).year),
   };
 }
 
