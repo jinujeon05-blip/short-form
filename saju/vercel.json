@@ -1,4 +1,18 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "myeongwol-sigma.vercel.app" }],
+      "destination": "https://myeongwol.net/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "myeongwol-jinwoo8.vercel.app" }],
+      "destination": "https://myeongwol.net/:path*",
+      "permanent": true
+    }
+  ]
 }
