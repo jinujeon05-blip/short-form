@@ -7,6 +7,7 @@ import { Link } from '../router';
 import { GuideList } from './ArticlePages';
 import { AdSlot } from '../components/AdSlot';
 import { HAZARD } from '../content/hazard';
+import { InstallApp } from '../components/InstallApp';
 import { YEARLY } from '../content/yearly';
 
 export function Home() {
@@ -76,6 +77,8 @@ export function Home() {
         </span>
         <span className="gold">→</span>
       </Link>
+
+      <InstallApp />
 
       <Section eyebrow="今日 · HÔM NAY" title={t.day.title}>
         <DayDetail info={info} basis={basis} />
