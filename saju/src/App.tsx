@@ -10,6 +10,7 @@ import { NamePage } from './pages/NamePage';
 import { DAILY } from './content/daily';
 import { HazardPage } from './pages/HazardPage';
 import { AgePage } from './pages/AgePage';
+import { HangulPage } from './pages/HangulPage';
 import { DailyIndexPage, DailyZodiacPage } from './pages/DailyPage';
 import { metaFor } from './meta';
 import { GuideIndexPage, GuidePage, InfoPage } from './pages/ArticlePages';
@@ -117,6 +118,8 @@ function Shell({ route }: { route: Route }) {
           <MatchPage query={route.search} />
         ) : route.path === '/name' ? (
           <NamePage query={route.search} />
+        ) : route.path === '/hangul' ? (
+          <HangulPage query={route.search} />
         ) : route.path === '/age' ? (
           <AgePage query={route.search} />
         ) : route.path === '/daily' ? (
@@ -147,6 +150,7 @@ function Shell({ route }: { route: Route }) {
           <Link to="/fortune/2027">{YEARLY_LINK[lang]}</Link>
           <Link to="/samjae">{SAMJAE_LINK[lang]}</Link>
           <Link to="/age">{AGE_LINK[lang]}</Link>
+          <Link to="/hangul">{HANGUL_LINK[lang]}</Link>
           <Link to="/guide">{t.guide.title}</Link>
           <Link to="/about">{t.info.about}</Link>
           <Link to="/privacy">{t.info.privacy}</Link>
@@ -163,6 +167,7 @@ function Shell({ route }: { route: Route }) {
 }
 
 const YEARLY_LINK: Record<Lang, string> = { ko: '2027 신년운세', vi: 'Tử vi 2027' };
+const HANGUL_LINK: Record<Lang, string> = { ko: '한글 표기 변환', vi: 'Phiên âm Hangul' };
 const AGE_LINK: Record<Lang, string> = { ko: '나이 계산기', vi: 'Tính tuổi' };
 const SAMJAE_LINK: Record<Lang, string> = { ko: '삼재 계산기', vi: 'Tam Tai · Kim Lâu' };
 

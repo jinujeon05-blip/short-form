@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { vietnameseToHangul } from '../engine/hangul';
 import { HanjaEntry } from '../content/hanja';
 import { Flow, elementFlow, koReading, parseKorean, parseVietnamese, romanizeName, soundElement } from '../engine/names';
 import { Element } from '../engine/ganzhi';
@@ -7,7 +8,7 @@ import { ELEMENT_CLASS, Section } from '../components/common';
 import { ShareImageButton } from '../components/ShareImage';
 import { NameCardData, drawNameCard } from '../components/cards';
 import { AdSlot } from '../components/AdSlot';
-import { hrefFor } from '../router';
+import { Link, hrefFor } from '../router';
 
 type Mode = 'toKo' | 'toVi';
 
@@ -143,6 +144,10 @@ export function NamePage({ query }: { query: string }) {
               <>
                 <h3 className="name-big">{koName}</h3>
                 <p className="name-sub"><span className="hanja-line">{hanja}</span> · {roman}</p>
+                <p className="center small">
+                  {lang === 'vi' ? 'Phiên âm theo cách đọc' : '소리대로 한글 표기'}:{' '}
+                  <Link to="/hangul" search={`?q=${encodeURIComponent(text.trim())}`}><b>{vietnameseToHangul(text).hangul}</b> →</Link>
+                </p>
               </>
             ) : (
               <>
