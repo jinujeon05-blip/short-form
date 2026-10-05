@@ -2,9 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { dayInfo } from '../engine/almanac';
 import { MatchResult, matchCharts } from '../engine/match';
 import { InvalidDateError, calculateSaju } from '../engine/pillars';
-import { useI18n } from '../i18n';
+import { Lang, useI18n } from '../i18n';
+import { ko } from '../i18n/ko';
+import { vi } from '../i18n/vi';
 import { BirthFields, BirthForm, decodeBirth, defaultBirth, encodeBirth, toInput } from '../components/BirthFields';
 import { ELEMENT_CLASS, Section, localTodayJdn } from '../components/common';
+import { cycleBranch } from '../engine/ganzhi';
 import { ShareImageButton } from '../components/ShareImage';
 import { drawMatchCard } from '../components/cards';
 import { AdSlot } from '../components/AdSlot';
@@ -16,11 +19,18 @@ export function MatchPage({ query }: { query: string }) {
     const p = new URLSearchParams(query);
     const a = decodeBirth(p.get('a'));
     const b = decodeBirth(p.get('b'));
-    return a && b ? { a, b } : null;
+    return a && b ? { a, b, invited: p.get('i') === '1' } : null;
+  }, [query]);
+  /** Invite link: only the sender's birth data is in the URL */
+  const inviter = useMemo(() => {
+    const p = new URLSearchParams(query);
+    return p.get('b') ? null : decodeBirth(p.get('invite'));
   }, [query]);
 
   const [a, setA] = useState<BirthForm>(() => parsed?.a ?? defaultBirth(lang, { place: lang === 'vi' ? 'hanoi' : 'seoul', gender: lang === 'vi' ? 'F' : 'M' }));
-  const [b, setB] = useState<BirthForm>(() => parsed?.b ?? defaultBirth(lang, { place: lang === 'vi' ? 'seoul' : 'hanoi', gender: lang === 'vi' ? 'M' : 'F', year: '1995' }));
+  const [b, setB] = useState<BirthForm>(() => parsed?.b ?? (inviter
+    ? defaultBirth(lang, { gender: inviter.gender === 'M' ? 'F' : 'M', year: '1995' })
+    : defaultBirth(lang, { place: lang === 'vi' ? 'seoul' : 'hanoi', gender: lang === 'vi' ? 'M' : 'F', year: '1995' })));
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -46,11 +56,12 @@ export function MatchPage({ query }: { query: string }) {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    const first = inviter ?? a;
     try {
-      calculateSaju(toInput(a));
+      calculateSaju(toInput(first));
       calculateSaju(toInput(b));
       setError('');
-      navigate(hrefFor('/match', lang, `?a=${encodeURIComponent(encodeBirth(a))}&b=${encodeURIComponent(encodeBirth(b))}`));
+      navigate(hrefFor('/match', lang, `?a=${encodeURIComponent(encodeBirth(first))}&b=${encodeURIComponent(encodeBirth(b))}${inviter ? '&i=1' : ''}`));
     } catch (err) {
       setError(err instanceof InvalidDateError ? t.saju.invalid : String(err));
     }
@@ -61,6 +72,31 @@ export function MatchPage({ query }: { query: string }) {
     parsed?.b.name || t.match.personB,
   ];
 
+  if (inviter && !parsed) {
+    const name = inviter.name || t.match.personA;
+    let animal = '';
+    try {
+      animal = t.animals[cycleBranch(calculateSaju(toInput(inviter)).lunarYearCycle)];
+    } catch {
+      /* invalid link */
+    }
+    return (
+      <Section eyebrow="宮合 · HỢP TUỔI" title={t.match.ask.title(name)} desc={t.match.ask.body(name, animal)}>
+        <form className="match-form invite-form" onSubmit={submit}>
+          <div className="panel person">
+            <h3 className="panel-title">💙 {t.match.ask.you}</h3>
+            <BirthFields value={b} onChange={setB} namePlaceholder={t.match.personB} />
+          </div>
+          <div className="match-submit">
+            {error && <p className="error" role="alert">{error}</p>}
+            <button className="btn btn-gold block" type="submit">{t.match.submit} ♥</button>
+            <p className="muted small center">🔒 {t.match.ask.note}</p>
+          </div>
+        </form>
+      </Section>
+    );
+  }
+
   return (
     <>
       <Section eyebrow="宮合 · HỢP TUỔI" title={t.match.title} desc={t.match.desc}>
@@ -68,6 +104,7 @@ export function MatchPage({ query }: { query: string }) {
           <div className="panel person">
             <h3 className="panel-title">💛 {t.match.personA}</h3>
             <BirthFields value={a} onChange={setA} namePlaceholder={t.match.personA} />
+            <InviteBox a={a} />
           </div>
           <div className="panel person">
             <h3 className="panel-title">💙 {t.match.personB}</h3>
@@ -81,12 +118,60 @@ export function MatchPage({ query }: { query: string }) {
         </form>
       </Section>
 
-      {result && <MatchResultView m={result} names={names} />}
+      {result && <MatchResultView m={result} names={names} invited={!!parsed?.invited} />}
     </>
   );
 }
 
-function MatchResultView({ m, names }: { m: MatchResult; names: [string, string] }) {
+const OTHER: Record<Lang, Lang> = { ko: 'vi', vi: 'ko' };
+const DICTS = { ko, vi };
+
+/** Lets the first person send a link with only their own birth data. */
+function InviteBox({ a }: { a: BirthForm }) {
+  const { t, lang } = useI18n();
+  const [linkLang, setLinkLang] = useState<Lang>(lang);
+  const [msg, setMsg] = useState('');
+  const send = async () => {
+    if (!a.name.trim()) {
+      setMsg(t.match.ask.needName);
+      return;
+    }
+    try {
+      calculateSaju(toInput(a));
+    } catch {
+      setMsg(t.saju.invalid);
+      return;
+    }
+    // Text in the share sheet follows the recipient's language.
+    const it = DICTS[linkLang].match.ask;
+    const url = `${location.origin}${hrefFor('/match', linkLang, `?invite=${encodeURIComponent(encodeBirth(a))}`)}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: it.shareTitle(a.name), text: it.shareText, url });
+        setMsg('');
+        return;
+      }
+      await navigator.clipboard.writeText(`${it.shareTitle(a.name)}\n${it.shareText}\n${url}`);
+      setMsg(t.match.ask.copied);
+    } catch {
+      /* cancelled */
+    }
+  };
+  return (
+    <div className="invite-box">
+      <p className="muted small">{t.match.ask.makeDesc}</p>
+      <div className="seg" role="group" aria-label={t.match.ask.linkLang}>
+        <span className="muted small">{t.match.ask.linkLang}</span>
+        <button type="button" className={linkLang === lang ? 'on' : ''} onClick={() => setLinkLang(lang)}>{lang === 'ko' ? '한국어' : 'Tiếng Việt'}</button>
+        <button type="button" className={linkLang !== lang ? 'on' : ''} onClick={() => setLinkLang(OTHER[lang])}>{lang === 'ko' ? 'Tiếng Việt' : '한국어'}</button>
+      </div>
+      <button type="button" className="btn btn-ghost block" onClick={send}>{t.match.ask.make}</button>
+      {msg && <p className="small gold" role="status">{msg}</p>}
+    </div>
+  );
+}
+
+function MatchResultView({ m, names, invited }: { m: MatchResult; names: [string, string]; invited: boolean }) {
   const { t, lang } = useI18n();
   const [copied, setCopied] = useState(false);
   const grade = t.match.grades[m.grade];
@@ -184,7 +269,9 @@ function MatchResultView({ m, names }: { m: MatchResult; names: [string, string]
 
       <div className="result-actions">
         <ShareImageButton filename="myeongwol-match.png" draw={(ctx) => drawMatchCard(ctx, m, names, t, lang)} />
-        <button className="btn btn-ghost" onClick={shareLink}>{copied ? t.result.copied : t.result.share}</button>
+        <button className={`btn ${invited ? 'btn-gold' : 'btn-ghost'}`} onClick={shareLink}>
+          {copied ? t.result.copied : invited ? t.match.ask.sendBack(names[0]) : t.result.share}
+        </button>
         <Link className="btn btn-ghost" to="/match">{t.match.again}</Link>
       </div>
       <p className="muted small center">{t.match.disclaimer}</p>
