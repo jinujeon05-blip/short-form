@@ -526,4 +526,8 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 .invite-box { display: grid; gap: 8px; margin-top: 6px; padding-top: 12px; border-top: 1px dashed var(--line-strong); }
 .invite-box p { margin: 0; }
 .invite-form { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+.install-band { align-items: flex-start; }
+.install-actions { display: grid; gap: 6px; justify-items: center; }
+.install-steps { margin: 10px 0 0; padding-left: 18px; display: grid; gap: 6px; font-size: 0.9rem; color: var(--text); }
+.btn-link { background: none; border: 0; color: var(--gold-soft); text-decoration: underline; cursor: pointer; padding: 4px; }
 .other-zodiacs { display: flex; flex-wrap: wrap; gap: 8px; }

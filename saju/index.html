@@ -34,8 +34,11 @@
       // Brief intro when launched from the home screen (installed app), once per launch.
       (function () {
         try {
-          var standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-          if (standalone && !sessionStorage.getItem('mw-intro')) {
+          var standalone = matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true;
+          // Also when opened directly (home-screen shortcut, typed URL) — not when arriving from search or links.
+          var direct = !document.referrer && !/bot|crawl|spider|lighthouse|headless/i.test(navigator.userAgent);
+          var fromApp = /[?&]source=pwa/.test(location.search);
+          if ((standalone || fromApp || direct) && !sessionStorage.getItem('mw-intro')) {
             sessionStorage.setItem('mw-intro', '1');
             document.documentElement.classList.add('app-intro');
           }
