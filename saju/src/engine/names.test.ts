@@ -36,6 +36,11 @@ describe('names', () => {
     expect(lee[0].candidates[0].h).toBe('李');
     expect(lee.map((x) => x.candidates[0].vi).join(' ')).toBe('Lý Thụy Nghiên');
     expect(parseKorean('남궁민')[0].candidates[0].vi).toBe('Nam Cung');
+    const has = (name: string, i: number, h: string) => expect(parseKorean(name)[i].candidates.map((c) => c.h)).toContain(h);
+    has('전진우', 1, '津');
+    has('전현욱', 2, '昱');
+    has('전현준', 1, '泫');
+    expect(parseKorean('전현욱')[2].candidates[0].vi).toBe('Húc');
   });
 
   it('romanizes and finds sound elements', () => {
