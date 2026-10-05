@@ -7,7 +7,9 @@ import { CalendarPage } from './pages/CalendarPage';
 import { SajuPage } from './pages/SajuPage';
 import { MatchPage } from './pages/MatchPage';
 import { NamePage } from './pages/NamePage';
+import { DAILY } from './content/daily';
 import { HazardPage } from './pages/HazardPage';
+import { DailyIndexPage, DailyZodiacPage } from './pages/DailyPage';
 import { metaFor } from './meta';
 import { GuideIndexPage, GuidePage, InfoPage } from './pages/ArticlePages';
 import { YearlyIndexPage, YearlyZodiacPage } from './pages/YearlyPage';
@@ -114,6 +116,10 @@ function Shell({ route }: { route: Route }) {
           <MatchPage query={route.search} />
         ) : route.path === '/name' ? (
           <NamePage query={route.search} />
+        ) : route.path === '/daily' ? (
+          <DailyIndexPage query={route.search} />
+        ) : route.path.startsWith('/daily/') ? (
+          <DailyZodiacPage zodiac={ANIMAL_SLUGS.indexOf(route.path.slice(7))} query={route.search} />
         ) : route.path === '/samjae' ? (
           <HazardPage query={route.search} />
         ) : route.path.startsWith('/fortune/') ? (
@@ -134,6 +140,7 @@ function Shell({ route }: { route: Route }) {
         <p>{t.footer.about}</p>
         <nav className="footer-links" aria-label="footer">
           {links.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
+          <Link to="/daily">{DAILY[lang].indexTitle}</Link>
           <Link to="/fortune/2027">{YEARLY_LINK[lang]}</Link>
           <Link to="/samjae">{SAMJAE_LINK[lang]}</Link>
           <Link to="/guide">{t.guide.title}</Link>
