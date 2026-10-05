@@ -4,7 +4,7 @@ import type { Lang } from './i18n';
 import articles from './content/articles.json';
 import { ANIMAL_SLUGS, FORTUNE_YEARS } from './engine/yearly';
 
-export const ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/daily', '/age', '/guide', '/about', '/privacy', '/terms'] as const;
+export const ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/daily', '/age', '/hangul', '/guide', '/about', '/privacy', '/terms'] as const;
 export const GUIDE_SLUGS: string[] = articles.guides.map((g) => g.slug);
 /** A static route, or /guide/<slug> */
 export type RoutePath = (typeof ROUTES)[number] | `/guide/${string}` | `/fortune/${string}` | `/daily/${string}`;

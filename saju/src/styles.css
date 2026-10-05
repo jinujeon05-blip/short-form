@@ -559,4 +559,14 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 .age-num { font-family: var(--serif); font-size: 2rem; color: var(--gold-soft); line-height: 1.2; }
 .age-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 20px; margin: 0; }
 .age-facts dd { margin: 2px 0 0; font-weight: 600; }
+.hangul-form { display: flex; gap: 8px; margin: 14px 0 8px; }
+.hangul-form input { flex: 1; min-width: 0; font-size: 1.05rem; }
+.hangul-result { text-align: center; display: grid; gap: 6px; justify-items: center; margin-top: 16px; }
+.hangul-big { font-family: var(--serif); font-size: clamp(1.8rem, 8vw, 2.8rem); font-weight: 900; color: var(--gold-soft); margin: 4px 0; word-break: keep-all; }
+.rule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.rule-grid .panel { margin: 0; }
+.rule-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; margin: 0; }
+.rule-list div { display: contents; }
+.rule-list dt { color: var(--muted); }
+.rule-list dd { margin: 0; font-weight: 600; color: var(--gold-soft); }
 .other-zodiacs { display: flex; flex-wrap: wrap; gap: 8px; }
