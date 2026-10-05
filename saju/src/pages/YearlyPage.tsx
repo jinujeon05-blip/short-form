@@ -3,6 +3,7 @@ import { localJdn, ymdFromJdn } from '../engine/astro';
 import { cycleBranch, cycleStem, yearCycle } from '../engine/ganzhi';
 import { ANIMAL_SLUGS, YearFortune, yearFortune, yearRanking } from '../engine/yearly';
 import { YEARLY } from '../content/yearly';
+import { HAZARD } from '../content/hazard';
 import { Lang, useI18n } from '../i18n';
 import { Link, RoutePath, hrefFor, navigate } from '../router';
 import { ELEMENT_CLASS, GanzhiChip, Stars, cycleHanja, cycleName } from '../components/common';
@@ -102,7 +103,7 @@ export function YearlyZodiacPage({ year, zodiac }: { year: number; zodiac: numbe
         <p>{rel.body}</p>
         <p className="muted">{y.traits[zodiac]}</p>
         {f.samjae > 0 && (
-          <p className="warn"><b>{y.samjae.badge[f.samjae]}</b> — {y.samjae.text[f.samjae]}</p>
+          <p className="warn"><b>{y.samjae.badge[f.samjae]}</b> — {y.samjae.text[f.samjae]} <Link to="/samjae">{HAZARD[lang].title} →</Link></p>
         )}
       </div>
 

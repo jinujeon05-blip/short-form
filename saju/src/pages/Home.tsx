@@ -6,6 +6,7 @@ import { GanzhiChip, Section, cycleName, localTodayJdn, lunarText } from '../com
 import { Link } from '../router';
 import { GuideList } from './ArticlePages';
 import { AdSlot } from '../components/AdSlot';
+import { HAZARD } from '../content/hazard';
 import { YEARLY } from '../content/yearly';
 
 export function Home() {
@@ -104,6 +105,14 @@ export function Home() {
           <p className="section-desc">{t.name.desc}</p>
         </div>
         <Link className="btn btn-gold" to="/name">{lang === 'vi' ? t.name.toKo : t.name.toVi} →</Link>
+      </section>
+
+      <section className="cta-band">
+        <div>
+          <h2 className="section-title">🛡️ {HAZARD[lang].title}</h2>
+          <p className="section-desc">{HAZARD[lang].lead}</p>
+        </div>
+        <Link className="btn btn-gold" to="/samjae">{HAZARD[lang].check} →</Link>
       </section>
 
       <section className="cta-band">
