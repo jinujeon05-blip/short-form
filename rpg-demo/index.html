@@ -99,7 +99,7 @@ button:disabled{opacity:.4;cursor:default}
 
 #dialog{position:absolute;left:4%;right:4%;bottom:5%;min-height:24%;display:flex;gap:1em;align-items:flex-start;background:linear-gradient(rgba(36,28,56,.96),rgba(14,11,22,.97));border:2px solid var(--frame);border-radius:.5em;padding:.9em 1.2em 1.1em;font-size:clamp(11px,1.75cqw,19px);cursor:pointer;box-shadow:inset 0 0 0 1px var(--frame-dark),inset 0 0 0 3px rgba(106,90,142,.25),0 .5em 2em rgba(0,0,0,.6)}
 #portrait{flex:none;width:4.6em;height:auto;aspect-ratio:56/52;image-rendering:pixelated;border:2px solid var(--frame);border-radius:.3em;background:radial-gradient(circle at 50% 35%,#4a3d70,#1a1428);box-shadow:inset 0 0 0 1px var(--frame-dark)}
-#standing{position:absolute;left:3%;bottom:18%;height:72%;max-width:42%;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 .6em 1.2em rgba(0,0,0,.55));animation:standIn .35s ease-out}
+#standing{position:absolute;left:1%;bottom:14%;height:78%;aspect-ratio:1;max-width:46%;object-fit:cover;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 58% 62% at 50% 44%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 58% 62% at 50% 44%,#000 62%,transparent 100%);animation:standIn .35s ease-out}
 @keyframes standIn{from{opacity:0;transform:translateX(-1.2em)}to{opacity:1;transform:none}}
 #dialog.has-standing{left:22%}
 @media (prefers-reduced-motion:reduce){#standing{animation:none}}
@@ -961,10 +961,10 @@ function playVoice(text){
   a.play().catch(()=>{});
 }
 /* optional AI illustrations (see art/PROMPTS.md); missing files keep the pixel portraits */
-const ART_FILES={'촌장 오렌':'art/standing-elder.png','상인 미라':'art/standing-merchant.png','꼬마 토비':'art/standing-kid.png'};
+const ART_FILES={'촌장 오렌':'art/portrait-elder.jpg','상인 미라':'art/portrait-merchant.jpg','꼬마 토비':'art/portrait-kid.jpg'};
 const ART={};
 for(const[name,src]of Object.entries(ART_FILES)){const im=new Image();im.onload=()=>{ART[name]=src;};im.src=src;}
-(function(){const im=new Image();im.onload=()=>{const t=$('title');t.style.setProperty('--title-art',`url("${im.src}")`);t.classList.add('art');};im.src='art/title.png';})();
+(function(){const im=new Image();im.onload=()=>{const t=$('title');t.style.setProperty('--title-art',`url("${im.src}")`);t.classList.add('art');};im.src='art/title.jpg';})();
 let DLG=null;
 function say(lines,cb){DLG={lines,i:0,char:0,cb};$('dialog').hidden=false;renderDialog(true);}
 function renderDialog(fresh){
