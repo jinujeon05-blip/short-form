@@ -1,0 +1,70 @@
+// Path-based routing: Korean at /…, Vietnamese at /vi/…
+import { AnchorHTMLAttributes, MouseEvent, ReactNode, createContext, useContext } from 'react';
+import type { Lang } from './i18n';
+
+export const ROUTES = ['/', '/calendar', '/match', '/name', '/saju'] as const;
+export type RoutePath = (typeof ROUTES)[number];
+
+export interface Route {
+  lang: Lang;
+  path: RoutePath;
+  search: string;
+}
+
+const NAV_EVENT = 'mw:navigate';
+
+export function parseLocation(pathname: string, search: string): Route {
+  const clean = pathname.replace(/\/+$/, '') || '/';
+  const isVi = clean === '/vi' || clean.startsWith('/vi/');
+  const rest = isVi ? clean.slice(3) || '/' : clean;
+  const path = (ROUTES as readonly string[]).includes(rest) ? (rest as RoutePath) : '/';
+  return { lang: isVi ? 'vi' : 'ko', path, search };
+}
+
+export function hrefFor(path: RoutePath, lang: Lang, search = ''): string {
+  const base = lang === 'vi' ? (path === '/' ? '/vi' : `/vi${path}`) : path;
+  return base + search;
+}
+
+export function navigate(url: string, replace = false) {
+  if (replace) history.replaceState(null, '', url);
+  else history.pushState(null, '', url);
+  window.dispatchEvent(new Event(NAV_EVENT));
+}
+
+export function subscribe(cb: () => void): () => void {
+  window.addEventListener('popstate', cb);
+  window.addEventListener(NAV_EVENT, cb);
+  return () => {
+    window.removeEventListener('popstate', cb);
+    window.removeEventListener(NAV_EVENT, cb);
+  };
+}
+
+/** Converts first-release links like /#/saju?b=… to /saju?b=… */
+export function legacyHashTarget(hash: string, lang: Lang): string | null {
+  if (!hash.startsWith('#/')) return null;
+  const [p, q] = hash.slice(1).split('?');
+  const path = (ROUTES as readonly string[]).includes(p) ? (p as RoutePath) : '/';
+  return hrefFor(path, lang, q ? `?${q}` : '');
+}
+
+export const RouteContext = createContext<Route>({ lang: 'ko', path: '/', search: '' });
+export const useRoute = () => useContext(RouteContext);
+
+/** Internal link that keeps the current language and navigates without a reload. */
+export function Link({ to, search = '', children, onClick, ...rest }: {
+  to: RoutePath;
+  search?: string;
+  children: ReactNode;
+} & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>) {
+  const { lang } = useRoute();
+  const href = hrefFor(to, lang, search);
+  const handle = (e: MouseEvent<HTMLAnchorElement>) => {
+    onClick?.(e);
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    navigate(href);
+  };
+  return <a href={href} onClick={handle} {...rest}>{children}</a>;
+}

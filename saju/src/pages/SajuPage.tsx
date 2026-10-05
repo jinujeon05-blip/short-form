@@ -6,6 +6,7 @@ import { ELEMENT_CLASS, GanzhiChip, Section, cycleName } from '../components/com
 import { BirthFields, BirthForm, decodeBirth, defaultBirth, encodeBirth, toInput } from '../components/BirthFields';
 import { ShareImageButton } from '../components/ShareImage';
 import { drawSajuCard } from '../components/cards';
+import { Link, hrefFor, navigate } from '../router';
 
 /** Reads `b=` (current) or the first-release `d=&c=&t=…` link format. */
 function fromQuery(q: string): BirthForm | null {
@@ -44,7 +45,7 @@ export function SajuPage({ query }: { query: string }) {
     try {
       calculateSaju(toInput(form));
       setError('');
-      window.location.hash = `#/saju?b=${encodeURIComponent(encodeBirth(form))}`;
+      navigate(hrefFor('/saju', lang, `?b=${encodeURIComponent(encodeBirth(form))}`));
     } catch (err) {
       setError(err instanceof InvalidDateError ? t.saju.invalid : String(err));
     }
@@ -229,7 +230,7 @@ function SajuResultView({ result: r, name, thisYear }: { result: SajuResult; nam
           draw={(ctx) => drawSajuCard(ctx, r, name, t, lang)}
         />
         <button className="btn btn-ghost" onClick={share}>{copied ? t.result.copied : t.result.share}</button>
-        <a className="btn btn-ghost" href="#/saju">{t.result.again}</a>
+        <Link className="btn btn-ghost" to="/saju">{t.result.again}</Link>
       </div>
       <p className="muted small center">{t.result.disclaimer}</p>
     </Section>

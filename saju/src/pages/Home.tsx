@@ -3,6 +3,7 @@ import { useI18n } from '../i18n';
 import { DayDetail } from '../components/DayDetail';
 import { ZodiacGrid } from '../components/ZodiacGrid';
 import { GanzhiChip, Section, cycleName, localTodayJdn, lunarText } from '../components/common';
+import { Link } from '../router';
 
 export function Home() {
   const { t, lang } = useI18n();
@@ -26,8 +27,8 @@ export function Home() {
           </h1>
           <p className="hero-desc">{t.hero.desc}</p>
           <div className="hero-cta">
-            <a className="btn btn-gold" href="#/saju">{t.hero.ctaSaju} →</a>
-            <a className="btn btn-ghost" href="#/calendar">{t.hero.ctaCalendar}</a>
+            <Link className="btn btn-gold" to="/saju">{t.hero.ctaSaju} →</Link>
+            <Link className="btn btn-ghost" to="/calendar">{t.hero.ctaCalendar}</Link>
           </div>
         </div>
         <div className="hero-moon" aria-hidden="true">
@@ -67,7 +68,7 @@ export function Home() {
         <DayDetail info={info} basis={basis} />
         <p className="muted small center">
           {t.day.basisNote}: {basis === 'VN' ? t.calendar.basisVN : t.calendar.basisKR} ·{' '}
-          <a href="#/calendar">{t.nav.calendar} →</a>
+          <Link to="/calendar">{t.nav.calendar} →</Link>
         </p>
       </Section>
 
@@ -80,7 +81,7 @@ export function Home() {
           <h2 className="section-title">💛 {t.match.title} 💙</h2>
           <p className="section-desc">{t.match.desc}</p>
         </div>
-        <a className="btn btn-gold" href="#/match">{t.match.submit} ♥</a>
+        <Link className="btn btn-gold" to="/match">{t.match.submit} ♥</Link>
       </section>
 
       <section className="cta-band">
@@ -88,7 +89,7 @@ export function Home() {
           <h2 className="section-title">🇻🇳 {t.name.title} 🇰🇷</h2>
           <p className="section-desc">{t.name.desc}</p>
         </div>
-        <a className="btn btn-gold" href="#/name">{lang === 'vi' ? t.name.toKo : t.name.toVi} →</a>
+        <Link className="btn btn-gold" to="/name">{lang === 'vi' ? t.name.toKo : t.name.toVi} →</Link>
       </section>
 
       <section className="cta-band">
@@ -96,7 +97,7 @@ export function Home() {
           <h2 className="section-title">{t.saju.title}</h2>
           <p className="section-desc">{t.saju.desc}</p>
         </div>
-        <a className="btn btn-gold" href="#/saju">{t.hero.ctaSaju} →</a>
+        <Link className="btn btn-gold" to="/saju">{t.hero.ctaSaju} →</Link>
       </section>
     </>
   );

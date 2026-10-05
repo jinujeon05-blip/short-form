@@ -6,6 +6,7 @@ import { useI18n } from '../i18n';
 import { ELEMENT_CLASS, Section } from '../components/common';
 import { ShareImageButton } from '../components/ShareImage';
 import { NameCardData, drawNameCard } from '../components/cards';
+import { hrefFor } from '../router';
 
 type Mode = 'toKo' | 'toVi';
 
@@ -38,8 +39,8 @@ export function NamePage({ query }: { query: string }) {
     const p = new URLSearchParams({ m: mode === 'toKo' ? 'ko' : 'vi', q: text });
     if (picks.some((x) => x > 0)) p.set('s', picks.join('.'));
     if (!omitMiddle) p.set('o', '0');
-    history.replaceState(null, '', `#/name?${p.toString()}`);
-  }, [mode, text, picks, omitMiddle]);
+    history.replaceState(null, '', hrefFor('/name', lang, `?${p.toString()}`));
+  }, [mode, text, picks, omitMiddle, lang]);
 
   const syllables = useMemo(() => (mode === 'toKo' ? parseVietnamese(text) : parseKorean(text)), [mode, text]);
   const chosen: Chosen[] = syllables

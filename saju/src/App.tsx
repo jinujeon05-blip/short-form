@@ -1,61 +1,102 @@
-import { useEffect, useState } from 'react';
-import { useI18n } from './i18n';
+import { useCallback, useEffect, useState } from 'react';
+import { I18nProvider, Lang, preferredLang, useI18n } from './i18n';
+import { Link, Route, RouteContext, RoutePath, hrefFor, legacyHashTarget, navigate, parseLocation, subscribe } from './router';
 import { MoonLogo } from './components/common';
 import { Home } from './pages/Home';
 import { CalendarPage } from './pages/CalendarPage';
 import { SajuPage } from './pages/SajuPage';
 import { MatchPage } from './pages/MatchPage';
 import { NamePage } from './pages/NamePage';
+import seo from './seo.json';
 
-function parseHash() {
-  const raw = window.location.hash.replace(/^#/, '') || '/';
-  const [path, query = ''] = raw.split('?');
-  return { path, query };
+const current = () => parseLocation(window.location.pathname, window.location.search);
+
+function initialRoute(): Route {
+  // Links shared before path routing (/#/saju?b=…) keep working.
+  const legacy = legacyHashTarget(window.location.hash, preferredLang());
+  if (legacy) history.replaceState(null, '', legacy);
+  // Vietnamese visitors landing on the Korean home go to /vi.
+  else if (window.location.pathname === '/' && !window.location.search && preferredLang() === 'vi') {
+    history.replaceState(null, '', '/vi');
+  }
+  return current();
 }
 
 export function App() {
-  const { t, lang, setLang } = useI18n();
-  const [route, setRoute] = useState(parseHash);
+  const [route, setRoute] = useState<Route>(initialRoute);
+
+  useEffect(() => subscribe(() => {
+    const next = current();
+    setRoute((prev) => {
+      if (prev.path !== next.path) window.scrollTo(0, 0);
+      return next;
+    });
+  }), []);
 
   useEffect(() => {
-    const onHash = () => {
-      const next = parseHash();
-      setRoute((prev) => {
-        if (prev.path !== next.path) window.scrollTo(0, 0);
-        return next;
-      });
-    };
-    window.addEventListener('hashchange', onHash);
-    return () => window.removeEventListener('hashchange', onHash);
+    const meta = (seo as Record<Lang, Record<string, { title: string; description: string }>>)[route.lang][route.path];
+    document.documentElement.lang = route.lang;
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
+  }, [route.lang, route.path]);
+
+  const changeLang = useCallback((l: Lang) => {
+    const r = current();
+    navigate(hrefFor(r.path, l, r.search));
   }, []);
 
-  const links = [
-    { href: '#/', path: '/', label: t.nav.today },
-    { href: '#/calendar', path: '/calendar', label: t.nav.calendar },
-    { href: '#/match', path: '/match', label: t.nav.match },
-    { href: '#/name', path: '/name', label: t.nav.name },
-    { href: '#/saju', path: '/saju', label: t.nav.saju },
+  return (
+    <RouteContext.Provider value={route}>
+      <I18nProvider lang={route.lang} onChangeLang={changeLang}>
+        <Shell route={route} />
+      </I18nProvider>
+    </RouteContext.Provider>
+  );
+}
+
+function Shell({ route }: { route: Route }) {
+  const { t, lang, setLang } = useI18n();
+  const links: { path: RoutePath; label: string }[] = [
+    { path: '/', label: t.nav.today },
+    { path: '/calendar', label: t.nav.calendar },
+    { path: '/match', label: t.nav.match },
+    { path: '/name', label: t.nav.name },
+    { path: '/saju', label: t.nav.saju },
   ];
 
   return (
     <div className="app">
       <header className="topbar">
         <div className="topbar-inner">
-          <a className="brand" href="#/">
+          <Link className="brand" to="/">
             <MoonLogo />
             <span className="brand-text">
               <span className="brand-name">{t.brand}</span>
               <span className="brand-sub">{t.brandSub}</span>
             </span>
-          </a>
+          </Link>
           <nav className="nav" aria-label="main">
             {links.map((l) => (
-              <a key={l.path} href={l.href} className={route.path === l.path ? 'on' : ''}>{l.label}</a>
+              <Link key={l.path} to={l.path} className={route.path === l.path ? 'on' : ''}>{l.label}</Link>
             ))}
           </nav>
           <div className="lang" role="group" aria-label="language">
-            <button className={lang === 'ko' ? 'on' : ''} onClick={() => setLang('ko')} aria-pressed={lang === 'ko'}>KO</button>
-            <button className={lang === 'vi' ? 'on' : ''} onClick={() => setLang('vi')} aria-pressed={lang === 'vi'}>VI</button>
+            <a
+              href={hrefFor(route.path, 'ko', route.search)}
+              hrefLang="ko"
+              className={lang === 'ko' ? 'on' : ''}
+              onClick={(e) => { e.preventDefault(); setLang('ko'); }}
+            >
+              KO
+            </a>
+            <a
+              href={hrefFor(route.path, 'vi', route.search)}
+              hrefLang="vi"
+              className={lang === 'vi' ? 'on' : ''}
+              onClick={(e) => { e.preventDefault(); setLang('vi'); }}
+            >
+              VI
+            </a>
           </div>
         </div>
       </header>
@@ -64,11 +105,11 @@ export function App() {
         {route.path === '/calendar' ? (
           <CalendarPage />
         ) : route.path === '/saju' ? (
-          <SajuPage query={route.query} />
+          <SajuPage query={route.search} />
         ) : route.path === '/match' ? (
-          <MatchPage query={route.query} />
+          <MatchPage query={route.search} />
         ) : route.path === '/name' ? (
-          <NamePage query={route.query} />
+          <NamePage query={route.search} />
         ) : (
           <Home />
         )}
@@ -77,6 +118,12 @@ export function App() {
       <footer className="footer">
         <div className="footer-brand"><MoonLogo size={28} /> <b>{t.brand}</b> <span className="muted">明月</span></div>
         <p>{t.footer.about}</p>
+        <nav className="footer-links" aria-label="footer">
+          {links.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
+          <a href={hrefFor(route.path, lang === 'ko' ? 'vi' : 'ko')} hrefLang={lang === 'ko' ? 'vi' : 'ko'}>
+            {lang === 'ko' ? 'Tiếng Việt' : '한국어'}
+          </a>
+        </nav>
         <p className="muted small">{t.footer.disclaimer} {t.footer.privacy}</p>
         <p className="muted small">© {new Date().getFullYear()} Minh Nguyệt · 명월</p>
       </footer>

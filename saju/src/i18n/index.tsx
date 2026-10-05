@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, ReactNode, useContext, useMemo } from 'react';
 import { ko, Dict } from './ko';
 import { vi } from './vi';
 
@@ -22,7 +22,8 @@ export function writeStore(key: string, value: string | null) {
   }
 }
 
-function initialLang(): Lang {
+/** Language the visitor prefers when the URL does not say: saved choice, then browser language. */
+export function preferredLang(): Lang {
   const saved = readStore('mw.lang');
   if (saved === 'ko' || saved === 'vi') return saved;
   return typeof navigator !== 'undefined' && navigator.language?.toLowerCase().startsWith('vi') ? 'vi' : 'ko';
@@ -36,22 +37,20 @@ interface Ctx {
 
 const I18nContext = createContext<Ctx | null>(null);
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(initialLang);
-  useEffect(() => {
-    document.documentElement.lang = lang;
-    document.title = lang === 'vi'
-      ? 'Minh Nguyệt 明月 · Lịch âm Hàn–Việt, ngày tốt, Tứ trụ'
-      : '명월 明月 · 한·베 음력 달력, 좋은 날, 무료 사주';
-  }, [lang]);
+/** The language comes from the URL (/vi/…); `onChangeLang` switches to the other language's URL. */
+export function I18nProvider({ lang, onChangeLang, children }: {
+  lang: Lang;
+  onChangeLang: (l: Lang) => void;
+  children: ReactNode;
+}) {
   const value = useMemo<Ctx>(() => ({
     lang,
     t: dicts[lang],
     setLang: (l) => {
       writeStore('mw.lang', l);
-      setLangState(l);
+      onChangeLang(l);
     },
-  }), [lang]);
+  }), [lang, onChangeLang]);
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
