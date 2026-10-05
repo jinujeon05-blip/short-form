@@ -145,7 +145,11 @@ for (const lang of LANGS) {
     const html = template
       .replace(/<html lang="[^"]*">/, `<html lang="${lang}">`)
       .replace(/<!--seo:start-->[\s\S]*?<!--seo:end-->/, head(route, lang))
-      .replace('<!--seo:body-->', body(route, lang));
+      .replace('<!--seo:body-->', body(route, lang))
+      .replace('href="/manifest.webmanifest"', `href="/${lang === 'vi' ? 'manifest-vi' : 'manifest'}.webmanifest"`)
+      .replace('name="apple-mobile-web-app-title" content="명월"', `name="apple-mobile-web-app-title" content="${lang === 'vi' ? 'Minh Nguyệt' : '명월'}"`)
+      .replace('<div class="t">명월 明月</div>', lang === 'vi' ? '<div class="t">Minh Nguyệt</div>' : '<div class="t">명월 明月</div>')
+      .replace('<div class="s">MINH NGUYỆT</div>', lang === 'vi' ? '<div class="s">明月 · 명월</div>' : '<div class="s">MINH NGUYỆT</div>');
     const rel = pathFor(route, lang);
     const file = rel === '/' ? path.join(dist, 'index.html') : path.join(dist, rel, 'index.html');
     fs.mkdirSync(path.dirname(file), { recursive: true });
