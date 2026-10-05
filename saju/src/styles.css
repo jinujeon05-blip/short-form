@@ -413,3 +413,38 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 .share-preview-inner { width: min(420px, 100%); max-height: 100%; overflow: auto; }
 .share-preview img { width: 100%; border-radius: 14px; display: block; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
 @media (max-width: 400px) { .nav a { font-size: 0.8rem; padding: 6px 2px; } }
+
+/* ---------- names ---------- */
+.name-panel { max-width: 640px; margin: 0 auto 16px; display: grid; gap: 14px; }
+.center-seg { justify-content: center; }
+.name-input { font-size: 1.25rem; padding: 14px 16px; }
+.examples { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.chip {
+  background: var(--panel2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px;
+  font-size: 0.88rem; cursor: pointer; color: var(--text);
+}
+.chip:hover { border-color: var(--gold); }
+.name-result { text-align: center; }
+.name-big { font-size: clamp(2.6rem, 11vw, 4.4rem); font-weight: 900; color: var(--gold-soft); letter-spacing: 0.06em; }
+.name-big.vi { letter-spacing: 0; font-size: clamp(2rem, 8vw, 3.4rem); }
+.name-sub { font-size: 1.15rem; margin-top: 4px; }
+.hanja-line { font-family: var(--serif); letter-spacing: 0.15em; color: var(--gold); }
+.name-cols { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 20px 0 8px; }
+.name-col {
+  flex: 1 1 120px; max-width: 170px; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.name-hanja { font-family: var(--serif); font-size: 3rem; font-weight: 900; line-height: 1.1; }
+.cand { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+.cand button {
+  font-family: var(--serif); font-size: 1.05rem; min-width: 36px; height: 36px; border-radius: 8px;
+  background: var(--panel2); border: 1px solid var(--line); cursor: pointer; color: var(--muted);
+}
+.cand button.on { border-color: var(--gold); color: var(--gold-soft); background: rgba(226, 192, 122, 0.12); }
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; }
+.flow-item { display: inline-flex; align-items: center; gap: 6px; }
+.flow-el { font-family: var(--serif); font-size: 1.5rem; font-weight: 900; }
+.flow-el small { font-size: 0.75rem; font-family: var(--sans); }
+.flow-arrow { font-size: 0.78rem; color: var(--muted); }
+.flow-arrow.generate { color: var(--good); }
+.flow-arrow.control, .flow-arrow.controlled { color: var(--bad); }

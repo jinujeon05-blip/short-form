@@ -85,6 +85,14 @@ export function Home() {
 
       <section className="cta-band">
         <div>
+          <h2 className="section-title">🇻🇳 {t.name.title} 🇰🇷</h2>
+          <p className="section-desc">{t.name.desc}</p>
+        </div>
+        <a className="btn btn-gold" href="#/name">{lang === 'vi' ? t.name.toKo : t.name.toVi} →</a>
+      </section>
+
+      <section className="cta-band">
+        <div>
           <h2 className="section-title">{t.saju.title}</h2>
           <p className="section-desc">{t.saju.desc}</p>
         </div>

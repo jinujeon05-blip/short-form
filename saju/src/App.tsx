@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { CalendarPage } from './pages/CalendarPage';
 import { SajuPage } from './pages/SajuPage';
 import { MatchPage } from './pages/MatchPage';
+import { NamePage } from './pages/NamePage';
 
 function parseHash() {
   const raw = window.location.hash.replace(/^#/, '') || '/';
@@ -32,6 +33,7 @@ export function App() {
     { href: '#/', path: '/', label: t.nav.today },
     { href: '#/calendar', path: '/calendar', label: t.nav.calendar },
     { href: '#/match', path: '/match', label: t.nav.match },
+    { href: '#/name', path: '/name', label: t.nav.name },
     { href: '#/saju', path: '/saju', label: t.nav.saju },
   ];
 
@@ -65,6 +67,8 @@ export function App() {
           <SajuPage query={route.query} />
         ) : route.path === '/match' ? (
           <MatchPage query={route.query} />
+        ) : route.path === '/name' ? (
+          <NamePage query={route.query} />
         ) : (
           <Home />
         )}

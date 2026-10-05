@@ -250,3 +250,62 @@ export function drawMatchCard(
     ctx.fillText(`${p.points}/${p.max}`, 980, y + 22);
   });
 }
+
+export interface NameCardData {
+  mode: 'toKo' | 'toVi';
+  koName: string;
+  roman: string;
+  hanja: string;
+  viName: string;
+  chars: { h: string; ko: string; vi: string; meaning: string }[];
+}
+
+export function drawNameCard(ctx: CanvasRenderingContext2D, d: NameCardData, t: Dict, lang: Lang) {
+  const f = fonts(lang);
+  frame(ctx, t, lang);
+  const toKo = d.mode === 'toKo';
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = C.gold;
+  ctx.font = `600 32px ${f.sans}`;
+  ctx.fillText(toKo ? `🇻🇳 ${d.viName}` : `🇰🇷 ${d.koName}`, CARD_W / 2, 300, CARD_W - 160);
+  ctx.fillStyle = C.muted;
+  ctx.font = `500 28px ${f.sans}`;
+  ctx.fillText(toKo ? t.name.cardTitle : t.name.cardTitleVi, CARD_W / 2, 350);
+
+  // Main name
+  ctx.fillStyle = C.goldSoft;
+  const main = toKo ? d.koName : d.viName;
+  ctx.font = `900 ${toKo ? 170 : 110}px ${f.serif}`;
+  ctx.fillText(main, CARD_W / 2, toKo ? 540 : 510, CARD_W - 140);
+  ctx.fillStyle = C.text;
+  ctx.font = `500 40px ${f.sans}`;
+  ctx.fillText(toKo ? d.roman : `${d.koName} · ${d.roman}`, CARD_W / 2, 620, CARD_W - 160);
+
+  // Hanja tiles
+  const n = d.chars.length;
+  const tile = Math.min(200, (CARD_W - 160 - (n - 1) * 24) / n);
+  const x0 = (CARD_W - (tile * n + (n - 1) * 24)) / 2;
+  d.chars.forEach((c, i) => {
+    const x = x0 + i * (tile + 24);
+    const y = 690;
+    ctx.fillStyle = C.panel;
+    roundRect(ctx, x, y, tile, tile + 150, 22);
+    ctx.fill();
+    ctx.strokeStyle = C.line;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = C.goldSoft;
+    ctx.font = `900 ${Math.round(tile * 0.55)}px ${f.serif}`;
+    ctx.fillText(c.h, x + tile / 2, y + tile * 0.68, tile - 16);
+    ctx.fillStyle = C.text;
+    ctx.font = `700 30px ${f.sans}`;
+    ctx.fillText(toKo ? c.ko : c.vi, x + tile / 2, y + tile + 30, tile - 12);
+    ctx.fillStyle = C.muted;
+    ctx.font = `500 24px ${f.sans}`;
+    ctx.fillText(toKo ? c.vi : c.ko, x + tile / 2, y + tile + 66, tile - 12);
+    ctx.fillStyle = C.gold;
+    ctx.font = `500 22px ${f.sans}`;
+    ctx.fillText(c.meaning, x + tile / 2, y + tile + 104, tile - 12);
+  });
+}

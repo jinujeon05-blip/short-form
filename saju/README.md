@@ -39,5 +39,10 @@ npm run build    # dist/ 에 정적 사이트 생성
 정적 사이트라 Vercel / Cloudflare Pages / Netlify 무료 요금제로 배포할 수 있습니다.
 - Vercel: 새 프로젝트 → 이 저장소 선택 → Root Directory `saju` → Framework `Vite` → Deploy
 
-## 다음 단계
-- 3단계: 베트남 이름 ↔ 한국 이름(한자) 변환, 사주 상세 풀이
+## 3단계 기능
+- **한·베 이름 변환** (`#/name`)
+  - 베트남 이름 → 한국 이름: Nguyễn Minh Anh → 완명영(阮明英), 성씨·이름 첫 글자 두음법칙(黎 려→여), 영문 표기
+  - 한국 이름 → 베트남 이름: 이서연 → Lý Thụy Nghiên(李瑞姸)
+  - 음절마다 한자 후보를 골라 바꿀 수 있음, 성조 없이 입력해도 인식, 중간 이름(Thị·Văn) 빼기
+  - 발음오행(첫소리 오행)의 상생·상극 흐름, 공유 이미지 카드
+  - 한자 사전: `src/content/hanja.ts` (약 350자, 줄 단위로 추가 가능)
