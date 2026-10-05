@@ -32,7 +32,7 @@ const BASE: Record<Relation, number> = {
   sixHarmony: 5, threeHarmony: 4, same: 3, neutral: 3, harm: 2, punish: 2, clash: 1,
 };
 
-function hash(...n: number[]): number {
+export function hash(...n: number[]): number {
   let h = 2166136261;
   for (const x of n) {
     h ^= x;

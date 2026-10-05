@@ -4,15 +4,17 @@ import type { Lang } from './i18n';
 import articles from './content/articles.json';
 import { ANIMAL_SLUGS, FORTUNE_YEARS } from './engine/yearly';
 
-export const ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/guide', '/about', '/privacy', '/terms'] as const;
+export const ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/daily', '/guide', '/about', '/privacy', '/terms'] as const;
 export const GUIDE_SLUGS: string[] = articles.guides.map((g) => g.slug);
 /** A static route, or /guide/<slug> */
-export type RoutePath = (typeof ROUTES)[number] | `/guide/${string}` | `/fortune/${string}`;
+export type RoutePath = (typeof ROUTES)[number] | `/guide/${string}` | `/fortune/${string}` | `/daily/${string}`;
 
 export function isKnownPath(p: string): p is RoutePath {
   if ((ROUTES as readonly string[]).includes(p)) return true;
   const m = p.match(/^\/guide\/([a-z0-9-]+)$/);
   if (m) return GUIDE_SLUGS.includes(m[1]);
+  const dz = p.match(/^\/daily\/([a-z]+)$/);
+  if (dz) return ANIMAL_SLUGS.includes(dz[1]);
   const f = p.match(/^\/fortune\/(\d{4})(?:\/([a-z]+))?$/);
   return !!f && FORTUNE_YEARS.includes(Number(f[1])) && (!f[2] || ANIMAL_SLUGS.includes(f[2]));
 }

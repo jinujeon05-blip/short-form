@@ -2,6 +2,7 @@
 import seo from './seo.json';
 import articles from './content/articles.json';
 import { YEARLY } from './content/yearly';
+import { DAILY } from './content/daily';
 import { ko } from './i18n/ko';
 import { vi } from './i18n/vi';
 import type { Lang } from './i18n';
@@ -22,6 +23,14 @@ export function metaFor(path: string, lang: Lang): PageMeta {
   if (guide) {
     const doc = guide[lang];
     return { title: `${doc.title} | ${BRAND[lang]}`, description: doc.description, h1: doc.title };
+  }
+  const dz = path.match(/^\/daily\/([a-z]+)$/);
+  if (dz) {
+    const t = DICT[lang];
+    const z = ANIMAL_SLUGS.indexOf(dz[1]);
+    const animal = lang === 'vi' ? `${t.branches[z]} (${t.animals[z]})` : t.animals[z];
+    const h1 = DAILY[lang].zodiacTitle(animal);
+    return { title: `${h1} · ${lang === 'vi' ? 'Tử vi hằng ngày' : '띠별 운세'} | ${BRAND[lang]}`, description: DAILY[lang].zodiacDesc(animal), h1 };
   }
   const f = path.match(/^\/fortune\/(\d{4})(?:\/([a-z]+))?$/);
   if (f) {

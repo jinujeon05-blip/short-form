@@ -530,4 +530,18 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 .install-actions { display: grid; gap: 6px; justify-items: center; }
 .install-steps { margin: 10px 0 0; padding-left: 18px; display: grid; gap: 6px; font-size: 0.9rem; color: var(--text); }
 .btn-link { background: none; border: 0; color: var(--gold-soft); text-decoration: underline; cursor: pointer; padding: 4px; }
+.day-nav { margin: 8px 0 4px; }
+.day-nav .chip.on { border-color: var(--gold); color: var(--gold-soft); background: rgba(226, 192, 122, 0.12); }
+.fortune-big { font-size: 1.15rem; font-weight: 600; color: var(--gold-soft); margin: 0 0 8px; }
+.lucky-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 16px; }
+.lucky-panel p { margin: 0; }
+.birth-lines { list-style: none; padding: 0; margin: 0; display: grid; gap: 0; }
+.birth-lines li { display: grid; grid-template-columns: max-content 1fr; gap: 10px; padding: 10px 4px; border-bottom: 1px solid var(--line); }
+.birth-lines li b { white-space: nowrap; }
+.week-bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: end; height: 140px; }
+.week-bar { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; height: 100%; color: var(--muted); text-decoration: none; }
+.week-bar:hover { text-decoration: none; }
+.week-fill { width: 70%; background: linear-gradient(var(--gold), rgba(226, 192, 122, 0.35)); border-radius: 6px 6px 2px 2px; }
+.week-bar.on { color: var(--gold-soft); font-weight: 700; }
+.week-bar.on .week-fill { box-shadow: 0 0 0 2px var(--gold-soft); }
 .other-zodiacs { display: flex; flex-wrap: wrap; gap: 8px; }

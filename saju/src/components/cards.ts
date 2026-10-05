@@ -354,3 +354,48 @@ export function drawYearCard(ctx: CanvasRenderingContext2D, f: YearFortune, t: D
   ctx.font = `500 28px ${fo.sans}`;
   ctx.fillText(`${y.lucky}: ${t.elementColor[f.luckyElement]} · ${f.luckyNumber}`, CARD_W / 2, 1150, CARD_W - 140);
 }
+
+export interface DailyCardData {
+  dateText: string;
+  zodiac: number;
+  title: string;
+  stars: number;
+  text: string;
+  areas: { label: string; stars: number }[];
+  lucky: string;
+}
+
+export function drawDailyCard(ctx: CanvasRenderingContext2D, d: DailyCardData, t: Dict, lang: Lang) {
+  const fo = fonts(lang);
+  frame(ctx, t, lang);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = C.gold;
+  ctx.font = `600 32px ${fo.sans}`;
+  ctx.fillText(d.dateText, CARD_W / 2, 270, CARD_W - 140);
+  ctx.font = `120px ${fo.sans}`;
+  ctx.fillText(t.animalEmoji[d.zodiac], CARD_W / 2, 420);
+  ctx.fillStyle = C.goldSoft;
+  ctx.font = `900 60px ${fo.serif}`;
+  ctx.fillText(d.title, CARD_W / 2, 515, CARD_W - 140);
+  ctx.fillStyle = C.gold;
+  ctx.font = `48px ${fo.sans}`;
+  ctx.fillText('★'.repeat(d.stars) + '☆'.repeat(5 - d.stars), CARD_W / 2, 585);
+  ctx.fillStyle = C.text;
+  ctx.font = `500 34px ${fo.sans}`;
+  wrap(ctx, d.text, CARD_W / 2, 660, CARD_W - 200, 48, 2);
+  d.areas.forEach((a, i) => {
+    const yy = 800 + i * 76;
+    ctx.textAlign = 'left';
+    ctx.fillStyle = C.text;
+    ctx.font = `600 32px ${fo.sans}`;
+    ctx.fillText(a.label, 180, yy);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = C.gold;
+    ctx.font = `38px ${fo.sans}`;
+    ctx.fillText('★'.repeat(a.stars) + '☆'.repeat(5 - a.stars), CARD_W - 180, yy);
+  });
+  ctx.textAlign = 'center';
+  ctx.fillStyle = C.muted;
+  ctx.font = `500 28px ${fo.sans}`;
+  ctx.fillText(d.lucky, CARD_W / 2, 1150, CARD_W - 140);
+}

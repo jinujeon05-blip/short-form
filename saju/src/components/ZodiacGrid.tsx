@@ -3,9 +3,12 @@ import { zodiacOfYear } from '../engine/almanac';
 import { zodiacFortune } from '../engine/fortune';
 import { readStore, useI18n, writeStore } from '../i18n';
 import { Stars } from './common';
+import { Link } from '../router';
+import { DAILY } from '../content/daily';
+import { dailyPath } from '../pages/DailyPage';
 
 export function ZodiacGrid({ jdn, dayCycle }: { jdn: number; dayCycle: number }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const saved = Number(readStore('mw.zodiac'));
   const [selected, setSelected] = useState<number | null>(Number.isInteger(saved) && readStore('mw.zodiac') !== null ? saved : null);
   const [year, setYear] = useState('');
@@ -79,6 +82,7 @@ export function ZodiacGrid({ jdn, dayCycle }: { jdn: number; dayCycle: number })
               <dt>{t.zodiac.health} <Stars n={f.areas.health} /></dt>
             </div>
           </dl>
+          <p className="center small"><Link to={dailyPath(f.branch)}>{DAILY[lang].homeLink} →</Link></p>
           <p className="lucky">
             <span>{t.zodiac.lucky}: <b>{t.elementColor[f.luckyElement]}</b></span>
             <span>{t.zodiac.luckyNumber}: <b>{f.luckyNumber}</b></span>
