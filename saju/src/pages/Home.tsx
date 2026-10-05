@@ -6,6 +6,7 @@ import { GanzhiChip, Section, cycleName, localTodayJdn, lunarText } from '../com
 import { Link } from '../router';
 import { GuideList } from './ArticlePages';
 import { AdSlot } from '../components/AdSlot';
+import { YEARLY } from '../content/yearly';
 
 export function Home() {
   const { t, lang } = useI18n();
@@ -65,6 +66,15 @@ export function Home() {
         </div>
         <p className={`today-note ${differ ? 'gold' : 'muted'}`}>{differ ? t.today.differ : t.today.same}</p>
       </section>
+
+      <Link to="/fortune/2027" className="year-banner">
+        <span className="year-banner-emoji" aria-hidden="true">{lang === 'vi' ? '🐐' : '🐑'}</span>
+        <span>
+          <b>{YEARLY[lang].homeBand(2027)}</b>
+          <span className="muted small">{YEARLY[lang].homeBandDesc}</span>
+        </span>
+        <span className="gold">→</span>
+      </Link>
 
       <Section eyebrow="今日 · HÔM NAY" title={t.day.title}>
         <DayDetail info={info} basis={basis} />

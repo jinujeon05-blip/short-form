@@ -7,8 +7,10 @@ import { CalendarPage } from './pages/CalendarPage';
 import { SajuPage } from './pages/SajuPage';
 import { MatchPage } from './pages/MatchPage';
 import { NamePage } from './pages/NamePage';
-import seo from './seo.json';
-import { GUIDES, GuideIndexPage, GuidePage, InfoPage } from './pages/ArticlePages';
+import { metaFor } from './meta';
+import { GuideIndexPage, GuidePage, InfoPage } from './pages/ArticlePages';
+import { YearlyIndexPage, YearlyZodiacPage } from './pages/YearlyPage';
+import { ANIMAL_SLUGS } from './engine/yearly';
 
 const current = () => parseLocation(window.location.pathname, window.location.search);
 
@@ -35,10 +37,7 @@ export function App() {
   }), []);
 
   useEffect(() => {
-    const guide = GUIDES.find((g) => route.path === `/guide/${g.slug}`);
-    const meta = guide
-      ? { title: `${guide[route.lang].title} | ${route.lang === 'vi' ? 'Minh Nguyệt' : '명월'}`, description: guide[route.lang].description }
-      : (seo as Record<Lang, Record<string, { title: string; description: string }>>)[route.lang][route.path];
+    const meta = metaFor(route.path, route.lang);
     document.documentElement.lang = route.lang;
     document.title = meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
@@ -114,6 +113,8 @@ function Shell({ route }: { route: Route }) {
           <MatchPage query={route.search} />
         ) : route.path === '/name' ? (
           <NamePage query={route.search} />
+        ) : route.path.startsWith('/fortune/') ? (
+          <YearlyRoute path={route.path} />
         ) : route.path === '/guide' ? (
           <GuideIndexPage />
         ) : route.path.startsWith('/guide/') ? (
@@ -130,6 +131,7 @@ function Shell({ route }: { route: Route }) {
         <p>{t.footer.about}</p>
         <nav className="footer-links" aria-label="footer">
           {links.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
+          <Link to="/fortune/2027">{YEARLY_LINK[lang]}</Link>
           <Link to="/guide">{t.guide.title}</Link>
           <Link to="/about">{t.info.about}</Link>
           <Link to="/privacy">{t.info.privacy}</Link>
@@ -143,4 +145,11 @@ function Shell({ route }: { route: Route }) {
       </footer>
     </div>
   );
+}
+
+const YEARLY_LINK: Record<Lang, string> = { ko: '2027 신년운세', vi: 'Tử vi 2027' };
+
+function YearlyRoute({ path }: { path: string }) {
+  const [, , year, slug] = path.split('/');
+  return slug ? <YearlyZodiacPage year={Number(year)} zodiac={ANIMAL_SLUGS.indexOf(slug)} /> : <YearlyIndexPage year={Number(year)} />;
 }

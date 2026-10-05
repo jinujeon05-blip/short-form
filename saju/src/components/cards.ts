@@ -1,6 +1,8 @@
 // Share-card drawings (1080×1350) for KakaoTalk / Zalo / Instagram.
 import { BRANCH_HANJA, STEM_HANJA, branchElement, stemElement } from '../engine/ganzhi';
 import { MatchResult } from '../engine/match';
+import { YearFortune } from '../engine/yearly';
+import { YEARLY } from '../content/yearly';
 import { SajuResult } from '../engine/pillars';
 import { Lang } from '../i18n';
 import { Dict } from '../i18n/ko';
@@ -308,4 +310,47 @@ export function drawNameCard(ctx: CanvasRenderingContext2D, d: NameCardData, t: 
     ctx.font = `500 22px ${f.sans}`;
     ctx.fillText(c.meaning, x + tile / 2, y + tile + 104, tile - 12);
   });
+}
+
+export function drawYearCard(ctx: CanvasRenderingContext2D, f: YearFortune, t: Dict, lang: Lang) {
+  const fo = fonts(lang);
+  frame(ctx, t, lang);
+  const y = YEARLY[lang];
+  ctx.textAlign = 'center';
+  ctx.fillStyle = C.gold;
+  ctx.font = `600 32px ${fo.sans}`;
+  ctx.fillText(`${f.year} · ${y.ganzhi(t.stems[f.yearCycle % 10], t.branches[f.yearCycle % 12], STEM_HANJA[f.yearCycle % 10] + BRANCH_HANJA[f.yearCycle % 12])}`, CARD_W / 2, 270, CARD_W - 140);
+
+  ctx.font = `120px ${fo.sans}`;
+  ctx.fillText(t.animalEmoji[f.zodiac], CARD_W / 2, 420);
+  ctx.fillStyle = C.goldSoft;
+  ctx.font = `900 64px ${fo.serif}`;
+  ctx.fillText(y.zodiacTitle(f.year, t.animals[f.zodiac]), CARD_W / 2, 520, CARD_W - 140);
+  ctx.fillStyle = C.gold;
+  ctx.font = `48px ${fo.sans}`;
+  ctx.fillText('★'.repeat(f.overall) + '☆'.repeat(5 - f.overall), CARD_W / 2, 590);
+  ctx.fillStyle = C.text;
+  ctx.font = `700 34px ${fo.serif}`;
+  ctx.fillText(y.relation[f.relation].head, CARD_W / 2, 660, CARD_W - 140);
+
+  (['love', 'money', 'work', 'health'] as const).forEach((a, i) => {
+    const yy = 740 + i * 80;
+    ctx.textAlign = 'left';
+    ctx.fillStyle = C.text;
+    ctx.font = `600 32px ${fo.sans}`;
+    ctx.fillText(y.areas[a], 160, yy);
+    ctx.fillStyle = C.gold;
+    ctx.font = `38px ${fo.sans}`;
+    ctx.textAlign = 'right';
+    ctx.fillText('★'.repeat(f.areas[a]) + '☆'.repeat(5 - f.areas[a]), CARD_W - 160, yy);
+  });
+  ctx.textAlign = 'center';
+  if (f.samjae) {
+    ctx.fillStyle = '#e0806b';
+    ctx.font = `700 30px ${fo.sans}`;
+    ctx.fillText(y.samjae.badge[f.samjae], CARD_W / 2, 1090);
+  }
+  ctx.fillStyle = C.muted;
+  ctx.font = `500 28px ${fo.sans}`;
+  ctx.fillText(`${y.lucky}: ${t.elementColor[f.luckyElement]} · ${f.luckyNumber}`, CARD_W / 2, 1150, CARD_W - 140);
 }
