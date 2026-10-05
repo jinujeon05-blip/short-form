@@ -12,6 +12,7 @@ import { RouteContext } from '../src/router.tsx';
 import { ANIMAL_SLUGS, FORTUNE_YEARS } from '../src/engine/yearly.ts';
 import { YearlyIndexPage, YearlyZodiacPage } from '../src/pages/YearlyPage.tsx';
 import { HazardPage } from '../src/pages/HazardPage.tsx';
+import { AgePage } from '../src/pages/AgePage.tsx';
 import { DailyIndexPage, DailyZodiacPage } from '../src/pages/DailyPage.tsx';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -23,7 +24,7 @@ const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
 const articles = JSON.parse(fs.readFileSync(path.join(root, 'src/content/articles.json'), 'utf8'));
 const adClient = config.adsense?.client ?? '';
 
-const TOOL_ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae'];
+const TOOL_ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/age'];
 const DAILY_ROUTES = ['/daily', ...ANIMAL_SLUGS.map((a) => `/daily/${a}`)];
 const INFO_ROUTES = ['/guide', '/about', '/privacy', '/terms'];
 const GUIDE_ROUTES = articles.guides.map((g) => `/guide/${g.slug}`);
@@ -32,8 +33,8 @@ const ROUTES = [...TOOL_ROUTES, ...DAILY_ROUTES, ...FORTUNE_ROUTES, ...INFO_ROUT
 const LANGS = ['ko', 'vi'];
 const LOCALE = { ko: 'ko_KR', vi: 'vi_VN' };
 const NAV = {
-  ko: { '/': '오늘', '/calendar': '좋은 날 달력', '/match': '궁합', '/name': '이름 변환', '/saju': '무료 사주', '/samjae': '삼재 계산기', '/guide': '읽을거리' },
-  vi: { '/': 'Hôm nay', '/calendar': 'Xem ngày tốt', '/match': 'Xem tuổi hợp', '/name': 'Tên tiếng Hàn', '/saju': 'Lá số Tứ trụ', '/samjae': 'Tam Tai · Kim Lâu', '/guide': 'Bài viết' },
+  ko: { '/': '오늘', '/calendar': '좋은 날 달력', '/match': '궁합', '/name': '이름 변환', '/saju': '무료 사주', '/samjae': '삼재 계산기', '/age': '나이 계산기', '/guide': '읽을거리' },
+  vi: { '/': 'Hôm nay', '/calendar': 'Xem ngày tốt', '/match': 'Xem tuổi hợp', '/name': 'Tên tiếng Hàn', '/saju': 'Lá số Tứ trụ', '/samjae': 'Tam Tai · Kim Lâu', '/age': 'Tính tuổi', '/guide': 'Bài viết' },
 };
 
 const pathFor = (route, lang) => (lang === 'vi' ? (route === '/' ? '/vi' : `/vi${route}`) : route);
@@ -56,7 +57,9 @@ function metaOf(route, lang) {
 /** Server-renders the yearly fortune page so its full text is in the HTML. */
 function renderFortune(route, lang) {
   const [, , year, slug] = route.split('/');
-  const page = route === '/samjae'
+  const page = route === '/age'
+    ? createElement(AgePage, { query: '' })
+    : route === '/samjae'
     ? createElement(HazardPage, { query: '' })
     : route === '/daily'
     ? createElement(DailyIndexPage, { query: '' })
@@ -134,7 +137,7 @@ function body(route, lang) {
   const info = ['/about', '/privacy', '/terms'].includes(route) ? articles.pages[route.slice(1)][lang] : null;
   const links = [...TOOL_ROUTES, '/guide'].map((r) => `<li><a href="${pathFor(r, lang)}">${esc(NAV[lang][r])}</a></li>`).join('');
   const other = lang === 'ko' ? 'vi' : 'ko';
-  if (route.startsWith('/fortune/') || route.startsWith('/daily') || route === '/samjae') return renderFortune(route, lang);
+  if (route.startsWith('/fortune/') || route.startsWith('/daily') || route === '/samjae' || route === '/age') return renderFortune(route, lang);
   if (g || info) {
     const doc = g ? g[lang] : info;
     return `<main class="main"><article class="article"><h1 class="article-title">${esc(doc.title)}</h1>${g ? `<p class="article-lead">${esc(doc.description)}</p>` : ''}${blocksHtml(doc.blocks, lang)}<ul class="footer-links">${links}</ul></article></main>`;

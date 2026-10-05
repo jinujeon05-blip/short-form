@@ -54,6 +54,11 @@
       "title": "오늘의 띠별 운세 · 12띠 운세 순위, 출생연도별 운세 | 명월",
       "description": "매일 바뀌는 오늘의 띠별 운세. 12띠 운세 순위와 애정·재물·일·건강운, 행운의 시간, 출생연도별 한 줄 운세를 무료로 확인하세요.",
       "h1": "오늘의 띠별 운세"
+    },
+    "/age": {
+      "title": "나이 계산기 · 만 나이, 연 나이, 세는나이 계산 | 명월",
+      "description": "생년월일로 만 나이, 연 나이, 세는나이와 베트남 나이(tuổi mụ), 띠, 한국·베트남 학년, 다음 생일·음력 생일, 10000일까지 바로 계산합니다. 올해 나이표·띠표 포함.",
+      "h1": "나이 계산기 · 만 나이, 연 나이, 세는나이"
     }
   },
   "vi": {
@@ -111,6 +116,11 @@
       "title": "Tử vi hôm nay 12 con giáp · Tử vi hằng ngày theo năm sinh | Minh Nguyệt",
       "description": "Tử vi hằng ngày miễn phí: xếp hạng 12 con giáp, tình cảm, tài lộc, công việc, sức khỏe, giờ tốt và luận theo từng năm sinh.",
       "h1": "Tử vi hôm nay 12 con giáp"
+    },
+    "/age": {
+      "title": "Tính tuổi · tuổi thật, tuổi mụ, tuổi Hàn Quốc theo ngày sinh | Minh Nguyệt",
+      "description": "Nhập ngày sinh để tính tuổi thật, tuổi mụ, tuổi kiểu Hàn Quốc, con giáp, lớp học, sinh nhật dương lịch và âm lịch tiếp theo, mốc 10.000 ngày. Kèm bảng tra tuổi năm nay.",
+      "h1": "Tính tuổi · tuổi thật, tuổi mụ, tuổi Hàn Quốc"
     }
   }
 }
