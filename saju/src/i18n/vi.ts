@@ -243,6 +243,18 @@ export const vi: Dict = {
     cardTitleVi: 'Tên tiếng Việt của tôi',
   },
 
+  guide: {
+    title: 'Bài viết',
+    more: 'Xem tất cả bài viết',
+    read: 'Đọc',
+    back: 'Danh sách bài viết',
+    related: 'Bài viết khác',
+    updated: 'Ngày đăng',
+    emailPending: 'đang cập nhật',
+    ad: 'Quảng cáo',
+  },
+  info: { about: 'Giới thiệu', privacy: 'Quyền riêng tư', terms: 'Điều khoản' },
+
   share: {
     image: 'Lưu / chia sẻ ảnh',
     making: 'Đang tạo ảnh…',

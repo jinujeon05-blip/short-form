@@ -1,8 +1,17 @@
 {
   "siteUrl": "https://myeongwol-sigma.vercel.app",
+  "contactEmail": "",
   "verification": {
     "google": "",
     "naver": "",
     "bing": ""
+  },
+  "adsense": {
+    "client": "",
+    "slots": {
+      "home": "",
+      "result": "",
+      "article": ""
+    }
   }
 }

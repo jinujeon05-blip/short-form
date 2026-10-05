@@ -24,6 +24,26 @@
       "title": "무료 사주팔자 · 만세력, 대운, 2027 신년운세 | 명월",
       "description": "태어난 날과 시간, 출생지로 사주팔자를 정확히 세웁니다. 십신, 지장간, 12운성, 오행 분포, 일간 풀이, 대운과 올해·내년 운세까지 무료로 확인하세요.",
       "h1": "무료 사주팔자 — 만세력과 대운 풀이"
+    },
+    "/guide": {
+      "title": "읽을거리 · 음력, 좋은 날, 사주, 한·베 문화 가이드 | 명월",
+      "description": "한국과 베트남의 음력이 다른 이유, 손 없는 날과 Tam Nương, 사주 기초, 납음오행, 이름 속 한자, 설날과 뗏까지 쉽게 풀어 쓴 가이드 모음입니다.",
+      "h1": "읽을거리 — 두 나라의 달력과 문화"
+    },
+    "/about": {
+      "title": "명월 소개 · 운영과 문의 | 명월",
+      "description": "명월(明月, Minh Nguyệt)은 한국인과 베트남인을 위한 무료 음력·좋은 날·사주 서비스입니다. 계산 방식과 문의처를 안내합니다.",
+      "h1": "명월 소개"
+    },
+    "/privacy": {
+      "title": "개인정보처리방침 | 명월",
+      "description": "명월은 생년월일 등 입력 정보를 서버에 저장하지 않습니다. 브라우저 저장, 광고 쿠키 등 개인정보 처리 방침을 안내합니다.",
+      "h1": "개인정보처리방침"
+    },
+    "/terms": {
+      "title": "이용약관 | 명월",
+      "description": "명월 서비스의 성격, 정확성, 콘텐츠 이용, 광고에 관한 이용약관입니다.",
+      "h1": "이용약관"
     }
   },
   "vi": {
@@ -51,6 +71,26 @@
       "title": "Lá số Tứ trụ miễn phí · Bát tự, đại vận, tử vi 2027 | Minh Nguyệt",
       "description": "Lập lá số Tứ trụ (Bát tự) chính xác theo ngày giờ và nơi sinh: Thập thần, Tàng can, Ngũ hành, Nhật chủ, Đại vận và vận năm nay, năm sau. Hoàn toàn miễn phí.",
       "h1": "Lá số Tứ trụ miễn phí — Bát tự và đại vận"
+    },
+    "/guide": {
+      "title": "Bài viết · Âm lịch, ngày tốt, Tứ trụ, văn hóa Việt – Hàn | Minh Nguyệt",
+      "description": "Vì sao âm lịch Việt – Hàn khác nhau, Tam Nương và ngày “Son eomneun”, Tứ trụ cho người mới, mệnh Nạp âm, chữ Hán trong tên, Tết và Seollal.",
+      "h1": "Bài viết — lịch và văn hóa hai nước"
+    },
+    "/about": {
+      "title": "Giới thiệu Minh Nguyệt · Liên hệ | Minh Nguyệt",
+      "description": "Minh Nguyệt (明月) là dịch vụ âm lịch, xem ngày tốt và Tứ trụ miễn phí cho người Việt và người Hàn. Cách tính và thông tin liên hệ.",
+      "h1": "Giới thiệu Minh Nguyệt"
+    },
+    "/privacy": {
+      "title": "Chính sách quyền riêng tư | Minh Nguyệt",
+      "description": "Minh Nguyệt không lưu ngày sinh và thông tin bạn nhập trên máy chủ. Chính sách về lưu trữ trình duyệt, cookie quảng cáo.",
+      "h1": "Chính sách quyền riêng tư"
+    },
+    "/terms": {
+      "title": "Điều khoản sử dụng | Minh Nguyệt",
+      "description": "Điều khoản về tính chất dịch vụ, độ chính xác, sử dụng nội dung và quảng cáo của Minh Nguyệt.",
+      "h1": "Điều khoản sử dụng"
     }
   }
 }

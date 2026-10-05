@@ -7,6 +7,7 @@ import { BirthFields, BirthForm, decodeBirth, defaultBirth, encodeBirth, toInput
 import { ELEMENT_CLASS, Section, localTodayJdn } from '../components/common';
 import { ShareImageButton } from '../components/ShareImage';
 import { drawMatchCard } from '../components/cards';
+import { AdSlot } from '../components/AdSlot';
 import { Link, hrefFor, navigate } from '../router';
 
 export function MatchPage({ query }: { query: string }) {
@@ -187,6 +188,7 @@ function MatchResultView({ m, names }: { m: MatchResult; names: [string, string]
         <Link className="btn btn-ghost" to="/match">{t.match.again}</Link>
       </div>
       <p className="muted small center">{t.match.disclaimer}</p>
+      <AdSlot name="result" />
     </Section>
   );
 }

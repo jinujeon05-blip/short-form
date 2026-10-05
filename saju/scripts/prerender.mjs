@@ -11,21 +11,50 @@ const seo = JSON.parse(fs.readFileSync(path.join(root, 'src/seo.json'), 'utf8'))
 const config = JSON.parse(fs.readFileSync(path.join(root, 'site.config.json'), 'utf8'));
 const site = config.siteUrl.replace(/\/+$/, '');
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
+const articles = JSON.parse(fs.readFileSync(path.join(root, 'src/content/articles.json'), 'utf8'));
+const adClient = config.adsense?.client ?? '';
 
-const ROUTES = ['/', '/calendar', '/match', '/name', '/saju'];
+const TOOL_ROUTES = ['/', '/calendar', '/match', '/name', '/saju'];
+const INFO_ROUTES = ['/guide', '/about', '/privacy', '/terms'];
+const GUIDE_ROUTES = articles.guides.map((g) => `/guide/${g.slug}`);
+const ROUTES = [...TOOL_ROUTES, ...INFO_ROUTES, ...GUIDE_ROUTES];
 const LANGS = ['ko', 'vi'];
 const LOCALE = { ko: 'ko_KR', vi: 'vi_VN' };
 const NAV = {
-  ko: { '/': '오늘', '/calendar': '좋은 날 달력', '/match': '궁합', '/name': '이름 변환', '/saju': '무료 사주' },
-  vi: { '/': 'Hôm nay', '/calendar': 'Xem ngày tốt', '/match': 'Xem tuổi hợp', '/name': 'Tên tiếng Hàn', '/saju': 'Lá số Tứ trụ' },
+  ko: { '/': '오늘', '/calendar': '좋은 날 달력', '/match': '궁합', '/name': '이름 변환', '/saju': '무료 사주', '/guide': '읽을거리' },
+  vi: { '/': 'Hôm nay', '/calendar': 'Xem ngày tốt', '/match': 'Xem tuổi hợp', '/name': 'Tên tiếng Hàn', '/saju': 'Lá số Tứ trụ', '/guide': 'Bài viết' },
 };
 
 const pathFor = (route, lang) => (lang === 'vi' ? (route === '/' ? '/vi' : `/vi${route}`) : route);
 const urlFor = (route, lang) => site + pathFor(route, lang);
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+const BRAND = { ko: '명월', vi: 'Minh Nguyệt' };
+const PENDING = { ko: '이메일 준비 중', vi: 'đang cập nhật' };
+const withEmail = (text, lang) => text.replace(/\{\{email\}\}/g, config.contactEmail || PENDING[lang]);
+
+function guideOf(route) {
+  return articles.guides.find((g) => route === `/guide/${g.slug}`);
+}
+
+/** Title/description/h1 for any route */
+function metaOf(route, lang) {
+  const g = guideOf(route);
+  if (g) return { title: `${g[lang].title} | ${BRAND[lang]}`, description: g[lang].description, h1: g[lang].title };
+  return seo[lang][route];
+}
+
+function blocksHtml(blocks, lang) {
+  return blocks.map((b) => {
+    if (b.h) return `<h2 class="article-h">${esc(b.h)}</h2>`;
+    if (b.p) return `<p>${esc(withEmail(b.p, lang))}</p>`;
+    if (b.ul) return `<ul class="article-list">${b.ul.map((li) => `<li>${esc(li)}</li>`).join('')}</ul>`;
+    return '';
+  }).join('');
+}
+
 function head(route, lang) {
-  const m = seo[lang][route];
+  const m = metaOf(route, lang);
   const url = urlFor(route, lang);
   const image = `${site}/og-image.png`;
   const tags = [
@@ -34,7 +63,7 @@ function head(route, lang) {
     `<link rel="canonical" href="${url}" />`,
     ...LANGS.map((l) => `<link rel="alternate" hreflang="${l}" href="${urlFor(route, l)}" />`),
     `<link rel="alternate" hreflang="x-default" href="${urlFor(route, 'ko')}" />`,
-    `<meta property="og:type" content="website" />`,
+    `<meta property="og:type" content="${guideOf(route) ? 'article' : 'website'}" />`,
     `<meta property="og:site_name" content="${lang === 'vi' ? 'Minh Nguyệt 明月' : '명월 明月'}" />`,
     `<meta property="og:title" content="${esc(m.title)}" />`,
     `<meta property="og:description" content="${esc(m.description)}" />`,
@@ -50,6 +79,10 @@ function head(route, lang) {
   if (v.google) tags.push(`<meta name="google-site-verification" content="${esc(v.google)}" />`);
   if (v.naver) tags.push(`<meta name="naver-site-verification" content="${esc(v.naver)}" />`);
   if (v.bing) tags.push(`<meta name="msvalidate.01" content="${esc(v.bing)}" />`);
+  if (adClient) {
+    tags.push(`<meta name="google-adsense-account" content="${esc(adClient)}" />`);
+    tags.push(`<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${esc(adClient)}" crossorigin="anonymous"></script>`);
+  }
   if (route === '/') {
     const ld = {
       '@context': 'https://schema.org',
@@ -67,9 +100,19 @@ function head(route, lang) {
 
 /** Static content shown before the app loads (and to crawlers that do not run JavaScript). */
 function body(route, lang) {
-  const m = seo[lang][route];
-  const links = ROUTES.map((r) => `<li><a href="${pathFor(r, lang)}">${esc(NAV[lang][r])}</a></li>`).join('');
+  const m = metaOf(route, lang);
+  const g = guideOf(route);
+  const info = ['/about', '/privacy', '/terms'].includes(route) ? articles.pages[route.slice(1)][lang] : null;
+  const links = [...TOOL_ROUTES, '/guide'].map((r) => `<li><a href="${pathFor(r, lang)}">${esc(NAV[lang][r])}</a></li>`).join('');
   const other = lang === 'ko' ? 'vi' : 'ko';
+  if (g || info) {
+    const doc = g ? g[lang] : info;
+    return `<main class="main"><article class="article"><h1 class="article-title">${esc(doc.title)}</h1>${g ? `<p class="article-lead">${esc(doc.description)}</p>` : ''}${blocksHtml(doc.blocks, lang)}<ul class="footer-links">${links}</ul></article></main>`;
+  }
+  if (route === '/guide') {
+    const list = articles.guides.map((x) => `<li><a href="${pathFor(`/guide/${x.slug}`, lang)}">${esc(x[lang].title)}</a> — ${esc(x[lang].description)}</li>`).join('');
+    return `<main class="main"><article class="article"><h1 class="article-title">${esc(m.h1)}</h1><p>${esc(m.description)}</p><ul class="article-list">${list}</ul></article></main>`;
+  }
   return `<main class="main"><section class="section"><h1 class="section-title">${esc(m.h1)}</h1><p class="section-desc">${esc(m.description)}</p><ul class="footer-links">${links}<li><a href="${pathFor(route, other)}" hreflang="${other}">${other === 'vi' ? 'Tiếng Việt' : '한국어'}</a></li></ul></section></main>`;
 }
 
@@ -96,12 +139,15 @@ ${LANGS.flatMap((lang) => ROUTES.map((route) => `  <url>
 ${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${urlFor(route, l)}" />`).join('\n')}
     <xhtml:link rel="alternate" hreflang="x-default" href="${urlFor(route, 'ko')}" />
     <lastmod>${today}</lastmod>
-    <changefreq>${route === '/' || route === '/calendar' ? 'daily' : 'weekly'}</changefreq>
-    <priority>${route === '/' ? '1.0' : '0.8'}</priority>
+    <changefreq>${route === '/' || route === '/calendar' ? 'daily' : TOOL_ROUTES.includes(route) || route === '/guide' ? 'weekly' : 'monthly'}</changefreq>
+    <priority>${route === '/' ? '1.0' : TOOL_ROUTES.includes(route) ? '0.8' : route.startsWith('/guide') ? '0.7' : '0.3'}</priority>
   </url>`)).join('\n')}
 </urlset>
 `;
 fs.writeFileSync(path.join(dist, 'sitemap.xml'), sitemap);
+if (adClient) {
+  fs.writeFileSync(path.join(dist, 'ads.txt'), `google.com, ${adClient.replace(/^ca-/, '')}, DIRECT, f08c47fec0942fa0\n`);
+}
 fs.writeFileSync(path.join(dist, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${site}/sitemap.xml\n`);
 
 console.log(`prerendered ${LANGS.length * ROUTES.length} pages for ${site}`);

@@ -240,6 +240,18 @@ export const ko = {
     cardTitleVi: '나의 베트남 이름',
   },
 
+  guide: {
+    title: '읽을거리',
+    more: '모든 글 보기',
+    read: '읽기',
+    back: '목록으로',
+    related: '다른 글',
+    updated: '작성일',
+    emailPending: '이메일 준비 중',
+    ad: '광고',
+  },
+  info: { about: '소개', privacy: '개인정보처리방침', terms: '이용약관' },
+
   share: {
     image: '이미지로 저장·공유',
     making: '이미지 만드는 중…',

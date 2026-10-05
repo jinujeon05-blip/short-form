@@ -4,6 +4,8 @@ import { DayDetail } from '../components/DayDetail';
 import { ZodiacGrid } from '../components/ZodiacGrid';
 import { GanzhiChip, Section, cycleName, localTodayJdn, lunarText } from '../components/common';
 import { Link } from '../router';
+import { GuideList } from './ArticlePages';
+import { AdSlot } from '../components/AdSlot';
 
 export function Home() {
   const { t, lang } = useI18n();
@@ -72,6 +74,8 @@ export function Home() {
         </p>
       </Section>
 
+      <AdSlot name="home" />
+
       <Section eyebrow="十二支 · 12 CON GIÁP" title={t.zodiac.title} desc={t.zodiac.desc}>
         <ZodiacGrid jdn={jdn} dayCycle={info.dayCycle} />
       </Section>
@@ -99,6 +103,11 @@ export function Home() {
         </div>
         <Link className="btn btn-gold" to="/saju">{t.hero.ctaSaju} →</Link>
       </section>
+
+      <Section eyebrow="讀 · BÀI VIẾT" title={t.guide.title}>
+        <GuideList limit={3} />
+        <p className="center"><Link to="/guide">{t.guide.more} →</Link></p>
+      </Section>
     </>
   );
 }

@@ -1,0 +1,452 @@
+{
+  "guides": [
+    {
+      "slug": "korean-vietnamese-lunar-calendar",
+      "date": "2026-10-05",
+      "cta": "/calendar",
+      "ko": {
+        "title": "한국 음력과 베트남 음력은 왜 다를까?",
+        "description": "같은 음력인데 설날과 추석 날짜가 하루, 때로는 한 달까지 달라지는 이유를 기준 시간과 천문 계산으로 쉽게 설명합니다.",
+        "cta": "오늘의 두 나라 음력 보기",
+        "blocks": [
+          { "p": "베트남에 사는 한국인이라면 한 번쯤 ‘한국 달력과 베트남 달력의 음력 날짜가 왜 다르지?’ 하고 고개를 갸웃한 적이 있을 겁니다. 두 나라 모두 같은 원리의 태음태양력을 쓰지만, 날짜를 정하는 기준 시간이 다르기 때문입니다." },
+          { "h": "음력 한 달은 ‘합삭’이 있는 날 시작합니다" },
+          { "p": "음력의 초하루는 달이 태양과 같은 방향에 놓여 보이지 않게 되는 순간, 즉 합삭(새 달)이 일어나는 날입니다. 합삭은 지구 전체에서 같은 ‘순간’에 일어나지만, 그 순간이 몇 월 며칠인지는 어느 나라 시간으로 보느냐에 따라 달라집니다." },
+          { "p": "한국은 동경 135도 기준인 UTC+9, 베트남은 동경 105도 기준인 UTC+7을 씁니다. 두 시간대는 2시간 차이가 나므로, 합삭이 한국 시간으로 자정에서 새벽 2시 사이에 일어나면 베트남에서는 아직 전날 밤 10시~12시입니다. 이때 베트남의 초하루는 한국보다 하루 빠르게 됩니다." },
+          { "h": "실제로 다른 날의 예" },
+          { "ul": [
+            "2026년 음력 9월 초하루: 베트남은 10월 10일, 한국은 10월 11일 (명월 계산 기준)",
+            "1985년 설: 베트남 뗏(Tết)은 1월 21일, 한국 설날은 2월 20일로 한 달이나 차이가 났습니다. 윤달과 동지가 들어 있는 달을 정하는 계산이 시간대에 따라 달라졌기 때문입니다.",
+            "1968년 설: 북베트남이 자체 기준(UTC+7) 달력을 쓰기 시작해, 남북 베트남의 설이 하루 엇갈렸습니다."
+          ] },
+          { "h": "윤달도 나라마다 달라질 수 있습니다" },
+          { "p": "음력은 열두 달이 1년(약 354일)보다 짧아 몇 년에 한 번 윤달을 넣어 계절을 맞춥니다. 윤달은 ‘중기(中氣)가 들어 있지 않은 첫 달’로 정하는데, 중기와 합삭이 아슬아슬하게 붙어 있으면 시간대에 따라 판단이 바뀌어 윤달의 위치가 달라지기도 합니다." },
+          { "h": "생활에서 주의할 점" },
+          { "ul": [
+            "제사·생일을 음력으로 챙긴다면, 한국 가족과 베트남 가족이 서로 다른 날로 알고 있을 수 있습니다.",
+            "택일(결혼·이사)을 할 때는 어느 나라 달력을 기준으로 할지 먼저 정하세요.",
+            "사주를 볼 때 음력 생일을 입력한다면, 태어난 나라의 음력으로 입력해야 정확합니다."
+          ] },
+          { "p": "명월은 두 나라의 음력을 각각의 기준 시간으로 따로 계산해 나란히 보여줍니다. 오늘 두 나라 날짜가 같은지, 다르다면 왜 다른지 홈 화면에서 바로 확인해 보세요." }
+        ]
+      },
+      "vi": {
+        "title": "Vì sao âm lịch Việt Nam và Hàn Quốc khác nhau?",
+        "description": "Cùng là âm lịch nhưng Tết và Rằm có năm lệch một ngày, thậm chí cả tháng. Giải thích dễ hiểu về múi giờ và cách tính lịch.",
+        "cta": "Xem âm lịch hai nước hôm nay",
+        "blocks": [
+          { "p": "Nếu bạn có người thân hay đồng nghiệp người Hàn, có lẽ bạn từng thắc mắc: sao ngày âm lịch trên lịch Hàn lại khác lịch Việt? Hai nước dùng cùng một nguyên tắc âm dương lịch, chỉ khác nhau ở múi giờ dùng để tính." },
+          { "h": "Mùng 1 là ngày có điểm Sóc" },
+          { "p": "Ngày mùng 1 âm lịch là ngày xảy ra điểm Sóc — lúc Mặt Trăng nằm cùng phía với Mặt Trời và không nhìn thấy được. Điểm Sóc xảy ra cùng một thời khắc trên toàn Trái Đất, nhưng thời khắc đó rơi vào ngày nào thì phụ thuộc vào giờ của từng nước." },
+          { "p": "Việt Nam dùng giờ UTC+7 (kinh tuyến 105° Đông), Hàn Quốc dùng UTC+9 (kinh tuyến 135° Đông). Nếu điểm Sóc rơi vào khoảng 0 giờ đến 2 giờ sáng theo giờ Hàn, thì ở Việt Nam vẫn là 22–24 giờ đêm hôm trước. Khi đó mùng 1 ở Việt Nam sẽ sớm hơn Hàn Quốc một ngày." },
+          { "h": "Ví dụ thực tế" },
+          { "ul": [
+            "Mùng 1 tháng 9 âm lịch năm 2026: Việt Nam là 10/10, Hàn Quốc là 11/10 (theo tính toán của Minh Nguyệt).",
+            "Tết Ất Sửu 1985: Việt Nam đón Tết ngày 21/1, còn Hàn Quốc và Trung Quốc là 20/2 — lệch cả một tháng do cách xác định tháng nhuận và tháng chứa Đông chí khác nhau theo múi giờ.",
+            "Tết Mậu Thân 1968: miền Bắc bắt đầu dùng lịch theo giờ UTC+7, nên Tết hai miền lệch nhau một ngày."
+          ] },
+          { "h": "Tháng nhuận cũng có thể khác" },
+          { "p": "Mười hai tháng âm lịch chỉ khoảng 354 ngày, nên vài năm lại thêm một tháng nhuận để khớp với mùa. Tháng nhuận là tháng đầu tiên không chứa Trung khí. Khi Trung khí và điểm Sóc sát nhau, múi giờ khác nhau có thể làm vị trí tháng nhuận khác nhau." },
+          { "h": "Lưu ý trong cuộc sống" },
+          { "ul": [
+            "Giỗ, sinh nhật âm lịch: gia đình Việt và gia đình Hàn có thể đang nhớ hai ngày khác nhau.",
+            "Khi xem ngày cưới hỏi, chuyển nhà, hãy thống nhất dùng lịch của nước nào.",
+            "Khi lập lá số với ngày sinh âm lịch, hãy nhập theo âm lịch của nước nơi bạn sinh ra."
+          ] },
+          { "p": "Minh Nguyệt tính riêng âm lịch của từng nước theo đúng múi giờ và hiển thị song song. Hãy xem ngay trên trang chủ hôm nay hai nước có trùng ngày hay không." }
+        ]
+      }
+    },
+    {
+      "slug": "choosing-good-days",
+      "date": "2026-10-05",
+      "cta": "/calendar",
+      "ko": {
+        "title": "손 없는 날과 Tam Nương: 한국·베트남식 좋은 날 고르기",
+        "description": "이사·결혼·개업 날짜를 고를 때 한국에서는 손 없는 날을, 베트남에서는 Tam Nương과 Nguyệt Kỵ를 피합니다. 두 나라의 택일 방법을 비교합니다.",
+        "cta": "좋은 날 달력 열기",
+        "blocks": [
+          { "p": "중요한 일을 앞두고 ‘좋은 날’을 고르는 문화는 한국과 베트남 모두 깊이 남아 있습니다. 다만 무엇을 보고 고르는지는 조금씩 다릅니다. 한·베 가족이 함께 결혼식이나 이사 날짜를 정할 때 참고하기 좋도록 정리했습니다." },
+          { "h": "한국: 손 없는 날" },
+          { "p": "‘손’은 날마다 방향을 옮겨 다니며 사람의 일을 방해한다고 여겨진 귀신을 말합니다. 음력으로 끝자리가 9와 0인 날(9일, 10일, 19일, 20일, 29일, 30일)에는 손이 하늘로 올라가 어느 방향에도 없다고 해서 ‘손 없는 날’이라 부르고, 특히 이사 날짜로 인기가 높습니다. 그래서 이 날은 이사 비용이 오르기도 합니다." },
+          { "h": "베트남: Tam Nương과 Nguyệt Kỵ" },
+          { "p": "베트남에서는 음력 3, 7, 13, 18, 22, 27일을 Tam Nương(삼낭일), 5, 14, 23일을 Nguyệt Kỵ(월기일)라 하여 결혼, 개업, 먼 길 떠나기 같은 큰일을 피하는 경우가 많습니다. ‘mùng năm, mười bốn, hai ba’라는 옛말이 있을 만큼 널리 알려져 있습니다." },
+          { "h": "두 나라 공통: 황도일과 12직" },
+          { "ul": [
+            "황도일(Ngày Hoàng đạo): 청룡·명당·금궤·보광·옥당·사명 여섯 별이 맡은 날로, 일을 시작하기 좋은 날로 봅니다.",
+            "흑도일(Ngày Hắc đạo): 나머지 여섯 별이 맡은 날로, 큰일은 피하는 편이 좋다고 봅니다.",
+            "12직(Thập nhị trực): 건·제·만·평·정·집·파·위·성·수·개·폐가 날마다 돌아가며, ‘성(Thành)’과 ‘개(Khai)’는 대부분의 일에 좋고 ‘파(Phá)’와 ‘폐(Bế)’는 시작하는 일에 좋지 않다고 봅니다.",
+            "황도시(Giờ Hoàng đạo): 하루 열두 시진 가운데 좋은 여섯 시간대로, 날짜를 바꾸기 어렵다면 시간이라도 맞추는 방법입니다."
+          ] },
+          { "h": "내 띠와 충하는 날" },
+          { "p": "그날의 일진(지지)이 내 띠와 정반대(충)이면 개인적으로는 피하는 것이 좋다고 봅니다. 예를 들어 말띠에게는 쥐날이 충하는 날입니다. 명월 달력에 출생 연도를 넣으면 이런 날을 자동으로 빼고 보여줍니다." },
+          { "h": "현실적인 팁" },
+          { "ul": [
+            "전통 택일은 참고용입니다. 하객 일정, 예식장 예약, 이사 비용 같은 현실 조건을 먼저 정한 뒤 그 안에서 좋은 날을 고르세요.",
+            "한·베 가족이 함께라면 두 나라 기준을 모두 만족하는 날을 고르면 양쪽 어른들 모두 마음이 편합니다.",
+            "명월 달력에서 목적(결혼·개업·이사·계약·여행)을 고르면 해당 일에 맞는 날만 강조됩니다."
+          ] }
+        ]
+      },
+      "vi": {
+        "title": "Ngày tốt kiểu Hàn và kiểu Việt: “Son eomneun” và Tam Nương",
+        "description": "Người Hàn chọn “ngày không có Son” để chuyển nhà, người Việt tránh Tam Nương, Nguyệt Kỵ. So sánh cách xem ngày tốt của hai nước.",
+        "cta": "Mở lịch ngày tốt",
+        "blocks": [
+          { "p": "Chọn ngày lành trước việc lớn là nét văn hóa còn đậm ở cả Việt Nam và Hàn Quốc, nhưng mỗi nước nhìn vào những yếu tố hơi khác nhau. Bài viết này giúp các gia đình Việt – Hàn cùng chọn ngày cưới, ngày chuyển nhà cho trọn vẹn." },
+          { "h": "Việt Nam: Tam Nương và Nguyệt Kỵ" },
+          { "p": "Các ngày âm lịch 3, 7, 13, 18, 22, 27 là ngày Tam Nương; ngày 5, 14, 23 là ngày Nguyệt Kỵ. Nhiều gia đình tránh cưới hỏi, khai trương, xuất hành xa vào những ngày này — như câu nói quen thuộc “mùng năm, mười bốn, hai ba”." },
+          { "h": "Hàn Quốc: ngày “Son eomneun”" },
+          { "p": "“Son” là vị thần được cho là di chuyển theo các hướng mỗi ngày và gây trở ngại cho việc của con người. Vào các ngày âm lịch có số tận cùng là 9 và 0 (mùng 9, 10, 19, 20, 29, 30), người ta tin rằng Son lên trời, không ở hướng nào — gọi là “son eomneun nal”. Đây là những ngày chuyển nhà được ưa chuộng nhất ở Hàn Quốc, đến mức giá dịch vụ chuyển nhà cũng tăng." },
+          { "h": "Điểm chung: Hoàng đạo và 12 Trực" },
+          { "ul": [
+            "Ngày Hoàng đạo: do sáu sao Thanh Long, Minh Đường, Kim Quỹ, Bảo Quang, Ngọc Đường, Tư Mệnh cai quản — tốt để khởi sự.",
+            "Ngày Hắc đạo: do sáu sao còn lại cai quản — nên tránh việc lớn.",
+            "12 Trực: Kiến, Trừ, Mãn, Bình, Định, Chấp, Phá, Nguy, Thành, Thu, Khai, Bế luân phiên mỗi ngày; Thành và Khai tốt cho hầu hết mọi việc, Phá và Bế không hợp để bắt đầu.",
+            "Giờ Hoàng đạo: sáu khung giờ tốt trong ngày — nếu khó đổi ngày, hãy chọn giờ."
+          ] },
+          { "h": "Ngày xung tuổi" },
+          { "p": "Nếu địa chi của ngày đối xung với tuổi của bạn thì nên tránh việc hệ trọng. Ví dụ người tuổi Ngọ nên tránh ngày Tý. Trong lịch Minh Nguyệt, chỉ cần nhập năm sinh là những ngày này được tự động loại ra." },
+          { "h": "Lời khuyên thực tế" },
+          { "ul": [
+            "Xem ngày chỉ mang tính tham khảo. Hãy chốt những điều kiện thực tế (lịch khách mời, nhà hàng, chi phí) trước rồi chọn ngày tốt trong khoảng đó.",
+            "Với gia đình Việt – Hàn, chọn ngày thỏa cả hai cách xem sẽ giúp ông bà hai bên đều yên lòng.",
+            "Trong lịch Minh Nguyệt, chọn mục đích (cưới hỏi, khai trương, chuyển nhà, ký kết, xuất hành) để làm nổi bật những ngày phù hợp."
+          ] }
+        ]
+      }
+    },
+    {
+      "slug": "saju-basics",
+      "date": "2026-10-05",
+      "cta": "/saju",
+      "ko": {
+        "title": "사주팔자 처음 읽는 법: 천간·지지·오행 기초",
+        "description": "년주·월주·일주·시주의 의미, 천간과 지지, 오행과 십신까지 사주표를 처음 보는 사람도 이해할 수 있게 정리했습니다.",
+        "cta": "내 사주 무료로 보기",
+        "blocks": [
+          { "p": "사주팔자(四柱八字)는 태어난 해·달·날·시간을 네 개의 기둥(四柱)으로 세우고, 각 기둥을 두 글자씩 모두 여덟 글자(八字)로 나타낸 것입니다. 베트남에서는 같은 것을 Tứ trụ 또는 Bát tự라고 부릅니다." },
+          { "h": "천간과 지지" },
+          { "p": "각 기둥의 윗글자는 천간(하늘의 줄기) 열 개 — 갑·을·병·정·무·기·경·신·임·계 — 중 하나이고, 아랫글자는 지지(땅의 가지) 열두 개 — 자·축·인·묘·진·사·오·미·신·유·술·해 — 중 하나입니다. 둘을 차례로 짝지으면 60개의 조합(육십갑자)이 되어 해와 달, 날과 시간을 매깁니다. 지지 열두 개는 우리가 아는 열두 띠이기도 합니다." },
+          { "h": "기둥이 바뀌는 기준" },
+          { "ul": [
+            "년주: 양력 1월 1일이나 설날이 아니라 입춘(대개 2월 4일 전후)에 바뀝니다.",
+            "월주: 음력 초하루가 아니라 24절기 중 ‘절’(입춘, 경칩, 청명 …)이 드는 시각에 바뀝니다.",
+            "일주: 자정 무렵 바뀌며, 23시~1시 ‘자시’를 어느 날로 볼지는 학파마다 다릅니다.",
+            "시주: 두 시간 단위의 시진으로 정하며, 출생지 경도에 따라 실제 해의 위치(진태양시)로 보정하기도 합니다. 서울은 표준시보다 약 32분 늦습니다."
+          ] },
+          { "h": "오행: 나무·불·흙·쇠·물" },
+          { "p": "모든 글자에는 목(木)·화(火)·토(土)·금(金)·수(水) 중 하나의 기운이 있습니다. 나무는 불을 살리고, 불은 흙을, 흙은 쇠를, 쇠는 물을, 물은 나무를 살리는 상생 관계가 있고, 나무는 흙을, 흙은 물을, 물은 불을, 불은 쇠를, 쇠는 나무를 누르는 상극 관계가 있습니다. 여덟 글자의 오행이 고르게 있는지, 어느 쪽에 치우쳤는지가 사주 풀이의 출발점입니다." },
+          { "h": "일간: 나를 나타내는 글자" },
+          { "p": "일주의 윗글자(일간)가 바로 ‘나’입니다. 예를 들어 일간이 경금(庚金)이면 단단한 쇠, 계수(癸水)면 비와 이슬 같은 성향으로 풉니다. 나머지 일곱 글자는 일간과의 관계에 따라 열 가지 십신(비견·겁재·식신·상관·편재·정재·편관·정관·편인·정인)으로 나뉘어 재물, 일, 인간관계 등을 읽는 단서가 됩니다." },
+          { "h": "대운과 세운" },
+          { "p": "대운은 10년마다 바뀌는 큰 흐름이고, 세운은 해마다 들어오는 기운입니다. 같은 사주라도 어떤 대운과 세운을 만나느냐에 따라 시기별 흐름이 달라진다고 봅니다." },
+          { "p": "사주는 나를 돌아보는 참고 자료일 뿐 정해진 운명이 아닙니다. 명월에서 내 사주를 세워 보고, 오행의 균형과 나에게 도움이 되는 색·방향을 생활 속 작은 습관으로 활용해 보세요." }
+        ]
+      },
+      "vi": {
+        "title": "Đọc lá số Tứ trụ cho người mới: Thiên can, Địa chi, Ngũ hành",
+        "description": "Ý nghĩa trụ năm, tháng, ngày, giờ; Thiên can, Địa chi; Ngũ hành và Thập thần — giải thích dễ hiểu cho người lần đầu xem lá số.",
+        "cta": "Lập lá số miễn phí",
+        "blocks": [
+          { "p": "Tứ trụ (Bát tự) là cách dựng bốn cột — năm, tháng, ngày, giờ sinh — mỗi cột gồm hai chữ, tổng cộng tám chữ. Người Hàn gọi là “saju palja”. Đây là phương pháp khác với Tử vi (lá số 12 cung) quen thuộc ở Việt Nam, dù cùng dựa trên Can Chi và Ngũ hành." },
+          { "h": "Thiên can và Địa chi" },
+          { "p": "Chữ trên mỗi trụ là một trong mười Thiên can — Giáp, Ất, Bính, Đinh, Mậu, Kỷ, Canh, Tân, Nhâm, Quý; chữ dưới là một trong mười hai Địa chi — Tý, Sửu, Dần, Mão, Thìn, Tỵ, Ngọ, Mùi, Thân, Dậu, Tuất, Hợi. Ghép lần lượt được 60 cặp (Lục thập hoa giáp) dùng để đánh dấu năm, tháng, ngày, giờ. Mười hai Địa chi cũng chính là 12 con giáp." },
+          { "h": "Mốc chuyển trụ" },
+          { "ul": [
+            "Trụ năm: đổi vào tiết Lập xuân (khoảng 4/2), không phải 1/1 hay mùng 1 Tết.",
+            "Trụ tháng: đổi theo các tiết khí (Lập xuân, Kinh trập, Thanh minh…), không theo mùng 1 âm lịch.",
+            "Trụ ngày: đổi quanh nửa đêm; giờ Tý (23h–1h) thuộc ngày nào thì mỗi trường phái nói khác nhau.",
+            "Trụ giờ: theo 12 canh giờ, có thể hiệu chỉnh theo kinh độ nơi sinh. Hà Nội sớm hơn giờ chuẩn UTC+7 khoảng 3 phút, TP.HCM khoảng 7 phút."
+          ] },
+          { "h": "Ngũ hành: Mộc, Hỏa, Thổ, Kim, Thủy" },
+          { "p": "Mỗi chữ mang một hành. Tương sinh: Mộc sinh Hỏa, Hỏa sinh Thổ, Thổ sinh Kim, Kim sinh Thủy, Thủy sinh Mộc. Tương khắc: Mộc khắc Thổ, Thổ khắc Thủy, Thủy khắc Hỏa, Hỏa khắc Kim, Kim khắc Mộc. Tám chữ có đủ năm hành hay lệch về hành nào là điểm xuất phát để luận lá số." },
+          { "h": "Nhật chủ: chữ đại diện cho bạn" },
+          { "p": "Chữ trên của trụ ngày (Nhật chủ) chính là “bạn”. Ví dụ Nhật chủ Canh Kim là kim loại cứng cỏi, Quý Thủy là mưa và sương. Bảy chữ còn lại được chia thành mười Thập thần (Tỷ Kiên, Kiếp Tài, Thực Thần, Thương Quan, Thiên Tài, Chính Tài, Thất Sát, Chính Quan, Thiên Ấn, Chính Ấn) theo quan hệ với Nhật chủ — gợi ý về tiền bạc, công việc, các mối quan hệ." },
+          { "h": "Đại vận và Lưu niên" },
+          { "p": "Đại vận là dòng vận lớn đổi mỗi 10 năm; Lưu niên là năng lượng của từng năm. Cùng một lá số nhưng gặp đại vận, lưu niên khác nhau thì từng giai đoạn sẽ khác nhau." },
+          { "p": "Tứ trụ là tài liệu để hiểu bản thân, không phải định mệnh. Hãy lập lá số trên Minh Nguyệt và thử áp dụng màu sắc, hướng hợp với mình vào những thói quen nhỏ hằng ngày." }
+        ]
+      }
+    },
+    {
+      "slug": "nap-am-zodiac-element",
+      "date": "2026-10-05",
+      "cta": "/match",
+      "ko": {
+        "title": "납음오행이란? 베트남 사람들이 말하는 ‘mệnh Kim, mệnh Hỏa’",
+        "description": "베트남에서 궁합과 집 방향을 볼 때 흔히 쓰는 ‘mệnh’(납음오행)의 뜻과 계산법, 태어난 해별 예시를 소개합니다.",
+        "cta": "한·베 궁합 보기",
+        "blocks": [
+          { "p": "베트남 친구에게 나이를 말하면 ‘그럼 너는 mệnh Thổ구나’ 같은 대답을 들을 때가 있습니다. 여기서 mệnh(명)은 태어난 해의 납음오행을 말합니다. 한국에서는 잘 쓰지 않지만 베트남에서는 궁합, 집 방향, 차 색깔을 고를 때까지 널리 쓰입니다." },
+          { "h": "육십갑자를 둘씩 묶은 30가지 오행" },
+          { "p": "납음오행은 육십갑자 60개를 두 개씩 짝지어 30가지 이름을 붙인 것입니다. 예를 들어 갑자·을축은 ‘해중금(바닷속의 쇠)’, 병인·정묘는 ‘노중화(화로 속의 불)’입니다. 일반적인 오행과 달리 같은 금이라도 바닷속 쇠, 칼끝의 쇠, 비녀의 쇠처럼 성질을 구분해 이름 붙인 것이 특징입니다." },
+          { "h": "태어난 해별 예시" },
+          { "ul": [
+            "1984·1985년생: 해중금(Hải Trung Kim) — 금",
+            "1986·1987년생: 노중화(Lư Trung Hỏa) — 화",
+            "1990·1991년생: 노방토(Lộ Bàng Thổ) — 토",
+            "1992·1993년생: 검봉금(Kiếm Phong Kim) — 금",
+            "1994·1995년생: 산두화(Sơn Đầu Hỏa) — 화",
+            "1996·1997년생: 간하수(Giản Hạ Thủy) — 수",
+            "2000·2001년생: 백랍금(Bạch Lạp Kim) — 금"
+          ] },
+          { "p": "기준이 되는 해는 양력 1월 1일이 아니라 설(Tết)입니다. 1·2월 초에 태어났다면 앞 해의 납음을 따릅니다." },
+          { "h": "궁합에서 보는 법" },
+          { "p": "두 사람의 mệnh이 서로 살려 주면(tương sinh) 좋은 궁합, 같으면(bình hòa) 무난, 서로 누르면(tương khắc) 조심하라고 봅니다. 예를 들어 Thổ(토)와 Kim(금)은 흙이 쇠를 낳는 상생이라 좋은 짝으로 봅니다." },
+          { "p": "다만 납음 하나만으로 궁합을 판단하지는 않습니다. 명월의 한·베 궁합은 납음오행에 더해 일간, 일지, 띠, 오행 보완까지 다섯 가지를 함께 보고 점수를 냅니다." }
+        ]
+      },
+      "vi": {
+        "title": "Mệnh Nạp âm là gì? Giải thích “mệnh Kim, mệnh Hỏa” cho người Hàn",
+        "description": "Ý nghĩa và cách tính mệnh Nạp âm theo năm sinh, bảng ví dụ các năm và cách dùng khi xem tuổi hợp — kèm cách giải thích cho bạn bè người Hàn.",
+        "cta": "Xem tuổi hợp Hàn – Việt",
+        "blocks": [
+          { "p": "Người Việt hay hỏi nhau “bạn mệnh gì?” khi xem tuổi, chọn hướng nhà hay màu xe. Mệnh ở đây là Nạp âm Ngũ hành của năm sinh. Ở Hàn Quốc khái niệm này gọi là “nabeum ohaeng” nhưng ít được dùng trong đời sống, nên bạn bè người Hàn thường không biết." },
+          { "h": "30 mệnh từ 60 Hoa giáp" },
+          { "p": "Nạp âm ghép 60 Hoa giáp thành từng cặp, đặt 30 tên khác nhau. Ví dụ Giáp Tý – Ất Sửu là Hải Trung Kim (vàng trong biển), Bính Dần – Đinh Mão là Lư Trung Hỏa (lửa trong lò). Khác với Ngũ hành thông thường, cùng là Kim nhưng được phân biệt rõ: vàng trong biển, vàng mũi kiếm, vàng trang sức…" },
+          { "h": "Ví dụ theo năm sinh" },
+          { "ul": [
+            "1984, 1985: Hải Trung Kim",
+            "1986, 1987: Lư Trung Hỏa",
+            "1990, 1991: Lộ Bàng Thổ",
+            "1992, 1993: Kiếm Phong Kim",
+            "1994, 1995: Sơn Đầu Hỏa",
+            "1996, 1997: Giản Hạ Thủy",
+            "2000, 2001: Bạch Lạp Kim"
+          ] },
+          { "p": "Năm được tính theo Tết, không theo 1/1 dương lịch. Sinh vào tháng 1 hoặc đầu tháng 2 trước Tết thì lấy mệnh của năm trước." },
+          { "h": "Dùng khi xem tuổi hợp" },
+          { "p": "Hai mệnh tương sinh là hợp, bình hòa (cùng hành) là ổn, tương khắc là cần lưu ý. Ví dụ Thổ và Kim là Thổ sinh Kim — được xem là cặp hợp." },
+          { "p": "Tuy vậy, chỉ một yếu tố mệnh thì chưa đủ. Phần Xem tuổi hợp của Minh Nguyệt kết hợp năm yếu tố — Nhật chủ, chi ngày, con giáp, mệnh Nạp âm và bổ trợ Ngũ hành — để chấm điểm." }
+        ]
+      }
+    },
+    {
+      "slug": "vietnamese-korean-names-hanja",
+      "date": "2026-10-05",
+      "cta": "/name",
+      "ko": {
+        "title": "베트남 이름과 한국 이름은 왜 닮았을까? 한자 이름 이야기",
+        "description": "Nguyễn은 완, Trần은 진, Lê는 여. 같은 한자를 두 나라가 어떻게 다르게 읽는지, 이름을 서로 바꿀 때 주의할 점을 소개합니다.",
+        "cta": "내 이름 바꿔 보기",
+        "blocks": [
+          { "p": "베트남 사람 이름의 대부분은 한자어(Hán-Việt)에서 왔습니다. 한국 이름도 대부분 한자로 짓기 때문에, 같은 한자를 각자의 방식으로 읽으면 이름을 서로 바꿀 수 있습니다. 예를 들어 Minh(明)은 한국어로 ‘명’, Anh(英)은 ‘영’입니다." },
+          { "h": "흔한 성씨 비교" },
+          { "ul": [
+            "Nguyễn 阮 → 완 (베트남 마지막 왕조인 응우옌 왕조를 한국에서는 ‘완조’라고 부릅니다)",
+            "Trần 陳 → 진",
+            "Lê 黎 → 려, 성씨로 쓸 때는 두음법칙에 따라 ‘여’",
+            "Phạm 范 → 범, Hoàng 黃 → 황, Vũ/Võ 武 → 무, Đặng 鄧 → 등",
+            "한국의 김(金)은 Kim, 이(李)는 Lý, 박(朴)은 Phác, 최(崔)는 Thôi"
+          ] },
+          { "h": "역사 속 인연: 화산 이씨" },
+          { "p": "13세기 베트남 리(Lý) 왕조의 왕자 리롱뜨엉(Lý Long Tường, 이용상)이 고려로 건너와 정착했고, 그 후손이 오늘날 한국의 화산 이씨로 이어졌다고 전해집니다. 두 나라의 이름이 닮은 데에는 이런 오랜 교류의 역사도 있습니다." },
+          { "h": "바꿀 때 알아 둘 점" },
+          { "ul": [
+            "같은 소리에 여러 한자가 있습니다. Hà는 河(강)일 수도, 霞(노을)일 수도 있으니 정확한 한자는 가족에게 확인하는 것이 좋습니다.",
+            "베트남 여성 이름의 Thị, 남성 이름의 Văn은 중간 이름으로, 한국식 세 글자 이름으로 바꿀 때는 보통 빼고 읽습니다.",
+            "한국어에는 첫소리에 ㄹ, ㄴ이 오기 어려운 두음법칙이 있어 黎(려)는 성씨로 쓰면 ‘여’, 林(림)은 ‘임’이 됩니다.",
+            "Sen(연꽃), Hồng 등 일부 이름은 순 베트남어(Nôm)이거나 여러 뜻이 있어 한자로 바로 옮기기 어렵습니다."
+          ] },
+          { "p": "명월의 이름 변환은 이름에 자주 쓰이는 한자를 기준으로 후보를 보여주고, 음절마다 원하는 한자를 고를 수 있습니다. 결과는 이미지 카드로 저장해 친구에게 보내 보세요." }
+        ]
+      },
+      "vi": {
+        "title": "Vì sao tên Việt và tên Hàn giống nhau? Câu chuyện chữ Hán trong tên",
+        "description": "Nguyễn là 완 (Wan), Trần là 진 (Jin), Lê là 여 (Yeo). Cách hai nước đọc cùng một chữ Hán và những điều cần biết khi đổi tên.",
+        "cta": "Đổi tên của bạn",
+        "blocks": [
+          { "p": "Phần lớn tên người Việt có gốc Hán-Việt. Người Hàn cũng đặt tên chủ yếu bằng chữ Hán, nên khi đọc cùng một chữ Hán theo cách của mỗi nước, ta có thể chuyển tên qua lại. Ví dụ Minh (明) đọc theo tiếng Hàn là “Myeong”, Anh (英) là “Yeong”." },
+          { "h": "So sánh các họ phổ biến" },
+          { "ul": [
+            "Nguyễn 阮 → 완 (Wan). Người Hàn gọi triều Nguyễn là “Wan-jo”.",
+            "Trần 陳 → 진 (Jin)",
+            "Lê 黎 → 려 (Ryeo), khi làm họ đọc là 여 (Yeo) theo quy tắc âm đầu",
+            "Phạm 范 → 범 (Beom), Hoàng 黃 → 황 (Hwang), Vũ/Võ 武 → 무 (Mu), Đặng 鄧 → 등 (Deung)",
+            "Ngược lại, họ Hàn 김 (金) là Kim, 이 (李) là Lý, 박 (朴) là Phác, 최 (崔) là Thôi"
+          ] },
+          { "h": "Mối duyên lịch sử: dòng họ Lý Hoa Sơn" },
+          { "p": "Vào thế kỷ 13, hoàng tử Lý Long Tường của nhà Lý đã vượt biển sang Cao Ly và định cư. Hậu duệ của ông được cho là dòng họ Lý Hoa Sơn (Hwasan Lee) ở Hàn Quốc ngày nay. Sự giống nhau của tên gọi hai nước còn gắn với lịch sử giao lưu lâu đời như vậy." },
+          { "h": "Điều cần biết khi đổi tên" },
+          { "ul": [
+            "Một âm có nhiều chữ Hán: Hà có thể là 河 (sông) hoặc 霞 (ráng chiều). Hãy hỏi gia đình để biết chữ chính xác.",
+            "Tên đệm Thị (nữ) và Văn (nam) thường được bỏ khi chuyển sang tên Hàn 3 chữ.",
+            "Tiếng Hàn có quy tắc âm đầu: chữ bắt đầu bằng ㄹ, ㄴ sẽ đổi âm khi đứng đầu, nên 黎 thành “Yeo”, 林 thành “Im”.",
+            "Một số tên thuần Việt như Sen, Mến, Lành không có chữ Hán tương ứng trực tiếp."
+          ] },
+          { "p": "Công cụ đổi tên của Minh Nguyệt gợi ý các chữ Hán thường dùng trong tên và cho bạn chọn từng chữ. Lưu kết quả thành ảnh để gửi cho bạn bè người Hàn nhé." }
+        ]
+      }
+    },
+    {
+      "slug": "seollal-and-tet",
+      "date": "2026-10-05",
+      "cta": "/",
+      "ko": {
+        "title": "설날과 뗏(Tết): 한국과 베트남의 새해 풍습 비교",
+        "description": "떡국과 바잉쯩, 세뱃돈과 리씨, 차례와 조상 제사. 같은 음력 설을 쇠는 두 나라의 풍습을 비교합니다.",
+        "cta": "올해 설 날짜 확인하기",
+        "blocks": [
+          { "p": "한국의 설날과 베트남의 뗏(Tết Nguyên Đán)은 모두 음력 1월 1일을 기념하는 가장 큰 명절입니다. 날짜는 대부분 같지만, 두 나라의 기준 시간이 달라 드물게 하루 이상 어긋나는 해도 있습니다. 풍습은 닮은 듯 다른 점이 많습니다." },
+          { "h": "명절 음식" },
+          { "ul": [
+            "한국: 떡국을 먹으며 ‘한 살 더 먹는다’고 말합니다. 전, 갈비찜, 식혜도 대표 음식입니다.",
+            "베트남: 찹쌀에 녹두와 돼지고기를 넣어 바나나잎으로 싼 바잉쯩(bánh chưng, 북부)과 바잉뗏(bánh tét, 남부)을 준비합니다. 과일 다섯 가지를 쌓는 ‘mâm ngũ quả’도 빠지지 않습니다."
+          ] },
+          { "h": "세뱃돈과 리씨(lì xì)" },
+          { "p": "한국에서는 아이들이 어른께 세배를 드리고 세뱃돈을 받습니다. 베트남에서는 빨간 봉투에 담은 ‘lì xì’를 주고받는데, 아이뿐 아니라 어른끼리, 직장에서도 행운을 비는 마음으로 건넵니다. 금액보다 새 지폐로 준비하는 정성을 중요하게 여깁니다." },
+          { "h": "조상과 신을 모시는 날" },
+          { "p": "한국은 설날 아침 차례를 지내고 성묘를 가는 집이 많습니다. 베트남은 섣달 23일 부엌신(Ông Công Ông Táo)을 하늘로 보내는 의식으로 명절 준비를 시작하고, 그믐밤(Giao thừa)에 조상을 맞이하는 제를 올립니다. 새해 첫 손님(xông đất)이 한 해 운을 정한다고 믿어 띠가 좋은 사람을 일부러 초대하기도 합니다." },
+          { "h": "꽃과 장식" },
+          { "p": "베트남 북부에서는 분홍 복숭아꽃(hoa đào), 남부에서는 노란 매화(hoa mai)와 금귤 나무로 집을 꾸밉니다. 한국 설날에는 특별한 꽃 장식 문화가 크지 않지만, 복조리를 걸거나 새해 덕담을 나누는 풍습이 있습니다." },
+          { "h": "연휴 기간" },
+          { "p": "한국의 설 연휴는 보통 설날 전후 3일이고, 베트남은 공무원 기준으로도 일주일 이상 쉬는 경우가 많아 사회 전체가 오래 쉽니다. 베트남에서 일하는 한국인이라면 뗏 전후로 업무 일정과 배송이 크게 늦어지는 점을 미리 고려하는 것이 좋습니다." },
+          { "p": "올해 설과 뗏이 언제인지, 두 나라 날짜가 같은지 명월 달력에서 확인해 보세요." }
+        ]
+      },
+      "vi": {
+        "title": "Tết Nguyên Đán và Seollal: so sánh phong tục năm mới Việt – Hàn",
+        "description": "Bánh chưng và canh bánh gạo tteokguk, lì xì và tiền mừng tuổi sebaetdon, cúng ông bà và charye. So sánh Tết của hai nước.",
+        "cta": "Xem ngày Tết năm nay",
+        "blocks": [
+          { "p": "Tết Nguyên Đán của Việt Nam và Seollal của Hàn Quốc đều mừng ngày mùng 1 tháng Giêng âm lịch — dịp lễ lớn nhất trong năm. Phần lớn các năm trùng ngày, nhưng vì múi giờ khác nhau nên cũng có năm lệch nhau. Phong tục thì có nhiều điểm giống mà khác." },
+          { "h": "Món ăn ngày Tết" },
+          { "ul": [
+            "Việt Nam: bánh chưng (miền Bắc), bánh tét (miền Nam), mâm ngũ quả, dưa hành, thịt kho.",
+            "Hàn Quốc: canh bánh gạo tteokguk — ăn một bát là “thêm một tuổi”; ngoài ra có bánh jeon, sườn hầm galbijjim, nước gạo ngọt sikhye."
+          ] },
+          { "h": "Lì xì và sebaetdon" },
+          { "p": "Ở Việt Nam, phong bao lì xì đỏ được trao không chỉ cho trẻ em mà cả giữa người lớn, đồng nghiệp — để chúc may mắn. Ở Hàn Quốc, trẻ em cúi lạy chúc Tết người lớn (sebae) rồi mới nhận tiền mừng tuổi (sebaetdon), thường bỏ trong phong bì trắng hoặc phong bì có hoa văn." },
+          { "h": "Cúng tổ tiên" },
+          { "p": "Người Việt bắt đầu Tết từ ngày 23 tháng Chạp tiễn Ông Công Ông Táo, rồi cúng Giao thừa đón ông bà. Người xông đất đầu năm được tin là quyết định vận may cả năm. Người Hàn cúng tổ tiên (charye) vào sáng mùng 1 rồi đi tảo mộ." },
+          { "h": "Hoa và trang trí" },
+          { "p": "Miền Bắc chưng hoa đào, miền Nam chưng hoa mai và cây quất. Ở Hàn Quốc không có truyền thống chưng hoa Tết rõ nét, thay vào đó có tục treo rổ vo gạo bokjori cầu may và trao nhau lời chúc đầu năm." },
+          { "h": "Thời gian nghỉ" },
+          { "p": "Kỳ nghỉ Seollal ở Hàn Quốc thường chỉ khoảng 3 ngày quanh mùng 1, trong khi Tết ở Việt Nam thường kéo dài hơn một tuần. Nếu bạn làm việc với đối tác Hàn, hãy lưu ý họ sẽ quay lại làm việc sớm hơn nhiều." },
+          { "p": "Xem ngày Tết năm nay và so sánh âm lịch hai nước ngay trên lịch Minh Nguyệt." }
+        ]
+      }
+    }
+  ],
+  "pages": {
+    "about": {
+      "ko": {
+        "title": "명월 소개",
+        "description": "명월(明月, Minh Nguyệt)은 한국인과 베트남인을 위한 무료 음력·좋은 날·사주 서비스입니다.",
+        "blocks": [
+          { "p": "명월(明月, Minh Nguyệt)은 ‘같은 달, 두 나라의 달력’을 주제로 한국인과 베트남인이 함께 쓸 수 있도록 만든 무료 서비스입니다. 베트남에 사는 한국인, 한국에 사는 베트남인, 한·베 가족과 커플이 서로의 달력과 문화를 쉽게 이해하는 것을 목표로 합니다." },
+          { "h": "제공하는 것" },
+          { "ul": [
+            "한국 음력과 베트남 음력을 각각의 기준 시간으로 계산해 나란히 보여주는 달력",
+            "황도일, 12직, 황도시, 손 없는 날, Tam Nương 등을 반영한 좋은 날 달력",
+            "12띠 오늘의 운세, 무료 사주팔자, 한·베 궁합, 베트남 ↔ 한국 이름 변환",
+            "두 나라의 달력과 문화를 소개하는 가이드 글"
+          ] },
+          { "h": "계산 방식" },
+          { "p": "절기와 합삭 시각은 공개 천문 계산 라이브러리로 분 단위까지 계산하며, 출생 시각은 당시의 표준시와 서머타임을 반영합니다. 모든 계산은 이용자의 브라우저 안에서 이루어지고, 생년월일 같은 정보는 서버로 보내거나 저장하지 않습니다." },
+          { "h": "운영 및 문의" },
+          { "p": "명월은 베트남에 거주하는 한국인 개인이 운영합니다. 오류 제보, 제휴, 기타 문의는 아래 이메일로 보내 주세요." },
+          { "p": "문의: {{email}}" }
+        ]
+      },
+      "vi": {
+        "title": "Giới thiệu Minh Nguyệt",
+        "description": "Minh Nguyệt (明月, 명월) là dịch vụ âm lịch, xem ngày tốt và Tứ trụ miễn phí cho người Việt và người Hàn.",
+        "blocks": [
+          { "p": "Minh Nguyệt (明月, 명월) là dịch vụ miễn phí với chủ đề “Một vầng trăng, hai cuốn lịch”, dành cho người Việt và người Hàn. Mục tiêu là giúp người Hàn ở Việt Nam, người Việt ở Hàn Quốc và các gia đình, cặp đôi Việt – Hàn dễ dàng hiểu lịch và văn hóa của nhau." },
+          { "h": "Chúng tôi cung cấp" },
+          { "ul": [
+            "Lịch âm Việt Nam và Hàn Quốc tính riêng theo múi giờ của mỗi nước, hiển thị song song",
+            "Lịch ngày tốt với ngày Hoàng đạo, 12 Trực, giờ Hoàng đạo, Tam Nương, ngày “Son eomneun”",
+            "Tử vi 12 con giáp hằng ngày, lá số Tứ trụ, xem tuổi hợp, đổi tên Việt ↔ Hàn",
+            "Bài viết giới thiệu lịch pháp và văn hóa hai nước"
+          ] },
+          { "h": "Cách tính" },
+          { "p": "Thời điểm tiết khí và điểm Sóc được tính đến từng phút bằng thư viện thiên văn mã nguồn mở; giờ sinh được quy đổi theo múi giờ và giờ mùa hè tại thời điểm đó. Mọi phép tính diễn ra trên trình duyệt của bạn; ngày sinh không được gửi lên hay lưu trên máy chủ." },
+          { "h": "Vận hành và liên hệ" },
+          { "p": "Minh Nguyệt do một cá nhân người Hàn sống tại Việt Nam vận hành. Mọi góp ý, báo lỗi hay hợp tác xin gửi về email dưới đây." },
+          { "p": "Liên hệ: {{email}}" }
+        ]
+      }
+    },
+    "privacy": {
+      "ko": {
+        "title": "개인정보처리방침",
+        "description": "명월이 이용자의 정보를 어떻게 다루는지, 쿠키와 광고에 대해 안내합니다.",
+        "blocks": [
+          { "p": "시행일: 2026년 10월 5일" },
+          { "h": "1. 수집하지 않는 정보" },
+          { "p": "명월은 회원가입이 없으며, 이용자가 입력하는 이름, 생년월일, 출생 시각, 출생지 등은 이용자의 브라우저 안에서만 계산에 사용되고 명월의 서버로 전송되거나 저장되지 않습니다. 단, 이용자가 ‘결과 공유’ 기능으로 링크를 만들면 입력값이 링크 주소에 포함되므로, 링크를 받은 사람은 그 내용을 볼 수 있습니다." },
+          { "h": "2. 브라우저에 저장하는 정보" },
+          { "p": "언어 설정, 선택한 띠, 달력 기준 국가, 출생 연도 같은 편의 설정은 이용자 기기의 로컬 저장소(localStorage)에만 저장됩니다. 브라우저 설정에서 언제든 삭제할 수 있습니다." },
+          { "h": "3. 자동으로 기록되는 정보" },
+          { "p": "사이트를 제공하는 호스팅 업체(Vercel)는 서비스 운영과 보안을 위해 접속 IP, 브라우저 종류, 접속 시각 같은 기술적 기록을 일정 기간 보관할 수 있습니다. 글꼴은 Google Fonts에서 불러오며, 이 과정에서 Google에 접속 정보가 전달될 수 있습니다." },
+          { "h": "4. 광고와 쿠키" },
+          { "p": "명월은 Google AdSense 등 제3자 광고 서비스를 이용할 수 있습니다. Google을 포함한 제3자 공급업체는 쿠키를 사용하여 이용자가 이 사이트나 다른 사이트를 이전에 방문한 기록을 바탕으로 광고를 게재할 수 있습니다. Google의 광고 쿠키를 통해 Google과 파트너는 이용자의 방문 기록에 기반한 광고를 제공할 수 있습니다." },
+          { "p": "이용자는 Google 광고 설정(https://adssettings.google.com)에서 맞춤 광고를 해제할 수 있으며, www.aboutads.info 에서 제3자 공급업체의 맞춤 광고 쿠키를 해제할 수 있습니다. Google이 광고 쿠키를 사용하는 방식은 https://policies.google.com/technologies/ads 에서 확인할 수 있습니다." },
+          { "h": "5. 아동의 개인정보" },
+          { "p": "명월은 아동을 대상으로 한 서비스가 아니며, 아동의 개인정보를 의도적으로 수집하지 않습니다." },
+          { "h": "6. 방침의 변경과 문의" },
+          { "p": "이 방침이 바뀌면 이 페이지에 시행일과 함께 공지합니다. 개인정보와 관련한 문의는 {{email}} 로 보내 주세요." }
+        ]
+      },
+      "vi": {
+        "title": "Chính sách quyền riêng tư",
+        "description": "Cách Minh Nguyệt xử lý thông tin của bạn, về cookie và quảng cáo.",
+        "blocks": [
+          { "p": "Ngày hiệu lực: 05/10/2026" },
+          { "h": "1. Thông tin chúng tôi không thu thập" },
+          { "p": "Minh Nguyệt không có chức năng đăng ký tài khoản. Họ tên, ngày giờ sinh, nơi sinh bạn nhập chỉ được dùng để tính toán trên trình duyệt của bạn, không được gửi lên hay lưu trên máy chủ của Minh Nguyệt. Riêng khi bạn dùng chức năng “chia sẻ kết quả”, thông tin đã nhập sẽ nằm trong đường dẫn, nên người nhận đường dẫn có thể xem được." },
+          { "h": "2. Thông tin lưu trên trình duyệt" },
+          { "p": "Các thiết lập tiện ích như ngôn ngữ, con giáp đã chọn, lịch theo nước nào, năm sinh chỉ được lưu trong bộ nhớ cục bộ (localStorage) trên thiết bị của bạn và có thể xóa bất cứ lúc nào trong cài đặt trình duyệt." },
+          { "h": "3. Thông tin ghi nhận tự động" },
+          { "p": "Nhà cung cấp lưu trữ (Vercel) có thể lưu nhật ký kỹ thuật như địa chỉ IP, loại trình duyệt, thời gian truy cập trong một thời gian để vận hành và bảo mật dịch vụ. Phông chữ được tải từ Google Fonts, nên thông tin truy cập có thể được gửi tới Google." },
+          { "h": "4. Quảng cáo và cookie" },
+          { "p": "Minh Nguyệt có thể sử dụng dịch vụ quảng cáo của bên thứ ba như Google AdSense. Các nhà cung cấp bên thứ ba, bao gồm Google, sử dụng cookie để hiển thị quảng cáo dựa trên các lần truy cập trước đây của bạn vào trang này hoặc các trang khác. Cookie quảng cáo của Google cho phép Google và đối tác hiển thị quảng cáo dựa trên lịch sử truy cập của bạn." },
+          { "p": "Bạn có thể tắt quảng cáo được cá nhân hóa tại Cài đặt quảng cáo của Google (https://adssettings.google.com) và tắt cookie của các nhà cung cấp bên thứ ba tại www.aboutads.info. Cách Google sử dụng cookie quảng cáo: https://policies.google.com/technologies/ads" },
+          { "h": "5. Thông tin của trẻ em" },
+          { "p": "Minh Nguyệt không hướng tới trẻ em và không cố ý thu thập thông tin cá nhân của trẻ em." },
+          { "h": "6. Thay đổi và liên hệ" },
+          { "p": "Khi chính sách thay đổi, chúng tôi sẽ cập nhật trên trang này kèm ngày hiệu lực. Mọi câu hỏi về quyền riêng tư xin gửi về {{email}}." }
+        ]
+      }
+    },
+    "terms": {
+      "ko": {
+        "title": "이용약관",
+        "description": "명월 서비스 이용에 관한 기본 약관입니다.",
+        "blocks": [
+          { "p": "시행일: 2026년 10월 5일" },
+          { "h": "1. 서비스의 성격" },
+          { "p": "명월이 제공하는 음력 변환, 좋은 날, 운세, 사주, 궁합, 이름 변환은 전통 역법과 명리학에 바탕을 둔 참고·오락용 정보입니다. 의료, 법률, 투자, 결혼 등 중요한 결정은 이용자 스스로의 판단과 전문가의 조언에 따라 내려 주세요." },
+          { "h": "2. 정확성" },
+          { "p": "명월은 계산의 정확성을 위해 노력하지만, 학파에 따른 해석 차이나 과거 시간대 기록의 차이로 결과가 다른 서비스와 다를 수 있습니다. 서비스 이용으로 생긴 손해에 대해 명월은 법이 허용하는 범위에서 책임을 지지 않습니다." },
+          { "h": "3. 콘텐츠 이용" },
+          { "p": "사이트의 글, 디자인, 해석 문구의 저작권은 명월에 있습니다. 개인적인 공유는 자유롭게 하실 수 있으나, 무단 복제나 상업적 재배포는 허용하지 않습니다. 이용자가 만든 결과 이미지는 개인적으로 자유롭게 공유할 수 있습니다." },
+          { "h": "4. 광고" },
+          { "p": "서비스 운영을 위해 사이트에 광고가 표시될 수 있으며, 광고 내용은 광고주가 책임집니다." },
+          { "h": "5. 변경과 문의" },
+          { "p": "약관이 바뀌면 이 페이지에 공지합니다. 문의: {{email}}" }
+        ]
+      },
+      "vi": {
+        "title": "Điều khoản sử dụng",
+        "description": "Điều khoản cơ bản khi sử dụng dịch vụ Minh Nguyệt.",
+        "blocks": [
+          { "p": "Ngày hiệu lực: 05/10/2026" },
+          { "h": "1. Tính chất dịch vụ" },
+          { "p": "Đổi âm lịch, xem ngày tốt, tử vi, Tứ trụ, xem tuổi hợp và đổi tên trên Minh Nguyệt là thông tin tham khảo, giải trí dựa trên lịch pháp và mệnh lý truyền thống. Các quyết định quan trọng về sức khỏe, pháp lý, đầu tư, hôn nhân… xin hãy dựa trên phán đoán của bạn và ý kiến chuyên gia." },
+          { "h": "2. Độ chính xác" },
+          { "p": "Chúng tôi cố gắng tính toán chính xác, nhưng kết quả có thể khác với dịch vụ khác do khác biệt trường phái hoặc dữ liệu múi giờ lịch sử. Trong phạm vi pháp luật cho phép, Minh Nguyệt không chịu trách nhiệm cho thiệt hại phát sinh từ việc sử dụng dịch vụ." },
+          { "h": "3. Sử dụng nội dung" },
+          { "p": "Bản quyền bài viết, thiết kế và lời luận giải thuộc về Minh Nguyệt. Bạn có thể chia sẻ cá nhân tự do, nhưng không được sao chép trái phép hay phát hành lại với mục đích thương mại. Ảnh kết quả bạn tạo ra có thể chia sẻ tự do." },
+          { "h": "4. Quảng cáo" },
+          { "p": "Trang có thể hiển thị quảng cáo để duy trì dịch vụ; nội dung quảng cáo do nhà quảng cáo chịu trách nhiệm." },
+          { "h": "5. Thay đổi và liên hệ" },
+          { "p": "Khi điều khoản thay đổi, chúng tôi sẽ thông báo trên trang này. Liên hệ: {{email}}" }
+        ]
+      }
+    }
+  }
+}

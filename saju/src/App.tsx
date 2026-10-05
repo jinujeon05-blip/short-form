@@ -8,6 +8,7 @@ import { SajuPage } from './pages/SajuPage';
 import { MatchPage } from './pages/MatchPage';
 import { NamePage } from './pages/NamePage';
 import seo from './seo.json';
+import { GUIDES, GuideIndexPage, GuidePage, InfoPage } from './pages/ArticlePages';
 
 const current = () => parseLocation(window.location.pathname, window.location.search);
 
@@ -34,7 +35,10 @@ export function App() {
   }), []);
 
   useEffect(() => {
-    const meta = (seo as Record<Lang, Record<string, { title: string; description: string }>>)[route.lang][route.path];
+    const guide = GUIDES.find((g) => route.path === `/guide/${g.slug}`);
+    const meta = guide
+      ? { title: `${guide[route.lang].title} | ${route.lang === 'vi' ? 'Minh Nguyệt' : '명월'}`, description: guide[route.lang].description }
+      : (seo as Record<Lang, Record<string, { title: string; description: string }>>)[route.lang][route.path];
     document.documentElement.lang = route.lang;
     document.title = meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
@@ -110,6 +114,12 @@ function Shell({ route }: { route: Route }) {
           <MatchPage query={route.search} />
         ) : route.path === '/name' ? (
           <NamePage query={route.search} />
+        ) : route.path === '/guide' ? (
+          <GuideIndexPage />
+        ) : route.path.startsWith('/guide/') ? (
+          <GuidePage slug={route.path.slice(7)} />
+        ) : route.path === '/about' || route.path === '/privacy' || route.path === '/terms' ? (
+          <InfoPage page={route.path.slice(1) as 'about' | 'privacy' | 'terms'} />
         ) : (
           <Home />
         )}
@@ -120,6 +130,10 @@ function Shell({ route }: { route: Route }) {
         <p>{t.footer.about}</p>
         <nav className="footer-links" aria-label="footer">
           {links.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
+          <Link to="/guide">{t.guide.title}</Link>
+          <Link to="/about">{t.info.about}</Link>
+          <Link to="/privacy">{t.info.privacy}</Link>
+          <Link to="/terms">{t.info.terms}</Link>
           <a href={hrefFor(route.path, lang === 'ko' ? 'vi' : 'ko')} hrefLang={lang === 'ko' ? 'vi' : 'ko'}>
             {lang === 'ko' ? 'Tiếng Việt' : '한국어'}
           </a>

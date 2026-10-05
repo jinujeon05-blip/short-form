@@ -6,6 +6,7 @@ import { useI18n } from '../i18n';
 import { ELEMENT_CLASS, Section } from '../components/common';
 import { ShareImageButton } from '../components/ShareImage';
 import { NameCardData, drawNameCard } from '../components/cards';
+import { AdSlot } from '../components/AdSlot';
 import { hrefFor } from '../router';
 
 type Mode = 'toKo' | 'toVi';
@@ -206,6 +207,7 @@ export function NamePage({ query }: { query: string }) {
             <ShareImageButton filename="myeongwol-name.png" draw={(ctx) => drawNameCard(ctx, card, t, lang)} />
           </div>
           <p className="muted small center">{t.name.disclaimer}</p>
+          <AdSlot name="result" />
         </>
       )}
     </Section>
