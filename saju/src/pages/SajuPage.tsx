@@ -6,6 +6,7 @@ import { ELEMENT_CLASS, GanzhiChip, Section, cycleName } from '../components/com
 import { BirthFields, BirthForm, decodeBirth, defaultBirth, encodeBirth, toInput } from '../components/BirthFields';
 import { ShareImageButton } from '../components/ShareImage';
 import { drawSajuCard } from '../components/cards';
+import { AdSlot } from '../components/AdSlot';
 import { Link, hrefFor, navigate } from '../router';
 
 /** Reads `b=` (current) or the first-release `d=&c=&t=…` link format. */
@@ -233,6 +234,7 @@ function SajuResultView({ result: r, name, thisYear }: { result: SajuResult; nam
         <Link className="btn btn-ghost" to="/saju">{t.result.again}</Link>
       </div>
       <p className="muted small center">{t.result.disclaimer}</p>
+      <AdSlot name="result" />
     </Section>
   );
 }

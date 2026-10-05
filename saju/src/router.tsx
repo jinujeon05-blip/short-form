@@ -1,9 +1,18 @@
 // Path-based routing: Korean at /…, Vietnamese at /vi/…
 import { AnchorHTMLAttributes, MouseEvent, ReactNode, createContext, useContext } from 'react';
 import type { Lang } from './i18n';
+import articles from './content/articles.json';
 
-export const ROUTES = ['/', '/calendar', '/match', '/name', '/saju'] as const;
-export type RoutePath = (typeof ROUTES)[number];
+export const ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/guide', '/about', '/privacy', '/terms'] as const;
+export const GUIDE_SLUGS: string[] = articles.guides.map((g) => g.slug);
+/** A static route, or /guide/<slug> */
+export type RoutePath = (typeof ROUTES)[number] | `/guide/${string}`;
+
+export function isKnownPath(p: string): p is RoutePath {
+  if ((ROUTES as readonly string[]).includes(p)) return true;
+  const m = p.match(/^\/guide\/([a-z0-9-]+)$/);
+  return !!m && GUIDE_SLUGS.includes(m[1]);
+}
 
 export interface Route {
   lang: Lang;
@@ -17,7 +26,7 @@ export function parseLocation(pathname: string, search: string): Route {
   const clean = pathname.replace(/\/+$/, '') || '/';
   const isVi = clean === '/vi' || clean.startsWith('/vi/');
   const rest = isVi ? clean.slice(3) || '/' : clean;
-  const path = (ROUTES as readonly string[]).includes(rest) ? (rest as RoutePath) : '/';
+  const path: RoutePath = isKnownPath(rest) ? rest : '/';
   return { lang: isVi ? 'vi' : 'ko', path, search };
 }
 
@@ -45,7 +54,7 @@ export function subscribe(cb: () => void): () => void {
 export function legacyHashTarget(hash: string, lang: Lang): string | null {
   if (!hash.startsWith('#/')) return null;
   const [p, q] = hash.slice(1).split('?');
-  const path = (ROUTES as readonly string[]).includes(p) ? (p as RoutePath) : '/';
+  const path: RoutePath = isKnownPath(p) ? p : '/';
   return hrefFor(path, lang, q ? `?${q}` : '');
 }
 

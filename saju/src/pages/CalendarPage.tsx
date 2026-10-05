@@ -5,6 +5,7 @@ import { CalendarCountry } from '../engine/lunar';
 import { readStore, useI18n, writeStore } from '../i18n';
 import { DayDetail } from '../components/DayDetail';
 import { Section, localTodayJdn } from '../components/common';
+import { AdSlot } from '../components/AdSlot';
 
 export function CalendarPage() {
   const { t, lang } = useI18n();
@@ -141,6 +142,7 @@ export function CalendarPage() {
       </div>
 
       <DayDetail info={dayInfo(selected, basis)} basis={basis} personalBranch={personalBranch} title=" " />
+      <AdSlot name="result" />
     </Section>
   );
 }
