@@ -1,0 +1,301 @@
+import type { Dream } from './types';
+
+export const NATURE_DREAMS_4: Dream[] = [
+  {
+    slug: 'forest', category: 'nature', tone: 'mixed', emoji: '🌲',
+    ko: {
+      name: '숲 꿈', keywords: ['숲', '숲속', '울창한 숲', '숲 꿈', '산림'],
+      summary: '울창한 숲은 번성과 많은 사람의 도움을 뜻합니다. 숲에서 길을 잃으면 선택지가 많아 방향을 정해야 할 때라는 꿈입니다.',
+      korea: '푸르고 울창한 숲에 들어가면 집안과 사업이 번성하고 주변에 도와줄 사람이 많아진다고 봅니다. 숲속에서 맑은 샘이나 빛을 만나면 해답을 찾고, 어두운 숲에서 헤매면 고민이 많으니 하나씩 정리하라는 뜻입니다. 숲이 불타거나 베어지면 기반을 잃지 않도록 조심하라는 꿈입니다.',
+      vietnam: '베트남에서 숲(rừng) 꿈은 풍요와 생명력을 뜻합니다. 깊은 숲에서 길을 잃으면 일이 복잡해질 수 있으니 신중하라는 뜻으로 봅니다.',
+      cases: [
+        ['울창한 숲에 들어가는 꿈', '번성하고 도와줄 사람이 많아집니다.'],
+        ['숲속에서 빛을 만나는 꿈', '고민의 해답을 찾습니다.'],
+        ['어두운 숲에서 헤매는 꿈', '고민을 하나씩 정리하세요.'],
+        ['숲이 베어지는 꿈', '기반을 지키는 데 신경 쓰세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy rừng', keywords: ['rừng', 'rừng rậm', 'khu rừng', 'lạc trong rừng'],
+      summary: 'Rừng xanh rậm rạp là thịnh vượng và nhiều người giúp đỡ. Lạc trong rừng là nhiều lựa chọn, cần định hướng.',
+      korea: 'Người Hàn cho rằng bước vào rừng xanh tốt là gia đình, công việc hưng thịnh, nhiều người giúp; gặp suối trong hay ánh sáng trong rừng là tìm được lời giải; lạc trong rừng tối là nhiều nỗi lo, nên gỡ từng việc; rừng cháy hay bị chặt là giữ gìn nền tảng.',
+      vietnam: 'Người Việt giải mơ thấy rừng là sung túc, sức sống; lạc trong rừng sâu là việc có thể rối, nên thận trọng.',
+      cases: [
+        ['Mơ vào rừng xanh tốt', 'Hưng thịnh, nhiều người giúp.'],
+        ['Mơ gặp ánh sáng trong rừng', 'Tìm ra lời giải.'],
+        ['Mơ lạc trong rừng tối', 'Gỡ từng nỗi lo một.'],
+        ['Mơ rừng bị chặt', 'Giữ gìn nền tảng.'],
+      ],
+    },
+  },
+  {
+    slug: 'rock', category: 'nature', tone: 'good', emoji: '🪨',
+    ko: {
+      name: '바위 꿈', keywords: ['바위', '큰 바위', '돌', '바위 꿈', '돌멩이'],
+      summary: '큰 바위는 흔들리지 않는 기반과 든든한 후원자를 뜻합니다. 바위를 안거나 바위에 오르면 지위와 재물이 굳건해지는 길몽입니다.',
+      korea: '큰 바위 위에 올라서면 기반이 단단해지고 높은 자리에 오른다고 봅니다. 바위를 품에 안으면 든든한 후원자를 얻거나 큰 인물이 될 아이의 태몽으로 풉니다. 바위가 굴러 내려오면 갑작스러운 일에 대비하라는 뜻이고, 돌에 걸려 넘어지면 작은 장애물을 미리 치우라는 꿈입니다.',
+      vietnam: '베트남어 "반석처럼 굳건하다(vững như bàn thạch)"처럼 바위(tảng đá) 꿈은 안정과 신뢰를 뜻합니다. 망부석(hòn Vọng Phu) 전설처럼 바위가 사람 모양이면 기다림과 그리움을 뜻하기도 합니다.',
+      cases: [
+        ['큰 바위 위에 올라서는 꿈', '기반이 단단해지고 높은 자리에 오릅니다.'],
+        ['바위를 품에 안는 꿈', '든든한 후원자를 얻거나 태몽입니다.'],
+        ['바위가 굴러 내려오는 꿈', '갑작스러운 일에 대비하세요.'],
+        ['돌에 걸려 넘어지는 꿈', '작은 장애물을 미리 치우세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy tảng đá', keywords: ['tảng đá', 'hòn đá', 'đá', 'núi đá', 'vấp đá'],
+      summary: 'Tảng đá lớn là nền tảng vững chắc và người chống lưng đáng tin. Ôm hay leo lên tảng đá là địa vị, tài sản thêm vững.',
+      korea: 'Người Hàn cho rằng đứng trên tảng đá lớn là nền móng vững, lên địa vị cao; ôm tảng đá là có người đỡ đầu hoặc giấc mơ báo sinh con thành người lớn; đá lăn xuống là chuẩn bị cho việc đột ngột; vấp đá ngã là dọn trước trở ngại nhỏ.',
+      vietnam: '“Vững như bàn thạch” — người Việt xem mơ thấy đá là ổn định, đáng tin; đá hình người như truyền thuyết hòn Vọng Phu lại là chờ đợi, nhớ nhung.',
+      cases: [
+        ['Mơ đứng trên tảng đá lớn', 'Nền móng vững, lên cao.'],
+        ['Mơ ôm tảng đá', 'Có người đỡ đầu hoặc báo có con.'],
+        ['Mơ đá lăn xuống', 'Chuẩn bị cho việc bất ngờ.'],
+        ['Mơ vấp đá ngã', 'Dọn trước trở ngại nhỏ.'],
+      ],
+    },
+  },
+  {
+    slug: 'desert', category: 'nature', tone: 'mixed', emoji: '🏜️',
+    ko: {
+      name: '사막 꿈', keywords: ['사막', '모래', '오아시스', '사막 꿈', '모래사장'],
+      summary: '사막은 외로움과 메마른 시기를 뜻하지만, 오아시스를 만나면 고생 끝에 기쁨이 찾아오는 꿈입니다.',
+      korea: '끝없는 사막을 걸으면 지금 지치고 외로운 시기라는 마음의 신호이니 쉬어 가라는 뜻입니다. 사막에서 오아시스나 물을 찾으면 고생 끝에 도움과 재물이 찾아오고, 모래바람이 불면 주변 일로 시야가 흐려지니 결정을 미루라는 꿈입니다. 모래를 손에 쥐면 돈이 새지 않게 관리하라는 뜻입니다.',
+      vietnam: '베트남에는 무이네와 닌투언처럼 모래언덕(đồi cát)이 있습니다. 모래언덕 꿈은 변화가 잦은 상황을, 사막의 물은 구원과 희망을 뜻합니다.',
+      cases: [
+        ['끝없는 사막을 걷는 꿈', '지친 시기입니다. 쉬어 가세요.'],
+        ['오아시스를 찾는 꿈', '고생 끝에 도움과 재물이 옵니다.'],
+        ['모래바람이 부는 꿈', '시야가 흐릴 때는 결정을 미루세요.'],
+        ['모래가 손에서 새는 꿈', '돈이 새지 않게 관리하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy sa mạc', keywords: ['sa mạc', 'cát', 'đồi cát', 'ốc đảo', 'bãi cát'],
+      summary: 'Sa mạc là cô đơn, giai đoạn khô cằn; nhưng gặp ốc đảo là khổ trước sướng sau.',
+      korea: 'Người Hàn cho rằng đi giữa sa mạc mênh mông là tín hiệu tâm trí mệt mỏi, cô đơn — nên nghỉ; tìm thấy ốc đảo hay nước là sau vất vả có người giúp, có tiền; bão cát là tầm nhìn bị che, nên hoãn quyết định; cát chảy khỏi tay là giữ tiền đừng để thất thoát.',
+      vietnam: 'Việt Nam có đồi cát ở Mũi Né, Ninh Thuận. Mơ thấy đồi cát là tình thế hay thay đổi; nước giữa sa mạc là cứu cánh, hy vọng.',
+      cases: [
+        ['Mơ đi giữa sa mạc', 'Đang mệt mỏi, hãy nghỉ.'],
+        ['Mơ tìm thấy ốc đảo', 'Khổ trước sướng sau.'],
+        ['Mơ bão cát', 'Hoãn quyết định khi chưa rõ.'],
+        ['Mơ cát chảy khỏi tay', 'Giữ tiền, tránh thất thoát.'],
+      ],
+    },
+  },
+  {
+    slug: 'island', category: 'nature', tone: 'mixed', emoji: '🏝️',
+    ko: {
+      name: '섬 꿈', keywords: ['섬', '무인도', '섬 꿈', '섬에 가는 꿈'],
+      summary: '섬은 휴식과 독립, 때로는 고립감을 뜻합니다. 아름다운 섬에 닿으면 바라던 목표에 이르고, 무인도에 갇히면 도움을 청하라는 꿈입니다.',
+      korea: '배를 타고 푸른 섬에 닿으면 오래 바라던 목표를 이루거나 좋은 곳으로 옮겨 간다고 봅니다. 무인도에 홀로 남으면 혼자 짊어진 짐이 많다는 뜻이니 주변에 도움을 청하고, 섬에서 집을 지으면 나만의 사업이나 독립을 시작한다는 꿈입니다.',
+      vietnam: '베트남은 푸꾸옥, 꼰다오 등 섬이 많아 섬(hòn đảo) 꿈은 여행과 휴식, 새로운 터전을 뜻합니다. 섬에 고립되면 외로움을 돌보라는 뜻입니다.',
+      cases: [
+        ['푸른 섬에 닿는 꿈', '바라던 목표에 이릅니다.'],
+        ['무인도에 혼자 남는 꿈', '혼자 짊어지지 말고 도움을 청하세요.'],
+        ['섬에 집을 짓는 꿈', '독립이나 내 사업을 시작합니다.'],
+        ['섬이 가라앉는 꿈', '기반을 다시 점검하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy hòn đảo', keywords: ['hòn đảo', 'đảo', 'đảo hoang', 'ra đảo'],
+      summary: 'Hòn đảo là nghỉ ngơi, độc lập, đôi khi là cô lập. Tới được đảo đẹp là đạt mục tiêu; kẹt ở đảo hoang là nên nhờ giúp đỡ.',
+      korea: 'Người Hàn cho rằng đi thuyền tới đảo xanh là đạt mục tiêu ấp ủ lâu, chuyển tới nơi tốt; một mình trên đảo hoang là gánh nặng tự ôm quá nhiều — hãy nhờ người giúp; dựng nhà trên đảo là bắt đầu tự lập, làm ăn riêng.',
+      vietnam: 'Việt Nam có nhiều đảo như Phú Quốc, Côn Đảo; mơ thấy đảo là du lịch, nghỉ ngơi, chốn mới; bị kẹt ở đảo là nên chăm sóc sự cô đơn.',
+      cases: [
+        ['Mơ tới được đảo xanh', 'Đạt mục tiêu.'],
+        ['Mơ một mình trên đảo hoang', 'Đừng ôm hết, hãy nhờ giúp.'],
+        ['Mơ dựng nhà trên đảo', 'Bắt đầu tự lập, làm riêng.'],
+        ['Mơ đảo chìm xuống', 'Xem lại nền tảng.'],
+      ],
+    },
+  },
+  {
+    slug: 'bamboo', category: 'nature', tone: 'good', emoji: '🎋',
+    ko: {
+      name: '대나무 꿈', keywords: ['대나무', '대나무 숲', '죽순', '대나무 꿈'],
+      summary: '대나무는 곧은 절개와 빠른 성장, 자손 번창을 뜻합니다. 죽순이 쑥쑥 솟으면 일이 우후죽순처럼 잘 풀리는 길몽입니다.',
+      korea: '푸른 대나무가 곧게 자라면 바른 마음으로 지위와 명예를 얻는다고 봅니다. 죽순이 여기저기 솟으면 일과 재물이 빠르게 늘고 자손이 번창하며, 대나무 숲에서 바람 소리를 들으면 마음이 맑아지는 휴식의 꿈입니다. 대나무가 부러지면 고집을 조금 내려놓으라는 뜻입니다.',
+      vietnam: '대나무(cây tre)는 베트남 사람과 마을을 상징합니다. 성 지옹(Thánh Gióng)이 대나무를 뽑아 적을 물리친 전설이 있고, "늙은 대가 지면 죽순이 돋는다(tre già măng mọc)"는 속담처럼 대나무 꿈은 대를 잇는 자손과 끈기를 뜻합니다.',
+      cases: [
+        ['대나무가 곧게 자라는 꿈', '바른 마음으로 명예를 얻습니다.'],
+        ['죽순이 솟아나는 꿈', '일과 재물이 빠르게 늘고 자손이 번창합니다.'],
+        ['대나무 숲을 걷는 꿈', '마음이 맑아지는 휴식이 옵니다.'],
+        ['대나무가 부러지는 꿈', '고집을 조금 내려놓으세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy cây tre', keywords: ['tre', 'cây tre', 'măng', 'lũy tre', 'rừng tre'],
+      summary: 'Tre là khí tiết ngay thẳng, lớn nhanh và con cháu đông đúc. Măng mọc khắp nơi là việc thuận lợi “như nấm sau mưa”.',
+      korea: 'Người Hàn cho rằng tre xanh mọc thẳng là giữ lòng ngay mà được danh, được chức; măng mọc khắp nơi là việc và tiền tăng nhanh, con cháu đông vui; nghe gió trong rừng tre là tâm hồn thư thái; tre gãy là nên bớt cố chấp.',
+      vietnam: 'Cây tre là biểu tượng của con người, làng quê Việt Nam: Thánh Gióng nhổ tre đánh giặc; “tre già măng mọc” — mơ thấy tre là con cháu nối dõi, sự bền bỉ.',
+      cases: [
+        ['Mơ tre mọc thẳng', 'Giữ lòng ngay mà được danh.'],
+        ['Mơ măng mọc lên', 'Việc và tiền tăng nhanh, con cháu đông.'],
+        ['Mơ đi trong rừng tre', 'Tâm hồn thư thái.'],
+        ['Mơ cây tre gãy', 'Bớt cố chấp.'],
+      ],
+    },
+  },
+  {
+    slug: 'lotus', category: 'nature', tone: 'good', emoji: '🪷',
+    ko: {
+      name: '연꽃 꿈', keywords: ['연꽃', '연못', '연잎', '연꽃 꿈', '연꽃 태몽'],
+      summary: '연꽃은 진흙 속에서도 깨끗하게 피는 꽃으로, 맑은 마음과 귀한 자녀, 어려움 속 성공을 뜻하는 길몽입니다.',
+      korea: '연못에 연꽃이 활짝 피면 집안에 경사가 생기고 어려움을 이겨 내 이름을 떨친다고 봅니다. 연꽃을 꺾어 품에 안으면 맑고 귀한 자녀의 태몽으로 풀며, 심청이 연꽃을 타고 돌아왔다는 옛이야기처럼 고난 끝의 반전과 복을 뜻합니다. 연꽃이 시들면 몸과 마음을 쉬게 하라는 뜻입니다.',
+      vietnam: '연꽃(hoa sen)은 베트남의 국화와 같은 꽃입니다. 민요(ca dao) 구절 "진흙 가까이 있어도 진흙 냄새에 물들지 않는다(gần bùn mà chẳng hôi tanh mùi bùn)"처럼 연꽃 꿈은 깨끗한 성품과 불교적 복, 평안을 뜻합니다.',
+      cases: [
+        ['연꽃이 활짝 피는 꿈', '경사가 생기고 이름을 떨칩니다.'],
+        ['연꽃을 품에 안는 꿈', '맑고 귀한 자녀의 태몽입니다.'],
+        ['진흙에서 연꽃이 솟는 꿈', '고난 끝에 성공합니다.'],
+        ['연꽃이 시드는 꿈', '몸과 마음을 쉬게 하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy hoa sen', keywords: ['hoa sen', 'sen', 'đầm sen', 'lá sen', 'ao sen'],
+      summary: 'Sen mọc từ bùn mà vẫn thanh khiết — là tâm trong sáng, con quý và thành công giữa khó khăn.',
+      korea: 'Người Hàn cho rằng sen nở rộ trong ao là nhà có hỷ sự, vượt khó mà nổi danh; hái sen ôm vào lòng là giấc mơ báo sinh con thanh tú; như chuyện cô Sim Cheong trở về trên đóa sen, đây là điềm đổi vận sau gian khổ; sen héo là nên nghỉ ngơi.',
+      vietnam: 'Sen được xem như quốc hoa của Việt Nam. “Gần bùn mà chẳng hôi tanh mùi bùn” — mơ thấy sen là phẩm cách thanh cao, phúc lành nhà Phật, bình an.',
+      cases: [
+        ['Mơ sen nở rộ', 'Có hỷ sự, nổi danh.'],
+        ['Mơ ôm hoa sen', 'Báo có con thanh tú.'],
+        ['Mơ sen vươn lên từ bùn', 'Thành công sau gian khó.'],
+        ['Mơ sen héo', 'Hãy nghỉ ngơi.'],
+      ],
+    },
+  },
+  {
+    slug: 'mud', category: 'nature', tone: 'mixed', emoji: '🟫',
+    ko: {
+      name: '진흙 꿈', keywords: ['진흙', '진흙탕', '흙탕물', '갯벌', '진흙 꿈'],
+      summary: '진흙탕에 빠지는 꿈은 곤란한 일이나 구설에 휘말리는 것을 경고합니다. 하지만 진흙으로 무언가를 빚으면 새로운 것을 만들어 냅니다.',
+      korea: '진흙탕에 발이 빠져 움직이기 힘들면 얽힌 일에서 빨리 빠져나오라는 경고입니다. 옷에 진흙이 묻으면 억울한 구설을 조심하고, 진흙을 씻어 내면 오해가 풀립니다. 반대로 진흙으로 그릇이나 집을 빚으면 손재주와 노력으로 새 일을 일군다고 봅니다. 한국에서는 흙을 재물로 보아 흙을 한가득 가져오면 재물운으로 풀기도 합니다.',
+      vietnam: '베트남에서 진흙(bùn) 꿈은 일이 꼬이는 것을 뜻하지만, 논의 진흙은 풍년과 노동의 결실을 뜻하기도 합니다.',
+      cases: [
+        ['진흙탕에 빠지는 꿈', '얽힌 일에서 빨리 빠져나오세요.'],
+        ['옷에 진흙이 묻는 꿈', '억울한 구설을 조심하세요.'],
+        ['진흙을 씻어 내는 꿈', '오해가 풀립니다.'],
+        ['진흙으로 무언가 빚는 꿈', '노력으로 새 일을 일굽니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy bùn', keywords: ['bùn', 'bùn lầy', 'lội bùn', 'vũng bùn'],
+      summary: 'Sa vào bùn là cảnh báo việc rắc rối hay thị phi. Nhưng nặn bùn thành vật là tạo ra điều mới.',
+      korea: 'Người Hàn cho rằng chân sa vào bùn khó đi là nên sớm thoát khỏi việc rối ren; quần áo dính bùn là coi chừng tai tiếng oan; rửa sạch bùn là hiểu lầm được giải; nặn bùn thành bát, thành nhà là nhờ khéo tay, chăm chỉ mà gây dựng việc mới; người Hàn còn xem đất là của cải.',
+      vietnam: 'Người Việt giải mơ thấy bùn là việc rối, nhưng bùn ruộng lại là được mùa, thành quả lao động.',
+      cases: [
+        ['Mơ sa vào bùn', 'Sớm thoát khỏi việc rối.'],
+        ['Mơ quần áo dính bùn', 'Coi chừng tai tiếng oan.'],
+        ['Mơ rửa sạch bùn', 'Hiểu lầm được giải.'],
+        ['Mơ nặn bùn', 'Gây dựng việc mới bằng công sức.'],
+      ],
+    },
+  },
+  {
+    slug: 'sky', category: 'nature', tone: 'good', emoji: '🌤️',
+    ko: {
+      name: '하늘 꿈', keywords: ['하늘', '맑은 하늘', '파란 하늘', '하늘이 열리는 꿈', '먹구름'],
+      summary: '맑고 푸른 하늘은 막힘없는 운과 희망을 뜻합니다. 하늘이 갈라지며 빛이 쏟아지면 아주 큰 길몽입니다.',
+      korea: '구름 한 점 없는 파란 하늘을 보면 하는 일마다 막힘이 없고 마음이 편해진다고 봅니다. 하늘이 열리고 빛이 쏟아지면 큰 행운이나 귀한 소식이 오는 대길몽이며, 하늘에서 무언가 내려와 받으면 뜻밖의 복을 받습니다. 하늘이 어둡고 먹구름이 끼면 잠시 조심하며 기다리라는 뜻입니다.',
+      vietnam: '베트남에서 하늘(bầu trời) 꿈은 하늘의 뜻과 앞날을 뜻합니다. 맑은 하늘은 순조로움, 어두운 하늘은 걱정을 뜻하고, 하늘에서 내려온 것을 받으면 하늘이 내린 복이라 봅니다.',
+      cases: [
+        ['맑은 파란 하늘을 보는 꿈', '막힘없이 순조롭습니다.'],
+        ['하늘이 열리고 빛이 쏟아지는 꿈', '큰 행운이 오는 대길몽입니다.'],
+        ['하늘에서 내려온 것을 받는 꿈', '뜻밖의 복을 받습니다.'],
+        ['먹구름 낀 하늘 꿈', '잠시 조심하며 기다리세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy bầu trời', keywords: ['bầu trời', 'trời xanh', 'trời quang', 'trời tối', 'trời mở'],
+      summary: 'Bầu trời trong xanh là vận thông suốt và hy vọng. Trời mở ra, ánh sáng tràn xuống là điềm đại cát.',
+      korea: 'Người Hàn cho rằng trời xanh không gợn mây là việc gì cũng suôn sẻ, lòng nhẹ nhõm; trời mở ra, ánh sáng đổ xuống là đại vận hay tin quý; nhận được vật từ trời rơi xuống là phúc bất ngờ; trời tối đầy mây đen là tạm thời cẩn thận, chờ đợi.',
+      vietnam: 'Người Việt xem mơ thấy bầu trời là ý trời, tương lai: trời trong là thuận lợi, trời tối là lo âu; nhận vật từ trời là phúc trời ban.',
+      cases: [
+        ['Mơ trời xanh trong', 'Mọi việc suôn sẻ.'],
+        ['Mơ trời mở, ánh sáng tràn xuống', 'Điềm đại cát.'],
+        ['Mơ nhận vật từ trời', 'Phúc bất ngờ.'],
+        ['Mơ trời đầy mây đen', 'Tạm thời cẩn thận, chờ đợi.'],
+      ],
+    },
+  },
+  {
+    slug: 'field', category: 'nature', tone: 'good', emoji: '🌾',
+    ko: {
+      name: '논밭 꿈', keywords: ['논', '밭', '논밭', '들판', '황금 들판', '벼'],
+      summary: '논밭은 재물의 기반이고, 누렇게 익은 들판은 노력의 결실을 뜻하는 길몽입니다.',
+      korea: '황금빛으로 익은 들판을 보면 노력한 만큼 큰 수확과 재물을 얻는다고 봅니다. 논밭을 사거나 물려받으면 부동산이나 안정된 수입이 생기고, 밭을 갈면 새 일을 시작할 준비가 된 것입니다. 논밭이 메마르거나 잡초로 덮이면 미뤄 둔 일을 손보라는 뜻입니다.',
+      vietnam: '베트남은 쌀의 나라로, 푸르거나 황금빛인 논(cánh đồng lúa) 꿈은 풍년과 풍요, 가정의 넉넉함을 뜻하는 아주 좋은 꿈입니다.',
+      cases: [
+        ['황금 들판을 보는 꿈', '노력한 만큼 큰 결실을 얻습니다.'],
+        ['논밭을 사는 꿈', '부동산이나 안정된 수입이 생깁니다.'],
+        ['밭을 가는 꿈', '새 일을 시작할 준비가 됐습니다.'],
+        ['논밭이 메마른 꿈', '미뤄 둔 일을 손보세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy cánh đồng lúa', keywords: ['cánh đồng', 'đồng lúa', 'ruộng lúa', 'ruộng', 'lúa chín'],
+      summary: 'Ruộng đồng là nền tảng của cải; cánh đồng lúa chín vàng là thành quả của nỗ lực — giấc mơ rất tốt.',
+      korea: 'Người Hàn cho rằng thấy cánh đồng chín vàng là gặt hái lớn, có tiền xứng công; mua hay được thừa kế ruộng là có bất động sản, thu nhập ổn định; cày ruộng là đã sẵn sàng bắt đầu việc mới; ruộng khô, cỏ dại là nên xử lý việc còn tồn.',
+      vietnam: 'Việt Nam là xứ lúa gạo; mơ thấy đồng lúa xanh hay vàng óng là được mùa, sung túc, gia đình no ấm.',
+      cases: [
+        ['Mơ cánh đồng lúa chín', 'Gặt hái lớn xứng công.'],
+        ['Mơ mua ruộng', 'Có bất động sản, thu nhập ổn định.'],
+        ['Mơ cày ruộng', 'Sẵn sàng bắt đầu việc mới.'],
+        ['Mơ ruộng khô cằn', 'Xử lý việc còn tồn.'],
+      ],
+    },
+  },
+  {
+    slug: 'sunset', category: 'nature', tone: 'mixed', emoji: '🌇',
+    ko: {
+      name: '노을 꿈', keywords: ['노을', '저녁노을', '석양', '해 지는 꿈', '일몰'],
+      summary: '붉은 노을은 한 시기의 아름다운 마무리를 뜻합니다. 노을을 함께 보면 관계가 깊어지고, 해가 지며 어두워지면 정리할 때라는 꿈입니다.',
+      korea: '붉게 물든 노을을 보면 하던 일이 좋은 결과로 마무리되고 그동안의 노력이 보상받는다고 봅니다. 사랑하는 사람과 노을을 보면 관계가 무르익고, 해가 지고 금방 어두워지면 미련을 정리하고 다음을 준비하라는 뜻입니다. 노을 속에서 새가 날면 반가운 소식이 옵니다.',
+      vietnam: '베트남에서 해 질 녘(hoàng hôn) 꿈은 한 단계의 끝과 휴식을 뜻합니다. 아름다운 노을은 노년의 평안, 어두운 노을은 피로를 뜻한다고 봅니다.',
+      cases: [
+        ['붉은 노을을 보는 꿈', '일이 좋은 결과로 마무리됩니다.'],
+        ['연인과 노을을 보는 꿈', '관계가 무르익습니다.'],
+        ['해가 지고 어두워지는 꿈', '미련을 정리하고 다음을 준비하세요.'],
+        ['노을 속을 새가 나는 꿈', '반가운 소식이 옵니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy hoàng hôn', keywords: ['hoàng hôn', 'mặt trời lặn', 'chiều tà', 'ráng chiều'],
+      summary: 'Ráng chiều đỏ rực là một giai đoạn khép lại đẹp đẽ. Ngắm hoàng hôn cùng ai là tình cảm sâu thêm; trời tối dần là lúc nên thu xếp.',
+      korea: 'Người Hàn cho rằng ngắm ráng chiều đỏ là việc khép lại tốt đẹp, công sức được đền đáp; ngắm hoàng hôn cùng người thương là tình cảm chín muồi; mặt trời lặn rồi tối nhanh là nên buông điều còn vương vấn, chuẩn bị bước tiếp; chim bay trong ráng chiều là có tin vui.',
+      vietnam: 'Người Việt giải mơ thấy hoàng hôn là kết thúc một chặng, nghỉ ngơi; hoàng hôn đẹp là tuổi già an nhàn, hoàng hôn u ám là mệt mỏi.',
+      cases: [
+        ['Mơ ráng chiều đỏ', 'Việc khép lại tốt đẹp.'],
+        ['Mơ ngắm hoàng hôn cùng người yêu', 'Tình cảm chín muồi.'],
+        ['Mơ trời tối dần', 'Buông bỏ, chuẩn bị bước tiếp.'],
+        ['Mơ chim bay trong ráng chiều', 'Có tin vui.'],
+      ],
+    },
+  },
+  {
+    slug: 'mushroom', category: 'nature', tone: 'mixed', emoji: '🍄',
+    ko: {
+      name: '버섯 꿈', keywords: ['버섯', '송이버섯', '독버섯', '버섯 따는 꿈'],
+      summary: '버섯을 따는 꿈은 뜻밖의 재물과 수확을 뜻하는 길몽입니다. 다만 독버섯은 달콤한 유혹을 조심하라는 경고입니다.',
+      korea: '산에서 버섯을 한가득 따면 뜻밖의 재물이 생기고, 귀한 송이버섯이나 영지를 얻으면 큰 행운과 건강을 얻는다고 봅니다. 버섯이 쑥쑥 자라면 일이 빠르게 늘어나 태몽으로도 풉니다. 화려한 독버섯을 먹으면 좋아 보이는 제안이나 사람을 경계하라는 뜻입니다.',
+      vietnam: '베트남에서 버섯(nấm) 꿈은 갑작스러운 행운과 성장을 뜻하며, "비 온 뒤 버섯처럼(mọc như nấm sau mưa)" 일이 많이 생긴다는 뜻으로도 풉니다. 독버섯은 위험한 유혹입니다.',
+      cases: [
+        ['버섯을 한가득 따는 꿈', '뜻밖의 재물이 생깁니다.'],
+        ['귀한 버섯을 얻는 꿈', '행운과 건강을 얻습니다.'],
+        ['버섯이 쑥쑥 자라는 꿈', '일이 빠르게 늘어납니다.'],
+        ['독버섯을 먹는 꿈', '달콤한 제안을 경계하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy nấm', keywords: ['nấm', 'hái nấm', 'nấm độc', 'nấm linh chi'],
+      summary: 'Hái nấm là tiền của, thu hoạch bất ngờ. Nhưng nấm độc là cảnh báo cám dỗ ngọt ngào.',
+      korea: 'Người Hàn cho rằng hái được đầy nấm trên núi là có tiền bất ngờ; được nấm quý như nấm tùng nhung hay linh chi là đại vận, khỏe mạnh; nấm mọc nhanh là việc tăng nhanh, cũng có thể là giấc mơ báo có con; ăn nấm độc sặc sỡ là coi chừng lời mời hay con người trông có vẻ tốt.',
+      vietnam: 'Người Việt giải mơ thấy nấm là may mắn bất ngờ, phát triển; “mọc như nấm sau mưa” là việc đến dồn dập; nấm độc là cám dỗ nguy hiểm.',
+      cases: [
+        ['Mơ hái được nhiều nấm', 'Có tiền bất ngờ.'],
+        ['Mơ được nấm quý', 'Gặp may, khỏe mạnh.'],
+        ['Mơ nấm mọc nhanh', 'Việc tăng nhanh.'],
+        ['Mơ ăn nấm độc', 'Cảnh giác lời mời hấp dẫn.'],
+      ],
+    },
+  },
+];

@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { DREAMS, POPULAR, dreamBySlug, searchDreams } from './index';
 
 describe('dream content', () => {
-  it('has 150 unique, complete entries', () => {
-    expect(DREAMS).toHaveLength(150);
-    expect(new Set(DREAMS.map((d) => d.slug)).size).toBe(150);
+  it('has 200 unique, complete entries', () => {
+    expect(DREAMS).toHaveLength(200);
+    expect(new Set(DREAMS.map((d) => d.slug)).size).toBe(200);
     for (const d of DREAMS) {
       for (const l of ['ko', 'vi'] as const) {
         expect(d[l].summary.length).toBeGreaterThan(20);
@@ -31,5 +31,11 @@ describe('dream content', () => {
     expect(searchDreams('xác chết')[0].slug).toBe('corpse');
     expect(searchDreams('기린')[0].slug).toBe('giraffe');
     expect(searchDreams('mây').map((d) => d.slug)).toEqual(['cloud']);
+    expect(searchDreams('대통령')[0].slug).toBe('president');
+    expect(searchDreams('도둑')[0].slug).toBe('thief');
+    expect(searchDreams('xe máy')[0].slug).toBe('motorbike');
+    expect(searchDreams('hoa sen')[0].slug).toBe('lotus');
+    expect(searchDreams('chợ')[0].slug).toBe('market');
+    expect(searchDreams('đảo')[0].slug).toBe('island');
   });
 });
