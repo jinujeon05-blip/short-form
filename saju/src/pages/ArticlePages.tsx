@@ -21,7 +21,7 @@ export interface Guide {
 }
 
 export const GUIDES = articles.guides as Guide[];
-const PAGES = articles.pages as Record<'about' | 'privacy' | 'terms', Record<Lang, Doc>>;
+const PAGES = articles.pages as Record<'about' | 'method' | 'privacy' | 'terms', Record<Lang, Doc>>;
 
 function withEmail(text: string, pending: string) {
   return text.replace(/\{\{email\}\}/g, config.contactEmail || pending);
@@ -101,7 +101,7 @@ export function GuidePage({ slug }: { slug: string }) {
   );
 }
 
-export function InfoPage({ page }: { page: 'about' | 'privacy' | 'terms' }) {
+export function InfoPage({ page }: { page: 'about' | 'method' | 'privacy' | 'terms' }) {
   const { lang } = useI18n();
   const doc = PAGES[page][lang];
   return (

@@ -138,8 +138,8 @@ function Shell({ route }: { route: Route }) {
           <GuideIndexPage />
         ) : route.path.startsWith('/guide/') ? (
           <GuidePage slug={route.path.slice(7)} />
-        ) : route.path === '/about' || route.path === '/privacy' || route.path === '/terms' ? (
-          <InfoPage page={route.path.slice(1) as 'about' | 'privacy' | 'terms'} />
+        ) : route.path === '/about' || route.path === '/method' || route.path === '/privacy' || route.path === '/terms' ? (
+          <InfoPage page={route.path.slice(1) as 'about' | 'method' | 'privacy' | 'terms'} />
         ) : (
           <Home />
         )}
@@ -158,6 +158,7 @@ function Shell({ route }: { route: Route }) {
           <Link to="/holidays">{HOLIDAY_LINK[lang]}</Link>
           <Link to="/guide">{t.guide.title}</Link>
           <Link to="/about">{t.info.about}</Link>
+          <Link to="/method">{METHOD_LINK[lang]}</Link>
           <Link to="/privacy">{t.info.privacy}</Link>
           <Link to="/terms">{t.info.terms}</Link>
           <a href={hrefFor(route.path, lang === 'ko' ? 'vi' : 'ko')} hrefLang={lang === 'ko' ? 'vi' : 'ko'}>
@@ -172,6 +173,7 @@ function Shell({ route }: { route: Route }) {
 }
 
 const YEARLY_LINK: Record<Lang, string> = { ko: '2027 신년운세', vi: 'Tử vi 2027' };
+const METHOD_LINK: Record<Lang, string> = { ko: '계산 방식', vi: 'Cách tính' };
 const HOLIDAY_LINK: Record<Lang, string> = { ko: '설날·Tết 날짜 비교', vi: 'Tết Việt – Hàn' };
 const HANGUL_LINK: Record<Lang, string> = { ko: '한글 표기 변환', vi: 'Phiên âm Hangul' };
 const AGE_LINK: Record<Lang, string> = { ko: '나이 계산기', vi: 'Tính tuổi' };

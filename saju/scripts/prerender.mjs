@@ -31,7 +31,7 @@ const adClient = config.adsense?.client ?? '';
 const TOOL_ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/age', '/hangul', '/holidays'];
 const CALENDAR_ROUTES = PURPOSES.map((x) => `/calendar/${x}`);
 const DAILY_ROUTES = ['/daily', ...ANIMAL_SLUGS.map((a) => `/daily/${a}`)];
-const INFO_ROUTES = ['/guide', '/about', '/privacy', '/terms'];
+const INFO_ROUTES = ['/guide', '/about', '/method', '/privacy', '/terms'];
 const GUIDE_ROUTES = articles.guides.map((g) => `/guide/${g.slug}`);
 const FORTUNE_ROUTES = FORTUNE_YEARS.flatMap((y) => [`/fortune/${y}`, ...ANIMAL_SLUGS.map((a) => `/fortune/${y}/${a}`)]);
 const ROUTES = [...TOOL_ROUTES, ...CALENDAR_ROUTES, ...DAILY_ROUTES, ...FORTUNE_ROUTES, ...INFO_ROUTES, ...GUIDE_ROUTES];
@@ -145,7 +145,7 @@ function head(route, lang) {
 function body(route, lang) {
   const m = metaOf(route, lang);
   const g = guideOf(route);
-  const info = ['/about', '/privacy', '/terms'].includes(route) ? articles.pages[route.slice(1)][lang] : null;
+  const info = ['/about', '/method', '/privacy', '/terms'].includes(route) ? articles.pages[route.slice(1)][lang] : null;
   const links = [...TOOL_ROUTES, '/guide'].map((r) => `<li><a href="${pathFor(r, lang)}">${esc(NAV[lang][r])}</a></li>`).join('');
   const other = lang === 'ko' ? 'vi' : 'ko';
   if (route.startsWith('/fortune/') || route.startsWith('/daily') || route === '/samjae' || route === '/age' || route === '/hangul' || route === '/holidays' || route.startsWith('/calendar/')) return renderFortune(route, lang);
@@ -188,7 +188,7 @@ ${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${urlF
     <xhtml:link rel="alternate" hreflang="x-default" href="${urlFor(route, 'ko')}" />
     <lastmod>${today}</lastmod>
     <changefreq>${route === '/' || route === '/calendar' || route.startsWith('/daily') ? 'daily' : TOOL_ROUTES.includes(route) || route === '/guide' ? 'weekly' : 'monthly'}</changefreq>
-    <priority>${route === '/' ? '1.0' : TOOL_ROUTES.includes(route) || route.startsWith('/fortune/') || route.startsWith('/daily') || route.startsWith('/calendar/') ? '0.8' : route.startsWith('/guide') ? '0.7' : '0.3'}</priority>
+    <priority>${route === '/' ? '1.0' : TOOL_ROUTES.includes(route) || route.startsWith('/fortune/') || route.startsWith('/daily') || route.startsWith('/calendar/') ? '0.8' : route.startsWith('/guide') || route === '/method' ? '0.7' : '0.3'}</priority>
   </url>`)).join('\n')}
 </urlset>
 `;
