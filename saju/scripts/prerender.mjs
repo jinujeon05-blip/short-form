@@ -13,6 +13,8 @@ import { ANIMAL_SLUGS, FORTUNE_YEARS } from '../src/engine/yearly.ts';
 import { YearlyIndexPage, YearlyZodiacPage } from '../src/pages/YearlyPage.tsx';
 import { HazardPage } from '../src/pages/HazardPage.tsx';
 import { CalendarPage } from '../src/pages/CalendarPage.tsx';
+import { DreamDetailPage, DreamIndexPage } from '../src/pages/DreamPage.tsx';
+import { DREAM_SLUGS } from '../src/content/dreams/index.ts';
 import { PURPOSES } from '../src/engine/almanac.ts';
 import { AgePage } from '../src/pages/AgePage.tsx';
 import { HangulPage } from '../src/pages/HangulPage.tsx';
@@ -29,12 +31,13 @@ const articles = JSON.parse(fs.readFileSync(path.join(root, 'src/content/article
 const adClient = config.adsense?.client ?? '';
 
 const TOOL_ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/age', '/hangul', '/holidays'];
+const DREAM_ROUTES = ['/dream', ...DREAM_SLUGS.map((x) => `/dream/${x}`)];
 const CALENDAR_ROUTES = PURPOSES.map((x) => `/calendar/${x}`);
 const DAILY_ROUTES = ['/daily', ...ANIMAL_SLUGS.map((a) => `/daily/${a}`)];
 const INFO_ROUTES = ['/guide', '/about', '/method', '/privacy', '/terms'];
 const GUIDE_ROUTES = articles.guides.map((g) => `/guide/${g.slug}`);
 const FORTUNE_ROUTES = FORTUNE_YEARS.flatMap((y) => [`/fortune/${y}`, ...ANIMAL_SLUGS.map((a) => `/fortune/${y}/${a}`)]);
-const ROUTES = [...TOOL_ROUTES, ...CALENDAR_ROUTES, ...DAILY_ROUTES, ...FORTUNE_ROUTES, ...INFO_ROUTES, ...GUIDE_ROUTES];
+const ROUTES = [...TOOL_ROUTES, ...CALENDAR_ROUTES, ...DREAM_ROUTES, ...DAILY_ROUTES, ...FORTUNE_ROUTES, ...INFO_ROUTES, ...GUIDE_ROUTES];
 const LANGS = ['ko', 'vi'];
 const LOCALE = { ko: 'ko_KR', vi: 'vi_VN' };
 const NAV = {
@@ -62,7 +65,11 @@ function metaOf(route, lang) {
 /** Server-renders the yearly fortune page so its full text is in the HTML. */
 function renderFortune(route, lang) {
   const [, , year, slug] = route.split('/');
-  const page = route.startsWith('/calendar/')
+  const page = route === '/dream'
+    ? createElement(DreamIndexPage, { query: '' })
+    : route.startsWith('/dream/')
+    ? createElement(DreamDetailPage, { slug: route.slice(7) })
+    : route.startsWith('/calendar/')
     ? createElement(CalendarPage, { purpose: route.slice(10) })
     : route === '/holidays'
     ? createElement(HolidaysPage)
@@ -148,7 +155,7 @@ function body(route, lang) {
   const info = ['/about', '/method', '/privacy', '/terms'].includes(route) ? articles.pages[route.slice(1)][lang] : null;
   const links = [...TOOL_ROUTES, '/guide'].map((r) => `<li><a href="${pathFor(r, lang)}">${esc(NAV[lang][r])}</a></li>`).join('');
   const other = lang === 'ko' ? 'vi' : 'ko';
-  if (route.startsWith('/fortune/') || route.startsWith('/daily') || route === '/samjae' || route === '/age' || route === '/hangul' || route === '/holidays' || route.startsWith('/calendar/')) return renderFortune(route, lang);
+  if (route.startsWith('/fortune/') || route.startsWith('/daily') || route === '/samjae' || route === '/age' || route === '/hangul' || route === '/holidays' || route.startsWith('/calendar/') || route.startsWith('/dream')) return renderFortune(route, lang);
   if (g || info) {
     const doc = g ? g[lang] : info;
     return `<main class="main"><article class="article"><h1 class="article-title">${esc(doc.title)}</h1>${g ? `<p class="article-lead">${esc(doc.description)}</p>` : ''}${blocksHtml(doc.blocks, lang)}<ul class="footer-links">${links}</ul></article></main>`;
@@ -188,7 +195,7 @@ ${LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${urlF
     <xhtml:link rel="alternate" hreflang="x-default" href="${urlFor(route, 'ko')}" />
     <lastmod>${today}</lastmod>
     <changefreq>${route === '/' || route === '/calendar' || route.startsWith('/daily') ? 'daily' : TOOL_ROUTES.includes(route) || route === '/guide' ? 'weekly' : 'monthly'}</changefreq>
-    <priority>${route === '/' ? '1.0' : TOOL_ROUTES.includes(route) || route.startsWith('/fortune/') || route.startsWith('/daily') || route.startsWith('/calendar/') ? '0.8' : route.startsWith('/guide') || route === '/method' ? '0.7' : '0.3'}</priority>
+    <priority>${route === '/' ? '1.0' : TOOL_ROUTES.includes(route) || route.startsWith('/fortune/') || route.startsWith('/daily') || route.startsWith('/calendar/') || route.startsWith('/dream') ? '0.8' : route.startsWith('/guide') || route === '/method' ? '0.7' : '0.3'}</priority>
   </url>`)).join('\n')}
 </urlset>
 `;

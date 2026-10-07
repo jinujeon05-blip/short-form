@@ -612,4 +612,26 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
   .fest-table thead th { white-space: normal; }
   .fest-table .pill { display: none; }
 }
+.dream-search { width: 100%; font-size: 1.05rem; margin: 12px 0 4px; }
+.dream-cats { margin: 18px 0 10px; }
+.dream-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+.dream-card {
+  display: flex; gap: 10px; align-items: center; padding: 12px; border-radius: 12px;
+  background: var(--panel); border: 1px solid var(--line); color: var(--text);
+}
+.dream-card:hover { text-decoration: none; border-color: var(--gold); }
+.dream-emoji { font-size: 1.7rem; line-height: 1; }
+.dream-card-body { display: grid; gap: 2px; min-width: 0; }
+.dream-card-body b { font-size: 0.95rem; }
+.tone { display: inline-block; font-size: 0.72rem; padding: 0 7px; border-radius: 999px; width: fit-content; }
+.tone-good { background: rgba(124, 197, 160, 0.15); color: var(--good); }
+.tone-bad { background: rgba(224, 128, 107, 0.15); color: var(--bad); }
+.tone-mixed { background: rgba(226, 192, 122, 0.15); color: var(--gold-soft); }
+.dream-views { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+.dream-views .panel { margin: 0; }
+.dream-views p { margin: 0; line-height: 1.7; }
+.dream-cases { display: grid; gap: 8px; margin: 0; }
+.dream-cases > div { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.dream-cases dt { font-weight: 700; color: var(--gold-soft); margin-bottom: 4px; }
+.dream-cases dd { margin: 0; }
 .other-zodiacs { display: flex; flex-wrap: wrap; gap: 8px; }

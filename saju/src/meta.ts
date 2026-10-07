@@ -4,6 +4,7 @@ import articles from './content/articles.json';
 import { YEARLY } from './content/yearly';
 import { DAILY } from './content/daily';
 import { PURPOSE_TEXT } from './content/purposes';
+import { DREAM_UI, dreamBySlug } from './content/dreams';
 import type { Purpose } from './engine/almanac';
 import { ko } from './i18n/ko';
 import { vi } from './i18n/vi';
@@ -25,6 +26,19 @@ export function metaFor(path: string, lang: Lang): PageMeta {
   if (guide) {
     const doc = guide[lang];
     return { title: `${doc.title} | ${BRAND[lang]}`, description: doc.description, h1: doc.title };
+  }
+  const dr = path.match(/^\/dream\/([a-z-]+)$/);
+  const dream = dr ? dreamBySlug(dr[1]) : undefined;
+  if (dream) {
+    const x = dream[lang];
+    const ui = DREAM_UI[lang];
+    const cases = x.cases.slice(0, 2).map(([c]) => c).join(', ');
+    const h1 = ui.pageTitle(x.name);
+    return {
+      title: lang === 'vi' ? `${h1} Giải mã: ${cases} | ${BRAND[lang]}` : `${h1} · ${cases} 의미 | ${BRAND[lang]}`,
+      description: ui.pageDesc(x.name, x.summary),
+      h1,
+    };
   }
   const cp = path.match(/^\/calendar\/([a-z]+)$/);
   if (cp && PURPOSE_TEXT[lang].pages[cp[1] as Purpose]) {

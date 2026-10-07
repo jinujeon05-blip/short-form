@@ -13,6 +13,7 @@ import { HazardPage } from './pages/HazardPage';
 import { AgePage } from './pages/AgePage';
 import { HangulPage } from './pages/HangulPage';
 import { HolidaysPage } from './pages/HolidaysPage';
+import { DreamDetailPage, DreamIndexPage } from './pages/DreamPage';
 import { DailyIndexPage, DailyZodiacPage } from './pages/DailyPage';
 import { metaFor } from './meta';
 import { GuideIndexPage, GuidePage, InfoPage } from './pages/ArticlePages';
@@ -124,6 +125,10 @@ function Shell({ route }: { route: Route }) {
           <MatchPage query={route.search} />
         ) : route.path === '/name' ? (
           <NamePage query={route.search} />
+        ) : route.path === '/dream' ? (
+          <DreamIndexPage query={route.search} />
+        ) : route.path.startsWith('/dream/') ? (
+          <DreamDetailPage key={route.path} slug={route.path.slice(7)} />
         ) : route.path === '/holidays' ? (
           <HolidaysPage />
         ) : route.path === '/hangul' ? (
@@ -155,6 +160,7 @@ function Shell({ route }: { route: Route }) {
         <nav className="footer-links" aria-label="footer">
           {links.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
           <Link to="/daily">{DAILY[lang].indexTitle}</Link>
+          <Link to="/dream">{DREAM_LINK[lang]}</Link>
           <Link to="/fortune/2027">{YEARLY_LINK[lang]}</Link>
           <Link to="/samjae">{SAMJAE_LINK[lang]}</Link>
           <Link to="/age">{AGE_LINK[lang]}</Link>
@@ -177,6 +183,7 @@ function Shell({ route }: { route: Route }) {
 }
 
 const YEARLY_LINK: Record<Lang, string> = { ko: '2027 신년운세', vi: 'Tử vi 2027' };
+const DREAM_LINK: Record<Lang, string> = { ko: '꿈해몽', vi: 'Giải mộng' };
 const METHOD_LINK: Record<Lang, string> = { ko: '계산 방식', vi: 'Cách tính' };
 const HOLIDAY_LINK: Record<Lang, string> = { ko: '설날·Tết 날짜 비교', vi: 'Tết Việt – Hàn' };
 const HANGUL_LINK: Record<Lang, string> = { ko: '한글 표기 변환', vi: 'Phiên âm Hangul' };
