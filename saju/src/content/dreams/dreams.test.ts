@@ -11,9 +11,9 @@ describe('taemong', () => {
 });
 
 describe('dream content', () => {
-  it('has 200 unique, complete entries', () => {
-    expect(DREAMS).toHaveLength(200);
-    expect(new Set(DREAMS.map((d) => d.slug)).size).toBe(200);
+  it('has 250 unique, complete entries', () => {
+    expect(DREAMS).toHaveLength(250);
+    expect(new Set(DREAMS.map((d) => d.slug)).size).toBe(250);
     for (const d of DREAMS) {
       for (const l of ['ko', 'vi'] as const) {
         expect(d[l].summary.length).toBeGreaterThan(20);
@@ -46,5 +46,14 @@ describe('dream content', () => {
     expect(searchDreams('hoa sen')[0].slug).toBe('lotus');
     expect(searchDreams('chợ')[0].slug).toBe('market');
     expect(searchDreams('đảo')[0].slug).toBe('island');
+  });
+  it('finds every keyword of the newest dreams first', async () => {
+    const { ANIMAL_DREAMS_6 } = await import('./animals6');
+    const { PEOPLE_DREAMS_5 } = await import('./people5');
+    const { NATURE_DREAMS_5 } = await import('./nature5');
+    const { SITUATION_DREAMS_6 } = await import('./situations6');
+    for (const d of [...ANIMAL_DREAMS_6, ...PEOPLE_DREAMS_5, ...NATURE_DREAMS_5, ...SITUATION_DREAMS_6]) {
+      for (const k of [...d.ko.keywords, ...d.vi.keywords]) expect(searchDreams(k)[0]?.slug, `${d.slug}: ${k}`).toBe(d.slug);
+    }
   });
 });

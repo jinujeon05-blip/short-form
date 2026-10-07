@@ -82,7 +82,7 @@ export const TAEMONG_TEXT: Record<Lang, TaemongText> = {
     ],
     disclaimer: '태몽 풀이와 아들·딸 구분은 전통 속설에 따른 재미·참고용입니다. 아이의 성별이나 미래를 예측하지 않습니다.',
     toNaming: '한·베 아기 이름도 미리 검사해 보세요 →',
-    toDream: '꿈해몽 200가지 전체 보기 →',
+    toDream: '꿈해몽 250가지 전체 보기 →',
   },
   vi: {
     eyebrow: '胎夢 · GIẤC MƠ BÁO CON',
@@ -102,6 +102,6 @@ export const TAEMONG_TEXT: Record<Lang, TaemongText> = {
     ],
     disclaimer: 'Giải mộng và việc đoán con trai – con gái chỉ dựa trên quan niệm dân gian, để tham khảo cho vui; không dự đoán giới tính hay tương lai của em bé.',
     toNaming: 'Kiểm tra trước tên cho bé Việt – Hàn →',
-    toDream: 'Xem tất cả 200 giấc mơ →',
+    toDream: 'Xem tất cả 250 giấc mơ →',
   },
 };

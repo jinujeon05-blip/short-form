@@ -1,0 +1,328 @@
+import type { Dream } from './types';
+
+export const PEOPLE_DREAMS_5: Dream[] = [
+  {
+    slug: 'face', category: 'people', tone: 'mixed', emoji: '😊',
+    ko: {
+      name: '얼굴 꿈', keywords: ['얼굴', '얼굴 꿈', '얼굴이 변하는 꿈', '얼굴에 상처'],
+      summary: '얼굴은 체면과 평판, 지금의 내 모습을 뜻합니다. 얼굴이 환하면 이름이 나고, 얼굴에 상처가 나면 체면을 조심하라는 꿈입니다.',
+      korea: '거울 속 내 얼굴이 맑고 환하면 평판이 좋아지고 좋은 일로 이름이 알려진다고 봅니다. 얼굴에 상처나 얼룩이 생기면 구설이나 체면 상할 일을 조심하고, 얼굴이 다른 사람으로 바뀌면 새로운 역할이나 변화를 앞두고 있다는 뜻입니다. 얼굴을 씻으면 걱정거리가 말끔히 정리됩니다.',
+      vietnam: '베트남에서도 얼굴(khuôn mặt) 꿈은 체면(thể diện)과 관련됩니다. 얼굴이 빛나면 좋은 평판, 얼굴이 일그러지면 다툼을 조심하라는 뜻입니다.',
+      cases: [
+        ['얼굴이 환하게 빛나는 꿈', '평판이 좋아지고 이름이 납니다.'],
+        ['얼굴에 상처가 나는 꿈', '구설과 체면 상할 일을 조심하세요.'],
+        ['얼굴이 다른 사람으로 바뀌는 꿈', '새 역할이나 변화를 앞두고 있습니다.'],
+        ['얼굴을 씻는 꿈', '걱정거리가 말끔히 정리됩니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy khuôn mặt', keywords: ['khuôn mặt', 'gương mặt', 'mặt bị thương', 'rửa mặt'],
+      summary: 'Khuôn mặt là thể diện, danh tiếng và hình ảnh hiện tại của bạn. Mặt sáng là nổi danh; mặt bị thương là giữ thể diện.',
+      korea: 'Người Hàn cho rằng thấy mặt mình trong gương sáng sủa là danh tiếng tốt lên; mặt có vết thương, vết bẩn là cẩn thận thị phi, mất mặt; mặt biến thành người khác là sắp có vai trò mới, thay đổi; rửa mặt là nỗi lo được gột sạch.',
+      vietnam: 'Người Việt cũng gắn giấc mơ này với thể diện: mặt rạng rỡ là tiếng tốt, mặt nhăn nhó là cẩn thận cãi vã.',
+      cases: [
+        ['Mơ mặt mình sáng rạng rỡ', 'Danh tiếng tốt lên.'],
+        ['Mơ mặt bị thương', 'Cẩn thận thị phi, mất mặt.'],
+        ['Mơ mặt biến thành người khác', 'Sắp có vai trò mới.'],
+        ['Mơ rửa mặt', 'Nỗi lo được gột sạch.'],
+      ],
+    },
+  },
+  {
+    slug: 'grandparents', category: 'people', tone: 'good', emoji: '👵',
+    ko: {
+      name: '할머니·할아버지 꿈', keywords: ['할머니', '할아버지', '조부모', '외할머니'],
+      summary: '살아 계신 할머니·할아버지가 나오는 꿈은 보살핌과 지혜, 집안의 뿌리를 뜻합니다. 웃으며 무언가를 주시면 복이 들어옵니다.',
+      korea: '할머니·할아버지가 웃으며 음식이나 돈을 주시면 집안에 복과 재물이 들어온다고 봅니다. 조언을 해 주시면 그 말을 기억해 두라는 뜻이고, 편찮으신 모습이면 실제로 안부를 여쭙고 챙겨 드리라는 꿈입니다. 돌아가신 조부모님 꿈은 "돌아가신 분 꿈"을 참고하세요.',
+      vietnam: '베트남에서 조부모(ông bà) 꿈은 조상의 보살핌과 가정의 화목을 뜻합니다. 할머니가 음식을 주시면 먹을 복이 생깁니다.',
+      cases: [
+        ['웃으며 음식·돈을 주시는 꿈', '집안에 복과 재물이 들어옵니다.'],
+        ['조언을 해 주시는 꿈', '그 말을 기억해 두세요.'],
+        ['편찮으신 모습을 보는 꿈', '안부를 여쭙고 챙겨 드리세요.'],
+        ['함께 밥을 먹는 꿈', '가족이 화목해집니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy ông bà', keywords: ['ông bà', 'bà nội', 'ông nội', 'bà ngoại', 'ông ngoại'],
+      summary: 'Mơ thấy ông bà còn sống là sự che chở, khôn ngoan và cội rễ gia đình. Ông bà cười và cho gì đó là phúc vào nhà.',
+      korea: 'Người Hàn cho rằng ông bà cười và cho đồ ăn hay tiền là nhà có phúc, có của; ông bà khuyên bảo là hãy nhớ lời đó; thấy ông bà ốm là nên hỏi thăm, chăm sóc thật; mơ thấy ông bà đã mất thì xem mục “mơ thấy người đã khuất”.',
+      vietnam: 'Người Việt giải mơ thấy ông bà là tổ tiên che chở, gia đình êm ấm; bà cho ăn là có lộc ăn.',
+      cases: [
+        ['Mơ ông bà cười, cho đồ ăn, tiền', 'Phúc và tiền vào nhà.'],
+        ['Mơ ông bà khuyên bảo', 'Hãy nhớ lời đó.'],
+        ['Mơ ông bà ốm', 'Hỏi thăm, chăm sóc ông bà.'],
+        ['Mơ ăn cơm cùng ông bà', 'Gia đình hòa thuận.'],
+      ],
+    },
+  },
+  {
+    slug: 'teacher', category: 'people', tone: 'good', emoji: '🧑‍🏫',
+    ko: {
+      name: '선생님 꿈', keywords: ['선생님', '은사', '선생님 꿈', '담임 선생님'],
+      summary: '선생님은 가르침과 평가, 인생의 길잡이를 뜻합니다. 선생님께 칭찬받으면 노력이 인정받는 길몽입니다.',
+      korea: '옛 선생님이 나와 칭찬하시면 지금 하는 일이 인정받고 시험·승진에 좋은 결과가 있다고 봅니다. 선생님께 혼나면 실수를 미리 점검하라는 뜻이고, 내가 선생님이 되어 가르치면 남을 이끄는 자리에 오릅니다. 은사님을 오랜만에 만나면 고민을 풀어 줄 조언자가 나타납니다.',
+      vietnam: '베트남은 스승의 날(20/11)을 크게 기릴 만큼 스승(thầy cô)을 존경합니다. 선생님 꿈은 귀인의 가르침과 학업운을 뜻합니다.',
+      cases: [
+        ['선생님께 칭찬받는 꿈', '노력이 인정받고 시험운이 좋습니다.'],
+        ['선생님께 혼나는 꿈', '실수를 미리 점검하세요.'],
+        ['내가 선생님이 되는 꿈', '남을 이끄는 자리에 오릅니다.'],
+        ['은사님을 만나는 꿈', '고민을 풀어 줄 조언자가 나타납니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy thầy cô giáo', keywords: ['thầy cô', 'thầy giáo', 'cô giáo', 'giáo viên'],
+      summary: 'Thầy cô là lời dạy, sự đánh giá và người dẫn đường. Được thầy cô khen là công sức được ghi nhận.',
+      korea: 'Người Hàn cho rằng thầy cô cũ hiện ra và khen là việc đang làm được công nhận, thi cử, thăng chức tốt; bị thầy cô mắng là nên kiểm tra sai sót trước; mình làm thầy dạy học là lên vị trí dẫn dắt người khác; gặp lại thầy cũ là có người khuyên giải nỗi lo.',
+      vietnam: 'Người Việt trọng đạo thầy trò (ngày 20/11). Mơ thấy thầy cô là có quý nhân chỉ dạy, vận học hành tốt.',
+      cases: [
+        ['Mơ được thầy cô khen', 'Được ghi nhận, thi cử tốt.'],
+        ['Mơ bị thầy cô mắng', 'Kiểm tra sai sót trước.'],
+        ['Mơ mình làm giáo viên', 'Lên vị trí dẫn dắt.'],
+        ['Mơ gặp lại thầy cũ', 'Có người khuyên giải.'],
+      ],
+    },
+  },
+  {
+    slug: 'police', category: 'people', tone: 'mixed', emoji: '👮',
+    ko: {
+      name: '경찰 꿈', keywords: ['경찰', '경찰 꿈', '경찰에 잡히는 꿈', '경찰차'],
+      summary: '경찰은 규칙과 보호, 양심의 목소리를 뜻합니다. 경찰의 도움을 받으면 문제가 풀리고, 쫓기면 마음에 걸리는 일을 정리하라는 꿈입니다.',
+      korea: '경찰이 나를 도와주면 억울한 일이 풀리고 든든한 보호자가 생긴다고 봅니다. 경찰에게 쫓기거나 잡히면 미뤄 둔 일이나 마음에 걸리는 약속을 정리하라는 뜻이고, 한국에서는 반대로 경찰에 잡혀가는 꿈을 관운·직장운이 트이는 꿈으로 풀기도 합니다. 내가 경찰이 되면 책임 있는 역할을 맡습니다.',
+      vietnam: '베트남에서 경찰(công an) 꿈은 규율과 법적인 일을 뜻합니다. 서류나 계약을 꼼꼼히 확인하라는 뜻으로 봅니다.',
+      cases: [
+        ['경찰이 도와주는 꿈', '억울한 일이 풀리고 보호자가 생깁니다.'],
+        ['경찰에게 쫓기는 꿈', '마음에 걸리는 일을 정리하세요.'],
+        ['경찰에 잡혀가는 꿈', '관운·직장운이 트인다고도 풉니다.'],
+        ['내가 경찰이 되는 꿈', '책임 있는 역할을 맡습니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy công an', keywords: ['công an', 'cảnh sát', 'bị công an bắt'],
+      summary: 'Công an là luật lệ, sự bảo vệ và tiếng nói lương tâm. Được công an giúp là việc được gỡ; bị đuổi là nên giải quyết điều còn vướng.',
+      korea: 'Người Hàn cho rằng được cảnh sát giúp là nỗi oan được giải, có người bảo vệ; bị cảnh sát đuổi, bắt là nên giải quyết việc trì hoãn, lời hứa còn vướng; nhưng người Hàn cũng có cách giải ngược: bị cảnh sát bắt đi là vận quan chức, công việc mở ra; mình làm cảnh sát là nhận vai trò có trách nhiệm.',
+      vietnam: 'Người Việt giải mơ thấy công an là chuyện kỷ luật, pháp lý; nhắc kiểm tra kỹ giấy tờ, hợp đồng.',
+      cases: [
+        ['Mơ được công an giúp', 'Nỗi oan được giải.'],
+        ['Mơ bị công an đuổi', 'Giải quyết việc còn vướng.'],
+        ['Mơ bị công an bắt', 'Theo giải mộng Hàn: vận công việc mở ra.'],
+        ['Mơ mình làm công an', 'Nhận vai trò có trách nhiệm.'],
+      ],
+    },
+  },
+  {
+    slug: 'neighbor', category: 'people', tone: 'mixed', emoji: '🏘️',
+    ko: {
+      name: '이웃 꿈', keywords: ['이웃', '이웃집', '옆집', '이웃 꿈'],
+      summary: '이웃은 가까운 인간관계와 생활 주변의 소식을 뜻합니다. 이웃과 웃으며 지내면 도움을 주고받을 일이 생깁니다.',
+      korea: '이웃과 음식을 나누면 주변 사람과 정이 깊어지고 도움을 받을 일이 생긴다고 봅니다. 이웃과 다투면 사소한 일로 감정이 상하지 않게 조심하고, 이웃집에 불이 나거나 경사가 있으면 주변의 소식이 나에게도 영향을 준다는 뜻입니다. 새 이웃이 이사 오면 새로운 인연이 시작됩니다.',
+      vietnam: '베트남 속담 "멀리 사는 친척보다 가까운 이웃이 낫다(bán anh em xa, mua láng giềng gần)"처럼 이웃(hàng xóm) 꿈은 생활 속 도움과 정을 뜻합니다.',
+      cases: [
+        ['이웃과 음식을 나누는 꿈', '정이 깊어지고 도움을 받습니다.'],
+        ['이웃과 다투는 꿈', '사소한 일로 감정 상하지 않게 하세요.'],
+        ['이웃집에 경사가 있는 꿈', '좋은 소식이 나에게도 옵니다.'],
+        ['새 이웃이 이사 오는 꿈', '새로운 인연이 시작됩니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy hàng xóm', keywords: ['hàng xóm', 'láng giềng', 'nhà bên cạnh'],
+      summary: 'Hàng xóm là các mối quan hệ gần gũi và tin tức quanh mình. Vui vẻ với hàng xóm là có dịp giúp đỡ nhau.',
+      korea: 'Người Hàn cho rằng chia sẻ đồ ăn với hàng xóm là tình cảm thêm sâu, có người giúp; cãi nhau với hàng xóm là đừng để chuyện nhỏ làm mất lòng; nhà hàng xóm có hỷ sự hay hỏa hoạn là chuyện xung quanh sẽ ảnh hưởng đến mình; hàng xóm mới chuyển đến là duyên mới bắt đầu.',
+      vietnam: '“Bán anh em xa, mua láng giềng gần” — người Việt giải mơ thấy hàng xóm là sự giúp đỡ, tình nghĩa trong đời sống.',
+      cases: [
+        ['Mơ chia đồ ăn với hàng xóm', 'Tình thêm sâu, có người giúp.'],
+        ['Mơ cãi nhau với hàng xóm', 'Đừng để chuyện nhỏ mất lòng.'],
+        ['Mơ nhà hàng xóm có hỷ sự', 'Tin vui lan đến mình.'],
+        ['Mơ hàng xóm mới chuyển đến', 'Duyên mới bắt đầu.'],
+      ],
+    },
+  },
+  {
+    slug: 'foreigner', category: 'people', tone: 'good', emoji: '🌏',
+    ko: {
+      name: '외국인 꿈', keywords: ['외국인', '외국 사람', '외국인 꿈', '서양인'],
+      summary: '외국인은 새로운 기회와 낯선 세계, 해외와의 인연을 뜻합니다. 외국인과 대화가 잘 통하면 뜻밖의 기회가 열리는 꿈입니다.',
+      korea: '외국인과 즐겁게 이야기하면 새로운 분야나 해외에서 기회가 생기고, 외국인에게 선물을 받으면 뜻밖의 도움이 온다고 봅니다. 말이 통하지 않아 답답하면 지금 주변과의 소통을 점검하라는 뜻이고, 외국인과 사랑에 빠지면 새로운 경험을 원하는 마음을 비춥니다. 한·베 가정이라면 가족과 더 가까워진다는 뜻으로 풀어도 좋습니다.',
+      vietnam: '베트남에서 외국인(người nước ngoài) 꿈은 해외와의 거래, 유학·취업 등 새로운 길을 뜻합니다.',
+      cases: [
+        ['외국인과 즐겁게 대화하는 꿈', '새 분야나 해외에서 기회가 생깁니다.'],
+        ['외국인에게 선물을 받는 꿈', '뜻밖의 도움이 옵니다.'],
+        ['말이 안 통해 답답한 꿈', '주변과의 소통을 점검하세요.'],
+        ['외국인과 사랑에 빠지는 꿈', '새로운 경험을 원하는 마음입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy người nước ngoài', keywords: ['người nước ngoài', 'người ngoại quốc', 'tây', 'người Hàn'],
+      summary: 'Người nước ngoài là cơ hội mới, thế giới lạ và duyên với nước ngoài. Nói chuyện hợp với họ là có cơ hội bất ngờ.',
+      korea: 'Người Hàn cho rằng trò chuyện vui với người nước ngoài là có cơ hội ở lĩnh vực mới hay ở nước ngoài; được người nước ngoài tặng quà là có sự giúp đỡ bất ngờ; không hiểu nhau mà bực là nên xem lại cách giao tiếp; yêu người nước ngoài là mong muốn trải nghiệm mới.',
+      vietnam: 'Người Việt giải mơ thấy người nước ngoài là giao dịch với nước ngoài, du học, đi làm — con đường mới.',
+      cases: [
+        ['Mơ trò chuyện vui với người nước ngoài', 'Có cơ hội ở nơi mới.'],
+        ['Mơ được người nước ngoài tặng quà', 'Có người giúp bất ngờ.'],
+        ['Mơ không hiểu tiếng nhau', 'Xem lại cách giao tiếp.'],
+        ['Mơ yêu người nước ngoài', 'Mong muốn trải nghiệm mới.'],
+      ],
+    },
+  },
+  {
+    slug: 'kids', category: 'people', tone: 'mixed', emoji: '🧒',
+    ko: {
+      name: '아이들 꿈', keywords: ['아이들', '어린아이', '아이 꿈', '꼬마'],
+      summary: '어린아이들은 순수한 활력과 새로 시작한 일을 뜻합니다. 아이들이 즐겁게 놀면 일이 잘 풀리고, 아이가 울면 작은 걱정거리를 챙기라는 꿈입니다.',
+      korea: '아이들이 즐겁게 뛰어놀면 집안에 웃음이 생기고 새로 시작한 일이 활기차게 자란다고 봅니다. 아이가 울며 매달리면 미뤄 둔 작은 문제를 챙겨야 하고, 낯선 아이를 돌보면 새로 맡을 일이나 책임이 생깁니다. 내가 어린아이로 돌아가면 쉬고 싶은 마음이나 순수한 열정을 되찾는다는 뜻입니다. 갓난아기 꿈은 "아기 꿈"을 참고하세요.',
+      vietnam: '베트남에서 아이들(trẻ con) 꿈은 기쁨과 새로운 시작을 뜻하지만, 아이가 울면 잔걱정이 생긴다고 봅니다.',
+      cases: [
+        ['아이들이 즐겁게 노는 꿈', '집안에 웃음이 생기고 일이 자랍니다.'],
+        ['아이가 울며 매달리는 꿈', '작은 문제를 챙기세요.'],
+        ['낯선 아이를 돌보는 꿈', '새로운 책임이 생깁니다.'],
+        ['내가 어린아이가 되는 꿈', '쉬고 싶은 마음, 순수한 열정입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy trẻ con', keywords: ['trẻ con', 'trẻ em', 'đứa trẻ', 'mình thành trẻ con'],
+      summary: 'Trẻ con là sức sống trong trẻo và việc mới bắt đầu. Trẻ chơi vui là việc thuận; trẻ khóc là nên lo những chuyện nhỏ.',
+      korea: 'Người Hàn cho rằng trẻ con nô đùa vui vẻ là nhà có tiếng cười, việc mới phát triển; trẻ khóc bám lấy mình là nên xử lý chuyện nhỏ còn để đó; trông một đứa trẻ lạ là sắp nhận việc, trách nhiệm mới; mình trở lại thành trẻ con là muốn nghỉ ngơi hoặc tìm lại nhiệt huyết.',
+      vietnam: 'Người Việt giải mơ thấy trẻ con là niềm vui, khởi đầu mới; trẻ khóc là có chuyện lo vặt.',
+      cases: [
+        ['Mơ trẻ con chơi vui', 'Nhà vui, việc phát triển.'],
+        ['Mơ trẻ khóc bám lấy mình', 'Lo chuyện nhỏ còn để đó.'],
+        ['Mơ trông đứa trẻ lạ', 'Có trách nhiệm mới.'],
+        ['Mơ mình thành trẻ con', 'Muốn nghỉ ngơi, tìm lại nhiệt huyết.'],
+      ],
+    },
+  },
+  {
+    slug: 'beggar', category: 'people', tone: 'mixed', emoji: '🥣',
+    ko: {
+      name: '거지 꿈', keywords: ['거지', '거지 꿈', '구걸', '노숙자'],
+      summary: '거지 꿈은 반대로 풀리는 경우가 많습니다. 내가 거지가 되면 오히려 재물이 들어오고, 거지에게 베풀면 복이 돌아온다고 봅니다.',
+      korea: '내가 거지가 되어 구걸하면 반대해몽으로 재물과 먹을 복이 들어온다고 풉니다. 거지에게 밥이나 돈을 주면 베푼 만큼 복이 돌아오고, 거지가 집에 들어오면 뜻밖의 손님이나 이익이 생깁니다. 다만 거지에게 쫓기면 돈 문제로 불안한 마음이니 지출을 점검하세요.',
+      vietnam: '베트남에서 거지(người ăn xin) 꿈은 대체로 지출과 손실을 조심하라는 뜻이지만, 거지에게 베풀면 복을 쌓는 꿈으로 봅니다.',
+      cases: [
+        ['내가 거지가 되는 꿈', '반대로 재물과 먹을 복이 들어옵니다.'],
+        ['거지에게 베푸는 꿈', '베푼 만큼 복이 돌아옵니다.'],
+        ['거지가 집에 들어오는 꿈', '뜻밖의 손님이나 이익이 생깁니다.'],
+        ['거지에게 쫓기는 꿈', '지출을 점검하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy người ăn xin', keywords: ['ăn xin', 'người ăn xin', 'ăn mày', 'mình đi ăn xin'],
+      summary: 'Người Hàn hay giải ngược giấc mơ này: mình đi ăn xin lại có tiền vào; cho người ăn xin là phúc quay về.',
+      korea: 'Người Hàn cho rằng mình thành người ăn xin là giải ngược — có tiền, có lộc ăn; cho người ăn xin cơm, tiền là cho đi bao nhiêu phúc về bấy nhiêu; người ăn xin vào nhà là có khách, có lợi bất ngờ; nhưng bị người ăn xin đuổi là đang lo chuyện tiền, nên xem lại chi tiêu.',
+      vietnam: 'Người Việt thường giải mơ thấy người ăn xin là cẩn thận hao tài, nhưng bố thí cho họ là tích phúc.',
+      cases: [
+        ['Mơ mình đi ăn xin', 'Theo giải mộng Hàn: có tiền, có lộc.'],
+        ['Mơ cho người ăn xin', 'Cho đi thì phúc về.'],
+        ['Mơ người ăn xin vào nhà', 'Có khách, có lợi bất ngờ.'],
+        ['Mơ bị người ăn xin đuổi', 'Xem lại chi tiêu.'],
+      ],
+    },
+  },
+  {
+    slug: 'coworker', category: 'people', tone: 'mixed', emoji: '🤝',
+    ko: {
+      name: '직장 동료 꿈', keywords: ['동료', '직장 동료', '회사 동료', '동기'],
+      summary: '동료 꿈은 협력과 경쟁, 직장 안의 인간관계를 비춥니다. 동료와 손발이 잘 맞으면 함께 성과를 냅니다.',
+      korea: '동료와 웃으며 일하면 협력이 잘되어 함께 성과를 내고, 동료가 나를 도와주면 회사에서 든든한 편이 생긴다고 봅니다. 동료와 다투면 사소한 오해를 미리 풀라는 뜻이고, 동료가 승진하면 나에게도 좋은 자극과 기회가 옵니다. 그만둔 동료가 나오면 옛 인맥에서 소식이 옵니다.',
+      vietnam: '베트남에서 동료(đồng nghiệp) 꿈은 직장 운을 뜻합니다. 동료와 화목하면 일이 순조롭고, 다투면 뒷말을 조심하라고 풉니다.',
+      cases: [
+        ['동료와 웃으며 일하는 꿈', '협력이 잘되어 성과를 냅니다.'],
+        ['동료가 도와주는 꿈', '든든한 내 편이 생깁니다.'],
+        ['동료와 다투는 꿈', '오해를 미리 풀어 두세요.'],
+        ['동료가 승진하는 꿈', '나에게도 자극과 기회가 옵니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy đồng nghiệp', keywords: ['đồng nghiệp', 'bạn đồng nghiệp', 'người cùng công ty'],
+      summary: 'Mơ thấy đồng nghiệp phản ánh hợp tác, cạnh tranh và các mối quan hệ nơi làm việc. Ăn ý với đồng nghiệp là cùng có thành quả.',
+      korea: 'Người Hàn cho rằng vui vẻ làm việc cùng đồng nghiệp là hợp tác tốt, cùng có thành tích; được đồng nghiệp giúp là có người chống lưng ở công ty; cãi nhau với đồng nghiệp là nên gỡ hiểu lầm sớm; đồng nghiệp thăng chức là mình cũng có động lực, cơ hội; đồng nghiệp cũ xuất hiện là có tin từ mối quen xưa.',
+      vietnam: 'Người Việt giải mơ thấy đồng nghiệp theo vận công việc: hòa thuận là việc suôn sẻ, cãi nhau là coi chừng điều tiếng.',
+      cases: [
+        ['Mơ vui vẻ làm việc với đồng nghiệp', 'Hợp tác tốt, có thành quả.'],
+        ['Mơ được đồng nghiệp giúp', 'Có người chống lưng.'],
+        ['Mơ cãi nhau với đồng nghiệp', 'Gỡ hiểu lầm sớm.'],
+        ['Mơ đồng nghiệp thăng chức', 'Mình cũng có cơ hội.'],
+      ],
+    },
+  },
+  {
+    slug: 'mother-in-law', category: 'people', tone: 'mixed', emoji: '🫖',
+    ko: {
+      name: '시어머니·장모님 꿈', keywords: ['시어머니', '장모님', '시댁', '처가', '시어머니 꿈'],
+      summary: '시어머니나 장모님이 나오는 꿈은 배우자 집안과의 관계, 가족 안의 부담과 기대를 비춥니다. 웃으며 맞아 주시면 가정이 화목해집니다.',
+      korea: '시어머니나 장모님이 웃으며 음식을 차려 주시면 양가 관계가 좋아지고 집안에 경사가 생긴다고 봅니다. 꾸중을 들으면 실제로 쌓인 부담을 대화로 풀라는 마음의 신호이고, 함께 장을 보거나 요리하면 가까워질 계기가 생깁니다. 국제결혼 가정이라면 문화 차이로 생긴 긴장을 서로 이해하려는 마음이 꿈에 나타나기도 합니다.',
+      vietnam: '베트남에서도 "시어머니와 며느리(mẹ chồng nàng dâu)"는 늘 이야깃거리입니다. 시어머니 꿈은 가정의 화목을 위해 서로 한 발씩 양보하라는 뜻으로 봅니다.',
+      cases: [
+        ['웃으며 음식을 차려 주시는 꿈', '양가 관계가 좋아지고 경사가 생깁니다.'],
+        ['꾸중을 듣는 꿈', '쌓인 부담을 대화로 풀어 보세요.'],
+        ['함께 장을 보거나 요리하는 꿈', '가까워질 계기가 생깁니다.'],
+        ['시댁·처가에 가는 꿈', '가족 행사나 소식이 있습니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy mẹ chồng, mẹ vợ', keywords: ['mẹ chồng', 'mẹ vợ', 'nhà chồng', 'nhà vợ'],
+      summary: 'Mơ thấy mẹ chồng, mẹ vợ phản ánh quan hệ với gia đình bên kia, áp lực và kỳ vọng trong nhà. Được đón tiếp vui vẻ là gia đình hòa thuận.',
+      korea: 'Người Hàn cho rằng mẹ chồng, mẹ vợ cười và dọn cơm cho là quan hệ hai bên tốt lên, nhà có hỷ sự; bị trách là tín hiệu nên nói chuyện để giải tỏa áp lực; cùng đi chợ, nấu ăn là có dịp gần gũi hơn; gia đình đa văn hóa mơ giấc mơ này cũng là mong muốn hiểu nhau hơn.',
+      vietnam: '“Mẹ chồng nàng dâu” là chuyện muôn thuở của người Việt; mơ thấy mẹ chồng nhắc hai bên cùng nhường nhịn để gia đình êm ấm.',
+      cases: [
+        ['Mơ mẹ chồng, mẹ vợ dọn cơm vui vẻ', 'Hai bên hòa thuận, có hỷ sự.'],
+        ['Mơ bị mẹ chồng trách', 'Nói chuyện để giải tỏa.'],
+        ['Mơ cùng đi chợ, nấu ăn', 'Có dịp gần gũi.'],
+        ['Mơ về nhà chồng, nhà vợ', 'Có việc, tin tức gia đình.'],
+      ],
+    },
+  },
+  {
+    slug: 'hug', category: 'people', tone: 'good', emoji: '🫂',
+    ko: {
+      name: '포옹 꿈', keywords: ['포옹', '안기는 꿈', '껴안는 꿈', '포옹 꿈'],
+      summary: '포옹은 화해와 위로, 그리움을 뜻합니다. 따뜻하게 안기면 마음의 짐이 풀리고 관계가 깊어지는 꿈입니다.',
+      korea: '누군가와 따뜻하게 포옹하면 갈등이 풀리고 서로 의지할 사람이 생긴다고 봅니다. 오래 못 본 사람과 안으면 그 사람의 소식이 오거나 다시 만날 일이 생기고, 낯선 사람이 안아 주면 뜻밖의 위로나 도움을 받습니다. 안으려는데 피하면 상대의 마음을 서두르지 말고 기다리라는 뜻입니다.',
+      vietnam: '베트남에서 포옹(ôm) 꿈은 사랑과 화해, 가족의 정을 뜻합니다.',
+      cases: [
+        ['따뜻하게 포옹하는 꿈', '갈등이 풀리고 의지할 사람이 생깁니다.'],
+        ['오래 못 본 사람과 안는 꿈', '그 사람의 소식이나 만남이 생깁니다.'],
+        ['낯선 사람이 안아 주는 꿈', '뜻밖의 위로와 도움을 받습니다.'],
+        ['안으려는데 피하는 꿈', '상대의 마음을 기다려 주세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy ôm ai đó', keywords: ['được ôm', 'ôm nhau', 'cái ôm', 'ôm chặt'],
+      summary: 'Cái ôm là hòa giải, an ủi và nỗi nhớ. Được ôm ấm áp là gánh nặng trong lòng được gỡ, tình cảm sâu thêm.',
+      korea: 'Người Hàn cho rằng ôm ai đó ấm áp là mâu thuẫn được giải, có người để dựa vào; ôm người lâu không gặp là có tin hay dịp gặp lại; người lạ ôm mình là được an ủi, giúp đỡ bất ngờ; muốn ôm mà người kia tránh là đừng vội, hãy chờ lòng người ta.',
+      vietnam: 'Người Việt giải mơ thấy ôm là tình yêu, hòa giải và tình thân gia đình.',
+      cases: [
+        ['Mơ ôm ai đó ấm áp', 'Mâu thuẫn được giải.'],
+        ['Mơ ôm người lâu không gặp', 'Có tin hay dịp gặp lại.'],
+        ['Mơ được người lạ ôm', 'Được an ủi bất ngờ.'],
+        ['Mơ muốn ôm mà bị tránh', 'Hãy chờ đợi lòng người.'],
+      ],
+    },
+  },
+  {
+    slug: 'beard', category: 'people', tone: 'mixed', emoji: '🧔',
+    ko: {
+      name: '수염 꿈', keywords: ['수염', '턱수염', '수염 꿈', '면도'],
+      summary: '수염은 권위와 장수, 어른으로서의 무게를 뜻합니다. 수염이 길게 자라면 존경과 지위가 오르는 꿈입니다.',
+      korea: '수염이 길고 윤기 있게 자라면 지위가 오르고 존경받으며 오래 산다고 봅니다. 수염을 깎거나 면도하면 묵은 걱정을 털고 새롭게 시작하는 뜻이지만, 수염이 뽑히거나 잘리면 체면이나 권위가 흔들릴 일을 조심하라는 꿈입니다. 여자에게 수염이 나면 강한 추진력이 생깁니다.',
+      vietnam: '베트남에서 수염(râu) 꿈은 지혜와 장수를 뜻하며, 흰 수염의 노인은 신선이나 조상의 도움으로 봅니다.',
+      cases: [
+        ['수염이 길게 자라는 꿈', '지위가 오르고 존경받습니다.'],
+        ['면도하는 꿈', '묵은 걱정을 털고 새로 시작합니다.'],
+        ['수염이 뽑히는 꿈', '체면이 흔들릴 일을 조심하세요.'],
+        ['여자에게 수염이 나는 꿈', '강한 추진력이 생깁니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy râu', keywords: ['râu', 'râu quai nón', 'cạo râu'],
+      summary: 'Râu là uy quyền, trường thọ và sự chín chắn. Râu mọc dài là được kính trọng, địa vị lên cao.',
+      korea: 'Người Hàn cho rằng râu dài bóng mượt là địa vị lên, được kính trọng, sống thọ; cạo râu là rũ bỏ lo âu cũ, bắt đầu mới; râu bị nhổ, bị cắt là cẩn thận mất thể diện, uy tín; phụ nữ mọc râu là có sức quyết đoán mạnh.',
+      vietnam: 'Người Việt giải mơ thấy râu là trí tuệ, trường thọ; ông lão râu bạc là tiên ông, tổ tiên phù hộ.',
+      cases: [
+        ['Mơ râu mọc dài', 'Được kính trọng, địa vị lên.'],
+        ['Mơ cạo râu', 'Rũ bỏ lo âu, bắt đầu mới.'],
+        ['Mơ bị nhổ râu', 'Cẩn thận mất thể diện.'],
+        ['Mơ phụ nữ mọc râu', 'Có sức quyết đoán mạnh.'],
+      ],
+    },
+  },
+];

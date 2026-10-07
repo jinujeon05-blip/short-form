@@ -1,0 +1,328 @@
+import type { Dream } from './types';
+
+export const ANIMAL_DREAMS_6: Dream[] = [
+  {
+    slug: 'clam', category: 'animal', tone: 'good', emoji: '🦪',
+    ko: {
+      name: '조개 꿈', keywords: ['조개', '진주', '조개 줍는 꿈', '조개 태몽'],
+      summary: '조개는 숨은 재물과 귀한 결실을 뜻합니다. 조개 속에서 진주가 나오면 큰 행운이고, 한국에서는 대표적인 딸 태몽으로도 봅니다.',
+      korea: '조개를 한가득 주우면 자잘한 재물이 모이고, 큰 조개를 품에 안으면 예쁜 딸을 얻는 태몽으로 풉니다. 조개를 열어 진주를 발견하면 숨어 있던 기회나 재능이 빛을 보고, 빈 껍데기만 나오면 겉만 그럴듯한 제안을 조심하라는 뜻입니다.',
+      vietnam: '베트남에서 조개(sò, ngao, nghêu) 꿈은 작은 재물과 장사운을 뜻합니다. 진주(ngọc trai)가 나오면 귀한 행운으로 봅니다.',
+      cases: [
+        ['조개를 가득 줍는 꿈', '작은 재물이 모입니다.'],
+        ['큰 조개를 품에 안는 꿈', '딸 태몽으로 많이 풉니다.'],
+        ['조개 속 진주를 찾는 꿈', '숨은 기회와 재능이 빛을 봅니다.'],
+        ['빈 껍데기만 나오는 꿈', '겉만 그럴듯한 제안을 조심하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy sò, ngao', keywords: ['sò', 'ngao', 'nghêu', 'ngọc trai', 'nhặt sò'],
+      summary: 'Sò, ngao là tiền của ẩn giấu và thành quả quý. Mở ra thấy ngọc trai là đại may; người Hàn còn coi đây là giấc mơ báo sinh con gái.',
+      korea: 'Người Hàn cho rằng nhặt được nhiều sò là tiền nhỏ dồn lại; ôm con sò to là giấc mơ báo sinh con gái xinh; mở sò thấy ngọc trai là cơ hội, tài năng tiềm ẩn được tỏa sáng; chỉ thấy vỏ rỗng là cẩn thận lời mời bề ngoài hấp dẫn.',
+      vietnam: 'Người Việt giải mơ thấy sò, ngao, nghêu là có lộc nhỏ, buôn bán thuận; thấy ngọc trai là may mắn quý giá.',
+      cases: [
+        ['Mơ nhặt được nhiều sò', 'Tiền nhỏ dồn lại.'],
+        ['Mơ ôm con sò to', 'Người Hàn coi là báo sinh con gái.'],
+        ['Mơ thấy ngọc trai trong sò', 'Cơ hội, tài năng được tỏa sáng.'],
+        ['Mơ chỉ thấy vỏ rỗng', 'Cẩn thận lời mời bề ngoài.'],
+      ],
+    },
+  },
+  {
+    slug: 'eel', category: 'animal', tone: 'mixed', emoji: '🎣',
+    ko: {
+      name: '장어·미꾸라지 꿈', keywords: ['장어', '미꾸라지', '뱀장어', '장어 잡는 꿈'],
+      summary: '장어는 힘과 재물을, 손에서 빠져나가는 미꾸라지는 잡힐 듯 안 잡히는 기회를 뜻합니다.',
+      korea: '큰 장어를 잡으면 기운이 넘치고 재물이 들어온다고 봅니다. 장어나 미꾸라지가 손에서 미끄러져 빠져나가면 다 된 일이 어긋날 수 있으니 마무리를 꼼꼼히 하라는 뜻이고, 장어를 먹으면 건강을 회복합니다. "미꾸라지 한 마리가 온 웅덩이를 흐린다"는 속담처럼 흙탕물 속 미꾸라지는 분위기를 흐리는 사람을 조심하라는 꿈입니다.',
+      vietnam: '베트남어 "lươn lẹo(장어처럼 꼬불꼬불하다)"는 교활하다는 뜻입니다. 장어(lươn) 꿈은 말 바꾸는 사람을 조심하라는 경고지만, 장어를 잡으면 재물운으로 봅니다.',
+      cases: [
+        ['큰 장어를 잡는 꿈', '기운이 넘치고 재물이 들어옵니다.'],
+        ['손에서 미끄러져 빠져나가는 꿈', '마무리를 꼼꼼히 하세요.'],
+        ['장어를 먹는 꿈', '건강과 기력을 회복합니다.'],
+        ['흙탕물 속 미꾸라지 꿈', '분위기를 흐리는 사람을 조심하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy con lươn', keywords: ['lươn', 'cá chạch', 'bắt lươn', 'con lươn'],
+      summary: 'Lươn to là sức mạnh và tiền của; lươn, chạch tuột khỏi tay là cơ hội tưởng nắm được mà vuột mất.',
+      korea: 'Người Hàn cho rằng bắt được lươn to là tràn đầy sinh lực, có tiền vào; lươn tuột khỏi tay là việc sắp xong có thể hỏng, cần làm kỹ phần kết; ăn lươn là hồi phục sức khỏe; tục ngữ Hàn nói “một con chạch làm đục cả vũng”, nên chạch trong nước đục là coi chừng kẻ phá bầu không khí.',
+      vietnam: 'Người Việt có từ “lươn lẹo” chỉ kẻ gian xảo; mơ thấy lươn là cảnh giác người hay nói một đằng làm một nẻo, nhưng bắt được lươn lại là có lộc.',
+      cases: [
+        ['Mơ bắt được lươn to', 'Sung sức, có tiền vào.'],
+        ['Mơ lươn tuột khỏi tay', 'Làm kỹ phần kết.'],
+        ['Mơ ăn lươn', 'Hồi phục sức khỏe.'],
+        ['Mơ chạch trong nước đục', 'Coi chừng kẻ phá rối.'],
+      ],
+    },
+  },
+  {
+    slug: 'panda', category: 'animal', tone: 'good', emoji: '🐼',
+    ko: {
+      name: '판다 꿈', keywords: ['판다', '판다 꿈', '아기 판다'],
+      summary: '판다는 느긋한 평화와 사랑받는 매력을 뜻합니다. 판다를 안으면 귀여움을 받으며 일이 순조로운 꿈입니다.',
+      korea: '전통 해몽에는 없지만, 요즘은 판다를 보면 마음의 여유와 주변의 사랑을 얻는다고 봅니다. 판다를 품에 안으면 귀엽고 복스러운 아이의 태몽으로도 풀고, 판다가 대나무를 먹으면 서두르지 않아도 먹고살 걱정이 없다는 뜻입니다. 판다가 우리에 갇혀 있으면 지나치게 보호받아 답답한 마음을 비춥니다.',
+      vietnam: '베트남에서도 판다(gấu trúc) 꿈은 평화와 행운, 귀여운 아이를 뜻하는 좋은 꿈으로 봅니다.',
+      cases: [
+        ['판다를 보는 꿈', '마음의 여유와 사랑을 얻습니다.'],
+        ['판다를 안는 꿈', '복스러운 아이의 태몽으로 풉니다.'],
+        ['판다가 대나무를 먹는 꿈', '먹고살 걱정이 줄어듭니다.'],
+        ['갇힌 판다를 보는 꿈', '답답한 마음을 풀 시간이 필요합니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy gấu trúc', keywords: ['gấu trúc', 'panda', 'gấu trúc con'],
+      summary: 'Gấu trúc là bình yên thong thả và sức hút được yêu mến. Ôm gấu trúc là được thương, mọi việc suôn sẻ.',
+      korea: 'Giải mộng Hàn xưa không có gấu trúc, nhưng nay người ta cho rằng thấy gấu trúc là lòng thư thái, được mọi người yêu quý; ôm gấu trúc là giấc mơ báo con đáng yêu, phúc hậu; gấu trúc ăn tre là không cần vội vẫn đủ ăn; gấu trúc bị nhốt là cảm giác bị bao bọc quá mức.',
+      vietnam: 'Người Việt cũng giải mơ thấy gấu trúc là bình an, may mắn, con cái đáng yêu.',
+      cases: [
+        ['Mơ thấy gấu trúc', 'Lòng thư thái, được yêu quý.'],
+        ['Mơ ôm gấu trúc', 'Báo có con phúc hậu.'],
+        ['Mơ gấu trúc ăn tre', 'Bớt lo chuyện cơm áo.'],
+        ['Mơ gấu trúc bị nhốt', 'Cần thời gian giải tỏa.'],
+      ],
+    },
+  },
+  {
+    slug: 'penguin', category: 'animal', tone: 'good', emoji: '🐧',
+    ko: {
+      name: '펭귄 꿈', keywords: ['펭귄', '펭귄 꿈', '펭귄 무리'],
+      summary: '펭귄은 추위를 함께 견디는 협동과 가족애를 뜻합니다. 펭귄 무리는 힘든 시기를 사람들과 함께 넘기는 꿈입니다.',
+      korea: '펭귄 무리가 모여 있으면 동료·가족과 힘을 합쳐 어려움을 이겨 낸다고 봅니다. 펭귄이 뒤뚱뒤뚱 걸으면 서툴러도 꾸준히 가면 된다는 뜻이고, 펭귄이 바다로 뛰어들면 망설이던 일에 용기를 내라는 꿈입니다. 홀로 선 펭귄은 외로움을 돌보라는 뜻입니다.',
+      vietnam: '베트남에서 펭귄(chim cánh cụt) 꿈은 인내와 가족의 정을 뜻합니다.',
+      cases: [
+        ['펭귄 무리를 보는 꿈', '함께 힘을 합쳐 어려움을 넘깁니다.'],
+        ['뒤뚱뒤뚱 걷는 펭귄 꿈', '서툴러도 꾸준히 가면 됩니다.'],
+        ['펭귄이 바다로 뛰어드는 꿈', '망설이던 일에 용기를 내세요.'],
+        ['홀로 선 펭귄 꿈', '외로운 마음을 돌보세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy chim cánh cụt', keywords: ['chim cánh cụt', 'cánh cụt', 'đàn cánh cụt'],
+      summary: 'Chim cánh cụt là đồng lòng vượt giá rét và tình thân gia đình. Thấy cả đàn là cùng mọi người vượt qua lúc khó.',
+      korea: 'Người Hàn cho rằng đàn cánh cụt tụ lại là cùng đồng nghiệp, gia đình chung sức vượt khó; cánh cụt lạch bạch đi là vụng mà bền bỉ vẫn tới; cánh cụt lao xuống biển là hãy can đảm với việc còn do dự; một con đứng lẻ loi là nên chăm sóc nỗi cô đơn.',
+      vietnam: 'Người Việt giải mơ thấy chim cánh cụt là sự nhẫn nại và tình cảm gia đình.',
+      cases: [
+        ['Mơ thấy đàn cánh cụt', 'Đồng lòng vượt khó.'],
+        ['Mơ cánh cụt đi lạch bạch', 'Vụng mà bền bỉ vẫn tới.'],
+        ['Mơ cánh cụt lao xuống biển', 'Can đảm lên.'],
+        ['Mơ cánh cụt đứng một mình', 'Chăm sóc nỗi cô đơn.'],
+      ],
+    },
+  },
+  {
+    slug: 'hedgehog', category: 'animal', tone: 'mixed', emoji: '🦔',
+    ko: {
+      name: '고슴도치 꿈', keywords: ['고슴도치', '고슴도치 꿈', '가시'],
+      summary: '고슴도치는 자신을 지키려는 마음과 날카로운 말을 뜻합니다. "고슴도치도 제 새끼는 함함하다"처럼 가족애를 뜻하기도 합니다.',
+      korea: '고슴도치가 몸을 웅크리고 가시를 세우면 지금 마음의 벽을 세우고 있다는 뜻이니 믿을 만한 사람에게 마음을 열어 보세요. 가시에 찔리면 가까운 사람의 날카로운 말을 조심하고, 고슴도치를 조심스럽게 안으면 까다로운 사람과도 잘 지내게 됩니다. 새끼 고슴도치는 "고슴도치도 제 새끼는 함함하다"는 속담처럼 자식 사랑을 뜻합니다.',
+      vietnam: '베트남에서 고슴도치·호저(con nhím) 꿈은 자기방어와 경계심을 뜻하며, 가시에 찔리면 말다툼을 조심하라고 풉니다.',
+      cases: [
+        ['가시를 세운 고슴도치 꿈', '마음의 벽을 조금 낮춰 보세요.'],
+        ['가시에 찔리는 꿈', '날카로운 말을 조심하세요.'],
+        ['고슴도치를 안는 꿈', '까다로운 사람과도 잘 지냅니다.'],
+        ['새끼 고슴도치 꿈', '자식과 가족을 향한 사랑을 뜻합니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy con nhím', keywords: ['nhím', 'con nhím', 'bị nhím đâm'],
+      summary: 'Nhím là tâm lý tự vệ và lời nói sắc. Người Hàn có câu “nhím cũng thấy con mình mềm mại” — nói về tình thương con.',
+      korea: 'Người Hàn cho rằng nhím cuộn tròn dựng lông là đang dựng bức tường trong lòng, hãy mở lòng với người đáng tin; bị gai đâm là cẩn thận lời nói sắc của người gần; ôm nhím cẩn thận là hòa hợp được với người khó tính; nhím con là tình thương con cái.',
+      vietnam: 'Người Việt giải mơ thấy nhím là tự vệ, cảnh giác; bị nhím đâm là cẩn thận cãi vã.',
+      cases: [
+        ['Mơ nhím dựng lông', 'Hạ bớt bức tường trong lòng.'],
+        ['Mơ bị gai nhím đâm', 'Cẩn thận lời nói sắc.'],
+        ['Mơ ôm con nhím', 'Hòa hợp với người khó tính.'],
+        ['Mơ thấy nhím con', 'Tình thương con cái, gia đình.'],
+      ],
+    },
+  },
+  {
+    slug: 'dinosaur', category: 'animal', tone: 'mixed', emoji: '🦖',
+    ko: {
+      name: '공룡 꿈', keywords: ['공룡', '공룡 꿈', '티라노'],
+      summary: '공룡은 압도적으로 큰 문제나 오래된 과거를 뜻합니다. 공룡을 피하거나 길들이면 큰 고비를 넘깁니다.',
+      korea: '공룡에게 쫓기면 감당하기 벅찬 일이나 사람 때문에 부담이 크다는 마음의 신호입니다. 공룡을 길들이거나 올라타면 큰 문제를 스스로 해결하고 힘을 얻으며, 공룡 화석을 발견하면 오래 묻어 둔 일이나 인연이 다시 떠오릅니다. 아이가 꾸는 공룡 꿈은 대개 호기심과 성장의 표현입니다.',
+      vietnam: '베트남에서도 공룡(khủng long) 꿈은 큰 압박과 도전을 뜻하며, 공룡을 이기면 고비를 넘긴다고 봅니다.',
+      cases: [
+        ['공룡에게 쫓기는 꿈', '벅찬 일을 나눠서 처리하세요.'],
+        ['공룡을 길들이는 꿈', '큰 문제를 해결하고 힘을 얻습니다.'],
+        ['공룡 화석을 찾는 꿈', '묻어 둔 일이나 인연이 다시 떠오릅니다.'],
+        ['아이가 공룡 꿈을 꾼 경우', '호기심과 성장의 표현입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy khủng long', keywords: ['khủng long', 'hóa thạch', 'bị khủng long đuổi'],
+      summary: 'Khủng long là vấn đề quá lớn hay quá khứ xa xưa. Thoát được hay thuần phục khủng long là vượt qua cửa ải lớn.',
+      korea: 'Người Hàn cho rằng bị khủng long đuổi là tín hiệu đang chịu áp lực quá sức; thuần phục, cưỡi khủng long là tự giải quyết vấn đề lớn và mạnh mẽ hơn; tìm thấy hóa thạch là chuyện, duyên cũ chôn giấu trở lại; trẻ nhỏ mơ thấy khủng long thường là trí tò mò và sự lớn lên.',
+      vietnam: 'Người Việt cũng giải mơ thấy khủng long là áp lực, thử thách lớn; thắng được khủng long là qua được khó khăn.',
+      cases: [
+        ['Mơ bị khủng long đuổi', 'Chia nhỏ việc quá sức.'],
+        ['Mơ thuần phục khủng long', 'Giải quyết vấn đề lớn.'],
+        ['Mơ tìm thấy hóa thạch', 'Chuyện cũ trở lại.'],
+        ['Trẻ mơ thấy khủng long', 'Tò mò, đang lớn.'],
+      ],
+    },
+  },
+  {
+    slug: 'silkworm', category: 'animal', tone: 'good', emoji: '🧵',
+    ko: {
+      name: '누에 꿈', keywords: ['누에', '누에고치', '비단', '누에 꿈'],
+      summary: '누에는 묵묵한 노력이 비단 같은 결실로 바뀌는 꿈입니다. 누에고치는 변신을 앞둔 준비 기간을 뜻합니다.',
+      korea: '누에가 뽕잎을 갉아 먹으면 부지런히 일한 만큼 재물이 쌓인다고 봅니다. 누에가 고치를 지으면 지금은 조용히 준비할 때이고, 고치에서 나방이 나오면 새로운 모습으로 거듭나며, 비단실을 뽑으면 노력이 값진 결과로 이어집니다. 예부터 누에치기는 집안을 일으키는 일로 여겨 좋은 꿈으로 풉니다.',
+      vietnam: '베트남 하노이 반푹(Vạn Phúc) 같은 비단 마을처럼 누에(con tằm)는 근면과 비단의 재물을 상징합니다. 누에 꿈은 수고 끝의 넉넉함을 뜻합니다.',
+      cases: [
+        ['누에가 뽕잎을 먹는 꿈', '부지런한 만큼 재물이 쌓입니다.'],
+        ['누에고치를 보는 꿈', '조용히 준비할 때입니다.'],
+        ['고치에서 나방이 나오는 꿈', '새로운 모습으로 거듭납니다.'],
+        ['비단실을 뽑는 꿈', '노력이 값진 결과가 됩니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy con tằm', keywords: ['tằm', 'con tằm', 'kén tằm', 'tơ lụa'],
+      summary: 'Tằm là cần cù lặng lẽ hóa thành thành quả như lụa. Kén tằm là thời gian chuẩn bị trước khi lột xác.',
+      korea: 'Người Hàn cho rằng tằm ăn lá dâu là chăm chỉ bao nhiêu tiền của dồn bấy nhiêu; tằm làm kén là lúc lặng lẽ chuẩn bị; ngài chui ra khỏi kén là đổi mới bản thân; kéo tơ là công sức thành quả quý; xưa nay nuôi tằm được xem là nghề làm giàu cho nhà.',
+      vietnam: 'Như làng lụa Vạn Phúc, con tằm với người Việt là biểu tượng cần cù và của cải từ tơ lụa; mơ thấy tằm là vất vả rồi sung túc.',
+      cases: [
+        ['Mơ tằm ăn lá dâu', 'Chăm chỉ thì tiền dồn lại.'],
+        ['Mơ thấy kén tằm', 'Lúc lặng lẽ chuẩn bị.'],
+        ['Mơ ngài chui ra khỏi kén', 'Đổi mới bản thân.'],
+        ['Mơ kéo tơ', 'Công sức thành quả quý.'],
+      ],
+    },
+  },
+  {
+    slug: 'grasshopper', category: 'animal', tone: 'mixed', emoji: '🌿',
+    ko: {
+      name: '메뚜기 꿈', keywords: ['메뚜기', '메뚜기 떼', '방아깨비'],
+      summary: '"메뚜기도 한철"이라는 속담처럼 메뚜기는 잠깐 오는 기회를 뜻합니다. 메뚜기 떼는 갑작스러운 손실을 조심하라는 꿈입니다.',
+      korea: '메뚜기를 잡으면 짧게 찾아온 기회를 놓치지 않고 잡는다는 뜻입니다. 메뚜기가 높이 뛰면 일이 한 단계 도약하고, 메뚜기 떼가 논밭을 덮으면 예상치 못한 지출이나 손실이 생길 수 있으니 대비하세요. 메뚜기가 집 안에 들어오면 손님이나 소식이 찾아옵니다.',
+      vietnam: '베트남 속담 "메뚜기가 수레를 찬다(châu chấu đá xe)"는 약한 자가 강한 자에게 덤비는 것을 말합니다. 메뚜기(châu chấu) 꿈은 힘에 부치는 다툼을 피하라는 뜻으로도 풉니다.',
+      cases: [
+        ['메뚜기를 잡는 꿈', '짧은 기회를 잡습니다.'],
+        ['메뚜기가 높이 뛰는 꿈', '일이 한 단계 도약합니다.'],
+        ['메뚜기 떼가 몰려오는 꿈', '예상 못 한 지출에 대비하세요.'],
+        ['메뚜기가 집에 들어오는 꿈', '손님이나 소식이 옵니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy châu chấu', keywords: ['châu chấu', 'cào cào', 'đàn châu chấu'],
+      summary: 'Người Hàn có câu “châu chấu cũng chỉ có một mùa” — cơ hội đến rồi đi nhanh. Đàn châu chấu là cẩn thận tổn thất bất ngờ.',
+      korea: 'Người Hàn cho rằng bắt được châu chấu là nắm kịp cơ hội ngắn ngủi; châu chấu nhảy cao là việc tiến một bước lớn; đàn châu chấu phủ ruộng là có thể có khoản chi, tổn thất bất ngờ; châu chấu vào nhà là có khách hay tin tức.',
+      vietnam: 'Người Việt có câu “châu chấu đá xe” — kẻ yếu chống kẻ mạnh. Mơ thấy châu chấu cũng nhắc tránh tranh chấp quá sức mình.',
+      cases: [
+        ['Mơ bắt được châu chấu', 'Nắm kịp cơ hội ngắn.'],
+        ['Mơ châu chấu nhảy cao', 'Việc tiến một bước lớn.'],
+        ['Mơ đàn châu chấu kéo đến', 'Đề phòng chi tiêu bất ngờ.'],
+        ['Mơ châu chấu vào nhà', 'Có khách hay tin tức.'],
+      ],
+    },
+  },
+  {
+    slug: 'tadpole', category: 'animal', tone: 'good', emoji: '🐸',
+    ko: {
+      name: '올챙이 꿈', keywords: ['올챙이', '올챙이 꿈', '개구리 알'],
+      summary: '올챙이는 작은 시작이 크게 자라는 성장을 뜻합니다. "개구리 올챙이 적 생각 못 한다"처럼 초심을 잊지 말라는 꿈이기도 합니다.',
+      korea: '올챙이가 가득한 연못을 보면 새로 시작한 일이 여러 갈래로 자라나고, 올챙이가 개구리가 되면 노력이 결실을 맺는다고 봅니다. 올챙이를 손으로 뜨면 작은 기회를 소중히 키우라는 뜻이며, 잘된 뒤에는 "개구리 올챙이 적 생각 못 한다"는 말처럼 처음 마음을 잊지 말라는 꿈입니다.',
+      vietnam: '베트남에서 올챙이(nòng nọc) 꿈은 성장과 자손 번창을 뜻합니다.',
+      cases: [
+        ['올챙이가 가득한 꿈', '새 일이 여러 갈래로 자랍니다.'],
+        ['올챙이가 개구리가 되는 꿈', '노력이 결실을 맺습니다.'],
+        ['올챙이를 손으로 뜨는 꿈', '작은 기회를 소중히 키우세요.'],
+        ['잘된 뒤 올챙이를 보는 꿈', '초심을 잊지 마세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy nòng nọc', keywords: ['nòng nọc', 'trứng ếch'],
+      summary: 'Nòng nọc là khởi đầu nhỏ lớn dần. Người Hàn có câu “ếch quên thời còn là nòng nọc” — nhắc đừng quên thuở ban đầu.',
+      korea: 'Người Hàn cho rằng ao đầy nòng nọc là việc mới bắt đầu sinh sôi nhiều hướng; nòng nọc thành ếch là công sức thành quả; vớt nòng nọc là trân trọng cơ hội nhỏ; khi đã thành công mà mơ thấy nòng nọc là đừng quên lòng ban đầu.',
+      vietnam: 'Người Việt giải mơ thấy nòng nọc là sự lớn lên, con cháu đông đúc.',
+      cases: [
+        ['Mơ ao đầy nòng nọc', 'Việc mới sinh sôi.'],
+        ['Mơ nòng nọc thành ếch', 'Công sức thành quả.'],
+        ['Mơ vớt nòng nọc', 'Trân trọng cơ hội nhỏ.'],
+        ['Thành công rồi mơ thấy nòng nọc', 'Đừng quên thuở ban đầu.'],
+      ],
+    },
+  },
+  {
+    slug: 'swan', category: 'animal', tone: 'good', emoji: '🪿',
+    ko: {
+      name: '백조 꿈', keywords: ['백조', '고니', '백조 꿈'],
+      summary: '백조는 우아함과 변신, 한결같은 사랑을 뜻합니다. "미운 오리 새끼"처럼 숨은 가치가 드러나는 꿈입니다.',
+      korea: '백조가 호수 위를 떠다니면 품위 있게 인정받고 마음이 평온해진다고 봅니다. 백조 한 쌍은 오래 함께할 인연을, 하얀 백조가 날아오르면 숨어 있던 재능이 빛을 보는 것을 뜻합니다. 검은 백조는 예상하지 못한 일이니 유연하게 대처하라는 꿈입니다.',
+      vietnam: '베트남에서 백조(thiên nga) 꿈은 아름다움과 고귀함, 사랑의 결실을 뜻합니다.',
+      cases: [
+        ['백조가 떠다니는 꿈', '품위 있게 인정받고 마음이 평온합니다.'],
+        ['백조 한 쌍을 보는 꿈', '오래 함께할 인연입니다.'],
+        ['백조가 날아오르는 꿈', '숨은 재능이 빛을 봅니다.'],
+        ['검은 백조 꿈', '뜻밖의 일에 유연하게 대처하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy thiên nga', keywords: ['thiên nga', 'thiên nga trắng', 'thiên nga đen'],
+      summary: 'Thiên nga là duyên dáng, lột xác và tình yêu chung thủy — như chuyện “vịt con xấu xí” tỏa sáng.',
+      korea: 'Người Hàn cho rằng thiên nga bơi trên hồ là được công nhận một cách thanh lịch, lòng bình yên; đôi thiên nga là duyên lâu bền; thiên nga trắng bay lên là tài năng tiềm ẩn tỏa sáng; thiên nga đen là việc bất ngờ, cần linh hoạt.',
+      vietnam: 'Người Việt giải mơ thấy thiên nga là vẻ đẹp, cao quý và tình yêu viên mãn.',
+      cases: [
+        ['Mơ thiên nga trên hồ', 'Được công nhận, lòng bình yên.'],
+        ['Mơ thấy đôi thiên nga', 'Duyên lâu bền.'],
+        ['Mơ thiên nga bay lên', 'Tài năng tỏa sáng.'],
+        ['Mơ thấy thiên nga đen', 'Linh hoạt trước việc bất ngờ.'],
+      ],
+    },
+  },
+  {
+    slug: 'ladybug', category: 'animal', tone: 'good', emoji: '🐞',
+    ko: {
+      name: '무당벌레 꿈', keywords: ['무당벌레', '무당벌레 꿈'],
+      summary: '무당벌레는 작은 행운과 반가운 소식을 뜻합니다. 손에 앉으면 바라던 일이 이루어진다는 꿈입니다.',
+      korea: '전통 해몽에는 드물지만, 요즘은 서양에서 행운의 벌레로 여기는 무당벌레가 손이나 옷에 앉으면 작은 소원이 이루어지고 좋은 소식이 온다고 봅니다. 무당벌레가 날아가면 기회를 서둘러 잡고, 무당벌레가 많으면 주변에 도와줄 사람이 늘어납니다.',
+      vietnam: '베트남에서도 무당벌레(bọ rùa) 꿈은 행운과 건강, 사랑의 소식을 뜻합니다.',
+      cases: [
+        ['손에 무당벌레가 앉는 꿈', '작은 소원이 이루어집니다.'],
+        ['옷에 무당벌레가 붙는 꿈', '좋은 소식이 옵니다.'],
+        ['무당벌레가 날아가는 꿈', '기회를 서둘러 잡으세요.'],
+        ['무당벌레가 많은 꿈', '도와줄 사람이 늘어납니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy bọ rùa', keywords: ['bọ rùa', 'con bọ rùa'],
+      summary: 'Bọ rùa là may mắn nhỏ và tin vui. Bọ rùa đậu trên tay là điều mong ước sắp thành.',
+      korea: 'Giải mộng Hàn xưa ít nhắc, nhưng nay người ta coi bọ rùa — loài côn trùng may mắn ở phương Tây — đậu lên tay, áo là ước nguyện nhỏ thành, có tin vui; bọ rùa bay đi là nhanh tay nắm cơ hội; nhiều bọ rùa là có thêm người giúp.',
+      vietnam: 'Người Việt cũng giải mơ thấy bọ rùa là may mắn, sức khỏe và tin vui tình cảm.',
+      cases: [
+        ['Mơ bọ rùa đậu trên tay', 'Ước nguyện nhỏ thành.'],
+        ['Mơ bọ rùa bám trên áo', 'Có tin vui.'],
+        ['Mơ bọ rùa bay đi', 'Nhanh tay nắm cơ hội.'],
+        ['Mơ thấy nhiều bọ rùa', 'Thêm người giúp đỡ.'],
+      ],
+    },
+  },
+  {
+    slug: 'starfish', category: 'animal', tone: 'good', emoji: '🐚',
+    ko: {
+      name: '불가사리 꿈', keywords: ['불가사리', '불가사리 꿈'],
+      summary: '불가사리는 잘린 팔이 다시 자라는 회복력을 뜻합니다. 힘든 일을 겪어도 다시 일어서는 꿈입니다.',
+      korea: '바닷가에서 불가사리를 주우면 잃었던 것을 되찾거나 상처가 회복된다고 봅니다. 불가사리가 반짝이면 작은 희망이 보이고, 불가사리를 바다로 돌려보내면 베푼 친절이 복으로 돌아옵니다. 불가사리가 바위에 단단히 붙어 있으면 끈기로 버티면 길이 열린다는 뜻입니다.',
+      vietnam: '베트남에서 불가사리(sao biển) 꿈은 회복과 희망, 바다에서 오는 행운을 뜻합니다.',
+      cases: [
+        ['불가사리를 줍는 꿈', '잃었던 것을 되찾고 회복합니다.'],
+        ['반짝이는 불가사리 꿈', '작은 희망이 보입니다.'],
+        ['불가사리를 바다로 돌려보내는 꿈', '베푼 친절이 복으로 돌아옵니다.'],
+        ['바위에 붙은 불가사리 꿈', '끈기로 버티면 길이 열립니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy sao biển', keywords: ['sao biển', 'con sao biển'],
+      summary: 'Sao biển là sức hồi phục — cánh bị đứt vẫn mọc lại. Gặp khó vẫn đứng dậy được.',
+      korea: 'Người Hàn cho rằng nhặt sao biển ở bờ biển là lấy lại thứ đã mất, vết thương lành lại; sao biển lấp lánh là thấy hy vọng nhỏ; thả sao biển về biển là lòng tốt quay lại thành phúc; sao biển bám chặt đá là kiên trì thì có lối ra.',
+      vietnam: 'Người Việt giải mơ thấy sao biển là hồi phục, hy vọng và may mắn từ biển.',
+      cases: [
+        ['Mơ nhặt sao biển', 'Lấy lại thứ đã mất.'],
+        ['Mơ sao biển lấp lánh', 'Thấy hy vọng nhỏ.'],
+        ['Mơ thả sao biển về biển', 'Lòng tốt thành phúc.'],
+        ['Mơ sao biển bám đá', 'Kiên trì thì có lối ra.'],
+      ],
+    },
+  },
+];

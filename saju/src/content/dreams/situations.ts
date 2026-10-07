@@ -31,7 +31,7 @@ export const SITUATION_DREAMS: Dream[] = [
   {
     slug: 'falling', category: 'situation', tone: 'bad', emoji: '🪂',
     ko: {
-      name: '떨어지는 꿈', keywords: ['높은 데서 떨어지는 꿈', '추락', '낭떠러지', '엘리베이터 꿈'],
+      name: '떨어지는 꿈', keywords: ['높은 데서 떨어지는 꿈', '추락', '낭떠러지', '추락하는 꿈'],
       summary: '높은 곳에서 떨어지는 꿈은 불안과 통제력을 잃을까 하는 걱정을 비춥니다. 땅에 무사히 닿으면 걱정이 기우라는 뜻입니다.',
       korea: '옛말에 "떨어지는 꿈을 꾸면 키가 큰다"고 할 만큼 성장기에는 흔한 꿈입니다. 어른이 꾸면 지위나 계획이 흔들릴까 하는 불안을 뜻하며, 떨어지다 날아오르면 위기를 기회로 바꾼다고 봅니다.',
       vietnam: '베트남에서도 떨어지는 꿈(mơ thấy rơi từ trên cao)은 일이나 관계에서 자신감을 잃은 상태를 뜻한다고 봅니다.',
@@ -43,7 +43,7 @@ export const SITUATION_DREAMS: Dream[] = [
       ],
     },
     vi: {
-      name: 'Mơ thấy rơi từ trên cao', keywords: ['rơi từ trên cao', 'ngã', 'rơi xuống vực', 'thang máy rơi'],
+      name: 'Mơ thấy rơi từ trên cao', keywords: ['rơi từ trên cao', 'ngã', 'rơi xuống vực', 'rơi tự do'],
       summary: 'Mơ rơi từ trên cao phản ánh lo lắng, sợ mất kiểm soát. Tiếp đất an toàn là nỗi lo không đáng có.',
       korea: 'Người Hàn có câu “mơ rơi là đang cao lớn”, vì trẻ con hay mơ như vậy. Người lớn mơ thấy thì đó là nỗi lo về địa vị, kế hoạch; đang rơi mà bay lên được là biến nguy thành cơ.',
       vietnam: 'Người Việt cũng cho rằng mơ rơi từ trên cao là đang thiếu tự tin trong công việc hoặc chuyện tình cảm.',
@@ -139,7 +139,7 @@ export const SITUATION_DREAMS: Dream[] = [
   {
     slug: 'dying', category: 'situation', tone: 'good', emoji: '⚰️',
     ko: {
-      name: '내가 죽는 꿈', keywords: ['죽는 꿈', '내가 죽는 꿈', '장례식 꿈', '관'],
+      name: '내가 죽는 꿈', keywords: ['죽는 꿈', '내가 죽는 꿈', '죽음', '임종'],
       summary: '무섭지만 대표적인 "반대로 해석하는" 꿈입니다. 내가 죽는 꿈은 묵은 것이 끝나고 새로 태어난다는 길몽입니다.',
       korea: '한국 해몽에서 죽음은 끝이 아니라 새 출발을 뜻해, 내가 죽는 꿈은 고민이 해결되거나 새로운 운이 열린다는 뜻으로 봅니다. 자기 장례식을 보거나 관에 들어가는 꿈도 재물과 명예가 들어오는 꿈으로 풉니다.',
       vietnam: '베트남에서도 자신이 죽는 꿈(mơ thấy mình chết)은 나쁜 일이 끝나고 좋은 변화가 온다는 뜻으로 풀이하는 경우가 많습니다.',
@@ -151,7 +151,7 @@ export const SITUATION_DREAMS: Dream[] = [
       ],
     },
     vi: {
-      name: 'Mơ thấy mình chết', keywords: ['mình chết', 'đám tang', 'quan tài', 'mơ thấy chết'],
+      name: 'Mơ thấy mình chết', keywords: ['mình chết', 'cái chết', 'lâm chung', 'mơ thấy chết'],
       summary: 'Đáng sợ nhưng đây là giấc mơ “giải ngược” điển hình: mơ mình chết là chuyện cũ kết thúc, bắt đầu cuộc sống mới.',
       korea: 'Trong giải mộng Hàn Quốc, cái chết là khởi đầu mới chứ không phải kết thúc: mơ mình chết là nỗi lo được giải, vận mới mở ra. Thấy đám tang của mình hay nằm trong quan tài cũng là điềm có tiền tài, danh dự.',
       vietnam: 'Người Việt cũng thường giải mơ thấy mình chết là điều xấu qua đi, sắp có thay đổi tốt.',
@@ -166,7 +166,7 @@ export const SITUATION_DREAMS: Dream[] = [
   {
     slug: 'flying', category: 'situation', tone: 'good', emoji: '🕊️',
     ko: {
-      name: '하늘을 나는 꿈', keywords: ['나는 꿈', '날아다니는 꿈', '하늘', '비행기 꿈'],
+      name: '하늘을 나는 꿈', keywords: ['나는 꿈', '날아다니는 꿈', '하늘', '공중에 뜨는 꿈'],
       summary: '하늘을 자유롭게 나는 꿈은 해방감과 성취, 지위 상승을 뜻하는 길몽입니다.',
       korea: '높이 날수록 이름을 떨치거나 원하는 자리에 오른다고 봅니다. 나는 것이 힘들거나 자꾸 떨어지면 아직 준비가 덜 되었다는 뜻, 비행기를 타는 꿈은 새로운 무대로 나아갈 기회를 뜻합니다.',
       vietnam: '베트남에서도 하늘을 나는 꿈(mơ thấy bay)은 자유와 성공, 근심에서 벗어나는 것을 뜻합니다.',
@@ -178,7 +178,7 @@ export const SITUATION_DREAMS: Dream[] = [
       ],
     },
     vi: {
-      name: 'Mơ thấy mình bay', keywords: ['bay', 'bay trên trời', 'đi máy bay', 'mơ bay'],
+      name: 'Mơ thấy mình bay', keywords: ['bay', 'bay trên trời', 'bay lơ lửng', 'mơ bay'],
       summary: 'Bay tự do trên trời là điềm tốt về sự giải thoát, thành công và địa vị thăng tiến.',
       korea: 'Người Hàn cho rằng bay càng cao càng nổi danh, đạt được vị trí mong muốn; bay khó khăn hay cứ rơi xuống là chưa chuẩn bị đủ; đi máy bay là cơ hội bước ra sân chơi mới.',
       vietnam: 'Người Việt cũng giải mơ bay là tự do, thành công và thoát khỏi lo âu.',

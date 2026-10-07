@@ -139,7 +139,7 @@ export const SITUATION_DREAMS_2: Dream[] = [
   {
     slug: 'eating', category: 'situation', tone: 'good', emoji: '🍚',
     ko: {
-      name: '음식 먹는 꿈', keywords: ['밥 먹는 꿈', '음식 꿈', '고기 먹는 꿈', '잔치'],
+      name: '음식 먹는 꿈', keywords: ['밥 먹는 꿈', '음식 꿈', '고기 먹는 꿈', '맛있게 먹는 꿈'],
       summary: '맛있게 먹는 꿈은 재물과 결실, 풍족함을 뜻합니다. 잔칫상을 받으면 경사가 생기는 길몽입니다.',
       korea: '흰 쌀밥이나 고기를 맛있게 먹는 꿈은 재물과 건강운이 좋아진다는 뜻이고, 잔칫상을 받으면 축하받을 일이 생긴다고 봅니다. 음식을 먹으려다 못 먹으면 기회를 아쉽게 놓칠 수 있다는 뜻입니다.',
       vietnam: '베트남에서도 맛있게 먹는 꿈(mơ thấy ăn)은 풍족함과 기쁨을 뜻하며, 가족과 함께 먹으면 집안이 화목해진다고 봅니다.',
@@ -151,7 +151,7 @@ export const SITUATION_DREAMS_2: Dream[] = [
       ],
     },
     vi: {
-      name: 'Mơ thấy ăn uống', keywords: ['ăn cơm', 'ăn uống', 'ăn cỗ', 'mơ ăn'],
+      name: 'Mơ thấy ăn uống', keywords: ['ăn cơm', 'ăn uống', 'ăn no', 'mơ ăn'],
       summary: 'Ăn ngon trong mơ là tài lộc, thành quả và sự sung túc. Được mời ăn cỗ là điềm có hỷ sự.',
       korea: 'Người Hàn cho rằng ăn cơm trắng, ăn thịt ngon là tài lộc, sức khỏe tốt; được dọn mâm cỗ là có chuyện đáng chúc mừng; định ăn mà không ăn được là tiếc nuối vì lỡ cơ hội.',
       vietnam: 'Người Việt cũng xem ăn uống ngon miệng là no đủ, vui vẻ; ăn cùng gia đình là gia đạo hòa thuận.',
@@ -193,7 +193,7 @@ export const SITUATION_DREAMS_2: Dream[] = [
   {
     slug: 'stairs', category: 'situation', tone: 'good', emoji: '🪜',
     ko: {
-      name: '계단 꿈', keywords: ['계단', '계단 오르는 꿈', '사다리', '엘리베이터'],
+      name: '계단 꿈', keywords: ['계단', '계단 오르는 꿈', '사다리', '계단 내려가는 꿈'],
       summary: '계단을 오르는 꿈은 한 단계씩 성장하고 지위가 오르는 길몽입니다. 내려가거나 미끄러지면 속도를 늦추라는 뜻입니다.',
       korea: '계단이나 사다리를 차근차근 오르면 승진이나 성적 향상처럼 노력한 만큼 올라간다고 봅니다. 엘리베이터가 빠르게 올라가면 갑작스러운 기회를, 계단이 끝없이 이어지면 목표가 멀게 느껴지는 마음을 뜻합니다.',
       vietnam: '베트남에서도 계단(cầu thang)을 오르는 꿈은 발전과 성공, 내려가는 꿈은 잠시 물러서야 할 때로 봅니다.',
@@ -205,7 +205,7 @@ export const SITUATION_DREAMS_2: Dream[] = [
       ],
     },
     vi: {
-      name: 'Mơ thấy cầu thang', keywords: ['cầu thang', 'leo cầu thang', 'thang máy', 'cái thang'],
+      name: 'Mơ thấy cầu thang', keywords: ['cầu thang', 'leo cầu thang', 'bậc thang', 'cái thang'],
       summary: 'Leo cầu thang là điềm tiến bộ từng bước, địa vị đi lên. Đi xuống hay trượt ngã là lời nhắc chậm lại.',
       korea: 'Người Hàn cho rằng leo từng bậc thang là công sức đến đâu tiến đến đó; thang máy lên nhanh là cơ hội bất ngờ; cầu thang dài vô tận là cảm giác mục tiêu còn xa.',
       vietnam: 'Người Việt cũng xem leo cầu thang là phát triển, thành công; đi xuống là lúc tạm lùi một bước.',
@@ -220,7 +220,7 @@ export const SITUATION_DREAMS_2: Dream[] = [
   {
     slug: 'prison', category: 'situation', tone: 'mixed', emoji: '🔒',
     ko: {
-      name: '감옥 꿈', keywords: ['감옥', '경찰 꿈', '잡혀가는 꿈', '갇히는 꿈'],
+      name: '감옥 꿈', keywords: ['감옥', '수감', '잡혀가는 꿈', '갇히는 꿈'],
       summary: '감옥에 갇히는 꿈은 답답한 상황이나 책임감을 뜻하지만, 전통 해몽에서는 오히려 안정된 자리를 얻는다고 보기도 합니다.',
       korea: '감옥에 들어가는 꿈을 "관(官)에 든다"고 하여 취직·승진처럼 안정된 자리를 얻는 꿈으로 풀기도 합니다. 반면 탈출하려 애쓰면 지금의 의무나 관계에서 벗어나고 싶은 마음을 뜻합니다.',
       vietnam: '베트남에서는 감옥 꿈(mơ thấy đi tù)을 구속감이나 걱정으로 보면서, 풀려나는 꿈은 어려움에서 벗어난다고 풉니다.',
