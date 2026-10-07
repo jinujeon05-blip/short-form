@@ -193,7 +193,7 @@ export const NATURE_DREAMS_2: Dream[] = [
   {
     slug: 'river', category: 'nature', tone: 'mixed', emoji: '🏞️',
     ko: {
-      name: '강 꿈', keywords: ['강', '강물', '다리', '강을 건너는 꿈'],
+      name: '강 꿈', keywords: ['강', '강물', '강가', '강을 건너는 꿈'],
       summary: '강은 인생의 흐름과 넘어야 할 고비를 뜻합니다. 맑은 강을 무사히 건너면 어려움을 넘어 새 단계로 갑니다.',
       korea: '맑은 강물이 유유히 흐르면 일이 순리대로 풀리고, 강을 건너는 꿈은 시험·이직 같은 고비를 넘긴다는 뜻입니다. 다리가 끊기거나 물살이 거세면 준비를 더 하라는 신호입니다.',
       vietnam: '베트남에서도 강(sông) 꿈은 삶의 흐름을 뜻하며, 배를 타고 강을 건너면 순조로운 변화가 온다고 풉니다.',
@@ -205,7 +205,7 @@ export const NATURE_DREAMS_2: Dream[] = [
       ],
     },
     vi: {
-      name: 'Mơ thấy sông', keywords: ['sông', 'qua sông', 'cây cầu', 'dòng sông'],
+      name: 'Mơ thấy sông', keywords: ['sông', 'qua sông', 'bờ sông', 'dòng sông'],
       summary: 'Dòng sông là dòng chảy cuộc đời và cửa ải phải vượt qua. Qua được sông trong là bước sang giai đoạn mới.',
       korea: 'Người Hàn cho rằng sông trong chảy êm là việc thuận theo lẽ tự nhiên; qua sông là vượt cửa ải như thi cử, đổi việc; cầu gãy hay nước xiết là cần chuẩn bị thêm.',
       vietnam: 'Người Việt cũng xem sông là dòng đời; đi đò qua sông là thay đổi suôn sẻ.',

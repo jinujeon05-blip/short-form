@@ -16,16 +16,20 @@ import { ANIMAL_DREAMS_5 } from './animals5';
 import { PEOPLE_DREAMS_4 } from './people4';
 import { NATURE_DREAMS_4 } from './nature4';
 import { SITUATION_DREAMS_5 } from './situations5';
+import { ANIMAL_DREAMS_6 } from './animals6';
+import { PEOPLE_DREAMS_5 } from './people5';
+import { NATURE_DREAMS_5 } from './nature5';
+import { SITUATION_DREAMS_6 } from './situations6';
 import { NATURE_DREAMS_2 } from './nature2';
 import { SITUATION_DREAMS_2 } from './situations2';
 
 export type { Dream, DreamCategory, DreamTone } from './types';
 
 export const DREAMS: Dream[] = [
-  ...ANIMAL_DREAMS, ...ANIMAL_DREAMS_2, ...ANIMAL_DREAMS_3, ...ANIMAL_DREAMS_4, ...ANIMAL_DREAMS_5,
-  ...PEOPLE_DREAMS, ...PEOPLE_DREAMS_2, ...PEOPLE_DREAMS_3, ...PEOPLE_DREAMS_4,
-  ...NATURE_DREAMS, ...NATURE_DREAMS_2, ...NATURE_DREAMS_3, ...NATURE_DREAMS_4,
-  ...SITUATION_DREAMS, ...SITUATION_DREAMS_2, ...SITUATION_DREAMS_3, ...SITUATION_DREAMS_4, ...SITUATION_DREAMS_5,
+  ...ANIMAL_DREAMS, ...ANIMAL_DREAMS_2, ...ANIMAL_DREAMS_3, ...ANIMAL_DREAMS_4, ...ANIMAL_DREAMS_5, ...ANIMAL_DREAMS_6,
+  ...PEOPLE_DREAMS, ...PEOPLE_DREAMS_2, ...PEOPLE_DREAMS_3, ...PEOPLE_DREAMS_4, ...PEOPLE_DREAMS_5,
+  ...NATURE_DREAMS, ...NATURE_DREAMS_2, ...NATURE_DREAMS_3, ...NATURE_DREAMS_4, ...NATURE_DREAMS_5,
+  ...SITUATION_DREAMS, ...SITUATION_DREAMS_2, ...SITUATION_DREAMS_3, ...SITUATION_DREAMS_4, ...SITUATION_DREAMS_5, ...SITUATION_DREAMS_6,
 ];
 export const DREAM_SLUGS = DREAMS.map((d) => d.slug);
 export const CATEGORIES: DreamCategory[] = ['animal', 'people', 'nature', 'situation'];
@@ -87,7 +91,7 @@ interface DreamUi {
 export const DREAM_UI: Record<Lang, DreamUi> = {
   ko: {
     title: '꿈해몽 · 한국과 베트남은 이 꿈을 어떻게 볼까?',
-    lead: '돼지꿈, 뱀꿈, 이빨 빠지는 꿈… 자주 꾸는 꿈 200가지를 한국 전통 해몽과 베트남 풀이로 나란히 정리했습니다. 상황별 의미도 함께 확인하세요.',
+    lead: '돼지꿈, 뱀꿈, 이빨 빠지는 꿈… 자주 꾸는 꿈 250가지를 한국 전통 해몽과 베트남 풀이로 나란히 정리했습니다. 상황별 의미도 함께 확인하세요.',
     searchPh: '꿈 검색 (예: 돼지, 이빨, 똥)',
     popular: '많이 찾는 꿈',
     all: '전체',
@@ -107,7 +111,7 @@ export const DREAM_UI: Record<Lang, DreamUi> = {
   },
   vi: {
     title: 'Giải mã giấc mơ · Người Hàn và người Việt hiểu giấc mơ này thế nào?',
-    lead: 'Mơ thấy lợn, rắn, rụng răng… 200 giấc mơ phổ biến được giải theo quan niệm truyền thống Hàn Quốc và Việt Nam, kèm ý nghĩa từng tình huống.',
+    lead: 'Mơ thấy lợn, rắn, rụng răng… 250 giấc mơ phổ biến được giải theo quan niệm truyền thống Hàn Quốc và Việt Nam, kèm ý nghĩa từng tình huống.',
     searchPh: 'Tìm giấc mơ (VD: rắn, rụng răng, tiền)',
     popular: 'Giấc mơ được tìm nhiều',
     all: 'Tất cả',
