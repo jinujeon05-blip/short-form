@@ -1,0 +1,328 @@
+import type { Dream } from './types';
+
+export const PEOPLE_DREAMS_3: Dream[] = [
+  {
+    slug: 'friend', category: 'people', tone: 'good', emoji: '🤝',
+    ko: {
+      name: '친구 꿈', keywords: ['친구', '옛 친구', '친구 꿈', '동창'],
+      summary: '친구가 나오는 꿈은 도움과 소식, 혹은 그 친구에게서 본 나의 모습을 뜻합니다. 반갑게 만나면 좋은 소식이 옵니다.',
+      korea: '오랜 친구를 반갑게 만나면 소식이 오거나 옛 인연에서 도움을 받는다고 봅니다. 친구와 다투면 실제로는 오해를 풀 기회가 오고, 친구가 떠나가면 관계의 변화를 받아들일 때라고 풉니다.',
+      vietnam: '베트남에서도 친구(bạn bè) 꿈은 도움과 화합을 뜻하며, 오랜 친구를 만나면 반가운 소식이 온다고 봅니다.',
+      cases: [
+        ['옛 친구를 반갑게 만나는 꿈', '반가운 소식이나 옛 인연의 도움이 있습니다.'],
+        ['친구와 다투는 꿈', '오해를 풀 기회가 옵니다. 먼저 연락해 보세요.'],
+        ['친구가 멀리 떠나는 꿈', '관계의 변화를 받아들일 때입니다.'],
+        ['친구에게 선물을 받는 꿈', '도움이나 좋은 기회를 얻습니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy bạn bè', keywords: ['bạn bè', 'bạn cũ', 'bạn thân', 'bạn học'],
+      summary: 'Mơ thấy bạn là tin tức, sự giúp đỡ, hoặc hình ảnh của chính bạn qua người bạn ấy. Gặp nhau vui vẻ là có tin tốt.',
+      korea: 'Người Hàn cho rằng gặp lại bạn cũ vui vẻ là có tin hoặc được giúp từ duyên xưa; cãi nhau với bạn là sắp có dịp gỡ hiểu lầm; bạn đi xa là lúc chấp nhận quan hệ thay đổi.',
+      vietnam: 'Người Việt cũng xem mơ thấy bạn bè là được giúp đỡ, hòa hợp; gặp bạn cũ là có tin vui.',
+      cases: [
+        ['Mơ gặp lại bạn cũ', 'Có tin vui hoặc được người xưa giúp.'],
+        ['Mơ cãi nhau với bạn', 'Sắp có dịp gỡ hiểu lầm — hãy chủ động liên lạc.'],
+        ['Mơ bạn đi xa', 'Chấp nhận sự thay đổi trong quan hệ.'],
+        ['Mơ được bạn tặng quà', 'Được giúp đỡ, có cơ hội tốt.'],
+      ],
+    },
+  },
+  {
+    slug: 'lover', category: 'people', tone: 'good', emoji: '💑',
+    ko: {
+      name: '애인 꿈', keywords: ['남자친구', '여자친구', '애인', '짝사랑', '좋아하는 사람'],
+      summary: '애인이나 좋아하는 사람이 나오는 꿈은 그 사람에 대한 마음과 관계의 온도를 비춥니다. 다정한 꿈은 관계가 깊어질 신호입니다.',
+      korea: '좋아하는 사람이 꿈에 나와 웃으면 마음이 통할 기회가 오고, 애인과 손을 잡으면 관계가 안정된다고 봅니다. 애인이 차갑게 굴면 표현이 부족하다는 내 마음의 걱정입니다.',
+      vietnam: '베트남에서도 애인(người yêu) 꿈은 사랑이 깊어지거나 관계를 돌아보라는 뜻으로 풉니다.',
+      cases: [
+        ['좋아하는 사람이 웃는 꿈', '마음이 통할 기회가 옵니다.'],
+        ['애인과 손잡고 걷는 꿈', '관계가 안정되고 깊어집니다.'],
+        ['애인이 차갑게 구는 꿈', '서운한 마음을 솔직하게 표현해 보세요.'],
+        ['애인이 다른 사람이 되는 꿈', '관계에서 바라는 모습이 바뀌고 있습니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy người yêu', keywords: ['người yêu', 'bạn trai', 'bạn gái', 'crush', 'người mình thích'],
+      summary: 'Mơ thấy người yêu hay người mình thích phản ánh tình cảm và “nhiệt độ” của mối quan hệ. Giấc mơ ngọt ngào là dấu hiệu tình cảm sâu thêm.',
+      korea: 'Người Hàn cho rằng người mình thích mỉm cười là sắp có dịp hiểu nhau; nắm tay người yêu là quan hệ ổn định; người yêu lạnh nhạt là bạn đang lo mình chưa bày tỏ đủ.',
+      vietnam: 'Người Việt cũng giải mơ thấy người yêu là tình cảm thêm sâu đậm, hoặc lời nhắc nhìn lại mối quan hệ.',
+      cases: [
+        ['Mơ người mình thích mỉm cười', 'Sắp có dịp hiểu lòng nhau.'],
+        ['Mơ nắm tay người yêu', 'Tình cảm ổn định, sâu sắc hơn.'],
+        ['Mơ người yêu lạnh nhạt', 'Hãy nói thật lòng những điều chưa nói.'],
+        ['Mơ người yêu thành người khác', 'Mong muốn của bạn trong tình yêu đang thay đổi.'],
+      ],
+    },
+  },
+  {
+    slug: 'twins', category: 'people', tone: 'good', emoji: '👯',
+    ko: {
+      name: '쌍둥이 꿈', keywords: ['쌍둥이', '쌍둥이 꿈', '태몽'],
+      summary: '쌍둥이는 겹경사와 두 배의 결실을 뜻하는 길몽입니다. 일이 두 갈래로 동시에 잘 풀린다는 뜻이기도 합니다.',
+      korea: '쌍둥이를 낳거나 안는 꿈은 기쁜 일이 겹쳐 오거나 수입원이 둘로 늘어난다고 봅니다. 실제 쌍둥이 태몽으로는 열매 두 개, 동물 두 마리처럼 "둘"이 나오는 꿈을 꼽습니다.',
+      vietnam: '베트남에서도 쌍둥이(sinh đôi) 꿈은 두 배의 행운, 겹경사를 뜻합니다.',
+      cases: [
+        ['쌍둥이를 낳는 꿈', '겹경사나 두 배의 결실이 있습니다.'],
+        ['쌍둥이를 안는 꿈', '수입원이나 기회가 둘로 늘어납니다.'],
+        ['나와 똑같은 사람을 보는 꿈', '나를 객관적으로 돌아볼 때입니다.'],
+        ['쌍둥이가 다투는 꿈', '두 가지 선택 사이에서 고민하고 있습니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy sinh đôi', keywords: ['sinh đôi', 'song sinh', 'cặp song sinh'],
+      summary: 'Sinh đôi là điềm song hỷ, thành quả gấp đôi — cũng có nghĩa hai việc cùng thuận lợi một lúc.',
+      korea: 'Người Hàn cho rằng sinh hay bế cặp song sinh là chuyện vui đến dồn, nguồn thu tăng gấp đôi. Giấc mơ báo sinh đôi thật thường là mơ thấy hai quả, hai con vật.',
+      vietnam: 'Người Việt cũng xem mơ sinh đôi là may mắn nhân đôi, song hỷ lâm môn.',
+      cases: [
+        ['Mơ sinh đôi', 'Song hỷ, thành quả gấp đôi.'],
+        ['Mơ bế cặp song sinh', 'Nguồn thu hoặc cơ hội tăng gấp đôi.'],
+        ['Mơ thấy người giống hệt mình', 'Đến lúc nhìn lại bản thân khách quan.'],
+        ['Mơ cặp song sinh cãi nhau', 'Bạn đang phân vân giữa hai lựa chọn.'],
+      ],
+    },
+  },
+  {
+    slug: 'nails', category: 'people', tone: 'mixed', emoji: '💅',
+    ko: {
+      name: '손톱 꿈', keywords: ['손톱', '손톱 깎는 꿈', '손톱 빠지는 꿈', '발톱'],
+      summary: '손톱은 작은 재물과 체면을 뜻합니다. 손톱을 깎으면 근심을 정리하고, 손톱이 빠지면 손해를 조심하라는 꿈입니다.',
+      korea: '손톱을 단정히 깎는 꿈은 묵은 걱정을 정리한다는 뜻이고, 손톱이 길고 고우면 재물과 품위를 얻는다고 봅니다. 손톱이 빠지거나 부러지면 아랫사람이나 작은 재물에서 손해가 생길 수 있다고 풉니다.',
+      vietnam: '베트남에서도 손톱(móng tay)이 빠지는 꿈은 작은 손실이나 건강을 조심하라는 뜻으로 봅니다.',
+      cases: [
+        ['손톱을 깎는 꿈', '묵은 걱정을 정리합니다.'],
+        ['손톱이 길고 고운 꿈', '재물과 품위를 얻습니다.'],
+        ['손톱이 빠지는 꿈', '작은 손해나 아랫사람 문제를 조심하세요.'],
+        ['매니큐어를 칠하는 꿈', '나를 꾸미고 드러낼 기회가 옵니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy móng tay', keywords: ['móng tay', 'cắt móng tay', 'gãy móng', 'sơn móng'],
+      summary: 'Móng tay là của cải nhỏ và thể diện. Cắt móng là dọn nỗi lo; móng rụng là đề phòng thiệt hại.',
+      korea: 'Người Hàn cho rằng cắt móng gọn gàng là dọn dẹp lo âu cũ; móng dài đẹp là có của, có phong thái; móng gãy, rụng là thiệt thòi nhỏ hoặc rắc rối với người dưới.',
+      vietnam: 'Người Việt cũng giải mơ rụng móng tay là mất mát nhỏ hoặc nên giữ gìn sức khỏe.',
+      cases: [
+        ['Mơ cắt móng tay', 'Dọn được nỗi lo cũ.'],
+        ['Mơ móng tay dài đẹp', 'Có của và phong thái.'],
+        ['Mơ gãy, rụng móng', 'Đề phòng thiệt hại nhỏ.'],
+        ['Mơ sơn móng tay', 'Có dịp thể hiện bản thân.'],
+      ],
+    },
+  },
+  {
+    slug: 'weight', category: 'people', tone: 'mixed', emoji: '⚖️',
+    ko: {
+      name: '살찌는 꿈', keywords: ['살찌는 꿈', '살 빠지는 꿈', '다이어트', '뚱뚱해지는 꿈'],
+      summary: '살찌는 꿈은 옛 해몽에서 재물과 여유가 늘어나는 길몽이지만, 요즘은 몸매나 건강에 대한 걱정이 담긴 꿈이기도 합니다.',
+      korea: '전통적으로 몸이 불어나는 꿈은 살림이 넉넉해지고 지위가 오른다고 풀었습니다. 살이 쏙 빠지면 군살 같은 부담을 덜어 내거나 반대로 기운이 빠졌다는 뜻이니 상황에 따라 봅니다.',
+      vietnam: '베트남에서도 살찌는 꿈(mơ thấy mình béo lên)을 풍족함으로 보며, 갑자기 마르면 건강을 살피라고 풉니다.',
+      cases: [
+        ['몸이 불어나는 꿈', '살림이 넉넉해지고 여유가 생깁니다.'],
+        ['살이 쏙 빠지는 꿈', '부담을 덜어 내거나 기운이 빠졌다는 뜻입니다.'],
+        ['다이어트에 성공하는 꿈', '목표를 꾸준히 이뤄 냅니다.'],
+        ['체중계 숫자에 놀라는 꿈', '외모나 건강에 대한 걱정이 큽니다. 너무 자책하지 마세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy mình béo lên', keywords: ['béo lên', 'tăng cân', 'gầy đi', 'giảm cân'],
+      summary: 'Mơ béo lên theo giải mộng xưa là của cải, sự sung túc tăng; nhưng ngày nay cũng chứa nỗi lo về vóc dáng, sức khỏe.',
+      korea: 'Người Hàn xưa cho rằng người phát tướng trong mơ là nhà khá giả, địa vị lên. Gầy đi nhanh có thể là trút bớt gánh nặng, hoặc là sức lực suy — tùy hoàn cảnh.',
+      vietnam: 'Người Việt cũng xem béo lên là no đủ; đột nhiên gầy rộc là nên quan tâm sức khỏe.',
+      cases: [
+        ['Mơ béo lên', 'Gia đình khấm khá, dư dả hơn.'],
+        ['Mơ gầy rộc đi', 'Trút gánh nặng hoặc sức lực đang yếu.'],
+        ['Mơ giảm cân thành công', 'Kiên trì đạt mục tiêu.'],
+        ['Mơ giật mình vì cân nặng', 'Đang lo về ngoại hình, sức khỏe — đừng tự trách quá.'],
+      ],
+    },
+  },
+  {
+    slug: 'breakup', category: 'people', tone: 'mixed', emoji: '🥀',
+    ko: {
+      name: '헤어지는 꿈', keywords: ['헤어지는 꿈', '이별', '차이는 꿈', '이별 꿈'],
+      summary: '이별하는 꿈은 실제 이별보다 관계에 대한 불안이나 변화의 시기를 뜻합니다. 전통적으로는 오히려 관계가 깊어지는 반대 꿈으로도 봅니다.',
+      korea: '애인과 헤어지는 꿈을 오히려 관계가 단단해질 반대 꿈으로 보기도 합니다. 내가 이별을 고하면 정리하고 싶은 일이 있다는 뜻, 차이는 꿈은 인정받고 싶은 마음이 크다는 뜻입니다.',
+      vietnam: '베트남에서도 헤어지는 꿈(mơ thấy chia tay)은 관계에 대한 걱정이며, 대화를 나누라는 신호로 봅니다.',
+      cases: [
+        ['애인과 헤어지는 꿈', '관계가 오히려 단단해진다는 해석도 있습니다.'],
+        ['내가 이별을 고하는 꿈', '정리하고 싶은 일이나 관계가 있습니다.'],
+        ['차이는 꿈', '인정받고 싶은 마음이 큽니다.'],
+        ['울면서 헤어지는 꿈', '쌓인 감정을 털어내고 가벼워집니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy chia tay', keywords: ['chia tay', 'bị bỏ rơi', 'chia tay người yêu'],
+      summary: 'Mơ chia tay thường là nỗi bất an về mối quan hệ hoặc giai đoạn thay đổi; người Hàn xưa còn coi đó là giấc mơ ngược — tình cảm thêm bền.',
+      korea: 'Người Hàn có khi giải mơ chia tay người yêu là giấc mơ ngược: hai người sẽ gắn bó hơn. Mình nói lời chia tay là có việc muốn dứt điểm; bị bỏ rơi là rất muốn được công nhận.',
+      vietnam: 'Người Việt cũng xem đây là lo lắng về tình cảm — lời nhắc hai người nên trò chuyện nhiều hơn.',
+      cases: [
+        ['Mơ chia tay người yêu', 'Theo cách giải ngược: tình cảm thêm bền.'],
+        ['Mơ mình nói lời chia tay', 'Có việc hay mối quan hệ muốn dứt điểm.'],
+        ['Mơ bị bỏ rơi', 'Bạn rất muốn được trân trọng.'],
+        ['Mơ khóc khi chia tay', 'Trút bỏ cảm xúc, lòng nhẹ hơn.'],
+      ],
+    },
+  },
+  {
+    slug: 'confession', category: 'people', tone: 'good', emoji: '💌',
+    ko: {
+      name: '고백받는 꿈', keywords: ['고백', '고백받는 꿈', '프러포즈', '청혼'],
+      summary: '고백이나 청혼을 받는 꿈은 인정과 호감, 좋은 제안이 들어올 길몽입니다.',
+      korea: '누군가 고백하면 주변의 호감이나 인정을 받고, 청혼을 받으면 좋은 제안이나 계약이 들어온다고 봅니다. 내가 고백하는 꿈은 미뤄 둔 말을 꺼낼 용기가 생겼다는 뜻입니다.',
+      vietnam: '베트남에서도 고백받는 꿈(mơ được tỏ tình)은 연애운 상승과 좋은 기회를 뜻합니다.',
+      cases: [
+        ['고백을 받는 꿈', '주변의 호감과 인정을 얻습니다.'],
+        ['청혼을 받는 꿈', '좋은 제안이나 계약이 들어옵니다.'],
+        ['내가 고백하는 꿈', '미뤄 둔 말을 꺼낼 용기가 생깁니다.'],
+        ['고백을 거절하는 꿈', '내 기준을 지키는 선택을 하게 됩니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ được tỏ tình', keywords: ['tỏ tình', 'cầu hôn', 'được tỏ tình', 'tỏ tình'],
+      summary: 'Mơ được tỏ tình hay cầu hôn là điềm lành về sự yêu mến, công nhận và lời mời hấp dẫn.',
+      korea: 'Người Hàn cho rằng được tỏ tình là được người xung quanh quý mến, công nhận; được cầu hôn là có lời đề nghị, hợp đồng tốt; mình tỏ tình là đã có dũng khí nói điều giấu lâu.',
+      vietnam: 'Người Việt cũng xem mơ được tỏ tình là đường tình duyên lên hương, có cơ hội tốt.',
+      cases: [
+        ['Mơ được tỏ tình', 'Được yêu mến, công nhận.'],
+        ['Mơ được cầu hôn', 'Có đề nghị, hợp đồng tốt.'],
+        ['Mơ mình tỏ tình', 'Có dũng khí nói điều giấu lâu.'],
+        ['Mơ từ chối lời tỏ tình', 'Bạn giữ vững tiêu chuẩn của mình.'],
+      ],
+    },
+  },
+  {
+    slug: 'divorce', category: 'people', tone: 'mixed', emoji: '📄',
+    ko: {
+      name: '이혼하는 꿈', keywords: ['이혼', '이혼 꿈', '부부 싸움'],
+      summary: '이혼하는 꿈은 실제 이혼이 아니라 관계나 생활의 큰 정리, 독립하고 싶은 마음을 뜻하는 경우가 많습니다.',
+      korea: '배우자와 이혼하는 꿈을 전통적으로는 오히려 부부 사이가 새로워지는 반대 꿈으로 봅니다. 동업이나 직장처럼 묶여 있던 관계를 정리하고 싶은 마음이 나타난 것일 수도 있습니다.',
+      vietnam: '베트남에서도 이혼하는 꿈(mơ thấy ly hôn)은 부부 관계의 피로를 돌아보고 대화하라는 신호로 봅니다.',
+      cases: [
+        ['배우자와 이혼하는 꿈', '부부 사이가 새로워진다는 반대 해석이 있습니다.'],
+        ['이혼 서류에 도장 찍는 꿈', '묶여 있던 관계나 일을 정리하고 싶습니다.'],
+        ['부모님이 이혼하는 꿈', '집안의 변화에 대한 불안이 있습니다.'],
+        ['이혼 후 홀가분한 꿈', '독립과 새 출발을 원하는 마음입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy ly hôn', keywords: ['ly hôn', 'ly dị', 'vợ chồng cãi nhau'],
+      summary: 'Mơ ly hôn thường không phải chia tay thật, mà là muốn sắp xếp lại một mối quan hệ, nếp sống, hoặc muốn được tự lập.',
+      korea: 'Người Hàn xưa giải mơ ly hôn là giấc mơ ngược — vợ chồng làm mới tình cảm. Đó cũng có thể là mong muốn dứt khỏi mối ràng buộc như hùn vốn, công việc.',
+      vietnam: 'Người Việt xem đây là dấu hiệu mệt mỏi trong hôn nhân, nên trò chuyện cởi mở.',
+      cases: [
+        ['Mơ ly hôn với vợ/chồng', 'Theo cách giải ngược: tình cảm được làm mới.'],
+        ['Mơ ký giấy ly hôn', 'Muốn dứt khỏi ràng buộc, công việc cũ.'],
+        ['Mơ bố mẹ ly hôn', 'Lo lắng về biến động trong gia đình.'],
+        ['Mơ thấy nhẹ nhõm sau ly hôn', 'Mong muốn tự lập, bắt đầu lại.'],
+      ],
+    },
+  },
+  {
+    slug: 'military', category: 'people', tone: 'mixed', emoji: '🪖',
+    ko: {
+      name: '군대 가는 꿈', keywords: ['군대 꿈', '재입대 꿈', '입대', '군대 다시 가는 꿈'],
+      summary: '한국 남성들이 가장 많이 꾸는 악몽 가운데 하나인 "재입대 꿈"은 책임과 규율에 대한 압박을 뜻합니다.',
+      korea: '제대한 뒤 다시 군대에 가는 꿈은 회사나 집안에서 원치 않는 의무를 떠안을 때 자주 꿉니다. 전통 해몽으로는 군복을 입으면 조직에서 자리를 얻는다고도 봅니다. 꿈에서 무사히 전역하면 맡은 일을 잘 마무리한다는 뜻입니다.',
+      vietnam: '베트남에도 병역 의무(nghĩa vụ quân sự)가 있어, 군대 꿈은 규율과 책임감, 단체 생활의 부담을 뜻한다고 봅니다.',
+      cases: [
+        ['다시 군대에 가는 꿈', '원치 않는 의무나 압박이 있습니다. 혼자 다 떠안지 마세요.'],
+        ['군복을 입는 꿈', '조직에서 자리를 얻거나 책임이 커집니다.'],
+        ['전역하는 꿈', '맡은 일을 잘 마무리하고 자유로워집니다.'],
+        ['훈련이 힘든 꿈', '지금의 고생이 실력이 됩니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy đi nghĩa vụ quân sự', keywords: ['đi bộ đội', 'nghĩa vụ quân sự', 'quân đội', 'nhập ngũ'],
+      summary: '“Mơ phải đi lính lại” là ác mộng kinh điển của đàn ông Hàn Quốc — biểu hiện áp lực trách nhiệm và kỷ luật.',
+      korea: 'Đàn ông Hàn đều phải đi nghĩa vụ, nên đã xuất ngũ mà mơ phải nhập ngũ lần nữa là giấc mơ rất phổ biến, hay đến khi phải gánh việc không muốn ở công ty, gia đình. Giải mộng xưa cho rằng mặc quân phục là được vị trí trong tổ chức; xuất ngũ suôn sẻ là hoàn thành tốt nhiệm vụ.',
+      vietnam: 'Việt Nam cũng có nghĩa vụ quân sự, nên mơ đi bộ đội thường nói về kỷ luật, trách nhiệm và áp lực tập thể.',
+      cases: [
+        ['Mơ phải nhập ngũ lại', 'Áp lực nghĩa vụ không mong muốn — đừng ôm hết một mình.'],
+        ['Mơ mặc quân phục', 'Có vị trí trong tổ chức, trách nhiệm tăng.'],
+        ['Mơ xuất ngũ', 'Hoàn thành việc được giao, thấy tự do.'],
+        ['Mơ tập luyện vất vả', 'Vất vả hôm nay thành năng lực ngày mai.'],
+      ],
+    },
+  },
+  {
+    slug: 'bath', category: 'people', tone: 'good', emoji: '🛁',
+    ko: {
+      name: '목욕하는 꿈', keywords: ['목욕', '샤워', '씻는 꿈', '목욕탕'],
+      summary: '깨끗이 씻는 꿈은 근심과 묵은 기운을 씻어 내는 길몽입니다. 새 출발이나 건강 회복을 뜻합니다.',
+      korea: '맑은 물로 목욕하면 걱정이 사라지고 운이 새로워진다고 봅니다. 목욕탕에서 여러 사람과 함께 씻으면 사람들과 허물없이 지내게 되고, 물이 더러우면 정리할 일이 남아 있다는 뜻입니다.',
+      vietnam: '베트남에서도 목욕하는 꿈(mơ thấy tắm)은 액운을 씻고 새 출발을 한다는 뜻으로, 섣달그믐에 몸을 씻는 풍습과도 이어집니다.',
+      cases: [
+        ['맑은 물로 목욕하는 꿈', '근심이 씻기고 운이 새로워집니다.'],
+        ['목욕탕에서 여럿이 씻는 꿈', '사람들과 허물없이 가까워집니다.'],
+        ['더러운 물로 씻는 꿈', '정리할 일이 남아 있습니다.'],
+        ['샤워 후 상쾌한 꿈', '건강과 기분이 회복됩니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy tắm', keywords: ['tắm', 'tắm rửa', 'tắm gội', 'nhà tắm'],
+      summary: 'Tắm rửa sạch sẽ là điềm lành: gột bỏ phiền muộn, xui xẻo — khởi đầu mới hoặc sức khỏe hồi phục.',
+      korea: 'Người Hàn cho rằng tắm bằng nước trong là hết lo, vận mới; tắm cùng nhiều người ở nhà tắm công cộng là trở nên thân thiết với mọi người; nước bẩn là còn việc phải dọn dẹp.',
+      vietnam: 'Người Việt có tục tắm nước lá chiều Ba Mươi Tết để gột xui xẻo, nên mơ tắm là rửa sạch vận rủi, bắt đầu lại.',
+      cases: [
+        ['Mơ tắm nước trong', 'Hết phiền muộn, vận mới.'],
+        ['Mơ tắm chung nhiều người', 'Gần gũi, cởi mở với mọi người.'],
+        ['Mơ tắm nước bẩn', 'Còn việc cần dọn dẹp.'],
+        ['Mơ tắm xong thấy sảng khoái', 'Sức khỏe, tinh thần hồi phục.'],
+      ],
+    },
+  },
+  {
+    slug: 'kidnapped', category: 'people', tone: 'bad', emoji: '🚐',
+    ko: {
+      name: '납치당하는 꿈', keywords: ['납치', '납치 꿈', '끌려가는 꿈', '감금'],
+      summary: '납치당하는 꿈은 내 뜻대로 할 수 없는 상황에 끌려가고 있다는 불안을 뜻합니다.',
+      korea: '누군가에게 끌려가면 일정이나 관계에서 주도권을 잃었다는 느낌을 반영한다고 봅니다. 스스로 탈출하면 상황을 되찾고, 누군가 구해 주면 도움을 받아 벗어난다고 풉니다.',
+      vietnam: '베트남에서도 납치 꿈(mơ bị bắt cóc)은 압박감과 통제력 상실을 뜻하며, 주변 사람을 조심하라고 보기도 합니다.',
+      cases: [
+        ['모르는 사람에게 끌려가는 꿈', '주도권을 잃은 느낌입니다. 거절할 일은 거절하세요.'],
+        ['아는 사람에게 납치되는 꿈', '그 사람과의 관계에서 부담을 느낍니다.'],
+        ['스스로 탈출하는 꿈', '상황을 되찾고 자유로워집니다.'],
+        ['누군가 구해 주는 꿈', '도움을 받아 어려움을 벗어납니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ bị bắt cóc', keywords: ['bắt cóc', 'bị bắt đi', 'bị nhốt'],
+      summary: 'Mơ bị bắt cóc là nỗi lo bị cuốn vào hoàn cảnh mình không làm chủ được.',
+      korea: 'Người Hàn cho rằng bị người khác lôi đi là cảm giác mất quyền chủ động trong lịch trình, quan hệ; tự trốn thoát là giành lại thế chủ động; được cứu là có người giúp thoát khó.',
+      vietnam: 'Người Việt cũng giải đây là áp lực, mất kiểm soát, và đôi khi là lời nhắc cảnh giác với người xung quanh.',
+      cases: [
+        ['Mơ bị người lạ bắt đi', 'Mất thế chủ động — hãy biết từ chối.'],
+        ['Mơ bị người quen bắt cóc', 'Đang thấy nặng nề trong quan hệ với người đó.'],
+        ['Mơ tự trốn thoát', 'Giành lại tự do, làm chủ tình hình.'],
+        ['Mơ được giải cứu', 'Có người giúp vượt khó.'],
+      ],
+    },
+  },
+  {
+    slug: 'killing', category: 'people', tone: 'mixed', emoji: '🗡️',
+    ko: {
+      name: '사람을 죽이는 꿈', keywords: ['사람 죽이는 꿈', '살인하는 꿈', '살인 꿈'],
+      summary: '무섭지만 대표적인 반대 꿈입니다. 꿈속에서 누군가를 해치는 것은 묵은 문제나 낡은 나를 끝내고 새로 시작한다는 뜻입니다.',
+      korea: '한국 해몽에서는 사람을 죽이는 꿈을 골칫거리를 해결하고 큰 성과를 얻는 길몽으로 보기도 합니다. 피가 많이 나면 재물이 들어온다고 풉니다. 다만 죄책감에 시달리면 마음에 걸리는 일이 있다는 신호입니다.',
+      vietnam: '베트남에서도 이 꿈(mơ thấy giết người)을 실제 폭력과는 무관하게, 어려움을 끊어 내고 변화가 온다는 뜻으로 풉니다.',
+      cases: [
+        ['모르는 사람을 해치는 꿈', '묵은 문제를 끊어 내고 새로 시작합니다.'],
+        ['피가 많이 나는 꿈', '재물이 들어온다는 전통 해석이 있습니다.'],
+        ['죄책감에 시달리는 꿈', '마음에 걸리는 일을 정리할 때입니다.'],
+        ['누군가를 지키려다 싸우는 꿈', '소중한 것을 지키는 힘이 생깁니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy giết người', keywords: ['giết người', 'mơ giết người'],
+      summary: 'Đáng sợ nhưng đây là giấc mơ “giải ngược” điển hình: kết thúc vấn đề cũ, con người cũ để bắt đầu lại.',
+      korea: 'Giải mộng Hàn có khi coi mơ giết người là giải quyết xong việc rắc rối, đạt thành quả lớn; chảy nhiều máu còn là có tiền. Nhưng nếu day dứt tội lỗi thì trong lòng có việc chưa yên.',
+      vietnam: 'Người Việt cũng giải giấc mơ này không liên quan bạo lực thật, mà là cắt đứt khó khăn, thay đổi sắp đến.',
+      cases: [
+        ['Mơ giết người lạ', 'Dứt vấn đề cũ, bắt đầu mới.'],
+        ['Mơ thấy nhiều máu', 'Theo giải mộng Hàn: có tiền vào.'],
+        ['Mơ day dứt tội lỗi', 'Đến lúc giải quyết điều vướng bận.'],
+        ['Mơ đánh nhau để bảo vệ ai đó', 'Có sức mạnh giữ gìn điều quý giá.'],
+      ],
+    },
+  },
+];
