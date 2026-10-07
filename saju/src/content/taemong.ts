@@ -81,7 +81,7 @@ export const TAEMONG_TEXT: Record<Lang, TaemongText> = {
       { q: '베트남에도 태몽이 있나요?', a: '베트남에서도 임신 전후의 꿈을 "giấc mơ báo mộng có thai(아이를 알리는 꿈)"라고 부르며 의미를 찾습니다. 용·호랑이처럼 힘센 동물은 아들, 꽃·달처럼 고운 것은 딸이라는 비슷한 속설이 있어, 한·베 가정에서 양가 어른들과 함께 이야기 나누기 좋은 주제입니다.' },
     ],
     disclaimer: '태몽 풀이와 아들·딸 구분은 전통 속설에 따른 재미·참고용입니다. 아이의 성별이나 미래를 예측하지 않습니다.',
-    toNaming: '👶 한·베 아기 이름도 미리 검사해 보세요 →',
+    toNaming: '한·베 아기 이름도 미리 검사해 보세요 →',
     toDream: '꿈해몽 200가지 전체 보기 →',
   },
   vi: {
@@ -101,7 +101,7 @@ export const TAEMONG_TEXT: Record<Lang, TaemongText> = {
       { q: 'Người Việt có quan niệm này không?', a: 'Có. Người Việt cũng tìm ý nghĩa giấc mơ báo mộng có thai; dân gian thường nói mơ thấy rồng, hổ là con trai, mơ thấy hoa, trăng là con gái — rất giống người Hàn. Đây là chủ đề thú vị để gia đình Việt – Hàn cùng trò chuyện với ông bà hai bên.' },
     ],
     disclaimer: 'Giải mộng và việc đoán con trai – con gái chỉ dựa trên quan niệm dân gian, để tham khảo cho vui; không dự đoán giới tính hay tương lai của em bé.',
-    toNaming: '👶 Kiểm tra trước tên cho bé Việt – Hàn →',
+    toNaming: 'Kiểm tra trước tên cho bé Việt – Hàn →',
     toDream: 'Xem tất cả 200 giấc mơ →',
   },
 };

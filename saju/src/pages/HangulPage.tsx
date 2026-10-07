@@ -1,3 +1,4 @@
+import { Copy } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { vietnameseToHangul } from '../engine/hangul';
 import { parseKorean, romanizeName } from '../engine/names';
@@ -90,7 +91,7 @@ export function HangulPage({ query }: { query: string }) {
           {vi?.custom && <p className="gold">{x.custom(vi.custom)}</p>}
           {vi && vi.unknown.length > 0 && <p className="bad small">{x.unknown(vi.unknown.join(', '))}</p>}
           {mode === 'ko' && <p className="muted small">{x.romanNote}</p>}
-          <button type="button" className="btn btn-ghost" onClick={copy}>{copied ? x.copied : `📋 ${x.copy}`}</button>
+          <button type="button" className="btn btn-ghost" onClick={copy}>{copied ? x.copied : <><Copy className="line-icon" aria-hidden="true" /> {x.copy}</>}</button>
         </div>
       )}
 

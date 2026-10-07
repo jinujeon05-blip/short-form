@@ -29,7 +29,7 @@ export const PEOPLE_DREAMS_3: Dream[] = [
     },
   },
   {
-    slug: 'lover', category: 'people', tone: 'good', emoji: '💑',
+    slug: 'lover', category: 'people', tone: 'good', emoji: '💞',
     ko: {
       name: '애인 꿈', keywords: ['남자친구', '여자친구', '애인', '짝사랑', '좋아하는 사람'],
       summary: '애인이나 좋아하는 사람이 나오는 꿈은 그 사람에 대한 마음과 관계의 온도를 비춥니다. 다정한 꿈은 관계가 깊어질 신호입니다.',

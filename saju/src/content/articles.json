@@ -1241,7 +1241,7 @@
             "p": "문의: {{email}}"
           },
           {
-            "p": "국기 이모지가 표시되지 않는 환경(Windows 등)에서는 Twemoji Country Flags 글꼴(Twemoji, CC-BY 4.0)을 사용합니다."
+            "p": "국기 이모지가 표시되지 않는 환경(Windows 등)에서는 Twemoji Country Flags 글꼴(Twemoji, CC-BY 4.0)을 사용합니다. 띠·꿈 그림은 Microsoft Fluent Emoji(MIT 라이선스), 아이콘은 Lucide(ISC 라이선스)를 사용합니다."
           }
         ]
       },
@@ -1279,7 +1279,7 @@
             "p": "Liên hệ: {{email}}"
           },
           {
-            "p": "Trên các thiết bị không hiển thị được cờ emoji (như Windows), trang dùng phông Twemoji Country Flags (Twemoji, CC-BY 4.0)."
+            "p": "Trên các thiết bị không hiển thị được cờ emoji (như Windows), trang dùng phông Twemoji Country Flags (Twemoji, CC-BY 4.0). Hình minh họa con giáp và giấc mơ dùng Microsoft Fluent Emoji (giấy phép MIT), biểu tượng dùng Lucide (giấy phép ISC)."
           }
         ]
       }

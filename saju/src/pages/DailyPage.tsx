@@ -1,3 +1,4 @@
+import { Emoji } from '../components/Emoji';
 import { useMemo, useState } from 'react';
 import { jdnFromYmd, ymdFromJdn } from '../engine/astro';
 import { zodiacOfYear } from '../engine/almanac';
@@ -94,7 +95,7 @@ export function DailyIndexPage({ query }: { query: string }) {
           <li key={f.branch}>
             <Link to={dailyPath(f.branch)} search={dParam(jdn, today)} className="rank-item">
               <span className="rank-no">{i + 1}</span>
-              <span className="rank-emoji" aria-hidden="true">{t.animalEmoji[f.branch]}</span>
+              <span className="rank-emoji" aria-hidden="true"><Emoji e={t.animalEmoji[f.branch]} /></span>
               <span className="rank-body">
                 <b>{t.animals[f.branch]} <span className="muted small">{t.branches[f.branch]}</span></b>
                 <span className="muted small">{t.fortune.overall[f.stars as Level][f.seed % 3]}</span>
@@ -130,7 +131,7 @@ export function DailyZodiacPage({ zodiac, query }: { zodiac: number; query: stri
     <article className="article daily">
       <p className="eyebrow left"><Link to="/daily" search={dParam(jdn, today)}>← {x.indexTitle}</Link></p>
       <div className="yearly-hero">
-        <span className="yearly-emoji" aria-hidden="true">{t.animalEmoji[zodiac]}</span>
+        <span className="yearly-emoji" aria-hidden="true"><Emoji e={t.animalEmoji[zodiac]} /></span>
         <div>
           <h1 className="article-title">{x.zodiacTitle(animal)}</h1>
           <p className="gold small">{dateLine(info, t, lang)}</p>
@@ -205,7 +206,7 @@ export function DailyZodiacPage({ zodiac, query }: { zodiac: number; query: stri
       <h2 className="article-h">{x.others}</h2>
       <div className="other-zodiacs">
         {t.animals.map((a, z) => (z === zodiac ? null : (
-          <Link key={z} to={dailyPath(z)} search={dParam(jdn, today)} className="chip">{t.animalEmoji[z]} {a}</Link>
+          <Link key={z} to={dailyPath(z)} search={dParam(jdn, today)} className="chip"><Emoji e={t.animalEmoji[z]} /> {a}</Link>
         )))}
       </div>
       <p className="muted small center">{x.disclaimer}</p>

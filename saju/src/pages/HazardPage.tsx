@@ -1,3 +1,5 @@
+import { Link2 } from 'lucide-react';
+import { Emoji } from '../components/Emoji';
 import { useMemo, useState } from 'react';
 import { cycleBranch, yearCycle } from '../engine/ganzhi';
 import { Custom, HOANG_OC_BAD, YearCheck, checkYear, houseOk, samjaeRuns, weddingOk } from '../engine/hazard';
@@ -91,7 +93,7 @@ export function HazardPage({ query }: { query: string }) {
 
           <div className="panel">
             <h2 className="panel-title">
-              {h.resultTitle(year)} · {t.animalEmoji[zodiac]} {t.animals[zodiac]} · {h.ageText(c.age)}
+              {h.resultTitle(year)} · <Emoji e={t.animalEmoji[zodiac]} /> {t.animals[zodiac]} · {h.ageText(c.age)}
             </h2>
             <p className="muted small"><GanzhiChip cycle={c.cycle} /> {cycleName(c.cycle, t)}</p>
             <div className="hazard-grid">
@@ -164,7 +166,7 @@ export function HazardPage({ query }: { query: string }) {
           </p>
           <div className="result-actions">
             <button type="button" className="btn btn-ghost" onClick={() => navigator.clipboard?.writeText(location.href)}>
-              🔗 {h.share}
+              <Link2 className="line-icon" aria-hidden="true" /> {h.share}
             </button>
             {FORTUNE_YEARS.map((fy) => (
               <Link key={fy} className="btn btn-gold" to={fortunePath(fy, zodiac)}>{h.fortuneCta(fy)} →</Link>
@@ -181,7 +183,7 @@ export function HazardPage({ query }: { query: string }) {
           <tbody>
             {GROUPS.map((g) => (
               <tr key={g[0]} className={g.includes(zodiac) ? 'on' : ''}>
-                <th scope="row">{g.map((z) => `${t.animalEmoji[z]} ${t.animals[z]}`).join(' · ')}</th>
+                <th scope="row">{g.map((z, i) => <span key={z}>{i > 0 && ' · '}<Emoji e={t.animalEmoji[z]} /> {t.animals[z]}</span>)}</th>
                 <td>{samjaeRuns(g[0], now - 2, now + 22).map((s) => `${s}–${s + 2}`).join(' / ')}</td>
               </tr>
             ))}

@@ -1,3 +1,5 @@
+import { Sparkles } from 'lucide-react';
+import { Emoji } from '../components/Emoji';
 import { useState } from 'react';
 import { Lean, TAEMONG, TAEMONG_TEXT } from '../content/taemong';
 import { useI18n } from '../i18n';
@@ -27,7 +29,7 @@ export function TaemongPage() {
         {list.map((s) => (
           <Link key={s.slug} to={dreamPath(s.slug)} className="panel taemong-card">
             <span className="taemong-head">
-              <span className="dream-emoji" aria-hidden="true">{s.emoji}</span>
+              <span className="dream-emoji" aria-hidden="true"><Emoji e={s.emoji} /></span>
               <b>{s[lang].name}</b>
               <span className={`tag lean-${s.lean}`}>{x.leanTag[s.lean]}</span>
             </span>
@@ -48,7 +50,7 @@ export function TaemongPage() {
         </section>
       ))}
 
-      <p className="panel center"><Link to="/naming">{x.toNaming}</Link></p>
+      <p className="panel center"><Link to="/naming"><Sparkles className="line-icon" aria-hidden="true" /> {x.toNaming}</Link></p>
       <p className="center"><Link to="/dream">{x.toDream}</Link></p>
     </article>
   );

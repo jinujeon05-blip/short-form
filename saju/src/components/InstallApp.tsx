@@ -1,3 +1,4 @@
+import { Smartphone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Lang, useI18n } from '../i18n';
 
@@ -29,7 +30,7 @@ const TEXT: Record<Lang, {
   steps: { k: string; v: string }[];
 }> = {
   ko: {
-    title: '📲 명월을 앱으로 설치하기',
+    title: '명월을 앱으로 설치하기',
     desc: '설치하면 주소창 없이 앱처럼 열리고, 홈 화면에서 바로 오늘의 음력과 운세를 볼 수 있어요.',
     install: '앱 설치',
     how: '설치 방법 보기',
@@ -42,7 +43,7 @@ const TEXT: Record<Lang, {
     ],
   },
   vi: {
-    title: '📲 Cài Minh Nguyệt như ứng dụng',
+    title: 'Cài Minh Nguyệt như ứng dụng',
     desc: 'Sau khi cài, trang mở toàn màn hình như ứng dụng, không còn thanh địa chỉ — xem lịch âm và tử vi ngay từ màn hình chính.',
     install: 'Cài ứng dụng',
     how: 'Xem cách cài',
@@ -99,7 +100,7 @@ export function InstallApp() {
   return (
     <section className="cta-band install-band">
       <div>
-        <h2 className="section-title">{x.title}</h2>
+        <h2 className="section-title"><Smartphone className="line-icon" aria-hidden="true" /> {x.title}</h2>
         <p className="section-desc">{done ? x.done : x.desc}</p>
         {open && (
           <ul className="install-steps">

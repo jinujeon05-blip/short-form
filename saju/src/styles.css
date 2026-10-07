@@ -674,3 +674,14 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 .lean-boy { background: rgba(110, 160, 230, 0.16); color: #9cc3f5; }
 .lean-girl { background: rgba(240, 140, 180, 0.16); color: #f3a9c7; }
 .lean-either { background: rgba(226, 192, 122, 0.12); color: var(--gold-soft); }
+/* Fluent emoji images: inline in text, 1em inside the big emoji slots */
+.emo { display: inline-block; width: 1.25em; height: 1.25em; vertical-align: -0.28em; }
+.zodiac-emoji .emo, .fortune-emoji .emo, .match-emoji .emo, .year-banner-emoji .emo, .rank-emoji .emo, .yearly-emoji .emo, .dream-emoji .emo {
+  width: 1em; height: 1em; vertical-align: middle;
+}
+/* Gold line icons (lucide) */
+.line-icon { width: 0.9em; height: 0.9em; vertical-align: -0.1em; color: var(--gold); stroke-width: 1.6; flex-shrink: 0; }
+.cta-band .section-title .line-icon { margin-right: 0.3em; }
+.line-icon.heart-b { color: #7fb2f0; }
+.good .line-icon { color: var(--good); }
+.btn-gold .line-icon { color: currentColor; }

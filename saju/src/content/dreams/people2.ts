@@ -245,7 +245,7 @@ export const PEOPLE_DREAMS_2: Dream[] = [
     },
   },
   {
-    slug: 'parents', category: 'people', tone: 'good', emoji: '👨‍👩‍👧',
+    slug: 'parents', category: 'people', tone: 'good', emoji: '🏡',
     ko: {
       name: '부모님 꿈', keywords: ['엄마 꿈', '아빠 꿈', '부모님 꿈', '어머니 꿈'],
       summary: '살아 계신 부모님이 나오는 꿈은 보살핌과 그리움, 그리고 내 삶의 기반을 뜻합니다. 부모님이 밝으면 집안이 평안합니다.',

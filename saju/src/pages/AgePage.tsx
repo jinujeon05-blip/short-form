@@ -1,3 +1,5 @@
+import { Link2 } from 'lucide-react';
+import { Emoji } from '../components/Emoji';
 import { useMemo, useState } from 'react';
 import { jdnFromYmd, weekdayFromJdn, ymdFromJdn } from '../engine/astro';
 import { yearCycle } from '../engine/ganzhi';
@@ -133,8 +135,8 @@ export function AgePage({ query }: { query: string }) {
       {result && <AgeResultView a={result} />}
       {result && (
         <div className="result-actions">
-          <button type="button" className="btn btn-ghost" onClick={copy}>{copied ? x.copied : `🔗 ${x.share}`}</button>
-          <Link className="btn btn-ghost" to={dailyPath(result.zodiac)}>{t.animalEmoji[result.zodiac]} {t.zodiac.title} →</Link>
+          <button type="button" className="btn btn-ghost" onClick={copy}>{copied ? x.copied : <><Link2 className="line-icon" aria-hidden="true" /> {x.share}</>}</button>
+          <Link className="btn btn-ghost" to={dailyPath(result.zodiac)}><Emoji e={t.animalEmoji[result.zodiac]} /> {t.zodiac.title} →</Link>
           <Link className="btn btn-ghost" to="/samjae" search={`?b=${result.lunarBirth.year}`}>{lang === 'vi' ? 'Tam Tai · Kim Lâu' : '삼재 계산기'} →</Link>
         </div>
       )}
@@ -170,7 +172,7 @@ function AgeResultView({ a }: { a: AgeResult }) {
   const adultJdn = jdnFromYmd(a.birth.y + adultAge, a.birth.m, a.birth.d);
   const birthCycle = yearCycle(a.lunarBirth.year);
   const facts = [
-    { k: x.zodiac, v: <>{t.animalEmoji[a.zodiac]} {t.animals[a.zodiac]} · <GanzhiChip cycle={birthCycle} /> {cycleName(birthCycle, t)}</> },
+    { k: x.zodiac, v: <><Emoji e={t.animalEmoji[a.zodiac]} /> {t.animals[a.zodiac]} · <GanzhiChip cycle={birthCycle} /> {cycleName(birthCycle, t)}</> },
     { k: x.lunarBirth, v: `${a.lunarBirth.year}${lang === 'ko' ? '년 ' : ' · '}${lunarText(a.lunarBirth, t, lang)}` },
     { k: x.bornOn, v: dateText(a.birthJdn, t, lang) },
     { k: x.daysLived, v: x.days(a.daysLived) },
@@ -235,7 +237,7 @@ function AgeTable({ year }: { year: number }) {
                 <th scope="row">{r.year}</th>
                 <td>{Math.max(0, r.intlBefore)} / {r.intlAfter}</td>
                 <td>{r.count}</td>
-                <td>{t.animalEmoji[r.zodiac]} {t.animals[r.zodiac]} <span className="muted small">{cycleName(r.cycle, t)}</span></td>
+                <td><Emoji e={t.animalEmoji[r.zodiac]} /> {t.animals[r.zodiac]} <span className="muted small">{cycleName(r.cycle, t)}</span></td>
               </tr>
             ))}
           </tbody>

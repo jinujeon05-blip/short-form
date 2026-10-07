@@ -1,3 +1,5 @@
+import { Baby, Cake, Heart, Moon, Shield, Sparkles } from 'lucide-react';
+import { Emoji } from '../components/Emoji';
 import { useState } from 'react';
 import { MoonPhase, phaseName } from '../components/MoonPhase';
 import { dayInfo } from '../engine/almanac';
@@ -59,7 +61,7 @@ export function Home() {
       <TodayCard info={info} basis={basis} />
 
       <Link to="/fortune/2027" className="year-banner">
-        <span className="year-banner-emoji" aria-hidden="true">{lang === 'vi' ? '🐐' : '🐑'}</span>
+        <span className="year-banner-emoji" aria-hidden="true"><Emoji e={lang === 'vi' ? '🐐' : '🐑'} /></span>
         <span>
           <b>{YEARLY[lang].homeBand(2027)}</b>
           <span className="muted small">{YEARLY[lang].homeBandDesc}</span>
@@ -85,7 +87,7 @@ export function Home() {
 
       <section className="cta-band">
         <div>
-          <h2 className="section-title">💛 {t.match.title} 💙</h2>
+          <h2 className="section-title"><Heart className="line-icon" aria-hidden="true" />{t.match.title}</h2>
           <p className="section-desc">{t.match.desc}</p>
         </div>
         <Link className="btn btn-gold" to="/match">{t.match.submit} ♥</Link>
@@ -94,7 +96,7 @@ export function Home() {
       <section className="cta-band cta-new">
         <div>
           <span className="new-badge">NEW</span>
-          <h2 className="section-title">✨ {HOME_NAMING[lang].title}</h2>
+          <h2 className="section-title"><Sparkles className="line-icon" aria-hidden="true" />{HOME_NAMING[lang].title}</h2>
           <p className="section-desc">{HOME_NAMING[lang].desc}</p>
           <p className="cta-example">Nguyễn Minh Anh → <b>민아</b> <span className="hanja-line">敏雅</span> · 서준 → <span className="bad">giun?</span></p>
         </div>
@@ -111,7 +113,7 @@ export function Home() {
 
       <section className="cta-band">
         <div>
-          <h2 className="section-title">🌙 {DREAM_UI[lang].title}</h2>
+          <h2 className="section-title"><Moon className="line-icon" aria-hidden="true" />{DREAM_UI[lang].title}</h2>
           <p className="section-desc">{DREAM_UI[lang].lead}</p>
         </div>
         <Link className="btn btn-gold" to="/dream">{lang === 'vi' ? 'Giải mộng' : '꿈해몽 보기'} →</Link>
@@ -119,7 +121,7 @@ export function Home() {
 
       <section className="cta-band">
         <div>
-          <h2 className="section-title">🤰 {HOME_TAEMONG[lang].title}</h2>
+          <h2 className="section-title"><Baby className="line-icon" aria-hidden="true" />{HOME_TAEMONG[lang].title}</h2>
           <p className="section-desc">{HOME_TAEMONG[lang].desc}</p>
         </div>
         <Link className="btn btn-gold" to="/taemong">{HOME_TAEMONG[lang].cta} →</Link>
@@ -127,7 +129,7 @@ export function Home() {
 
       <section className="cta-band">
         <div>
-          <h2 className="section-title">🎂 {AGE[lang].title}</h2>
+          <h2 className="section-title"><Cake className="line-icon" aria-hidden="true" />{AGE[lang].title}</h2>
           <p className="section-desc">{AGE[lang].lead}</p>
         </div>
         <Link className="btn btn-gold" to="/age">{AGE[lang].calc} →</Link>
@@ -135,7 +137,7 @@ export function Home() {
 
       <section className="cta-band">
         <div>
-          <h2 className="section-title">🛡️ {HAZARD[lang].title}</h2>
+          <h2 className="section-title"><Shield className="line-icon" aria-hidden="true" />{HAZARD[lang].title}</h2>
           <p className="section-desc">{HAZARD[lang].lead}</p>
         </div>
         <Link className="btn btn-gold" to="/samjae">{HAZARD[lang].check} →</Link>

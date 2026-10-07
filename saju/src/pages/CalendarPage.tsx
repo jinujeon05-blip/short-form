@@ -1,3 +1,4 @@
+import { Emoji } from '../components/Emoji';
 import { useMemo, useState } from 'react';
 import { jdnFromYmd } from '../engine/astro';
 import { PURPOSES, Purpose, dayInfo, holidaysOf, personalClash, suitsPurpose, upcomingDays, zodiacOfYear } from '../engine/almanac';
@@ -77,7 +78,7 @@ export function CalendarPage({ purpose: routePurpose = null }: { purpose?: Purpo
         <label className="my-year">
           <span className="k">{t.calendar.myYear}</span>
           <input inputMode="numeric" value={birthYear} placeholder="1990" onChange={(e) => setBirthYear(e.target.value)} />
-          {personalBranch !== null && <span>{t.animalEmoji[personalBranch]} {t.animals[personalBranch]}</span>}
+          {personalBranch !== null && <span><Emoji e={t.animalEmoji[personalBranch]} /> {t.animals[personalBranch]}</span>}
         </label>
       </div>
 
