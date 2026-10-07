@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { initialLaw, koReading, parseKorean, parseVietnamese, romanizeName, soundElement } from './names';
+import { TOP_SURNAMES } from '../content/nameGuide';
 
 describe('names', () => {
   it('applies 두음법칙', () => {
@@ -51,5 +52,23 @@ describe('names', () => {
     expect(soundElement('영')).toBe(2);
     expect(soundElement('서')).toBe(3);
     expect(soundElement('란')).toBe(1);
+  });
+});
+
+describe('name guide examples', () => {
+  const ko = (n: string) => {
+    const p = parseVietnamese(n);
+    return { ko: p.map((x, i) => koReading(x.candidates[0], i)).join(''), h: p.map((x) => x.candidates[0].h).join('') };
+  };
+  it('keeps the historical hanja for famous names', () => {
+    expect(ko('Hồ Chí Minh')).toEqual({ ko: '호지명', h: '胡志明' });
+    expect(ko('Trần Hưng Đạo')).toEqual({ ko: '진흥도', h: '陳興道' });
+    expect(ko('Lý Long Tường')).toEqual({ ko: '이용상', h: '李龍祥' });
+    expect(ko('Võ Nguyên Giáp')).toEqual({ ko: '무원갑', h: '武元甲' });
+  });
+  it('covers the top surnames', () => {
+    for (const s of TOP_SURNAMES) expect(parseVietnamese(s)[0].candidates.length).toBeGreaterThan(0);
+    expect(ko('Nguyễn').ko).toBe('완');
+    expect(ko('Lâm').ko).toBe('임');
   });
 });

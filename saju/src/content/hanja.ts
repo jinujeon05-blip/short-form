@@ -480,6 +480,40 @@ const RAW = `
 晧|호|Hạo|밝다|sáng|g
 鎬|호|Cảo|호경(서울 이름)|đất Hạo Kinh|g
 玟|민|Mân|옥돌|ngọc mân|g
+農|농|Nông|농사|nông nghiệp|s
+歐|구|Âu|노래하다·구라파|họ Âu|s
+譚|담|Đàm|이야기하다|đàm luận|s
+翁|옹|Ông|늙은이|ông lão|s
+曲|곡|Khúc|굽다·노래|khúc ca|s
+駱|락|Lạc|낙타|lạc đà|s
+傅|부|Phó|스승|thầy dạy|s
+賴|뢰|Lại|힘입다|nhờ cậy|s
+應|응|Ứng|응하다|ứng đáp|s
+麥|맥|Mạch|보리|lúa mạch|s
+凌|릉|Lăng|넘다·얼음|vượt lên|s
+龔|공|Cung|공손하다|họ Cung|s
+妙|묘|Diệu|묘하다|kỳ diệu|g
+克|극|Khắc|이기다|khắc phục|g
+釧|천|Xuyến|팔찌|vòng tay|g
+甲|갑|Giáp|첫째·갑옷|đứng đầu|g
+福|복|Phước|복|phúc lành (giọng Nam)|g
+決|결|Quyết|결단하다|quyết đoán|g
+士|사|Sĩ|선비|kẻ sĩ|g
+士|사|Sỹ|선비|kẻ sĩ|g
+樂|락|Lạc|즐겁다|vui vẻ|g
+愛|애|Ái|사랑|yêu thương|g
+合|합|Hợp|합하다|hòa hợp|g
+沙|사|Sa|모래|cát|g
+釵|차|Thoa|비녀|cây trâm|g
+茶|다|Trà|차|trà|g
+妮|니|Ni|계집아이|cô gái nhỏ|g
+貴|귀|Quí|귀하다|quý giá|g
+盈|영|Doanh|가득 차다|đầy đủ|g
+筍|순|Duẩn|죽순|măng tre|g
+交|교|Giao|사귀다|giao kết|g
+會|회|Hội|모이다|hội họp|g
+戀|련|Luyến|그리워하다|quyến luyến|g
+話|화|Thoại|말하다|lời nói|g
 `;
 
 export type Role = 's' | 'g';

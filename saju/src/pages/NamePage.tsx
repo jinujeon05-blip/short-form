@@ -8,6 +8,7 @@ import { ELEMENT_CLASS, Section } from '../components/common';
 import { ShareImageButton } from '../components/ShareImage';
 import { NameCardData, drawNameCard } from '../components/cards';
 import { AdSlot } from '../components/AdSlot';
+import { FAMOUS_NAMES, NAME_GUIDE, TOP_SURNAMES } from '../content/nameGuide';
 import { Link, hrefFor } from '../router';
 
 type Mode = 'toKo' | 'toVi';
@@ -82,6 +83,18 @@ export function NamePage({ query }: { query: string }) {
     setMode(m);
     setText('');
     setPicks([]);
+  };
+
+  const g = NAME_GUIDE[lang];
+  const tryName = (v: string) => {
+    setMode('toKo');
+    changeText(v);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const convert = (v: string) => {
+    const p = parseVietnamese(v);
+    const ko = p.map((x, i) => (x.candidates[0] ? koReading(x.candidates[0], i) : x.input));
+    return { ko: ko.join(''), hanja: p.map((x) => x.candidates[0]?.h ?? '?').join(''), roman: romanizeName(ko[0], ko.slice(1)) };
   };
 
   const ready = chosen.length > 0 && chosen.some((c) => c.entry);
@@ -215,6 +228,47 @@ export function NamePage({ query }: { query: string }) {
           <AdSlot name="result" />
         </>
       )}
+
+      <h2 className="article-h">{g.famousTitle}</h2>
+      <p className="muted">{g.famousDesc}</p>
+      <div className="famous-names">
+        {FAMOUS_NAMES.map((n) => {
+          const c = convert(n);
+          return (
+            <button type="button" key={n} className="panel famous-name" onClick={() => tryName(n)}>
+              <span className="muted small">{n}</span>
+              <b>{c.ko} <span className="hanja-line">{c.hanja}</span></b>
+              <span className="small">{g.famousNote[n]}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <h2 className="article-h">{g.surTitle}</h2>
+      <p className="muted">{g.surDesc}</p>
+      <div className="sur-grid">
+        {TOP_SURNAMES.map((n) => {
+          const c = convert(n);
+          return (
+            <button type="button" key={n} onClick={() => tryName(n)}>
+              <span className="small">{n}</span>
+              <b>{c.ko}</b>
+              <span className="muted small">{c.hanja} · {c.roman}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <h2 className="article-h">{g.lyTitle}</h2>
+      {g.ly.map((p) => <p key={p.slice(0, 20)}>{p}</p>)}
+
+      <h2 className="article-h">{g.faqTitle}</h2>
+      {g.faq.map((f) => (
+        <section key={f.q}>
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
+        </section>
+      ))}
     </Section>
   );
 }
