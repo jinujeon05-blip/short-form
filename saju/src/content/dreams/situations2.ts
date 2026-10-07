@@ -1,0 +1,301 @@
+import type { Dream } from './types';
+
+export const SITUATION_DREAMS_2: Dream[] = [
+  {
+    slug: 'shoes', category: 'situation', tone: 'mixed', emoji: '👟',
+    ko: {
+      name: '신발 꿈', keywords: ['신발', '신발 잃어버리는 꿈', '새 신발', '구두'],
+      summary: '신발은 나의 자리와 동반자를 뜻합니다. 새 신발을 신으면 새 출발, 신발을 잃으면 자리나 관계를 살피라는 뜻입니다.',
+      korea: '새 신발을 신는 꿈은 새 직장이나 좋은 인연을 만난다는 뜻이고, 신발이 꼭 맞으면 자리가 안정된다고 봅니다. 신발을 잃어버리는 꿈은 직장·지위나 가까운 관계에 변화가 생길 수 있으니 살피라는 뜻으로 풉니다.',
+      vietnam: '베트남에서도 신발(giày dép) 꿈은 나아갈 길과 동반자를 뜻하며, 신발을 잃으면 계획이 틀어질 수 있다고 봅니다.',
+      cases: [
+        ['새 신발을 신는 꿈', '새 출발이나 좋은 인연이 생깁니다.'],
+        ['신발이 꼭 맞는 꿈', '내 자리가 안정됩니다.'],
+        ['신발을 잃어버리는 꿈', '직장이나 관계의 변화를 살피세요.'],
+        ['신발이 해지거나 짝짝이인 꿈', '준비를 다시 점검할 때입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy giày dép', keywords: ['giày', 'dép', 'mất giày', 'giày mới'],
+      summary: 'Giày dép tượng trưng cho vị trí của bạn và người đồng hành. Đi giày mới là khởi đầu mới; mất giày là nên để ý công việc, quan hệ.',
+      korea: 'Người Hàn cho rằng đi giày mới là có việc mới hoặc duyên lành; giày vừa chân là vị trí ổn định; mất giày là công việc, địa vị hay quan hệ gần gũi có thể thay đổi.',
+      vietnam: 'Người Việt cũng xem giày dép là con đường và người đồng hành; mất giày là kế hoạch dễ trục trặc.',
+      cases: [
+        ['Mơ đi giày mới', 'Khởi đầu mới hoặc duyên lành.'],
+        ['Mơ giày vừa chân', 'Vị trí của bạn ổn định.'],
+        ['Mơ mất giày', 'Để ý thay đổi trong công việc, quan hệ.'],
+        ['Mơ giày rách hoặc lệch đôi', 'Xem lại sự chuẩn bị.'],
+      ],
+    },
+  },
+  {
+    slug: 'mirror', category: 'situation', tone: 'mixed', emoji: '🪞',
+    ko: {
+      name: '거울 꿈', keywords: ['거울', '거울 깨지는 꿈', '거울 보는 꿈'],
+      summary: '거울은 나 자신을 돌아보는 상징입니다. 맑은 거울은 진실과 좋은 평판, 깨진 거울은 관계의 금을 뜻합니다.',
+      korea: '맑은 거울에 내 얼굴이 밝게 비치면 평판이 좋아지고 일이 투명하게 풀린다고 봅니다. 거울이 깨지면 가까운 관계에 금이 갈 수 있으니 말조심하라는 뜻이고, 거울에 다른 사람이 비치면 그 사람과 깊은 인연이 생긴다고 풉니다.',
+      vietnam: '베트남에서도 거울(gương)이 깨지는 꿈은 좋지 않게 보아, 가족이나 연인과의 다툼을 조심하라고 풉니다.',
+      cases: [
+        ['맑은 거울에 얼굴이 비치는 꿈', '평판이 좋아지고 일이 투명하게 풀립니다.'],
+        ['거울이 깨지는 꿈', '가까운 관계에서 말조심하세요.'],
+        ['거울에 다른 사람이 비치는 꿈', '그 사람과 깊은 인연이 생깁니다.'],
+        ['거울을 닦는 꿈', '오해를 풀고 관계를 회복합니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy gương', keywords: ['gương', 'gương vỡ', 'soi gương'],
+      summary: 'Gương là biểu tượng nhìn lại bản thân. Gương trong là sự thật và danh tiếng tốt; gương vỡ là quan hệ rạn nứt.',
+      korea: 'Người Hàn cho rằng soi gương sáng thấy mặt mình rạng rỡ là danh tiếng tốt, việc minh bạch; gương vỡ là quan hệ thân thiết dễ rạn, nên giữ lời; thấy người khác trong gương là sắp có duyên sâu với người đó.',
+      vietnam: 'Người Việt cũng kiêng gương vỡ, giải là nên tránh cãi vã với gia đình, người yêu.',
+      cases: [
+        ['Mơ soi gương sáng', 'Danh tiếng tốt, việc minh bạch.'],
+        ['Mơ gương vỡ', 'Giữ lời với người thân.'],
+        ['Mơ thấy người khác trong gương', 'Có duyên sâu với người đó.'],
+        ['Mơ lau gương', 'Hóa giải hiểu lầm, hàn gắn quan hệ.'],
+      ],
+    },
+  },
+  {
+    slug: 'key', category: 'situation', tone: 'good', emoji: '🔑',
+    ko: {
+      name: '열쇠 꿈', keywords: ['열쇠', '열쇠 잃어버리는 꿈', '자물쇠', '문 여는 꿈'],
+      summary: '열쇠는 문제 해결의 실마리와 새로운 기회를 뜻합니다. 열쇠를 얻으면 막힌 일이 열리는 길몽입니다.',
+      korea: '열쇠를 받거나 줍는 꿈은 해결책이나 권한, 새 집·새 자리를 얻는다는 뜻으로 봅니다. 문이 잘 열리면 일이 순조롭고, 열쇠를 잃어버리면 기회를 놓치지 않게 서류와 일정을 챙기라는 뜻입니다.',
+      vietnam: '베트남에서도 열쇠(chìa khóa) 꿈은 기회와 해결책, 신뢰를 뜻합니다.',
+      cases: [
+        ['열쇠를 받는 꿈', '권한이나 새 자리를 얻습니다.'],
+        ['열쇠로 문을 여는 꿈', '막힌 일이 열리고 순조롭습니다.'],
+        ['열쇠를 잃어버리는 꿈', '서류와 일정을 꼼꼼히 챙기세요.'],
+        ['문이 열리지 않는 꿈', '다른 방법을 찾아볼 때입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy chìa khóa', keywords: ['chìa khóa', 'mất chìa khóa', 'mở cửa'],
+      summary: 'Chìa khóa là manh mối giải quyết vấn đề và cơ hội mới. Có được chìa khóa là việc bế tắc sắp mở ra.',
+      korea: 'Người Hàn cho rằng được cho hay nhặt chìa khóa là có lời giải, quyền hạn, nhà mới hay vị trí mới; mở cửa dễ dàng là việc suôn sẻ; mất chìa khóa là nên giữ kỹ giấy tờ, lịch hẹn.',
+      vietnam: 'Người Việt cũng xem chìa khóa là cơ hội, lời giải và sự tin tưởng.',
+      cases: [
+        ['Mơ được trao chìa khóa', 'Có quyền hạn hoặc vị trí mới.'],
+        ['Mơ mở cửa bằng chìa khóa', 'Việc bế tắc được khai thông.'],
+        ['Mơ mất chìa khóa', 'Giữ kỹ giấy tờ, lịch trình.'],
+        ['Mơ cửa không mở được', 'Đến lúc thử cách khác.'],
+      ],
+    },
+  },
+  {
+    slug: 'clothes', category: 'situation', tone: 'good', emoji: '👗',
+    ko: {
+      name: '옷 꿈', keywords: ['옷', '새 옷', '한복', '옷 입는 꿈'],
+      summary: '옷은 나의 체면과 역할을 뜻합니다. 새 옷이나 고운 한복을 입으면 지위가 오르거나 경사가 생기는 길몽입니다.',
+      korea: '새 옷이나 비단옷을 입는 꿈은 승진, 합격, 결혼 같은 경사를 뜻합니다. 옷이 더럽거나 찢어지면 체면이 상할 일을 조심하라는 뜻이고, 남에게 옷을 선물받으면 도움을 받는다고 봅니다.',
+      vietnam: '베트남에서도 새 옷(quần áo mới), 특히 아오자이를 입는 꿈은 기쁜 일과 좋은 평판을 뜻합니다.',
+      cases: [
+        ['새 옷을 입는 꿈', '새 역할이나 경사가 생깁니다.'],
+        ['고운 한복을 입는 꿈', '결혼이나 축하받을 일이 있습니다.'],
+        ['옷이 더럽거나 찢어지는 꿈', '체면이 상하지 않도록 말과 행동을 조심하세요.'],
+        ['옷을 선물받는 꿈', '도움이나 인정을 받습니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy quần áo mới', keywords: ['quần áo', 'áo mới', 'áo dài', 'mặc đồ mới'],
+      summary: 'Quần áo là thể diện và vai trò của bạn. Mặc đồ mới hay hanbok đẹp là điềm thăng tiến, có hỷ sự.',
+      korea: 'Người Hàn cho rằng mặc đồ mới, áo lụa là thăng chức, thi đỗ, cưới hỏi; quần áo bẩn rách là nên giữ thể diện; được tặng áo là được giúp đỡ.',
+      vietnam: 'Người Việt cũng xem mặc áo mới, nhất là áo dài, là có chuyện vui, được khen ngợi.',
+      cases: [
+        ['Mơ mặc áo mới', 'Vai trò mới hoặc chuyện vui.'],
+        ['Mơ mặc hanbok, áo dài đẹp', 'Có tin cưới hỏi, được chúc mừng.'],
+        ['Mơ quần áo bẩn, rách', 'Giữ gìn lời nói, hành động để khỏi mất thể diện.'],
+        ['Mơ được tặng quần áo', 'Được giúp đỡ, được công nhận.'],
+      ],
+    },
+  },
+  {
+    slug: 'lost', category: 'situation', tone: 'mixed', emoji: '🧭',
+    ko: {
+      name: '길을 잃는 꿈', keywords: ['길 잃는 꿈', '헤매는 꿈', '미로'],
+      summary: '길을 잃는 꿈은 방향을 정하지 못한 고민을 비춥니다. 결국 길을 찾으면 답을 얻는다는 뜻입니다.',
+      korea: '진로나 관계에서 갈림길에 서 있을 때 자주 꾸는 꿈입니다. 낯선 곳에서 헤매면 새로운 환경이 부담스럽다는 뜻이고, 누군가 길을 알려 주면 조언자를 만난다고 봅니다.',
+      vietnam: '베트남에서도 길을 잃는 꿈(mơ thấy lạc đường)은 결정을 망설이는 마음으로 풀며, 길을 찾으면 문제가 풀린다고 봅니다.',
+      cases: [
+        ['낯선 곳에서 헤매는 꿈', '새 환경이 부담스럽습니다. 천천히 적응하세요.'],
+        ['누군가 길을 알려 주는 꿈', '좋은 조언자를 만납니다.'],
+        ['결국 길을 찾는 꿈', '고민하던 일의 답을 얻습니다.'],
+        ['미로에 갇히는 꿈', '선택지를 줄이고 하나씩 시도해 보세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy lạc đường', keywords: ['lạc đường', 'đi lạc', 'mê cung'],
+      summary: 'Mơ lạc đường phản ánh nỗi băn khoăn chưa chọn được hướng đi. Cuối cùng tìm được đường là sẽ có lời giải.',
+      korea: 'Người Hàn cho rằng giấc mơ này hay đến khi đứng trước ngã rẽ về sự nghiệp, tình cảm; lạc nơi xa lạ là áp lực môi trường mới; có người chỉ đường là gặp người khuyên bảo tốt.',
+      vietnam: 'Người Việt cũng giải đây là sự do dự; tìm được đường là vấn đề được giải.',
+      cases: [
+        ['Mơ lạc ở nơi xa lạ', 'Áp lực môi trường mới — thích nghi từ từ.'],
+        ['Mơ có người chỉ đường', 'Gặp người khuyên bảo tốt.'],
+        ['Mơ tìm được đường', 'Có lời giải cho việc đang lo.'],
+        ['Mơ kẹt trong mê cung', 'Thu hẹp lựa chọn, thử từng cách.'],
+      ],
+    },
+  },
+  {
+    slug: 'eating', category: 'situation', tone: 'good', emoji: '🍚',
+    ko: {
+      name: '음식 먹는 꿈', keywords: ['밥 먹는 꿈', '음식 꿈', '고기 먹는 꿈', '잔치'],
+      summary: '맛있게 먹는 꿈은 재물과 결실, 풍족함을 뜻합니다. 잔칫상을 받으면 경사가 생기는 길몽입니다.',
+      korea: '흰 쌀밥이나 고기를 맛있게 먹는 꿈은 재물과 건강운이 좋아진다는 뜻이고, 잔칫상을 받으면 축하받을 일이 생긴다고 봅니다. 음식을 먹으려다 못 먹으면 기회를 아쉽게 놓칠 수 있다는 뜻입니다.',
+      vietnam: '베트남에서도 맛있게 먹는 꿈(mơ thấy ăn)은 풍족함과 기쁨을 뜻하며, 가족과 함께 먹으면 집안이 화목해진다고 봅니다.',
+      cases: [
+        ['흰쌀밥을 맛있게 먹는 꿈', '재물과 건강운이 좋아집니다.'],
+        ['잔칫상을 받는 꿈', '축하받을 일이 생깁니다.'],
+        ['가족과 함께 먹는 꿈', '집안이 화목해집니다.'],
+        ['먹으려다 못 먹는 꿈', '기회를 놓치지 않게 서두르세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy ăn uống', keywords: ['ăn cơm', 'ăn uống', 'ăn cỗ', 'mơ ăn'],
+      summary: 'Ăn ngon trong mơ là tài lộc, thành quả và sự sung túc. Được mời ăn cỗ là điềm có hỷ sự.',
+      korea: 'Người Hàn cho rằng ăn cơm trắng, ăn thịt ngon là tài lộc, sức khỏe tốt; được dọn mâm cỗ là có chuyện đáng chúc mừng; định ăn mà không ăn được là tiếc nuối vì lỡ cơ hội.',
+      vietnam: 'Người Việt cũng xem ăn uống ngon miệng là no đủ, vui vẻ; ăn cùng gia đình là gia đạo hòa thuận.',
+      cases: [
+        ['Mơ ăn cơm trắng ngon', 'Tài lộc và sức khỏe tốt lên.'],
+        ['Mơ được mời ăn cỗ', 'Có chuyện đáng mừng.'],
+        ['Mơ ăn cùng gia đình', 'Gia đình hòa thuận.'],
+        ['Mơ định ăn mà không được ăn', 'Nhanh tay kẻo lỡ cơ hội.'],
+      ],
+    },
+  },
+  {
+    slug: 'phone', category: 'situation', tone: 'mixed', emoji: '📱',
+    ko: {
+      name: '휴대폰 꿈', keywords: ['휴대폰', '핸드폰 잃어버리는 꿈', '전화 꿈', '폰 고장'],
+      summary: '휴대폰은 소통과 연결을 뜻합니다. 반가운 전화가 오면 좋은 소식, 휴대폰을 잃으면 연락이 끊길까 하는 불안입니다.',
+      korea: '현대의 꿈으로, 반가운 사람에게 전화가 오면 실제 소식이나 기회가 온다고 봅니다. 휴대폰을 잃어버리거나 고장 나면 중요한 연락이나 관계를 놓칠까 걱정하는 마음, 디지털 피로를 뜻하기도 합니다.',
+      vietnam: '베트남에서도 휴대폰(điện thoại) 꿈은 소식과 관계를 뜻하며, 전화가 안 걸리면 오해를 조심하라고 풉니다.',
+      cases: [
+        ['반가운 전화가 오는 꿈', '좋은 소식이나 기회가 옵니다.'],
+        ['휴대폰을 잃어버리는 꿈', '중요한 연락과 관계를 챙기세요.'],
+        ['전화가 안 걸리는 꿈', '오해가 생기기 쉬우니 직접 만나 이야기하세요.'],
+        ['휴대폰 화면이 깨지는 꿈', '디지털 피로가 쌓였습니다. 잠시 쉬어 가세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy điện thoại', keywords: ['điện thoại', 'mất điện thoại', 'gọi điện', 'vỡ màn hình'],
+      summary: 'Điện thoại là giao tiếp và kết nối. Có cuộc gọi vui là tin tốt; mất điện thoại là sợ mất liên lạc.',
+      korea: 'Đây là giấc mơ thời hiện đại: người Hàn cho rằng có người thân gọi đến là có tin, cơ hội thật; mất hay hỏng điện thoại là sợ lỡ liên lạc, quan hệ quan trọng, hoặc mệt vì dùng máy quá nhiều.',
+      vietnam: 'Người Việt cũng xem điện thoại là tin tức, quan hệ; gọi không được là nên đề phòng hiểu lầm.',
+      cases: [
+        ['Mơ có cuộc gọi vui', 'Có tin tốt hoặc cơ hội.'],
+        ['Mơ mất điện thoại', 'Giữ gìn liên lạc, quan hệ quan trọng.'],
+        ['Mơ gọi không được', 'Dễ hiểu lầm — hãy gặp mặt nói chuyện.'],
+        ['Mơ vỡ màn hình điện thoại', 'Mệt mỏi vì thiết bị — nghỉ ngơi một chút.'],
+      ],
+    },
+  },
+  {
+    slug: 'stairs', category: 'situation', tone: 'good', emoji: '🪜',
+    ko: {
+      name: '계단 꿈', keywords: ['계단', '계단 오르는 꿈', '사다리', '엘리베이터'],
+      summary: '계단을 오르는 꿈은 한 단계씩 성장하고 지위가 오르는 길몽입니다. 내려가거나 미끄러지면 속도를 늦추라는 뜻입니다.',
+      korea: '계단이나 사다리를 차근차근 오르면 승진이나 성적 향상처럼 노력한 만큼 올라간다고 봅니다. 엘리베이터가 빠르게 올라가면 갑작스러운 기회를, 계단이 끝없이 이어지면 목표가 멀게 느껴지는 마음을 뜻합니다.',
+      vietnam: '베트남에서도 계단(cầu thang)을 오르는 꿈은 발전과 성공, 내려가는 꿈은 잠시 물러서야 할 때로 봅니다.',
+      cases: [
+        ['계단을 차근차근 오르는 꿈', '노력한 만큼 지위가 오릅니다.'],
+        ['엘리베이터가 빠르게 올라가는 꿈', '갑작스러운 기회가 옵니다.'],
+        ['계단에서 미끄러지는 꿈', '서두르지 말고 속도를 조절하세요.'],
+        ['끝없는 계단을 오르는 꿈', '목표를 작은 단계로 나눠 보세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy cầu thang', keywords: ['cầu thang', 'leo cầu thang', 'thang máy', 'cái thang'],
+      summary: 'Leo cầu thang là điềm tiến bộ từng bước, địa vị đi lên. Đi xuống hay trượt ngã là lời nhắc chậm lại.',
+      korea: 'Người Hàn cho rằng leo từng bậc thang là công sức đến đâu tiến đến đó; thang máy lên nhanh là cơ hội bất ngờ; cầu thang dài vô tận là cảm giác mục tiêu còn xa.',
+      vietnam: 'Người Việt cũng xem leo cầu thang là phát triển, thành công; đi xuống là lúc tạm lùi một bước.',
+      cases: [
+        ['Mơ leo cầu thang từng bước', 'Địa vị đi lên nhờ nỗ lực.'],
+        ['Mơ thang máy đi lên nhanh', 'Cơ hội bất ngờ.'],
+        ['Mơ trượt ngã cầu thang', 'Đừng vội — điều chỉnh tốc độ.'],
+        ['Mơ cầu thang dài vô tận', 'Chia mục tiêu thành bước nhỏ.'],
+      ],
+    },
+  },
+  {
+    slug: 'prison', category: 'situation', tone: 'mixed', emoji: '🔒',
+    ko: {
+      name: '감옥 꿈', keywords: ['감옥', '경찰 꿈', '잡혀가는 꿈', '갇히는 꿈'],
+      summary: '감옥에 갇히는 꿈은 답답한 상황이나 책임감을 뜻하지만, 전통 해몽에서는 오히려 안정된 자리를 얻는다고 보기도 합니다.',
+      korea: '감옥에 들어가는 꿈을 "관(官)에 든다"고 하여 취직·승진처럼 안정된 자리를 얻는 꿈으로 풀기도 합니다. 반면 탈출하려 애쓰면 지금의 의무나 관계에서 벗어나고 싶은 마음을 뜻합니다.',
+      vietnam: '베트남에서는 감옥 꿈(mơ thấy đi tù)을 구속감이나 걱정으로 보면서, 풀려나는 꿈은 어려움에서 벗어난다고 풉니다.',
+      cases: [
+        ['감옥에 들어가는 꿈', '안정된 자리를 얻는다는 전통 해석이 있습니다.'],
+        ['경찰에게 잡혀가는 꿈', '책임질 일이 생깁니다. 서류를 꼼꼼히 챙기세요.'],
+        ['감옥에서 탈출하는 꿈', '답답한 상황에서 벗어나고 싶은 마음입니다.'],
+        ['감옥에서 풀려나는 꿈', '근심에서 벗어납니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy đi tù', keywords: ['đi tù', 'bị bắt', 'công an', 'nhà tù'],
+      summary: 'Mơ bị giam là cảm giác bí bách, trách nhiệm nặng nề; nhưng giải mộng Hàn xưa lại cho rằng đó là được một vị trí ổn định.',
+      korea: 'Người Hàn xưa nói “vào tù là vào quan”, nên mơ đi tù có thể là sắp có việc làm, được thăng chức ổn định. Cố vượt ngục là muốn thoát khỏi nghĩa vụ hay mối quan hệ hiện tại.',
+      vietnam: 'Người Việt giải mơ đi tù là bị ràng buộc, lo lắng; mơ được thả là thoát khỏi khó khăn.',
+      cases: [
+        ['Mơ vào tù', 'Theo giải mộng Hàn: có vị trí ổn định.'],
+        ['Mơ bị công an bắt', 'Có việc phải chịu trách nhiệm — giữ kỹ giấy tờ.'],
+        ['Mơ vượt ngục', 'Muốn thoát khỏi hoàn cảnh bí bách.'],
+        ['Mơ được thả tự do', 'Thoát khỏi nỗi lo.'],
+      ],
+    },
+  },
+  {
+    slug: 'car', category: 'situation', tone: 'good', emoji: '🚙',
+    ko: {
+      name: '차 꿈', keywords: ['새 차', '운전하는 꿈', '차 타는 꿈', '자동차'],
+      summary: '자동차는 내 삶의 속도와 주도권을 뜻합니다. 새 차를 몰고 시원하게 달리면 일이 순조롭게 진행되는 길몽입니다.',
+      korea: '새 차를 사거나 선물받는 꿈은 새로운 지위나 기회를 얻는다는 뜻이고, 내가 운전대를 잡으면 주도권을 쥔다고 봅니다. 남이 운전하는 차에 타면 도움을 받거나 다른 사람의 결정에 따르게 된다는 뜻입니다.',
+      vietnam: '오토바이와 차가 많은 베트남에서도 새 차(xe mới) 꿈은 발전과 재물을 뜻하고, 차가 고장 나면 계획을 점검하라고 풉니다.',
+      cases: [
+        ['새 차를 사는 꿈', '새로운 지위나 기회를 얻습니다.'],
+        ['내가 운전해 시원하게 달리는 꿈', '주도권을 잡고 일이 순조롭습니다.'],
+        ['남이 운전하는 차에 타는 꿈', '도움을 받거나 다른 사람의 결정에 따릅니다.'],
+        ['차가 고장 나는 꿈', '계획과 컨디션을 점검하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy ô tô, xe mới', keywords: ['ô tô', 'xe mới', 'lái xe', 'xe máy'],
+      summary: 'Xe cộ là tốc độ và quyền chủ động trong đời bạn. Lái xe mới chạy êm là điềm mọi việc suôn sẻ.',
+      korea: 'Người Hàn cho rằng mua hay được tặng xe mới là có địa vị, cơ hội mới; tự cầm lái là nắm quyền chủ động; ngồi xe người khác lái là được giúp hoặc phải theo quyết định của người khác.',
+      vietnam: 'Người Việt cũng xem xe mới là phát triển, tiền tài; xe hỏng là nên xem lại kế hoạch.',
+      cases: [
+        ['Mơ mua xe mới', 'Có địa vị, cơ hội mới.'],
+        ['Mơ tự lái xe chạy êm', 'Nắm quyền chủ động, việc thuận.'],
+        ['Mơ ngồi xe người khác lái', 'Được giúp hoặc phải theo người khác.'],
+        ['Mơ xe hỏng', 'Kiểm tra lại kế hoạch và sức khỏe.'],
+      ],
+    },
+  },
+  {
+    slug: 'swimming', category: 'situation', tone: 'mixed', emoji: '🏊',
+    ko: {
+      name: '수영하는 꿈', keywords: ['수영', '헤엄치는 꿈', '물에 빠지는 꿈', '익사'],
+      summary: '물속을 자유롭게 헤엄치면 일이 순조롭게 풀리는 길몽, 물에 빠지면 감당하기 벅찬 상황을 뜻합니다.',
+      korea: '맑은 물에서 힘들이지 않고 헤엄치면 어려움 없이 목표에 다가간다고 봅니다. 물에 빠지는 꿈은 일이나 감정에 휩싸였다는 신호지만, 누군가 구해 주면 도움을 받아 위기를 넘깁니다.',
+      vietnam: '베트남에서도 수영하는 꿈(mơ thấy bơi)은 자신감과 순조로움을, 물에 빠지는 꿈은 스트레스를 뜻한다고 봅니다.',
+      cases: [
+        ['맑은 물에서 자유롭게 헤엄치는 꿈', '일이 순조롭게 풀립니다.'],
+        ['물에 빠지는 꿈', '일이나 감정에 휩싸였습니다. 도움을 청하세요.'],
+        ['누군가 나를 구해 주는 꿈', '도움을 받아 위기를 넘깁니다.'],
+        ['물살을 거슬러 헤엄치는 꿈', '힘들어도 끈기로 목표를 이룹니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy bơi, đuối nước', keywords: ['bơi', 'đuối nước', 'chết đuối', 'bơi lội'],
+      summary: 'Bơi tự do trong nước là điềm thuận lợi; bị đuối nước là hoàn cảnh quá sức.',
+      korea: 'Người Hàn cho rằng bơi nhẹ nhàng trong nước trong là tiến tới mục tiêu không vướng mắc; đuối nước là bị công việc, cảm xúc nhấn chìm, nhưng được cứu là có người giúp vượt nguy.',
+      vietnam: 'Người Việt cũng giải mơ bơi là tự tin, suôn sẻ; đuối nước là căng thẳng.',
+      cases: [
+        ['Mơ bơi tự do trong nước trong', 'Mọi việc suôn sẻ.'],
+        ['Mơ bị đuối nước', 'Quá tải công việc, cảm xúc — hãy nhờ giúp đỡ.'],
+        ['Mơ được người cứu', 'Có người giúp vượt nguy.'],
+        ['Mơ bơi ngược dòng', 'Vất vả nhưng kiên trì sẽ đến đích.'],
+      ],
+    },
+  },
+];
