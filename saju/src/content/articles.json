@@ -1455,6 +1455,150 @@
           }
         ]
       }
+    },
+    "method": {
+      "ko": {
+        "title": "명월의 계산 방식 · 음력·절기·사주·택일은 어떻게 계산하나요?",
+        "description": "명월이 한국 음력과 베트남 음력, 24절기, 사주팔자, 좋은 날을 어떤 기준과 공식으로 계산하는지 정리했습니다.",
+        "blocks": [
+          {
+            "p": "명월은 표를 베껴 쓰지 않고, 날짜마다 천문 계산으로 직접 구합니다. 그래서 한국 시간과 베트남 시간에서 각각 정확한 음력을 낼 수 있습니다. 이 페이지는 그 계산 기준을 투명하게 공개하기 위해 만들었습니다."
+          },
+          {
+            "h": "1. 천문 계산"
+          },
+          {
+            "ul": [
+              "해와 달의 위치는 공개 천문 계산 라이브러리(astronomy-engine)로 구합니다. 24절기 시각과 합삭(초하루) 시각의 오차는 대체로 1분 안팎입니다.",
+              "24절기는 태양이 황도 위를 15도씩 움직일 때마다 정해집니다. 소한(285도)부터 동지(270도)까지 한 해에 24개입니다.",
+              "모든 시각은 세계협정시(UTC)로 계산한 뒤, 나라별 표준시로 바꿔 날짜를 정합니다."
+            ]
+          },
+          {
+            "h": "2. 음력 (한국·베트남)"
+          },
+          {
+            "ul": [
+              "음력 한 달은 합삭이 일어난 날에 시작합니다. 날짜는 한국은 UTC+9, 베트남은 UTC+7(1968년 이전은 UTC+8) 시간으로 판단합니다.",
+              "동지가 들어 있는 달이 11월입니다. 두 11월 사이에 달이 13개면, 중기(中氣)가 없는 첫 달을 윤달로 둡니다(무중치윤법).",
+              "이 차이 때문에 두 나라의 초하루가 하루 어긋나는 날이 생기며, 드물게 윤달 위치가 달라 한 달 차이가 나기도 합니다(예: 1985년 Tết).",
+              "검증: 중국 음력 계산 라이브러리와 1929~1967년 구간을 교차 비교했고, 2007·2027년처럼 알려진 한·베 설날 차이를 그대로 재현합니다."
+            ]
+          },
+          {
+            "h": "3. 사주팔자"
+          },
+          {
+            "ul": [
+              "연주(年柱)는 입춘 시각, 월주(月柱)는 각 달의 절(節) 시각을 기준으로 바뀝니다. 설날이 아니라 입춘이 기준입니다.",
+              "일주(日柱)는 율리우스 적일(Julian Day)로 60갑자를 셉니다.",
+              "태어난 시각은 당시의 표준시와 서머타임(예: 한국 1948~1960년, 1987~1988년)을 반영해 UTC로 바꾼 뒤, 출생지 경도로 지방 평균태양시를 보정합니다(서울은 약 −32분).",
+              "밤 11시~자정 사이 출생은 기본적으로 다음 날 자시로 보며, 야자시를 쓰는 방식도 고를 수 있습니다.",
+              "대운은 태어난 날부터 다음(또는 이전) 절까지의 날수를 3일=1년으로 바꿔 시작 나이를 구합니다."
+            ]
+          },
+          {
+            "h": "4. 좋은 날(택일)"
+          },
+          {
+            "ul": [
+              "황흑도: 그날을 맡은 12신(청룡·명당·금궤·보광·옥당·사명은 황도)으로 길한 날인지 봅니다.",
+              "12직(건·제·만·평·정·집·파·위·성·수·개·폐): 절기 달의 지지와 그날 지지로 정하며, 결혼·이사·개업 같은 목적마다 어울리는 직이 다릅니다.",
+              "황도시: 하루 12시진 가운데 황도에 해당하는 6개 시간입니다.",
+              "손 없는 날: 한국 음력 끝자리가 9·0인 날입니다.",
+              "Tam Nương(음력 3·7·13·18·22·27일), Nguyệt Kỵ(음력 5·14·23일): 베트남식 달력에서 큰일을 피하는 날로 반영합니다.",
+              "길흉 등급(대길·길·평·흉)은 황흑도, 12직, 베트남 흉일을 점수로 합산해 정합니다."
+            ]
+          },
+          {
+            "h": "5. 운세·궁합·삼재"
+          },
+          {
+            "ul": [
+              "띠별 운세: 그날(또는 그해)의 지지와 내 띠의 육합·삼합·충·형·해 관계, 천간 오행의 생극으로 풉니다.",
+              "궁합: 두 사람의 일간 관계, 일지 관계, 띠 관계, 납음오행, 오행 보완을 점수로 합산합니다.",
+              "삼재: 삼합으로 묶인 세 띠가 충하는 방향의 3년(들·눌·날삼재)에 듭니다. Kim Lâu와 Hoang Ốc는 tuổi mụ(음력 설 기준 세는나이)로 계산합니다."
+            ]
+          },
+          {
+            "h": "6. 개인정보와 한계"
+          },
+          {
+            "p": "모든 계산은 이용자의 브라우저 안에서 이루어지며 생년월일은 서버로 전송·저장되지 않습니다. 운세와 택일은 전통 역법과 명리학의 규칙을 따른 참고·오락용 정보이며, 과학적인 예측이 아닙니다. 계산 오류를 발견하시면 {{email}}로 알려 주세요."
+          }
+        ]
+      },
+      "vi": {
+        "title": "Cách Minh Nguyệt tính toán · Âm lịch, tiết khí, Tứ trụ và xem ngày",
+        "description": "Minh Nguyệt tính âm lịch Việt Nam, âm lịch Hàn Quốc, 24 tiết khí, lá số Tứ trụ và ngày tốt xấu theo tiêu chuẩn và công thức nào.",
+        "blocks": [
+          {
+            "p": "Minh Nguyệt không sao chép bảng lịch có sẵn mà tính từng ngày bằng thiên văn, nhờ vậy có thể cho ra âm lịch chính xác theo giờ Việt Nam và giờ Hàn Quốc. Trang này công khai các tiêu chuẩn tính toán đó."
+          },
+          {
+            "h": "1. Tính toán thiên văn"
+          },
+          {
+            "ul": [
+              "Vị trí Mặt Trời và Mặt Trăng được tính bằng thư viện thiên văn mở (astronomy-engine). Sai số thời điểm tiết khí và trăng non thường khoảng 1 phút.",
+              "24 tiết khí được xác định mỗi khi Mặt Trời đi được 15° trên hoàng đạo, từ Tiểu hàn (285°) đến Đông chí (270°).",
+              "Mọi thời điểm được tính theo giờ UTC rồi đổi sang giờ chuẩn của từng nước để xác định ngày."
+            ]
+          },
+          {
+            "h": "2. Âm lịch Việt Nam và Hàn Quốc"
+          },
+          {
+            "ul": [
+              "Tháng âm lịch bắt đầu vào ngày có điểm sóc. Việt Nam dùng giờ UTC+7 (trước 1968 là UTC+8), Hàn Quốc dùng UTC+9.",
+              "Tháng chứa Đông chí là tháng 11. Nếu giữa hai tháng 11 có 13 tháng, tháng đầu tiên không có trung khí là tháng nhuận.",
+              "Vì vậy có những ngày mùng một hai nước lệch nhau một ngày; hiếm hơn, tháng nhuận khác nhau khiến Tết lệch cả tháng (như năm 1985).",
+              "Kiểm chứng: đối chiếu với thư viện âm lịch Trung Quốc giai đoạn 1929–1967, và tái hiện đúng các năm Tết Việt – Hàn khác ngày như 2007, 2027."
+            ]
+          },
+          {
+            "h": "3. Lá số Tứ trụ"
+          },
+          {
+            "ul": [
+              "Trụ năm đổi vào thời điểm Lập xuân, trụ tháng đổi theo các tiết (節) — không phải theo mùng một Tết.",
+              "Trụ ngày đếm 60 hoa giáp theo số ngày Julius (Julian Day).",
+              "Giờ sinh được đổi sang UTC theo giờ chuẩn và giờ mùa hè thời đó, rồi hiệu chỉnh giờ mặt trời trung bình theo kinh độ nơi sinh (Hà Nội khoảng +3 phút, TP.HCM khoảng +7 phút).",
+              "Sinh từ 23 giờ đến nửa đêm mặc định tính là giờ Tý của ngày hôm sau; có thể chọn cách tính Tý muộn (dạ Tý).",
+              "Đại vận lấy số ngày từ lúc sinh đến tiết kế tiếp (hoặc trước đó), quy đổi 3 ngày = 1 năm."
+            ]
+          },
+          {
+            "h": "4. Xem ngày tốt xấu"
+          },
+          {
+            "ul": [
+              "Hoàng đạo / Hắc đạo: theo 12 vị thần trực ngày (Thanh Long, Minh Đường, Kim Quỹ, Bảo Quang, Ngọc Đường, Tư Mệnh là hoàng đạo).",
+              "Thập nhị trực (Kiến, Trừ, Mãn, Bình, Định, Chấp, Phá, Nguy, Thành, Thu, Khai, Bế) theo chi của tháng tiết khí và chi của ngày; mỗi việc như cưới hỏi, nhập trạch, khai trương hợp với các trực khác nhau.",
+              "Giờ hoàng đạo: 6 trong 12 canh giờ thuộc hoàng đạo.",
+              "Tam Nương (mùng 3, 7, 13, 18, 22, 27) và Nguyệt Kỵ (mùng 5, 14, 23) được tính là ngày nên tránh việc lớn theo lịch Việt Nam.",
+              "“Ngày không có Son” của người Hàn: ngày âm lịch tận cùng là 9 hoặc 0.",
+              "Mức Đại cát / Cát / Bình / Hung được cộng điểm từ hoàng đạo, trực và các ngày kỵ."
+            ]
+          },
+          {
+            "h": "5. Tử vi, xem tuổi hợp, Tam Tai"
+          },
+          {
+            "ul": [
+              "Tử vi theo con giáp: dựa trên quan hệ Lục hợp, Tam hợp, Xung, Hình, Hại giữa chi của ngày (hoặc năm) với tuổi bạn, và sinh khắc ngũ hành.",
+              "Xem tuổi hợp: cộng điểm từ quan hệ nhật chủ, nhật chi, con giáp, mệnh nạp âm và bổ trợ ngũ hành của hai người.",
+              "Tam Tai theo nhóm tam hợp; Kim Lâu và Hoang Ốc tính theo tuổi mụ (thêm tuổi vào Tết âm lịch)."
+            ]
+          },
+          {
+            "h": "6. Quyền riêng tư và giới hạn"
+          },
+          {
+            "p": "Mọi phép tính diễn ra trong trình duyệt của bạn; ngày sinh không được gửi hay lưu trên máy chủ. Tử vi và xem ngày là thông tin tham khảo, giải trí theo lịch pháp và mệnh lý truyền thống, không phải dự đoán khoa học. Nếu phát hiện sai sót, vui lòng báo cho chúng tôi qua {{email}}."
+          }
+        ]
+      }
     }
   }
 }

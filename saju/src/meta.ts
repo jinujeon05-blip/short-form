@@ -3,6 +3,8 @@ import seo from './seo.json';
 import articles from './content/articles.json';
 import { YEARLY } from './content/yearly';
 import { DAILY } from './content/daily';
+import { PURPOSE_TEXT } from './content/purposes';
+import type { Purpose } from './engine/almanac';
 import { ko } from './i18n/ko';
 import { vi } from './i18n/vi';
 import type { Lang } from './i18n';
@@ -23,6 +25,11 @@ export function metaFor(path: string, lang: Lang): PageMeta {
   if (guide) {
     const doc = guide[lang];
     return { title: `${doc.title} | ${BRAND[lang]}`, description: doc.description, h1: doc.title };
+  }
+  const cp = path.match(/^\/calendar\/([a-z]+)$/);
+  if (cp && PURPOSE_TEXT[lang].pages[cp[1] as Purpose]) {
+    const pg = PURPOSE_TEXT[lang].pages[cp[1] as Purpose];
+    return { title: pg.title, description: pg.description, h1: pg.h1 };
   }
   const dz = path.match(/^\/daily\/([a-z]+)$/);
   if (dz) {

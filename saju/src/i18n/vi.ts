@@ -73,7 +73,7 @@ export const vi: Dict = {
     suits: 'Ngày tốt cho việc này',
   },
 
-  purposes: { wedding: 'Cưới hỏi', opening: 'Khai trương', moving: 'Chuyển nhà', contract: 'Ký kết', travel: 'Xuất hành' },
+  purposes: { wedding: 'Cưới hỏi', opening: 'Khai trương', moving: 'Nhập trạch', contract: 'Ký kết', travel: 'Xuất hành', groundbreaking: 'Động thổ', vehicle: 'Mua xe', haircut: 'Cắt tóc' },
 
   saju: {
     title: 'Lá số Tứ trụ miễn phí',

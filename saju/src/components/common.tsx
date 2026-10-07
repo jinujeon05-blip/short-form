@@ -52,13 +52,14 @@ export function Stars({ n }: { n: number }) {
   );
 }
 
-export function Section({ eyebrow, title, desc, children, id }: {
-  eyebrow?: string; title: string; desc?: string; children: ReactNode; id?: string;
+export function Section({ eyebrow, title, desc, children, id, h1 }: {
+  eyebrow?: string; title: string; desc?: string; children: ReactNode; id?: string; h1?: boolean;
 }) {
+  const Heading = h1 ? 'h1' : 'h2';
   return (
     <section className="section" id={id}>
       {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-      <h2 className="section-title">{title}</h2>
+      <Heading className="section-title">{title}</Heading>
       {desc && <p className="section-desc">{desc}</p>}
       {children}
     </section>

@@ -8,9 +8,11 @@ import { SajuPage } from './pages/SajuPage';
 import { MatchPage } from './pages/MatchPage';
 import { NamePage } from './pages/NamePage';
 import { DAILY } from './content/daily';
+import type { Purpose } from './engine/almanac';
 import { HazardPage } from './pages/HazardPage';
 import { AgePage } from './pages/AgePage';
 import { HangulPage } from './pages/HangulPage';
+import { HolidaysPage } from './pages/HolidaysPage';
 import { DailyIndexPage, DailyZodiacPage } from './pages/DailyPage';
 import { metaFor } from './meta';
 import { GuideIndexPage, GuidePage, InfoPage } from './pages/ArticlePages';
@@ -110,14 +112,16 @@ function Shell({ route }: { route: Route }) {
       </header>
 
       <main className="main">
-        {route.path === '/calendar' ? (
-          <CalendarPage />
+        {route.path === '/calendar' || route.path.startsWith('/calendar/') ? (
+          <CalendarPage key={route.path} purpose={route.path === '/calendar' ? null : (route.path.slice(10) as Purpose)} />
         ) : route.path === '/saju' ? (
           <SajuPage query={route.search} />
         ) : route.path === '/match' ? (
           <MatchPage query={route.search} />
         ) : route.path === '/name' ? (
           <NamePage query={route.search} />
+        ) : route.path === '/holidays' ? (
+          <HolidaysPage />
         ) : route.path === '/hangul' ? (
           <HangulPage query={route.search} />
         ) : route.path === '/age' ? (
@@ -134,8 +138,8 @@ function Shell({ route }: { route: Route }) {
           <GuideIndexPage />
         ) : route.path.startsWith('/guide/') ? (
           <GuidePage slug={route.path.slice(7)} />
-        ) : route.path === '/about' || route.path === '/privacy' || route.path === '/terms' ? (
-          <InfoPage page={route.path.slice(1) as 'about' | 'privacy' | 'terms'} />
+        ) : route.path === '/about' || route.path === '/method' || route.path === '/privacy' || route.path === '/terms' ? (
+          <InfoPage page={route.path.slice(1) as 'about' | 'method' | 'privacy' | 'terms'} />
         ) : (
           <Home />
         )}
@@ -151,8 +155,10 @@ function Shell({ route }: { route: Route }) {
           <Link to="/samjae">{SAMJAE_LINK[lang]}</Link>
           <Link to="/age">{AGE_LINK[lang]}</Link>
           <Link to="/hangul">{HANGUL_LINK[lang]}</Link>
+          <Link to="/holidays">{HOLIDAY_LINK[lang]}</Link>
           <Link to="/guide">{t.guide.title}</Link>
           <Link to="/about">{t.info.about}</Link>
+          <Link to="/method">{METHOD_LINK[lang]}</Link>
           <Link to="/privacy">{t.info.privacy}</Link>
           <Link to="/terms">{t.info.terms}</Link>
           <a href={hrefFor(route.path, lang === 'ko' ? 'vi' : 'ko')} hrefLang={lang === 'ko' ? 'vi' : 'ko'}>
@@ -167,6 +173,8 @@ function Shell({ route }: { route: Route }) {
 }
 
 const YEARLY_LINK: Record<Lang, string> = { ko: '2027 신년운세', vi: 'Tử vi 2027' };
+const METHOD_LINK: Record<Lang, string> = { ko: '계산 방식', vi: 'Cách tính' };
+const HOLIDAY_LINK: Record<Lang, string> = { ko: '설날·Tết 날짜 비교', vi: 'Tết Việt – Hàn' };
 const HANGUL_LINK: Record<Lang, string> = { ko: '한글 표기 변환', vi: 'Phiên âm Hangul' };
 const AGE_LINK: Record<Lang, string> = { ko: '나이 계산기', vi: 'Tính tuổi' };
 const SAMJAE_LINK: Record<Lang, string> = { ko: '삼재 계산기', vi: 'Tam Tai · Kim Lâu' };

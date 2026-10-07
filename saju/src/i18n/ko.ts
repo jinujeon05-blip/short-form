@@ -71,7 +71,7 @@ export const ko = {
     suits: '이 목적에 좋은 날',
   },
 
-  purposes: { wedding: '결혼', opening: '개업', moving: '이사', contract: '계약', travel: '여행' },
+  purposes: { wedding: '결혼', opening: '개업', moving: '이사', contract: '계약', travel: '여행', groundbreaking: '착공·동토', vehicle: '차 구입', haircut: '이발·미용' },
 
   saju: {
     title: '무료 사주팔자',
