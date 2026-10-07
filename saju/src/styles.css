@@ -19,13 +19,13 @@
   --metal: #c9cdd6;
   --water: #5b8fd9;
   --radius: 14px;
-  --serif: 'Noto Serif KR', 'Noto Serif', serif;
-  --sans: 'Noto Sans KR', 'Be Vietnam Pro', system-ui, sans-serif;
+  --serif: 'Twemoji Country Flags', 'Noto Serif KR', 'Noto Serif', serif;
+  --sans: 'Twemoji Country Flags', 'Noto Sans KR', 'Be Vietnam Pro', system-ui, sans-serif;
   color-scheme: dark;
 }
 html[lang='vi'] {
-  --serif: 'Noto Serif', 'Noto Serif KR', serif;
-  --sans: 'Be Vietnam Pro', 'Noto Sans KR', system-ui, sans-serif;
+  --serif: 'Twemoji Country Flags', 'Noto Serif', 'Noto Serif KR', serif;
+  --sans: 'Twemoji Country Flags', 'Be Vietnam Pro', 'Noto Sans KR', system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
