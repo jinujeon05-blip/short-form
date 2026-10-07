@@ -1,3 +1,4 @@
+import { Emoji } from '../components/Emoji';
 import { useState } from 'react';
 import { localJdn, ymdFromJdn } from '../engine/astro';
 import { cycleBranch, cycleStem, yearCycle } from '../engine/ganzhi';
@@ -57,7 +58,7 @@ export function YearlyIndexPage({ year }: { year: number }) {
           <li key={f.zodiac}>
             <Link to={fortunePath(year, f.zodiac)} className="rank-item">
               <span className="rank-no">{i + 1}</span>
-              <span className="rank-emoji" aria-hidden="true">{t.animalEmoji[f.zodiac]}</span>
+              <span className="rank-emoji" aria-hidden="true"><Emoji e={t.animalEmoji[f.zodiac]} /></span>
               <span className="rank-body">
                 <b>{t.animals[f.zodiac]} <span className="muted small">{t.branches[f.zodiac]}</span></b>
                 <span className="muted small">{y.relation[f.relation].head}</span>
@@ -89,7 +90,7 @@ export function YearlyZodiacPage({ year, zodiac }: { year: number; zodiac: numbe
         <Link to={fortunePath(year)}>← {y.indexTitle(year, y.ganzhi(t.stems[cycleStem(f.yearCycle)], t.branches[cycleBranch(f.yearCycle)], cycleHanja(f.yearCycle)))}</Link>
       </p>
       <div className="yearly-hero">
-        <span className="yearly-emoji" aria-hidden="true">{t.animalEmoji[zodiac]}</span>
+        <span className="yearly-emoji" aria-hidden="true"><Emoji e={t.animalEmoji[zodiac]} /></span>
         <div>
           <h1 className="article-title">{y.zodiacTitle(year, animal)}</h1>
           <p className="muted">
@@ -181,7 +182,7 @@ export function YearlyZodiacPage({ year, zodiac }: { year: number; zodiac: numbe
       <h2 className="article-h">{y.others}</h2>
       <div className="other-zodiacs">
         {t.animals.map((a, z) => (z === zodiac ? null : (
-          <Link key={z} to={fortunePath(year, z)} className="chip">{t.animalEmoji[z]} {a}</Link>
+          <Link key={z} to={fortunePath(year, z)} className="chip"><Emoji e={t.animalEmoji[z]} /> {a}</Link>
         )))}
       </div>
       <p className="muted small center">{y.disclaimer}</p>

@@ -1,3 +1,4 @@
+import { CircleCheck, Search } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { NAMING } from '../content/naming';
 import { KO_CHARS } from '../content/koNames';
@@ -61,7 +62,7 @@ export function NamingPage({ query }: { query: string }) {
 
       <div className="seg" role="group">
         <button type="button" className={tab === 'suggest' ? 'on' : ''} onClick={() => setTab('suggest')}>{x.tabSuggest}</button>
-        <button type="button" className={tab === 'check' ? 'on' : ''} onClick={() => setTab('check')}>{x.tabCheck}</button>
+        <button type="button" className={tab === 'check' ? 'on' : ''} onClick={() => setTab('check')}><Search className="line-icon" aria-hidden="true" /> {x.tabCheck}</button>
       </div>
 
       {tab === 'suggest' ? (
@@ -240,7 +241,7 @@ function KoreanCheck({ name, direct, setDirect, picks, setPicks }: {
       <div className="panel">
         <h2 className="panel-title">{x.viEarTitle}</h2>
         <p><span className="muted small">{x.romanLabel}</span> <b>{roman}</b></p>
-        {flags.length ? flags.map((f) => <Flag key={f.part} f={f} />) : <p className="good">{x.viEarOk}</p>}
+        {flags.length ? flags.map((f) => <Flag key={f.part} f={f} />) : <p className="good"><CircleCheck className="line-icon" aria-hidden="true" /> {x.viEarOk}</p>}
       </div>
 
       <div className="panel">
@@ -306,7 +307,7 @@ function VietnameseCheck({ name, onSuggest }: { name: string; onSuggest: (v: str
       <div className="panel">
         <h2 className="panel-title">{x.koEarTitle}</h2>
         <p><span className="muted small">{x.hangulLabel}</span> <b lang="ko">{r.hangul}</b></p>
-        {r.flags.length ? r.flags.map((f) => <Flag key={f.part} f={f} />) : <p className="good">{x.koEarOk}</p>}
+        {r.flags.length ? r.flags.map((f) => <Flag key={f.part} f={f} />) : <p className="good"><CircleCheck className="line-icon" aria-hidden="true" /> {x.koEarOk}</p>}
         {r.hard.length > 0 && (
           <>
             <h3 className="small">{x.hardTitle}</h3>

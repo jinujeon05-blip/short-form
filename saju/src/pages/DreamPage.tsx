@@ -1,3 +1,5 @@
+import { Baby } from 'lucide-react';
+import { Emoji } from '../components/Emoji';
 import { useMemo, useState } from 'react';
 import { CATEGORIES, DREAMS, DREAM_UI, Dream, DreamCategory, POPULAR, dreamBySlug, searchDreams } from '../content/dreams';
 import { useI18n } from '../i18n';
@@ -11,7 +13,7 @@ function DreamCard({ d }: { d: Dream }) {
   const ui = DREAM_UI[lang];
   return (
     <Link to={dreamPath(d.slug)} className="dream-card">
-      <span className="dream-emoji" aria-hidden="true">{d.emoji}</span>
+      <span className="dream-emoji" aria-hidden="true"><Emoji e={d.emoji} /></span>
       <span className="dream-card-body">
         <b>{d[lang].name}</b>
         <span className={`tone tone-${d.tone}`}>{ui.tone[d.tone]}</span>
@@ -50,7 +52,7 @@ export function DreamIndexPage({ query }: { query: string }) {
 
       {!q && !cat && (
         <>
-          <p className="panel center"><Link to="/taemong">{lang === 'vi' ? '🤰 Giấc mơ báo có thai: mơ thấy gì sinh con trai, con gái? →' : '🤰 태몽 모음: 아들 태몽·딸 태몽 속설 31가지 →'}</Link></p>
+          <p className="panel center"><Link to="/taemong"><Baby className="line-icon" aria-hidden="true" /> {lang === 'vi' ? 'Giấc mơ báo có thai: mơ thấy gì sinh con trai, con gái? →' : '태몽 모음: 아들 태몽·딸 태몽 속설 31가지 →'}</Link></p>
           <h2 className="article-h">{ui.popular}</h2>
           <div className="dream-grid">
             {POPULAR.map((s) => <DreamCard key={s} d={dreamBySlug(s)!} />)}
@@ -94,7 +96,7 @@ export function DreamDetailPage({ slug }: { slug: string }) {
     <article className="article dream">
       <p className="eyebrow left"><Link to="/dream">{ui.back}</Link></p>
       <div className="yearly-hero">
-        <span className="yearly-emoji" aria-hidden="true">{d.emoji}</span>
+        <span className="yearly-emoji" aria-hidden="true"><Emoji e={d.emoji} /></span>
         <div>
           <h1 className="article-title">{ui.pageTitle(x.name)}</h1>
           <p><span className={`tone tone-${d.tone}`}>{ui.tone[d.tone]}</span> <span className="muted small">{ui.categories[d.category]}</span></p>

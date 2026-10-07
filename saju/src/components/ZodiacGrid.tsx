@@ -1,3 +1,4 @@
+import { Emoji } from './Emoji';
 import { useState } from 'react';
 import { zodiacOfYear } from '../engine/almanac';
 import { zodiacFortune } from '../engine/fortune';
@@ -34,7 +35,7 @@ export function ZodiacGrid({ jdn, dayCycle }: { jdn: number; dayCycle: number })
               onClick={() => pick(b)}
               aria-pressed={selected === b}
             >
-              <span className="zodiac-emoji" aria-hidden="true">{t.animalEmoji[b]}</span>
+              <span className="zodiac-emoji" aria-hidden="true"><Emoji e={t.animalEmoji[b]} /></span>
               <span className="zodiac-name">{name}</span>
               <span className="zodiac-mini"><Stars n={s} /></span>
             </button>
@@ -64,7 +65,7 @@ export function ZodiacGrid({ jdn, dayCycle }: { jdn: number; dayCycle: number })
       {f ? (
         <div className="fortune-card">
           <div className="fortune-head">
-            <span className="fortune-emoji" aria-hidden="true">{t.animalEmoji[f.branch]}</span>
+            <span className="fortune-emoji" aria-hidden="true"><Emoji e={t.animalEmoji[f.branch]} /></span>
             <div>
               <h3>{t.animals[f.branch]} · {t.branches[f.branch]}</h3>
               <Stars n={f.stars} />

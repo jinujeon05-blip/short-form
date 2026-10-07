@@ -1,3 +1,4 @@
+import { Moon } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { I18nProvider, Lang, preferredLang, useI18n } from './i18n';
 import { Link, Route, RouteContext, RoutePath, hrefFor, legacyHashTarget, navigate, parseLocation, subscribe } from './router';
@@ -163,7 +164,7 @@ function Shell({ route }: { route: Route }) {
       <footer className="footer">
         <div className="footer-brand"><MoonLogo size={28} /> <b>{t.brand}</b> <span className="muted">明月</span></div>
         <p>{t.footer.about}</p>
-        <p className="small calc-source">🌙 {CALC_SOURCE[lang]} <Link to="/method">{METHOD_LINK[lang]} →</Link></p>
+        <p className="small calc-source"><Moon className="line-icon" aria-hidden="true" /> {CALC_SOURCE[lang]} <Link to="/method">{METHOD_LINK[lang]} →</Link></p>
         <nav className="footer-links" aria-label="footer">
           {links.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
           <Link to="/daily">{DAILY[lang].indexTitle}</Link>

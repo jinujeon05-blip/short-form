@@ -83,7 +83,7 @@ export const PEOPLE_DREAMS_4: Dream[] = [
     },
   },
   {
-    slug: 'sibling', category: 'people', tone: 'mixed', emoji: '👫',
+    slug: 'sibling', category: 'people', tone: 'mixed', emoji: '🫶',
     ko: {
       name: '형제자매 꿈', keywords: ['형제', '자매', '형', '언니', '오빠', '누나', '동생 꿈', '형제 꿈'],
       summary: '형제자매 꿈은 가족 간의 정과 협력, 때로는 경쟁심을 비춥니다. 사이좋게 지내면 집안에 화목과 도움이 생깁니다.',

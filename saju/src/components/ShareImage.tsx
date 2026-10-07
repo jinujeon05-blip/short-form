@@ -1,3 +1,4 @@
+import { ImageDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useI18n } from '../i18n';
 import { CARD_H, CARD_W } from './cards';
@@ -57,7 +58,7 @@ export function ShareImageButton({ draw, filename }: {
   return (
     <>
       <button className="btn btn-gold" onClick={make} disabled={busy}>
-        {busy ? t.share.making : `🖼 ${t.share.image}`}
+        {busy ? t.share.making : <><ImageDown className="line-icon" aria-hidden="true" /> {t.share.image}</>}
       </button>
       {url && (
         <div className="share-preview" role="dialog" aria-label={t.share.image} onClick={() => setUrl(null)}>

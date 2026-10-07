@@ -1,3 +1,4 @@
+import { Emoji } from './Emoji';
 import { useEffect, useState } from 'react';
 import { DayInfo, holidaysOf } from '../engine/almanac';
 import { CalendarCountry } from '../engine/lunar';
@@ -74,7 +75,7 @@ export function TodayCard({ info, basis }: { info: DayInfo; basis: CalendarCount
         </div>
         <div>
           <span className="k">{lang === 'vi' ? 'Năm' : '띠'}</span>
-          <b>{t.animalEmoji[zodiac]} {t.animals[zodiac]} <span className="small muted">{cycleName(folkYear, t)}</span></b>
+          <b><Emoji e={t.animalEmoji[zodiac]} /> {t.animals[zodiac]} <span className="small muted">{cycleName(folkYear, t)}</span></b>
         </div>
       </div>
       {differ && <p className="today-differ gold small">{t.today.differ}</p>}

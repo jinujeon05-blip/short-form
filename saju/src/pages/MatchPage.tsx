@@ -1,3 +1,5 @@
+import { Heart, Lock, Mail, Moon } from 'lucide-react';
+import { Emoji } from '../components/Emoji';
 import { useEffect, useMemo, useState } from 'react';
 import { dayInfo } from '../engine/almanac';
 import { MatchResult, matchCharts } from '../engine/match';
@@ -84,13 +86,13 @@ export function MatchPage({ query }: { query: string }) {
       <Section eyebrow="宮合 · HỢP TUỔI" title={t.match.ask.title(name)} desc={t.match.ask.body(name, animal)}>
         <form className="match-form invite-form" onSubmit={submit}>
           <div className="panel person">
-            <h3 className="panel-title">💙 {t.match.ask.you}</h3>
+            <h3 className="panel-title"><Heart className="line-icon heart-b" aria-hidden="true" /> {t.match.ask.you}</h3>
             <BirthFields value={b} onChange={setB} namePlaceholder={t.match.personB} />
           </div>
           <div className="match-submit">
             {error && <p className="error" role="alert">{error}</p>}
             <button className="btn btn-gold block" type="submit">{t.match.submit} ♥</button>
-            <p className="muted small center">🔒 {t.match.ask.note}</p>
+            <p className="muted small center"><Lock className="line-icon" aria-hidden="true" /> {t.match.ask.note}</p>
           </div>
         </form>
       </Section>
@@ -102,18 +104,18 @@ export function MatchPage({ query }: { query: string }) {
       <Section eyebrow="宮合 · HỢP TUỔI" title={t.match.title} desc={t.match.desc}>
         <form className="match-form" onSubmit={submit}>
           <div className="panel person">
-            <h3 className="panel-title">💛 {t.match.personA}</h3>
+            <h3 className="panel-title"><Heart className="line-icon" aria-hidden="true" /> {t.match.personA}</h3>
             <BirthFields value={a} onChange={setA} namePlaceholder={t.match.personA} />
             <InviteBox a={a} />
           </div>
           <div className="panel person">
-            <h3 className="panel-title">💙 {t.match.personB}</h3>
+            <h3 className="panel-title"><Heart className="line-icon heart-b" aria-hidden="true" /> {t.match.personB}</h3>
             <BirthFields value={b} onChange={setB} namePlaceholder={t.match.personB} />
           </div>
           <div className="match-submit">
             {error && <p className="error" role="alert">{error}</p>}
             <button className="btn btn-gold block" type="submit">{t.match.submit} ♥</button>
-            <p className="muted small center">🔒 {t.saju.privacy}</p>
+            <p className="muted small center"><Lock className="line-icon" aria-hidden="true" /> {t.saju.privacy}</p>
           </div>
         </form>
       </Section>
@@ -165,7 +167,7 @@ function InviteBox({ a }: { a: BirthForm }) {
         <button type="button" className={linkLang === lang ? 'on' : ''} onClick={() => setLinkLang(lang)}>{lang === 'ko' ? '한국어' : 'Tiếng Việt'}</button>
         <button type="button" className={linkLang !== lang ? 'on' : ''} onClick={() => setLinkLang(OTHER[lang])}>{lang === 'ko' ? 'Tiếng Việt' : '한국어'}</button>
       </div>
-      <button type="button" className="btn btn-ghost block" onClick={send}>{t.match.ask.make}</button>
+      <button type="button" className="btn btn-ghost block" onClick={send}><Mail className="line-icon" aria-hidden="true" /> {t.match.ask.make}</button>
       {msg && <p className="small gold" role="status">{msg}</p>}
     </div>
   );
@@ -210,7 +212,7 @@ function MatchResultView({ m, names, invited }: { m: MatchResult; names: [string
     <Section id="match-result" eyebrow="結果 · KẾT QUẢ" title={`${names[0]} ♥ ${names[1]}`}>
       <div className="match-hero panel">
         <div className="match-person">
-          <span className="match-emoji" aria-hidden="true">{t.animalEmoji[m.zodiacA]}</span>
+          <span className="match-emoji" aria-hidden="true"><Emoji e={t.animalEmoji[m.zodiacA]} /></span>
           <b>{names[0]}</b>
           <span className="muted small">{t.animals[m.zodiacA]} · {t.nayin[m.nayinA]}</span>
         </div>
@@ -221,7 +223,7 @@ function MatchResultView({ m, names, invited }: { m: MatchResult; names: [string
           </div>
         </div>
         <div className="match-person">
-          <span className="match-emoji" aria-hidden="true">{t.animalEmoji[m.zodiacB]}</span>
+          <span className="match-emoji" aria-hidden="true"><Emoji e={t.animalEmoji[m.zodiacB]} /></span>
           <b>{names[1]}</b>
           <span className="muted small">{t.animals[m.zodiacB]} · {t.nayin[m.nayinB]}</span>
         </div>
@@ -258,7 +260,7 @@ function MatchResultView({ m, names, invited }: { m: MatchResult; names: [string
           <h3 className="panel-title">{t.match.goodDays}</h3>
           {m.goodDays.length ? (
             <ul className="good-days">
-              {m.goodDays.map((d) => <li key={d}>🌕 {dateLabel(d)}</li>)}
+              {m.goodDays.map((d) => <li key={d}><Moon className="line-icon" aria-hidden="true" /> {dateLabel(d)}</li>)}
             </ul>
           ) : (
             <p className="muted">{t.match.noGoodDays}</p>

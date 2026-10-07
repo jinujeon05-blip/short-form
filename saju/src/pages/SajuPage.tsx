@@ -1,3 +1,4 @@
+import { Lock } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { BRANCH_HANJA, STEM_HANJA, branchElement, cycleStem, stemElement, tenGod, yearCycle } from '../engine/ganzhi';
 import { InvalidDateError, SajuResult, calculateSaju } from '../engine/pillars';
@@ -73,7 +74,7 @@ export function SajuPage({ query }: { query: string }) {
 
           {error && <p className="error" role="alert">{error}</p>}
           <button className="btn btn-gold block" type="submit">{t.saju.submit}</button>
-          <p className="muted small center">🔒 {t.saju.privacy}</p>
+          <p className="muted small center"><Lock className="line-icon" aria-hidden="true" /> {t.saju.privacy}</p>
         </form>
       </Section>
 
