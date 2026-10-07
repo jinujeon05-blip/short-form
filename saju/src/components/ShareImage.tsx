@@ -2,6 +2,7 @@ import { ImageDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useI18n } from '../i18n';
 import { CARD_H, CARD_W } from './cards';
+import { preloadEmojis } from './Emoji';
 
 async function waitForFonts() {
   try {
@@ -32,7 +33,7 @@ export function ShareImageButton({ draw, filename }: {
   const make = async () => {
     setBusy(true);
     try {
-      await waitForFonts();
+      await Promise.all([waitForFonts(), preloadEmojis(t.animalEmoji)]);
       const canvas = document.createElement('canvas');
       canvas.width = CARD_W;
       canvas.height = CARD_H;
