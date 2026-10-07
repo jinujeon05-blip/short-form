@@ -64,6 +64,11 @@
       "title": "베트남어 한글 표기 변환 · 베트남 이름·지명 한글로 (응우옌, 쩐…) | 명월",
       "description": "베트남 이름과 지명을 국립국어원 외래어 표기법에 맞춰 한글로 바꿔 드립니다. Nguyễn Thị Lan → 응우옌 티 란. 음절별 풀이와 표기 규칙표, 한국 이름 로마자 변환까지.",
       "h1": "베트남어 한글 표기 변환"
+    },
+    "/holidays": {
+      "title": "설날 vs 베트남 뗏(Tết), 추석 vs 쭝투 날짜 비교 · 2027 설날은 하루 차이 | 명월",
+      "description": "한국 설날·추석과 베트남 Tết·Trung Thu 날짜를 2000~2045년까지 비교합니다. 2027년은 베트남 Tết이 2월 6일, 한국 설날이 2월 7일. 왜 날짜가 다른지와 올해 양국 공휴일도 정리했습니다.",
+      "h1": "설날 vs 뗏(Tết), 추석 vs 쭝투 날짜 비교"
     }
   },
   "vi": {
@@ -131,6 +136,11 @@
       "title": "Phiên âm tên tiếng Việt sang chữ Hàn (Hangul) · Viết tên bằng tiếng Hàn | Minh Nguyệt",
       "description": "Viết tên tiếng Việt bằng chữ Hàn theo quy tắc chính thức: Nguyễn Thị Lan → 응우옌 티 란. Có phân tích từng âm tiết, bảng quy tắc và chuyển tên Hàn sang chữ Latin.",
       "h1": "Phiên âm tên tiếng Việt sang chữ Hàn"
+    },
+    "/holidays": {
+      "title": "Tết Việt Nam và Seollal Hàn Quốc khác ngày? So sánh Tết, Trung Thu 2000–2045 | Minh Nguyệt",
+      "description": "So sánh ngày Tết Nguyên Đán, Tết Trung Thu của Việt Nam với Seollal, Chuseok của Hàn Quốc từ 2000 đến 2045. Năm 2027 Tết Việt là 6/2, Hàn Quốc là 7/2. Giải thích vì sao lệch ngày và lịch nghỉ lễ hai nước.",
+      "h1": "So sánh Tết Việt Nam và Hàn Quốc"
     }
   }
 }

@@ -598,4 +598,18 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 }
 .upcoming-list button.on, .upcoming-list button:hover { border-color: var(--gold); }
 .upcoming-list b { font-family: var(--serif); font-size: 1.15rem; color: var(--gold-soft); }
+.fest-table .pill { margin-left: 6px; }
+.fest-table td { white-space: nowrap; }
+.hol-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+.hol-cols .panel { margin: 0; }
+.hol-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.hol-list li { display: grid; grid-template-columns: 7.5em 1fr; gap: 8px; align-items: baseline; }
+@media (max-width: 600px) {
+  .fest-table tr { display: table-row; padding: 0; }
+  .fest-table th, .fest-table td { border-bottom: 1px solid var(--line); padding: 6px 3px; font-size: 0.8rem; }
+  .fest-table thead tr > :last-child { display: table-cell; }
+  .fest-table tr > :last-child { white-space: nowrap; }
+  .fest-table thead th { white-space: normal; }
+  .fest-table .pill { display: none; }
+}
 .other-zodiacs { display: flex; flex-wrap: wrap; gap: 8px; }
