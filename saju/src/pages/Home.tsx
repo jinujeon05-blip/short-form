@@ -2,13 +2,15 @@ import { dayInfo } from '../engine/almanac';
 import { useI18n } from '../i18n';
 import { DayDetail } from '../components/DayDetail';
 import { ZodiacGrid } from '../components/ZodiacGrid';
-import { GanzhiChip, Section, cycleName, localTodayJdn, lunarText } from '../components/common';
+import { Section, localTodayJdn } from '../components/common';
 import { Link } from '../router';
 import { GuideList } from './ArticlePages';
 import { AdSlot } from '../components/AdSlot';
 import { HAZARD } from '../content/hazard';
 import { AGE } from '../content/age';
 import { InstallApp } from '../components/InstallApp';
+import { TodayCard } from '../components/TodayCard';
+import { TODAY } from '../content/today';
 import { YEARLY } from '../content/yearly';
 
 export function Home() {
@@ -16,10 +18,6 @@ export function Home() {
   const jdn = localTodayJdn();
   const basis = lang === 'vi' ? 'VN' : 'KR';
   const info = dayInfo(jdn, basis);
-  const kr = info.lunar.KR;
-  const vn = info.lunar.VN;
-  const differ = kr.day !== vn.day || kr.month !== vn.month || kr.leap !== vn.leap;
-  const { y, m, d } = info.ymd;
 
   return (
     <>
@@ -46,29 +44,7 @@ export function Home() {
         </div>
       </section>
 
-      <section className="today-strip" aria-label={t.today.title}>
-        <div className="today-cell">
-          <span className="k">{t.today.solar}</span>
-          <span className="today-big">{lang === 'vi' ? `${d}/${m}/${y}` : `${y}.${m}.${d}`}</span>
-          <span className="muted small">{t.calendar.weekdays[info.weekday]}</span>
-        </div>
-        <div className={`today-cell ${differ ? 'diff' : ''}`}>
-          <span className="k">🇰🇷 {t.today.lunarKR}</span>
-          <span className="today-big">{lunarText(kr, t, lang)}</span>
-          <span className="muted small">{kr.year}</span>
-        </div>
-        <div className={`today-cell ${differ ? 'diff' : ''}`}>
-          <span className="k">🇻🇳 {t.today.lunarVN}</span>
-          <span className="today-big">{lunarText(vn, t, lang)}</span>
-          <span className="muted small">{vn.year}</span>
-        </div>
-        <div className="today-cell">
-          <span className="k">{t.today.dayPillar}</span>
-          <span className="today-big"><GanzhiChip cycle={info.dayCycle} /></span>
-          <span className="muted small">{cycleName(info.dayCycle, t)}</span>
-        </div>
-        <p className={`today-note ${differ ? 'gold' : 'muted'}`}>{differ ? t.today.differ : t.today.same}</p>
-      </section>
+      <TodayCard info={info} basis={basis} />
 
       <Link to="/fortune/2027" className="year-banner">
         <span className="year-banner-emoji" aria-hidden="true">{lang === 'vi' ? '🐐' : '🐑'}</span>
@@ -81,7 +57,7 @@ export function Home() {
 
       <InstallApp />
 
-      <Section eyebrow="今日 · HÔM NAY" title={t.day.title}>
+      <Section eyebrow="今日 · HÔM NAY" title={TODAY[lang].detail}>
         <DayDetail info={info} basis={basis} />
         <p className="muted small center">
           {t.day.basisNote}: {basis === 'VN' ? t.calendar.basisVN : t.calendar.basisKR} ·{' '}

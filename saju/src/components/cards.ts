@@ -399,3 +399,66 @@ export function drawDailyCard(ctx: CanvasRenderingContext2D, d: DailyCardData, t
   ctx.font = `500 28px ${fo.sans}`;
   ctx.fillText(d.lucky, CARD_W / 2, 1150, CARD_W - 140);
 }
+
+export interface TodayCardData {
+  title: string;
+  dateText: string;
+  lunarKR: string;
+  lunarVN: string;
+  pillar: string;
+  dayCycle: number;
+  level: string;
+  verdict: string;
+  good: string;
+  avoid: string;
+  hours: string;
+}
+
+export function drawTodayCard(ctx: CanvasRenderingContext2D, d: TodayCardData, t: Dict, lang: Lang) {
+  const fo = fonts(lang);
+  frame(ctx, t, lang);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = C.muted;
+  ctx.font = `500 30px ${fo.sans}`;
+  ctx.fillText(d.title, CARD_W / 2, 255, CARD_W - 140);
+  ctx.fillStyle = C.goldSoft;
+  ctx.font = `900 58px ${fo.serif}`;
+  ctx.fillText(d.dateText, CARD_W / 2, 335, CARD_W - 140);
+
+  // Day pillar hanja, colored by element
+  const stem = d.dayCycle % 10;
+  const branch = d.dayCycle % 12;
+  ctx.font = `900 120px ${fo.serif}`;
+  ctx.fillStyle = ELEMENT_HEX[stemElement(stem)];
+  ctx.fillText(STEM_HANJA[stem], CARD_W / 2 - 75, 490);
+  ctx.fillStyle = ELEMENT_HEX[branchElement(branch)];
+  ctx.fillText(BRANCH_HANJA[branch], CARD_W / 2 + 75, 490);
+
+  ctx.fillStyle = C.text;
+  ctx.font = `600 32px ${fo.sans}`;
+  ctx.fillText(d.pillar, CARD_W / 2, 550, CARD_W - 140);
+  ctx.fillStyle = C.muted;
+  ctx.font = `500 30px ${fo.sans}`;
+  ctx.fillText(`${d.lunarKR} · ${d.lunarVN}`, CARD_W / 2, 600, CARD_W - 140);
+
+  // Level badge
+  ctx.strokeStyle = C.gold;
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.arc(CARD_W / 2, 700, 62, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.fillStyle = C.gold;
+  ctx.font = `900 44px ${fo.serif}`;
+  ctx.fillText(d.level, CARD_W / 2, 716, 110);
+
+  ctx.fillStyle = C.goldSoft;
+  ctx.font = `700 34px ${fo.sans}`;
+  wrap(ctx, d.verdict, CARD_W / 2, 830, CARD_W - 180, 46, 2);
+  ctx.fillStyle = C.text;
+  ctx.font = `500 30px ${fo.sans}`;
+  wrap(ctx, d.good, CARD_W / 2, 940, CARD_W - 200, 42, 2);
+  wrap(ctx, d.avoid, CARD_W / 2, 1030, CARD_W - 200, 42, 2);
+  ctx.fillStyle = C.gold;
+  ctx.font = `500 26px ${fo.sans}`;
+  wrap(ctx, d.hours, CARD_W / 2, 1120, CARD_W - 160, 36, 2);
+}
