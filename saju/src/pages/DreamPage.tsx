@@ -84,7 +84,10 @@ export function DreamDetailPage({ slug }: { slug: string }) {
   const ui = DREAM_UI[lang];
   const d = dreamBySlug(slug)!;
   const x = d[lang];
-  const related = DREAMS.filter((o) => o.category === d.category && o.slug !== d.slug).slice(0, 8);
+  // Neighbours in the same category, starting right after this dream, so every page links to different ones.
+  const same = DREAMS.filter((o) => o.category === d.category);
+  const at = same.findIndex((o) => o.slug === d.slug);
+  const related = [...same.slice(at + 1), ...same.slice(0, at)].slice(0, 8);
 
   return (
     <article className="article dream">

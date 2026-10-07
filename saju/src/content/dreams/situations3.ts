@@ -1,0 +1,328 @@
+import type { Dream } from './types';
+
+export const SITUATION_DREAMS_3: Dream[] = [
+  {
+    slug: 'knife', category: 'situation', tone: 'mixed', emoji: '🔪',
+    ko: {
+      name: '칼 꿈', keywords: ['칼', '칼에 찔리는 꿈', '칼 받는 꿈', '검'],
+      summary: '칼은 결단력과 권한을 뜻합니다. 칼을 받으면 권한이나 자리를 얻고, 칼에 찔리는 꿈은 의외로 재물 꿈으로 봅니다.',
+      korea: '좋은 칼을 선물받거나 손에 쥐면 결단할 힘과 권한, 승진을 얻는다고 봅니다. 칼에 찔려 피가 나는 꿈은 재물이 들어온다는 전통 해석이 있고, 칼이 부러지면 계획이 틀어질 수 있으니 점검하라는 뜻입니다.',
+      vietnam: '베트남에서 칼(dao) 꿈은 갈등이나 다툼을 조심하라는 뜻으로 보지만, 칼을 잘 다루면 어려움을 결단력으로 이겨 낸다고 풉니다.',
+      cases: [
+        ['칼을 선물받는 꿈', '권한이나 자리를 얻습니다.'],
+        ['칼에 찔려 피가 나는 꿈', '재물이 들어온다는 전통 해석이 있습니다.'],
+        ['칼로 무언가를 자르는 꿈', '미뤄 둔 일을 결단력 있게 정리합니다.'],
+        ['칼이 부러지는 꿈', '계획을 다시 점검하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy dao', keywords: ['dao', 'bị dao đâm', 'con dao', 'kiếm'],
+      summary: 'Dao là sự quyết đoán và quyền hạn. Được tặng dao là có quyền, có vị trí; bị dao đâm lại được người Hàn xem là có tiền.',
+      korea: 'Người Hàn cho rằng được tặng dao tốt hay cầm dao trong tay là có sức quyết đoán, quyền hạn, thăng chức; bị dao đâm chảy máu là có tiền vào theo cách giải xưa; dao gãy là kế hoạch dễ trục trặc.',
+      vietnam: 'Người Việt thường giải mơ thấy dao là nên đề phòng mâu thuẫn, cãi vã; nhưng dùng dao khéo léo là quyết đoán vượt khó.',
+      cases: [
+        ['Mơ được tặng dao', 'Có quyền hạn, vị trí.'],
+        ['Mơ bị dao đâm chảy máu', 'Theo giải mộng Hàn: có tiền vào.'],
+        ['Mơ dùng dao cắt đồ', 'Dứt khoát giải quyết việc tồn đọng.'],
+        ['Mơ dao gãy', 'Kiểm tra lại kế hoạch.'],
+      ],
+    },
+  },
+  {
+    slug: 'gun', category: 'situation', tone: 'mixed', emoji: '🎯',
+    ko: {
+      name: '총 꿈', keywords: ['총', '총 쏘는 꿈', '총 맞는 꿈', '총소리'],
+      summary: '총은 목표를 향한 집중력과 갑작스러운 소식을 뜻합니다. 총을 쏴 맞히면 목표를 이루는 꿈입니다.',
+      korea: '과녁을 맞히면 원하던 목표를 이루고, 총소리를 들으면 갑작스러운 소식이 온다고 봅니다. 총에 맞는 꿈은 충격적인 소식이지만 다치지 않으면 오히려 명성이나 행운으로 이어진다고 풉니다.',
+      vietnam: '베트남에서 총(súng) 꿈은 갈등이나 경쟁을 뜻하며, 총을 쏘아 맞히면 성공, 총에 맞으면 구설을 조심하라고 봅니다.',
+      cases: [
+        ['과녁을 맞히는 꿈', '원하던 목표를 이룹니다.'],
+        ['총소리를 듣는 꿈', '갑작스러운 소식이 옵니다.'],
+        ['총에 맞았는데 무사한 꿈', '충격 뒤에 오히려 행운이 옵니다.'],
+        ['총을 잃어버리는 꿈', '집중력과 의욕을 다시 모으세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy súng', keywords: ['súng', 'bắn súng', 'bị bắn', 'tiếng súng'],
+      summary: 'Súng là sự tập trung vào mục tiêu và tin tức bất ngờ. Bắn trúng đích là đạt được điều mong muốn.',
+      korea: 'Người Hàn cho rằng bắn trúng hồng tâm là đạt mục tiêu; nghe tiếng súng là có tin bất ngờ; bị bắn mà không sao là sau cú sốc sẽ có may mắn, danh tiếng.',
+      vietnam: 'Người Việt xem mơ thấy súng là cạnh tranh, mâu thuẫn; bắn trúng là thành công, bị bắn là cẩn thận thị phi.',
+      cases: [
+        ['Mơ bắn trúng đích', 'Đạt được mục tiêu.'],
+        ['Mơ nghe tiếng súng', 'Có tin bất ngờ.'],
+        ['Mơ bị bắn mà không sao', 'Qua cú sốc là đến may mắn.'],
+        ['Mơ mất súng', 'Tập trung lại sức lực, quyết tâm.'],
+      ],
+    },
+  },
+  {
+    slug: 'bag', category: 'situation', tone: 'mixed', emoji: '👜',
+    ko: {
+      name: '가방 꿈', keywords: ['가방', '가방 잃어버리는 꿈', '핸드백', '배낭'],
+      summary: '가방은 내가 지닌 능력과 짐, 재물을 뜻합니다. 새 가방을 얻으면 기회가, 가방을 잃으면 정리할 짐이 있다는 뜻입니다.',
+      korea: '새 가방을 선물받거나 사면 새로운 일이나 역할을 맡고, 가방이 묵직하면 재물이나 성과가 차오른다고 봅니다. 가방을 잃어버리면 소중한 것을 놓칠까 하는 걱정, 짐이 너무 무거우면 책임이 과하다는 뜻입니다.',
+      vietnam: '베트남에서도 가방(túi xách) 꿈은 재물과 책임을 뜻하며, 가방을 잃으면 지출을 조심하라고 봅니다.',
+      cases: [
+        ['새 가방을 얻는 꿈', '새 일이나 역할을 맡습니다.'],
+        ['묵직한 가방을 드는 꿈', '재물이나 성과가 차오릅니다.'],
+        ['가방을 잃어버리는 꿈', '소중한 것을 챙기고 지출을 점검하세요.'],
+        ['짐이 너무 무거운 꿈', '책임이 과합니다. 나눠 맡기세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy túi xách', keywords: ['túi xách', 'mất túi', 'ba lô', 'cặp sách'],
+      summary: 'Túi xách là năng lực, gánh nặng và tiền bạc bạn mang theo. Có túi mới là cơ hội; mất túi là có gánh cần sắp xếp.',
+      korea: 'Người Hàn cho rằng được tặng hay mua túi mới là nhận việc, vai trò mới; túi nặng trĩu là tiền bạc, thành quả đầy lên; mất túi là lo để lỡ điều quý; hành lý quá nặng là gánh trách nhiệm quá nhiều.',
+      vietnam: 'Người Việt cũng xem túi xách là tiền và trách nhiệm; mất túi là nên cẩn thận chi tiêu.',
+      cases: [
+        ['Mơ có túi mới', 'Nhận việc, vai trò mới.'],
+        ['Mơ xách túi nặng', 'Tiền bạc, thành quả đầy lên.'],
+        ['Mơ mất túi xách', 'Giữ kỹ đồ quý, xem lại chi tiêu.'],
+        ['Mơ hành lý quá nặng', 'Gánh quá nhiều — hãy chia sẻ bớt.'],
+      ],
+    },
+  },
+  {
+    slug: 'wallet', category: 'situation', tone: 'mixed', emoji: '👛',
+    ko: {
+      name: '지갑 꿈', keywords: ['지갑', '지갑 잃어버리는 꿈', '지갑 줍는 꿈'],
+      summary: '지갑은 재물과 신분을 뜻합니다. 두툼한 지갑은 재물운, 지갑을 잃는 꿈은 지출과 서류를 챙기라는 뜻입니다.',
+      korea: '지갑이 두툼해지면 재물이 늘고, 지갑을 주우면 뜻밖의 수입이나 기회가 생긴다고 봅니다. 지갑을 잃어버리면 신분이나 돈과 관련된 일을 꼼꼼히 챙기라는 뜻이며, 오히려 근심이 사라진다는 해석도 있습니다.',
+      vietnam: '베트남에서도 지갑(ví) 꿈은 재물운을 뜻하고, 지갑을 잃으면 돈 관리를 조심하라고 풉니다.',
+      cases: [
+        ['지갑이 두툼해지는 꿈', '재물이 늘어납니다.'],
+        ['지갑을 줍는 꿈', '뜻밖의 수입이나 기회가 생깁니다.'],
+        ['지갑을 잃어버리는 꿈', '돈과 서류를 꼼꼼히 챙기세요.'],
+        ['빈 지갑을 보는 꿈', '지출 계획을 다시 세울 때입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy ví tiền', keywords: ['ví', 'ví tiền', 'mất ví', 'nhặt được ví'],
+      summary: 'Ví là tiền bạc và thân phận. Ví dày là có tiền; mất ví là nhắc giữ kỹ tiền và giấy tờ.',
+      korea: 'Người Hàn cho rằng ví dày lên là tiền tăng; nhặt được ví là có khoản thu, cơ hội bất ngờ; mất ví là nên cẩn thận việc liên quan tiền, giấy tờ — cũng có cách giải là bớt được nỗi lo.',
+      vietnam: 'Người Việt cũng xem mơ thấy ví là vận tiền bạc; mất ví là nên quản lý tiền cẩn thận.',
+      cases: [
+        ['Mơ ví dày lên', 'Tiền bạc tăng.'],
+        ['Mơ nhặt được ví', 'Có khoản thu, cơ hội bất ngờ.'],
+        ['Mơ mất ví', 'Giữ kỹ tiền và giấy tờ.'],
+        ['Mơ ví rỗng', 'Lập lại kế hoạch chi tiêu.'],
+      ],
+    },
+  },
+  {
+    slug: 'watch', category: 'situation', tone: 'mixed', emoji: '⌚',
+    ko: {
+      name: '시계 꿈', keywords: ['시계', '손목시계', '시계가 멈추는 꿈', '시계 선물'],
+      summary: '시계는 시간과 약속, 기회의 때를 뜻합니다. 새 시계를 받으면 좋은 때가 오고, 시계가 멈추면 쉬어 가라는 뜻입니다.',
+      korea: '시계를 선물받으면 약속이나 인연이 생기고, 좋은 때를 만난다고 봅니다. 시계가 멈추거나 고장 나면 일이 잠시 멈추니 무리하지 말라는 뜻, 시계가 빨리 돌면 마감과 시간 압박을 느끼고 있다는 뜻입니다.',
+      vietnam: '베트남에서도 시계(đồng hồ) 꿈은 시간 관리와 기회를 뜻하며, 시계가 멈추면 계획을 점검하라고 봅니다.',
+      cases: [
+        ['시계를 선물받는 꿈', '약속이나 인연, 좋은 때가 옵니다.'],
+        ['시계가 멈추는 꿈', '잠시 쉬어 가라는 신호입니다.'],
+        ['시계가 빨리 도는 꿈', '시간 압박을 느낍니다. 일정을 정리하세요.'],
+        ['시계를 잃어버리는 꿈', '약속과 기회를 놓치지 않게 챙기세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy đồng hồ', keywords: ['đồng hồ', 'đồng hồ đeo tay', 'đồng hồ dừng'],
+      summary: 'Đồng hồ là thời gian, lời hẹn và thời cơ. Được tặng đồng hồ là thời điểm tốt đến; đồng hồ dừng là lời nhắc nghỉ ngơi.',
+      korea: 'Người Hàn cho rằng được tặng đồng hồ là có lời hẹn, duyên lành, gặp thời; đồng hồ dừng hay hỏng là việc tạm ngưng, đừng gắng; kim chạy nhanh là đang chịu áp lực thời hạn.',
+      vietnam: 'Người Việt cũng giải mơ thấy đồng hồ là quản lý thời gian, cơ hội; đồng hồ dừng là nên xem lại kế hoạch.',
+      cases: [
+        ['Mơ được tặng đồng hồ', 'Có hẹn ước, duyên lành, gặp thời.'],
+        ['Mơ đồng hồ dừng', 'Tín hiệu nên nghỉ ngơi.'],
+        ['Mơ kim chạy rất nhanh', 'Áp lực thời gian — sắp xếp lại lịch.'],
+        ['Mơ mất đồng hồ', 'Giữ lời hẹn, đừng lỡ cơ hội.'],
+      ],
+    },
+  },
+  {
+    slug: 'rice', category: 'situation', tone: 'good', emoji: '🌾',
+    ko: {
+      name: '쌀 꿈', keywords: ['쌀', '쌀가마', '곡식', '쌀 꿈'],
+      summary: '쌀은 가장 기본적인 재물이자 풍요의 상징입니다. 쌀이 가득 쌓이면 살림이 넉넉해지는 길몽입니다.',
+      korea: '쌀가마가 집에 들어오거나 쌀독이 가득 차면 재물이 늘고 먹고사는 걱정이 사라진다고 봅니다. 쌀을 퍼서 나눠 주면 덕을 쌓아 복으로 돌아오고, 쌀을 쏟으면 지출을 조심하라는 뜻입니다.',
+      vietnam: '쌀농사의 나라 베트남에서 쌀(gạo)과 벼(lúa)는 풍요 그 자체입니다. 쌀이 가득한 꿈은 넉넉한 살림과 재물을 뜻합니다.',
+      cases: [
+        ['쌀가마가 들어오는 꿈', '재물이 늘어납니다.'],
+        ['쌀독이 가득 찬 꿈', '먹고사는 걱정이 사라집니다.'],
+        ['쌀을 나눠 주는 꿈', '덕을 쌓아 복으로 돌아옵니다.'],
+        ['쌀을 쏟는 꿈', '지출을 조심하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy gạo, lúa', keywords: ['gạo', 'lúa', 'bao gạo', 'thóc'],
+      summary: 'Gạo là của cải cơ bản nhất và biểu tượng sung túc. Gạo chất đầy là nhà cửa no đủ.',
+      korea: 'Người Hàn cho rằng bao gạo vào nhà hay chum gạo đầy là tiền của tăng, hết lo cơm áo; xúc gạo chia cho người là tích đức, phúc quay về; đổ gạo là nên dè chừng chi tiêu.',
+      vietnam: 'Với đất nước lúa nước như Việt Nam, gạo và lúa là chính sự no đủ; mơ thấy gạo đầy là gia đình sung túc, có tiền.',
+      cases: [
+        ['Mơ bao gạo vào nhà', 'Tiền của tăng.'],
+        ['Mơ chum gạo đầy', 'Không còn lo cơm áo.'],
+        ['Mơ chia gạo cho người', 'Tích đức, phúc quay về.'],
+        ['Mơ làm đổ gạo', 'Cẩn thận chi tiêu.'],
+      ],
+    },
+  },
+  {
+    slug: 'rice-cake', category: 'situation', tone: 'good', emoji: '🍡',
+    ko: {
+      name: '떡 꿈', keywords: ['떡', '시루떡', '떡 먹는 꿈', '떡 받는 꿈'],
+      summary: '떡은 잔치와 경사, 재물을 뜻하는 길몽입니다. 떡을 받거나 맛있게 먹으면 기쁜 일이 생깁니다.',
+      korea: '"떡 본 김에 제사 지낸다"는 말처럼 떡은 경사와 기회의 상징입니다. 떡을 한 시루 받으면 재물과 축하할 일이 생기고, 떡을 나눠 먹으면 인간관계가 좋아집니다. 떡이 상하면 기회를 놓치지 말라는 뜻입니다.',
+      vietnam: '베트남의 반쯩(bánh chưng)·반뗏(bánh tét)처럼 떡은 설날 풍요의 상징이라, 떡을 받는 꿈은 집안의 복과 화목을 뜻합니다.',
+      cases: [
+        ['떡을 한 시루 받는 꿈', '재물과 축하할 일이 생깁니다.'],
+        ['떡을 맛있게 먹는 꿈', '기쁜 일과 좋은 기회가 옵니다.'],
+        ['떡을 나눠 먹는 꿈', '인간관계가 좋아집니다.'],
+        ['떡이 상해 있는 꿈', '눈앞의 기회를 놓치지 마세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy bánh chưng, bánh dày', keywords: ['bánh chưng', 'bánh tét', 'bánh dày', 'bánh gạo'],
+      summary: 'Bánh làm từ gạo nếp là cỗ bàn, hỷ sự và tài lộc. Được biếu hay ăn bánh ngon là sắp có tin vui.',
+      korea: 'Người Hàn có câu “thấy bánh tteok thì làm cỗ luôn”, nên bánh gạo tteok là biểu tượng hỷ sự, cơ hội. Được cho cả nồi bánh là có tiền và chuyện mừng; chia bánh cho người là quan hệ tốt lên; bánh thiu là đừng để lỡ cơ hội.',
+      vietnam: 'Với người Việt, bánh chưng, bánh tét là biểu tượng no ấm ngày Tết; mơ được biếu bánh là gia đình có phúc, hòa thuận.',
+      cases: [
+        ['Mơ được biếu cả nồi bánh', 'Tiền tài và chuyện vui.'],
+        ['Mơ ăn bánh ngon', 'Có tin mừng, cơ hội tốt.'],
+        ['Mơ chia bánh cho mọi người', 'Quan hệ tốt đẹp hơn.'],
+        ['Mơ bánh bị thiu', 'Đừng để lỡ cơ hội trước mắt.'],
+      ],
+    },
+  },
+  {
+    slug: 'meat', category: 'situation', tone: 'mixed', emoji: '🥩',
+    ko: {
+      name: '고기 꿈', keywords: ['고기', '고기 먹는 꿈', '소고기', '돼지고기', '날고기'],
+      summary: '익힌 고기를 맛있게 먹으면 재물과 기력을 얻는 길몽이고, 날고기는 건강을 살피라는 뜻으로 봅니다.',
+      korea: '잘 구운 고기를 배불리 먹으면 재물과 기운이 오르고, 고기를 선물받으면 대접받거나 도움을 받는다고 봅니다. 핏물이 흐르는 날고기를 먹으면 건강이나 구설을 조심하라는 해석이 있습니다.',
+      vietnam: '베트남에서도 고기(thịt)를 푸짐하게 먹는 꿈은 풍족함을 뜻하지만, 상한 고기는 손해를 조심하라고 봅니다.',
+      cases: [
+        ['잘 구운 고기를 먹는 꿈', '재물과 기력이 오릅니다.'],
+        ['고기를 선물받는 꿈', '대접받거나 도움을 받습니다.'],
+        ['날고기를 먹는 꿈', '건강과 말조심을 챙기세요.'],
+        ['고기를 나눠 주는 꿈', '베푼 만큼 사람을 얻습니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy thịt', keywords: ['thịt', 'ăn thịt', 'thịt sống', 'thịt bò'],
+      summary: 'Ăn thịt chín ngon là điềm có tiền, có sức; ăn thịt sống là lời nhắc giữ gìn sức khỏe.',
+      korea: 'Người Hàn cho rằng ăn no thịt nướng là tiền tài và sinh lực lên; được biếu thịt là được đãi đằng, giúp đỡ; ăn thịt sống còn máu là nên cẩn thận sức khỏe, lời ăn tiếng nói.',
+      vietnam: 'Người Việt cũng xem ăn thịt thịnh soạn là no đủ; thịt ôi là đề phòng thiệt hại.',
+      cases: [
+        ['Mơ ăn thịt nướng ngon', 'Tiền và sức lực tăng.'],
+        ['Mơ được biếu thịt', 'Được đãi đằng, giúp đỡ.'],
+        ['Mơ ăn thịt sống', 'Giữ sức khỏe, cẩn thận lời nói.'],
+        ['Mơ chia thịt cho người khác', 'Cho đi bao nhiêu, được người bấy nhiêu.'],
+      ],
+    },
+  },
+  {
+    slug: 'alcohol', category: 'situation', tone: 'mixed', emoji: '🍶',
+    ko: {
+      name: '술 마시는 꿈', keywords: ['술', '술 마시는 꿈', '취하는 꿈', '소주'],
+      summary: '기분 좋게 술을 마시면 잔치와 경사, 좋은 인연을 뜻하지만, 만취하면 실수와 지출을 조심하라는 꿈입니다.',
+      korea: '귀한 술을 대접받으면 윗사람에게 인정받고, 여럿이 즐겁게 마시면 축하할 일이 생긴다고 봅니다. 너무 취해 실수하면 말조심과 지출 관리를 하라는 뜻입니다.',
+      vietnam: '베트남에서도 술(rượu) 마시는 꿈은 잔치와 기쁜 모임을 뜻하며, 취해서 정신을 잃으면 판단을 흐리지 말라는 경고로 봅니다.',
+      cases: [
+        ['귀한 술을 대접받는 꿈', '윗사람에게 인정받습니다.'],
+        ['여럿이 즐겁게 마시는 꿈', '축하할 일이 생깁니다.'],
+        ['만취해서 실수하는 꿈', '말조심과 지출 관리를 하세요.'],
+        ['술을 거절하는 꿈', '유혹을 이겨 내고 중심을 지킵니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy uống rượu', keywords: ['rượu', 'uống rượu', 'say rượu', 'bia'],
+      summary: 'Uống rượu vui vẻ là tiệc tùng, hỷ sự, duyên tốt; say khướt là lời nhắc cẩn thận sai sót, chi tiêu.',
+      korea: 'Người Hàn cho rằng được mời rượu quý là được bề trên công nhận; cùng mọi người uống vui là có việc đáng mừng; say quá mà lỡ lời là nên giữ miệng, quản lý chi tiêu.',
+      vietnam: 'Người Việt cũng xem mơ uống rượu là cỗ bàn, gặp gỡ vui; say đến mất tỉnh táo là lời cảnh báo đừng để phán đoán lệch lạc.',
+      cases: [
+        ['Mơ được mời rượu quý', 'Được bề trên công nhận.'],
+        ['Mơ cùng mọi người uống vui', 'Có việc đáng mừng.'],
+        ['Mơ say khướt lỡ lời', 'Giữ miệng, quản lý chi tiêu.'],
+        ['Mơ từ chối rượu', 'Vượt qua cám dỗ, giữ vững lập trường.'],
+      ],
+    },
+  },
+  {
+    slug: 'cleaning', category: 'situation', tone: 'good', emoji: '🧹',
+    ko: {
+      name: '청소하는 꿈', keywords: ['청소', '대청소', '빨래', '정리하는 꿈'],
+      summary: '청소하는 꿈은 묵은 걱정과 나쁜 기운을 털어내고 새로 시작한다는 길몽입니다.',
+      korea: '집을 깨끗이 청소하면 근심이 사라지고 좋은 일을 맞을 준비가 된다고 봅니다. 쓰레기를 내다 버리면 나쁜 관계나 습관을 정리하고, 빨래를 하면 오해나 누명을 벗는다고 풉니다.',
+      vietnam: '베트남에서는 설 전에 집을 대청소(dọn nhà đón Tết)하는 풍습처럼, 청소하는 꿈을 액운을 쫓고 복을 맞는 꿈으로 봅니다.',
+      cases: [
+        ['집을 깨끗이 청소하는 꿈', '근심이 사라지고 좋은 일을 맞을 준비가 됩니다.'],
+        ['쓰레기를 내다 버리는 꿈', '나쁜 관계나 습관을 정리합니다.'],
+        ['빨래하는 꿈', '오해나 누명을 벗습니다.'],
+        ['아무리 치워도 더러운 꿈', '혼자 감당하기 벅찹니다. 도움을 청하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy dọn dẹp nhà', keywords: ['dọn dẹp', 'quét nhà', 'giặt đồ', 'lau nhà'],
+      summary: 'Mơ dọn dẹp là điềm tốt: trút bỏ lo âu, xui xẻo cũ để bắt đầu lại.',
+      korea: 'Người Hàn cho rằng dọn nhà sạch sẽ là hết lo, sẵn sàng đón việc tốt; đổ rác là dứt bỏ quan hệ, thói quen xấu; giặt quần áo là gỡ được hiểu lầm, oan ức.',
+      vietnam: 'Giống tục dọn nhà đón Tết, người Việt xem mơ dọn dẹp là xua vận rủi, đón phúc lộc.',
+      cases: [
+        ['Mơ dọn nhà sạch sẽ', 'Hết lo, sẵn sàng đón tin vui.'],
+        ['Mơ đi đổ rác', 'Dứt bỏ quan hệ, thói quen xấu.'],
+        ['Mơ giặt quần áo', 'Gỡ được hiểu lầm, oan ức.'],
+        ['Mơ dọn mãi không sạch', 'Việc quá sức — hãy nhờ giúp đỡ.'],
+      ],
+    },
+  },
+  {
+    slug: 'urine', category: 'situation', tone: 'good', emoji: '🚽',
+    ko: {
+      name: '오줌 꿈', keywords: ['오줌', '소변', '오줌 누는 꿈', '화장실 꿈'],
+      summary: '오줌이 시원하게 나오거나 넘쳐흐르는 꿈은 한국에서 재물과 큰 행운을 뜻하는 대표 길몽입니다.',
+      korea: '삼국유사에는 김유신의 누이 보희가 서악에 올라 오줌을 누자 서라벌이 잠기는 꿈을 꾸었고, 동생 문희가 비단 치마를 주고 그 꿈을 사서 김춘추(태종무열왕)와 혼인해 왕비가 되었다는 이야기가 있습니다. 그래서 오줌이 넘쳐 마을을 덮는 꿈은 큰 복과 귀함을 뜻합니다.',
+      vietnam: '베트남에서도 소변(nước tiểu) 꿈을 근심을 쏟아 내고 재물이 들어오는 꿈으로 풀이하는 경우가 많습니다.',
+      cases: [
+        ['오줌이 넘쳐 마을을 덮는 꿈', '큰 복과 귀함을 얻습니다(문희의 꿈).'],
+        ['시원하게 오줌을 누는 꿈', '근심이 풀리고 재물이 들어옵니다.'],
+        ['화장실을 못 찾는 꿈', '마음 놓을 곳이 없습니다. 휴식이 필요합니다.'],
+        ['남들 앞에서 오줌을 누는 꿈', '부끄러운 일보다 숨은 실력이 드러납니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy đi tiểu', keywords: ['đi tiểu', 'nước tiểu', 'nhà vệ sinh', 'tìm nhà vệ sinh'],
+      summary: 'Ở Hàn Quốc, mơ đi tiểu thỏa thích hay nước tiểu tràn ngập là điềm đại cát về tài lộc và vận may.',
+      korea: 'Sử Tam quốc di sự chép: chị của tướng Kim Yu-sin là Bo-hui mơ đi tiểu trên núi làm ngập cả kinh đô Seorabeol; cô em Mun-hui đã đổi một chiếc váy lụa để “mua” giấc mơ ấy, rồi lấy Kim Chun-chu và trở thành hoàng hậu. Vì vậy nước tiểu tràn ngập làng là điềm phúc lớn, phú quý.',
+      vietnam: 'Người Việt cũng thường giải mơ đi tiểu là trút bỏ lo âu, có tài lộc vào.',
+      cases: [
+        ['Mơ nước tiểu tràn ngập làng', 'Phúc lớn, phú quý (giấc mơ của Mun-hui).'],
+        ['Mơ đi tiểu thoải mái', 'Hết lo, tiền bạc vào.'],
+        ['Mơ không tìm được nhà vệ sinh', 'Thiếu chỗ thư giãn — cần nghỉ ngơi.'],
+        ['Mơ đi tiểu trước mặt người khác', 'Năng lực ẩn giấu được lộ ra.'],
+      ],
+    },
+  },
+  {
+    slug: 'vomit', category: 'situation', tone: 'mixed', emoji: '🤢',
+    ko: {
+      name: '토하는 꿈', keywords: ['토하는 꿈', '구토', '토 꿈'],
+      summary: '토하는 꿈은 속에 쌓인 것을 비워 내는 꿈입니다. 시원하게 토하면 근심이 해결되지만, 재물이 나갈 수 있다는 해석도 있습니다.',
+      korea: '먹은 것을 시원하게 토해 내면 묵은 걱정이나 억울함을 털어놓고 해결한다고 봅니다. 다만 금은보화를 토하면 재물이 나가니 지출을 조심하라고 풉니다. 토하지 못해 괴로우면 말하지 못한 고민이 있다는 뜻입니다.',
+      vietnam: '베트남에서도 토하는 꿈(mơ thấy nôn)은 마음속 응어리를 털어낸다는 뜻이며, 건강을 챙기라는 신호로도 봅니다.',
+      cases: [
+        ['시원하게 토하는 꿈', '묵은 걱정을 털어내고 해결합니다.'],
+        ['보석을 토하는 꿈', '재물이 나갈 수 있으니 지출을 조심하세요.'],
+        ['토하지 못해 괴로운 꿈', '말하지 못한 고민을 털어놓으세요.'],
+        ['다른 사람이 토하는 꿈', '그 사람의 고민을 들어 줄 때입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy nôn mửa', keywords: ['nôn', 'nôn mửa', 'ói'],
+      summary: 'Mơ nôn là trút bỏ những gì dồn nén. Nôn ra thoải mái là nỗi lo được giải, nhưng cũng có cách giải là tiền ra.',
+      korea: 'Người Hàn cho rằng nôn hết ra là nói được nỗi lo, uất ức và giải quyết xong; nhưng nôn ra vàng bạc là tiền đi ra; muốn nôn không được là có tâm sự chưa nói được.',
+      vietnam: 'Người Việt cũng giải mơ nôn là trút bỏ uất ức, và là lời nhắc giữ sức khỏe.',
+      cases: [
+        ['Mơ nôn ra thoải mái', 'Trút bỏ lo âu, giải quyết xong việc.'],
+        ['Mơ nôn ra vàng bạc', 'Tiền dễ ra — cẩn thận chi tiêu.'],
+        ['Mơ muốn nôn mà không được', 'Hãy nói ra tâm sự của mình.'],
+        ['Mơ người khác nôn', 'Lúc lắng nghe nỗi lo của người đó.'],
+      ],
+    },
+  },
+];

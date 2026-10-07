@@ -1,0 +1,328 @@
+import type { Dream } from './types';
+
+export const SITUATION_DREAMS_4: Dream[] = [
+  {
+    slug: 'train', category: 'situation', tone: 'mixed', emoji: '🚆',
+    ko: {
+      name: '기차 꿈', keywords: ['기차', '열차', '지하철', '기차 놓치는 꿈'],
+      summary: '기차는 정해진 길과 인생의 흐름을 뜻합니다. 기차를 타면 계획대로 나아가고, 놓치면 기회를 챙기라는 꿈입니다.',
+      korea: '기차를 타고 창밖을 보며 가면 계획한 일이 순조롭게 진행된다고 봅니다. 기차를 놓치면 기회를 놓칠까 하는 불안, 기차가 탈선하면 계획을 다시 점검하라는 뜻입니다. 지하철 꿈은 일상의 반복과 사람들 사이의 관계를 뜻합니다.',
+      vietnam: '베트남에서도 기차(tàu hỏa) 꿈은 인생의 여정을 뜻하며, 기차를 타면 먼 곳의 소식이나 이동이 생긴다고 봅니다.',
+      cases: [
+        ['기차를 타고 가는 꿈', '계획한 일이 순조롭게 진행됩니다.'],
+        ['기차를 놓치는 꿈', '기회를 놓치지 않게 일정을 챙기세요.'],
+        ['기차가 탈선하는 꿈', '계획을 다시 점검할 때입니다.'],
+        ['종착역에 도착하는 꿈', '한 단계를 잘 마무리합니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy tàu hỏa', keywords: ['tàu hỏa', 'tàu điện', 'lỡ tàu', 'ga tàu'],
+      summary: 'Tàu hỏa là con đường đã định và dòng chảy cuộc đời. Lên tàu là đi đúng kế hoạch; lỡ tàu là nhắc nắm bắt cơ hội.',
+      korea: 'Người Hàn cho rằng ngồi tàu ngắm cảnh là việc đã định diễn ra suôn sẻ; lỡ tàu là sợ bỏ lỡ cơ hội; tàu trật bánh là xem lại kế hoạch; tàu điện ngầm là nhịp sống lặp lại và các mối quan hệ.',
+      vietnam: 'Người Việt cũng xem tàu hỏa là hành trình đời người; đi tàu là có tin từ xa hoặc chuyển dời.',
+      cases: [
+        ['Mơ đi tàu', 'Kế hoạch diễn ra suôn sẻ.'],
+        ['Mơ lỡ tàu', 'Giữ lịch trình, đừng bỏ lỡ cơ hội.'],
+        ['Mơ tàu trật bánh', 'Kiểm tra lại kế hoạch.'],
+        ['Mơ đến ga cuối', 'Hoàn thành một chặng đường.'],
+      ],
+    },
+  },
+  {
+    slug: 'ship', category: 'situation', tone: 'good', emoji: '🚢',
+    ko: {
+      name: '배 꿈', keywords: ['배', '배 타는 꿈', '선박', '배가 가라앉는 꿈'],
+      summary: '짐을 가득 실은 배가 들어오면 재물이 들어오는 길몽입니다. 배가 가라앉으면 계획을 점검하라는 뜻입니다.',
+      korea: '물건이나 사람을 가득 실은 배가 항구로 들어오면 재물과 기회가 들어온다고 봅니다. 큰 배를 타고 바다로 나가면 사업 확장이나 해외와 관련된 일이 생기고, 배가 뒤집히면 무리한 계획을 조심하라는 뜻입니다.',
+      vietnam: '강과 바다가 많은 베트남에서 배(thuyền, tàu) 꿈은 생계와 재물을 뜻하며, 순풍에 돛 단 배는 일이 술술 풀린다고 봅니다.',
+      cases: [
+        ['짐을 가득 실은 배가 들어오는 꿈', '재물과 기회가 들어옵니다.'],
+        ['큰 배를 타고 바다로 나가는 꿈', '사업이 커지거나 해외 관련 일이 생깁니다.'],
+        ['순풍에 돛을 단 배를 보는 꿈', '일이 술술 풀립니다.'],
+        ['배가 가라앉는 꿈', '무리한 계획을 조심하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy thuyền, tàu thủy', keywords: ['thuyền', 'tàu thủy', 'đi thuyền', 'thuyền chìm'],
+      summary: 'Thuyền chở đầy hàng cập bến là điềm tài lộc. Thuyền chìm là lời nhắc xem lại kế hoạch.',
+      korea: 'Người Hàn cho rằng thuyền đầy hàng, đầy người vào cảng là tiền và cơ hội đến; đi tàu lớn ra khơi là mở rộng làm ăn, có việc liên quan nước ngoài; thuyền lật là cẩn thận kế hoạch quá sức.',
+      vietnam: 'Với đất nước sông nước như Việt Nam, thuyền là sinh kế và tài lộc; “thuận buồm xuôi gió” là mọi việc hanh thông.',
+      cases: [
+        ['Mơ thuyền đầy hàng cập bến', 'Tài lộc, cơ hội đến.'],
+        ['Mơ đi tàu lớn ra khơi', 'Làm ăn mở rộng, việc liên quan nước ngoài.'],
+        ['Mơ thuyền thuận buồm xuôi gió', 'Mọi việc hanh thông.'],
+        ['Mơ thuyền chìm', 'Cẩn thận kế hoạch quá sức.'],
+      ],
+    },
+  },
+  {
+    slug: 'school', category: 'situation', tone: 'mixed', emoji: '🏫',
+    ko: {
+      name: '학교 꿈', keywords: ['학교', '학창 시절', '교실', '선생님 꿈'],
+      summary: '학교 꿈은 배움과 평가, 그리고 다시 배워야 할 과제를 뜻합니다. 졸업 후에도 새로운 도전을 앞두면 자주 꿉니다.',
+      korea: '학창 시절 교실로 돌아가면 지금 새로운 것을 배워야 하는 시기라고 봅니다. 선생님께 칭찬받으면 윗사람에게 인정받고, 교실을 못 찾으면 새 환경에서 길을 찾는 중이라는 뜻입니다.',
+      vietnam: '베트남에서도 학교(trường học) 꿈은 배움과 성장, 옛 추억을 뜻하며, 선생님(thầy cô)을 만나면 좋은 조언을 얻는다고 봅니다.',
+      cases: [
+        ['학창 시절 교실로 돌아가는 꿈', '새로운 것을 배워야 하는 시기입니다.'],
+        ['선생님께 칭찬받는 꿈', '윗사람에게 인정받습니다.'],
+        ['교실을 못 찾는 꿈', '새 환경에서 길을 찾는 중입니다.'],
+        ['졸업식을 하는 꿈', '한 단계를 마치고 새 출발을 합니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy trường học', keywords: ['trường học', 'lớp học', 'thầy cô', 'ngày xưa đi học'],
+      summary: 'Mơ thấy trường học là chuyện học hỏi, được đánh giá và những bài học cần ôn lại. Người đã ra trường vẫn hay mơ khi sắp có thử thách mới.',
+      korea: 'Người Hàn cho rằng quay lại lớp học thời đi học là lúc cần học điều mới; được thầy khen là được bề trên công nhận; không tìm thấy lớp là đang tìm đường ở môi trường mới.',
+      vietnam: 'Người Việt cũng xem mơ thấy trường là học hỏi, trưởng thành, kỷ niệm; gặp thầy cô là nhận lời khuyên quý.',
+      cases: [
+        ['Mơ quay lại lớp học cũ', 'Đến lúc học hỏi điều mới.'],
+        ['Mơ được thầy cô khen', 'Được bề trên công nhận.'],
+        ['Mơ không tìm thấy lớp', 'Đang tìm đường ở môi trường mới.'],
+        ['Mơ dự lễ tốt nghiệp', 'Hoàn thành một chặng, bắt đầu mới.'],
+      ],
+    },
+  },
+  {
+    slug: 'church', category: 'situation', tone: 'good', emoji: '⛪',
+    ko: {
+      name: '교회·성당 꿈', keywords: ['교회', '성당', '예배', '기도하는 꿈', '십자가'],
+      summary: '교회나 성당에서 기도하는 꿈은 마음의 평화와 위로, 바른 길을 찾는다는 뜻의 길몽입니다.',
+      korea: '교회나 성당에서 평안하게 기도하면 걱정이 덜어지고 도움의 손길을 만난다고 봅니다. 종소리를 들으면 반가운 소식이, 예배 중 눈물을 흘리면 마음의 짐을 내려놓는다고 풉니다. 종교와 관계없이 내면의 안정을 찾는 꿈으로 봅니다.',
+      vietnam: '천주교 신자가 많은 베트남에서도 성당(nhà thờ) 꿈은 평안과 보호, 감사할 일을 뜻합니다.',
+      cases: [
+        ['교회·성당에서 기도하는 꿈', '걱정이 덜어지고 도움을 만납니다.'],
+        ['종소리를 듣는 꿈', '반가운 소식이 옵니다.'],
+        ['예배 중 눈물을 흘리는 꿈', '마음의 짐을 내려놓습니다.'],
+        ['성당에서 결혼식을 보는 꿈', '좋은 인연이나 약속이 생깁니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy nhà thờ', keywords: ['nhà thờ', 'cầu nguyện', 'thánh giá', 'đi lễ'],
+      summary: 'Mơ cầu nguyện ở nhà thờ là điềm lành về sự bình an, an ủi và tìm thấy con đường đúng.',
+      korea: 'Người Hàn cho rằng cầu nguyện bình an ở nhà thờ là bớt lo, gặp người giúp; nghe tiếng chuông là có tin vui; rơi nước mắt khi cầu nguyện là trút được gánh nặng — dù có theo đạo hay không, đó là lúc tìm lại sự an yên.',
+      vietnam: 'Với nhiều người Việt theo Công giáo, mơ thấy nhà thờ là được che chở, bình an, có điều để tạ ơn.',
+      cases: [
+        ['Mơ cầu nguyện ở nhà thờ', 'Bớt lo, gặp được sự giúp đỡ.'],
+        ['Mơ nghe tiếng chuông', 'Có tin vui.'],
+        ['Mơ khóc khi cầu nguyện', 'Trút được gánh nặng trong lòng.'],
+        ['Mơ thấy đám cưới ở nhà thờ', 'Có duyên lành hoặc lời hứa tốt.'],
+      ],
+    },
+  },
+  {
+    slug: 'late', category: 'situation', tone: 'bad', emoji: '⏰',
+    ko: {
+      name: '지각하는 꿈', keywords: ['지각', '늦는 꿈', '약속에 늦는 꿈', '비행기 놓치는 꿈'],
+      summary: '지각하거나 약속에 늦는 꿈은 준비가 부족하다는 불안과 시간 압박을 뜻합니다.',
+      korea: '중요한 시험이나 회의에 늦는 꿈은 실제로 할 일이 많아 쫓기고 있다는 신호입니다. 늦었는데도 무사히 들어가면 걱정한 일이 잘 풀리고, 비행기를 놓치면 기회를 미리 챙기라는 뜻으로 봅니다.',
+      vietnam: '베트남에서도 늦는 꿈(mơ thấy bị muộn)은 스트레스와 준비 부족에 대한 걱정으로 봅니다.',
+      cases: [
+        ['시험이나 회의에 늦는 꿈', '할 일에 쫓기고 있습니다. 일정을 정리하세요.'],
+        ['늦었지만 무사히 들어가는 꿈', '걱정한 일이 잘 풀립니다.'],
+        ['비행기를 놓치는 꿈', '기회를 미리 챙기세요.'],
+        ['시계가 계속 빨라지는 꿈', '완벽주의를 내려놓고 우선순위를 정하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy bị muộn', keywords: ['bị muộn', 'đi trễ', 'lỡ chuyến bay', 'trễ hẹn'],
+      summary: 'Mơ đi muộn, trễ hẹn là nỗi lo chưa chuẩn bị đủ và áp lực thời gian.',
+      korea: 'Người Hàn cho rằng mơ trễ kỳ thi, cuộc họp quan trọng là dấu hiệu bạn đang bị việc đuổi theo; trễ mà vẫn vào kịp là việc lo sẽ ổn; lỡ chuyến bay là nhắc chuẩn bị cơ hội từ sớm.',
+      vietnam: 'Người Việt cũng giải mơ bị muộn là căng thẳng, lo chưa chuẩn bị chu đáo.',
+      cases: [
+        ['Mơ trễ kỳ thi, cuộc họp', 'Đang bị việc dí — sắp xếp lại lịch.'],
+        ['Mơ muộn mà vẫn kịp', 'Việc lo lắng sẽ ổn thỏa.'],
+        ['Mơ lỡ chuyến bay', 'Chuẩn bị cơ hội từ sớm.'],
+        ['Mơ đồng hồ cứ chạy nhanh', 'Buông bớt cầu toàn, ưu tiên việc chính.'],
+      ],
+    },
+  },
+  {
+    slug: 'gift', category: 'situation', tone: 'good', emoji: '🎁',
+    ko: {
+      name: '선물 꿈', keywords: ['선물', '선물 받는 꿈', '선물 주는 꿈'],
+      summary: '선물을 받는 꿈은 뜻밖의 행운과 인정, 좋은 인연을 뜻하는 길몽입니다.',
+      korea: '선물을 받으면 뜻밖의 도움이나 기회, 고백을 받는다고 봅니다. 내가 선물을 주면 베푼 만큼 사람을 얻고, 포장을 뜯었는데 비어 있으면 기대를 조금 낮추라는 뜻입니다.',
+      vietnam: '베트남에서도 선물(quà) 꿈은 기쁜 소식과 인연을 뜻합니다.',
+      cases: [
+        ['선물을 받는 꿈', '뜻밖의 도움이나 기회가 옵니다.'],
+        ['선물을 주는 꿈', '베푼 만큼 사람을 얻습니다.'],
+        ['선물 상자가 비어 있는 꿈', '기대를 조금 낮추면 실망이 줄어듭니다.'],
+        ['큰 선물 상자를 받는 꿈', '큰 경사나 기회가 생깁니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy được tặng quà', keywords: ['quà', 'tặng quà', 'được tặng quà', 'hộp quà'],
+      summary: 'Mơ được tặng quà là điềm lành về may mắn bất ngờ, sự công nhận và duyên tốt.',
+      korea: 'Người Hàn cho rằng được tặng quà là có sự giúp đỡ, cơ hội, lời tỏ tình bất ngờ; mình tặng quà là cho đi bao nhiêu được người bấy nhiêu; mở quà mà trống rỗng là nên bớt kỳ vọng.',
+      vietnam: 'Người Việt cũng xem mơ được quà là có tin vui, duyên lành.',
+      cases: [
+        ['Mơ được tặng quà', 'Có giúp đỡ, cơ hội bất ngờ.'],
+        ['Mơ tặng quà cho người', 'Cho đi bao nhiêu, nhận lại bấy nhiêu.'],
+        ['Mơ hộp quà rỗng', 'Bớt kỳ vọng sẽ bớt thất vọng.'],
+        ['Mơ được hộp quà lớn', 'Có hỷ sự hoặc cơ hội lớn.'],
+      ],
+    },
+  },
+  {
+    slug: 'letter', category: 'situation', tone: 'good', emoji: '✉️',
+    ko: {
+      name: '편지 꿈', keywords: ['편지', '편지 받는 꿈', '문자', '연락'],
+      summary: '편지를 받는 꿈은 기다리던 소식과 연락이 온다는 길몽입니다.',
+      korea: '반가운 사람의 편지를 받으면 실제로 연락이 오거나 좋은 소식을 듣는다고 봅니다. 편지를 쓰면 하고 싶은 말을 전할 때가 되었고, 편지를 읽지 못하면 오해가 생기지 않게 확인하라는 뜻입니다.',
+      vietnam: '베트남에서도 편지(thư) 꿈은 먼 곳의 소식이나 연락을 뜻합니다.',
+      cases: [
+        ['반가운 편지를 받는 꿈', '기다리던 소식이 옵니다.'],
+        ['편지를 쓰는 꿈', '하고 싶은 말을 전할 때입니다.'],
+        ['편지를 읽지 못하는 꿈', '오해가 없게 내용을 확인하세요.'],
+        ['편지를 찢는 꿈', '지난 일을 정리하고 싶은 마음입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy thư', keywords: ['thư', 'nhận thư', 'viết thư', 'tin nhắn'],
+      summary: 'Mơ nhận thư là điềm lành về tin tức, liên lạc đang chờ đợi.',
+      korea: 'Người Hàn cho rằng nhận thư của người thương là sắp có liên lạc, tin vui thật; viết thư là đến lúc nói điều muốn nói; không đọc được thư là nên xác nhận kỹ để tránh hiểu lầm.',
+      vietnam: 'Người Việt cũng xem mơ thấy thư là tin từ phương xa, có người liên lạc.',
+      cases: [
+        ['Mơ nhận thư vui', 'Có tin chờ đợi.'],
+        ['Mơ viết thư', 'Đến lúc nói điều muốn nói.'],
+        ['Mơ không đọc được thư', 'Xác nhận kỹ để tránh hiểu lầm.'],
+        ['Mơ xé thư', 'Muốn khép lại chuyện cũ.'],
+      ],
+    },
+  },
+  {
+    slug: 'umbrella', category: 'situation', tone: 'good', emoji: '☂️',
+    ko: {
+      name: '우산 꿈', keywords: ['우산', '우산 잃어버리는 꿈', '양산'],
+      summary: '우산은 보호와 도움의 손길을 뜻합니다. 우산을 받으면 어려울 때 도와줄 사람이 생깁니다.',
+      korea: '비 오는 날 누군가 우산을 씌워 주면 귀인의 도움을 받는다고 봅니다. 새 우산을 얻으면 든든한 보호를, 우산을 잃어버리면 준비 없이 일을 맞을 수 있으니 대비하라는 뜻입니다.',
+      vietnam: '베트남에서도 우산(ô, dù) 꿈은 보호와 안전을 뜻하며, 우산이 찢어지면 믿던 도움이 흔들릴 수 있다고 봅니다.',
+      cases: [
+        ['누군가 우산을 씌워 주는 꿈', '귀인의 도움을 받습니다.'],
+        ['새 우산을 얻는 꿈', '든든한 보호를 얻습니다.'],
+        ['우산을 잃어버리는 꿈', '미리 대비해 두세요.'],
+        ['우산이 찢어지는 꿈', '한 곳에만 기대지 말고 대안을 마련하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy ô dù', keywords: ['ô', 'dù', 'che ô', 'mất ô'],
+      summary: 'Ô dù là sự che chở, giúp đỡ. Được che ô là khi khó có người giúp.',
+      korea: 'Người Hàn cho rằng trời mưa có người che ô cho mình là được quý nhân giúp; có ô mới là được che chở vững vàng; mất ô là có thể gặp việc khi chưa kịp chuẩn bị.',
+      vietnam: 'Người Việt cũng xem ô dù là che chở, an toàn; ô rách là chỗ dựa có thể lung lay.',
+      cases: [
+        ['Mơ được người che ô', 'Được quý nhân giúp đỡ.'],
+        ['Mơ có ô mới', 'Được che chở vững vàng.'],
+        ['Mơ mất ô', 'Hãy chuẩn bị trước.'],
+        ['Mơ ô bị rách', 'Đừng dựa một chỗ — chuẩn bị phương án khác.'],
+      ],
+    },
+  },
+  {
+    slug: 'bed', category: 'situation', tone: 'mixed', emoji: '🛏️',
+    ko: {
+      name: '침대 꿈', keywords: ['침대', '이불', '잠자는 꿈', '침대 꿈'],
+      summary: '침대는 휴식과 친밀한 관계를 뜻합니다. 포근한 침대는 안정, 부서진 침대는 관계나 건강을 살피라는 뜻입니다.',
+      korea: '새 침대나 포근한 이불에서 자는 꿈은 생활이 안정되고 가정이 화목해진다고 봅니다. 침대가 부서지거나 남이 내 침대에 누워 있으면 관계나 자리를 위협받는 느낌을 뜻합니다.',
+      vietnam: '베트남에서도 침대(giường) 꿈은 가정과 부부 관계를 뜻하며, 새 침대는 좋은 인연이나 안정을 상징합니다.',
+      cases: [
+        ['포근한 침대에서 자는 꿈', '생활이 안정되고 가정이 화목해집니다.'],
+        ['새 침대를 들이는 꿈', '좋은 인연이나 새 생활이 시작됩니다.'],
+        ['침대가 부서지는 꿈', '관계나 건강을 살피세요.'],
+        ['남이 내 침대에 누운 꿈', '내 자리나 관계를 지키고 싶은 마음입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy giường', keywords: ['giường', 'chăn gối', 'ngủ trên giường'],
+      summary: 'Giường là sự nghỉ ngơi và mối quan hệ thân mật. Giường êm là ổn định; giường gãy là nhắc quan tâm quan hệ, sức khỏe.',
+      korea: 'Người Hàn cho rằng ngủ trên giường mới, chăn ấm là cuộc sống ổn định, gia đình hòa thuận; giường gãy hay người khác nằm giường mình là cảm giác vị trí, quan hệ bị đe dọa.',
+      vietnam: 'Người Việt cũng xem giường là gia đình, vợ chồng; giường mới là duyên lành, cuộc sống ổn định.',
+      cases: [
+        ['Mơ ngủ trên giường êm', 'Cuộc sống ổn định, gia đình hòa thuận.'],
+        ['Mơ kê giường mới', 'Có duyên mới hoặc cuộc sống mới.'],
+        ['Mơ giường gãy', 'Quan tâm quan hệ, sức khỏe.'],
+        ['Mơ người khác nằm giường mình', 'Muốn giữ vị trí, mối quan hệ của mình.'],
+      ],
+    },
+  },
+  {
+    slug: 'door', category: 'situation', tone: 'mixed', emoji: '🚪',
+    ko: {
+      name: '문 꿈', keywords: ['문', '문이 열리는 꿈', '문이 안 열리는 꿈', '대문'],
+      summary: '문은 기회와 새로운 시작을 뜻합니다. 문이 활짝 열리면 길이 열리고, 문이 잠기면 다른 길을 찾으라는 꿈입니다.',
+      korea: '대문이 활짝 열리고 빛이 들어오면 새로운 기회와 손님, 재물이 들어온다고 봅니다. 문이 잠겨 열리지 않으면 지금 방법이 막혔다는 뜻이고, 누군가 문을 두드리면 반가운 소식이 온다고 풉니다.',
+      vietnam: '베트남에서도 문(cửa) 꿈은 기회를 뜻하며, 새해 첫 손님이 문을 넘는 "xông đất" 풍습처럼 누가 문으로 들어오는지가 중요합니다.',
+      cases: [
+        ['대문이 활짝 열리는 꿈', '새로운 기회와 재물이 들어옵니다.'],
+        ['문이 잠겨 열리지 않는 꿈', '다른 방법을 찾아볼 때입니다.'],
+        ['누군가 문을 두드리는 꿈', '반가운 소식이 옵니다.'],
+        ['문이 부서지는 꿈', '집안의 안전과 경계를 살피세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy cánh cửa', keywords: ['cửa', 'mở cửa', 'cửa khóa', 'gõ cửa'],
+      summary: 'Cánh cửa là cơ hội, khởi đầu mới. Cửa mở toang là đường mở; cửa khóa là lời nhắc tìm hướng khác.',
+      korea: 'Người Hàn cho rằng cổng mở rộng, ánh sáng tràn vào là cơ hội, khách quý, tiền tài đến; cửa khóa không mở được là cách hiện tại đã tắc; có người gõ cửa là có tin vui.',
+      vietnam: 'Người Việt cũng xem cửa là cơ hội — như tục “xông đất” đầu năm, ai bước qua cửa nhà mình rất quan trọng.',
+      cases: [
+        ['Mơ cổng mở toang', 'Cơ hội và tiền tài vào nhà.'],
+        ['Mơ cửa khóa không mở được', 'Đến lúc tìm cách khác.'],
+        ['Mơ có người gõ cửa', 'Có tin vui.'],
+        ['Mơ cửa bị phá', 'Để ý an toàn, ranh giới trong nhà.'],
+      ],
+    },
+  },
+  {
+    slug: 'corpse', category: 'situation', tone: 'good', emoji: '⚱️',
+    ko: {
+      name: '시체 꿈', keywords: ['시체', '시신', '시체 보는 꿈', '시체 업는 꿈'],
+      summary: '무섭게 느껴지지만 한국 해몽에서 시체 꿈은 대표적인 재물 길몽입니다. 시체를 만지거나 업을수록 큰 재물이 들어온다고 봅니다.',
+      korea: '시체는 "들어온 재물"을 상징해, 시체를 보거나 집에 들이는 꿈은 재물과 이익이 생긴다고 풉니다. 시체를 업거나 안으면 큰돈, 시체가 썩어 냄새가 나면 오래 기다린 수익이 들어온다고 봅니다. 시체가 일어나 쫓아오면 해결하지 못한 걱정이 있다는 뜻입니다.',
+      vietnam: '베트남에서도 시체(xác chết) 꿈을 의외로 재물운(tài lộc)으로 풀이하는 경우가 많습니다.',
+      cases: [
+        ['시체를 보는 꿈', '재물과 이익이 생깁니다.'],
+        ['시체를 업거나 안는 꿈', '큰돈이 들어온다고 봅니다.'],
+        ['시체를 집에 들이는 꿈', '집안에 재물이 쌓입니다.'],
+        ['시체가 일어나 쫓아오는 꿈', '해결하지 못한 걱정을 정리하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy xác chết', keywords: ['xác chết', 'thi thể', 'mơ thấy người chết nằm'],
+      summary: 'Nghe đáng sợ, nhưng theo giải mộng Hàn Quốc, mơ thấy xác chết là điềm tài lộc điển hình — càng chạm, càng cõng xác thì tiền càng nhiều.',
+      korea: 'Người Hàn coi xác chết là “tài sản đi vào”: thấy xác hay đưa xác vào nhà là có tiền, có lợi; cõng hay ôm xác là tiền lớn; xác bốc mùi là khoản thu chờ lâu sắp về. Xác chết đứng dậy đuổi theo là còn nỗi lo chưa giải quyết.',
+      vietnam: 'Người Việt cũng thường giải mơ thấy xác chết là có tài lộc, trái với cảm giác sợ hãi.',
+      cases: [
+        ['Mơ thấy xác chết', 'Có tiền, có lợi.'],
+        ['Mơ cõng hoặc ôm xác', 'Tiền lớn vào.'],
+        ['Mơ đưa xác vào nhà', 'Của cải tích tụ trong nhà.'],
+        ['Mơ xác chết đứng dậy đuổi', 'Giải quyết nỗi lo còn tồn đọng.'],
+      ],
+    },
+  },
+  {
+    slug: 'singing', category: 'situation', tone: 'good', emoji: '🎤',
+    ko: {
+      name: '노래·춤 꿈', keywords: ['노래', '노래하는 꿈', '춤', '춤추는 꿈', '무대'],
+      summary: '즐겁게 노래하고 춤추는 꿈은 기쁜 일과 인기, 하는 일이 흥겹게 풀린다는 길몽입니다.',
+      korea: '무대에서 노래해 박수를 받으면 실력을 인정받고 이름이 알려진다고 봅니다. 여럿이 어울려 춤추면 잔치나 경사가 생기고, 노래가 안 나오면 하고 싶은 말을 참고 있다는 뜻입니다.',
+      vietnam: '베트남에서도 노래와 춤(hát, nhảy) 꿈은 기쁨과 화합을 뜻하며, 함께 춤추면 좋은 인연을 만난다고 봅니다.',
+      cases: [
+        ['무대에서 노래해 박수받는 꿈', '실력을 인정받고 이름이 알려집니다.'],
+        ['여럿이 어울려 춤추는 꿈', '잔치나 경사가 생깁니다.'],
+        ['노래가 안 나오는 꿈', '참고 있는 말을 표현해 보세요.'],
+        ['누군가와 둘이 춤추는 꿈', '좋은 인연이 가까워집니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy hát, nhảy múa', keywords: ['hát', 'nhảy', 'múa', 'sân khấu', 'karaoke'],
+      summary: 'Mơ ca hát, nhảy múa vui vẻ là điềm lành: có chuyện vui, được yêu mến, mọi việc rộn ràng thuận lợi.',
+      korea: 'Người Hàn cho rằng hát trên sân khấu được vỗ tay là năng lực được công nhận, có tiếng tăm; cùng mọi người nhảy múa là có tiệc vui, hỷ sự; muốn hát mà không ra tiếng là đang kìm nén điều muốn nói.',
+      vietnam: 'Người Việt cũng xem mơ hát, nhảy là niềm vui, hòa hợp; nhảy cùng ai đó là sắp gặp duyên lành.',
+      cases: [
+        ['Mơ hát trên sân khấu được vỗ tay', 'Năng lực được công nhận, có tiếng tăm.'],
+        ['Mơ nhảy múa cùng mọi người', 'Có tiệc vui, hỷ sự.'],
+        ['Mơ hát không ra tiếng', 'Hãy nói ra điều đang kìm nén.'],
+        ['Mơ nhảy đôi với ai đó', 'Duyên lành đến gần.'],
+      ],
+    },
+  },
+];
