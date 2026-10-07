@@ -229,6 +229,10 @@ export function NamePage({ query }: { query: string }) {
         </>
       )}
 
+      <p className="panel center">
+        <Link to="/naming">{lang === 'vi' ? '✨ Muốn có tên Hàn hiện đại như 민아, 서연? Đặt tên tiếng Hàn hợp với bạn →' : '✨ 요즘 한국 이름(민아, 서연…)으로 지어 보고 싶다면? 한·베 작명 →'}</Link>
+      </p>
+
       <h2 className="article-h">{g.famousTitle}</h2>
       <p className="muted">{g.famousDesc}</p>
       <div className="famous-names">

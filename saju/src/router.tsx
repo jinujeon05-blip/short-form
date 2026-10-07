@@ -6,7 +6,7 @@ import { ANIMAL_SLUGS, FORTUNE_YEARS } from './engine/yearly';
 import { PURPOSES } from './engine/almanac';
 import { DREAM_SLUGS } from './content/dreams';
 
-export const ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/daily', '/age', '/hangul', '/holidays', '/dream', '/guide', '/about', '/method', '/privacy', '/terms'] as const;
+export const ROUTES = ['/', '/calendar', '/match', '/name', '/naming', '/saju', '/samjae', '/daily', '/age', '/hangul', '/holidays', '/dream', '/guide', '/about', '/method', '/privacy', '/terms'] as const;
 export const GUIDE_SLUGS: string[] = articles.guides.map((g) => g.slug);
 /** A static route, or /guide/<slug> */
 export type RoutePath = (typeof ROUTES)[number] | `/guide/${string}` | `/fortune/${string}` | `/daily/${string}` | `/calendar/${string}` | `/dream/${string}`;
