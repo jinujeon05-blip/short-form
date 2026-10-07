@@ -12,6 +12,7 @@ import type { Purpose } from './engine/almanac';
 import { HazardPage } from './pages/HazardPage';
 import { AgePage } from './pages/AgePage';
 import { HangulPage } from './pages/HangulPage';
+import { NamingPage } from './pages/NamingPage';
 import { HolidaysPage } from './pages/HolidaysPage';
 import { DreamDetailPage, DreamIndexPage } from './pages/DreamPage';
 import { DailyIndexPage, DailyZodiacPage } from './pages/DailyPage';
@@ -131,6 +132,8 @@ function Shell({ route }: { route: Route }) {
           <DreamDetailPage key={route.path} slug={route.path.slice(7)} />
         ) : route.path === '/holidays' ? (
           <HolidaysPage />
+        ) : route.path === '/naming' ? (
+          <NamingPage query={route.search} />
         ) : route.path === '/hangul' ? (
           <HangulPage query={route.search} />
         ) : route.path === '/age' ? (
@@ -164,6 +167,7 @@ function Shell({ route }: { route: Route }) {
           <Link to="/fortune/2027">{YEARLY_LINK[lang]}</Link>
           <Link to="/samjae">{SAMJAE_LINK[lang]}</Link>
           <Link to="/age">{AGE_LINK[lang]}</Link>
+          <Link to="/naming">{NAMING_LINK[lang]}</Link>
           <Link to="/hangul">{HANGUL_LINK[lang]}</Link>
           <Link to="/holidays">{HOLIDAY_LINK[lang]}</Link>
           <Link to="/guide">{t.guide.title}</Link>
@@ -186,6 +190,7 @@ const YEARLY_LINK: Record<Lang, string> = { ko: '2027 신년운세', vi: 'Tử v
 const DREAM_LINK: Record<Lang, string> = { ko: '꿈해몽', vi: 'Giải mộng' };
 const METHOD_LINK: Record<Lang, string> = { ko: '계산 방식', vi: 'Cách tính' };
 const HOLIDAY_LINK: Record<Lang, string> = { ko: '설날·Tết 날짜 비교', vi: 'Tết Việt – Hàn' };
+const NAMING_LINK: Record<Lang, string> = { ko: '한·베 작명', vi: 'Đặt tên tiếng Hàn' };
 const HANGUL_LINK: Record<Lang, string> = { ko: '한글 표기 변환', vi: 'Phiên âm Hangul' };
 const AGE_LINK: Record<Lang, string> = { ko: '나이 계산기', vi: 'Tính tuổi' };
 const SAMJAE_LINK: Record<Lang, string> = { ko: '삼재 계산기', vi: 'Tam Tai · Kim Lâu' };

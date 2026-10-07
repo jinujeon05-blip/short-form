@@ -18,6 +18,7 @@ import { DREAM_SLUGS } from '../src/content/dreams/index.ts';
 import { PURPOSES } from '../src/engine/almanac.ts';
 import { AgePage } from '../src/pages/AgePage.tsx';
 import { HangulPage } from '../src/pages/HangulPage.tsx';
+import { NamingPage } from '../src/pages/NamingPage.tsx';
 import { HolidaysPage } from '../src/pages/HolidaysPage.tsx';
 import { DailyIndexPage, DailyZodiacPage } from '../src/pages/DailyPage.tsx';
 
@@ -30,7 +31,7 @@ const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
 const articles = JSON.parse(fs.readFileSync(path.join(root, 'src/content/articles.json'), 'utf8'));
 const adClient = config.adsense?.client ?? '';
 
-const TOOL_ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/age', '/hangul', '/holidays'];
+const TOOL_ROUTES = ['/', '/calendar', '/match', '/name', '/naming', '/saju', '/samjae', '/age', '/hangul', '/holidays'];
 const DREAM_ROUTES = ['/dream', ...DREAM_SLUGS.map((x) => `/dream/${x}`)];
 const CALENDAR_ROUTES = PURPOSES.map((x) => `/calendar/${x}`);
 const DAILY_ROUTES = ['/daily', ...ANIMAL_SLUGS.map((a) => `/daily/${a}`)];
@@ -41,8 +42,8 @@ const ROUTES = [...TOOL_ROUTES, ...CALENDAR_ROUTES, ...DREAM_ROUTES, ...DAILY_RO
 const LANGS = ['ko', 'vi'];
 const LOCALE = { ko: 'ko_KR', vi: 'vi_VN' };
 const NAV = {
-  ko: { '/': '오늘', '/calendar': '좋은 날 달력', '/match': '궁합', '/name': '이름 변환', '/saju': '무료 사주', '/samjae': '삼재 계산기', '/age': '나이 계산기', '/hangul': '한글 표기 변환', '/holidays': '설날·Tết 비교', '/guide': '읽을거리' },
-  vi: { '/': 'Hôm nay', '/calendar': 'Xem ngày tốt', '/match': 'Xem tuổi hợp', '/name': 'Tên tiếng Hàn', '/saju': 'Lá số Tứ trụ', '/samjae': 'Tam Tai · Kim Lâu', '/age': 'Tính tuổi', '/hangul': 'Phiên âm Hangul', '/holidays': 'Tết Việt – Hàn', '/guide': 'Bài viết' },
+  ko: { '/': '오늘', '/calendar': '좋은 날 달력', '/match': '궁합', '/name': '이름 변환', '/naming': '한·베 작명', '/saju': '무료 사주', '/samjae': '삼재 계산기', '/age': '나이 계산기', '/hangul': '한글 표기 변환', '/holidays': '설날·Tết 비교', '/guide': '읽을거리' },
+  vi: { '/': 'Hôm nay', '/calendar': 'Xem ngày tốt', '/match': 'Xem tuổi hợp', '/name': 'Tên tiếng Hàn', '/naming': 'Đặt tên tiếng Hàn', '/saju': 'Lá số Tứ trụ', '/samjae': 'Tam Tai · Kim Lâu', '/age': 'Tính tuổi', '/hangul': 'Phiên âm Hangul', '/holidays': 'Tết Việt – Hàn', '/guide': 'Bài viết' },
 };
 
 const pathFor = (route, lang) => (lang === 'vi' ? (route === '/' ? '/vi' : `/vi${route}`) : route);
@@ -73,6 +74,8 @@ function renderFortune(route, lang) {
     ? createElement(CalendarPage, { purpose: route.slice(10) })
     : route === '/holidays'
     ? createElement(HolidaysPage)
+    : route === '/naming'
+    ? createElement(NamingPage, { query: '' })
     : route === '/hangul'
     ? createElement(HangulPage, { query: '' })
     : route === '/age'
@@ -155,7 +158,7 @@ function body(route, lang) {
   const info = ['/about', '/method', '/privacy', '/terms'].includes(route) ? articles.pages[route.slice(1)][lang] : null;
   const links = [...TOOL_ROUTES, '/guide'].map((r) => `<li><a href="${pathFor(r, lang)}">${esc(NAV[lang][r])}</a></li>`).join('');
   const other = lang === 'ko' ? 'vi' : 'ko';
-  if (route.startsWith('/fortune/') || route.startsWith('/daily') || route === '/samjae' || route === '/age' || route === '/hangul' || route === '/holidays' || route.startsWith('/calendar/') || route.startsWith('/dream')) return renderFortune(route, lang);
+  if (route.startsWith('/fortune/') || route.startsWith('/daily') || route === '/samjae' || route === '/age' || route === '/naming' || route === '/hangul' || route === '/holidays' || route.startsWith('/calendar/') || route.startsWith('/dream')) return renderFortune(route, lang);
   if (g || info) {
     const doc = g ? g[lang] : info;
     return `<main class="main"><article class="article"><h1 class="article-title">${esc(doc.title)}</h1>${g ? `<p class="article-lead">${esc(doc.description)}</p>` : ''}${blocksHtml(doc.blocks, lang)}<ul class="footer-links">${links}</ul></article></main>`;
