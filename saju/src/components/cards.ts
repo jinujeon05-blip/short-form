@@ -6,6 +6,7 @@ import { YEARLY } from '../content/yearly';
 import { SajuResult } from '../engine/pillars';
 import { Lang } from '../i18n';
 import { Dict } from '../i18n/ko';
+import { drawEmoji } from './Emoji';
 
 export const CARD_W = 1080;
 export const CARD_H = 1350;
@@ -202,8 +203,7 @@ export function drawMatchCard(
   const people: [string, number, number][] = [[names[0], m.zodiacA, m.nayinA], [names[1], m.zodiacB, m.nayinB]];
   people.forEach(([n, z, ny], i) => {
     const cx = i === 0 ? 290 : CARD_W - 290;
-    ctx.font = `90px ${f.sans}`;
-    ctx.fillText(t.animalEmoji[z], cx, 390);
+    drawEmoji(ctx, t.animalEmoji[z], cx, 390, 90);
     ctx.fillStyle = C.text;
     ctx.font = `700 40px ${f.serif}`;
     ctx.fillText(n, cx, 450, 340);
@@ -321,8 +321,7 @@ export function drawYearCard(ctx: CanvasRenderingContext2D, f: YearFortune, t: D
   ctx.font = `600 32px ${fo.sans}`;
   ctx.fillText(`${f.year} · ${y.ganzhi(t.stems[f.yearCycle % 10], t.branches[f.yearCycle % 12], STEM_HANJA[f.yearCycle % 10] + BRANCH_HANJA[f.yearCycle % 12])}`, CARD_W / 2, 270, CARD_W - 140);
 
-  ctx.font = `120px ${fo.sans}`;
-  ctx.fillText(t.animalEmoji[f.zodiac], CARD_W / 2, 420);
+  drawEmoji(ctx, t.animalEmoji[f.zodiac], CARD_W / 2, 420, 120);
   ctx.fillStyle = C.goldSoft;
   ctx.font = `900 64px ${fo.serif}`;
   ctx.fillText(y.zodiacTitle(f.year, t.animals[f.zodiac]), CARD_W / 2, 520, CARD_W - 140);
@@ -372,8 +371,7 @@ export function drawDailyCard(ctx: CanvasRenderingContext2D, d: DailyCardData, t
   ctx.fillStyle = C.gold;
   ctx.font = `600 32px ${fo.sans}`;
   ctx.fillText(d.dateText, CARD_W / 2, 270, CARD_W - 140);
-  ctx.font = `120px ${fo.sans}`;
-  ctx.fillText(t.animalEmoji[d.zodiac], CARD_W / 2, 420);
+  drawEmoji(ctx, t.animalEmoji[d.zodiac], CARD_W / 2, 420, 120);
   ctx.fillStyle = C.goldSoft;
   ctx.font = `900 60px ${fo.serif}`;
   ctx.fillText(d.title, CARD_W / 2, 515, CARD_W - 140);

@@ -49,7 +49,7 @@ for e in sorted(found):
     if not name:
         missing.append(e)
         continue
-    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}">{body(name)}</svg>'
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">{body(name)}</svg>'
     open(os.path.join(out, f'{k}.svg'), 'w', encoding='utf-8').write(svg)
     ok.append(k)
 json.dump(sorted(ok), open(os.path.join(ROOT, 'src/content/emojiSet.json'), 'w'), separators=(',', ':'))
