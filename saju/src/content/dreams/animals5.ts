@@ -1,0 +1,328 @@
+import type { Dream } from './types';
+
+export const ANIMAL_DREAMS_5: Dream[] = [
+  {
+    slug: 'gecko', category: 'animal', tone: 'mixed', emoji: '🦎',
+    ko: {
+      name: '도마뱀 꿈', keywords: ['도마뱀', '도마뱀 꿈', '도마뱀 꼬리', '게코'],
+      summary: '도마뱀은 위기를 빠져나가는 재치와 숨은 기회를 뜻합니다. 꼬리를 자르고 달아나면 손해를 조금 보고 큰 위험을 피하는 꿈입니다.',
+      korea: '도마뱀이 집 벽에 붙어 있으면 집안을 지키는 작은 수호자로 보아 나쁘지 않게 풉니다. 도마뱀이 꼬리를 자르고 달아나면 작은 것을 내주고 큰 화를 피하고, 도마뱀에게 물리면 가까운 사람의 잔꾀에 휘말리지 않도록 조심하라는 뜻입니다.',
+      vietnam: '베트남에서는 집 도마뱀(thạch sùng)이 "똑똑" 혀 차는 소리를 길흉의 징조로 여깁니다. 큰 부자 석숭(Thạch Sùng)이 재산을 다 잃고 도마뱀으로 태어나 아쉬움에 혀를 찬다는 옛이야기가 있어, 도마뱀 꿈은 재물을 지키고 사치를 경계하라는 뜻으로도 풉니다.',
+      cases: [
+        ['벽에 붙은 도마뱀을 보는 꿈', '집안이 무탈합니다.'],
+        ['도마뱀이 꼬리를 자르고 도망가는 꿈', '작은 손해로 큰 위험을 피합니다.'],
+        ['도마뱀에게 물리는 꿈', '잔꾀를 부리는 사람을 조심하세요.'],
+        ['도마뱀을 잡는 꿈', '놓칠 뻔한 기회를 붙잡습니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy thạch sùng, thằn lằn', keywords: ['thạch sùng', 'thằn lằn', 'thạch sùng chặc lưỡi', 'tắc kè'],
+      summary: 'Thằn lằn là sự lanh lợi thoát hiểm và cơ hội ẩn. Thằn lằn đứt đuôi bỏ chạy là mất chút ít mà tránh được họa lớn.',
+      korea: 'Người Hàn cho rằng thằn lằn bám tường là “người gác nhà” nhỏ, không phải điềm xấu; thằn lằn đứt đuôi chạy là chịu thiệt nhỏ để tránh họa lớn; bị thằn lằn cắn là cẩn thận mưu mẹo của người gần gũi.',
+      vietnam: 'Người Việt xem tiếng thạch sùng chặc lưỡi là điềm báo. Chuyện xưa kể phú ông Thạch Sùng mất hết của cải, hóa thành con thạch sùng tiếc của mà tặc lưỡi — nên mơ thấy thạch sùng còn nhắc giữ gìn tài sản, tránh xa hoa.',
+      cases: [
+        ['Mơ thằn lằn bám tường', 'Gia đạo bình yên.'],
+        ['Mơ thằn lằn đứt đuôi bỏ chạy', 'Thiệt nhỏ để tránh họa lớn.'],
+        ['Mơ bị thằn lằn cắn', 'Cẩn thận người hay mưu mẹo.'],
+        ['Mơ bắt được thằn lằn', 'Nắm lại cơ hội suýt vuột mất.'],
+      ],
+    },
+  },
+  {
+    slug: 'snail', category: 'animal', tone: 'mixed', emoji: '🐌',
+    ko: {
+      name: '달팽이 꿈', keywords: ['달팽이', '달팽이 꿈', '우렁이', '소라'],
+      summary: '달팽이는 느리지만 꾸준한 전진과 내 집 마련을 뜻합니다. 서두르지 않으면 결국 목표에 닿는다는 꿈입니다.',
+      korea: '달팽이가 집을 지고 기어가면 천천히라도 내 집과 재산을 일군다고 봅니다. 달팽이가 껍데기 속으로 숨으면 지금은 몸을 낮추고 때를 기다리라는 뜻이고, 달팽이를 밟아 깨뜨리면 성급함 때문에 공든 일을 그르치지 않도록 조심하라는 뜻입니다.',
+      vietnam: '베트남에서 달팽이·우렁이(ốc) 꿈은 느리지만 안정적인 발전을 뜻하고, 우렁이를 줍는 꿈은 작은 재물이 모이는 것으로 봅니다.',
+      cases: [
+        ['달팽이가 기어가는 꿈', '느려도 꾸준하면 목표에 닿습니다.'],
+        ['달팽이가 껍데기에 숨는 꿈', '지금은 때를 기다리세요.'],
+        ['달팽이를 밟는 꿈', '성급함이 일을 그르칠 수 있습니다.'],
+        ['우렁이를 줍는 꿈', '작은 재물이 모입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy ốc sên', keywords: ['ốc sên', 'con ốc', 'ốc', 'bắt ốc'],
+      summary: 'Ốc sên là tiến chậm mà chắc và chuyện có nhà riêng. Không vội vàng thì rồi sẽ tới đích.',
+      korea: 'Người Hàn cho rằng ốc sên cõng nhà bò đi là chậm mà vẫn gây dựng được nhà cửa, tài sản; ốc rụt vào vỏ là nên ẩn mình chờ thời; giẫm vỡ ốc là đừng vì nóng vội mà hỏng việc đã dày công.',
+      vietnam: 'Người Việt giải mơ thấy ốc là phát triển chậm nhưng vững; mơ đi bắt ốc, nhặt ốc là có chút tiền tích góp.',
+      cases: [
+        ['Mơ ốc sên bò', 'Chậm mà chắc sẽ tới đích.'],
+        ['Mơ ốc rụt vào vỏ', 'Nên chờ thời.'],
+        ['Mơ giẫm phải ốc', 'Nóng vội dễ hỏng việc.'],
+        ['Mơ đi bắt ốc', 'Có chút tiền tích góp.'],
+      ],
+    },
+  },
+  {
+    slug: 'squirrel', category: 'animal', tone: 'good', emoji: '🐿️',
+    ko: {
+      name: '다람쥐 꿈', keywords: ['다람쥐', '청설모', '다람쥐 꿈'],
+      summary: '다람쥐는 부지런히 모으는 저축과 재치를 뜻합니다. 도토리를 모으는 다람쥐는 작은 돈이 차곡차곡 쌓이는 길몽입니다.',
+      korea: '다람쥐가 도토리를 물어 나르면 저축과 살림이 늘어난다고 봅니다. 다람쥐가 품에 뛰어들면 영리하고 재빠른 아이의 태몽으로 풀고, 다람쥐를 놓치면 작은 기회를 흘려보내지 않도록 꼼꼼히 챙기라는 뜻입니다.',
+      vietnam: '베트남에서도 다람쥐(con sóc) 꿈은 민첩함과 알뜰한 저축을 뜻하는 좋은 꿈입니다.',
+      cases: [
+        ['다람쥐가 도토리를 모으는 꿈', '저축이 차곡차곡 쌓입니다.'],
+        ['다람쥐가 품에 뛰어드는 꿈', '영리한 아이의 태몽입니다.'],
+        ['다람쥐가 나무를 오르는 꿈', '재치로 일을 빨리 풀어 갑니다.'],
+        ['다람쥐를 놓치는 꿈', '작은 기회를 꼼꼼히 챙기세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy con sóc', keywords: ['sóc', 'con sóc', 'sóc chuột'],
+      summary: 'Sóc là chăm chỉ tích góp và lanh lợi. Sóc tha hạt dẻ là tiền nhỏ dồn lại thành nhiều.',
+      korea: 'Người Hàn cho rằng sóc tha hạt dẻ là tiền tiết kiệm, của nả tăng dần; sóc nhảy vào lòng là giấc mơ báo sinh con thông minh nhanh nhẹn; để sổng sóc là đừng bỏ lỡ cơ hội nhỏ.',
+      vietnam: 'Người Việt cũng xem mơ thấy sóc là điềm tốt: nhanh nhẹn, biết tích lũy.',
+      cases: [
+        ['Mơ sóc tha hạt', 'Tiền tiết kiệm tăng dần.'],
+        ['Mơ sóc nhảy vào lòng', 'Báo có con lanh lợi.'],
+        ['Mơ sóc leo cây', 'Nhanh trí giải quyết việc.'],
+        ['Mơ để sổng con sóc', 'Đừng bỏ lỡ cơ hội nhỏ.'],
+      ],
+    },
+  },
+  {
+    slug: 'dolphin', category: 'animal', tone: 'good', emoji: '🐬',
+    ko: {
+      name: '돌고래 꿈', keywords: ['돌고래', '돌고래 꿈', '돌고래 태몽'],
+      summary: '돌고래는 영리함과 우정, 도와주는 귀인을 뜻합니다. 돌고래와 함께 헤엄치면 사람 덕에 일이 술술 풀립니다.',
+      korea: '돌고래가 뛰어오르면 기쁜 일과 활력이 생기고, 돌고래와 함께 헤엄치면 좋은 동료와 귀인을 만난다고 봅니다. 돌고래가 품에 안기면 밝고 총명한 아이의 태몽으로 풀고, 돌고래가 다치면 주변 사람의 어려움을 살피라는 뜻입니다.',
+      vietnam: '베트남 어민들은 바다에서 사람을 구해 주는 고래·돌고래를 신성하게 여깁니다. 돌고래(cá heo) 꿈은 위기에서 도움을 받는 길몽입니다.',
+      cases: [
+        ['돌고래가 뛰어오르는 꿈', '기쁜 일과 활력이 생깁니다.'],
+        ['돌고래와 헤엄치는 꿈', '좋은 동료와 귀인을 만납니다.'],
+        ['돌고래가 품에 안기는 꿈', '총명한 아이의 태몽입니다.'],
+        ['다친 돌고래를 보는 꿈', '주변의 어려움을 살펴 주세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy cá heo', keywords: ['cá heo', 'bơi cùng cá heo'],
+      summary: 'Cá heo là thông minh, tình bạn và quý nhân giúp đỡ. Bơi cùng cá heo là nhờ người mà mọi việc suôn sẻ.',
+      korea: 'Người Hàn cho rằng cá heo nhảy lên là có chuyện vui, thêm sức sống; bơi cùng cá heo là gặp đồng nghiệp tốt, quý nhân; cá heo vào lòng là giấc mơ báo sinh con sáng dạ; cá heo bị thương là nên để ý khó khăn của người quanh mình.',
+      vietnam: 'Ngư dân Việt kính trọng cá voi, cá heo — loài cứu người trên biển. Mơ thấy cá heo là gặp nạn có người giúp.',
+      cases: [
+        ['Mơ cá heo nhảy lên', 'Có chuyện vui, thêm sức sống.'],
+        ['Mơ bơi cùng cá heo', 'Gặp bạn tốt, quý nhân.'],
+        ['Mơ ôm cá heo', 'Báo có con sáng dạ.'],
+        ['Mơ cá heo bị thương', 'Quan tâm khó khăn của người xung quanh.'],
+      ],
+    },
+  },
+  {
+    slug: 'shrimp', category: 'animal', tone: 'good', emoji: '🦐',
+    ko: {
+      name: '새우 꿈', keywords: ['새우', '대하', '새우 잡는 꿈', '새우 꿈'],
+      summary: '새우는 작지만 알찬 재물과 수확을 뜻합니다. 새우를 한가득 잡으면 작은 수입이 모여 큰돈이 됩니다.',
+      korea: '새우를 그물 가득 잡으면 자잘한 수입이 모여 살림이 넉넉해진다고 봅니다. 큰 새우(대하)는 뜻밖의 수입, 새우를 먹는 꿈은 노력한 만큼의 보상입니다. "고래 싸움에 새우 등 터진다"는 속담처럼, 큰 것들 사이에 낀 새우는 남의 다툼에 휘말리지 말라는 뜻입니다.',
+      vietnam: '베트남에서 새우(tôm) 꿈은 장사가 잘되고 작은 이익이 이어지는 꿈으로 봅니다. 살아 펄떡이는 새우는 활기찬 재물운입니다.',
+      cases: [
+        ['새우를 가득 잡는 꿈', '작은 수입이 모여 큰돈이 됩니다.'],
+        ['큰 새우를 보는 꿈', '뜻밖의 수입이 생깁니다.'],
+        ['새우를 먹는 꿈', '노력한 만큼 보상받습니다.'],
+        ['큰 물고기 사이에 낀 새우 꿈', '남의 다툼에 끼지 마세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy tôm', keywords: ['tôm', 'con tôm', 'bắt tôm', 'tôm hùm'],
+      summary: 'Tôm là tiền của nhỏ mà chắc. Bắt được đầy tôm là nhiều khoản nhỏ gộp lại thành lớn.',
+      korea: 'Người Hàn cho rằng kéo lưới đầy tôm là thu nhập nhỏ dồn lại, cuộc sống sung túc; tôm to là khoản thu bất ngờ; ăn tôm là được đền đáp xứng công. Tục ngữ Hàn có câu “cá voi đánh nhau, tôm gãy lưng” — tôm kẹt giữa cá lớn là đừng dính vào chuyện tranh chấp của người khác.',
+      vietnam: 'Người Việt giải mơ thấy tôm là buôn bán thuận lợi, lợi nhỏ đều đặn; tôm tươi nhảy tanh tách là tài lộc sinh động.',
+      cases: [
+        ['Mơ bắt được nhiều tôm', 'Lợi nhỏ gộp thành lớn.'],
+        ['Mơ thấy tôm hùm, tôm to', 'Có khoản thu bất ngờ.'],
+        ['Mơ ăn tôm', 'Được đền đáp xứng công.'],
+        ['Mơ tôm kẹt giữa cá lớn', 'Đừng dính vào tranh chấp của người khác.'],
+      ],
+    },
+  },
+  {
+    slug: 'leech', category: 'animal', tone: 'bad', emoji: '🩸',
+    ko: {
+      name: '거머리 꿈', keywords: ['거머리', '거머리 꿈', '거머리가 붙는 꿈'],
+      summary: '거머리는 내 돈과 기운을 빼앗아 가는 사람이나 일을 뜻합니다. 거머리를 떼어 내면 골칫거리에서 벗어납니다.',
+      korea: '거머리가 몸에 달라붙으면 주변에 기대기만 하거나 돈을 빌려 가고 갚지 않는 사람을 조심하라는 뜻입니다. 거머리를 떼어 내거나 잡으면 지긋지긋한 관계나 빚에서 벗어나고, 거머리가 피를 빨면 건강과 지출을 함께 점검하라는 꿈입니다.',
+      vietnam: '베트남 속담 "굶주린 거머리처럼 질기다(dai như đỉa đói)"처럼, 거머리(đỉa) 꿈은 끈질기게 들러붙는 사람이나 빚 문제를 경계하라는 뜻입니다.',
+      cases: [
+        ['거머리가 달라붙는 꿈', '기대기만 하는 사람을 조심하세요.'],
+        ['거머리를 떼어 내는 꿈', '지긋지긋한 관계나 빚에서 벗어납니다.'],
+        ['거머리가 피를 빠는 꿈', '건강과 지출을 함께 점검하세요.'],
+        ['논에서 거머리를 보는 꿈', '일을 시작하기 전에 조건을 꼼꼼히 보세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy con đỉa', keywords: ['đỉa', 'con đỉa', 'đỉa bám', 'đỉa hút máu'],
+      summary: 'Đỉa là người hay việc rút cạn tiền bạc, sức lực của bạn. Gỡ được đỉa là thoát khỏi phiền toái.',
+      korea: 'Người Hàn cho rằng đỉa bám vào người là coi chừng kẻ chỉ biết dựa dẫm, vay tiền không trả; gỡ hay bắt được đỉa là thoát khỏi mối quan hệ, khoản nợ dai dẳng; đỉa hút máu là xem lại sức khỏe và chi tiêu.',
+      vietnam: 'Như câu “dai như đỉa đói”, người Việt giải mơ thấy đỉa là cảnh báo người bám riết hoặc chuyện nợ nần.',
+      cases: [
+        ['Mơ đỉa bám vào người', 'Coi chừng người dựa dẫm.'],
+        ['Mơ gỡ được đỉa', 'Thoát khỏi quan hệ, nợ nần dai dẳng.'],
+        ['Mơ đỉa hút máu', 'Xem lại sức khỏe và chi tiêu.'],
+        ['Mơ thấy đỉa dưới ruộng', 'Xem kỹ điều kiện trước khi bắt đầu.'],
+      ],
+    },
+  },
+  {
+    slug: 'firefly', category: 'animal', tone: 'good', emoji: '✨',
+    ko: {
+      name: '반딧불이 꿈', keywords: ['반딧불', '반딧불이', '개똥벌레', '반딧불 꿈'],
+      summary: '반딧불이는 어둠 속 작은 희망과 학업의 결실을 뜻합니다. 반딧불 빛으로 공부했다는 형설지공처럼 시험·공부에 좋은 꿈입니다.',
+      korea: '반딧불이가 무리 지어 빛나면 막막하던 일에 길이 보이고, 반딧불을 손에 담으면 작은 행운과 소원이 이루어진다고 봅니다. 가난한 선비가 반딧불과 눈빛으로 공부해 성공했다는 "형설지공" 고사처럼 수험생에게는 노력이 결실을 맺는 꿈입니다.',
+      vietnam: '베트남에서도 반딧불이(đom đóm)는 시골 여름밤의 정겨운 추억이자 작은 희망의 상징입니다. 반딧불이 꿈은 어려움 속 한 줄기 빛을 뜻합니다.',
+      cases: [
+        ['반딧불이가 무리 지어 빛나는 꿈', '막막하던 일에 길이 보입니다.'],
+        ['반딧불을 손에 담는 꿈', '작은 소원이 이루어집니다.'],
+        ['반딧불 아래 공부하는 꿈', '노력이 시험 결과로 이어집니다.'],
+        ['반딧불이 꺼지는 꿈', '작은 희망도 소중히 지키세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy đom đóm', keywords: ['đom đóm', 'con đom đóm', 'bắt đom đóm'],
+      summary: 'Đom đóm là tia hy vọng nhỏ trong bóng tối và thành quả học hành. Người Hàn có điển tích “huỳnh tuyết” — học dưới ánh đom đóm mà thành đạt.',
+      korea: 'Người Hàn cho rằng đàn đom đóm sáng rực là việc bế tắc đã có lối ra; bắt đom đóm trong tay là may mắn nhỏ, ước nguyện thành; theo điển tích học trò nghèo học dưới ánh đom đóm và ánh tuyết, đây là giấc mơ tốt cho người đi thi.',
+      vietnam: 'Với người Việt, đom đóm gắn với đêm hè ở quê, là biểu tượng hy vọng nhỏ bé; mơ thấy đom đóm là có tia sáng giữa lúc khó khăn.',
+      cases: [
+        ['Mơ đàn đom đóm sáng rực', 'Việc bế tắc đã có lối ra.'],
+        ['Mơ bắt đom đóm trong tay', 'Ước nguyện nhỏ thành hiện thực.'],
+        ['Mơ học dưới ánh đom đóm', 'Nỗ lực thành kết quả thi cử.'],
+        ['Mơ đom đóm tắt', 'Hãy giữ gìn hy vọng dù nhỏ.'],
+      ],
+    },
+  },
+  {
+    slug: 'parrot', category: 'animal', tone: 'mixed', emoji: '🦜',
+    ko: {
+      name: '앵무새 꿈', keywords: ['앵무새', '앵무새 꿈', '말하는 새'],
+      summary: '앵무새는 말과 소문, 소식을 뜻합니다. 앵무새가 좋은 말을 하면 반가운 소식이, 시끄럽게 떠들면 구설을 조심하라는 꿈입니다.',
+      korea: '앵무새가 내 이름을 부르거나 좋은 말을 하면 반가운 소식이 들려온다고 봅니다. 앵무새가 시끄럽게 떠들면 내 말이 옮겨져 구설에 오를 수 있으니 말조심하라는 뜻이고, 화려한 앵무새를 키우면 말솜씨로 인기를 얻는다고 풉니다.',
+      vietnam: '베트남어 "앵무새처럼 배운다(học vẹt)"는 뜻도 모르고 외우기만 하는 것을 말합니다. 앵무새(con vẹt) 꿈은 남의 말을 그대로 믿거나 옮기지 말라는 뜻으로도 풉니다.',
+      cases: [
+        ['앵무새가 좋은 말을 하는 꿈', '반가운 소식이 옵니다.'],
+        ['앵무새가 시끄럽게 떠드는 꿈', '구설을 조심하고 말을 아끼세요.'],
+        ['화려한 앵무새를 키우는 꿈', '말솜씨로 인기를 얻습니다.'],
+        ['앵무새가 날아가는 꿈', '비밀이 새지 않게 조심하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy con vẹt', keywords: ['vẹt', 'con vẹt', 'vẹt biết nói'],
+      summary: 'Vẹt là lời nói, tin đồn và tin tức. Vẹt nói lời hay là có tin vui; vẹt kêu ầm ĩ là cẩn thận thị phi.',
+      korea: 'Người Hàn cho rằng vẹt gọi tên mình hay nói lời hay là sắp có tin vui; vẹt kêu ầm ĩ là lời mình bị truyền đi, dễ vướng thị phi; nuôi vẹt sặc sỡ là nhờ tài ăn nói mà được yêu mến.',
+      vietnam: 'Người Việt có từ “học vẹt” — học thuộc mà không hiểu. Mơ thấy vẹt cũng nhắc đừng vội tin hay truyền lại lời người khác.',
+      cases: [
+        ['Mơ vẹt nói lời hay', 'Sắp có tin vui.'],
+        ['Mơ vẹt kêu ầm ĩ', 'Cẩn thận thị phi, bớt lời.'],
+        ['Mơ nuôi vẹt đẹp', 'Được yêu mến nhờ tài ăn nói.'],
+        ['Mơ vẹt bay mất', 'Giữ kín chuyện riêng.'],
+      ],
+    },
+  },
+  {
+    slug: 'jellyfish', category: 'animal', tone: 'mixed', emoji: '🌊',
+    ko: {
+      name: '해파리 꿈', keywords: ['해파리', '해파리 꿈', '해파리에 쏘이는 꿈'],
+      summary: '해파리는 흘러가는 대로 떠도는 마음과 보이지 않는 위험을 뜻합니다. 쏘이면 방심한 틈을 조심하라는 꿈입니다.',
+      korea: '해파리가 물속에 떠다니면 방향 없이 흘러가는 지금의 상황을 돌아보라는 뜻입니다. 해파리에 쏘이면 무심코 지나친 작은 문제가 아프게 돌아올 수 있으니 조심하고, 빛나는 해파리를 바라보면 신비로운 인연이나 영감을 얻는다고 풉니다.',
+      vietnam: '베트남 바닷가에서 해파리(sứa)는 여름철 경계 대상입니다. 해파리 꿈은 겉으로 부드러워 보이지만 상처를 줄 수 있는 사람을 조심하라는 뜻으로 봅니다.',
+      cases: [
+        ['해파리가 떠다니는 꿈', '방향을 다시 정할 때입니다.'],
+        ['해파리에 쏘이는 꿈', '방심한 틈의 작은 문제를 조심하세요.'],
+        ['빛나는 해파리를 보는 꿈', '신비로운 인연이나 영감을 얻습니다.'],
+        ['해파리를 피하는 꿈', '위험을 미리 알아채고 피합니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy con sứa', keywords: ['sứa', 'con sứa', 'sứa cắn', 'bị sứa đốt'],
+      summary: 'Sứa là tâm trạng trôi dạt và nguy hiểm vô hình. Bị sứa đốt là nhắc đề phòng lúc lơ là.',
+      korea: 'Người Hàn cho rằng sứa trôi trong nước là nên xem lại tình cảnh đang trôi theo dòng, thiếu định hướng; bị sứa đốt là vấn đề nhỏ bị bỏ qua sẽ quay lại gây đau; ngắm sứa phát sáng là có duyên lạ hay cảm hứng.',
+      vietnam: 'Ở biển Việt Nam, sứa là thứ cần cảnh giác mùa hè. Mơ thấy sứa là cẩn thận người ngoài mềm mỏng mà có thể làm tổn thương.',
+      cases: [
+        ['Mơ sứa trôi lững lờ', 'Lúc cần định hướng lại.'],
+        ['Mơ bị sứa đốt', 'Đề phòng vấn đề nhỏ lúc lơ là.'],
+        ['Mơ thấy sứa phát sáng', 'Có duyên lạ hoặc cảm hứng.'],
+        ['Mơ tránh được sứa', 'Nhận ra nguy hiểm và né kịp.'],
+      ],
+    },
+  },
+  {
+    slug: 'camel', category: 'animal', tone: 'good', emoji: '🐫',
+    ko: {
+      name: '낙타 꿈', keywords: ['낙타', '낙타 꿈', '낙타 타는 꿈'],
+      summary: '낙타는 끈기와 먼 길을 견디는 힘을 뜻합니다. 낙타를 타고 사막을 건너면 힘든 시기를 버티고 목표에 닿는 꿈입니다.',
+      korea: '낙타를 타고 길을 가면 오래 걸리더라도 끝내 목표를 이룬다고 봅니다. 짐을 가득 실은 낙타는 재물과 책임이 함께 늘어나는 것을, 낙타가 무릎을 꿇으면 잠시 쉬어 가라는 뜻으로 풉니다.',
+      vietnam: '베트남에는 낙타(lạc đà)가 살지 않아 전통 풀이는 드물지만, 요즘은 인내와 먼 여행, 해외에서의 일을 뜻하는 꿈으로 봅니다.',
+      cases: [
+        ['낙타를 타고 가는 꿈', '오래 걸려도 목표에 닿습니다.'],
+        ['짐을 실은 낙타 꿈', '재물과 책임이 함께 늘어납니다.'],
+        ['낙타가 무릎을 꿇는 꿈', '잠시 쉬어 갈 때입니다.'],
+        ['낙타 무리를 보는 꿈', '먼 곳과의 거래나 여행이 생깁니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy lạc đà', keywords: ['lạc đà', 'cưỡi lạc đà'],
+      summary: 'Lạc đà là sự bền bỉ, chịu được đường xa. Cưỡi lạc đà qua sa mạc là vượt qua giai đoạn khó và tới đích.',
+      korea: 'Người Hàn cho rằng cưỡi lạc đà đi đường là dù lâu nhưng cuối cùng đạt mục tiêu; lạc đà chở đầy hàng là tiền của và trách nhiệm cùng tăng; lạc đà quỳ xuống là nên nghỉ ngơi một chút.',
+      vietnam: 'Việt Nam không có lạc đà nên ít lời giải truyền thống; ngày nay người ta hiểu đây là sự nhẫn nại, chuyến đi xa hay công việc ở nước ngoài.',
+      cases: [
+        ['Mơ cưỡi lạc đà', 'Lâu nhưng sẽ tới đích.'],
+        ['Mơ lạc đà chở hàng', 'Tiền và trách nhiệm cùng tăng.'],
+        ['Mơ lạc đà quỳ xuống', 'Nên nghỉ ngơi một chút.'],
+        ['Mơ thấy đàn lạc đà', 'Có giao dịch, chuyến đi phương xa.'],
+      ],
+    },
+  },
+  {
+    slug: 'dragonfly', category: 'animal', tone: 'good', emoji: '🍃',
+    ko: {
+      name: '잠자리 꿈', keywords: ['잠자리', '고추잠자리', '잠자리 잡는 꿈'],
+      summary: '잠자리는 가벼운 변화와 자유, 계절이 바뀌듯 찾아오는 새 소식을 뜻합니다. 잠자리를 잡으면 바라던 일을 손에 넣습니다.',
+      korea: '잠자리 떼가 하늘을 맴돌면 주변이 활기차지고 새 소식이 온다고 봅니다. 잠자리를 잡으면 바라던 것을 얻고, 손가락에 잠자리가 앉으면 좋은 인연이 스스로 다가온다는 뜻입니다. 잠자리를 놓치면 기회를 너무 가볍게 여기지 말라는 꿈입니다.',
+      vietnam: '베트남 속담 "잠자리가 낮게 날면 비, 높이 날면 맑음, 중간이면 흐림(chuồn chuồn bay thấp thì mưa…)"처럼 잠자리(chuồn chuồn)는 날씨와 변화를 알리는 존재입니다. 잠자리 꿈은 상황의 변화를 미리 읽으라는 뜻입니다.',
+      cases: [
+        ['잠자리 떼를 보는 꿈', '주변이 활기차고 새 소식이 옵니다.'],
+        ['잠자리를 잡는 꿈', '바라던 것을 얻습니다.'],
+        ['손에 잠자리가 앉는 꿈', '좋은 인연이 다가옵니다.'],
+        ['잠자리가 낮게 나는 꿈', '변화에 미리 대비하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy chuồn chuồn', keywords: ['chuồn chuồn', 'bắt chuồn chuồn'],
+      summary: 'Chuồn chuồn là thay đổi nhẹ nhàng, tự do và tin mới đến như mùa chuyển. Bắt được chuồn chuồn là có được điều mong muốn.',
+      korea: 'Người Hàn cho rằng đàn chuồn chuồn lượn trên trời là xung quanh sôi động, có tin mới; bắt được chuồn chuồn là đạt điều mong muốn; chuồn chuồn đậu lên tay là duyên lành tự tìm đến; để vuột chuồn chuồn là đừng xem nhẹ cơ hội.',
+      vietnam: '“Chuồn chuồn bay thấp thì mưa, bay cao thì nắng, bay vừa thì râm” — với người Việt, chuồn chuồn báo thời tiết, báo đổi thay. Mơ thấy chuồn chuồn là nên đọc trước sự thay đổi.',
+      cases: [
+        ['Mơ thấy đàn chuồn chuồn', 'Xung quanh sôi động, có tin mới.'],
+        ['Mơ bắt được chuồn chuồn', 'Đạt điều mong muốn.'],
+        ['Mơ chuồn chuồn đậu trên tay', 'Duyên lành tìm đến.'],
+        ['Mơ chuồn chuồn bay thấp', 'Chuẩn bị trước cho thay đổi.'],
+      ],
+    },
+  },
+  {
+    slug: 'cicada', category: 'animal', tone: 'good', emoji: '🦗',
+    ko: {
+      name: '매미 꿈', keywords: ['매미', '매미 소리', '매미 꿈', '매미 허물'],
+      summary: '매미는 오랜 기다림 끝의 변신과 성공을 뜻합니다. 땅속에서 오래 지내다 허물을 벗고 날아오르듯 노력이 빛을 보는 꿈입니다.',
+      korea: '매미가 허물을 벗으면 긴 준비 끝에 새 모습으로 거듭나고, 매미 소리가 크게 울리면 이름이 알려진다고 봅니다. 매미를 잡으면 바라던 결과를 얻고, 매미 소리가 시끄럽게만 느껴지면 주변의 잡음에 흔들리지 말라는 뜻입니다.',
+      vietnam: '베트남에서 매미(ve sầu) 소리와 붉은 봉황목 꽃은 여름과 시험 철, 졸업을 상징합니다. 매미 꿈은 학업과 시험의 결실을 뜻합니다.',
+      cases: [
+        ['매미가 허물을 벗는 꿈', '긴 준비 끝에 새롭게 거듭납니다.'],
+        ['매미 소리가 크게 울리는 꿈', '이름이 알려지고 인정받습니다.'],
+        ['매미를 잡는 꿈', '바라던 결과를 얻습니다.'],
+        ['매미 소리가 시끄러운 꿈', '잡음에 흔들리지 마세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy ve sầu', keywords: ['ve sầu', 'tiếng ve', 'xác ve'],
+      summary: 'Ve sầu là lột xác thành công sau thời gian dài chờ đợi — như ve sống lâu dưới đất rồi lột xác bay lên.',
+      korea: 'Người Hàn cho rằng ve lột xác là sau thời gian chuẩn bị dài sẽ đổi mới bản thân; tiếng ve vang to là được nhiều người biết đến; bắt được ve là đạt kết quả mong muốn; thấy tiếng ve chỉ ồn ào là đừng để lời ra tiếng vào làm lung lay.',
+      vietnam: 'Với người Việt, tiếng ve và hoa phượng là mùa hè, mùa thi, mùa chia tay học trò. Mơ thấy ve sầu là thành quả học hành, thi cử.',
+      cases: [
+        ['Mơ ve sầu lột xác', 'Đổi mới sau thời gian chuẩn bị dài.'],
+        ['Mơ nghe tiếng ve vang', 'Được biết đến, được công nhận.'],
+        ['Mơ bắt được ve', 'Đạt kết quả mong muốn.'],
+        ['Mơ tiếng ve ồn ào', 'Đừng để lời ra tiếng vào làm dao động.'],
+      ],
+    },
+  },
+];

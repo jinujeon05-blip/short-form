@@ -259,7 +259,7 @@ export const SITUATION_DREAMS_2: Dream[] = [
       ],
     },
     vi: {
-      name: 'Mơ thấy ô tô, xe mới', keywords: ['ô tô', 'xe mới', 'lái xe', 'xe máy'],
+      name: 'Mơ thấy ô tô, xe mới', keywords: ['ô tô', 'xe mới', 'lái xe', 'xe hơi'],
       summary: 'Xe cộ là tốc độ và quyền chủ động trong đời bạn. Lái xe mới chạy êm là điềm mọi việc suôn sẻ.',
       korea: 'Người Hàn cho rằng mua hay được tặng xe mới là có địa vị, cơ hội mới; tự cầm lái là nắm quyền chủ động; ngồi xe người khác lái là được giúp hoặc phải theo quyết định của người khác.',
       vietnam: 'Người Việt cũng xem xe mới là phát triển, tiền tài; xe hỏng là nên xem lại kế hoạch.',
