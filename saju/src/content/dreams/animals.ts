@@ -1,0 +1,328 @@
+import type { Dream } from './types';
+
+export const ANIMAL_DREAMS: Dream[] = [
+  {
+    slug: 'pig', category: 'animal', tone: 'good', emoji: '🐷',
+    ko: {
+      name: '돼지꿈', keywords: ['돼지', '돼지 꿈', '복권'],
+      summary: '한국에서 가장 유명한 길몽입니다. 돼지는 재물과 복을 상징해, 돈이 들어오거나 일이 풍족해질 징조로 봅니다.',
+      korea: '돼지(猪)의 한자음 "저"가 재물을 뜻하는 말과 통하고, 옛날 제사와 잔치에 쓰이던 귀한 가축이어서 풍요의 상징이 되었습니다. 그래서 돼지꿈을 꾸면 복권을 산다는 말이 나올 만큼 재물운이 오는 꿈으로 여깁니다. 돼지가 크고 살찔수록, 집 안으로 들어올수록 더 좋게 봅니다.',
+      vietnam: '베트남에서도 돼지(lợn, heo)는 풍족함과 재물의 상징입니다. 특히 살찐 돼지는 집안 살림이 넉넉해질 징조로, 돼지 떼는 사업이 번창할 꿈으로 풀이합니다.',
+      cases: [
+        ['돼지가 집 안으로 들어오는 꿈', '재물이 들어오는 대표적인 길몽입니다. 뜻밖의 수입이나 좋은 거래를 기대해 볼 만합니다.'],
+        ['돼지를 안거나 업는 꿈', '내 손에 복이 들어오는 꿈으로, 재물운과 함께 가족에게 경사가 생긴다고 봅니다.'],
+        ['돼지 떼를 보는 꿈', '여러 곳에서 이익이 생기거나 사업이 커질 징조로 풀이합니다.'],
+        ['돼지가 집 밖으로 나가는 꿈', '들어올 재물이 빠져나갈 수 있으니 지출과 투자를 조심하라는 뜻으로 봅니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy lợn (heo)', keywords: ['lợn', 'heo', 'nằm mơ thấy lợn', 'mơ thấy heo'],
+      summary: 'Ở Hàn Quốc đây là giấc mơ cát tường nổi tiếng nhất. Lợn tượng trưng cho tiền bạc và phúc lộc, báo hiệu tài lộc sắp đến.',
+      korea: 'Người Hàn coi lợn là biểu tượng của sự sung túc, vì đó là con vật quý trong cúng tế và yến tiệc ngày xưa. Mơ thấy lợn (돼지꿈) mạnh đến mức nhiều người đi mua vé số ngay sáng hôm sau. Lợn càng to, càng vào nhà thì càng tốt.',
+      vietnam: 'Người Việt cũng xem lợn là biểu tượng no đủ. Mơ thấy lợn béo báo hiệu gia đình khấm khá; mơ thấy đàn lợn là điềm làm ăn phát đạt.',
+      cases: [
+        ['Mơ thấy lợn vào nhà', 'Điềm tài lộc vào nhà rõ nhất — có thể có khoản thu bất ngờ hoặc giao dịch tốt.'],
+        ['Mơ ôm hoặc cõng lợn', 'Phúc lộc đến tận tay, gia đình có thể có tin vui.'],
+        ['Mơ thấy đàn lợn', 'Lợi ích đến từ nhiều nơi, công việc kinh doanh mở rộng.'],
+        ['Mơ thấy lợn chạy ra khỏi nhà', 'Tiền có thể đi ra — nên cẩn thận chi tiêu và đầu tư.'],
+      ],
+    },
+  },
+  {
+    slug: 'snake', category: 'animal', tone: 'good', emoji: '🐍',
+    ko: {
+      name: '뱀꿈', keywords: ['뱀', '구렁이', '태몽', '뱀 꿈'],
+      summary: '한국에서는 재물과 태몽을 뜻하는 좋은 꿈으로 보는 경우가 많습니다. 다만 뱀에게 물리거나 쫓기면 해석이 달라집니다.',
+      korea: '큰 구렁이나 뱀은 집을 지키는 업(業)신이자 재물을 상징해, 뱀이 집에 들어오거나 몸을 감으면 재물이 생긴다고 봅니다. 또 대표적인 태몽 가운데 하나로, 구렁이는 아들, 작은 뱀은 딸이라는 속설도 있습니다.',
+      vietnam: '베트남에서는 뱀(rắn) 꿈을 이성과의 인연, 혹은 주변의 경쟁자를 뜻하는 꿈으로 보는 경우가 많습니다. 뱀에게 물리는 꿈은 오히려 행운이나 좋은 인연이 온다고 풀이하기도 합니다.',
+      cases: [
+        ['큰 구렁이가 집에 들어오는 꿈', '재물운이 크게 들어오는 길몽으로 봅니다.'],
+        ['뱀이 몸을 감는 꿈', '좋은 인연이나 재물이 나에게 붙는다는 뜻으로 풀이합니다. 태몽으로 보기도 합니다.'],
+        ['뱀에게 물리는 꿈', '한국에서는 뜻밖의 이득, 베트남에서는 좋은 인연의 징조로 보는 경우가 많습니다.'],
+        ['뱀을 죽이는 꿈', '골치 아픈 문제나 경쟁자를 이겨 내는 꿈으로 봅니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy rắn', keywords: ['rắn', 'nằm mơ thấy rắn', 'rắn cắn', 'mơ rắn'],
+      summary: 'Người Hàn thường coi giấc mơ thấy rắn là điềm tài lộc hoặc báo có con (태몽). Tuy vậy bị rắn đuổi hay cắn thì ý nghĩa sẽ khác.',
+      korea: 'Rắn lớn được xem là thần giữ nhà và giữ của, nên rắn vào nhà hay quấn quanh người là điềm có của. Đây cũng là một trong những giấc mơ báo có thai phổ biến nhất ở Hàn Quốc — dân gian nói trăn lớn báo con trai, rắn nhỏ báo con gái.',
+      vietnam: 'Người Việt thường liên hệ rắn với chuyện tình duyên hoặc kẻ tiểu nhân quanh mình. Bị rắn cắn trong mơ lại hay được giải là điềm may, sắp gặp người tốt hoặc có tin vui.',
+      cases: [
+        ['Mơ thấy rắn lớn vào nhà', 'Điềm tài lộc lớn theo cách nghĩ của người Hàn.'],
+        ['Mơ rắn quấn người', 'Nhân duyên hoặc tài lộc gắn với mình; cũng có thể là giấc mơ báo có thai.'],
+        ['Mơ bị rắn cắn', 'Người Hàn cho là được lợi bất ngờ; người Việt cho là sắp có duyên tốt.'],
+        ['Mơ giết rắn', 'Vượt qua rắc rối hoặc thắng được đối thủ.'],
+      ],
+    },
+  },
+  {
+    slug: 'dragon', category: 'animal', tone: 'good', emoji: '🐉',
+    ko: {
+      name: '용꿈', keywords: ['용', '용 꿈', '태몽', '승진'],
+      summary: '가장 큰 길몽 가운데 하나입니다. 출세, 승진, 큰 성공, 귀한 자녀를 얻는 태몽으로 봅니다.',
+      korea: '용은 임금과 큰 인물을 상징해 "개천에서 용 난다"는 말처럼 크게 이름을 떨칠 징조로 봅니다. 용이 하늘로 오르는 꿈은 시험 합격이나 승진, 용을 품에 안는 꿈은 큰 인물을 낳을 태몽으로 풀이합니다.',
+      vietnam: '베트남에서도 용(rồng)은 권력과 번영의 상징이라 출세와 성공, 재물이 들어올 꿈으로 봅니다. 승천하는 용은 일이 크게 풀릴 길조입니다.',
+      cases: [
+        ['용이 하늘로 오르는 꿈', '시험 합격, 승진, 사업 성공 같은 큰 도약을 뜻합니다.'],
+        ['용을 타는 꿈', '내가 주도권을 잡고 크게 성공한다는 뜻으로 봅니다.'],
+        ['용을 품에 안는 꿈', '대표적인 태몽으로, 귀하게 될 자녀를 얻는다고 봅니다.'],
+        ['용이 떨어지거나 죽는 꿈', '계획이 틀어질 수 있으니 무리한 확장을 조심하라는 뜻입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy rồng', keywords: ['rồng', 'nằm mơ thấy rồng', 'rồng bay'],
+      summary: 'Một trong những giấc mơ đại cát: báo hiệu thăng tiến, thành công lớn hoặc sinh con quý.',
+      korea: 'Rồng tượng trưng cho vua chúa và người tài. Người Hàn có câu “rồng sinh ra từ suối nhỏ” để nói người xuất thân bình thường mà làm nên chuyện lớn. Rồng bay lên trời là điềm đỗ đạt, thăng chức; ôm rồng là giấc mơ báo có con tài giỏi.',
+      vietnam: 'Với người Việt, rồng là biểu tượng quyền lực và thịnh vượng. Mơ thấy rồng báo hiệu công danh, tiền tài; rồng bay lên là điềm mọi việc hanh thông.',
+      cases: [
+        ['Mơ rồng bay lên trời', 'Đỗ đạt, thăng tiến, làm ăn bứt phá.'],
+        ['Mơ cưỡi rồng', 'Bạn nắm quyền chủ động và đạt thành công lớn.'],
+        ['Mơ ôm rồng vào lòng', 'Giấc mơ báo có con quý theo quan niệm Hàn Quốc.'],
+        ['Mơ rồng rơi hoặc chết', 'Kế hoạch có thể trục trặc — tránh mở rộng quá sức.'],
+      ],
+    },
+  },
+  {
+    slug: 'tiger', category: 'animal', tone: 'mixed', emoji: '🐯',
+    ko: {
+      name: '호랑이꿈', keywords: ['호랑이', '호랑이 꿈', '태몽', '범'],
+      summary: '권력과 귀인, 강한 기운을 뜻하는 꿈입니다. 호랑이를 다루면 길몽, 호랑이에게 쫓기면 압박감을 뜻합니다.',
+      korea: '호랑이는 산신령의 짐승이자 권위의 상징이라, 호랑이가 집에 들어오거나 나를 따르면 높은 사람의 도움을 받거나 지위가 오를 꿈으로 봅니다. 아들을 얻는 태몽으로도 유명합니다.',
+      vietnam: '베트남에서 호랑이(hổ, cọp)는 힘과 위엄의 상징이지만, 꿈에서는 강한 경쟁자나 윗사람의 압박을 뜻하기도 합니다. 호랑이를 이기는 꿈은 어려움을 극복할 징조로 봅니다.',
+      cases: [
+        ['호랑이가 집에 들어오는 꿈', '귀인의 도움이나 승진운이 들어오는 길몽입니다.'],
+        ['호랑이를 타거나 길들이는 꿈', '권한과 영향력이 커지는 꿈으로 봅니다.'],
+        ['호랑이에게 쫓기는 꿈', '윗사람이나 일의 압박을 느끼고 있다는 뜻입니다. 무리한 결정은 미루세요.'],
+        ['새끼 호랑이를 안는 꿈', '대표적인 태몽으로 봅니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy hổ (cọp)', keywords: ['hổ', 'cọp', 'nằm mơ thấy hổ', 'mơ thấy cọp'],
+      summary: 'Giấc mơ về quyền lực, quý nhân và sức mạnh. Thuần phục được hổ là tốt; bị hổ đuổi là dấu hiệu áp lực.',
+      korea: 'Người Hàn coi hổ là linh vật của thần núi và biểu tượng uy quyền. Hổ vào nhà hay đi theo mình là điềm được người có thế giúp đỡ, được thăng chức; đây cũng là giấc mơ báo sinh con trai rất nổi tiếng.',
+      vietnam: 'Người Việt xem hổ là biểu tượng sức mạnh, nhưng trong mơ hổ còn có thể là đối thủ mạnh hoặc cấp trên gây áp lực. Thắng được hổ là điềm vượt qua khó khăn.',
+      cases: [
+        ['Mơ hổ vào nhà', 'Có quý nhân giúp đỡ hoặc cơ hội thăng tiến.'],
+        ['Mơ cưỡi hoặc thuần phục hổ', 'Quyền hạn và ảnh hưởng của bạn tăng lên.'],
+        ['Mơ bị hổ đuổi', 'Bạn đang chịu áp lực từ công việc hoặc cấp trên — tạm hoãn quyết định lớn.'],
+        ['Mơ ôm hổ con', 'Giấc mơ báo có con theo quan niệm Hàn Quốc.'],
+      ],
+    },
+  },
+  {
+    slug: 'dog', category: 'animal', tone: 'mixed', emoji: '🐶',
+    ko: {
+      name: '개꿈', keywords: ['개', '강아지', '개한테 물리는 꿈', '강아지 꿈'],
+      summary: '"개꿈"은 의미 없는 꿈이라는 말이지만, 실제로 개가 나오는 꿈은 친구·조력자·충성을 뜻하는 경우가 많습니다.',
+      korea: '개는 집을 지키는 충직한 동물이라 꿈에서 반기는 개는 믿을 만한 친구나 도와줄 사람을 뜻합니다. 반대로 개가 짖거나 물면 주변 사람과의 말다툼, 배신을 조심하라는 뜻으로 봅니다.',
+      vietnam: '베트남에서도 개(chó)는 충성과 보호를 뜻합니다. 개가 따라오면 좋은 친구를 만나고, 개에게 물리면 가까운 사람과 갈등이 생길 수 있다고 풀이합니다.',
+      cases: [
+        ['강아지를 안는 꿈', '새로운 친구나 귀여운 경사가 생길 꿈입니다.'],
+        ['개가 꼬리를 흔들며 반기는 꿈', '믿을 만한 조력자를 만난다는 뜻입니다.'],
+        ['개에게 물리는 꿈', '가까운 사람과의 오해나 다툼을 조심하라는 뜻입니다.'],
+        ['개가 사납게 짖는 꿈', '말실수나 구설에 휘말리지 않도록 조심하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy chó', keywords: ['chó', 'chó cắn', 'nằm mơ thấy chó', 'mơ chó đuổi'],
+      summary: 'Người Hàn gọi giấc mơ vô nghĩa là “mơ chó” (개꿈), nhưng thực ra mơ thấy chó thường nói về bạn bè, người giúp đỡ và lòng trung thành.',
+      korea: 'Chó là con vật trung thành giữ nhà, nên chó vẫy đuôi chào đón trong mơ là dấu hiệu có bạn tốt, người giúp. Chó sủa hay cắn thì nên cẩn thận cãi vã hoặc bị phản bội.',
+      vietnam: 'Người Việt cũng xem chó là biểu tượng trung thành và bảo vệ. Chó đi theo mình là sắp gặp bạn tốt; bị chó cắn là dễ xích mích với người thân quen.',
+      cases: [
+        ['Mơ ôm chó con', 'Có thêm bạn mới hoặc niềm vui nhỏ trong nhà.'],
+        ['Mơ chó vẫy đuôi chào', 'Gặp được người đáng tin cậy giúp đỡ.'],
+        ['Mơ bị chó cắn', 'Cẩn thận hiểu lầm, xích mích với người gần gũi.'],
+        ['Mơ chó sủa dữ', 'Coi chừng lời ra tiếng vào, thị phi.'],
+      ],
+    },
+  },
+  {
+    slug: 'cat', category: 'animal', tone: 'mixed', emoji: '🐱',
+    ko: {
+      name: '고양이꿈', keywords: ['고양이', '고양이 꿈', '새끼 고양이'],
+      summary: '고양이는 예민한 직감, 여성적인 기운, 때로는 숨은 경쟁자를 뜻합니다. 순한 고양이는 좋은 인연, 할퀴는 고양이는 구설을 상징합니다.',
+      korea: '한국 전통에서는 고양이를 영물로 여겨, 고양이가 할퀴거나 노려보면 누군가의 시기나 뒷말을 조심하라는 뜻으로 봅니다. 반대로 고양이를 쓰다듬거나 새끼 고양이를 얻으면 작은 행운이나 새로운 인연이 생긴다고 풀이합니다.',
+      vietnam: '베트남에서 고양이(mèo)는 12띠 동물이기도 해 친숙합니다. 고양이가 집에 오면 손님이나 소식이 오고, 고양이에게 할퀴이면 작은 손해를 조심하라고 풉니다.',
+      cases: [
+        ['고양이를 쓰다듬는 꿈', '마음이 편해지는 일이나 좋은 인연이 생길 꿈입니다.'],
+        ['새끼 고양이를 얻는 꿈', '작은 행운이나 반가운 소식이 옵니다.'],
+        ['고양이에게 할퀴는 꿈', '뒷말이나 질투를 조심하라는 뜻입니다.'],
+        ['검은 고양이가 지나가는 꿈', '직감을 믿고 조심스럽게 움직이라는 뜻으로 봅니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy mèo', keywords: ['mèo', 'mèo con', 'nằm mơ thấy mèo', 'mèo cào'],
+      summary: 'Mèo tượng trưng cho trực giác nhạy bén, nét nữ tính và đôi khi là đối thủ ngầm. Mèo hiền là duyên tốt; mèo cào là thị phi.',
+      korea: 'Người Hàn xưa xem mèo là con vật có linh tính; mèo cào hay nhìn chằm chằm là dấu hiệu bị ghen ghét, nói xấu. Vuốt ve mèo hay được mèo con thì có may mắn nhỏ, có mối quan hệ mới.',
+      vietnam: 'Mèo là con giáp của người Việt nên rất gần gũi. Mèo vào nhà là có khách hoặc có tin; bị mèo cào là nên đề phòng mất mát nhỏ.',
+      cases: [
+        ['Mơ vuốt ve mèo', 'Mọi việc êm ả, có duyên lành.'],
+        ['Mơ được mèo con', 'Có may mắn nhỏ hoặc tin vui.'],
+        ['Mơ bị mèo cào', 'Cẩn thận lời đồn và sự đố kỵ.'],
+        ['Mơ thấy mèo đen', 'Hãy tin trực giác và thận trọng khi hành động.'],
+      ],
+    },
+  },
+  {
+    slug: 'rat', category: 'animal', tone: 'mixed', emoji: '🐭',
+    ko: {
+      name: '쥐꿈', keywords: ['쥐', '쥐 꿈', '생쥐'],
+      summary: '쥐는 부지런함과 재물을 모으는 기운이지만, 집안 재물이 새어 나가는 것을 뜻하기도 합니다. 쥐의 수와 행동을 보고 풉니다.',
+      korea: '쥐는 곡식을 모으는 동물이라, 쥐가 무언가를 물어 오면 재물이 쌓인다고 봅니다. 반대로 쥐가 곡식을 갉아 먹거나 떼로 몰려다니면 작은 손실이나 잔걱정이 많아질 징조로 풉니다.',
+      vietnam: '베트남에서는 쥐(chuột) 꿈을 흔히 작은 손실이나 소인배를 조심하라는 뜻으로 풀지만, 쥐를 잡는 꿈은 골칫거리를 해결하는 좋은 꿈으로 봅니다.',
+      cases: [
+        ['쥐가 무언가를 물어 오는 꿈', '작은 재물이 꾸준히 모이는 꿈입니다.'],
+        ['쥐 떼를 보는 꿈', '잔걱정이나 새는 돈이 많아질 수 있으니 살림을 점검하세요.'],
+        ['쥐를 잡는 꿈', '골치 아픈 문제를 해결하는 길몽입니다.'],
+        ['쥐에게 물리는 꿈', '아랫사람이나 가까운 사람 때문에 손해를 볼 수 있습니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy chuột', keywords: ['chuột', 'nằm mơ thấy chuột', 'chuột cắn'],
+      summary: 'Chuột vừa là sự chăm chỉ tích của, vừa là dấu hiệu tiền bạc thất thoát. Cần xem số lượng và hành động của chuột.',
+      korea: 'Chuột là con vật tích trữ lương thực, nên chuột tha đồ về là điềm của cải tích dần. Chuột gặm lúa gạo hoặc kéo đàn thì báo hao hụt nhỏ, nhiều chuyện lặt vặt phiền lòng.',
+      vietnam: 'Người Việt thường giải mơ thấy chuột là nên đề phòng mất mát nhỏ hoặc kẻ tiểu nhân; mơ bắt được chuột thì là điềm giải quyết xong rắc rối.',
+      cases: [
+        ['Mơ chuột tha đồ về', 'Tiền bạc tích góp dần dần.'],
+        ['Mơ thấy đàn chuột', 'Dễ hao hụt, nhiều chuyện lặt vặt — nên xem lại chi tiêu.'],
+        ['Mơ bắt được chuột', 'Giải quyết được việc phiền phức.'],
+        ['Mơ bị chuột cắn', 'Có thể thiệt thòi vì người dưới quyền hoặc người quen.'],
+      ],
+    },
+  },
+  {
+    slug: 'fish', category: 'animal', tone: 'good', emoji: '🐟',
+    ko: {
+      name: '물고기꿈', keywords: ['물고기', '잉어', '고기 잡는 꿈', '태몽'],
+      summary: '물고기, 특히 큰 잉어는 재물과 태몽을 뜻하는 좋은 꿈입니다. 맑은 물에서 헤엄칠수록 좋습니다.',
+      korea: '물고기를 잡는 꿈은 노력한 만큼 재물이나 성과를 얻는다는 뜻이고, 큰 잉어나 금붕어를 품에 안으면 대표적인 태몽으로 봅니다. 잉어가 폭포를 거슬러 오르면 용이 된다는 "등용문" 이야기처럼 출세의 상징이기도 합니다.',
+      vietnam: '베트남에서도 물고기(cá)는 풍요(여유)를 뜻하고, 잉어가 용이 되는 이야기(cá chép hóa rồng)가 있어 성공의 상징입니다. 큰 물고기를 잡으면 재물이 들어온다고 봅니다.',
+      cases: [
+        ['큰 물고기를 잡는 꿈', '재물운과 성과가 따르는 길몽입니다.'],
+        ['잉어를 품에 안는 꿈', '대표적인 태몽입니다.'],
+        ['맑은 물에서 물고기가 노는 꿈', '마음이 편하고 일이 순조롭게 풀립니다.'],
+        ['죽은 물고기를 보는 꿈', '기대한 일이 늦어질 수 있으니 조급해하지 마세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy cá', keywords: ['cá', 'cá chép', 'bắt cá', 'nằm mơ thấy cá'],
+      summary: 'Cá, nhất là cá chép lớn, là điềm tài lộc và báo có con. Cá bơi trong nước trong càng tốt.',
+      korea: 'Người Hàn cho rằng mơ bắt cá là công sức được đền đáp; ôm cá chép lớn hay cá vàng là giấc mơ báo có thai rất phổ biến. Cá chép vượt thác hóa rồng cũng là biểu tượng đỗ đạt.',
+      vietnam: 'Với người Việt, cá tượng trưng cho sự dư dả; truyện cá chép hóa rồng là biểu tượng thành công. Bắt được cá to là điềm tiền bạc vào.',
+      cases: [
+        ['Mơ bắt được cá to', 'Tài lộc và thành quả đến.'],
+        ['Mơ ôm cá chép', 'Giấc mơ báo có con theo quan niệm Hàn Quốc.'],
+        ['Mơ cá bơi trong nước trong', 'Tâm trạng thoải mái, công việc suôn sẻ.'],
+        ['Mơ thấy cá chết', 'Việc mong đợi có thể chậm lại — đừng nóng vội.'],
+      ],
+    },
+  },
+  {
+    slug: 'cow', category: 'animal', tone: 'good', emoji: '🐮',
+    ko: {
+      name: '소꿈', keywords: ['소', '황소', '소 꿈', '송아지'],
+      summary: '소는 성실함과 재산, 든든한 조력자를 뜻합니다. 소가 집에 들어오면 재물이 늘어날 꿈입니다.',
+      korea: '농경 사회에서 소는 가장 큰 재산이었기 때문에, 소가 집에 들어오거나 소를 얻는 꿈은 재산이 늘고 일이 든든해질 꿈으로 봅니다. 황소는 조상이나 윗사람의 도움을 뜻하기도 합니다.',
+      vietnam: '베트남에서도 소(bò, trâu)는 근면과 재산의 상징입니다. 소를 끌고 오면 일이 순조롭고, 소가 들이받으면 윗사람과 부딪힐 수 있다고 풉니다.',
+      cases: [
+        ['소가 집에 들어오는 꿈', '재산이 불어나고 집안이 안정될 꿈입니다.'],
+        ['소를 끌고 가는 꿈', '꾸준히 노력한 일이 결실을 맺습니다.'],
+        ['소에게 받히는 꿈', '윗사람과 의견 충돌을 조심하세요.'],
+        ['송아지를 얻는 꿈', '새로운 일이나 자녀와 관련된 경사가 생깁니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy bò, trâu', keywords: ['bò', 'trâu', 'nằm mơ thấy bò', 'nằm mơ thấy trâu'],
+      summary: 'Bò, trâu tượng trưng cho sự cần cù, tài sản và người hỗ trợ vững chắc. Bò vào nhà là điềm của cải tăng thêm.',
+      korea: 'Trong xã hội nông nghiệp, bò là tài sản lớn nhất, nên mơ bò vào nhà hay được bò là điềm của cải tăng, gia đình vững vàng. Bò đực còn tượng trưng cho sự giúp đỡ của tổ tiên hoặc người bề trên.',
+      vietnam: 'Người Việt cũng coi trâu bò là đầu cơ nghiệp. Dắt trâu về nhà là mọi việc hanh thông; bị trâu húc là dễ va chạm với cấp trên.',
+      cases: [
+        ['Mơ bò vào nhà', 'Tài sản tăng, gia đình yên ổn.'],
+        ['Mơ dắt bò', 'Việc kiên trì sắp có kết quả.'],
+        ['Mơ bị bò húc', 'Cẩn thận bất đồng với cấp trên.'],
+        ['Mơ được bê con', 'Có việc mới hoặc tin vui liên quan con cái.'],
+      ],
+    },
+  },
+  {
+    slug: 'bird', category: 'animal', tone: 'good', emoji: '🐦',
+    ko: {
+      name: '새꿈', keywords: ['새', '까치', '학', '봉황'],
+      summary: '새는 소식과 자유를 뜻합니다. 까치나 학처럼 길한 새가 날아오면 반가운 소식이 옵니다.',
+      korea: '"까치가 울면 반가운 손님이 온다"는 말처럼 까치 꿈은 기쁜 소식을, 학이나 봉황 꿈은 명예와 장수를 뜻합니다. 새장에 갇힌 새는 답답한 상황, 날아가는 새는 기회를 놓치지 말라는 뜻으로 봅니다.',
+      vietnam: '베트남에서는 새(chim)가 집에 날아들면 손님이나 좋은 소식이 온다고 보고, 새를 잡으면 원하는 것을 얻는 꿈으로 풉니다.',
+      cases: [
+        ['까치가 우는 꿈', '반가운 소식이나 손님이 찾아옵니다.'],
+        ['새가 품에 날아드는 꿈', '좋은 인연이나 태몽으로 봅니다.'],
+        ['새장 속 새를 보는 꿈', '답답한 상황에 놓여 있다는 마음의 표현입니다.'],
+        ['새가 멀리 날아가는 꿈', '눈앞의 기회를 놓치지 말라는 뜻입니다.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy chim', keywords: ['chim', 'chim bay vào nhà', 'nằm mơ thấy chim'],
+      summary: 'Chim tượng trưng cho tin tức và tự do. Những loài chim lành bay đến là điềm có tin vui.',
+      korea: 'Người Hàn có câu “chim ác là (까치) kêu là có khách quý”, nên mơ thấy chim này là có tin vui; hạc hay phượng hoàng là danh dự và sống thọ. Chim trong lồng là hoàn cảnh bí bách; chim bay đi là lời nhắc đừng bỏ lỡ cơ hội.',
+      vietnam: 'Người Việt tin chim bay vào nhà là có khách hoặc tin lành; bắt được chim là đạt được điều mong muốn.',
+      cases: [
+        ['Mơ chim hót', 'Có tin vui hoặc khách quý đến.'],
+        ['Mơ chim bay vào lòng', 'Duyên tốt, hoặc giấc mơ báo có con.'],
+        ['Mơ chim trong lồng', 'Tâm trạng bị gò bó, bế tắc.'],
+        ['Mơ chim bay xa', 'Đừng để vuột mất cơ hội trước mắt.'],
+      ],
+    },
+  },
+  {
+    slug: 'turtle', category: 'animal', tone: 'good', emoji: '🐢',
+    ko: {
+      name: '거북이꿈', keywords: ['거북이', '자라', '거북 꿈', '태몽'],
+      summary: '거북이는 장수와 안정, 꾸준한 재물을 뜻하는 길몽입니다. 태몽으로도 자주 꼽힙니다.',
+      korea: '거북이는 십장생 가운데 하나로 오래 사는 동물이라, 거북이 꿈은 건강과 장수, 오래가는 재물을 뜻합니다. 거북이가 집에 들어오거나 품에 안기면 귀한 자녀를 얻는 태몽으로 봅니다.',
+      vietnam: '베트남에서 거북(rùa)은 사신(四靈) 가운데 하나로 장수와 지혜를 상징합니다(호안끼엠 호수의 거북 전설). 거북 꿈은 일이 늦더라도 확실히 이루어질 길몽입니다.',
+      cases: [
+        ['거북이가 집에 들어오는 꿈', '집안에 오래가는 복이 들어옵니다.'],
+        ['거북이를 품에 안는 꿈', '대표적인 태몽입니다.'],
+        ['거북이가 물로 들어가는 꿈', '일이 순리대로 자리를 잡습니다.'],
+        ['거북이를 놓치는 꿈', '조급함 때문에 기회를 놓치지 않도록 하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy rùa', keywords: ['rùa', 'nằm mơ thấy rùa', 'rùa vàng'],
+      summary: 'Rùa là điềm lành về sống lâu, ổn định và tiền bạc bền vững; cũng thường là giấc mơ báo có con.',
+      korea: 'Rùa là một trong “thập trường sinh” của người Hàn, tượng trưng cho tuổi thọ; mơ thấy rùa là sức khỏe tốt và tài lộc lâu bền. Rùa vào nhà hay ôm rùa là giấc mơ báo có con quý.',
+      vietnam: 'Với người Việt, rùa là một trong tứ linh, biểu tượng trường thọ và trí tuệ (gắn với truyền thuyết hồ Hoàn Kiếm). Mơ thấy rùa là việc tuy chậm nhưng chắc chắn thành.',
+      cases: [
+        ['Mơ rùa vào nhà', 'Phúc lộc lâu bền đến với gia đình.'],
+        ['Mơ ôm rùa', 'Giấc mơ báo có con theo quan niệm Hàn Quốc.'],
+        ['Mơ rùa bò xuống nước', 'Mọi việc dần vào nề nếp.'],
+        ['Mơ để rùa chạy mất', 'Đừng vì nóng vội mà bỏ lỡ cơ hội.'],
+      ],
+    },
+  },
+  {
+    slug: 'chicken', category: 'animal', tone: 'good', emoji: '🐔',
+    ko: {
+      name: '닭꿈', keywords: ['닭', '달걀', '병아리', '닭 꿈'],
+      summary: '닭은 새벽과 시작, 소식을 뜻합니다. 수탉이 울면 좋은 소식, 달걀을 얻으면 재물이 모이는 꿈입니다.',
+      korea: '닭이 우는 꿈은 새로운 일이 시작되거나 기다리던 소식이 온다는 뜻이고, 달걀을 줍는 꿈은 작은 재물이 쌓인다는 뜻으로 봅니다. 병아리 떼는 식구가 늘거나 일이 번창할 징조입니다.',
+      vietnam: '베트남에서도 닭(gà)은 새벽을 알리는 길한 동물로, 수탉 울음은 좋은 소식을, 암탉이 알을 낳으면 집안이 넉넉해질 꿈으로 봅니다.',
+      cases: [
+        ['수탉이 우는 꿈', '기다리던 소식이나 새 출발이 있습니다.'],
+        ['달걀을 줍는 꿈', '작은 재물이 꾸준히 모입니다.'],
+        ['병아리 떼를 보는 꿈', '식구가 늘거나 일이 번창합니다.'],
+        ['닭이 싸우는 꿈', '주변의 말다툼에 휘말리지 않도록 조심하세요.'],
+      ],
+    },
+    vi: {
+      name: 'Mơ thấy gà', keywords: ['gà', 'gà trống', 'trứng gà', 'nằm mơ thấy gà'],
+      summary: 'Gà tượng trưng cho bình minh, khởi đầu và tin tức. Gà trống gáy là tin vui; nhặt trứng là của cải tích lũy.',
+      korea: 'Người Hàn cho rằng gà gáy là có việc mới bắt đầu hoặc tin chờ đợi sắp đến; nhặt trứng gà là tích được của nhỏ; đàn gà con là gia đình thêm người, công việc phát triển.',
+      vietnam: 'Người Việt cũng xem gà là con vật báo sáng mang điềm lành: gà trống gáy là tin vui, gà mái đẻ trứng là nhà cửa sung túc.',
+      cases: [
+        ['Mơ gà trống gáy', 'Có tin vui hoặc khởi đầu mới.'],
+        ['Mơ nhặt trứng gà', 'Của cải tích lũy đều đặn.'],
+        ['Mơ đàn gà con', 'Gia đình thêm người hoặc làm ăn phát đạt.'],
+        ['Mơ gà đá nhau', 'Tránh bị cuốn vào cãi vã xung quanh.'],
+      ],
+    },
+  },
+];

@@ -8,6 +8,7 @@ import { GuideList } from './ArticlePages';
 import { AdSlot } from '../components/AdSlot';
 import { HAZARD } from '../content/hazard';
 import { AGE } from '../content/age';
+import { DREAM_UI } from '../content/dreams';
 import { InstallApp } from '../components/InstallApp';
 import { TodayCard } from '../components/TodayCard';
 import { TODAY } from '../content/today';
@@ -85,6 +86,14 @@ export function Home() {
           <p className="section-desc">{t.name.desc}</p>
         </div>
         <Link className="btn btn-gold" to="/name">{lang === 'vi' ? t.name.toKo : t.name.toVi} →</Link>
+      </section>
+
+      <section className="cta-band">
+        <div>
+          <h2 className="section-title">🌙 {DREAM_UI[lang].title}</h2>
+          <p className="section-desc">{DREAM_UI[lang].lead}</p>
+        </div>
+        <Link className="btn btn-gold" to="/dream">{lang === 'vi' ? 'Giải mộng' : '꿈해몽 보기'} →</Link>
       </section>
 
       <section className="cta-band">

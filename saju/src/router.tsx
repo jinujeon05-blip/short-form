@@ -4,16 +4,19 @@ import type { Lang } from './i18n';
 import articles from './content/articles.json';
 import { ANIMAL_SLUGS, FORTUNE_YEARS } from './engine/yearly';
 import { PURPOSES } from './engine/almanac';
+import { DREAM_SLUGS } from './content/dreams';
 
-export const ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/daily', '/age', '/hangul', '/holidays', '/guide', '/about', '/method', '/privacy', '/terms'] as const;
+export const ROUTES = ['/', '/calendar', '/match', '/name', '/saju', '/samjae', '/daily', '/age', '/hangul', '/holidays', '/dream', '/guide', '/about', '/method', '/privacy', '/terms'] as const;
 export const GUIDE_SLUGS: string[] = articles.guides.map((g) => g.slug);
 /** A static route, or /guide/<slug> */
-export type RoutePath = (typeof ROUTES)[number] | `/guide/${string}` | `/fortune/${string}` | `/daily/${string}` | `/calendar/${string}`;
+export type RoutePath = (typeof ROUTES)[number] | `/guide/${string}` | `/fortune/${string}` | `/daily/${string}` | `/calendar/${string}` | `/dream/${string}`;
 
 export function isKnownPath(p: string): p is RoutePath {
   if ((ROUTES as readonly string[]).includes(p)) return true;
   const m = p.match(/^\/guide\/([a-z0-9-]+)$/);
   if (m) return GUIDE_SLUGS.includes(m[1]);
+  const dr = p.match(/^\/dream\/([a-z-]+)$/);
+  if (dr) return DREAM_SLUGS.includes(dr[1]);
   const cp = p.match(/^\/calendar\/([a-z]+)$/);
   if (cp) return (PURPOSES as string[]).includes(cp[1]);
   const dz = p.match(/^\/daily\/([a-z]+)$/);
