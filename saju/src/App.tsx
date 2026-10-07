@@ -8,6 +8,7 @@ import { SajuPage } from './pages/SajuPage';
 import { MatchPage } from './pages/MatchPage';
 import { NamePage } from './pages/NamePage';
 import { DAILY } from './content/daily';
+import type { Purpose } from './engine/almanac';
 import { HazardPage } from './pages/HazardPage';
 import { AgePage } from './pages/AgePage';
 import { HangulPage } from './pages/HangulPage';
@@ -110,8 +111,8 @@ function Shell({ route }: { route: Route }) {
       </header>
 
       <main className="main">
-        {route.path === '/calendar' ? (
-          <CalendarPage />
+        {route.path === '/calendar' || route.path.startsWith('/calendar/') ? (
+          <CalendarPage key={route.path} purpose={route.path === '/calendar' ? null : (route.path.slice(10) as Purpose)} />
         ) : route.path === '/saju' ? (
           <SajuPage query={route.search} />
         ) : route.path === '/match' ? (

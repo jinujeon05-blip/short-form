@@ -1,13 +1,17 @@
 import { useMemo, useState } from 'react';
 import { jdnFromYmd } from '../engine/astro';
-import { PURPOSES, Purpose, dayInfo, holidaysOf, personalClash, suitsPurpose, zodiacOfYear } from '../engine/almanac';
+import { PURPOSES, Purpose, dayInfo, holidaysOf, personalClash, suitsPurpose, upcomingDays, zodiacOfYear } from '../engine/almanac';
+import { PURPOSE_TEXT } from '../content/purposes';
+import { Link, RoutePath, hrefFor, navigate } from '../router';
 import { CalendarCountry } from '../engine/lunar';
 import { readStore, useI18n, writeStore } from '../i18n';
 import { DayDetail } from '../components/DayDetail';
-import { Section, localTodayJdn } from '../components/common';
+import { Section, localTodayJdn, lunarText } from '../components/common';
 import { AdSlot } from '../components/AdSlot';
 
-export function CalendarPage() {
+export const purposePath = (p: Purpose | null): RoutePath => (p ? `/calendar/${p}` : '/calendar') as RoutePath;
+
+export function CalendarPage({ purpose: routePurpose = null }: { purpose?: Purpose | null }) {
   const { t, lang } = useI18n();
   const today = localTodayJdn();
   const now = new Date();
@@ -16,7 +20,10 @@ export function CalendarPage() {
   const [basis, setBasisState] = useState<CalendarCountry>(
     savedBasis === 'KR' || savedBasis === 'VN' ? savedBasis : lang === 'vi' ? 'VN' : 'KR',
   );
-  const [purpose, setPurpose] = useState<Purpose | null>(null);
+  const purpose = routePurpose;
+  const setPurpose = (p: Purpose | null) => navigate(hrefFor(purposePath(p), lang));
+  const pt = PURPOSE_TEXT[lang];
+  const page = purpose ? pt.pages[purpose] : null;
   const [birthYear, setBirthYearState] = useState(readStore('mw.birthYear') ?? '');
   const [selected, setSelected] = useState<number>(today);
 
@@ -48,7 +55,7 @@ export function CalendarPage() {
   };
 
   return (
-    <Section eyebrow="擇日 · XEM NGÀY" title={t.calendar.title} desc={t.calendar.desc}>
+    <Section eyebrow="擇日 · XEM NGÀY" title={page ? page.h1 : t.calendar.title} desc={page ? page.intro : t.calendar.desc} h1>
       <div className="cal-controls">
         <div className="seg" role="group" aria-label={t.calendar.basis}>
           <span className="k">{t.calendar.basis}</span>
@@ -73,6 +80,39 @@ export function CalendarPage() {
           {personalBranch !== null && <span>{t.animalEmoji[personalBranch]} {t.animals[personalBranch]}</span>}
         </label>
       </div>
+
+      {purpose && (
+        <div className="panel upcoming">
+          <h3 className="panel-title">{pt.upcoming} · {t.purposes[purpose]}</h3>
+          <p className="muted small">{pt.upcomingDesc}</p>
+          {(() => {
+            const list = upcomingDays(purpose, basis, today, 12, 120, personalBranch);
+            if (!list.length) return <p className="muted">{pt.none}</p>;
+            return (
+              <ol className="upcoming-list">
+                {list.map((info) => (
+                  <li key={info.jdn}>
+                    <button
+                      type="button"
+                      className={info.jdn === selected ? 'on' : ''}
+                      onClick={() => {
+                        setYm({ y: info.ymd.y, m: info.ymd.m });
+                        setSelected(info.jdn);
+                      }}
+                    >
+                      <b>{lang === 'vi' ? `${info.ymd.d}/${info.ymd.m}` : `${info.ymd.m}.${info.ymd.d}`}</b>
+                      <span className="small">{t.calendar.weekdays[info.weekday]}</span>
+                      <span className="muted small">{lunarText(info.lunar[basis], t, lang)}</span>
+                      <i className={`dot dot-${info.level}`} />
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            );
+          })()}
+          <p className="muted small">{pt.rule}</p>
+        </div>
+      )}
 
       <div className="cal-nav">
         <button className="btn btn-ghost sm" onClick={() => move(-1)} aria-label={t.calendar.prev}>‹</button>
@@ -143,6 +183,21 @@ export function CalendarPage() {
 
       <DayDetail info={dayInfo(selected, basis)} basis={basis} personalBranch={personalBranch} title=" " />
       <AdSlot name="result" />
+
+      {page && (
+        <div className="panel">
+          <h3 className="panel-title">{pt.tipsTitle}</h3>
+          <ul className="article-list">
+            {page.tips.map((tip) => <li key={tip}>{tip}</li>)}
+          </ul>
+        </div>
+      )}
+      <h3 className="article-h">{pt.more}</h3>
+      <div className="other-zodiacs">
+        {PURPOSES.filter((p) => p !== purpose).map((p) => (
+          <Link key={p} to={purposePath(p)} className="chip">{t.purposes[p]}</Link>
+        ))}
+      </div>
     </Section>
   );
 }

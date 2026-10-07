@@ -9,14 +9,21 @@ export const GOOD_STARS = [0, 1, 4, 5, 7, 10];
 export const GOOD_OFFICERS = [1, 4, 5, 8, 10];
 export const BAD_OFFICERS = [6, 7, 11];
 
-export type Purpose = 'wedding' | 'opening' | 'moving' | 'contract' | 'travel';
-export const PURPOSES: Purpose[] = ['wedding', 'opening', 'moving', 'contract', 'travel'];
+export type Purpose = 'wedding' | 'opening' | 'moving' | 'contract' | 'travel' | 'groundbreaking' | 'vehicle' | 'haircut';
+export const PURPOSES: Purpose[] = ['wedding', 'opening', 'moving', 'contract', 'travel', 'groundbreaking', 'vehicle', 'haircut'];
+// 12 officers: 0 建 1 除 2 滿 3 平 4 定 5 執 6 破 7 危 8 成 9 收 10 開 11 閉
 const PURPOSE_OFFICERS: Record<Purpose, number[]> = {
   wedding: [4, 8, 10],
   opening: [2, 4, 8, 10],
   moving: [1, 4, 8, 10],
   contract: [4, 5, 8, 10],
   travel: [1, 4, 8, 10],
+  // 동토 / động thổ: 平·定·成·開
+  groundbreaking: [3, 4, 8, 10],
+  // Buying a vehicle: 定 (settle), 成, 收 (receive), 開
+  vehicle: [4, 8, 9, 10],
+  // Haircut: 除 (removing) is the classic day, plus 平·成·開
+  haircut: [1, 3, 8, 10],
 };
 
 export type DayLevel = 'great' | 'good' | 'normal' | 'bad';
@@ -124,6 +131,16 @@ export function suitsPurpose(info: DayInfo, purpose: Purpose, basis: CalendarCou
   if (basis === 'VN' && (info.tamNuong || info.nguyetKy)) return false;
   if (personalBranch != null && isClash(personalBranch, cycleBranch(info.dayCycle))) return false;
   return true;
+}
+
+/** Next `count` days (from `fromJdn`, within `maxDays`) that suit a purpose. */
+export function upcomingDays(purpose: Purpose, basis: CalendarCountry, fromJdn: number, count = 12, maxDays = 120, personalBranch?: number | null): DayInfo[] {
+  const out: DayInfo[] = [];
+  for (let j = fromJdn; j < fromJdn + maxDays && out.length < count; j++) {
+    const info = dayInfo(j, basis);
+    if (suitsPurpose(info, purpose, basis, personalBranch)) out.push(info);
+  }
+  return out;
 }
 
 export function personalClash(info: DayInfo, personalBranch: number | null | undefined): boolean {

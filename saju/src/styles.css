@@ -590,4 +590,12 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 .rule-list div { display: contents; }
 .rule-list dt { color: var(--muted); }
 .rule-list dd { margin: 0; font-weight: 600; color: var(--gold-soft); }
+.upcoming { display: grid; gap: 8px; }
+.upcoming-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
+.upcoming-list button {
+  width: 100%; display: grid; justify-items: center; gap: 1px; padding: 8px 4px; border-radius: 10px;
+  background: rgba(226, 192, 122, 0.08); border: 1px solid var(--line); color: var(--text); cursor: pointer; font: inherit;
+}
+.upcoming-list button.on, .upcoming-list button:hover { border-color: var(--gold); }
+.upcoming-list b { font-family: var(--serif); font-size: 1.15rem; color: var(--gold-soft); }
 .other-zodiacs { display: flex; flex-wrap: wrap; gap: 8px; }
