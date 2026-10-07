@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { DREAMS, POPULAR, dreamBySlug, searchDreams } from './index';
 
 describe('dream content', () => {
-  it('has 80 unique, complete entries', () => {
-    expect(DREAMS).toHaveLength(80);
-    expect(new Set(DREAMS.map((d) => d.slug)).size).toBe(80);
+  it('has 100 unique, complete entries', () => {
+    expect(DREAMS).toHaveLength(100);
+    expect(new Set(DREAMS.map((d) => d.slug)).size).toBe(100);
     for (const d of DREAMS) {
       for (const l of ['ko', 'vi'] as const) {
         expect(d[l].summary.length).toBeGreaterThan(20);
@@ -23,5 +23,9 @@ describe('dream content', () => {
     expect(searchDreams('ma').map((d) => d.slug)).toEqual(['ghost']);
     expect(searchDreams('cầu vồng').map((d) => d.slug)).toEqual(['rainbow']);
     expect(searchDreams('귀신')[0].slug).toBe('ghost');
+    expect(searchDreams('코끼리')[0].slug).toBe('elephant');
+    expect(searchDreams('voi')[0].slug).toBe('elephant');
+    expect(searchDreams('제비').map((d) => d.slug)).toEqual(['swallow']);
+    expect(searchDreams('dơi')[0].slug).toBe('bat');
   });
 });
