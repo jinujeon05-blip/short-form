@@ -664,3 +664,12 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 .name-flag.strong .tag { background: rgba(224, 108, 108, 0.18); color: var(--bad); }
 .name-flag.mild .tag { background: rgba(226, 192, 122, 0.12); color: var(--gold-soft); }
 .linklike { background: none; border: 0; padding: 0; color: var(--gold); cursor: pointer; font: inherit; text-decoration: underline; }
+.taemong-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin: 12px 0; }
+.taemong-card { margin: 0; display: grid; gap: 6px; color: var(--text); text-decoration: none; }
+.taemong-card:hover { border-color: var(--gold); text-decoration: none; }
+.taemong-card .gold { color: var(--gold); }
+.taemong-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.taemong-head b { font-family: var(--serif); font-size: 1.15rem; color: var(--gold-soft); }
+.lean-boy { background: rgba(110, 160, 230, 0.16); color: #9cc3f5; }
+.lean-girl { background: rgba(240, 140, 180, 0.16); color: #f3a9c7; }
+.lean-either { background: rgba(226, 192, 122, 0.12); color: var(--gold-soft); }

@@ -13,6 +13,7 @@ import { HazardPage } from './pages/HazardPage';
 import { AgePage } from './pages/AgePage';
 import { HangulPage } from './pages/HangulPage';
 import { NamingPage } from './pages/NamingPage';
+import { TaemongPage } from './pages/TaemongPage';
 import { HolidaysPage } from './pages/HolidaysPage';
 import { DreamDetailPage, DreamIndexPage } from './pages/DreamPage';
 import { DailyIndexPage, DailyZodiacPage } from './pages/DailyPage';
@@ -132,6 +133,8 @@ function Shell({ route }: { route: Route }) {
           <DreamDetailPage key={route.path} slug={route.path.slice(7)} />
         ) : route.path === '/holidays' ? (
           <HolidaysPage />
+        ) : route.path === '/taemong' ? (
+          <TaemongPage />
         ) : route.path === '/naming' ? (
           <NamingPage query={route.search} />
         ) : route.path === '/hangul' ? (
@@ -164,6 +167,7 @@ function Shell({ route }: { route: Route }) {
           {links.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
           <Link to="/daily">{DAILY[lang].indexTitle}</Link>
           <Link to="/dream">{DREAM_LINK[lang]}</Link>
+          <Link to="/taemong">{TAEMONG_LINK[lang]}</Link>
           <Link to="/fortune/2027">{YEARLY_LINK[lang]}</Link>
           <Link to="/samjae">{SAMJAE_LINK[lang]}</Link>
           <Link to="/age">{AGE_LINK[lang]}</Link>
@@ -187,6 +191,7 @@ function Shell({ route }: { route: Route }) {
 }
 
 const YEARLY_LINK: Record<Lang, string> = { ko: '2027 신년운세', vi: 'Tử vi 2027' };
+const TAEMONG_LINK: Record<Lang, string> = { ko: '태몽 모음', vi: 'Giấc mơ báo có thai' };
 const DREAM_LINK: Record<Lang, string> = { ko: '꿈해몽', vi: 'Giải mộng' };
 const METHOD_LINK: Record<Lang, string> = { ko: '계산 방식', vi: 'Cách tính' };
 const HOLIDAY_LINK: Record<Lang, string> = { ko: '설날·Tết 날짜 비교', vi: 'Tết Việt – Hàn' };

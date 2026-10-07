@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { DREAMS, POPULAR, dreamBySlug, searchDreams } from './index';
+import { TAEMONG } from '../taemong';
+
+describe('taemong', () => {
+  it('lists 31 symbols that all link to dream pages', () => {
+    expect(TAEMONG).toHaveLength(31);
+    expect(new Set(TAEMONG.map((s) => s.slug)).size).toBe(31);
+    TAEMONG.forEach((s) => expect(dreamBySlug(s.slug), s.slug).toBeTruthy());
+  });
+});
 
 describe('dream content', () => {
   it('has 200 unique, complete entries', () => {

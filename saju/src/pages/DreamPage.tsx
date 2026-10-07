@@ -50,6 +50,7 @@ export function DreamIndexPage({ query }: { query: string }) {
 
       {!q && !cat && (
         <>
+          <p className="panel center"><Link to="/taemong">{lang === 'vi' ? '🤰 Giấc mơ báo có thai: mơ thấy gì sinh con trai, con gái? →' : '🤰 태몽 모음: 아들 태몽·딸 태몽 속설 31가지 →'}</Link></p>
           <h2 className="article-h">{ui.popular}</h2>
           <div className="dream-grid">
             {POPULAR.map((s) => <DreamCard key={s} d={dreamBySlug(s)!} />)}
