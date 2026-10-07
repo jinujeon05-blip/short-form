@@ -96,16 +96,20 @@ function Shell({ route }: { route: Route }) {
               hrefLang="ko"
               className={lang === 'ko' ? 'on' : ''}
               onClick={(e) => { e.preventDefault(); setLang('ko'); }}
+              aria-label="한국어"
+              title="한국어"
             >
-              KO
+              🇰🇷
             </a>
             <a
               href={hrefFor(route.path, 'vi', route.search)}
               hrefLang="vi"
               className={lang === 'vi' ? 'on' : ''}
               onClick={(e) => { e.preventDefault(); setLang('vi'); }}
+              aria-label="Tiếng Việt"
+              title="Tiếng Việt"
             >
-              VI
+              🇻🇳
             </a>
           </div>
         </div>
