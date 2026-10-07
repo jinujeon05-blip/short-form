@@ -163,6 +163,7 @@ function Shell({ route }: { route: Route }) {
       <footer className="footer">
         <div className="footer-brand"><MoonLogo size={28} /> <b>{t.brand}</b> <span className="muted">明月</span></div>
         <p>{t.footer.about}</p>
+        <p className="small calc-source">🌙 {CALC_SOURCE[lang]} <Link to="/method">{METHOD_LINK[lang]} →</Link></p>
         <nav className="footer-links" aria-label="footer">
           {links.map((l) => <Link key={l.path} to={l.path}>{l.label}</Link>)}
           <Link to="/daily">{DAILY[lang].indexTitle}</Link>
@@ -191,6 +192,10 @@ function Shell({ route }: { route: Route }) {
 }
 
 const YEARLY_LINK: Record<Lang, string> = { ko: '2027 신년운세', vi: 'Tử vi 2027' };
+const CALC_SOURCE: Record<Lang, string> = {
+  ko: '명월은 한국천문연구원 역서와 같은 기준(한국 표준시 UTC+9의 합삭·24절기)으로 음력을 직접 천문 계산하며, 베트남 음력은 베트남 표준시(UTC+7) 기준으로 계산합니다.',
+  vi: 'Minh Nguyệt tự tính âm lịch bằng thiên văn: lịch Việt theo giờ Việt Nam (UTC+7), lịch Hàn theo cùng chuẩn với Viện Thiên văn Hàn Quốc KASI (UTC+9, điểm sóc và 24 tiết khí).',
+};
 const TAEMONG_LINK: Record<Lang, string> = { ko: '태몽 모음', vi: 'Giấc mơ báo có thai' };
 const DREAM_LINK: Record<Lang, string> = { ko: '꿈해몽', vi: 'Giải mộng' };
 const METHOD_LINK: Record<Lang, string> = { ko: '계산 방식', vi: 'Cách tính' };

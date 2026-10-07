@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { MoonPhase, phaseName } from '../components/MoonPhase';
 import { dayInfo } from '../engine/almanac';
 import { Lang, useI18n } from '../i18n';
 import { DayDetail } from '../components/DayDetail';
@@ -19,6 +21,8 @@ export function Home() {
   const jdn = localTodayJdn();
   const basis = lang === 'vi' ? 'VN' : 'KR';
   const info = dayInfo(jdn, basis);
+  const lunar = info.lunar[basis];
+  const [phase, setPhase] = useState<number | null>(null);
 
   return (
     <>
@@ -36,12 +40,19 @@ export function Home() {
             <Link className="btn btn-ghost" to="/calendar">{t.hero.ctaCalendar}</Link>
           </div>
         </div>
-        <div className="hero-moon" aria-hidden="true">
-          <div className="moon-orbit">
-            <div className="moon" />
+        <div className="hero-moon">
+          <div className="moon-orbit" aria-hidden="true">
+            <MoonPhase onPhase={setPhase} />
             <span className="orbit-label orbit-kr">음력</span>
             <span className="orbit-label orbit-vn">Âm lịch</span>
           </div>
+          {phase !== null && (
+            <p className="moon-caption">
+              {lang === 'vi'
+                ? `Trăng hôm nay · ${lunar.day}/${lunar.month}${lunar.leap ? ' (nhuận)' : ''} âm lịch · ${phaseName(phase, lang)}`
+                : `오늘의 달 · 음력 ${lunar.leap ? '윤' : ''}${lunar.month}월 ${lunar.day}일 · ${phaseName(phase, lang)}`}
+            </p>
+          )}
         </div>
       </section>
 
