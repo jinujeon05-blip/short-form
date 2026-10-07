@@ -30,6 +30,11 @@
       "description": "용, 호랑이, 뱀, 돼지, 꽃, 달 등 대표 태몽 31가지를 아들·딸 속설과 베트남 풀이로 정리했습니다. 태몽은 누가, 언제 꾸는지, 꿈을 사고파는 풍습까지 알아보세요.",
       "h1": "태몽 모음 · 아들 태몽, 딸 태몽 속설과 베트남 풀이"
     },
+    "/jesa": {
+      "title": "제사·기일 계산기 · 음력 기일 양력 변환 (10년 날짜·요일) | 명월",
+      "description": "음력 기일을 넣으면 앞으로 10년간 양력 날짜와 요일, 제사 전날을 알려 드립니다. 30일 없는 해, 윤달 기일, 한국·베트남 음력 차이까지 반영하고 휴대폰 달력에 저장할 수 있어요.",
+      "h1": "제사·기일 계산기 · 음력 기일을 양력 날짜로"
+    },
     "/saju": {
       "title": "무료 사주팔자 · 만세력, 대운, 2027 신년운세 | 명월",
       "description": "태어난 날과 시간, 출생지로 사주팔자를 정확히 세웁니다. 십신, 지장간, 12운성, 오행 분포, 일간 풀이, 대운과 올해·내년 운세까지 무료로 확인하세요.",
@@ -121,6 +126,11 @@
       "title": "Giấc mơ báo có thai · Mơ thấy gì sinh con trai, con gái? (31 giấc mơ) | Minh Nguyệt",
       "description": "Mơ thấy rồng, hổ, rắn, lợn, hoa, trăng báo sinh con trai hay con gái? 31 giấc mơ báo con theo quan niệm Hàn Quốc và Việt Nam, kèm tục “mua giấc mơ” của người Hàn.",
       "h1": "Giấc mơ báo có thai · Mơ thấy gì sinh con trai, con gái?"
+    },
+    "/jesa": {
+      "title": "Tính ngày giỗ âm lịch sang dương lịch 10 năm · Lịch giỗ | Minh Nguyệt",
+      "description": "Nhập ngày giỗ âm lịch để biết ngày dương lịch, thứ và ngày Tiên thường trong 10 năm tới; tự xử lý tháng thiếu, tháng nhuận, so với âm lịch Hàn và lưu vào lịch điện thoại.",
+      "h1": "Tính ngày giỗ · Đổi ngày giỗ âm lịch sang dương lịch"
     },
     "/saju": {
       "title": "Lá số Tứ trụ miễn phí · Bát tự, đại vận, tử vi 2027 | Minh Nguyệt",
