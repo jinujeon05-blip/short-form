@@ -15,6 +15,7 @@ import { AgePage } from './pages/AgePage';
 import { HangulPage } from './pages/HangulPage';
 import { NamingPage } from './pages/NamingPage';
 import { TaemongPage } from './pages/TaemongPage';
+import { JesaPage } from './pages/JesaPage';
 import { HolidaysPage } from './pages/HolidaysPage';
 import { DreamDetailPage, DreamIndexPage } from './pages/DreamPage';
 import { DailyIndexPage, DailyZodiacPage } from './pages/DailyPage';
@@ -134,6 +135,8 @@ function Shell({ route }: { route: Route }) {
           <DreamDetailPage key={route.path} slug={route.path.slice(7)} />
         ) : route.path === '/holidays' ? (
           <HolidaysPage />
+        ) : route.path === '/jesa' ? (
+          <JesaPage query={route.search} />
         ) : route.path === '/taemong' ? (
           <TaemongPage />
         ) : route.path === '/naming' ? (
@@ -175,6 +178,7 @@ function Shell({ route }: { route: Route }) {
           <Link to="/age">{AGE_LINK[lang]}</Link>
           <Link to="/naming">{NAMING_LINK[lang]}</Link>
           <Link to="/hangul">{HANGUL_LINK[lang]}</Link>
+          <Link to="/jesa">{JESA_LINK[lang]}</Link>
           <Link to="/holidays">{HOLIDAY_LINK[lang]}</Link>
           <Link to="/guide">{t.guide.title}</Link>
           <Link to="/about">{t.info.about}</Link>
@@ -197,6 +201,7 @@ const CALC_SOURCE: Record<Lang, string> = {
   ko: '명월은 한국천문연구원 역서와 같은 기준(한국 표준시 UTC+9의 합삭·24절기)으로 음력을 직접 천문 계산하며, 베트남 음력은 베트남 표준시(UTC+7) 기준으로 계산합니다.',
   vi: 'Minh Nguyệt tự tính âm lịch bằng thiên văn: lịch Việt theo giờ Việt Nam (UTC+7), lịch Hàn theo cùng chuẩn với Viện Thiên văn Hàn Quốc KASI (UTC+9, điểm sóc và 24 tiết khí).',
 };
+const JESA_LINK: Record<Lang, string> = { ko: '제사·기일 계산기', vi: 'Tính ngày giỗ' };
 const TAEMONG_LINK: Record<Lang, string> = { ko: '태몽 모음', vi: 'Giấc mơ báo có thai' };
 const DREAM_LINK: Record<Lang, string> = { ko: '꿈해몽', vi: 'Giải mộng' };
 const METHOD_LINK: Record<Lang, string> = { ko: '계산 방식', vi: 'Cách tính' };

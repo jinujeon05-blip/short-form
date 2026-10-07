@@ -1,4 +1,4 @@
-import { Baby, Cake, Heart, Moon, Shield, Sparkles } from 'lucide-react';
+import { Baby, Cake, CalendarHeart, Heart, Moon, Shield, Sparkles } from 'lucide-react';
 import { Emoji } from '../components/Emoji';
 import { useState } from 'react';
 import { MoonPhase, phaseName } from '../components/MoonPhase';
@@ -137,6 +137,14 @@ export function Home() {
 
       <section className="cta-band">
         <div>
+          <h2 className="section-title"><CalendarHeart className="line-icon" aria-hidden="true" />{HOME_JESA[lang].title}</h2>
+          <p className="section-desc">{HOME_JESA[lang].desc}</p>
+        </div>
+        <Link className="btn btn-gold" to="/jesa">{HOME_JESA[lang].cta} →</Link>
+      </section>
+
+      <section className="cta-band">
+        <div>
           <h2 className="section-title"><Shield className="line-icon" aria-hidden="true" />{HAZARD[lang].title}</h2>
           <p className="section-desc">{HAZARD[lang].lead}</p>
         </div>
@@ -175,4 +183,9 @@ const HOME_NAMING: Record<Lang, { title: string; desc: string; cta: string }> = 
 const HOME_TAEMONG: Record<Lang, { title: string; desc: string; cta: string }> = {
   ko: { title: '태몽 모음 · 아들 태몽, 딸 태몽', desc: '용, 호랑이, 뱀, 돼지, 꽃, 달… 대표 태몽 31가지의 아들·딸 속설과 베트남 풀이를 한눈에.', cta: '태몽 보기' },
   vi: { title: 'Giấc mơ báo có thai', desc: 'Mơ thấy rồng, hổ, rắn, lợn, hoa, trăng… 31 giấc mơ báo con trai hay con gái theo dân gian Hàn – Việt.', cta: 'Xem ngay' },
+};
+
+const HOME_JESA: Record<Lang, { title: string; desc: string; cta: string }> = {
+  ko: { title: '제사·기일 계산기', desc: '음력 기일을 넣으면 앞으로 10년간 양력 날짜와 요일을 알려 드리고, 휴대폰 달력에 한 번에 저장할 수 있어요.', cta: '기일 계산하기' },
+  vi: { title: 'Tính ngày giỗ', desc: 'Nhập ngày giỗ âm lịch để biết ngày dương lịch và thứ trong 10 năm tới, lưu một lần vào lịch điện thoại.', cta: 'Tính ngày giỗ' },
 };
