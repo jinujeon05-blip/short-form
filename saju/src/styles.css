@@ -285,6 +285,13 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 }
 .cta-band .section-title, .cta-band .section-desc { text-align: left; margin-left: 0; }
 .cta-band .section-desc { margin-bottom: 0; }
+.cta-new { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset, 0 8px 32px rgba(226, 192, 122, 0.12); }
+.new-badge {
+  display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--gold); color: #1a1408;
+  font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 6px;
+}
+.cta-example { margin: 10px 0 0; font-size: 0.95rem; }
+.cta-example b { font-family: var(--serif); font-size: 1.2rem; color: var(--gold-soft); }
 
 /* ---------- calendar ---------- */
 .cal-controls { display: grid; gap: 12px; margin-bottom: 16px; }

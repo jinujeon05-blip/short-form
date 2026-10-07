@@ -1,5 +1,5 @@
 import { dayInfo } from '../engine/almanac';
-import { useI18n } from '../i18n';
+import { Lang, useI18n } from '../i18n';
 import { DayDetail } from '../components/DayDetail';
 import { ZodiacGrid } from '../components/ZodiacGrid';
 import { Section, localTodayJdn } from '../components/common';
@@ -80,6 +80,16 @@ export function Home() {
         <Link className="btn btn-gold" to="/match">{t.match.submit} ♥</Link>
       </section>
 
+      <section className="cta-band cta-new">
+        <div>
+          <span className="new-badge">NEW</span>
+          <h2 className="section-title">✨ {HOME_NAMING[lang].title}</h2>
+          <p className="section-desc">{HOME_NAMING[lang].desc}</p>
+          <p className="cta-example">Nguyễn Minh Anh → <b>민아</b> <span className="hanja-line">敏雅</span> · 서준 → <span className="bad">giun?</span></p>
+        </div>
+        <Link className="btn btn-gold" to="/naming">{HOME_NAMING[lang].cta} →</Link>
+      </section>
+
       <section className="cta-band">
         <div>
           <h2 className="section-title">🇻🇳 {t.name.title} 🇰🇷</h2>
@@ -94,6 +104,14 @@ export function Home() {
           <p className="section-desc">{DREAM_UI[lang].lead}</p>
         </div>
         <Link className="btn btn-gold" to="/dream">{lang === 'vi' ? 'Giải mộng' : '꿈해몽 보기'} →</Link>
+      </section>
+
+      <section className="cta-band">
+        <div>
+          <h2 className="section-title">🤰 {HOME_TAEMONG[lang].title}</h2>
+          <p className="section-desc">{HOME_TAEMONG[lang].desc}</p>
+        </div>
+        <Link className="btn btn-gold" to="/taemong">{HOME_TAEMONG[lang].cta} →</Link>
       </section>
 
       <section className="cta-band">
@@ -127,3 +145,21 @@ export function Home() {
     </>
   );
 }
+
+const HOME_NAMING: Record<Lang, { title: string; desc: string; cta: string }> = {
+  ko: {
+    title: '한·베 작명 · 나에게 어울리는 한국 이름',
+    desc: '베트남 이름의 소리와 뜻을 살린 요즘 한국 이름을 추천하고, 아이 이름이 베트남어·한국어로 이상하게 들리지 않는지 검사합니다. 한자 획수까지 무료.',
+    cta: '이름 추천받기',
+  },
+  vi: {
+    title: 'Đặt tên tiếng Hàn hợp với bạn',
+    desc: 'Gợi ý tên Hàn hiện đại giữ âm hoặc nghĩa tên Việt của bạn, và kiểm tra tên của bé có nghe “kỳ” trong tiếng Việt hay tiếng Hàn không. Miễn phí.',
+    cta: 'Gợi ý tên Hàn',
+  },
+};
+
+const HOME_TAEMONG: Record<Lang, { title: string; desc: string; cta: string }> = {
+  ko: { title: '태몽 모음 · 아들 태몽, 딸 태몽', desc: '용, 호랑이, 뱀, 돼지, 꽃, 달… 대표 태몽 31가지의 아들·딸 속설과 베트남 풀이를 한눈에.', cta: '태몽 보기' },
+  vi: { title: 'Giấc mơ báo có thai', desc: 'Mơ thấy rồng, hổ, rắn, lợn, hoa, trăng… 31 giấc mơ báo con trai hay con gái theo dân gian Hàn – Việt.', cta: 'Xem ngay' },
+};
