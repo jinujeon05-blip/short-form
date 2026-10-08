@@ -60,7 +60,7 @@ const vi = {
   model: {
     eyebrow: "MÔ HÌNH HỢP TÁC",
     title: "Hàn Quốc lo đơn hàng, Việt Nam lo con người",
-    kr: { label: "Đối tác kinh doanh Hàn Quốc", items: ["Tìm kiếm và chăm sóc khách hàng Hàn Quốc", "Hiểu văn hoá và tiêu chuẩn làm việc Hàn", "Giữ đơn hàng ổn định, lâu dài"] },
+    kr: { label: "Đối tác kinh doanh Hàn Quốc", items: ["Tìm kiếm và chăm sóc khách hàng Hàn Quốc", "Hiểu văn hoá và tiêu chuẩn làm việc Hàn Quốc", "Giữ đơn hàng ổn định, lâu dài"] },
     vn: { label: "Ban điều hành Việt Nam", items: ["Tuyển dụng, sàng lọc người lao động", "Hồ sơ pháp lý, hợp đồng, chế độ", "Quản lý hiện trường, hỗ trợ hằng ngày"] },
     result: "Đơn hàng ổn định + tuyển đúng người = việc làm bền vững cho người lao động và thu nhập đều cho đối tác tuyển dụng.",
   },
