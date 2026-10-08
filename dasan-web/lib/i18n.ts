@@ -76,7 +76,7 @@ const vi = {
   gallery: {
     title: "Hình ảnh thực tế tại hiện trường tuyển dụng",
     alt: ["Buổi tuyển dụng tại nhà ăn nhà máy", "Người lao động nghe hướng dẫn trước khi nhận việc", "Người lao động tại xưởng sản xuất"],
-    note: "Ảnh thật từ các đợt tuyển dụng của DASAN. Một số ảnh minh họa khác trên trang được tạo bằng AI.",
+    note: "Ảnh thật từ các đợt tuyển dụng của DASAN.",
   },
   jobs: {
     eyebrow: "VIỆC LÀM ĐANG TUYỂN",
@@ -273,7 +273,7 @@ const ko: Dict = {
   gallery: {
     title: "실제 채용 현장 사진",
     alt: ["공장 식당에서 열린 채용 설명회", "출근 전 안내를 듣는 근로자들", "생산 현장의 근로자들"],
-    note: "다산 채용 현장의 실제 사진입니다. 페이지의 다른 일부 이미지는 AI로 제작한 연출 이미지입니다.",
+    note: "다산 채용 현장의 실제 사진입니다.",
   },
   jobs: {
     eyebrow: "채용 중",
