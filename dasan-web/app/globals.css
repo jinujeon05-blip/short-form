@@ -214,3 +214,9 @@ p { margin: 0; }
 .faq-group-title { font-size: 18px; color: var(--red); margin-bottom: 12px; letter-spacing: 0.02em; }
 .faq .grid { align-items: start; gap: 12px 20px; }
 .footer-logo { height: 30px; width: auto; margin-bottom: 12px; opacity: 0.9; }
+
+.pain .pain-q { font-weight: 700; color: var(--navy); font-size: 17px; margin-bottom: 6px; }
+.pain .pain-a { color: var(--muted); }
+.hero .btn-outline { color: #fff; border-color: rgba(255, 255, 255, 0.6); }
+.hero .btn-outline:hover { background: rgba(255, 255, 255, 0.1); }
+.nav { gap: 18px; }

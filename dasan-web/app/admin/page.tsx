@@ -3,9 +3,12 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   APPLICANT_STATUSES,
+  INQUIRY_STATUSES,
   PARTNER_STATUSES,
   type Applicant,
   type ApplicantStatus,
+  type Inquiry,
+  type InquiryStatus,
   type Job,
   type Partner,
   type PartnerStatus,
@@ -24,6 +27,19 @@ const PARTNER_LABEL: Record<PartnerStatus, string> = {
   active: "Đang hợp tác · 활동중",
   inactive: "Ngừng · 중단",
 };
+const INQUIRY_LABEL: Record<InquiryStatus, string> = {
+  new: "Mới · 신규",
+  contacted: "Đã liên hệ · 연락함",
+  quoted: "Đã báo giá · 견적 발송",
+  contracted: "Đã ký · 계약",
+  closed: "Kết thúc · 종료",
+};
+const WORK_TYPE: Record<Inquiry["workType"], string> = {
+  general: "Sản xuất · 생산직",
+  seasonal: "Thời vụ · 단기",
+  fulltime: "Chính thức · 정규직",
+  other: "Khác · 기타",
+};
 const JOB_TYPE: Record<Applicant["jobType"], string> = {
   any: "Bất kỳ · 무관",
   general: "Phổ thông · 생산직",
@@ -31,8 +47,8 @@ const JOB_TYPE: Record<Applicant["jobType"], string> = {
   fulltime: "Chính thức · 정규직",
 };
 
-type Data = { jobs: Job[]; applicants: Applicant[]; partners: Partner[]; storageConfigured: boolean };
-type Tab = "applicants" | "partners" | "jobs";
+type Data = { jobs: Job[]; applicants: Applicant[]; partners: Partner[]; inquiries: Inquiry[]; storageConfigured: boolean };
+type Tab = "inquiries" | "applicants" | "partners" | "jobs";
 
 const fmtDate = (iso: string) => new Date(iso).toLocaleString("vi-VN", { dateStyle: "short", timeStyle: "short" });
 
@@ -78,6 +94,9 @@ export default function AdminPage() {
   const applicants = data.applicants.filter(
     (a) => (!status || a.status === status) && (!q || [a.name, a.phone, a.hometown, a.referralCode].join(" ").toLowerCase().includes(q)),
   );
+  const inquiries = data.inquiries.filter(
+    (r) => (!status || r.status === status) && (!q || [r.company, r.contactName, r.phone, r.email, r.location].join(" ").toLowerCase().includes(q)),
+  );
   const partners = data.partners.filter(
     (p) => (!status || p.status === status) && (!q || [p.name, p.phone, p.area, p.code].join(" ").toLowerCase().includes(q)),
   );
@@ -103,6 +122,7 @@ export default function AdminPage() {
 
   const newApplicants = data.applicants.filter((a) => a.status === "new").length;
   const newPartners = data.partners.filter((p) => p.status === "new").length;
+  const newInquiries = data.inquiries.filter((r) => r.status === "new").length;
 
   return (
     <>
@@ -123,6 +143,9 @@ export default function AdminPage() {
           </p>
         )}
         <div className="tabs">
+          <button className={tab === "inquiries" ? "active" : ""} onClick={() => switchTab("inquiries")}>
+            Doanh nghiệp · 기업 의뢰 ({data.inquiries.length}){newInquiries > 0 && <span className="count">{newInquiries}</span>}
+          </button>
           <button className={tab === "applicants" ? "active" : ""} onClick={() => switchTab("applicants")}>
             Ứng viên · 지원자 ({data.applicants.length}){newApplicants > 0 && <span className="count">{newApplicants}</span>}
           </button>
@@ -139,13 +162,53 @@ export default function AdminPage() {
             <input placeholder="Tìm tên, SĐT, mã… · 검색" value={query} onChange={(e) => setQuery(e.target.value)} />
             <select value={status} onChange={(e) => setStatus(e.target.value)}>
               <option value="">Tất cả · 전체</option>
-              {(tab === "applicants" ? APPLICANT_STATUSES : PARTNER_STATUSES).map((s) => (
+              {(tab === "applicants" ? APPLICANT_STATUSES : tab === "inquiries" ? INQUIRY_STATUSES : PARTNER_STATUSES).map((s) => (
                 <option key={s} value={s}>
-                  {tab === "applicants" ? APPLICANT_LABEL[s as ApplicantStatus] : PARTNER_LABEL[s as PartnerStatus]}
+                  {tab === "applicants"
+                    ? APPLICANT_LABEL[s as ApplicantStatus]
+                    : tab === "inquiries"
+                      ? INQUIRY_LABEL[s as InquiryStatus]
+                      : PARTNER_LABEL[s as PartnerStatus]}
                 </option>
               ))}
             </select>
             <a href={`/api/admin/export?type=${tab}`}>⬇ Excel (CSV)</a>
+          </div>
+        )}
+
+        {tab === "inquiries" && (
+          <div className="table-wrap">
+            <table className="data">
+              <thead>
+                <tr>
+                  <th>Ngày · 접수일</th><th>Công ty · 회사</th><th>Liên hệ · 연락처</th><th>Nhà máy · 위치</th>
+                  <th>Số người · 인원</th><th>Loại · 유형</th><th>Thời gian · 시기</th><th>Yêu cầu · 요청</th><th>Trạng thái · 상태</th><th>Ghi chú · 메모</th><th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {inquiries.map((r) => (
+                  <tr key={r.id}>
+                    <td>{fmtDate(r.createdAt)}</td>
+                    <td className={r.status === "new" ? "st-new" : ""}>{r.company}<br /><span className="muted">{r.contactName}</span></td>
+                    <td><a href={`tel:${r.phone.replace(/[^\d+]/g, "")}`}>{r.phone}</a>{r.email && <><br /><a className="muted" href={`mailto:${r.email}`}>{r.email}</a></>}</td>
+                    <td>{r.location}</td>
+                    <td>{r.headcount}</td>
+                    <td>{WORK_TYPE[r.workType]}</td>
+                    <td>{r.startDate}</td>
+                    <td style={{ maxWidth: 240, whiteSpace: "pre-line" }}>{r.message}</td>
+                    <td>
+                      <select value={r.status} onChange={(e) => patch("inquiries", r.id, { status: e.target.value })}>
+                        {INQUIRY_STATUSES.map((s) => <option key={s} value={s}>{INQUIRY_LABEL[s]}</option>)}
+                      </select>
+                    </td>
+                    <td>
+                      <textarea defaultValue={r.memo} onBlur={(e) => e.target.value !== r.memo && patch("inquiries", r.id, { memo: e.target.value })} />
+                    </td>
+                    <td><button className="del" onClick={() => del("inquiries", r.id)}>Xóa·삭제</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 

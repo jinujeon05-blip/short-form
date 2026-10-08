@@ -1,14 +1,20 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { Redis } from "@upstash/redis";
-import type { Applicant, Job, Partner } from "./types";
+import type { Applicant, Inquiry, Job, Partner } from "./types";
 
 // Records live in three hashes (id → record). On Vercel this is Upstash Redis
 // (added from the Vercel Marketplace, which sets the KV_REST_API_* env vars);
 // without those vars it falls back to a JSON file for local development.
 
-type Collection = "jobs" | "applicants" | "partners";
-type RecordOf<C extends Collection> = C extends "jobs" ? Job : C extends "applicants" ? Applicant : Partner;
+type Collection = "jobs" | "applicants" | "partners" | "inquiries";
+type RecordOf<C extends Collection> = C extends "jobs"
+  ? Job
+  : C extends "applicants"
+    ? Applicant
+    : C extends "inquiries"
+      ? Inquiry
+      : Partner;
 
 const redisUrl = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
 const redisToken = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -23,9 +29,9 @@ type FileDb = Record<Collection, Record<string, unknown>>;
 
 async function readFileDb(): Promise<FileDb> {
   try {
-    return JSON.parse(await fs.readFile(FILE, "utf8")) as FileDb;
+    return { jobs: {}, applicants: {}, partners: {}, inquiries: {}, ...JSON.parse(await fs.readFile(FILE, "utf8")) } as FileDb;
   } catch {
-    return { jobs: {}, applicants: {}, partners: {} };
+    return { jobs: {}, applicants: {}, partners: {}, inquiries: {} };
   }
 }
 

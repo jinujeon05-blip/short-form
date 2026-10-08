@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { get, put, remove } from "@/lib/db";
-import { APPLICANT_STATUSES, PARTNER_STATUSES } from "@/lib/types";
+import { APPLICANT_STATUSES, INQUIRY_STATUSES, PARTNER_STATUSES } from "@/lib/types";
 import { int, oneOf, str } from "@/lib/validate";
 import { jobFromBody } from "@/lib/jobs";
 
@@ -29,6 +29,15 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json(row);
   }
 
+  if (collection === "inquiries") {
+    const row = await get("inquiries", id);
+    if (!row) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    if ("status" in body) row.status = oneOf(body.status, INQUIRY_STATUSES, row.status);
+    if ("memo" in body) row.memo = str(body.memo, 1000);
+    await put("inquiries", row);
+    return NextResponse.json(row);
+  }
+
   if (collection === "jobs") {
     const row = await get("jobs", id);
     if (!row) return NextResponse.json({ error: "not_found" }, { status: 404 });
@@ -43,7 +52,7 @@ export async function PATCH(req: Request, { params }: Params) {
 
 export async function DELETE(_req: Request, { params }: Params) {
   const { collection, id } = await params;
-  if (collection !== "applicants" && collection !== "partners" && collection !== "jobs") {
+  if (collection !== "applicants" && collection !== "partners" && collection !== "jobs" && collection !== "inquiries") {
     return NextResponse.json({ error: "not_found" }, { status: 404 });
   }
   await remove(collection, id);

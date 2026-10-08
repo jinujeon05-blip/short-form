@@ -20,3 +20,10 @@ export function phone(v: unknown): string | null {
   const digits = raw.replace(/[\s.\-()]/g, "");
   return /^(\+?84|0)\d{9,10}$/.test(digits) ? digits : null;
 }
+
+// Any international or local number (Korean, Vietnamese, …): 8–15 digits with an optional leading +.
+export function anyPhone(v: unknown): string | null {
+  const raw = str(v, 30);
+  const digits = raw.replace(/[\s.\-()]/g, "");
+  return /^\+?\d{8,15}$/.test(digits) ? raw : null;
+}

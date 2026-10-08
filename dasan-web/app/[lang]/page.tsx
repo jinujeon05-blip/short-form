@@ -24,6 +24,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           <div className="ctas">
             <Link href={`/${lang}/apply`} className="btn btn-red">{t.hero.ctaWorker}</Link>
             <Link href={`/${lang}/partner`} className="btn btn-white">{t.hero.ctaPartner}</Link>
+            <Link href={`/${lang}/business`} className="btn btn-outline">{t.hero.ctaBusiness}</Link>
           </div>
           <span className="badge">✓ {t.hero.badge} {COMPANY.license}</span>
         </div>

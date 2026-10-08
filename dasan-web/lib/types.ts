@@ -4,6 +4,25 @@ export type ApplicantStatus = (typeof APPLICANT_STATUSES)[number];
 export const PARTNER_STATUSES = ["new", "contacted", "active", "inactive"] as const;
 export type PartnerStatus = (typeof PARTNER_STATUSES)[number];
 
+export const INQUIRY_STATUSES = ["new", "contacted", "quoted", "contracted", "closed"] as const;
+export type InquiryStatus = (typeof INQUIRY_STATUSES)[number];
+
+export type Inquiry = {
+  id: string;
+  createdAt: string;
+  status: InquiryStatus;
+  company: string;
+  contactName: string;
+  phone: string;
+  email: string;
+  location: string;
+  headcount: number;
+  workType: "general" | "seasonal" | "fulltime" | "other";
+  startDate: string;
+  message: string;
+  memo: string;
+};
+
 export type Job = {
   id: string;
   createdAt: string;
