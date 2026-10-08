@@ -18,16 +18,17 @@ export default async function PartnerPage({ params }: Props) {
 
   return (
     <>
-      <section className="section cta-band hero-photo">
+      <section className="hero photo-hero">
         <div className="bg" style={{ backgroundImage: "url(/images/ai-team-leader.jpg)" }} />
-        <div className="container" style={{ position: "relative" }}>
-          <p className="eyebrow" style={{ color: "#ffe3e7" }}>{p.eyebrow}</p>
-          <h1 className="h2" style={{ fontSize: "clamp(30px, 5vw, 48px)" }}>{p.title}</h1>
-          <p className="lead" style={{ marginBottom: 20 }}>{p.sub}</p>
-          <div className="pills" style={{ marginBottom: 24 }}>
-            {p.pills.map((x) => <span className="pill" key={x}>{x}</span>)}
+        <div className="shade" />
+        <div className="container">
+          <p className="eyebrow">{p.eyebrow}</p>
+          <h1 style={{ fontSize: "clamp(30px, 5vw, 50px)", whiteSpace: "normal", maxWidth: 680 }}>{p.title}</h1>
+          <p className="sub">{p.sub}</p>
+          <div className="pills" style={{ marginBottom: 28 }}>
+            {p.pills.map((x) => <span className="pill" key={x}>✓ {x}</span>)}
           </div>
-          <a href="#register" className="btn btn-white">{p.cta} ↓</a>
+          <a href="#register" className="btn btn-red">{p.cta} ↓</a>
         </div>
       </section>
 
