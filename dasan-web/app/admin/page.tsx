@@ -41,6 +41,14 @@ const WORK_TYPE: Record<Inquiry["workType"], string> = {
   sorting: "Sorting · 선별",
   other: "Khác · 기타",
 };
+const AREA: Record<NonNullable<Applicant["preferredArea"]>, string> = {
+  any: "Bất kỳ · 무관",
+  bacninh: "Bắc Ninh · 박닌",
+  thainguyen: "Thái Nguyên · 타이응우옌",
+  haiphong: "Hải Phòng · 하이퐁",
+  vinhphuc: "Vĩnh Phúc · 빈푹",
+  other: "Tỉnh khác · 기타 북부",
+};
 const JOB_TYPE: Record<Applicant["jobType"], string> = {
   any: "Bất kỳ · 무관",
   general: "Phổ thông · 생산직",
@@ -233,7 +241,7 @@ export default function AdminPage() {
                       <td><a href={`tel:${a.phone}`}>{a.phone}</a><br /><a className="muted" href={`https://zalo.me/${a.phone.replace(/^\+?84/, "0")}`} target="_blank" rel="noreferrer">Zalo</a></td>
                       <td>{a.birthYear}</td>
                       <td>{a.hometown}</td>
-                      <td>{JOB_TYPE[a.jobType]}{job && <><br /><span className="muted">{job.title.vi}</span></>}{a.note && <><br /><span className="muted">“{a.note}”</span></>}</td>
+                      <td>{JOB_TYPE[a.jobType]}{a.preferredArea && a.preferredArea !== "any" && <><br /><span className="muted">📍 {AREA[a.preferredArea]}</span></>}{job && <><br /><span className="muted">{job.title.vi}</span></>}{a.note && <><br /><span className="muted">“{a.note}”</span></>}</td>
                       <td>{a.referralCode}{partner && <><br /><span className="muted">{partner.name}</span></>}{a.referralCode && !partner && <><br /><span className="muted">?</span></>}</td>
                       <td>
                         <select value={a.status} onChange={(e) => patch("applicants", a.id, { status: e.target.value })}>
@@ -338,7 +346,7 @@ function JobsAdmin({ jobs, onChange, onDelete }: { jobs: Job[]; onChange: () => 
         </div>
         <div className="row2">
           <div className="field"><label>Công ty · 회사 (hiển thị · 공개)</label><input name="company" defaultValue={j?.company} placeholder="Công ty điện tử Hàn Quốc tại KCN Yên Phong" /></div>
-          <div className="field"><label>Địa điểm · 근무지</label><input name="location" defaultValue={j?.location} placeholder="KCN Yên Phong, Bắc Ninh" /></div>
+          <div className="field"><label>Địa điểm · 근무지</label><input name="location" defaultValue={j?.location} placeholder="KCN Yên Phong, Bắc Ninh · KCN Yên Bình, Thái Nguyên" /></div>
         </div>
         <div className="row2">
           <div className="field"><label>Lương · 급여</label><input name="salary" defaultValue={j?.salary} placeholder="8–10 triệu/tháng" /></div>

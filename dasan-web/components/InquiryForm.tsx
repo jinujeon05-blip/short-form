@@ -46,7 +46,7 @@ export default function InquiryForm({ t, defaultWorkType = "general" }: { t: Dic
       <div className="row2">
         <div className="field">
           <label htmlFor="location">{t.location}</label>
-          <input id="location" name="location" maxLength={120} placeholder="Yên Phong, VSIP, Quế Võ…" />
+          <input id="location" name="location" maxLength={120} placeholder="Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc…" />
         </div>
         <div className="field">
           <label htmlFor="headcount">{t.needHeadcount} <span className="req">*</span></label>

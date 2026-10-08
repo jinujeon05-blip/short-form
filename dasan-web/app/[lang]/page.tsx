@@ -66,6 +66,35 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </div>
       </section>
 
+      <section className="section dark area" id="area">
+        <div className="container split area-split">
+          <div>
+            <p className="eyebrow">{t.area.eyebrow}</p>
+            <h2 className="h2">{t.area.title}</h2>
+            <p className="lead">{t.area.sub}</p>
+            <p className="area-others-label">{t.area.othersLabel}</p>
+            <div className="area-chips">
+              {t.area.others.map((o) => (
+                <span key={o}>{o}</span>
+              ))}
+            </div>
+            <p className="area-note">{t.area.note}</p>
+          </div>
+          <div className="area-grid">
+            {t.area.main.map((r, i) => (
+              <div className="area-card" key={r.name}>
+                <h3>
+                  <span className="pin" aria-hidden="true">●</span> {r.name}
+                  {i === 0 && <span className="hq">{t.area.hq}</span>}
+                </h3>
+                {r.vn && <p className="area-vn">{r.vn}</p>}
+                <p>{r.sub}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section alt">
         <div className="container">
           <div className="head">

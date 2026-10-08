@@ -46,6 +46,7 @@ export type Applicant = {
   gender: "male" | "female" | "other";
   hometown: string;
   jobType: "general" | "seasonal" | "fulltime" | "any";
+  preferredArea?: "any" | "bacninh" | "thainguyen" | "haiphong" | "vinhphuc" | "other";
   jobId: string | null;
   referralCode: string;
   note: string;

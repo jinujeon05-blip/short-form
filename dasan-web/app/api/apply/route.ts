@@ -30,6 +30,7 @@ export async function POST(req: Request) {
     gender: oneOf(body.gender, ["male", "female", "other"] as const, "other"),
     hometown: str(body.hometown, 120),
     jobType: oneOf(body.jobType, ["general", "seasonal", "fulltime", "any"] as const, "any"),
+    preferredArea: oneOf(body.preferredArea, ["any", "bacninh", "thainguyen", "haiphong", "vinhphuc", "other"] as const, "any"),
     jobId: job ? job.id : null,
     referralCode: str(body.referralCode, 12).toUpperCase(),
     note: str(body.note, 500),

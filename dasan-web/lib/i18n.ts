@@ -31,15 +31,15 @@ export const KR_CONTACT = {
 
 const vi = {
   meta: {
-    title: "DASAN — Việc làm uy tín tại Bắc Ninh",
+    title: "DASAN — Việc làm uy tín tại Bắc Ninh và miền Bắc",
     description:
-      "Công ty cung ứng và cho thuê lại lao động có giấy phép tại Bắc Ninh. Tìm việc tại các KCN và trở thành Đối tác Tuyển dụng của DASAN.",
+      "Công ty cung ứng và cho thuê lại lao động có giấy phép. Việc làm tại các KCN Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc và toàn miền Bắc. Trở thành Đối tác Tuyển dụng của DASAN.",
   },
   nav: { about: "Giới thiệu", jobs: "Việc làm", partner: "Đối tác tuyển dụng", business: "Doanh nghiệp", sorting: "Sorting", faq: "Hỏi đáp", contact: "Liên hệ", apply: "Ứng tuyển ngay" },
   hero: {
-    eyebrow: "BẮC NINH · CUNG ỨNG NHÂN LỰC",
+    eyebrow: "CUNG ỨNG NHÂN LỰC · TOÀN MIỀN BẮC",
     title: "Việc làm uy tín,\nđối tác cùng phát triển",
-    sub: "Công ty có giấy phép cho thuê lại lao động, kết nối người lao động với các doanh nghiệp Hàn Quốc và FDI tại Bắc Ninh.",
+    sub: "Công ty có giấy phép cho thuê lại lao động, kết nối người lao động với các doanh nghiệp Hàn Quốc và FDI tại Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc và các tỉnh miền Bắc.",
     ctaWorker: "Tôi muốn tìm việc",
     ctaPartner: "Trở thành đối tác tuyển dụng",
     ctaBusiness: "Doanh nghiệp cần nhân lực",
@@ -68,9 +68,24 @@ const vi = {
     eyebrow: "DÀNH CHO DOANH NGHIỆP",
     title: "Dịch vụ cho doanh nghiệp",
     cards: [
-      { href: "business", img: "ai-handshake", title: "Cung ứng nhân lực", sub: "Cho thuê lại lao động, lao động thời vụ và tuyển dụng chính thức cho nhà máy tại Bắc Ninh — trao đổi bằng tiếng Hàn.", cta: "Xem chi tiết & gửi yêu cầu" },
+      { href: "business", img: "ai-handshake", title: "Cung ứng nhân lực", sub: "Cho thuê lại lao động, lao động thời vụ và tuyển dụng chính thức cho nhà máy tại Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc và toàn miền Bắc — trao đổi bằng tiếng Hàn.", cta: "Xem chi tiết & gửi yêu cầu" },
       { href: "sorting", img: "ai-sort-line", title: "Phân loại linh kiện (Sorting)", sub: "Kiểm tra, phân loại linh kiện Samsung Electronics sản xuất ở nước ngoài, tỉnh khác và nhiều linh kiện điện tử khác.", cta: "Xem dịch vụ sorting" },
     ],
+  },
+  area: {
+    eyebrow: "KHU VỰC HOẠT ĐỘNG",
+    title: "Cung ứng nhân lực toàn miền Bắc",
+    sub: "Trụ sở tại Bắc Ninh. DASAN cung ứng lao động và phân loại linh kiện cho các nhà máy tại Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc và các tỉnh miền Bắc khác.",
+    hq: "Trụ sở",
+    main: [
+      { name: "Bắc Ninh", vn: "", sub: "KCN Yên Phong, Quế Võ, VSIP, Tiên Sơn, Quang Châu" },
+      { name: "Thái Nguyên", vn: "", sub: "KCN Yên Bình, Điềm Thụy, Sông Công" },
+      { name: "Hải Phòng", vn: "", sub: "KCN Tràng Duệ, VSIP Hải Phòng, DEEP C, Đại An" },
+      { name: "Vĩnh Phúc", vn: "", sub: "KCN Bình Xuyên, Bá Thiện, Khai Quang" },
+    ],
+    othersLabel: "Và các tỉnh miền Bắc khác",
+    others: ["Hà Nội", "Hưng Yên", "Hải Dương", "Bắc Giang", "Quảng Ninh", "Phú Thọ"],
+    note: "Khu vực khác vui lòng liên hệ — DASAN sẽ tư vấn theo từng nhà máy.",
   },
   legal: {
     eyebrow: "HỒ SƠ PHÁP LÝ",
@@ -82,7 +97,7 @@ const vi = {
       { img: "cert-deposit", title: "Xác nhận tiền ký quỹ 2 tỷ VND", sub: "PG Bank Bắc Ninh · 24/11/2023" },
     ],
   },
-  clients: { eyebrow: "ĐỐI TÁC", title: "Làm việc tại các doanh nghiệp lớn ở Bắc Ninh" },
+  clients: { eyebrow: "ĐỐI TÁC", title: "Làm việc tại các doanh nghiệp lớn ở miền Bắc" },
   gallery: {
     title: "Hình ảnh thực tế tại hiện trường tuyển dụng",
     alt: ["Buổi tuyển dụng tại nhà ăn nhà máy", "Người lao động nghe hướng dẫn trước khi nhận việc", "Người lao động tại xưởng sản xuất"],
@@ -90,7 +105,7 @@ const vi = {
   },
   jobs: {
     eyebrow: "VIỆC LÀM ĐANG TUYỂN",
-    title: "Cơ hội việc làm tại các KCN Bắc Ninh",
+    title: "Cơ hội việc làm tại các KCN miền Bắc",
     types: [
       { title: "Lao động phổ thông", sub: "Sản xuất, lắp ráp, kiểm tra linh kiện điện tử" },
       { title: "Lao động thời vụ", sub: "Linh hoạt theo đơn hàng, nhận việc nhanh" },
@@ -190,6 +205,7 @@ const vi = {
         title: "Người lao động",
         items: [
           { q: "Người lao động có phải trả phí không?", a: "Không. DASAN không thu bất kỳ khoản phí giới thiệu việc làm nào của người lao động. Nếu có ai thu tiền nhân danh DASAN, hãy báo ngay cho chúng tôi." },
+          { q: "DASAN có việc làm ở những tỉnh nào?", a: "Trụ sở tại Bắc Ninh. DASAN có việc làm tại các KCN Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc và nhiều tỉnh miền Bắc khác. Hãy cho chúng tôi biết khu vực bạn muốn làm việc khi ứng tuyển." },
           { q: "Cần chuẩn bị giấy tờ gì?", a: "CCCD và sơ yếu lý lịch. Một số nhà máy yêu cầu thêm giấy khám sức khỏe — DASAN sẽ báo trước cho bạn." },
           { q: "Bao nhiêu tuổi thì ứng tuyển được?", a: "Từ đủ 18 tuổi. Độ tuổi tối đa tùy theo yêu cầu của từng nhà máy, hãy nhắn Zalo để được tư vấn." },
           { q: "Sau khi đăng ký bao lâu thì được liên hệ?", a: "DASAN gọi lại trong vòng 24 giờ làm việc để tư vấn và hẹn lịch phỏng vấn." },
@@ -204,7 +220,7 @@ const vi = {
           { q: "Có cần đăng ký kinh doanh không?", a: "Không cần. Bạn hợp tác với DASAN với tư cách cá nhân, theo thỏa thuận hợp tác ký giữa hai bên." },
           { q: "Khi nào đối tác nhận hoa hồng?", a: "Hằng tháng, sau khi đối soát ngày công của người lao động bạn giới thiệu." },
           { q: "Làm sao DASAN biết ai do tôi giới thiệu?", a: "Mỗi đối tác có một mã riêng (DS…). Người lao động điền mã này khi ứng tuyển, DASAN đối soát theo mã." },
-          { q: "Tôi có thể giới thiệu người ở tỉnh khác không?", a: "Được. Bạn có thể giới thiệu người lao động từ bất kỳ tỉnh nào đến làm việc tại Bắc Ninh." },
+          { q: "Tôi có thể giới thiệu người ở tỉnh khác không?", a: "Được. Bạn có thể giới thiệu người lao động từ bất kỳ tỉnh nào đến làm việc tại các KCN Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc và các tỉnh miền Bắc." },
           { q: "Nếu người lao động nghỉ việc sớm thì sao?", a: "Chính sách hoa hồng cho từng trường hợp được ghi rõ trong thỏa thuận hợp tác trước khi bắt đầu." },
         ],
       },
@@ -212,17 +228,18 @@ const vi = {
         title: "Doanh nghiệp",
         items: [
           { q: "Làm sao kiểm chứng DASAN?", a: "Tra MST 2301234220 trên Cổng thông tin quốc gia về đăng ký doanh nghiệp, hoặc xem bản gốc giấy phép số 68/2023/SBN tại văn phòng." },
-          { q: "DASAN cung ứng những loại lao động nào?", a: "Lao động phổ thông, lao động thời vụ và hỗ trợ tuyển dụng nhân viên chính thức cho các nhà máy tại Bắc Ninh." },
+          { q: "DASAN cung ứng những loại lao động nào?", a: "Lao động phổ thông, lao động thời vụ và hỗ trợ tuyển dụng nhân viên chính thức cho các nhà máy tại Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc và toàn miền Bắc." },
+          { q: "DASAN có cung ứng cho nhà máy ngoài Bắc Ninh không?", a: "Có. DASAN cung ứng cho các nhà máy tại Thái Nguyên, Hải Phòng, Vĩnh Phúc và các tỉnh miền Bắc khác. Vui lòng cho biết địa điểm nhà máy khi gửi yêu cầu." },
           { q: "Doanh nghiệp Hàn Quốc liên hệ bằng tiếng Hàn được không?", a: "Được. Đối tác kinh doanh người Hàn Quốc của DASAN tư vấn trực tiếp bằng tiếng Hàn." },
         ],
       },
     ],
   },
   business: {
-    meta: "Cung ứng nhân lực cho doanh nghiệp tại Bắc Ninh",
+    meta: "Cung ứng nhân lực cho doanh nghiệp tại Bắc Ninh và miền Bắc",
     eyebrow: "DÀNH CHO DOANH NGHIỆP",
-    title: "Đối tác nhân lực tại Bắc Ninh,\ntrao đổi bằng tiếng Hàn",
-    sub: "DASAN có giấy phép cho thuê lại lao động, cung ứng lao động sản xuất cho các nhà máy tại KCN Bắc Ninh. Đối tác người Hàn Quốc trực tiếp tư vấn và phối hợp từ khâu báo giá đến quản lý hiện trường.",
+    title: "Đối tác nhân lực miền Bắc,\ntrao đổi bằng tiếng Hàn",
+    sub: "DASAN có giấy phép cho thuê lại lao động, cung ứng lao động sản xuất cho các nhà máy tại KCN Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc và toàn miền Bắc. Đối tác người Hàn Quốc trực tiếp tư vấn và phối hợp từ khâu báo giá đến quản lý hiện trường.",
     cta: "Gửi yêu cầu nhân lực",
     call: "Gọi tư vấn",
     painsTitle: "DASAN giải quyết những khó khăn này",
@@ -263,8 +280,8 @@ const vi = {
   sorting: {
     meta: "Dịch vụ phân loại (sorting) linh kiện điện tử",
     eyebrow: "PHÂN LOẠI LINH KIỆN · SORTING",
-    title: "Linh kiện sản xuất ở nước ngoài, tỉnh khác —\nphân loại ngay tại Bắc Ninh",
-    sub: "DASAN kiểm tra và phân loại linh kiện, sản phẩm của Samsung Electronics được sản xuất ở nước ngoài hoặc tỉnh khác rồi đưa về Bắc Ninh, cùng nhiều loại linh kiện điện tử khác. Khi phát sinh vấn đề chất lượng, chúng tôi bố trí người nhanh để dây chuyền không phải dừng.",
+    title: "Linh kiện sản xuất ở nước ngoài, tỉnh khác —\nphân loại ngay tại miền Bắc",
+    sub: "DASAN kiểm tra và phân loại linh kiện, sản phẩm của Samsung Electronics được sản xuất ở nước ngoài hoặc tỉnh khác rồi đưa về các nhà máy tại Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc, cùng nhiều loại linh kiện điện tử khác. Khi phát sinh vấn đề chất lượng, chúng tôi bố trí người nhanh để dây chuyền không phải dừng.",
     cta: "Gửi yêu cầu phân loại",
     whenTitle: "Khi nào nên dùng dịch vụ",
     when: [
@@ -294,7 +311,7 @@ const vi = {
     ],
     whyTitle: "Thế mạnh của DASAN",
     why: [
-      { title: "Có mặt tại Bắc Ninh", sub: "Xử lý ngay tại Bắc Ninh — nơi tập trung nhà máy và nhà cung cấp của Samsung." },
+      { title: "Có mặt khắp miền Bắc", sub: "Xử lý ngay tại Bắc Ninh, Thái Nguyên, Hải Phòng, Vĩnh Phúc — nơi tập trung nhà máy và nhà cung cấp của Samsung." },
       { title: "Huy động nhân lực", sub: "Mạng lưới đối tác tuyển dụng giúp có đủ người theo sản lượng." },
       { title: "Trao đổi tiếng Hàn", sub: "Đối tác người Hàn Quốc thống nhất tiêu chuẩn và báo cáo bằng tiếng Hàn." },
       { title: "Hoạt động hợp pháp", sub: "Pháp nhân có giấy phép cho thuê lại lao động và tiền ký quỹ." },
@@ -337,6 +354,8 @@ const vi = {
     genders: { male: "Nam", female: "Nữ", other: "Khác" },
     hometown: "Quê quán / nơi ở hiện tại",
     jobType: "Loại công việc mong muốn",
+    preferredArea: "Khu vực muốn làm việc",
+    preferredAreas: { any: "Khu vực nào cũng được", bacninh: "Bắc Ninh", thainguyen: "Thái Nguyên", haiphong: "Hải Phòng", vinhphuc: "Vĩnh Phúc", other: "Tỉnh khác ở miền Bắc" },
     jobTypes: { any: "Việc gì cũng được", general: "Lao động phổ thông", seasonal: "Lao động thời vụ", fulltime: "Nhân viên chính thức" },
     job: "Việc làm đã chọn",
     referral: "Mã đối tác giới thiệu (nếu có)",
@@ -361,14 +380,14 @@ export type Dict = typeof vi;
 
 const ko: Dict = {
   meta: {
-    title: "다산 DASAN — 박닌 신뢰받는 인력공급 파트너",
-    description: "베트남 박닌의 정식 허가 근로자파견·인력공급 회사. 한국계 고객사에 안정적인 인력을 공급하고, 채용파트너와 함께 성장합니다.",
+    title: "다산 DASAN — 베트남 북부 신뢰받는 인력공급 파트너",
+    description: "박닌·타이응우옌·하이퐁·빈푹 등 베트남 북부 전역을 지원하는 정식 허가 근로자파견·인력공급 회사. 한국계 고객사에 안정적인 인력을 공급하고, 채용파트너와 함께 성장합니다.",
   },
   nav: { about: "회사소개", jobs: "채용공고", partner: "채용파트너", business: "기업 의뢰", sorting: "선별 대행", faq: "FAQ", contact: "문의", apply: "지원하기" },
   hero: {
-    eyebrow: "베트남 박닌 · 인력공급",
+    eyebrow: "베트남 북부 전역 · 인력공급",
     title: "신뢰받는 일자리,\n함께 성장하는 파트너",
-    sub: "근로자파견업 정식 허가를 받은 회사로, 박닌의 한국계·글로벌 제조기업과 근로자를 연결합니다.",
+    sub: "근로자파견업 정식 허가를 받은 회사로, 박닌·타이응우옌·하이퐁·빈푹 등 북부 지역의 한국계·글로벌 제조기업과 근로자를 연결합니다.",
     ctaWorker: "일자리 찾기",
     ctaPartner: "채용파트너 신청",
     ctaBusiness: "기업 인력 의뢰",
@@ -397,9 +416,24 @@ const ko: Dict = {
     eyebrow: "기업 고객",
     title: "기업 고객 서비스",
     cards: [
-      { href: "business", img: "ai-handshake", title: "인력 공급 의뢰", sub: "박닌 공장에 근로자 파견·단기 인력·정규직 채용을 지원합니다. 한국인 파트너가 한국어로 상담합니다.", cta: "자세히 보기 · 인력 의뢰" },
-      { href: "sorting", img: "ai-sort-line", title: "전자부품 선별(Sorting) 대행", sub: "해외·타 지역에서 생산된 삼성전자 부품·제품과 다양한 전자부품을 박닌 현지에서 검사·선별합니다.", cta: "선별 대행 자세히 보기" },
+      { href: "business", img: "ai-handshake", title: "인력 공급 의뢰", sub: "박닌·타이응우옌·하이퐁·빈푹 등 북부 전역 공장에 근로자 파견·단기 인력·정규직 채용을 지원합니다. 한국인 파트너가 한국어로 상담합니다.", cta: "자세히 보기 · 인력 의뢰" },
+      { href: "sorting", img: "ai-sort-line", title: "전자부품 선별(Sorting) 대행", sub: "해외·타 지역에서 생산된 삼성전자 부품·제품과 다양한 전자부품을 북부 현지에서 검사·선별합니다.", cta: "선별 대행 자세히 보기" },
     ],
+  },
+  area: {
+    eyebrow: "서비스 지역",
+    title: "베트남 북부 전 지역에 인력을 공급합니다",
+    sub: "본사는 박닌에 있으며, 박닌·타이응우옌·하이퐁·빈푹 등 북부 전역의 공장에 인력 공급과 부품 선별 대행을 제공합니다.",
+    hq: "본사",
+    main: [
+      { name: "박닌", vn: "Bắc Ninh", sub: "옌퐁·꿰보·VSIP·띠엔선·꽝쩌우 산업단지" },
+      { name: "타이응우옌", vn: "Thái Nguyên", sub: "옌빈·디엠투이·송꽁 산업단지" },
+      { name: "하이퐁", vn: "Hải Phòng", sub: "짱주에·VSIP 하이퐁·DEEP C·다이안 산업단지" },
+      { name: "빈푹", vn: "Vĩnh Phúc", sub: "빈쑤옌·바티엔·카이꽝 산업단지" },
+    ],
+    othersLabel: "기타 북부 지역",
+    others: ["하노이", "흥옌", "하이즈엉", "박장", "꽝닌", "푸토"],
+    note: "그 밖의 지역도 문의해 주세요. 공장별로 맞춰 상담해 드립니다.",
   },
   legal: {
     eyebrow: "법적 자격",
@@ -411,7 +445,7 @@ const ko: Dict = {
       { img: "cert-deposit", title: "이행보증금 예치확인서", sub: "PG Bank 박닌지점 · 20억 동 (2023.11.24)" },
     ],
   },
-  clients: { eyebrow: "고객사", title: "박닌 산업단지의 글로벌 제조기업과 함께합니다" },
+  clients: { eyebrow: "고객사", title: "베트남 북부 산업단지의 글로벌 제조기업과 함께합니다" },
   gallery: {
     title: "실제 채용 현장 사진",
     alt: ["공장 식당에서 열린 채용 설명회", "출근 전 안내를 듣는 근로자들", "생산 현장의 근로자들"],
@@ -419,7 +453,7 @@ const ko: Dict = {
   },
   jobs: {
     eyebrow: "채용 중",
-    title: "박닌 산업단지 일자리",
+    title: "베트남 북부 산업단지 일자리",
     types: [
       { title: "일반 생산직", sub: "전자부품 생산·조립·검사" },
       { title: "단기·시즌직", sub: "오더에 맞춘 유연한 근무, 빠른 투입" },
@@ -519,6 +553,7 @@ const ko: Dict = {
         title: "구직자",
         items: [
           { q: "근로자가 비용을 내나요?", a: "아니요. 다산은 근로자에게 어떤 소개비도 받지 않습니다. 다산 이름으로 돈을 요구하는 사람이 있으면 바로 알려 주세요." },
+          { q: "어느 지역에서 일할 수 있나요?", a: "본사는 박닌에 있으며, 박닌·타이응우옌·하이퐁·빈푹 등 북부 여러 지역의 산업단지 일자리가 있습니다. 지원할 때 희망 지역을 알려 주세요." },
           { q: "어떤 서류가 필요한가요?", a: "신분증(CCCD)과 이력서가 필요합니다. 일부 공장은 건강검진서를 요구하며, 미리 안내해 드립니다." },
           { q: "몇 살부터 지원할 수 있나요?", a: "만 18세 이상이면 지원할 수 있습니다. 최대 연령은 공장마다 다르니 Zalo로 문의해 주세요." },
           { q: "신청 후 언제 연락이 오나요?", a: "영업일 기준 24시간 안에 다산이 전화로 상담과 면접 일정을 안내합니다." },
@@ -533,7 +568,7 @@ const ko: Dict = {
           { q: "사업자 등록이 필요한가요?", a: "필요 없습니다. 개인 자격으로 다산과 협력 계약을 맺고 활동합니다." },
           { q: "수수료는 언제 받나요?", a: "매월, 소개한 근로자의 근무일수를 정산한 후 지급합니다." },
           { q: "제가 소개한 사람인지 어떻게 확인하나요?", a: "파트너마다 고유 코드(DS…)가 있습니다. 근로자가 지원할 때 이 코드를 입력하면 코드 기준으로 정산합니다." },
-          { q: "다른 지방 사람도 소개할 수 있나요?", a: "네. 어느 지방 출신이든 박닌에서 일할 근로자를 소개할 수 있습니다." },
+          { q: "다른 지방 사람도 소개할 수 있나요?", a: "네. 어느 지방 출신이든 박닌·타이응우옌·하이퐁·빈푹 등 북부 산업단지에서 일할 근로자를 소개할 수 있습니다." },
           { q: "근로자가 일찍 그만두면 수수료는요?", a: "경우별 수수료 정책은 시작 전에 협력 계약서에 명시합니다." },
         ],
       },
@@ -541,17 +576,18 @@ const ko: Dict = {
         title: "고객사",
         items: [
           { q: "다산을 어떻게 검증하나요?", a: "베트남 국가 기업등록 포털에서 사업자번호 2301234220을 조회하거나, 사무실에서 허가증(68/2023/SBN) 원본을 확인하실 수 있습니다." },
-          { q: "어떤 인력을 공급하나요?", a: "박닌 지역 공장에 일반 생산직, 단기·시즌직 인력을 공급하고 정규직 채용도 지원합니다." },
+          { q: "어떤 인력을 공급하나요?", a: "박닌·타이응우옌·하이퐁·빈푹 등 북부 전역 공장에 일반 생산직, 단기·시즌직 인력을 공급하고 정규직 채용도 지원합니다." },
+          { q: "박닌 외 지역 공장도 가능한가요?", a: "네. 타이응우옌·하이퐁·빈푹 등 베트남 북부 전 지역 공장에 공급합니다. 의뢰 시 공장 위치를 알려 주세요." },
           { q: "한국어로 상담할 수 있나요?", a: "네. 다산의 한국인 파트너가 한국어로 직접 상담하고, 견적과 현장 미팅을 진행합니다." },
         ],
       },
     ],
   },
   business: {
-    meta: "한국 기업을 위한 박닌 인력 공급",
+    meta: "한국 기업을 위한 베트남 북부 인력 공급",
     eyebrow: "한국 기업 전용",
-    title: "한국어로 소통하는\n박닌 인력 파트너",
-    sub: "근로자파견업 정식 허가를 받은 다산이 박닌 산업단지 공장에 생산 인력을 공급합니다. 한국인 파트너가 상담·견적부터 현장 관리까지 한국어로 직접 챙깁니다.",
+    title: "한국어로 소통하는\n베트남 북부 인력 파트너",
+    sub: "근로자파견업 정식 허가를 받은 다산이 박닌·타이응우옌·하이퐁·빈푹 등 북부 전역 산업단지 공장에 생산 인력을 공급합니다. 한국인 파트너가 상담·견적부터 현장 관리까지 한국어로 직접 챙깁니다.",
     cta: "인력 의뢰하기",
     call: "전화 상담",
     painsTitle: "이런 고민, 다산이 해결합니다",
@@ -592,8 +628,8 @@ const ko: Dict = {
   sorting: {
     meta: "전자부품 선별(Sorting) 대행",
     eyebrow: "전자부품 선별 대행 · SORTING",
-    title: "해외·타 지역 생산 부품,\n박닌에서 바로 선별합니다",
-    sub: "해외나 베트남 타 지역에서 생산되어 박닌으로 들어온 삼성전자 부품·제품과 다양한 전자부품을 검사·선별합니다. 품질 이슈가 생겨도 라인이 멈추지 않도록 필요한 인원을 빠르게 투입합니다.",
+    title: "해외·타 지역 생산 부품,\n북부 현지에서 바로 선별합니다",
+    sub: "해외나 베트남 타 지역에서 생산되어 박닌·타이응우옌·하이퐁·빈푹 등 북부 공장으로 들어온 삼성전자 부품·제품과 다양한 전자부품을 검사·선별합니다. 품질 이슈가 생겨도 라인이 멈추지 않도록 필요한 인원을 빠르게 투입합니다.",
     cta: "선별 의뢰하기",
     whenTitle: "이럴 때 맡기세요",
     when: [
@@ -623,7 +659,7 @@ const ko: Dict = {
     ],
     whyTitle: "다산 선별 대행의 강점",
     why: [
-      { title: "박닌 현지 대응", sub: "삼성전자 공장과 협력사가 모인 박닌에서 바로 대응합니다." },
+      { title: "북부 현지 대응", sub: "삼성전자 공장과 협력사가 모인 박닌·타이응우옌·하이퐁·빈푹에서 바로 대응합니다." },
       { title: "인력 동원력", sub: "채용파트너 네트워크로 물량에 맞춰 인원을 확보합니다." },
       { title: "한국어 소통", sub: "한국인 파트너가 기준 협의와 결과 보고를 한국어로 진행합니다." },
       { title: "합법 운영", sub: "근로자파견업 허가와 보증금을 갖춘 정식 법인입니다." },
@@ -666,6 +702,8 @@ const ko: Dict = {
     genders: { male: "남", female: "여", other: "기타" },
     hometown: "고향 / 현재 거주지",
     jobType: "희망 직종",
+    preferredArea: "희망 근무 지역",
+    preferredAreas: { any: "무관", bacninh: "박닌", thainguyen: "타이응우옌", haiphong: "하이퐁", vinhphuc: "빈푹", other: "기타 북부 지역" },
     jobTypes: { any: "무관", general: "일반 생산직", seasonal: "단기·시즌직", fulltime: "정규직" },
     job: "선택한 공고",
     referral: "추천 파트너 코드 (있는 경우)",

@@ -239,3 +239,19 @@ p { margin: 0; }
 .biz-body h3 { font-size: 22px; }
 .biz-body p { color: var(--muted); flex: 1; }
 .biz-body .btn { align-self: flex-start; margin-top: 6px; }
+
+/* Service area */
+.area-split { align-items: center; }
+.area-others-label { margin-top: 24px; font-weight: 700; color: #fcfcfb; font-size: 15px; }
+.area-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.area-chips span { border: 1px solid rgba(244, 163, 174, 0.5); color: #e6ecf4; border-radius: 999px; padding: 6px 14px; font-size: 14px; font-weight: 600; }
+.area-note { margin-top: 16px; color: #bfd0e6; font-size: 14px; }
+.area-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.area-card { background: var(--navy-2); border-radius: var(--radius); padding: 22px; border-top: 4px solid var(--red); }
+.area-card h3 { font-size: 20px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.area-card .pin { color: var(--pink); font-size: 12px; }
+.area-card .hq { background: var(--red); color: #fff; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.area-card p { color: #bfd0e6; font-size: 14px; margin-top: 6px; }
+@media (max-width: 560px) { .area-grid { grid-template-columns: 1fr; } }
+.area h2 { text-wrap: balance; }
+.area-card p.area-vn { color: var(--pink); font-weight: 600; margin-top: 2px; }

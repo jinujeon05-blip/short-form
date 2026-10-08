@@ -20,7 +20,7 @@ export async function GET(req: Request) {
   } else if (type === "partners") {
     body = csv(await list("partners"), ["createdAt", "status", "code", "name", "phone", "area", "role", "headcount", "note", "memo"]);
   } else {
-    body = csv(await list("applicants"), ["createdAt", "status", "name", "phone", "birthYear", "gender", "hometown", "jobType", "jobId", "referralCode", "note", "memo"]);
+    body = csv(await list("applicants"), ["createdAt", "status", "name", "phone", "birthYear", "gender", "hometown", "jobType", "preferredArea", "jobId", "referralCode", "note", "memo"]);
   }
   const name = type === "partners" || type === "inquiries" ? type : "applicants";
   // BOM so Excel opens Vietnamese/Korean text as UTF-8.

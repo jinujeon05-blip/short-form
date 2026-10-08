@@ -52,6 +52,12 @@ export default function ApplyForm({ t, jobs, initialJob, initialRef }: Props) {
         <label htmlFor="hometown">{t.hometown}</label>
         <input id="hometown" name="hometown" maxLength={120} />
       </div>
+      <div className="field">
+        <label htmlFor="preferredArea">{t.preferredArea}</label>
+        <select id="preferredArea" name="preferredArea" defaultValue="any">
+          {(Object.keys(t.preferredAreas) as (keyof typeof t.preferredAreas)[]).map((k) => <option key={k} value={k}>{t.preferredAreas[k]}</option>)}
+        </select>
+      </div>
       <div className="row2">
         <div className="field">
           <label htmlFor="jobType">{t.jobType}</label>
