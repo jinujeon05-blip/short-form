@@ -5,6 +5,7 @@ export default function SiteFooter({ lang, t }: { lang: Locale; t: Dict["footer"
     <footer className="site-footer">
       <div className="container inner">
         <div>
+          <img src="/images/logo-white.png" alt="DASAN" className="footer-logo" width={128} height={30} />
           <strong>{lang === "ko" ? COMPANY.nameKo : COMPANY.nameVi}</strong>
           <br />
           {COMPANY.nameEn}

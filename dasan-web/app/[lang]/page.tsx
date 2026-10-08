@@ -213,12 +213,19 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <p className="eyebrow">{t.faq.eyebrow}</p>
             <h2 className="h2">{t.faq.title}</h2>
           </div>
-          <div className="grid g2">
-            {t.faq.items.map((f) => (
-              <details key={f.q}>
-                <summary>{f.q}</summary>
-                <p>{f.a}</p>
-              </details>
+          <div className="faq-groups">
+            {t.faq.groups.map((g) => (
+              <div key={g.title}>
+                <h3 className="faq-group-title">{g.title}</h3>
+                <div className="grid g2">
+                  {g.items.map((f) => (
+                    <details key={f.q}>
+                      <summary>{f.q}</summary>
+                      <p>{f.a}</p>
+                    </details>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>

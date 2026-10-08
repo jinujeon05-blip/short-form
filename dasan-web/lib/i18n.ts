@@ -176,11 +176,38 @@ const vi = {
   faq: {
     eyebrow: "HỎI ĐÁP",
     title: "Câu hỏi thường gặp",
-    items: [
-      { q: "Người lao động có phải trả phí không?", a: "Không. DASAN không thu phí giới thiệu việc làm của người lao động." },
-      { q: "Chỉ có vài người có làm đối tác được không?", a: "Được. Bạn có thể bắt đầu từ 1 người." },
-      { q: "Khi nào đối tác nhận hoa hồng?", a: "Hằng tháng, sau khi đối soát ngày công của người lao động bạn giới thiệu." },
-      { q: "Làm sao kiểm chứng DASAN?", a: "Tra MST 2301234220 trên Cổng thông tin quốc gia về đăng ký doanh nghiệp, hoặc xem bản gốc giấy phép số 68/2023/SBN tại văn phòng." },
+    groups: [
+      {
+        title: "Người lao động",
+        items: [
+          { q: "Người lao động có phải trả phí không?", a: "Không. DASAN không thu bất kỳ khoản phí giới thiệu việc làm nào của người lao động. Nếu có ai thu tiền nhân danh DASAN, hãy báo ngay cho chúng tôi." },
+          { q: "Cần chuẩn bị giấy tờ gì?", a: "CCCD và sơ yếu lý lịch. Một số nhà máy yêu cầu thêm giấy khám sức khỏe — DASAN sẽ báo trước cho bạn." },
+          { q: "Bao nhiêu tuổi thì ứng tuyển được?", a: "Từ đủ 18 tuổi. Độ tuổi tối đa tùy theo yêu cầu của từng nhà máy, hãy nhắn Zalo để được tư vấn." },
+          { q: "Sau khi đăng ký bao lâu thì được liên hệ?", a: "DASAN gọi lại trong vòng 24 giờ làm việc để tư vấn và hẹn lịch phỏng vấn." },
+          { q: "Lương được trả thế nào?", a: "Mức lương, ngày trả lương và phụ cấp được ghi rõ trong hợp đồng và thông báo trước khi bạn nhận việc." },
+          { q: "Có được đóng bảo hiểm không?", a: "Có. Người lao động được tham gia BHXH, BHYT theo quy định của pháp luật lao động." },
+          { q: "Nếu gặp khó khăn khi đang làm việc thì sao?", a: "Liên hệ quản lý hiện trường của DASAN hoặc gọi hotline. Chúng tôi hỗ trợ bạn trong suốt thời gian làm việc." },
+        ],
+      },
+      {
+        title: "Đối tác tuyển dụng",
+        items: [
+          { q: "Chỉ có vài người có làm đối tác được không?", a: "Được. Bạn có thể bắt đầu từ 1 người." },
+          { q: "Có cần đăng ký kinh doanh không?", a: "Không cần. Bạn hợp tác với DASAN với tư cách cá nhân, theo thỏa thuận hợp tác ký giữa hai bên." },
+          { q: "Khi nào đối tác nhận hoa hồng?", a: "Hằng tháng, sau khi đối soát ngày công của người lao động bạn giới thiệu." },
+          { q: "Làm sao DASAN biết ai do tôi giới thiệu?", a: "Mỗi đối tác có một mã riêng (DS…). Người lao động điền mã này khi ứng tuyển, DASAN đối soát theo mã." },
+          { q: "Tôi có thể giới thiệu người ở tỉnh khác không?", a: "Được. Bạn có thể giới thiệu người lao động từ bất kỳ tỉnh nào đến làm việc tại Bắc Ninh." },
+          { q: "Nếu người lao động nghỉ việc sớm thì sao?", a: "Chính sách hoa hồng cho từng trường hợp được ghi rõ trong thỏa thuận hợp tác trước khi bắt đầu." },
+        ],
+      },
+      {
+        title: "Doanh nghiệp",
+        items: [
+          { q: "Làm sao kiểm chứng DASAN?", a: "Tra MST 2301234220 trên Cổng thông tin quốc gia về đăng ký doanh nghiệp, hoặc xem bản gốc giấy phép số 68/2023/SBN tại văn phòng." },
+          { q: "DASAN cung ứng những loại lao động nào?", a: "Lao động phổ thông, lao động thời vụ và hỗ trợ tuyển dụng nhân viên chính thức cho các nhà máy tại Bắc Ninh." },
+          { q: "Doanh nghiệp Hàn Quốc liên hệ bằng tiếng Hàn được không?", a: "Được. Đối tác kinh doanh người Hàn Quốc của DASAN tư vấn trực tiếp bằng tiếng Hàn." },
+        ],
+      },
     ],
   },
   contact: {
@@ -374,11 +401,38 @@ const ko: Dict = {
   faq: {
     eyebrow: "FAQ",
     title: "자주 묻는 질문",
-    items: [
-      { q: "근로자가 비용을 내나요?", a: "아니요. 다산은 근로자에게 소개비를 받지 않습니다." },
-      { q: "인원이 적어도 채용파트너가 될 수 있나요?", a: "네. 1명부터 가능합니다." },
-      { q: "수수료는 언제 받나요?", a: "매월, 소개한 근로자의 근무일수를 정산한 후 지급합니다." },
-      { q: "다산을 어떻게 검증하나요?", a: "베트남 국가 기업등록 포털에서 사업자번호 2301234220을 조회하거나, 사무실에서 허가증(68/2023/SBN) 원본을 확인하실 수 있습니다." },
+    groups: [
+      {
+        title: "구직자",
+        items: [
+          { q: "근로자가 비용을 내나요?", a: "아니요. 다산은 근로자에게 어떤 소개비도 받지 않습니다. 다산 이름으로 돈을 요구하는 사람이 있으면 바로 알려 주세요." },
+          { q: "어떤 서류가 필요한가요?", a: "신분증(CCCD)과 이력서가 필요합니다. 일부 공장은 건강검진서를 요구하며, 미리 안내해 드립니다." },
+          { q: "몇 살부터 지원할 수 있나요?", a: "만 18세 이상이면 지원할 수 있습니다. 최대 연령은 공장마다 다르니 Zalo로 문의해 주세요." },
+          { q: "신청 후 언제 연락이 오나요?", a: "영업일 기준 24시간 안에 다산이 전화로 상담과 면접 일정을 안내합니다." },
+          { q: "급여는 어떻게 받나요?", a: "급여, 지급일, 수당은 계약서에 명시되며 출근 전에 안내합니다." },
+          { q: "보험에 가입되나요?", a: "네. 노동법에 따라 사회보험(BHXH)과 건강보험(BHYT)에 가입됩니다." },
+          { q: "일하다가 어려움이 생기면요?", a: "다산 현장 관리자나 핫라인으로 연락하세요. 근무 기간 내내 지원합니다." },
+        ],
+      },
+      {
+        title: "채용파트너",
+        items: [
+          { q: "인원이 적어도 채용파트너가 될 수 있나요?", a: "네. 1명부터 가능합니다." },
+          { q: "사업자 등록이 필요한가요?", a: "필요 없습니다. 개인 자격으로 다산과 협력 계약을 맺고 활동합니다." },
+          { q: "수수료는 언제 받나요?", a: "매월, 소개한 근로자의 근무일수를 정산한 후 지급합니다." },
+          { q: "제가 소개한 사람인지 어떻게 확인하나요?", a: "파트너마다 고유 코드(DS…)가 있습니다. 근로자가 지원할 때 이 코드를 입력하면 코드 기준으로 정산합니다." },
+          { q: "다른 지방 사람도 소개할 수 있나요?", a: "네. 어느 지방 출신이든 박닌에서 일할 근로자를 소개할 수 있습니다." },
+          { q: "근로자가 일찍 그만두면 수수료는요?", a: "경우별 수수료 정책은 시작 전에 협력 계약서에 명시합니다." },
+        ],
+      },
+      {
+        title: "고객사",
+        items: [
+          { q: "다산을 어떻게 검증하나요?", a: "베트남 국가 기업등록 포털에서 사업자번호 2301234220을 조회하거나, 사무실에서 허가증(68/2023/SBN) 원본을 확인하실 수 있습니다." },
+          { q: "어떤 인력을 공급하나요?", a: "박닌 지역 공장에 일반 생산직, 단기·시즌직 인력을 공급하고 정규직 채용도 지원합니다." },
+          { q: "한국어로 상담할 수 있나요?", a: "네. 다산의 한국인 파트너가 한국어로 직접 상담하고, 견적과 현장 미팅을 진행합니다." },
+        ],
+      },
     ],
   },
   contact: {

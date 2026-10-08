@@ -16,7 +16,7 @@ export default function SiteHeader({ lang, t }: { lang: Locale; t: Dict["nav"] }
     <header className="site-header">
       <div className="container inner">
         <Link href={`/${lang}`} className="logo" onClick={close}>
-          <img src="/images/logo.jpg" alt="DASAN" width={115} height={34} />
+          <img src="/images/logo.png" alt="DASAN" width={145} height={34} />
         </Link>
         <nav className={`nav${open ? " open" : ""}`}>
           <Link href={`/${lang}#about`} onClick={close}>{t.about}</Link>

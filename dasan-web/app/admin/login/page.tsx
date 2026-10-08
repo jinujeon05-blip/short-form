@@ -26,7 +26,7 @@ export default function LoginPage() {
 
   return (
     <div className="login-box">
-      <img src="/images/logo.jpg" alt="DASAN" />
+      <img src="/images/logo.png" alt="DASAN" />
       <h1 style={{ fontSize: 22, marginBottom: 16 }}>Quản trị · 관리자</h1>
       <form className="form" onSubmit={onSubmit}>
         <div className="field">

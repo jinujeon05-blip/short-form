@@ -209,3 +209,8 @@ p { margin: 0; }
 .stats .stat .label { font-size: 14px; color: var(--muted); }
 @media (max-width: 900px) { .trust-split { grid-template-columns: 1fr; gap: 24px; } }
 @media (max-width: 640px) { .stats.g2 { grid-template-columns: 1fr 1fr; } }
+
+.faq-groups { display: grid; gap: 32px; }
+.faq-group-title { font-size: 18px; color: var(--red); margin-bottom: 12px; letter-spacing: 0.02em; }
+.faq .grid { align-items: start; gap: 12px 20px; }
+.footer-logo { height: 30px; width: auto; margin-bottom: 12px; opacity: 0.9; }
