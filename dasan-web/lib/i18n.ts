@@ -13,17 +13,20 @@ export const COMPANY = {
   license: "68/2023/SBN",
   addressVi: "Số 35 Lê Thanh Nghị, P. Kinh Bắc, TP. Bắc Ninh",
   addressKo: "베트남 박닌성 박닌시 낀박동 레탄응이 35번지",
-  phone: "0916 0999 66",
-  phoneHref: "tel:+84916099966",
-  zalo: "https://zalo.me/0916099966",
-  email: "nguyendinhanhtam@gmail.com",
 };
 
+// Vietnamese-speaking contacts for workers and recruitment partners, in display order.
+export const VN_CONTACTS = [
+  { phone: "0937 250 787", tel: "+84937250787", zalo: "https://zalo.me/0937250787", email: "Nhienhoangduong.090717@gmail.com" },
+  { phone: "0916 0999 66", tel: "+84916099966", zalo: "https://zalo.me/0916099966", email: "nguyendinhanhtam@gmail.com" },
+];
+
+// Korean-speaking contact for Korean client companies.
 export const KR_CONTACT = {
-  name: process.env.NEXT_PUBLIC_KR_CONTACT_NAME ?? "",
-  phone: process.env.NEXT_PUBLIC_KR_CONTACT_PHONE ?? "",
-  kakao: process.env.NEXT_PUBLIC_KR_CONTACT_KAKAO ?? "",
-  email: process.env.NEXT_PUBLIC_KR_CONTACT_EMAIL ?? "",
+  phone: "0917 302 200",
+  tel: "+84917302200",
+  zalo: "https://zalo.me/0917302200",
+  email: "jeonjinu389@gmail.com",
 };
 
 const vi = {
@@ -188,6 +191,7 @@ const vi = {
     callBtn: "Gọi ngay",
     krTitle: "Doanh nghiệp Hàn Quốc",
     krSub: "Liên hệ bằng tiếng Hàn",
+    krPhoneLabel: "Điện thoại / Zalo / KakaoTalk",
   },
   form: {
     applyTitle: "Đăng ký tìm việc",
@@ -384,6 +388,7 @@ const ko: Dict = {
     callBtn: "전화하기",
     krTitle: "한국 고객사 문의",
     krSub: "한국어 상담 · 인력 공급 견적 · 현장 상담",
+    krPhoneLabel: "전화 / Zalo / 카카오톡",
   },
   form: {
     applyTitle: "구직 신청",

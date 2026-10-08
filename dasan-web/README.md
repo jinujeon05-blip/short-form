@@ -21,7 +21,6 @@
 3. **Environment Variables**에 다음 값을 넣습니다.
    - `ADMIN_PASSWORD`: 관리자 비밀번호 (길고 추측하기 어렵게)
    - `SESSION_SECRET`: 32자 이상의 임의 문자열
-   - (선택) `NEXT_PUBLIC_KR_CONTACT_NAME`, `NEXT_PUBLIC_KR_CONTACT_PHONE`, `NEXT_PUBLIC_KR_CONTACT_KAKAO`, `NEXT_PUBLIC_KR_CONTACT_EMAIL`: 한국어 페이지의 "한국 고객사 문의" 카드에 표시할 연락처
 4. 데이터 저장소를 연결합니다. 프로젝트의 **Storage** 탭에서 **Upstash → Redis**(무료 플랜 가능)를 만들고 이 프로젝트에 연결합니다. `KV_REST_API_URL`과 `KV_REST_API_TOKEN`이 자동으로 추가됩니다.
    - ⚠ 이 단계를 빼면 지원서가 저장되지 않습니다. 관리자 화면 상단에 노란 경고가 보이면 연결이 안 된 상태입니다.
 5. **Deploy**를 누른 뒤, **Settings → Domains**에서 구입한 도메인(예: `dasan.vn`)을 연결합니다.
@@ -39,7 +38,7 @@ Redis 설정이 없으면 `.data/db.json` 파일에 저장합니다. 개발용�
 
 ## 문구 수정
 
-사이트의 모든 문구(베트남어/한국어)는 `lib/i18n.ts` 한 파일에 있습니다. 회사 정보(전화, 주소, 허가번호)는 같은 파일의 `COMPANY`에 있습니다.
+사이트의 모든 문구(베트남어/한국어)는 `lib/i18n.ts` 한 파일에 있습니다. 회사 정보(주소, 허가번호)는 같은 파일의 `COMPANY`, 연락처는 `VN_CONTACTS`(베트남어 담당, 위에서부터 표시 순서)와 `KR_CONTACT`(한국어 담당)에 있습니다.
 
 ## 개인정보
 

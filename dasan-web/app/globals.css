@@ -185,3 +185,7 @@ p { margin: 0; }
 .hero-photo { position: relative; overflow: hidden; }
 .hero-photo .bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.18; }
 .hero .bg { opacity: 0.45; }
+.contact-person { display: flex; flex-direction: column; gap: 6px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+.contact-person + .contact-person { padding-top: 8px; }
+.contact-card a { color: #fff; }
+.contact-card .btn-white { color: var(--navy); }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import "../globals.css";
-import { COMPANY, getDict, isLocale } from "@/lib/i18n";
+import { VN_CONTACTS, getDict, isLocale } from "@/lib/i18n";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -38,7 +38,7 @@ export default async function LangLayout({ children, params }: Props) {
         <SiteHeader lang={lang} t={t.nav} />
         <main>{children}</main>
         <SiteFooter lang={lang} t={t.footer} />
-        <a className="float-zalo" href={COMPANY.zalo} target="_blank" rel="noopener noreferrer">
+        <a className="float-zalo" href={VN_CONTACTS[0].zalo} target="_blank" rel="noopener noreferrer">
           Zalo
         </a>
       </body>

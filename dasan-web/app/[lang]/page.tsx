@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { COMPANY, KR_CONTACT, getDict, isLocale } from "@/lib/i18n";
+import { COMPANY, KR_CONTACT, VN_CONTACTS, getDict, isLocale } from "@/lib/i18n";
 import { list } from "@/lib/db";
 import JobCard from "@/components/JobCard";
 
@@ -215,21 +215,29 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           <div className="grid g2">
             <div className="contact-card">
               <p className="label">{t.contact.workerTitle}</p>
-              <p className="big">{COMPANY.phone}</p>
-              <p>{t.contact.phoneLabel} · {COMPANY.email}</p>
+              {VN_CONTACTS.map((c) => (
+                <div className="contact-person" key={c.phone}>
+                  <p className="big">{c.phone}</p>
+                  <p>{t.contact.phoneLabel} · <a href={`mailto:${c.email}`}>{c.email}</a></p>
+                  <div className="row">
+                    <a className="btn btn-red btn-small" href={`tel:${c.tel}`}>{t.contact.callBtn}</a>
+                    <a className="btn btn-white btn-small" href={c.zalo} target="_blank" rel="noopener noreferrer">{t.contact.zaloBtn}</a>
+                  </div>
+                </div>
+              ))}
               <p>{lang === "ko" ? COMPANY.addressKo : COMPANY.addressVi}</p>
-              <div className="row">
-                <a className="btn btn-red btn-small" href={COMPANY.phoneHref}>{t.contact.callBtn}</a>
-                <a className="btn btn-white btn-small" href={COMPANY.zalo} target="_blank" rel="noopener noreferrer">{t.contact.zaloBtn}</a>
-              </div>
             </div>
             <div className="contact-card">
               <p className="label">{t.contact.krTitle}</p>
-              <p className="big">{KR_CONTACT.name || "—"}</p>
+              <div className="contact-person">
+                <p className="big">{KR_CONTACT.phone}</p>
+                <p>{t.contact.krPhoneLabel} · <a href={`mailto:${KR_CONTACT.email}`}>{KR_CONTACT.email}</a></p>
+                <div className="row">
+                  <a className="btn btn-red btn-small" href={`tel:${KR_CONTACT.tel}`}>{t.contact.callBtn}</a>
+                  <a className="btn btn-white btn-small" href={KR_CONTACT.zalo} target="_blank" rel="noopener noreferrer">{t.contact.zaloBtn}</a>
+                </div>
+              </div>
               <p>{t.contact.krSub}</p>
-              {KR_CONTACT.phone && <p>☎ {KR_CONTACT.phone}</p>}
-              {KR_CONTACT.kakao && <p>KakaoTalk: {KR_CONTACT.kakao}</p>}
-              {KR_CONTACT.email && <p><a href={`mailto:${KR_CONTACT.email}`}>{KR_CONTACT.email}</a></p>}
             </div>
           </div>
         </div>
