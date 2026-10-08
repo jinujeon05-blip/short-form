@@ -10,7 +10,11 @@ export const metadata: Metadata = {
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi">
+    // Labels are bilingual on purpose; stop browser auto-translate from rewriting the Vietnamese half.
+    <html lang="vi" translate="no" className="notranslate">
+      <head>
+        <meta name="google" content="notranslate" />
+      </head>
       <body className="admin">{children}</body>
     </html>
   );
