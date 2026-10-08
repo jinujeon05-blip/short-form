@@ -64,6 +64,14 @@ const vi = {
     vn: { label: "Ban điều hành Việt Nam", items: ["Tuyển dụng, sàng lọc người lao động", "Hồ sơ pháp lý, hợp đồng, chế độ", "Quản lý hiện trường, hỗ trợ hằng ngày"] },
     result: "Đơn hàng ổn định + tuyển đúng người = việc làm bền vững cho người lao động và thu nhập đều cho đối tác tuyển dụng.",
   },
+  bizTeaser: {
+    eyebrow: "DÀNH CHO DOANH NGHIỆP",
+    title: "Dịch vụ cho doanh nghiệp",
+    cards: [
+      { href: "business", img: "ai-handshake", title: "Cung ứng nhân lực", sub: "Cho thuê lại lao động, lao động thời vụ và tuyển dụng chính thức cho nhà máy tại Bắc Ninh — trao đổi bằng tiếng Hàn.", cta: "Xem chi tiết & gửi yêu cầu" },
+      { href: "sorting", img: "ai-sort-line", title: "Phân loại linh kiện (Sorting)", sub: "Kiểm tra, phân loại linh kiện Samsung Electronics sản xuất ở nước ngoài, tỉnh khác và nhiều linh kiện điện tử khác.", cta: "Xem dịch vụ sorting" },
+    ],
+  },
   legal: {
     eyebrow: "HỒ SƠ PHÁP LÝ",
     title: "Hoạt động hợp pháp, đầy đủ giấy phép",
@@ -384,6 +392,14 @@ const ko: Dict = {
     kr: { label: "한국인 파트너", items: ["한국계 고객사 영업 및 관계 관리", "한국식 업무 기준과 문화 이해", "안정적이고 장기적인 오더 확보"] },
     vn: { label: "베트남 경영진", items: ["근로자 채용 및 선별", "법적 서류·계약·복리후생", "현장 관리와 일상 지원"] },
     result: "안정적인 오더 + 적합한 인재 = 근로자에게는 지속 가능한 일자리, 채용파트너에게는 꾸준한 수입.",
+  },
+  bizTeaser: {
+    eyebrow: "기업 고객",
+    title: "기업 고객 서비스",
+    cards: [
+      { href: "business", img: "ai-handshake", title: "인력 공급 의뢰", sub: "박닌 공장에 근로자 파견·단기 인력·정규직 채용을 지원합니다. 한국인 파트너가 한국어로 상담합니다.", cta: "자세히 보기 · 인력 의뢰" },
+      { href: "sorting", img: "ai-sort-line", title: "전자부품 선별(Sorting) 대행", sub: "해외·타 지역에서 생산된 삼성전자 부품·제품과 다양한 전자부품을 박닌 현지에서 검사·선별합니다.", cta: "선별 대행 자세히 보기" },
+    ],
   },
   legal: {
     eyebrow: "법적 자격",

@@ -87,7 +87,28 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </div>
       </section>
 
-      <section className="section" id="legal">
+      <section className="section biz-teaser" id="business">
+        <div className="container">
+          <div className="head">
+            <p className="eyebrow">{t.bizTeaser.eyebrow}</p>
+            <h2 className="h2">{t.bizTeaser.title}</h2>
+          </div>
+          <div className="grid g2">
+            {t.bizTeaser.cards.map((c) => (
+              <Link href={`/${lang}/${c.href}`} className="card biz-card" key={c.href}>
+                <img src={`/images/${c.img}.jpg`} alt="" loading="lazy" />
+                <div className="biz-body">
+                  <h3>{c.title}</h3>
+                  <p>{c.sub}</p>
+                  <span className="btn btn-navy btn-small">{c.cta} →</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section alt" id="legal">
         <div className="container">
           <div className="head">
             <p className="eyebrow">{t.legal.eyebrow}</p>
@@ -105,7 +126,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </div>
       </section>
 
-      <section className="section alt">
+      <section className="section">
         <div className="container">
           <div className="head">
             <p className="eyebrow">{t.clients.eyebrow}</p>
@@ -124,7 +145,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </div>
       </section>
 
-      <section className="section" id="jobs">
+      <section className="section alt" id="jobs">
         <div className="container">
           <div className="head">
             <p className="eyebrow">{t.jobs.eyebrow}</p>
@@ -155,7 +176,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </div>
       </section>
 
-      <section className="section alt">
+      <section className="section">
         <div className="container">
           <div className="head">
             <p className="eyebrow">{t.promise.eyebrow}</p>
@@ -173,7 +194,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </div>
       </section>
 
-      <section className="section">
+      <section className="section alt">
         <div className="container">
           <div className="head">
             <p className="eyebrow">{t.steps.eyebrow}</p>
