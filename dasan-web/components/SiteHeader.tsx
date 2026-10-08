@@ -23,6 +23,7 @@ export default function SiteHeader({ lang, t }: { lang: Locale; t: Dict["nav"] }
           <Link href={`/${lang}/jobs`} onClick={close}>{t.jobs}</Link>
           <Link href={`/${lang}/partner`} onClick={close}>{t.partner}</Link>
           <Link href={`/${lang}/business`} onClick={close}>{t.business}</Link>
+          <Link href={`/${lang}/sorting`} onClick={close}>{t.sorting}</Link>
           <Link href={`/${lang}#faq`} onClick={close}>{t.faq}</Link>
           <Link href={`/${lang}#contact`} onClick={close}>{t.contact}</Link>
           <span className="lang" aria-label="Language">

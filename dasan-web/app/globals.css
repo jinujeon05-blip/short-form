@@ -50,6 +50,7 @@ p { margin: 0; }
 .site-header .inner { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
 .logo img { height: 34px; width: auto; }
 .nav { display: flex; align-items: center; gap: 22px; font-size: 15px; font-weight: 600; }
+.nav a { white-space: nowrap; }
 .nav a { text-decoration: none; color: var(--ink); }
 .nav a:hover { color: var(--red); }
 .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font-size: 13px; font-weight: 700; }
@@ -57,7 +58,7 @@ p { margin: 0; }
 .flag { width: 21px; height: 14px; border-radius: 2px; flex: 0 0 auto; display: block; }
 .lang a.active { background: var(--navy); color: #fff; }
 .menu-btn { display: none; background: none; border: 0; font-size: 26px; cursor: pointer; color: var(--navy); padding: 4px; }
-@media (max-width: 900px) {
+@media (max-width: 1180px) {
   .menu-btn { display: block; }
   .nav { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--bg); flex-direction: column; align-items: stretch; gap: 0; border-bottom: 1px solid var(--line); padding: 8px 20px 16px; }
   .nav.open { display: flex; }
@@ -219,4 +220,13 @@ p { margin: 0; }
 .pain .pain-a { color: var(--muted); }
 .hero .btn-outline { color: #fff; border-color: rgba(255, 255, 255, 0.6); }
 .hero .btn-outline:hover { background: rgba(255, 255, 255, 0.1); }
-.nav { gap: 18px; }
+.nav { gap: 16px; }
+@media (min-width: 1181px) { .nav { font-size: 14.5px; } }
+.scope-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.scope-list li { background: #fff; border-radius: 12px; padding: 16px 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 2px; border-left: 4px solid var(--blue); }
+.scope-list strong { color: var(--navy); font-size: 17px; }
+.scope-list span { color: var(--muted); font-size: 15px; }
+.item-chip { font-weight: 700; color: var(--navy); padding: 18px 22px; }
+.service-link { text-decoration: none; color: inherit; border: 2px solid var(--blue); transition: transform 0.15s ease; }
+.service-link:hover { transform: translateY(-2px); }
+.service-link .more { display: inline-block; margin-top: 10px; color: var(--blue); font-weight: 700; font-size: 14px; }

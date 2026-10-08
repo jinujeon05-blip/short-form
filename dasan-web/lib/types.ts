@@ -17,7 +17,7 @@ export type Inquiry = {
   email: string;
   location: string;
   headcount: number;
-  workType: "general" | "seasonal" | "fulltime" | "other";
+  workType: "general" | "seasonal" | "fulltime" | "sorting" | "other";
   startDate: string;
   message: string;
   memo: string;

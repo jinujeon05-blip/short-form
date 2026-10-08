@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     email: str(body.email, 120),
     location: str(body.location, 120),
     headcount,
-    workType: oneOf(body.workType, ["general", "seasonal", "fulltime", "other"] as const, "general"),
+    workType: oneOf(body.workType, ["general", "seasonal", "fulltime", "sorting", "other"] as const, "general"),
     startDate: str(body.startDate, 40),
     message: str(body.message, 1500),
     memo: "",

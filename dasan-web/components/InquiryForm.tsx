@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Dict } from "@/lib/i18n";
 
-export default function InquiryForm({ t }: { t: Dict["form"] }) {
+export default function InquiryForm({ t, defaultWorkType = "general" }: { t: Dict["form"]; defaultWorkType?: keyof Dict["form"]["workTypes"] }) {
   const [state, setState] = useState<"idle" | "sending" | "ok" | "error" | "invalid">("idle");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -56,7 +56,7 @@ export default function InquiryForm({ t }: { t: Dict["form"] }) {
       <div className="row2">
         <div className="field">
           <label htmlFor="workType">{t.workType}</label>
-          <select id="workType" name="workType" defaultValue="general">
+          <select id="workType" name="workType" defaultValue={defaultWorkType}>
             {(Object.keys(t.workTypes) as (keyof typeof t.workTypes)[]).map((k) => <option key={k} value={k}>{t.workTypes[k]}</option>)}
           </select>
         </div>

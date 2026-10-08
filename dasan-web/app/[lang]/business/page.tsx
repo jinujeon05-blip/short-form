@@ -52,13 +52,22 @@ export default async function BusinessPage({ params }: Props) {
         <div className="container">
           <h2 className="h2 head">{b.servicesTitle}</h2>
           <div className="grid g4">
-            {b.services.map((s, i) => (
-              <div className="card" key={s.title}>
-                <p className="num">0{i + 1}</p>
-                <h3>{s.title}</h3>
-                <p>{s.sub}</p>
-              </div>
-            ))}
+            {b.services.map((s, i) =>
+              i === b.services.length - 1 ? (
+                <a className="card service-link" key={s.title} href={`/${lang}/sorting`}>
+                  <p className="num">0{i + 1}</p>
+                  <h3>{s.title}</h3>
+                  <p>{s.sub}</p>
+                  <span className="more">{t.nav.sorting} →</span>
+                </a>
+              ) : (
+                <div className="card" key={s.title}>
+                  <p className="num">0{i + 1}</p>
+                  <h3>{s.title}</h3>
+                  <p>{s.sub}</p>
+                </div>
+              ),
+            )}
           </div>
         </div>
       </section>

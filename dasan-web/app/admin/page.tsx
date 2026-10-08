@@ -38,6 +38,7 @@ const WORK_TYPE: Record<Inquiry["workType"], string> = {
   general: "Sản xuất · 생산직",
   seasonal: "Thời vụ · 단기",
   fulltime: "Chính thức · 정규직",
+  sorting: "Sorting · 선별",
   other: "Khác · 기타",
 };
 const JOB_TYPE: Record<Applicant["jobType"], string> = {
