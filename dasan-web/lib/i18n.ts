@@ -54,6 +54,7 @@ const vi = {
       { value: "10", label: "Doanh nghiệp đối tác tiêu biểu" },
     ],
     note: "Mọi giấy tờ đều công khai — người lao động và đối tác có thể tự kiểm tra.",
+    videoLabel: "Video giới thiệu thương hiệu DASAN: kết nối người lao động và doanh nghiệp",
   },
   model: {
     eyebrow: "MÔ HÌNH HỢP TÁC",
@@ -251,6 +252,7 @@ const ko: Dict = {
       { value: "10", label: "주요 거래 기업" },
     ],
     note: "모든 서류를 공개합니다. 근로자와 파트너가 직접 확인할 수 있습니다.",
+    videoLabel: "다산 브랜드 영상: 근로자와 기업을 연결합니다",
   },
   model: {
     eyebrow: "한·베 파트너십",

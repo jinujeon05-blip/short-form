@@ -31,17 +31,35 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
       <section className="section" id="about">
         <div className="container">
-          <div className="head">
-            <p className="eyebrow">{t.trust.eyebrow}</p>
-            <h2 className="h2">{t.trust.title}</h2>
-          </div>
-          <div className="grid g4">
-            {t.trust.items.map((s) => (
-              <div className="card stat" key={s.label}>
-                <div className="value">{s.value}</div>
-                <div className="label">{s.label}</div>
+          <div className="trust-split">
+            <div className="intro-video">
+              <video
+                poster="/images/dasan-intro-poster.jpg"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label={t.trust.videoLabel}
+              >
+                <source src="/video/dasan-intro.webm" type="video/webm" />
+                <source src="/video/dasan-intro.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div>
+              <div className="head" style={{ marginBottom: 20 }}>
+                <p className="eyebrow">{t.trust.eyebrow}</p>
+                <h2 className="h2">{t.trust.title}</h2>
               </div>
-            ))}
+              <div className="grid g2 stats">
+                {t.trust.items.map((s) => (
+                  <div className="card stat" key={s.label}>
+                    <div className="value">{s.value}</div>
+                    <div className="label">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
           <p className="note-bar">{t.trust.note}</p>
         </div>
