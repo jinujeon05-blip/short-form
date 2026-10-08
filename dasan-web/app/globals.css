@@ -29,7 +29,8 @@ body {
 html[lang="ko"] body { font-family: "Noto Sans KR", "Be Vietnam Pro", system-ui, sans-serif; word-break: keep-all; }
 img { max-width: 100%; display: block; }
 a { color: inherit; }
-h1, h2, h3 { line-height: 1.2; margin: 0; color: var(--navy); }
+h1, h2, h3 { line-height: 1.2; margin: 0; color: var(--navy); overflow-wrap: break-word; }
+html[lang="ko"] h1, html[lang="ko"] h2, html[lang="ko"] h3, html[lang="ko"] p { word-break: keep-all; }
 p { margin: 0; }
 
 .container { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 20px; }
@@ -133,9 +134,11 @@ p { margin: 0; }
 .tier.dark .range { color: var(--pink); }
 .tier ul { margin: 6px 0 0; padding-left: 18px; }
 .quote { background: var(--navy); color: #fff; border-radius: var(--radius); padding: 32px; font-size: 22px; font-weight: 600; display: flex; align-items: center; }
-.cta-band { background: var(--red); color: #fff; }
-.cta-band h2 { color: #fff; }
-.cta-band .lead { color: #ffe3e7; }
+.cta-band { background: #fdf0f2; border-top: 1px solid #f6d5db; border-bottom: 1px solid #f6d5db; }
+.cta-band .container > div:first-child { border-left: 4px solid var(--red); padding-left: 24px; }
+.cta-band .lead { color: var(--muted); }
+.cta-band .pill { background: #fff; color: var(--navy); border: 1px solid #c9d3e0; }
+@media (max-width: 640px) { .cta-band .container > div:first-child { padding-left: 16px; } }
 .faq details { background: #fff; border-radius: 12px; padding: 18px 22px; box-shadow: var(--shadow); }
 .faq summary { font-weight: 700; cursor: pointer; color: var(--navy); }
 .faq details p { margin-top: 10px; color: var(--muted); }

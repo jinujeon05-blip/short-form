@@ -177,13 +177,13 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <section className="section cta-band">
         <div className="container split">
           <div>
-            <p className="eyebrow" style={{ color: "#ffe3e7" }}>{t.partner.eyebrow}</p>
+            <p className="eyebrow">{t.partner.eyebrow}</p>
             <h2 className="h2">{t.partner.title}</h2>
             <p className="lead" style={{ marginBottom: 20 }}>{t.partner.sub}</p>
             <div className="pills" style={{ marginBottom: 24 }}>
-              {t.partner.pills.map((p) => <span className="pill" key={p}>{p}</span>)}
+              {t.partner.pills.map((p) => <span className="pill" key={p}>✓ {p}</span>)}
             </div>
-            <Link href={`/${lang}/partner`} className="btn btn-white">{t.partner.cta} →</Link>
+            <Link href={`/${lang}/partner`} className="btn btn-red">{t.partner.cta} →</Link>
           </div>
           <img className="photo" src="/images/ai-team-leader.jpg" alt="" loading="lazy" />
         </div>
