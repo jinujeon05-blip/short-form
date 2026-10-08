@@ -1,0 +1,26 @@
+body.admin { background: var(--bg-2); font-family: "Noto Sans KR", "Be Vietnam Pro", system-ui, sans-serif; }
+.admin-top { background: var(--navy); color: #fff; }
+.admin-top .inner { display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 12px; }
+.admin-top strong { font-size: 17px; }
+.admin-top button { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.4); border-radius: 8px; padding: 6px 12px; cursor: pointer; font: inherit; }
+.tabs { display: flex; gap: 6px; margin: 20px 0; flex-wrap: wrap; }
+.tabs button { border: 1px solid var(--line); background: #fff; padding: 10px 16px; border-radius: 10px; font: inherit; font-weight: 700; cursor: pointer; color: var(--ink); }
+.tabs button.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.tabs .count { display: inline-block; margin-left: 6px; background: var(--red); color: #fff; border-radius: 999px; font-size: 12px; padding: 0 7px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+.toolbar input, .toolbar select { padding: 9px 12px; border: 1px solid #cdd4de; border-radius: 8px; font: inherit; background: #fff; }
+.toolbar a { font-weight: 700; color: var(--blue); }
+.table-wrap { overflow-x: auto; background: #fff; border-radius: 12px; box-shadow: var(--shadow); }
+table.data { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 900px; }
+table.data th { text-align: left; background: #eef1f5; padding: 10px; font-size: 13px; color: var(--muted); white-space: nowrap; }
+table.data td { padding: 10px; border-top: 1px solid var(--line); vertical-align: top; }
+table.data select, table.data textarea { font: inherit; font-size: 13px; padding: 5px 6px; border: 1px solid #cdd4de; border-radius: 6px; background: #fff; }
+table.data textarea { width: 180px; min-height: 34px; resize: vertical; }
+.del { background: none; border: 0; color: var(--red); cursor: pointer; font: inherit; font-size: 13px; }
+.st-new { color: var(--red); font-weight: 700; }
+.warn { background: #fff7e0; border: 1px solid #f0d27a; padding: 12px 16px; border-radius: 10px; margin-top: 16px; font-size: 14px; }
+.job-form { background: #fff; border-radius: 12px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
+.job-form h3 { margin-bottom: 12px; }
+.login-box { max-width: 380px; margin: 12vh auto; background: #fff; padding: 32px; border-radius: 16px; box-shadow: var(--shadow); }
+.login-box img { height: 40px; width: auto; margin-bottom: 16px; }
+.muted { color: var(--muted); font-size: 13px; }
