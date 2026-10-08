@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import type { Dict, Locale } from "@/lib/i18n";
+import { FlagKR, FlagVN } from "./Flags";
 
 export default function SiteHeader({ lang, t }: { lang: Locale; t: Dict["nav"] }) {
   const [open, setOpen] = useState(false);
@@ -24,8 +25,12 @@ export default function SiteHeader({ lang, t }: { lang: Locale; t: Dict["nav"] }
           <Link href={`/${lang}#faq`} onClick={close}>{t.faq}</Link>
           <Link href={`/${lang}#contact`} onClick={close}>{t.contact}</Link>
           <span className="lang" aria-label="Language">
-            <Link href={swap("vi")} className={lang === "vi" ? "active" : ""} onClick={close}>VI</Link>
-            <Link href={swap("ko")} className={lang === "ko" ? "active" : ""} onClick={close}>KO</Link>
+            <Link href={swap("vi")} className={lang === "vi" ? "active" : ""} onClick={close} aria-label="Tiếng Việt" title="Tiếng Việt">
+              <FlagVN /> VI
+            </Link>
+            <Link href={swap("ko")} className={lang === "ko" ? "active" : ""} onClick={close} aria-label="한국어" title="한국어">
+              <FlagKR /> KO
+            </Link>
           </span>
           <Link href={`/${lang}/apply`} className="btn btn-red btn-small" onClick={close}>{t.apply}</Link>
         </nav>
