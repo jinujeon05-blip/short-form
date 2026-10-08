@@ -15,7 +15,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   return (
     <>
       <section className="hero">
-        <div className="bg" style={{ backgroundImage: "url(/images/photo-canteen.jpg)" }} />
+        <div className="bg" style={{ backgroundImage: "url(/images/ai-factory-line.jpg)" }} />
         <div className="shade" />
         <div className="container">
           <p className="eyebrow">{t.hero.eyebrow}</p>
@@ -53,6 +53,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <p className="eyebrow">{t.model.eyebrow}</p>
             <h2 className="h2">{t.model.title}</h2>
           </div>
+          <img className="banner" src="/images/ai-handshake.jpg" alt="" loading="lazy" />
           <div className="grid g2">
             <div className="card model-card">
               <p className="label">{t.model.kr.label}</p>
@@ -94,6 +95,13 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           <div className="clients">
             <img src="/images/clients.jpg" alt="SMAC, Samsung Display, Mobase, Goertek, ITM, Yamagata, Cresyn, KCI Vina, KDA M&C, EM-Tech" loading="lazy" />
           </div>
+          <h3 style={{ margin: "40px 0 16px", fontSize: 22 }}>{t.gallery.title}</h3>
+          <div className="grid g3 gallery">
+            <img src="/images/photo-canteen.jpg" alt={t.gallery.alt[0]} loading="lazy" />
+            <img src="/images/photo-group.jpg" alt={t.gallery.alt[1]} loading="lazy" />
+            <img src="/images/photo-factory.jpg" alt={t.gallery.alt[2]} loading="lazy" />
+          </div>
+          <p className="lead" style={{ marginTop: 12, fontSize: 15 }}>{t.gallery.note}</p>
         </div>
       </section>
 
@@ -113,7 +121,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 </div>
               ))}
             </div>
-            <img className="photo" src="/images/photo-factory.jpg" alt="" loading="lazy" />
+            <img className="photo" src="/images/ai-shuttle.jpg" alt="" loading="lazy" />
           </div>
           <h3 style={{ margin: "40px 0 16px", fontSize: 22 }}>{t.jobs.listTitle}</h3>
           {jobs.length ? (
@@ -134,6 +142,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <p className="eyebrow">{t.promise.eyebrow}</p>
             <h2 className="h2">{t.promise.title}</h2>
           </div>
+          <img className="banner" src="/images/ai-orientation.jpg" alt="" loading="lazy" />
           <div className="grid g3">
             {t.promise.items.map((p) => (
               <div className="card" key={p.title}>
@@ -151,6 +160,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <p className="eyebrow">{t.steps.eyebrow}</p>
             <h2 className="h2">{t.steps.title}</h2>
           </div>
+          <img className="banner" src="/images/ai-consult.jpg" alt="" loading="lazy" />
           <div className="grid g5">
             {t.steps.items.map((s, i) => (
               <div className="card" key={s.title}>
@@ -165,14 +175,17 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       </section>
 
       <section className="section cta-band">
-        <div className="container">
-          <p className="eyebrow" style={{ color: "#ffe3e7" }}>{t.partner.eyebrow}</p>
-          <h2 className="h2">{t.partner.title}</h2>
-          <p className="lead" style={{ marginBottom: 20 }}>{t.partner.sub}</p>
-          <div className="pills" style={{ marginBottom: 24 }}>
-            {t.partner.pills.map((p) => <span className="pill" key={p}>{p}</span>)}
+        <div className="container split">
+          <div>
+            <p className="eyebrow" style={{ color: "#ffe3e7" }}>{t.partner.eyebrow}</p>
+            <h2 className="h2">{t.partner.title}</h2>
+            <p className="lead" style={{ marginBottom: 20 }}>{t.partner.sub}</p>
+            <div className="pills" style={{ marginBottom: 24 }}>
+              {t.partner.pills.map((p) => <span className="pill" key={p}>{p}</span>)}
+            </div>
+            <Link href={`/${lang}/partner`} className="btn btn-white">{t.partner.cta} →</Link>
           </div>
-          <Link href={`/${lang}/partner`} className="btn btn-white">{t.partner.cta} →</Link>
+          <img className="photo" src="/images/ai-team-leader.jpg" alt="" loading="lazy" />
         </div>
       </section>
 

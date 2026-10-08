@@ -18,8 +18,9 @@ export default async function PartnerPage({ params }: Props) {
 
   return (
     <>
-      <section className="section cta-band">
-        <div className="container">
+      <section className="section cta-band hero-photo">
+        <div className="bg" style={{ backgroundImage: "url(/images/ai-team-leader.jpg)" }} />
+        <div className="container" style={{ position: "relative" }}>
           <p className="eyebrow" style={{ color: "#ffe3e7" }}>{p.eyebrow}</p>
           <h1 className="h2" style={{ fontSize: "clamp(30px, 5vw, 48px)" }}>{p.title}</h1>
           <p className="lead" style={{ marginBottom: 20 }}>{p.sub}</p>

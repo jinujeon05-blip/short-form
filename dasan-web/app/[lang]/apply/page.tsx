@@ -28,6 +28,7 @@ export default async function ApplyPage({ params, searchParams }: Props) {
           <h1 className="h2">{t.form.applyTitle}</h1>
           <p className="lead">{t.form.applySub}</p>
         </div>
+        <img className="banner" src="/images/ai-consult.jpg" alt="" />
         <div className="card">
           <ApplyForm t={t.form} jobs={jobs} initialJob={job ?? ""} initialRef={ref ?? ""} />
         </div>
