@@ -165,8 +165,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <img src="/images/clients.jpg" alt="SMAC, Samsung Display, Mobase, Goertek, ITM, Yamagata, Cresyn, KCI Vina, KDA M&C, EM-Tech" loading="lazy" />
           </div>
           <h3 style={{ margin: "40px 0 16px", fontSize: 22 }}>{t.gallery.title}</h3>
-          <div className="grid g3 gallery">
+          <div className="grid g2 gallery gallery-feature">
+            <img src="/images/real-orientation-2.jpg" alt={t.gallery.alt[4]} loading="lazy" />
             <img src="/images/photo-canteen.jpg" alt={t.gallery.alt[0]} loading="lazy" />
+          </div>
+          <div className="grid g2 gallery" style={{ marginTop: 16 }}>
             <img src="/images/photo-group.jpg" alt={t.gallery.alt[1]} loading="lazy" />
             <img src="/images/photo-factory.jpg" alt={t.gallery.alt[2]} loading="lazy" />
           </div>
@@ -211,7 +214,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <p className="eyebrow">{t.promise.eyebrow}</p>
             <h2 className="h2">{t.promise.title}</h2>
           </div>
-          <img className="banner" src="/images/ai-orientation.jpg" alt="" loading="lazy" />
+          <img className="banner" src="/images/real-banner.jpg" alt={t.gallery.alt[3]} loading="lazy" />
           <div className="grid g3">
             {t.promise.items.map((p) => (
               <div className="card" key={p.title}>

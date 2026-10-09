@@ -100,7 +100,7 @@ const vi = {
   clients: { eyebrow: "ĐỐI TÁC", title: "Làm việc tại các doanh nghiệp lớn ở miền Bắc" },
   gallery: {
     title: "Hình ảnh thực tế tại hiện trường tuyển dụng",
-    alt: ["Buổi tuyển dụng tại nhà ăn nhà máy", "Người lao động nghe hướng dẫn trước khi nhận việc", "Người lao động tại xưởng sản xuất"],
+    alt: ["Buổi tuyển dụng tại nhà ăn nhà máy", "Người lao động nghe hướng dẫn trước khi nhận việc", "Người lao động tại xưởng sản xuất", "Hàng trăm người lao động mặc đồng phục nghe hướng dẫn trước ngày đầu đi làm", "Buổi hướng dẫn nhận việc quy mô lớn tại nhà máy"],
     note: "Ảnh thật từ các đợt tuyển dụng của DASAN.",
   },
   jobs: {
@@ -256,6 +256,7 @@ const vi = {
       { title: "Tuyển dụng nhân viên chính thức", sub: "Tìm người để doanh nghiệp tuyển dụng trực tiếp." },
       { title: "Phân loại linh kiện (Sorting)", sub: "Kiểm tra, phân loại linh kiện Samsung và các linh kiện điện tử khác." },
     ],
+    realPhotoAlt: "Hàng trăm người lao động do DASAN cung ứng nghe hướng dẫn tại nhà máy",
     whyTitle: "Vì sao chọn DASAN",
     why: [
       { title: "Hợp pháp", sub: "Giấy phép cho thuê lại lao động 68/2023/SBN, ký quỹ 2 tỷ VND tại PG Bank." },
@@ -448,7 +449,7 @@ const ko: Dict = {
   clients: { eyebrow: "고객사", title: "베트남 북부 산업단지의 글로벌 제조기업과 함께합니다" },
   gallery: {
     title: "실제 채용 현장 사진",
-    alt: ["공장 식당에서 열린 채용 설명회", "출근 전 안내를 듣는 근로자들", "생산 현장의 근로자들"],
+    alt: ["공장 식당에서 열린 채용 설명회", "출근 전 안내를 듣는 근로자들", "생산 현장의 근로자들", "첫 출근 전 안내를 듣는 작업복 차림의 근로자 수백 명", "공장에서 진행한 대규모 입사 안내"],
     note: "다산 채용 현장의 실제 사진입니다.",
   },
   jobs: {
@@ -604,6 +605,7 @@ const ko: Dict = {
       { title: "정규직 채용 대행", sub: "고객사가 직접 고용할 인력을 모집합니다." },
       { title: "전자부품 선별(Sorting)", sub: "삼성전자 부품 등 다양한 전자부품을 검사·선별합니다." },
     ],
+    realPhotoAlt: "다산이 공급한 근로자 수백 명이 공장에서 입사 안내를 듣는 모습",
     whyTitle: "다산을 선택하는 이유",
     why: [
       { title: "합법성", sub: "근로자파견업 허가 68/2023/SBN, PG Bank 이행보증금 20억 동 예치." },

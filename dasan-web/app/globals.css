@@ -255,3 +255,7 @@ p { margin: 0; }
 @media (max-width: 560px) { .area-grid { grid-template-columns: 1fr; } }
 .area h2 { text-wrap: balance; }
 .area-card p.area-vn { color: var(--pink); font-weight: 600; margin-top: 2px; }
+.gallery img { height: 280px; }
+.gallery-feature img { height: 320px; }
+@media (max-width: 640px) { .gallery img, .gallery-feature img { height: 220px; } }
+.photo-real { align-self: center; height: auto; aspect-ratio: 4 / 3; }

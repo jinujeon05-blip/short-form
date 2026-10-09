@@ -85,7 +85,7 @@ export default async function BusinessPage({ params }: Props) {
               ))}
             </div>
           </div>
-          <img className="photo" src="/images/ai-factory-line.jpg" alt="" loading="lazy" />
+          <img className="photo photo-real" src="/images/real-orientation-1.jpg" alt={b.realPhotoAlt} loading="lazy" />
         </div>
       </section>
 
