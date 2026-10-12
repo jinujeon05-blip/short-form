@@ -1,3 +1,4 @@
+import { ToolGuide } from '../components/ToolGuide';
 import { Emoji } from '../components/Emoji';
 import { useMemo, useState } from 'react';
 import { jdnFromYmd } from '../engine/astro';
@@ -199,6 +200,7 @@ export function CalendarPage({ purpose: routePurpose = null }: { purpose?: Purpo
           <Link key={p} to={purposePath(p)} className="chip">{t.purposes[p]}</Link>
         ))}
       </div>
+      {!purpose && <ToolGuide id="calendar" />}
     </Section>
   );
 }
