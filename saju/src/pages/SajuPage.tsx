@@ -1,3 +1,4 @@
+import { ToolGuide } from '../components/ToolGuide';
 import { Lock } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { BRANCH_HANJA, STEM_HANJA, branchElement, cycleStem, stemElement, tenGod, yearCycle } from '../engine/ganzhi';
@@ -79,6 +80,7 @@ export function SajuPage({ query }: { query: string }) {
       </Section>
 
       {result && <SajuResultView result={result} name={parsed?.name ?? ''} thisYear={thisYear} />}
+      <ToolGuide id="saju" />
     </>
   );
 }

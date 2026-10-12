@@ -1,3 +1,4 @@
+import { ToolGuide } from '../components/ToolGuide';
 import { Heart, Lock, Mail, Moon } from 'lucide-react';
 import { Emoji } from '../components/Emoji';
 import { useEffect, useMemo, useState } from 'react';
@@ -121,6 +122,7 @@ export function MatchPage({ query }: { query: string }) {
       </Section>
 
       {result && <MatchResultView m={result} names={names} invited={!!parsed?.invited} />}
+      <ToolGuide id="match" />
     </>
   );
 }

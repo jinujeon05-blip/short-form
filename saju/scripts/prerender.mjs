@@ -21,6 +21,10 @@ import { HangulPage } from '../src/pages/HangulPage.tsx';
 import { NamingPage } from '../src/pages/NamingPage.tsx';
 import { TaemongPage } from '../src/pages/TaemongPage.tsx';
 import { JesaPage } from '../src/pages/JesaPage.tsx';
+import { Home } from '../src/pages/Home.tsx';
+import { SajuPage } from '../src/pages/SajuPage.tsx';
+import { MatchPage } from '../src/pages/MatchPage.tsx';
+import { NamePage } from '../src/pages/NamePage.tsx';
 import { HolidaysPage } from '../src/pages/HolidaysPage.tsx';
 import { DailyIndexPage, DailyZodiacPage } from '../src/pages/DailyPage.tsx';
 
@@ -68,7 +72,17 @@ function metaOf(route, lang) {
 /** Server-renders the yearly fortune page so its full text is in the HTML. */
 function renderFortune(route, lang) {
   const [, , year, slug] = route.split('/');
-  const page = route === '/jesa'
+  const page = route === '/'
+    ? createElement(Home)
+    : route === '/saju'
+    ? createElement(SajuPage, { query: '' })
+    : route === '/match'
+    ? createElement(MatchPage, { query: '' })
+    : route === '/name'
+    ? createElement(NamePage, { query: '' })
+    : route === '/calendar'
+    ? createElement(CalendarPage, { purpose: null })
+    : route === '/jesa'
     ? createElement(JesaPage, { query: '' })
     : route === '/taemong'
     ? createElement(TaemongPage)
@@ -164,7 +178,7 @@ function body(route, lang) {
   const info = ['/about', '/method', '/privacy', '/terms'].includes(route) ? articles.pages[route.slice(1)][lang] : null;
   const links = [...TOOL_ROUTES, '/guide'].map((r) => `<li><a href="${pathFor(r, lang)}">${esc(NAV[lang][r])}</a></li>`).join('');
   const other = lang === 'ko' ? 'vi' : 'ko';
-  if (route.startsWith('/fortune/') || route.startsWith('/daily') || route === '/samjae' || route === '/age' || route === '/jesa' || route === '/taemong' || route === '/naming' || route === '/hangul' || route === '/holidays' || route.startsWith('/calendar/') || route.startsWith('/dream')) return renderFortune(route, lang);
+  if (['/', '/saju', '/match', '/name', '/calendar'].includes(route) || route.startsWith('/fortune/') || route.startsWith('/daily') || route === '/samjae' || route === '/age' || route === '/jesa' || route === '/taemong' || route === '/naming' || route === '/hangul' || route === '/holidays' || route.startsWith('/calendar/') || route.startsWith('/dream')) return renderFortune(route, lang);
   if (g || info) {
     const doc = g ? g[lang] : info;
     return `<main class="main"><article class="article"><h1 class="article-title">${esc(doc.title)}</h1>${g ? `<p class="article-lead">${esc(doc.description)}</p>` : ''}${blocksHtml(doc.blocks, lang)}<ul class="footer-links">${links}</ul></article></main>`;
