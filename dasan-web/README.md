@@ -25,7 +25,7 @@
    - `SESSION_SECRET`: 32자 이상의 임의 문자열
 4. 데이터 저장소를 연결합니다. 프로젝트의 **Storage** 탭에서 **Upstash → Redis**(무료 플랜 가능)를 만들고 이 프로젝트에 연결합니다. `KV_REST_API_URL`과 `KV_REST_API_TOKEN`이 자동으로 추가됩니다.
    - ⚠ 이 단계를 빼면 지원서가 저장되지 않습니다. 관리자 화면 상단에 노란 경고가 보이면 연결이 안 된 상태입니다.
-5. **Deploy**를 누른 뒤, **Settings → Domains**에서 구입한 도메인을 연결합니다. 현재 도메인은 `dasanhr.vn`입니다(아래 '도메인' 참고).
+5. **Deploy**를 누른 뒤, **Settings → Domains**에서 구입한 도메인을 연결합니다. 현재 도메인은 `dasanhr.com`입니다(아래 '도메인' 참고).
 
 ## 로컬 실행
 
@@ -46,19 +46,12 @@ Redis 설정이 없으면 `.data/db.json` 파일에 저장합니다. 개발용�
 
 지원 폼과 파트너 폼은 개인정보 수집·이용 동의를 받은 경우에만 접수합니다(베트남 개인정보보호 시행령 13/2023/NĐ-CP 대응). 관리자 비밀번호는 두 대표만 알고 있어야 합니다.
 
-## 도메인 (dasanhr.vn)
+## 도메인 (dasanhr.com)
 
-- 메인 주소는 `dasanhr.vn`이고, `www.dasanhr.vn`은 `dasanhr.vn`으로 자동 이동합니다. 두 주소 모두 Vercel 프로젝트에 등록돼 있습니다.
-- 도메인을 산 업체(Mắt Bão, PA Việt Nam, iNET 등)의 DNS 관리 화면에 아래 두 줄을 넣습니다. 기존에 같은 이름의 A/CNAME 레코드가 있으면 지웁니다.
-
-| 종류 | 이름(Host) | 값 |
-|---|---|---|
-| A | `@` | `216.198.79.1` |
-| CNAME | `www` | `2f314f4d4e76b0f0.vercel-dns-017.com` |
-
-- 위 값은 Vercel이 이 프로젝트에 권장한 값입니다(예전 값 `76.76.21.21` / `cname.vercel-dns.com`도 동작합니다).
-- 보통 몇 분~몇 시간 안에 연결되고, HTTPS 인증서는 Vercel이 자동으로 발급·갱신합니다. 연결 상태는 Vercel의 **Settings → Domains**에서 확인합니다(초록색 체크면 정상).
-- **매년 도메인 갱신**을 잊지 마세요. 만료되면 사이트가 바로 접속되지 않습니다. 등록업체에서 자동 갱신을 켜 두는 것을 권장합니다.
+- 메인 주소는 `https://dasanhr.com`이고, `www.dasanhr.com`은 `dasanhr.com`으로 자동 이동합니다.
+- 도메인은 **Vercel에서 구매**했습니다(2026년 10월, 1년, 자동 갱신 켜짐). DNS도 Vercel이 관리하므로 따로 설정할 것이 없고, HTTPS 인증서도 자동으로 발급·갱신됩니다.
+- 갱신 상태와 결제 카드는 Vercel → **Domains**(https://vercel.com/jinwoo8/~/domains)와 **Settings → Billing**에서 확인합니다. 결제 카드가 만료되면 자동 갱신이 실패하니 카드 정보를 최신으로 유지하세요.
+- 연결 상태는 프로젝트의 **Settings → Domains**에서 확인합니다(초록색 체크면 정상).
 
 ## 운영·유지보수 체크리스트
 
@@ -67,7 +60,7 @@ Redis 설정이 없으면 `.data/db.json` 파일에 저장합니다. 개발용�
 | 매일 | `/admin`에서 새 기업 의뢰·지원자·파트너 신청 확인, 상태와 메모 업데이트 |
 | 수시 | 채용공고 등록·마감 (`/admin` → 채용공고 탭) |
 | 매월 | 파트너별 소개·출근 인원 확인 후 수수료 정산, CSV 백업 다운로드 |
-| 매년 | `dasanhr.vn` 도메인 갱신, 관리자 비밀번호 변경 |
+| 매년 | `dasanhr.com` 자동 갱신 결제 확인, 관리자 비밀번호 변경 |
 
 - **관리자 비밀번호 변경**: Vercel → **Settings → Environment Variables**에서 `ADMIN_PASSWORD`를 바꾸고 다시 배포(**Deployments → 최신 배포 → Redeploy**)합니다.
 - **문구·연락처 수정**: `lib/i18n.ts`를 고친 뒤 GitHub에 올리고 배포합니다. 사진은 `public/images`에 같은 이름으로 덮어쓰면 됩니다.
