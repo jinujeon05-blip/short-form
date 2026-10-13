@@ -2,7 +2,7 @@ export const ko = {
   langName: '한국어',
   brand: '명월',
   brandSub: '明月 · MINH NGUYỆT',
-  nav: { today: '오늘', calendar: '좋은 날', match: '궁합', name: '이름', saju: '내 사주' },
+  nav: { today: '오늘', calendar: '좋은 날', match: '궁합', dream: '꿈해몽', name: '이름', saju: '내 사주' },
 
   hero: {
     eyebrow: '같은 달, 두 나라의 달력',
