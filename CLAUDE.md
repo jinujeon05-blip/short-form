@@ -15,3 +15,10 @@
 
 ## 참고
 - 기존 폴더(`src/`, `saju/`, `rpg-demo/`, `server/` 등)는 이전 숏폼 리퍼포징 프로젝트의 산출물이다.
+
+## 음식점 목록
+| 폴더 | 가게 | Vercel 프로젝트 | 주소 |
+|---|---|---|---|
+| `restaurants/sutkkui` | 숯꾸이 (Bắc Ninh) | `sutkkui-menu` (팀 jinwoo8) | https://sutkkui-menu.vercel.app |
+
+- Vercel 팀 기본값이 "모든 배포 로그인 보호"라서, 새 프로젝트마다 Deployment Protection을 `prod_deployment_urls_and_all_previews`로 바꿔야 손님이 로그인 없이 열 수 있다.
