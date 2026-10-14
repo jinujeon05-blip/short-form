@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fdf6f3">
+<title>Ăn Vội · Mì Trộn Siu Dính</title>
+<meta name="description" content="Ăn Vội — Mì Trộn Siu Dính · 157/45 Hùng Vương, Quảng Ngãi">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf6f3;
+    --card: #ffffff;
+    --wine: #7c2a2a;
+    --rose: #a95c58;
+    --blush: #f6e1dc;
+    --blush-2: #fbeeea;
+    --line: #efd9d3;
+    --text: #4a2a28;
+    --muted: #9a7b77;
+    --orange: #e8742c;
+    --sun: #f6c445;
+    --round: "Baloo 2", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; color: var(--text); background: var(--cream);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "PingFang SC", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.4;
+    background-image: radial-gradient(var(--blush) 1.2px, transparent 1.3px);
+    background-size: 18px 18px;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+  .round { font-family: var(--round); }
+  :lang(ko) body { word-break: keep-all; }
+
+  /* ── 헤더 ── */
+  header { position: relative; text-align: center; padding: 14px 0 26px; overflow: hidden; }
+  header::before { /* 왼쪽 위 와인색 물결 (원래 메뉴판 모티프) */
+    content: ""; position: absolute; left: -60px; top: -90px; width: 260px; height: 200px; border-radius: 0 0 60% 40%;
+    background: var(--rose); opacity: .9; z-index: 0;
+  }
+  header > * { position: relative; z-index: 1; }
+  .langs { display: flex; justify-content: flex-end; gap: 5px; flex-wrap: wrap; }
+  .langs button {
+    font: inherit; font-size: 12.5px; font-weight: 700; color: var(--rose);
+    background: #fff; border: 1.5px solid var(--line); border-radius: 999px; padding: 4px 11px; cursor: pointer;
+  }
+  .langs button[aria-pressed="true"] { color: #fff; background: var(--wine); border-color: var(--wine); }
+  .logo { display: block; width: min(46vw, 190px); height: auto; margin: 10px auto 0; mix-blend-mode: multiply; }
+  .pill {
+    display: inline-block; margin-top: 8px; padding: 6px 22px 4px; border-radius: 999px;
+    background: var(--rose); color: #fff; font-family: var(--round); font-weight: 800; font-size: 22px; letter-spacing: .3px;
+    box-shadow: 0 6px 0 rgba(124, 42, 42, .18);
+  }
+  .tags { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+  .tags span { font-size: 12px; font-weight: 700; color: var(--wine); background: #fff; border: 1.5px dashed var(--rose); border-radius: 999px; padding: 3px 10px; }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; background: rgba(253, 246, 243, .94); backdrop-filter: blur(8px); border-bottom: 1.5px solid var(--line); }
+  nav .wrap { position: relative; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-top: 9px; padding-bottom: 9px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: var(--rose); text-decoration: none; font-weight: 800; font-size: 14px; padding: 7px 14px; border-radius: 999px; background: #fff; border: 1.5px solid var(--line); white-space: nowrap; }
+  nav a.active { color: #fff; background: var(--wine); border-color: var(--wine); }
+
+  /* ── 섹션 ── */
+  main { padding: 18px 0 6px; display: grid; gap: 22px; }
+  section {
+    background: var(--card); border: 2px dashed var(--line); border-radius: 22px; padding: 16px 16px 8px;
+    box-shadow: 0 10px 24px rgba(169, 92, 88, .08);
+  }
+  .banner { margin: -4px -4px 14px; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 10; }
+  .banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  h2 { margin: 0; font-family: var(--round); font-size: 30px; font-weight: 800; color: var(--wine); line-height: 1.05; }
+  h2 small { display: block; font-family: system-ui, sans-serif; font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 4px; }
+  .notes { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+  .notes li { font-size: 13px; font-weight: 600; color: var(--wine); background: var(--blush-2); border-radius: 10px; padding: 6px 10px 6px 30px; position: relative; }
+  .notes li::before { content: "✦"; position: absolute; left: 11px; top: 6px; color: var(--orange); }
+
+  .colhead { display: flex; justify-content: flex-end; gap: 6px; margin: 14px 0 0; }
+  .colhead span { width: 78px; text-align: center; font-size: 12px; font-weight: 800; padding: 3px 0; border-radius: 6px; }
+  .colhead span:nth-child(1) { background: #f4c9cc; color: var(--wine); }
+  .colhead span:nth-child(2) { background: #f3dcae; color: #8a5a10; }
+
+  ul.items { list-style: none; margin: 6px 0 0; padding: 0; }
+  ul.items > li { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1.5px dotted var(--line); }
+  ul.items > li:last-child { border-bottom: 0; }
+  .thumb { flex: none; width: 58px; height: 58px; border-radius: 14px; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.12); cursor: zoom-in; }
+  .zoom { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 20px; background: rgba(40, 15, 15, .82); cursor: zoom-out; }
+  .zoom[hidden] { display: none; }
+  .zoom img { max-width: min(92vw, 520px); max-height: 80vh; border-radius: 18px; border: 3px solid #fff; }
+  .zoom p { margin: 12px 0 0; color: #fff; font-weight: 800; text-align: center; }
+  .info { flex: 1; min-width: 0; }
+  .info b { font-size: 16.5px; font-weight: 800; color: var(--text); }
+  .info .hot { display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 800; color: #fff; background: var(--orange); border-radius: 999px; padding: 1px 7px; vertical-align: 2px; }
+  .info .sub { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .info .desc { display: block; font-size: 13px; color: var(--rose); margin-top: 3px; }
+  .info ol { margin: 6px 0 0; padding: 0 0 0 18px; font-size: 13.5px; color: var(--text); }
+  .info ol li { margin: 2px 0; }
+  .info ol li::marker { color: var(--orange); font-weight: 800; }
+  .price { flex: none; font-family: var(--round); font-weight: 800; font-size: 18px; color: var(--wine); white-space: nowrap; }
+  .prices { flex: none; display: flex; gap: 6px; }
+  .prices span { width: 78px; text-align: center; font-family: var(--round); font-weight: 800; font-size: 16.5px; color: var(--wine); }
+  .prices small, .price small { font-size: 11px; font-weight: 700; color: var(--muted); }
+  .pricecol { display: block; font-family: system-ui, sans-serif; font-size: 10px; font-weight: 800; color: var(--muted); }
+
+  /* 담기 버튼 */
+  .prices button.add {
+    position: relative; width: 78px; font: inherit; font-family: var(--round); font-weight: 800; font-size: 16.5px; color: var(--wine);
+    background: var(--blush-2); border: 1.5px solid var(--line); border-radius: 12px; padding: 5px 0 3px; cursor: pointer;
+  }
+  .prices button.add::after, .plus::after {
+    content: attr(data-n); position: absolute; display: grid; place-items: center; border-radius: 50%;
+    background: var(--wine); color: #fff; font-family: system-ui, sans-serif; font-weight: 800;
+  }
+  .prices button.add::after { top: -8px; right: -6px; width: 20px; height: 20px; font-size: 12px; }
+  .prices button.add.in { background: #fff3e8; border-color: var(--orange); }
+  .prices button.add.in::after, .plus.in::after { background: var(--orange); }
+  .price-wrap { flex: none; display: flex; align-items: center; gap: 8px; }
+  .plus { position: relative; flex: none; width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; cursor: pointer; padding: 0; }
+  .plus::after { inset: 0; font-size: 16px; }
+
+  /* 장바구니 바 + 주문서 */
+  body.has-cart { padding-bottom: 84px; }
+  .cartbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, rgba(253,246,243,.95) 30%); }
+  .cartbar button {
+    display: flex; align-items: center; gap: 10px; width: 100%; max-width: 528px; margin: 0 auto; font: inherit; cursor: pointer;
+    color: #fff; background: var(--wine); border: 0; border-radius: 18px; padding: 12px 16px; box-shadow: 0 10px 24px rgba(124,42,42,.35);
+  }
+  .cartbar .count { background: #fff; color: var(--wine); font-weight: 800; border-radius: 999px; min-width: 28px; padding: 2px 8px; }
+  .cartbar .total { flex: 1; text-align: left; font-family: var(--round); font-weight: 800; font-size: 18px; }
+  .cartbar b { font-size: 15px; }
+  .sheet { position: fixed; inset: 0; z-index: 40; display: flex; align-items: flex-end; justify-content: center; }
+  .sheet[hidden] { display: none; }
+  .sheet-bg { position: absolute; inset: 0; background: rgba(60, 20, 20, .45); }
+  .sheet-panel {
+    position: relative; width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; background: var(--cream);
+    border-radius: 22px 22px 0 0; padding: 16px 16px calc(20px + env(safe-area-inset-bottom));
+  }
+  .sheet-head { display: flex; justify-content: space-between; align-items: center; }
+  .sheet-head h3 { margin: 0; font-family: var(--round); font-size: 24px; color: var(--wine); }
+  .sheet-head button { font-size: 26px; line-height: 1; border: 0; background: none; color: var(--rose); cursor: pointer; }
+  .lines { list-style: none; margin: 10px 0 0; padding: 0; }
+  .lines li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1.5px dotted var(--line); }
+  .lines .ln { flex: 1; min-width: 0; font-weight: 700; }
+  .lines .ln small { display: block; font-weight: 600; color: var(--muted); font-size: 12px; }
+  .lines .qty { display: flex; align-items: center; gap: 8px; }
+  .lines .qty button { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--rose); background: #fff; color: var(--wine); font-weight: 800; cursor: pointer; }
+  .lines .lp { width: 76px; text-align: right; font-family: var(--round); font-weight: 800; color: var(--wine); }
+  .sum { display: flex; justify-content: space-between; align-items: baseline; margin: 12px 0 0; font-weight: 700; }
+  .sum b { font-family: var(--round); font-size: 24px; color: var(--wine); }
+  .modes { display: flex; gap: 6px; margin: 14px 0 0; }
+  .modes button { flex: 1; font: inherit; font-weight: 800; font-size: 13.5px; color: var(--rose); background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 9px 4px; cursor: pointer; }
+  .modes button[aria-pressed="true"] { color: #fff; background: var(--rose); border-color: var(--rose); }
+  .fields { display: grid; gap: 8px; margin: 12px 0 0; }
+  .fields input, .fields textarea { font: inherit; font-size: 15px; width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; color: var(--text); }
+  .fields textarea { min-height: 64px; resize: vertical; }
+  .hint { margin: 10px 0 0; font-size: 13px; font-weight: 600; color: var(--rose); }
+  .hint.warn { color: #c0392b; }
+  .actions { display: grid; gap: 8px; margin: 14px 0 0; }
+  .actions .zalo { display: flex; align-items: center; justify-content: center; gap: 8px; font: inherit; font-weight: 800; font-size: 16px; color: #fff; background: #0068ff; border: 0; border-radius: 14px; padding: 14px; cursor: pointer; }
+  .actions .zalo i { font-style: normal; background: #fff; color: #0068ff; border-radius: 6px; padding: 0 5px; font-size: 13px; }
+  .actions .ghost { text-align: center; font-weight: 800; color: var(--wine); text-decoration: none; border: 1.5px solid var(--rose); border-radius: 14px; padding: 12px; background: #fff; cursor: pointer; font: inherit; }
+  .preview { margin: 14px 0 0; }
+  .preview summary { cursor: pointer; font-weight: 700; color: var(--rose); font-size: 13.5px; }
+  .preview pre { white-space: pre-wrap; font: inherit; font-size: 14px; background: #fff; border: 1.5px dashed var(--line); border-radius: 12px; padding: 12px; margin: 8px 0 0; }
+
+  /* 콤보 카드 */
+  #combo ul.items > li { align-items: flex-start; background: var(--blush-2); border: 0; border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
+  #combo .price { font-size: 22px; }
+
+  /* ── 하단 ── */
+  footer.wrap { padding-top: 28px; padding-bottom: calc(30px + env(safe-area-inset-bottom)); }
+  .store { border-radius: 22px; overflow: hidden; border: 3px solid #fff; box-shadow: 0 10px 24px rgba(169, 92, 88, .15); }
+  .store img { display: block; width: 100%; aspect-ratio: 6 / 5; object-fit: cover; }
+  .perks { display: grid; gap: 6px; margin: 16px 0; }
+  .perks div { font-size: 13.5px; font-weight: 700; color: var(--wine); text-align: center; }
+  .cards { display: grid; gap: 10px; }
+  .card {
+    display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; color: var(--text); text-decoration: none; text-align: left;
+    background: #fff; border: 2px solid var(--rose); border-radius: 999px; padding: 6px 18px 6px 6px; cursor: pointer;
+  }
+  .card i { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--rose); display: grid; place-items: center; }
+  .card svg { width: 20px; height: 20px; color: #fff; }
+  .card div { flex: 1; min-width: 0; }
+  .card small { display: block; font-size: 11px; color: var(--muted); font-weight: 700; }
+  .card strong { display: block; font-size: 16px; color: var(--wine); word-break: break-word; }
+  .card em { flex: none; font-style: normal; font-size: 12px; font-weight: 800; color: var(--rose); }
+  .vnd { text-align: center; font-size: 12px; color: var(--muted); margin: 16px 0 0; }
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 20;
+    background: var(--wine); color: #fff; font-size: 14px; font-weight: 700;
+    padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="langs" id="langs"></div>
+  <img class="logo" src="img/logo.jpg" alt="Ăn Vội" width="413" height="410">
+  <div class="pill">Mì Trộn Siu Dính</div>
+  <div class="tags" id="tags"></div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap" id="menu"></main>
+
+<footer class="wrap">
+  <div class="store"><img src="img/store.jpg" alt="Ăn Vội — 157/45 Hùng Vương" loading="lazy"></div>
+  <div class="perks" id="perks"></div>
+  <div class="cards" id="cards"></div>
+  <p class="vnd" id="foot"></p>
+</footer>
+<div class="cartbar" id="cartbar" hidden>
+  <button type="button" id="openCart"><span class="count" id="cartCount"></span><span class="total" id="cartTotal"></span><b id="cartCta"></b></button>
+</div>
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-bg" data-close></div>
+  <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sTitle">
+    <div class="sheet-head"><h3 id="sTitle"></h3><button type="button" data-close aria-label="close">×</button></div>
+    <ul class="lines" id="lines"></ul>
+    <div class="sum"><span id="sSubLabel"></span><b id="sTotal"></b></div>
+    <div class="modes" id="modes"></div>
+    <div class="fields">
+      <input id="fName" autocomplete="name">
+      <input id="fPhone" type="tel" autocomplete="tel">
+      <input id="fAddr" autocomplete="street-address">
+      <textarea id="fNote"></textarea>
+    </div>
+    <p class="hint" id="hint"></p>
+    <div class="actions">
+      <button type="button" class="zalo" id="sendZalo"><i>Zalo</i><span id="sendLabel"></span></button>
+      <a class="ghost" id="callBtn"></a>
+      <button type="button" class="ghost" id="clearCart"></button>
+    </div>
+    <details class="preview" id="previewBox"><summary id="previewLabel"></summary><pre id="preview"></pre></details>
+  </div>
+</div>
+<div class="zoom" id="zoom" hidden><div><img id="zoomImg" alt=""><p id="zoomCap"></p></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<script>
+  const LANGS = [["vi", "Tiếng Việt"], ["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"]];
+  const UI = {
+    vi: { title: "Thực đơn", copy: "Sao chép", copied: "Đã sao chép mật khẩu", call: "Gọi điện · Đặt món", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND (đ)", tags: ["Sốt nhà làm"] },
+    ko: { title: "메뉴", copy: "복사", copied: "비밀번호를 복사했어요", call: "전화 · 주문", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(đ)", tags: ["직접 만든 소스"] },
+    en: { title: "Menu", copy: "Copy", copied: "Password copied", call: "Call · Order", map: "Address · Map", vnd: "Prices in Vietnamese đồng (đ)", tags: ["Homemade sauce"] },
+    zh: { title: "菜单", copy: "复制", copied: "密码已复制", call: "电话 · 点餐", map: "地址 · 地图", vnd: "价格单位：越南盾（đ）", tags: ["自家特制酱"] },
+    ja: { title: "メニュー", copy: "コピー", copied: "パスワードをコピーしました", call: "電話・ご注文", map: "住所・地図", vnd: "価格はベトナムドン（đ）です", tags: ["自家製ソース"] },
+  };
+
+  let observer;
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  function storage(fn) { try { return fn(localStorage); } catch { return null; } }
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 베트남어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  const fmt = (n) => n.toLocaleString("vi-VN");
+
+  // 가격을 누르면 장바구니에 담김. 가격이 범위(priceText)인 메뉴는 주문서 메모로 요청
+  function priceHTML(it, cat, ci, ii) {
+    if (it.prices) {
+      const cols = it.cols || cat.cols;
+      const showLabels = !cat.cols || it.cols; // 섹션 위에 열 제목이 없을 때만 칸마다 라벨
+      return `<div class="prices">${it.prices.map((p, i) =>
+        `<button type="button" class="add" data-k="${ci}-${ii}-${i}" data-n="+">${showLabels ? `<small class="pricecol">${esc(cols[i])}</small>` : ""}${fmt(p)}</button>`).join("")}</div>`;
+    }
+    if (it.priceText) return `<div class="price">${esc(it.priceText)}<small>đ</small></div>`;
+    return `<div class="price-wrap"><div class="price">${fmt(it.price)}<small>đ</small></div><button type="button" class="plus" data-k="${ci}-${ii}-0" data-n="+" aria-label="+"></button></div>`;
+  }
+
+  function render(lang) {
+    const t = UI[lang];
+    const R = window.RESTAURANT;
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand} · ${t.title}`;
+
+    $("langs").innerHTML = LANGS.map(([c, label]) =>
+      `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+    $("tags").innerHTML = t.tags.map((s) => `<span>${esc(s)}</span>`).join("");
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat, ci) => `
+      <section id="${cat.id}">
+        ${cat.photo ? `<div class="banner"><img src="${cat.photo}" alt="" loading="lazy"></div>` : ""}
+        <h2>${esc(cat.name[lang])}${lang !== "vi" ? `<small>${esc(cat.name.vi)}</small>` : ""}</h2>
+        ${cat.notes ? `<ul class="notes">${cat.notes.map((n) => `<li>${esc(n[lang])}</li>`).join("")}</ul>` : ""}
+        ${cat.cols ? `<div class="colhead">${cat.cols.map((c) => `<span>${esc(c)}</span>`).join("")}</div>` : ""}
+        <ul class="items">${cat.items.map((it, ii) => `
+          <li>
+            ${it.photo ? `<img class="thumb" src="${it.photo}" alt="${esc(it.name[lang])}" loading="lazy">` : ""}
+            <div class="info">
+              <b>${esc(it.name[lang])}</b>${it.hot ? `<span class="hot">★</span>` : ""}
+              ${lang !== "vi" ? `<span class="sub">${esc(it.name.vi)}</span>` : ""}
+              ${it.desc ? `<span class="desc">${esc(it.desc[lang])}</span>` : ""}
+              ${it.list ? `<ol>${it.list.map((l) => `<li>${esc(l[lang])}</li>`).join("")}</ol>` : ""}
+            </div>
+            ${priceHTML(it, cat, ci, ii)}
+          </li>`).join("")}
+        </ul>
+      </section>`).join("");
+
+    $("perks").innerHTML = Object.values(EXTRA).map((e) => `<div>✦ ${esc(e[lang])}</div>`).join("");
+    renderCards(t, R);
+    $("foot").textContent = t.vnd;
+    observeSections();
+    if (typeof updateCart === "function" && window.__cartReady) updateCart();
+  }
+
+  const ICONS = {
+    wifi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg>',
+    call: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>',
+    map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+  };
+
+  function renderCards(t, R) {
+    const cards = [];
+    if (R.wifi) cards.push(`<button class="card" id="wifi" type="button"><i>${ICONS.wifi}</i><div><small>Wi-Fi · ${esc(R.wifi.ssid)}</small><strong>${esc(R.wifi.password)}</strong></div><em>${esc(t.copy)}</em></button>`);
+    if (R.zalo) cards.push(`<a class="card" href="https://zalo.me/${esc(R.zalo)}" target="_blank" rel="noopener"><i style="background:#0068ff"><b style="color:#fff;font-size:11px">Zalo</b></i><div><small>Zalo</small><strong>${esc(R.zalo.replace(/(\d{4})(\d{3})(\d{3})/, "$1 $2 $3"))}</strong></div></a>`);
+    for (const p of R.phones || []) cards.push(`<a class="card" href="tel:${esc(p.replace(/\s/g, ""))}"><i>${ICONS.call}</i><div><small>${esc(t.call)}</small><strong>${esc(p)}</strong></div></a>`);
+    const href = R.mapUrl || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Ăn Vội " + R.address);
+    cards.push(`<a class="card" target="_blank" rel="noopener" href="${esc(href)}"><i>${ICONS.map}</i><div><small>${esc(t.map)}</small><strong>${esc(R.address)}</strong></div></a>`);
+    $("cards").innerHTML = cards.join("");
+    $("wifi")?.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(R.wifi.password); toast(UI[lang].copied); }
+      catch { toast(R.wifi.password); }
+    });
+  }
+
+  // ── 장바구니 · Zalo 주문 ──
+  const OUI = {
+    vi: { items: "món", view: "Xem đơn", title: "Đơn của bạn", sub: "Tạm tính", modes: ["Giao hàng", "Mang về", "Ăn tại quán"], name: "Tên của bạn", phone: "Số điện thoại", addr: "Địa chỉ giao hàng", note: "Ghi chú (vị gà, ít cay, phô mai…)", min: "Giao hàng cho đơn từ 50.000đ", ship: "Phí ship từ 5.000đ, quán sẽ báo khi xác nhận đơn.", dine: "Ăn tại quán: đưa màn hình này cho nhân viên là được.", send: "Sao chép đơn & mở Zalo", copied: "Đã sao chép đơn — dán vào Zalo để gửi", copyFail: "Không sao chép được — hãy chép nội dung đơn bên dưới", call: "Gọi điện đặt món", clear: "Xóa đơn", preview: "Xem nội dung đơn" },
+    ko: { items: "개", view: "주문서 보기", title: "주문서", sub: "합계", modes: ["배달", "포장", "매장 식사"], name: "이름", phone: "전화번호", addr: "배달 주소", note: "요청사항 (치킨 맛, 덜 맵게, 치즈 등)", min: "배달은 50,000đ 이상부터 가능해요", ship: "배달비 5,000đ부터, 가게에서 주문 확인 때 알려드려요.", dine: "매장 식사: 이 화면을 직원에게 보여주세요.", send: "주문서 복사하고 Zalo 열기", copied: "주문서를 복사했어요 — Zalo에 붙여넣어 보내세요", copyFail: "복사가 안 됐어요 — 아래 주문 내용을 직접 복사해 주세요", call: "전화로 주문", clear: "주문서 비우기", preview: "주문서 내용 보기 (베트남어)" },
+    en: { items: "items", view: "View order", title: "Your order", sub: "Subtotal", modes: ["Delivery", "Takeaway", "Dine-in"], name: "Your name", phone: "Phone number", addr: "Delivery address", note: "Notes (chicken flavor, less spicy, cheese…)", min: "Delivery for orders from 50,000đ", ship: "Delivery fee from 5,000đ, confirmed by the shop.", dine: "Dine-in: just show this screen to the staff.", send: "Copy order & open Zalo", copied: "Order copied — paste it in Zalo to send", copyFail: "Couldn't copy — please copy the order text below", call: "Order by phone", clear: "Clear order", preview: "Show order text (Vietnamese)" },
+    zh: { items: "份", view: "查看订单", title: "我的订单", sub: "小计", modes: ["外送", "外带", "堂食"], name: "姓名", phone: "电话", addr: "送餐地址", note: "备注（鸡肉口味、少辣、芝士等）", min: "满50,000đ可外送", ship: "运费5,000đ起，店家确认订单时告知。", dine: "堂食：把此画面给服务员看即可。", send: "复制订单并打开Zalo", copied: "订单已复制 — 粘贴到Zalo发送", copyFail: "复制失败 — 请手动复制下方订单内容", call: "电话点餐", clear: "清空订单", preview: "查看订单内容（越南语）" },
+    ja: { items: "点", view: "注文を見る", title: "ご注文", sub: "小計", modes: ["配達", "持ち帰り", "店内"], name: "お名前", phone: "電話番号", addr: "配達先住所", note: "ご要望（チキンの味、辛さ控えめ、チーズなど）", min: "配達は50,000đ以上から", ship: "配達料は5,000đ〜、注文確認時にお知らせします。", dine: "店内：この画面をスタッフに見せてください。", send: "注文をコピーしてZaloを開く", copied: "注文をコピーしました — Zaloに貼り付けて送信", copyFail: "コピーできませんでした — 下の注文内容をコピーしてください", call: "電話で注文", clear: "注文を空にする", preview: "注文内容を見る（ベトナム語）" },
+  };
+  const MODE_VI = ["Giao hàng", "Mang về", "Ăn tại quán"];
+  const LANG_NAME = { vi: "Tiếng Việt", ko: "Tiếng Hàn", en: "Tiếng Anh", zh: "Tiếng Trung", ja: "Tiếng Nhật" };
+
+  // 장바구니 키 "카테고리-메뉴-가격칸" → 메뉴 정보
+  function lookup(k) {
+    const [ci, ii, vi] = k.split("-").map(Number);
+    const cat = MENU[ci], it = cat && cat.items[ii];
+    if (!it) return null;
+    const price = it.prices ? it.prices[vi] : it.price;
+    const cols = it.cols || cat.cols;
+    return { it, price, variant: it.prices ? cols[vi] : "" };
+  }
+  const cart = new Map(storage((s) => JSON.parse(s.getItem("anvoi-cart-v2") || "[]")) || []);
+  for (const k of [...cart.keys()]) if (!lookup(k)) cart.delete(k);
+  let mode = 0;
+
+  function saveCart() { storage((s) => s.setItem("anvoi-cart-v2", JSON.stringify([...cart]))); }
+  const total = () => [...cart].reduce((n, [k, q]) => n + lookup(k).price * q, 0);
+  const countAll = () => [...cart.values()].reduce((a, b) => a + b, 0);
+
+  function orderText() {
+    const R = window.RESTAURANT, L = [];
+    L.push(`🍜 ĐƠN HÀNG – ${R.brand}`);
+    for (const [k, q] of cart) {
+      const { it, price, variant } = lookup(k);
+      L.push(`• ${q} x ${it.name.vi}${variant ? ` (${variant})` : ""} – ${fmt(price * q)}đ`);
+    }
+    L.push(`Tạm tính: ${fmt(total())}đ`);
+    L.push(`Hình thức: ${MODE_VI[mode]}`);
+    const v = (id) => $(id).value.trim();
+    if (v("fName")) L.push(`Tên: ${v("fName")}`);
+    if (v("fPhone")) L.push(`SĐT: ${v("fPhone")}`);
+    if (mode === 0 && v("fAddr")) L.push(`Địa chỉ: ${v("fAddr")}`);
+    if (v("fNote")) L.push(`Ghi chú: ${v("fNote")}`);
+    if (lang !== "vi") L.push(`(Khách dùng ${LANG_NAME[lang]})`);
+    return L.join("\n");
+  }
+
+  function updateCart() {
+    const o = OUI[lang], n = countAll();
+    document.querySelectorAll("[data-k]").forEach((b) => {
+      const q = cart.get(b.dataset.k) || 0;
+      b.dataset.n = q ? q : "+";
+      b.classList.toggle("in", q > 0);
+    });
+    $("cartbar").hidden = n === 0;
+    document.body.classList.toggle("has-cart", n > 0);
+    $("cartCount").textContent = n;
+    $("cartTotal").textContent = fmt(total()) + "đ";
+    $("cartCta").textContent = o.view + " ›";
+    if (!$("sheet").hidden) renderSheet();
+    saveCart();
+  }
+
+  function renderSheet() {
+    const o = OUI[lang];
+    if (!cart.size) { closeSheet(); return; }
+    $("sTitle").textContent = o.title;
+    $("lines").innerHTML = [...cart].map(([k, q]) => {
+      const { it, price, variant } = lookup(k);
+      const sub = [variant, lang !== "vi" ? it.name.vi : ""].filter(Boolean).join(" · ");
+      return `<li><div class="ln">${esc(it.name[lang])}${sub ? `<small>${esc(sub)}</small>` : ""}</div>
+        <div class="qty"><button type="button" data-dec="${k}">−</button><span>${q}</span><button type="button" data-inc="${k}">+</button></div>
+        <div class="lp">${fmt(price * q)}</div></li>`;
+    }).join("");
+    $("sSubLabel").textContent = o.sub;
+    $("sTotal").textContent = fmt(total()) + "đ";
+    $("modes").innerHTML = o.modes.map((m, i) => `<button type="button" data-mode="${i}" aria-pressed="${i === mode}">${esc(m)}</button>`).join("");
+    $("fName").placeholder = o.name;
+    $("fPhone").placeholder = o.phone;
+    $("fAddr").placeholder = o.addr;
+    $("fAddr").hidden = mode !== 0;
+    $("fNote").placeholder = o.note;
+    const short = mode === 0 && total() < 50000;
+    $("hint").className = "hint" + (short ? " warn" : "");
+    $("hint").textContent = mode === 0 ? (short ? o.min : o.ship) : mode === 2 ? o.dine : "";
+    $("sendLabel").textContent = o.send;
+    const R = window.RESTAURANT;
+    $("callBtn").textContent = o.call;
+    $("callBtn").href = "tel:" + (R.phones[0] || "").replace(/\s/g, "");
+    $("clearCart").textContent = o.clear;
+    $("previewLabel").textContent = o.preview;
+    $("preview").textContent = orderText();
+  }
+
+  function openSheet() { $("sheet").hidden = false; document.body.style.overflow = "hidden"; renderSheet(); }
+  function closeSheet() { $("sheet").hidden = true; document.body.style.overflow = ""; }
+
+  $("menu").addEventListener("click", (e) => {
+    const th = e.target.closest(".thumb");
+    if (th) { $("zoomImg").src = th.src; $("zoomCap").textContent = th.alt; $("zoom").hidden = false; return; }
+    const b = e.target.closest("[data-k]");
+    if (!b) return;
+    cart.set(b.dataset.k, (cart.get(b.dataset.k) || 0) + 1);
+    updateCart();
+  });
+  $("openCart").addEventListener("click", openSheet);
+  $("zoom").addEventListener("click", () => { $("zoom").hidden = true; });
+  $("sheet").addEventListener("click", (e) => {
+    const t = e.target;
+    if (t.closest("[data-close]")) return closeSheet();
+    const inc = t.closest("[data-inc]")?.dataset.inc, dec = t.closest("[data-dec]")?.dataset.dec;
+    if (inc) { cart.set(inc, cart.get(inc) + 1); updateCart(); }
+    if (dec) { const q = cart.get(dec) - 1; q > 0 ? cart.set(dec, q) : cart.delete(dec); updateCart(); }
+    const m = t.closest("[data-mode]")?.dataset.mode;
+    if (m !== undefined) { mode = Number(m); renderSheet(); }
+  });
+  $("sheet").addEventListener("input", () => { $("preview").textContent = orderText(); });
+  $("clearCart").addEventListener("click", () => { cart.clear(); updateCart(); });
+  $("sendZalo").addEventListener("click", async () => {
+    const text = orderText(), R = window.RESTAURANT;
+    try {
+      await navigator.clipboard.writeText(text);
+      toast(OUI[lang].copied);
+      setTimeout(() => { location.href = "https://zalo.me/" + R.zalo; }, 700);
+    } catch {
+      $("previewBox").open = true;
+      toast(OUI[lang].copyFail);
+    }
+  });
+
+  let lang = detectLang();
+  render(lang);
+  window.__cartReady = true;
+  updateCart();
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+</body>
+</html>
