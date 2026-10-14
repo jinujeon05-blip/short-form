@@ -248,11 +248,11 @@
 <script>
   const LANGS = [["vi", "Tiếng Việt"], ["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"]];
   const UI = {
-    vi: { title: "Thực đơn", copy: "Sao chép", copied: "Đã sao chép mật khẩu", call: "Gọi điện · Đặt món", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND (đ)", tags: ["Sốt nhà làm", "Ship từ 50k", "Tặng nước ngọt"] },
-    ko: { title: "메뉴", copy: "복사", copied: "비밀번호를 복사했어요", call: "전화 · 주문", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(đ)", tags: ["직접 만든 소스", "50k 이상 배달", "음료 무료"] },
-    en: { title: "Menu", copy: "Copy", copied: "Password copied", call: "Call · Order", map: "Address · Map", vnd: "Prices in Vietnamese đồng (đ)", tags: ["Homemade sauce", "Delivery from 50k", "Free drink"] },
-    zh: { title: "菜单", copy: "复制", copied: "密码已复制", call: "电话 · 点餐", map: "地址 · 地图", vnd: "价格单位：越南盾（đ）", tags: ["自家特制酱", "满50k外送", "赠送汽水"] },
-    ja: { title: "メニュー", copy: "コピー", copied: "パスワードをコピーしました", call: "電話・ご注文", map: "住所・地図", vnd: "価格はベトナムドン（đ）です", tags: ["自家製ソース", "50kから配達", "ドリンク無料"] },
+    vi: { title: "Thực đơn", copy: "Sao chép", copied: "Đã sao chép mật khẩu", call: "Gọi điện · Đặt món", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND (đ)", tags: ["Sốt nhà làm"] },
+    ko: { title: "메뉴", copy: "복사", copied: "비밀번호를 복사했어요", call: "전화 · 주문", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(đ)", tags: ["직접 만든 소스"] },
+    en: { title: "Menu", copy: "Copy", copied: "Password copied", call: "Call · Order", map: "Address · Map", vnd: "Prices in Vietnamese đồng (đ)", tags: ["Homemade sauce"] },
+    zh: { title: "菜单", copy: "复制", copied: "密码已复制", call: "电话 · 点餐", map: "地址 · 地图", vnd: "价格单位：越南盾（đ）", tags: ["自家特制酱"] },
+    ja: { title: "メニュー", copy: "コピー", copied: "パスワードをコピーしました", call: "電話・ご注文", map: "住所・地図", vnd: "価格はベトナムドン（đ）です", tags: ["自家製ソース"] },
   };
 
   let observer;
@@ -366,11 +366,11 @@
     const cols = it.cols || cat.cols;
     return { it, price, variant: it.prices ? cols[vi] : "" };
   }
-  const cart = new Map(storage((s) => JSON.parse(s.getItem("anvoi-cart") || "[]")) || []);
+  const cart = new Map(storage((s) => JSON.parse(s.getItem("anvoi-cart-v2") || "[]")) || []);
   for (const k of [...cart.keys()]) if (!lookup(k)) cart.delete(k);
   let mode = 0;
 
-  function saveCart() { storage((s) => s.setItem("anvoi-cart", JSON.stringify([...cart]))); }
+  function saveCart() { storage((s) => s.setItem("anvoi-cart-v2", JSON.stringify([...cart]))); }
   const total = () => [...cart].reduce((n, [k, q]) => n + lookup(k).price * q, 0);
   const countAll = () => [...cart.values()].reduce((a, b) => a + b, 0);
 

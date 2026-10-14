@@ -71,23 +71,6 @@ window.MENU = [
     ],
   },
   {
-    id: "chicken",
-    photo: "img/banner-ga.jpg",
-    name: { ko: "치킨볼", en: "Chicken Bites", zh: "鸡肉丸", ja: "チキンボール", vi: "Gà viên" },
-    notes: [
-      { ko: "아침에는 판매하지 않아요", en: "Not available in the morning", zh: "早上不售", ja: "朝は販売していません", vi: "Không bán buổi sáng" },
-      { ko: "모든 치킨은 주문 즉시 튀겨 따뜻하고 바삭해요", en: "Every portion is freshly fried to order", zh: "每份鸡肉现点现炸，热乎香脆", ja: "注文ごとに揚げたてでお出しします", vi: "Mỗi phần gà đều được chiên mới để giữ độ nóng và thơm ngon" },
-    ],
-    items: [
-      { price: 80000, hot: true, photo: "img/ga-mix-3-vi.jpg", name: { ko: "3가지 맛 믹스 치킨볼 + 밥", en: "3-Flavor Mix Chicken + Hot Rice", zh: "三味混合鸡肉丸配热米饭", ja: "3種ミックスチキン＋ご飯", vi: "Gà Mix 3 Vị kèm Cơm Nóng" } },
-      { price: 35000, photo: "img/ga-chua-cay.jpg", name: { ko: "새콤매콤 소스 치킨볼", en: "Tangy Spicy Sauce", zh: "酸辣酱鸡肉丸", ja: "甘酸っぱ辛ソース", vi: "Sốt Chua Cay" } },
-      { price: 35000, photo: "img/ga-phomai-cay.jpg", name: { ko: "매콤 치즈 소스 치킨볼", en: "Spicy Cheese Sauce", zh: "香辣芝士酱鸡肉丸", ja: "辛口チーズソース", vi: "Sốt Phomai Cay" } },
-      { price: 35000, name: { ko: "치즈 시즈닝 치킨볼", en: "Cheese Shake", zh: "芝士摇摇粉鸡肉丸", ja: "チーズシェイク", vi: "Phomai Lắc" } },
-      { price: 15000, photo: "img/khoai-tay.jpg", name: { ko: "감자튀김", en: "French Fries", zh: "炸薯条", ja: "フライドポテト", vi: "Khoai Tây Chiên" } },
-      { price: 5000, name: { ko: "공기밥", en: "Hot Rice", zh: "热米饭", ja: "ご飯", vi: "Cơm Nóng" } },
-    ],
-  },
-  {
     id: "topping",
     name: { ko: "토핑 추가", en: "Extra Toppings", zh: "加料", ja: "トッピング追加", vi: "Topping" },
     items: [
@@ -112,7 +95,6 @@ window.MENU = [
     id: "drinks",
     name: { ko: "음료", en: "Drinks", zh: "饮料", ja: "ドリンク", vi: "Đồ uống" },
     items: [
-      { price: 15000, hot: true, name: { ko: "금귤 매실차", en: "Kumquat Tea with Salted Plum", zh: "金桔话梅茶", ja: "金柑と話梅のお茶", vi: "Trà Tắc Xí Muội" } },
       { priceText: "7.000 – 12.000", name: { ko: "태국 탄산음료", en: "Thai Soft Drinks", zh: "泰国汽水", ja: "タイのソフトドリンク", vi: "Nước Ngọt Thái" } },
       { prices: [5000, 10000], cols: ["500ml", "700ml"], name: { ko: "음료 사이즈 업", en: "Drink Upsize", zh: "饮料加大", ja: "ドリンクサイズアップ", vi: "Upsize Nước" } },
     ],
@@ -124,4 +106,5 @@ window.EXTRA = {
   delivery: { ko: "50,000đ 이상 배달 가능 (배달비 5,000đ부터)", en: "Delivery for orders from 50,000đ (fee from 5,000đ)", zh: "满50,000đ可外送（运费5,000đ起）", ja: "50,000đ以上で配達可（配達料5,000đ〜）", vi: "Nhận ship đơn từ 50.000đ (phí ship từ 5.000đ)" },
   takeaway: { ko: "포장 시 음료 + 물티슈 세트", en: "Takeaway comes with a drink + wet wipes", zh: "外带附饮料和湿巾", ja: "持ち帰りはドリンク＋おしぼり付き", vi: "Combo nước + khăn ướt mang đi" },
   homemade: { ko: "직접 만든 특제 소스", en: "Signature homemade sauce", zh: "自家特制酱料", ja: "自家製の特製ソース", vi: "Sốt đặc trưng nhà làm" },
+  school: { ko: "학교·인근 단체 주문 – 배달비 무료", en: "Group orders for schools & nearby – free delivery", zh: "学校及附近团购 – 免运费", ja: "学校・近隣のまとめ注文 – 配達無料", vi: "Gom đơn trường học và lân cận - miễn phí ship" },
 };
