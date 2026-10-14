@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>숯꾸이 테이블 QR 카드</title>
+<style>
+  @font-face { font-family: "Jalnan"; src: url("../../../public/fonts/Jalnan2.ttf"); }
+  @font-face { font-family: "Gmarket"; src: url("../../../public/fonts/GmarketSansTTFBold.ttf"); }
+  @page { size: 105mm 148mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --red: #d6312b; --ink: #1b1817; --paper: #fbf8f4; --muted: #6f6762; }
+  html, body { background: #fff; }
+  body { font-family: "Inter", "Gmarket", "IPAGothic", "WenQuanYi Zen Hei", sans-serif; color: var(--ink); }
+
+  .card {
+    position: relative; width: 105mm; height: 148mm; overflow: hidden;
+    background: var(--paper);
+    display: flex; flex-direction: column; align-items: center;
+  }
+  /* 은은한 물결 문양 (메뉴판 배경 모티프) */
+  .card::before {
+    content: ""; position: absolute; inset: 0; opacity: .5;
+    background:
+      radial-gradient(circle at 50% 100%, transparent 5.2mm, #ece5dd 5.2mm, #ece5dd 5.5mm, transparent 5.5mm) 0 0 / 12mm 6mm,
+      radial-gradient(circle at 50% 100%, transparent 2.6mm, #ece5dd 2.6mm, #ece5dd 2.9mm, transparent 2.9mm) 0 0 / 12mm 6mm;
+    -webkit-mask: linear-gradient(#000 0 30mm, transparent 46mm);
+            mask: linear-gradient(#000 0 30mm, transparent 46mm);
+  }
+
+  header { position: relative; margin-top: 9mm; display: flex; align-items: center; gap: 3mm; }
+  .stamp {
+    display: flex; flex-direction: column; align-items: center; gap: .4mm;
+    font-family: "WenQuanYi Zen Hei", sans-serif; font-size: 4.4mm; line-height: 1;
+    color: #fff; background: var(--red); padding: 1.8mm 1.3mm; border-radius: .8mm;
+  }
+  .brand { font-family: "Jalnan", sans-serif; font-size: 17mm; line-height: 1; letter-spacing: .5mm; }
+  .brand b { color: var(--red); font-weight: inherit; }
+  .sub {
+    position: relative; margin-top: 2.6mm;
+    font-family: "Inter"; font-weight: 800; font-size: 3.1mm; letter-spacing: .9mm; color: var(--ink);
+  }
+  .sub span { color: var(--red); }
+
+  .qr-wrap { position: relative; margin-top: 5mm; padding: 0; background: #fff; border-radius: 3mm;
+             box-shadow: 0 0 0 .35mm #e3dbd2; }
+  .qr-wrap img { display: block; width: 56mm; height: 56mm; }
+  .qr-wrap i { position: absolute; width: 7mm; height: 7mm; border: 1.1mm solid var(--red); }
+  .qr-wrap i:nth-of-type(1) { top: -1.6mm; left: -1.6mm; border-right: 0; border-bottom: 0; border-top-left-radius: 3.4mm; }
+  .qr-wrap i:nth-of-type(2) { top: -1.6mm; right: -1.6mm; border-left: 0; border-bottom: 0; border-top-right-radius: 3.4mm; }
+  .qr-wrap i:nth-of-type(3) { bottom: -1.6mm; left: -1.6mm; border-right: 0; border-top: 0; border-bottom-left-radius: 3.4mm; }
+  .qr-wrap i:nth-of-type(4) { bottom: -1.6mm; right: -1.6mm; border-left: 0; border-top: 0; border-bottom-right-radius: 3.4mm; }
+
+  .cta { position: relative; margin-top: 5mm; text-align: center; }
+  .cta .menu {
+    display: inline-block; font-family: "Inter Display", "Inter"; font-weight: 900; font-size: 6.4mm; letter-spacing: 1.6mm;
+    color: #fff; background: var(--red); padding: .6mm 3mm .6mm 4.6mm;
+    clip-path: polygon(0 10%, 100% 0, 97% 100%, 2% 90%);
+  }
+  .cta ul { list-style: none; margin-top: 2.6mm; display: grid; grid-template-columns: auto auto; gap: .9mm 3.2mm; justify-content: center; text-align: left; }
+  .cta li { font-size: 2.85mm; line-height: 1.25; white-space: nowrap; }
+  .cta li em { font-style: normal; display: inline-block; width: 5mm; font-family: "Inter"; font-weight: 700; font-size: 2.1mm; color: var(--red); }
+  .ko { font-family: "Gmarket", sans-serif; }
+  .zh { font-family: "WenQuanYi Zen Hei", sans-serif; }
+  .ja { font-family: "IPAGothic", sans-serif; }
+  .lat { font-family: "Inter"; font-weight: 600; }
+
+  footer {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 21mm;
+    background: var(--ink); color: #f4efe9;
+    display: grid; grid-template-columns: 1fr 1fr; align-content: center; gap: 1.6mm 3mm; padding: 0 6mm;
+  }
+  footer div { display: flex; align-items: center; gap: 1.8mm; min-width: 0; }
+  footer svg { flex: none; width: 3.6mm; height: 3.6mm; color: var(--red); }
+  footer small { display: block; font-family: "Inter"; font-size: 1.8mm; letter-spacing: .3mm; color: #a39b94; text-transform: uppercase; }
+  footer span { display: block; font-family: "Inter"; font-weight: 700; font-size: 2.6mm; white-space: nowrap; }
+  footer .addr { grid-column: 1 / -1; justify-content: center; }
+  footer .addr span { font-weight: 600; font-size: 2.4mm; color: #d9d2cb; }
+</style>
+</head>
+<body>
+<div class="card">
+  <header>
+    <div class="stamp"><span>烤</span><span>肉</span></div>
+    <h1 class="brand">숯<b>꾸</b>이</h1>
+  </header>
+  <p class="sub">NHÀ HÀNG <span>THỊT NƯỚNG</span></p>
+
+  <div class="qr-wrap">
+    <img src="qr.svg" alt="QR: https://sutkkui-menu.vercel.app">
+    <i></i><i></i><i></i><i></i>
+  </div>
+
+  <div class="cta">
+    <div class="menu">MENU</div>
+    <ul>
+      <li><em>KO</em><span class="ko">QR 찍고 메뉴 보기</span></li>
+      <li><em>EN</em><span class="lat">Scan for menu</span></li>
+      <li><em>VI</em><span class="lat">Quét mã xem thực đơn</span></li>
+      <li><em>ZH</em><span class="zh">扫码查看菜单</span></li>
+      <li><em>JA</em><span class="ja">スキャンしてメニューへ</span></li>
+      <li><em>✦</em><span class="lat" style="color:var(--muted)">Auto language</span></li>
+    </ul>
+  </div>
+
+  <footer>
+    <div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg>
+      <p><small>Wi-Fi · Password</small><span>992992992</span></p>
+    </div>
+    <div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>
+      <p><small>Hotline</small><span>0866 740 772</span></p>
+    </div>
+    <div class="addr"><span>190 Nguyễn Cao · TP. Bắc Ninh</span></div>
+  </footer>
+</div>
+</body>
+</html>
