@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#18211b">
+<title>백천화덕아나고 메뉴</title>
+<meta name="description" content="백천화덕아나고 · 화덕 초벌구이 아나고·곰장어·직화 쌀국수 — 경북 경산시 백천길 7">
+<style>
+  :root {
+    --board: #18211b;
+    --board-2: #223026;
+    --card: #233127;
+    --line: #34463a;
+    --cream: #f5ecdc;
+    --muted: #a9b3a6;
+    --fire: #ff7a2f;
+    --fire-2: #ffb03b;
+    --red: #e5322b;
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; color: var(--cream); background: var(--noise), var(--board);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.35;
+  }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── 상단: 가게 사진 + 로고 ── */
+  header { position: relative; overflow: hidden; padding: 12px 0 26px; text-align: center; }
+  header::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(16,22,18,.7) 0%, rgba(16,22,18,.84) 50%, var(--board) 100%), url("img/store.jpg") center 30% / cover;
+    filter: saturate(.9);
+  }
+  header::after { /* 아래쪽 불빛 */
+    content: ""; position: absolute; left: 50%; bottom: -60px; width: 420px; height: 160px; transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgba(255,122,47,.45), transparent); pointer-events: none;
+  }
+  header .wrap { position: relative; z-index: 1; }
+  .langs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button {
+    font: inherit; font-size: 13px; font-weight: 600; color: var(--cream);
+    background: rgba(0,0,0,.35); border: 1px solid rgba(245,236,220,.35); border-radius: 999px; padding: 5px 11px; cursor: pointer;
+  }
+  .langs button[aria-pressed="true"] { color: #fff; background: var(--red); border-color: var(--red); }
+  .logo { display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; }
+  .logo svg { width: 54px; height: 54px; flex: none; filter: drop-shadow(0 0 12px rgba(255,122,47,.6)); }
+  .logo .name { display: flex; align-items: center; gap: 8px; font-size: 40px; font-weight: 900; letter-spacing: -1px; line-height: 1; text-shadow: 0 2px 10px rgba(0,0,0,.6); }
+  .logo .box { display: inline-grid; place-items: center; font-size: 14px; line-height: 1.05; font-weight: 800; border: 2px solid var(--cream); border-radius: 4px; padding: 3px 4px; letter-spacing: 0; }
+  .logo .red { color: #ff3b30; }
+  .tagline { margin: 12px 0 0; font-size: 16px; font-weight: 700; color: var(--fire-2); letter-spacing: .3px; }
+  .chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .chips span { font-size: 12.5px; font-weight: 700; color: var(--cream); background: rgba(255,122,47,.16); border: 1px solid rgba(255,122,47,.55); border-radius: 999px; padding: 4px 11px; }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; background: rgba(20,28,22,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-top: 8px; padding-bottom: 8px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 700; padding: 8px 13px; border-radius: 999px; white-space: nowrap; }
+  nav a.active { color: #fff; background: linear-gradient(135deg, var(--red), var(--fire)); }
+
+  /* ── 메뉴 ── */
+  section { padding: 28px 0 4px; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-bottom: 2px solid var(--fire); padding-bottom: 8px; }
+  h2 { margin: 0; font-size: 24px; font-weight: 900; letter-spacing: -.3px; }
+  h2::before { content: "🔥"; font-size: 18px; margin-right: 6px; vertical-align: 2px; }
+  .head .unit { font-size: 13px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .notice { margin: 10px 0 0; font-size: 13.5px; font-weight: 600; color: var(--fire-2); background: rgba(255,176,59,.08); border: 1px dashed rgba(255,176,59,.5); border-radius: 10px; padding: 8px 12px; }
+
+  ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  li { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  .thumb { flex: none; width: 92px; height: 69px; border-radius: 12px; overflow: hidden; padding: 0; border: 0; cursor: zoom-in; background: var(--card); box-shadow: 0 6px 14px rgba(0,0,0,.35); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .info { flex: 1; min-width: 0; }
+  .row { display: flex; align-items: baseline; gap: 8px; }
+  .row b { font-size: 17px; font-weight: 800; color: #fff; }
+  .row .leader { flex: 1; min-width: 12px; border-bottom: 2px dotted #4b5d50; transform: translateY(-4px); }
+  .row .price { font-size: 17px; font-weight: 900; color: var(--fire-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .row .price small { font-size: 12px; font-weight: 700; margin-left: 1px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+  .tags span { font-size: 11.5px; font-weight: 800; border-radius: 5px; padding: 1px 6px; }
+  .tags .hot { color: #fff; background: var(--red); }
+  .tags .g { color: var(--muted); border: 1px solid var(--line); }
+  .sub { margin-top: 3px; font-size: 13.5px; color: var(--muted); }
+  .desc { margin-top: 3px; font-size: 13.5px; color: #d6cdbd; }
+
+  /* ── 원산지 · 이벤트 · 정보 ── */
+  .boxes { display: grid; gap: 12px; margin-top: 34px; }
+  .box { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+  .box h3 { margin: 0 0 10px; font-size: 16px; font-weight: 900; }
+  .origin { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 14px; }
+  .origin span:nth-child(even) { color: var(--fire-2); font-weight: 700; text-align: right; }
+  .event { background: linear-gradient(135deg, rgba(229,50,43,.22), rgba(255,122,47,.12)); border-color: rgba(255,122,47,.55); }
+  .event p { margin: 0; font-size: 14px; }
+  .event b { color: var(--fire-2); }
+  .pills { display: grid; gap: 10px; margin-top: 12px; }
+  .pill { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; text-align: left; color: var(--cream); text-decoration: none; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px 14px 10px 10px; cursor: pointer; }
+  .pill i { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, var(--red), var(--fire)); }
+  .pill i svg { width: 20px; height: 20px; color: #fff; }
+  .pill div { flex: 1; min-width: 0; }
+  .pill small { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .pill strong { display: block; font-size: 16px; font-weight: 800; word-break: break-word; }
+  .pill em { flex: none; font-style: normal; font-size: 12px; font-weight: 700; color: var(--fire-2); }
+  footer { padding: 18px 0 calc(28px + env(safe-area-inset-bottom)); text-align: center; font-size: 12px; color: var(--muted); }
+
+  /* 사진 크게 보기 */
+  .zoom { position: fixed; inset: 0; z-index: 30; display: none; place-items: center; padding: 16px; background: rgba(0,0,0,.86); cursor: zoom-out; }
+  .zoom.show { display: grid; }
+  .zoom figure { margin: 0; max-width: 560px; width: 100%; }
+  .zoom img { width: 100%; border-radius: 16px; display: block; }
+  .zoom figcaption { margin-top: 10px; text-align: center; font-size: 16px; font-weight: 800; }
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 40; background: var(--red); color: #fff; font-size: 14px; font-weight: 700; padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="langs" id="langs"></div>
+    <div class="logo" aria-label="백천화덕아나고">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M8 58V36a24 24 0 0 1 48 0v22" fill="none" stroke="#f5ecdc" stroke-width="5"/>
+        <path d="M8 46h48" stroke="#f5ecdc" stroke-width="3" stroke-dasharray="5 4"/>
+        <path d="M32 6c3 8 12 12 12 22a12 12 0 0 1-24 0c0-5 3-8 5-11 1 4 3 6 5 6-2-6 0-12 2-17z" fill="#ff5a2b"/>
+        <path d="M32 22c2 4 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3-1-3 0-5 1-8z" fill="#ffb03b"/>
+        <rect x="22" y="48" width="20" height="10" rx="2" fill="#ff5a2b"/>
+      </svg>
+      <div class="name">백천<span class="box">화<br>덕</span><span class="red">아나고</span></div>
+    </div>
+    <p class="tagline" id="tagline"></p>
+    <div class="chips" id="chips"></div>
+  </div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap">
+  <div id="menu"></div>
+  <div class="boxes">
+    <div class="box event"><h3 id="eventTitle"></h3><p id="eventText"></p></div>
+    <div class="box"><h3 id="originTitle"></h3><div class="origin" id="origin"></div></div>
+  </div>
+  <div class="pills">
+    <button class="pill" id="wifi" type="button" hidden>
+      <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg></i>
+      <div><small id="wifiLabel"></small><strong id="wifiText"></strong></div>
+      <em id="wifiCopy"></em>
+    </button>
+    <a class="pill" id="call">
+      <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></i>
+      <div><small id="callLabel"></small><strong id="callText"></strong></div>
+    </a>
+    <a class="pill" id="map" target="_blank" rel="noopener">
+      <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></i>
+      <div><small id="mapLabel"></small><strong id="mapText"></strong></div>
+    </a>
+  </div>
+</main>
+<footer id="foot"></footer>
+
+<div class="zoom" id="zoom"><figure><img id="zoomImg" alt=""><figcaption id="zoomCap"></figcaption></figure></div>
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<script>
+  const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
+  const UI = {
+    ko: { title: "메뉴", tagline: "화덕 장인이 굽는 초벌구이 · 직화 불맛 쌀국수", chips: ["모든 메뉴 화덕 초벌구이", "점심 특선 쌀국수", "단체 · 예약 가능"],
+      serving: (u) => `1인분 ${u}`, oven: "모든 메뉴는 화덕에서 초벌구이해서 조리 시간이 조금 걸려요.", lunch: "백천동 인생 점심! 화덕 장인이 만든 직화 불맛 쌀국수",
+      spicy: "매콤", eventTitle: "리뷰 이벤트", eventText: "네이버 영수증 리뷰 또는 당근마켓 단골 리뷰를 남기시면 <b>음료 1캔 또는 숯불구이 100g</b>을 드려요!",
+      originTitle: "원산지", from: { kr: "국내산", us: "미국산", ie: "아일랜드산" },
+      copy: "복사", copied: "비밀번호를 복사했어요", call: "전화 · 예약", map: "주소 · 지도 (네이버)", won: "원", foot: "가격 단위: 원" },
+    en: { title: "Menu", tagline: "Wood-fired grill & smoky rice noodles", chips: ["Everything pre-grilled in a wood-fired oven", "Lunch pho specials", "Groups · Reservations"],
+      serving: (u) => `${u} per serving`, oven: "Every dish is pre-grilled in our wood-fired oven, so it takes a little time.", lunch: "Fire-grilled pho made by our oven master",
+      spicy: "Spicy", eventTitle: "Review event", eventText: "Leave a Naver receipt review or a Daangn review and get <b>a free canned drink or 100 g of charcoal-grilled meat</b>!",
+      originTitle: "Country of origin", from: { kr: "Korea", us: "USA", ie: "Ireland" },
+      copy: "Copy", copied: "Password copied", call: "Call · Reservations", map: "Address · Map (Naver)", won: "₩", foot: "Prices in Korean won (KRW)" },
+    zh: { title: "菜单", tagline: "炉火烧烤 · 炭火香米粉", chips: ["全部菜品炉火预烤", "午餐米粉特选", "可团体 · 可预订"],
+      serving: (u) => `每份 ${u}`, oven: "所有菜品都先在炉中预烤，需要稍等片刻。", lunch: "炉火师傅亲手做的炭火香米粉",
+      spicy: "辣", eventTitle: "评价活动", eventText: "在 Naver 留下收据评价或在胡萝卜市场（Daangn）留下评价，即送 <b>饮料一罐或炭烤肉 100g</b>！",
+      originTitle: "原产地", from: { kr: "韩国产", us: "美国产", ie: "爱尔兰产" },
+      copy: "复制", copied: "密码已复制", call: "电话 · 预订", map: "地址 · 地图（Naver）", won: "₩", foot: "价格单位：韩元（KRW）" },
+    ja: { title: "メニュー", tagline: "窯で焼き上げる香ばしいグリル・炭火フォー", chips: ["全メニュー窯で下焼き", "ランチのフォー", "団体・予約OK"],
+      serving: (u) => `1人前 ${u}`, oven: "全メニューを窯で下焼きするため、少しお時間をいただきます。", lunch: "窯の職人が作る炭火香るフォー",
+      spicy: "辛口", eventTitle: "レビューイベント", eventText: "NAVERのレシートレビュー、またはタングンマーケットのレビューで <b>缶ドリンク1本か炭火焼き100g</b> をプレゼント！",
+      originTitle: "原産地", from: { kr: "韓国産", us: "アメリカ産", ie: "アイルランド産" },
+      copy: "コピー", copied: "パスワードをコピーしました", call: "電話・ご予約", map: "住所・地図（NAVER）", won: "₩", foot: "価格は韓国ウォン（KRW）です" },
+    vi: { title: "Thực đơn", tagline: "Đồ nướng lò củi · Phở & bún nướng than", chips: ["Mọi món đều nướng sơ bằng lò củi", "Phở đặc biệt buổi trưa", "Nhận khách đoàn · Đặt bàn"],
+      serving: (u) => `${u} / phần`, oven: "Mọi món đều được nướng sơ trong lò củi nên cần chờ một chút.", lunch: "Phở nướng than do đầu bếp lò củi nấu",
+      spicy: "Cay", eventTitle: "Sự kiện đánh giá", eventText: "Viết đánh giá hóa đơn trên Naver hoặc đánh giá trên Daangn để nhận <b>1 lon nước ngọt hoặc 100 g thịt nướng than</b>!",
+      originTitle: "Xuất xứ", from: { kr: "Hàn Quốc", us: "Mỹ", ie: "Ireland" },
+      copy: "Sao chép", copied: "Đã sao chép mật khẩu", call: "Gọi điện · Đặt bàn", map: "Địa chỉ · Bản đồ (Naver)", won: "₩", foot: "Giá tính bằng won Hàn Quốc (KRW)" },
+  };
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const storage = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  let observer;
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  const fmt = (n) => n.toLocaleString("en-US");
+
+  function render(lang) {
+    const t = UI[lang], R = window.RESTAURANT;
+    // 아랫줄: 외국어 화면에선 한국어 이름(직원에게 보여주기), 한국어 화면에선 영어 이름
+    const second = lang === "ko" ? "en" : "ko";
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand} · ${t.title}`;
+
+    $("langs").innerHTML = LANGS.map(([c, label]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+    $("tagline").textContent = t.tagline;
+    $("chips").innerHTML = t.chips.map((c) => `<span>${esc(c)}</span>`).join("");
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}">
+        <div class="head"><h2>${esc(cat.name[lang])}</h2>${cat.unit ? `<span class="unit">${esc(t.serving(cat.unit))}</span>` : ""}</div>
+        ${cat.notice ? `<p class="notice">${esc(t[cat.notice])}</p>` : ""}
+        <ul>${cat.items.map((it) => `
+          <li>
+            ${it.photo ? `<button class="thumb" type="button" data-photo="${it.photo}" data-cap="${esc(it.name[lang])}"><img src="${it.photo}" alt="${esc(it.name[lang])}" loading="lazy"></button>` : ""}
+            <div class="info">
+              <div class="row"><b>${esc(it.name[lang])}</b><span class="leader"></span><span class="price">${fmt(it.price)}<small>${esc(t.won)}</small></span></div>
+              ${it.spicy || it.unit ? `<div class="tags">${it.spicy ? `<span class="hot">🌶 ${esc(t.spicy)}</span>` : ""}${it.unit ? `<span class="g">${esc(it.unit)}</span>` : ""}</div>` : ""}
+              ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
+              <div class="sub">${esc(it.name[second])}</div>
+            </div>
+          </li>`).join("")}
+        </ul>
+      </section>`).join("");
+
+    $("eventTitle").textContent = "🎁 " + t.eventTitle;
+    $("eventText").innerHTML = t.eventText;
+    $("originTitle").textContent = t.originTitle;
+    $("origin").innerHTML = ORIGIN.map((o) => `<span>${esc(o[lang])}</span><span>${esc(t.from[o.from])}</span>`).join("");
+
+    if (R.wifi) {
+      $("wifi").hidden = false;
+      $("wifiLabel").textContent = `Wi-Fi · ${R.wifi.ssid}`;
+      $("wifiText").textContent = R.wifi.password;
+      $("wifiCopy").textContent = t.copy;
+    }
+    $("callLabel").textContent = t.call;
+    $("callText").textContent = R.phone;
+    $("call").href = "tel:" + R.phone.replace(/[^\d+]/g, "");
+    $("mapLabel").textContent = t.map;
+    $("mapText").textContent = R.address;
+    $("map").href = R.mapUrl;
+    $("foot").textContent = t.foot;
+    observeSections();
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  $("menu").addEventListener("click", (e) => {
+    const b = e.target.closest(".thumb");
+    if (!b) return;
+    $("zoomImg").src = b.dataset.photo;
+    $("zoomCap").textContent = b.dataset.cap;
+    $("zoom").classList.add("show");
+  });
+  $("zoom").addEventListener("click", () => $("zoom").classList.remove("show"));
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+  $("wifi").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(RESTAURANT.wifi.password); toast(UI[lang].copied); }
+    catch { toast(RESTAURANT.wifi.password); }
+  });
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+</body>
+</html>
