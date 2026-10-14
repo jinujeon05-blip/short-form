@@ -6,6 +6,7 @@ window.RESTAURANT = {
   brand: "Ăn Vội",
   tagline: "Mì Trộn Siu Dính",
   phones: ["0969 092 694", "0944 837 894"],
+  zalo: "0969092694",   // Zalo 주문 받을 번호 (컵·간판에 적힌 번호)
   address: "157/45 Hùng Vương, Quảng Ngãi",
   mapUrl: null,     // 구글 지도 링크가 있으면 넣기 (없으면 주소로 검색)
   wifi: null,       // 예: { ssid: "An Voi", password: "12345678" } (null이면 숨김)

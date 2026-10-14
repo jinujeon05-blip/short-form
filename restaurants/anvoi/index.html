@@ -103,6 +103,67 @@
   .prices small, .price small { font-size: 11px; font-weight: 700; color: var(--muted); }
   .pricecol { display: block; font-family: system-ui, sans-serif; font-size: 10px; font-weight: 800; color: var(--muted); }
 
+  /* 담기 버튼 */
+  .prices button.add {
+    position: relative; width: 78px; font: inherit; font-family: var(--round); font-weight: 800; font-size: 16.5px; color: var(--wine);
+    background: var(--blush-2); border: 1.5px solid var(--line); border-radius: 12px; padding: 5px 0 3px; cursor: pointer;
+  }
+  .prices button.add::after, .plus::after {
+    content: attr(data-n); position: absolute; display: grid; place-items: center; border-radius: 50%;
+    background: var(--wine); color: #fff; font-family: system-ui, sans-serif; font-weight: 800;
+  }
+  .prices button.add::after { top: -8px; right: -6px; width: 20px; height: 20px; font-size: 12px; }
+  .prices button.add.in { background: #fff3e8; border-color: var(--orange); }
+  .prices button.add.in::after, .plus.in::after { background: var(--orange); }
+  .price-wrap { flex: none; display: flex; align-items: center; gap: 8px; }
+  .plus { position: relative; flex: none; width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; cursor: pointer; padding: 0; }
+  .plus::after { inset: 0; font-size: 16px; }
+
+  /* 장바구니 바 + 주문서 */
+  body.has-cart { padding-bottom: 84px; }
+  .cartbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, rgba(253,246,243,.95) 30%); }
+  .cartbar button {
+    display: flex; align-items: center; gap: 10px; width: 100%; max-width: 528px; margin: 0 auto; font: inherit; cursor: pointer;
+    color: #fff; background: var(--wine); border: 0; border-radius: 18px; padding: 12px 16px; box-shadow: 0 10px 24px rgba(124,42,42,.35);
+  }
+  .cartbar .count { background: #fff; color: var(--wine); font-weight: 800; border-radius: 999px; min-width: 28px; padding: 2px 8px; }
+  .cartbar .total { flex: 1; text-align: left; font-family: var(--round); font-weight: 800; font-size: 18px; }
+  .cartbar b { font-size: 15px; }
+  .sheet { position: fixed; inset: 0; z-index: 40; display: flex; align-items: flex-end; justify-content: center; }
+  .sheet[hidden] { display: none; }
+  .sheet-bg { position: absolute; inset: 0; background: rgba(60, 20, 20, .45); }
+  .sheet-panel {
+    position: relative; width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; background: var(--cream);
+    border-radius: 22px 22px 0 0; padding: 16px 16px calc(20px + env(safe-area-inset-bottom));
+  }
+  .sheet-head { display: flex; justify-content: space-between; align-items: center; }
+  .sheet-head h3 { margin: 0; font-family: var(--round); font-size: 24px; color: var(--wine); }
+  .sheet-head button { font-size: 26px; line-height: 1; border: 0; background: none; color: var(--rose); cursor: pointer; }
+  .lines { list-style: none; margin: 10px 0 0; padding: 0; }
+  .lines li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1.5px dotted var(--line); }
+  .lines .ln { flex: 1; min-width: 0; font-weight: 700; }
+  .lines .ln small { display: block; font-weight: 600; color: var(--muted); font-size: 12px; }
+  .lines .qty { display: flex; align-items: center; gap: 8px; }
+  .lines .qty button { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--rose); background: #fff; color: var(--wine); font-weight: 800; cursor: pointer; }
+  .lines .lp { width: 76px; text-align: right; font-family: var(--round); font-weight: 800; color: var(--wine); }
+  .sum { display: flex; justify-content: space-between; align-items: baseline; margin: 12px 0 0; font-weight: 700; }
+  .sum b { font-family: var(--round); font-size: 24px; color: var(--wine); }
+  .modes { display: flex; gap: 6px; margin: 14px 0 0; }
+  .modes button { flex: 1; font: inherit; font-weight: 800; font-size: 13.5px; color: var(--rose); background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 9px 4px; cursor: pointer; }
+  .modes button[aria-pressed="true"] { color: #fff; background: var(--rose); border-color: var(--rose); }
+  .fields { display: grid; gap: 8px; margin: 12px 0 0; }
+  .fields input, .fields textarea { font: inherit; font-size: 15px; width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; color: var(--text); }
+  .fields textarea { min-height: 64px; resize: vertical; }
+  .hint { margin: 10px 0 0; font-size: 13px; font-weight: 600; color: var(--rose); }
+  .hint.warn { color: #c0392b; }
+  .actions { display: grid; gap: 8px; margin: 14px 0 0; }
+  .actions .zalo { display: flex; align-items: center; justify-content: center; gap: 8px; font: inherit; font-weight: 800; font-size: 16px; color: #fff; background: #0068ff; border: 0; border-radius: 14px; padding: 14px; cursor: pointer; }
+  .actions .zalo i { font-style: normal; background: #fff; color: #0068ff; border-radius: 6px; padding: 0 5px; font-size: 13px; }
+  .actions .ghost { text-align: center; font-weight: 800; color: var(--wine); text-decoration: none; border: 1.5px solid var(--rose); border-radius: 14px; padding: 12px; background: #fff; cursor: pointer; font: inherit; }
+  .preview { margin: 14px 0 0; }
+  .preview summary { cursor: pointer; font-weight: 700; color: var(--rose); font-size: 13.5px; }
+  .preview pre { white-space: pre-wrap; font: inherit; font-size: 14px; background: #fff; border: 1.5px dashed var(--line); border-radius: 12px; padding: 12px; margin: 8px 0 0; }
+
   /* 콤보 카드 */
   #combo ul.items > li { align-items: flex-start; background: var(--blush-2); border: 0; border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
   #combo .price { font-size: 22px; }
@@ -151,6 +212,31 @@
   <div class="cards" id="cards"></div>
   <p class="vnd" id="foot"></p>
 </footer>
+<div class="cartbar" id="cartbar" hidden>
+  <button type="button" id="openCart"><span class="count" id="cartCount"></span><span class="total" id="cartTotal"></span><b id="cartCta"></b></button>
+</div>
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-bg" data-close></div>
+  <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sTitle">
+    <div class="sheet-head"><h3 id="sTitle"></h3><button type="button" data-close aria-label="close">×</button></div>
+    <ul class="lines" id="lines"></ul>
+    <div class="sum"><span id="sSubLabel"></span><b id="sTotal"></b></div>
+    <div class="modes" id="modes"></div>
+    <div class="fields">
+      <input id="fName" autocomplete="name">
+      <input id="fPhone" type="tel" autocomplete="tel">
+      <input id="fAddr" autocomplete="street-address">
+      <textarea id="fNote"></textarea>
+    </div>
+    <p class="hint" id="hint"></p>
+    <div class="actions">
+      <button type="button" class="zalo" id="sendZalo"><i>Zalo</i><span id="sendLabel"></span></button>
+      <a class="ghost" id="callBtn"></a>
+      <button type="button" class="ghost" id="clearCart"></button>
+    </div>
+    <details class="preview" id="previewBox"><summary id="previewLabel"></summary><pre id="preview"></pre></details>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script src="menu.js"></script>
@@ -185,15 +271,16 @@
 
   const fmt = (n) => n.toLocaleString("vi-VN");
 
-  function priceHTML(it, cat) {
+  // 가격을 누르면 장바구니에 담김. 가격이 범위(priceText)인 메뉴는 주문서 메모로 요청
+  function priceHTML(it, cat, ci, ii) {
     if (it.prices) {
       const cols = it.cols || cat.cols;
       const showLabels = !cat.cols || it.cols; // 섹션 위에 열 제목이 없을 때만 칸마다 라벨
       return `<div class="prices">${it.prices.map((p, i) =>
-        `<span>${showLabels ? `<small class="pricecol">${esc(cols[i])}</small>` : ""}${fmt(p)}</span>`).join("")}</div>`;
+        `<button type="button" class="add" data-k="${ci}-${ii}-${i}" data-n="+">${showLabels ? `<small class="pricecol">${esc(cols[i])}</small>` : ""}${fmt(p)}</button>`).join("")}</div>`;
     }
     if (it.priceText) return `<div class="price">${esc(it.priceText)}<small>đ</small></div>`;
-    return `<div class="price">${fmt(it.price)}<small>đ</small></div>`;
+    return `<div class="price-wrap"><div class="price">${fmt(it.price)}<small>đ</small></div><button type="button" class="plus" data-k="${ci}-${ii}-0" data-n="+" aria-label="+"></button></div>`;
   }
 
   function render(lang) {
@@ -207,13 +294,13 @@
     $("tags").innerHTML = t.tags.map((s) => `<span>${esc(s)}</span>`).join("");
     $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
 
-    $("menu").innerHTML = MENU.map((cat) => `
+    $("menu").innerHTML = MENU.map((cat, ci) => `
       <section id="${cat.id}">
         ${cat.photo ? `<div class="banner"><img src="${cat.photo}" alt="" loading="lazy"></div>` : ""}
         <h2>${esc(cat.name[lang])}${lang !== "vi" ? `<small>${esc(cat.name.vi)}</small>` : ""}</h2>
         ${cat.notes ? `<ul class="notes">${cat.notes.map((n) => `<li>${esc(n[lang])}</li>`).join("")}</ul>` : ""}
         ${cat.cols ? `<div class="colhead">${cat.cols.map((c) => `<span>${esc(c)}</span>`).join("")}</div>` : ""}
-        <ul class="items">${cat.items.map((it) => `
+        <ul class="items">${cat.items.map((it, ii) => `
           <li>
             ${it.photo ? `<img class="thumb" src="${it.photo}" alt="" loading="lazy">` : ""}
             <div class="info">
@@ -222,7 +309,7 @@
               ${it.desc ? `<span class="desc">${esc(it.desc[lang])}</span>` : ""}
               ${it.list ? `<ol>${it.list.map((l) => `<li>${esc(l[lang])}</li>`).join("")}</ol>` : ""}
             </div>
-            ${priceHTML(it, cat)}
+            ${priceHTML(it, cat, ci, ii)}
           </li>`).join("")}
         </ul>
       </section>`).join("");
@@ -231,6 +318,7 @@
     renderCards(t, R);
     $("foot").textContent = t.vnd;
     observeSections();
+    if (typeof updateCart === "function" && window.__cartReady) updateCart();
   }
 
   const ICONS = {
@@ -242,6 +330,7 @@
   function renderCards(t, R) {
     const cards = [];
     if (R.wifi) cards.push(`<button class="card" id="wifi" type="button"><i>${ICONS.wifi}</i><div><small>Wi-Fi · ${esc(R.wifi.ssid)}</small><strong>${esc(R.wifi.password)}</strong></div><em>${esc(t.copy)}</em></button>`);
+    if (R.zalo) cards.push(`<a class="card" href="https://zalo.me/${esc(R.zalo)}" target="_blank" rel="noopener"><i style="background:#0068ff"><b style="color:#fff;font-size:11px">Zalo</b></i><div><small>Zalo</small><strong>${esc(R.zalo.replace(/(\d{4})(\d{3})(\d{3})/, "$1 $2 $3"))}</strong></div></a>`);
     for (const p of R.phones || []) cards.push(`<a class="card" href="tel:${esc(p.replace(/\s/g, ""))}"><i>${ICONS.call}</i><div><small>${esc(t.call)}</small><strong>${esc(p)}</strong></div></a>`);
     const href = R.mapUrl || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("Ăn Vội " + R.address);
     cards.push(`<a class="card" target="_blank" rel="noopener" href="${esc(href)}"><i>${ICONS.map}</i><div><small>${esc(t.map)}</small><strong>${esc(R.address)}</strong></div></a>`);
@@ -252,8 +341,136 @@
     });
   }
 
+  // ── 장바구니 · Zalo 주문 ──
+  const OUI = {
+    vi: { items: "món", view: "Xem đơn", title: "Đơn của bạn", sub: "Tạm tính", modes: ["Giao hàng", "Mang về", "Ăn tại quán"], name: "Tên của bạn", phone: "Số điện thoại", addr: "Địa chỉ giao hàng", note: "Ghi chú (vị gà, ít cay, phô mai…)", min: "Giao hàng cho đơn từ 50.000đ", ship: "Phí ship từ 5.000đ, quán sẽ báo khi xác nhận đơn.", dine: "Ăn tại quán: đưa màn hình này cho nhân viên là được.", send: "Sao chép đơn & mở Zalo", copied: "Đã sao chép đơn — dán vào Zalo để gửi", copyFail: "Không sao chép được — hãy chép nội dung đơn bên dưới", call: "Gọi điện đặt món", clear: "Xóa đơn", preview: "Xem nội dung đơn" },
+    ko: { items: "개", view: "주문서 보기", title: "주문서", sub: "합계", modes: ["배달", "포장", "매장 식사"], name: "이름", phone: "전화번호", addr: "배달 주소", note: "요청사항 (치킨 맛, 덜 맵게, 치즈 등)", min: "배달은 50,000đ 이상부터 가능해요", ship: "배달비 5,000đ부터, 가게에서 주문 확인 때 알려드려요.", dine: "매장 식사: 이 화면을 직원에게 보여주세요.", send: "주문서 복사하고 Zalo 열기", copied: "주문서를 복사했어요 — Zalo에 붙여넣어 보내세요", copyFail: "복사가 안 됐어요 — 아래 주문 내용을 직접 복사해 주세요", call: "전화로 주문", clear: "주문서 비우기", preview: "주문서 내용 보기 (베트남어)" },
+    en: { items: "items", view: "View order", title: "Your order", sub: "Subtotal", modes: ["Delivery", "Takeaway", "Dine-in"], name: "Your name", phone: "Phone number", addr: "Delivery address", note: "Notes (chicken flavor, less spicy, cheese…)", min: "Delivery for orders from 50,000đ", ship: "Delivery fee from 5,000đ, confirmed by the shop.", dine: "Dine-in: just show this screen to the staff.", send: "Copy order & open Zalo", copied: "Order copied — paste it in Zalo to send", copyFail: "Couldn't copy — please copy the order text below", call: "Order by phone", clear: "Clear order", preview: "Show order text (Vietnamese)" },
+    zh: { items: "份", view: "查看订单", title: "我的订单", sub: "小计", modes: ["外送", "外带", "堂食"], name: "姓名", phone: "电话", addr: "送餐地址", note: "备注（鸡肉口味、少辣、芝士等）", min: "满50,000đ可外送", ship: "运费5,000đ起，店家确认订单时告知。", dine: "堂食：把此画面给服务员看即可。", send: "复制订单并打开Zalo", copied: "订单已复制 — 粘贴到Zalo发送", copyFail: "复制失败 — 请手动复制下方订单内容", call: "电话点餐", clear: "清空订单", preview: "查看订单内容（越南语）" },
+    ja: { items: "点", view: "注文を見る", title: "ご注文", sub: "小計", modes: ["配達", "持ち帰り", "店内"], name: "お名前", phone: "電話番号", addr: "配達先住所", note: "ご要望（チキンの味、辛さ控えめ、チーズなど）", min: "配達は50,000đ以上から", ship: "配達料は5,000đ〜、注文確認時にお知らせします。", dine: "店内：この画面をスタッフに見せてください。", send: "注文をコピーしてZaloを開く", copied: "注文をコピーしました — Zaloに貼り付けて送信", copyFail: "コピーできませんでした — 下の注文内容をコピーしてください", call: "電話で注文", clear: "注文を空にする", preview: "注文内容を見る（ベトナム語）" },
+  };
+  const MODE_VI = ["Giao hàng", "Mang về", "Ăn tại quán"];
+  const LANG_NAME = { vi: "Tiếng Việt", ko: "Tiếng Hàn", en: "Tiếng Anh", zh: "Tiếng Trung", ja: "Tiếng Nhật" };
+
+  // 장바구니 키 "카테고리-메뉴-가격칸" → 메뉴 정보
+  function lookup(k) {
+    const [ci, ii, vi] = k.split("-").map(Number);
+    const cat = MENU[ci], it = cat && cat.items[ii];
+    if (!it) return null;
+    const price = it.prices ? it.prices[vi] : it.price;
+    const cols = it.cols || cat.cols;
+    return { it, price, variant: it.prices ? cols[vi] : "" };
+  }
+  const cart = new Map(storage((s) => JSON.parse(s.getItem("anvoi-cart") || "[]")) || []);
+  for (const k of [...cart.keys()]) if (!lookup(k)) cart.delete(k);
+  let mode = 0;
+
+  function saveCart() { storage((s) => s.setItem("anvoi-cart", JSON.stringify([...cart]))); }
+  const total = () => [...cart].reduce((n, [k, q]) => n + lookup(k).price * q, 0);
+  const countAll = () => [...cart.values()].reduce((a, b) => a + b, 0);
+
+  function orderText() {
+    const R = window.RESTAURANT, L = [];
+    L.push(`🍜 ĐƠN HÀNG – ${R.brand}`);
+    for (const [k, q] of cart) {
+      const { it, price, variant } = lookup(k);
+      L.push(`• ${q} x ${it.name.vi}${variant ? ` (${variant})` : ""} – ${fmt(price * q)}đ`);
+    }
+    L.push(`Tạm tính: ${fmt(total())}đ`);
+    L.push(`Hình thức: ${MODE_VI[mode]}`);
+    const v = (id) => $(id).value.trim();
+    if (v("fName")) L.push(`Tên: ${v("fName")}`);
+    if (v("fPhone")) L.push(`SĐT: ${v("fPhone")}`);
+    if (mode === 0 && v("fAddr")) L.push(`Địa chỉ: ${v("fAddr")}`);
+    if (v("fNote")) L.push(`Ghi chú: ${v("fNote")}`);
+    if (lang !== "vi") L.push(`(Khách dùng ${LANG_NAME[lang]})`);
+    return L.join("\n");
+  }
+
+  function updateCart() {
+    const o = OUI[lang], n = countAll();
+    document.querySelectorAll("[data-k]").forEach((b) => {
+      const q = cart.get(b.dataset.k) || 0;
+      b.dataset.n = q ? q : "+";
+      b.classList.toggle("in", q > 0);
+    });
+    $("cartbar").hidden = n === 0;
+    document.body.classList.toggle("has-cart", n > 0);
+    $("cartCount").textContent = n;
+    $("cartTotal").textContent = fmt(total()) + "đ";
+    $("cartCta").textContent = o.view + " ›";
+    if (!$("sheet").hidden) renderSheet();
+    saveCart();
+  }
+
+  function renderSheet() {
+    const o = OUI[lang];
+    if (!cart.size) { closeSheet(); return; }
+    $("sTitle").textContent = o.title;
+    $("lines").innerHTML = [...cart].map(([k, q]) => {
+      const { it, price, variant } = lookup(k);
+      const sub = [variant, lang !== "vi" ? it.name.vi : ""].filter(Boolean).join(" · ");
+      return `<li><div class="ln">${esc(it.name[lang])}${sub ? `<small>${esc(sub)}</small>` : ""}</div>
+        <div class="qty"><button type="button" data-dec="${k}">−</button><span>${q}</span><button type="button" data-inc="${k}">+</button></div>
+        <div class="lp">${fmt(price * q)}</div></li>`;
+    }).join("");
+    $("sSubLabel").textContent = o.sub;
+    $("sTotal").textContent = fmt(total()) + "đ";
+    $("modes").innerHTML = o.modes.map((m, i) => `<button type="button" data-mode="${i}" aria-pressed="${i === mode}">${esc(m)}</button>`).join("");
+    $("fName").placeholder = o.name;
+    $("fPhone").placeholder = o.phone;
+    $("fAddr").placeholder = o.addr;
+    $("fAddr").hidden = mode !== 0;
+    $("fNote").placeholder = o.note;
+    const short = mode === 0 && total() < 50000;
+    $("hint").className = "hint" + (short ? " warn" : "");
+    $("hint").textContent = mode === 0 ? (short ? o.min : o.ship) : mode === 2 ? o.dine : "";
+    $("sendLabel").textContent = o.send;
+    const R = window.RESTAURANT;
+    $("callBtn").textContent = o.call;
+    $("callBtn").href = "tel:" + (R.phones[0] || "").replace(/\s/g, "");
+    $("clearCart").textContent = o.clear;
+    $("previewLabel").textContent = o.preview;
+    $("preview").textContent = orderText();
+  }
+
+  function openSheet() { $("sheet").hidden = false; document.body.style.overflow = "hidden"; renderSheet(); }
+  function closeSheet() { $("sheet").hidden = true; document.body.style.overflow = ""; }
+
+  $("menu").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-k]");
+    if (!b) return;
+    cart.set(b.dataset.k, (cart.get(b.dataset.k) || 0) + 1);
+    updateCart();
+  });
+  $("openCart").addEventListener("click", openSheet);
+  $("sheet").addEventListener("click", (e) => {
+    const t = e.target;
+    if (t.closest("[data-close]")) return closeSheet();
+    const inc = t.closest("[data-inc]")?.dataset.inc, dec = t.closest("[data-dec]")?.dataset.dec;
+    if (inc) { cart.set(inc, cart.get(inc) + 1); updateCart(); }
+    if (dec) { const q = cart.get(dec) - 1; q > 0 ? cart.set(dec, q) : cart.delete(dec); updateCart(); }
+    const m = t.closest("[data-mode]")?.dataset.mode;
+    if (m !== undefined) { mode = Number(m); renderSheet(); }
+  });
+  $("sheet").addEventListener("input", () => { $("preview").textContent = orderText(); });
+  $("clearCart").addEventListener("click", () => { cart.clear(); updateCart(); });
+  $("sendZalo").addEventListener("click", async () => {
+    const text = orderText(), R = window.RESTAURANT;
+    try {
+      await navigator.clipboard.writeText(text);
+      toast(OUI[lang].copied);
+      setTimeout(() => { location.href = "https://zalo.me/" + R.zalo; }, 700);
+    } catch {
+      $("previewBox").open = true;
+      toast(OUI[lang].copyFail);
+    }
+  });
+
   let lang = detectLang();
   render(lang);
+  window.__cartReady = true;
+  updateCart();
 
   $("langs").addEventListener("click", (e) => {
     const c = e.target.closest("button")?.dataset.lang;
