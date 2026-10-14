@@ -3,137 +3,181 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#161414">
+<meta name="theme-color" content="#e7e8e3">
 <title>숯꾸이 메뉴</title>
-<meta name="description" content="숯꾸이 · Nhà Hàng Thịt Nướng — 190 Nguyễn Cao, Bắc Ninh">
+<meta name="description" content="숯꾸이 烤肉 · Nhà Hàng Thịt Nướng — 190 Nguyễn Cao, Bắc Ninh">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #161414;
-    --surface: #211e1d;
-    --line: #3a3533;
-    --text: #f4efe9;
-    --muted: #a39b94;
-    --red: #d6312b;
-    --red-soft: #e85a4f;
+    --board: #1e1d1c;
+    --board-2: #2a2826;
+    --paper: #e7e8e3;
+    --wave: #d6d7d0;
+    --ink: #1b1817;
+    --chalk: #f3efe8;
+    --muted: #a9a29a;
+    --dots: #6a645e;
+    --red: #c8211b;
+    --red-hi: #e2463b;
+    --brush: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 80' preserveAspectRatio='none'%3E%3Cg fill='%23c8211b'%3E%3Cpath d='M14 27c30-9 88-13 150-12 70-2 150-6 206 1l16 3-9 5 21 4-14 4 12 6-18 3c-48 9-130 14-214 14-60 1-112-1-148-6l-17-3 10-4-20-3 15-4-11-5z'/%3E%3Cpath d='M40 18c60-6 150-8 250-6l-4 3c-90-1-170 1-240 6z' opacity='.75'/%3E%3Cpath d='M30 63c70 4 170 4 280-2l-6 4c-100 6-190 6-268 1z' opacity='.7'/%3E%3Cpath d='M330 13l50 3-3 2-46-2zM2 40l12-1-1 2-10 1zM386 46l12 1-2 2-10-1z' opacity='.6'/%3E%3C/g%3E%3C/svg%3E");
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --waves:
+      radial-gradient(circle at 50% 100%, transparent 7.4px, var(--wave) 7.4px 8.6px, transparent 8.6px 13.4px, var(--wave) 13.4px 14.6px, transparent 14.6px) 0 0 / 32px 16px,
+      radial-gradient(circle at 50% 100%, transparent 7.4px, var(--wave) 7.4px 8.6px, transparent 8.6px 13.4px, var(--wave) 13.4px 14.6px, transparent 14.6px) 16px 8px / 32px 16px;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+  html { scroll-behavior: smooth; scroll-padding-top: 58px; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
+    margin: 0; color: var(--chalk);
+    background: var(--noise), radial-gradient(120% 60% at 50% 0%, var(--board-2), var(--board) 70%) fixed, var(--board);
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    line-height: 1.4;
+    -webkit-font-smoothing: antialiased; line-height: 1.35;
   }
-  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+  .display { font-family: "Black Han Sans", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-weight: 400; }
+  /* Black Han Sans는 한글·기본 라틴만 지원 → 베트남어/중국어/일본어 제목은 기본 굵은 글꼴 */
+  :lang(vi) .display, :lang(zh-Hans) .display, :lang(ja) .display, .viet { font-family: inherit; font-weight: 800; }
 
-  /* Header */
-  header { padding: 28px 0 18px; text-align: center; }
-  .langs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 26px; }
+  /* ── 종이 패널 (메뉴판 왼쪽 면) ── */
+  .paper { background: var(--paper); color: var(--ink); position: relative; }
+  .paper::before {              /* 물결무늬는 메뉴판처럼 위/아래 띠에만 */
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 64px; pointer-events: none;
+    background: var(--waves);
+    -webkit-mask: linear-gradient(#000 35%, transparent); mask: linear-gradient(#000 35%, transparent);
+  }
+  .paper > .wrap { position: relative; }
+  footer.paper::before { top: auto; bottom: 0; transform: scaleY(-1); }
+  .paper::after {               /* 칠판으로 넘어가는 찢어진 가장자리 */
+    content: ""; position: absolute; left: 0; right: 0; bottom: -9px; height: 10px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='10'%3E%3Cpath d='M0 0h18L13 7 9 4 4 10z' fill='%23e7e8e3'/%3E%3C/svg%3E") 0 0 / 18px 10px repeat-x;
+  }
+  header.paper { padding: 14px 0 22px; text-align: center; }
+  .langs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
   .langs button {
-    font: inherit; font-size: 13px; color: var(--muted);
-    background: transparent; border: 1px solid var(--line); border-radius: 999px;
-    padding: 6px 12px; cursor: pointer;
+    font: inherit; font-size: 13px; font-weight: 600; color: var(--ink);
+    background: rgba(255,255,255,.55); border: 1.5px solid var(--ink); border-radius: 999px;
+    padding: 5px 11px; cursor: pointer;
   }
   .langs button[aria-pressed="true"] { color: #fff; background: var(--red); border-color: var(--red); }
-  .brand {
-    font-family: "Black Han Sans", sans-serif;
-    font-size: 64px; line-height: 1; margin: 0; letter-spacing: 2px;
-    color: var(--text);
-  }
-  .brand span { color: var(--red); }
-  .sub { margin: 10px 0 0; color: var(--muted); font-size: 14px; letter-spacing: 1px; }
+  .hero { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; }
+  .logo { display: block; width: 138px; height: auto; mix-blend-mode: multiply; }
+  .hero-text { text-align: left; }
+  .menu-word { margin: 0; font-size: 54px; line-height: .95; color: var(--red); letter-spacing: 2px; transform: rotate(-3deg); transform-origin: left; }
+  .brand-sub { margin: 10px 0 0; font-size: 21px; letter-spacing: .5px; line-height: 1.1; }
+  .brand-sub span { color: var(--red); }
+  .deco { color: var(--ink); letter-spacing: 4px; font-size: 10px; margin-top: 8px; }
 
-  /* Category nav */
+  /* ── 카테고리 탭 ── */
   nav {
     position: sticky; top: 0; z-index: 10;
-    background: rgba(22, 20, 20, .94); backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--line);
+    background: rgba(24, 23, 22, .95); backdrop-filter: blur(8px);
+    border-bottom: 1px solid #3a3633; margin-top: 9px;
   }
-  nav .wrap { position: relative; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-top: 10px; padding-bottom: 10px; }
+  nav .wrap { position: relative; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-top: 8px; padding-bottom: 8px; }
   nav .wrap::-webkit-scrollbar { display: none; }
   nav a {
-    flex: none; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600;
-    padding: 7px 12px; border-radius: 8px; white-space: nowrap;
+    flex: none; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 700;
+    padding: 8px 12px; white-space: nowrap; border-radius: 4px;
   }
-  nav a.active { color: #fff; background: var(--surface); }
+  nav a.active { color: #fff; background: var(--brush) center / 100% 100% no-repeat; }
 
-  /* Sections */
-  section { padding: 28px 0 4px; }
+  /* ── 메뉴 섹션 (칠판) ── */
+  section { padding: 30px 0 6px; }
+  .photo {
+    margin: 0 0 4px; border-radius: 14px; overflow: hidden; border: 2px solid rgba(255,255,255,.85);
+    aspect-ratio: 2 / 1; box-shadow: 0 10px 24px rgba(0,0,0,.45);
+  }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .head { text-align: center; margin-top: -24px; position: relative; }
   h2 {
-    display: inline-block; margin: 0 0 6px; padding: 4px 18px 4px 12px;
-    font-size: 20px; color: #fff;
-    background: var(--red);
-    clip-path: polygon(0 8%, 100% 0, 96% 100%, 2% 92%);
+    display: inline-block; margin: 0; padding: 12px 34px 14px; min-width: 200px;
+    font-size: 27px; color: #fff; letter-spacing: 1px; line-height: 1;
+    background: var(--brush) center / 100% 100% no-repeat;
+    text-shadow: 0 1px 0 rgba(0,0,0,.25);
   }
-  .notice { margin: 6px 0 4px; color: var(--red-soft); font-size: 13px; }
-  ul { list-style: none; margin: 8px 0 0; padding: 0; }
-  li { display: flex; align-items: baseline; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-  li:last-child { border-bottom: 0; }
-  .name { flex: 1; min-width: 0; }
-  .name b { font-size: 17px; font-weight: 600; }
-  .name .unit { color: var(--muted); font-size: 13px; margin-left: 6px; font-weight: 400; }
-  .name small { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; }
-  .name .tag { display: inline-block; margin-top: 5px; font-size: 12px; color: var(--red-soft); border: 1px solid currentColor; border-radius: 4px; padding: 1px 6px; }
-  .price { flex: none; font-weight: 700; font-size: 17px; font-variant-numeric: tabular-nums; }
-  .price i { font-style: normal; font-size: 12px; color: var(--muted); margin-left: 2px; font-weight: 400; }
+  section:not(:has(.photo)) .head { margin-top: 0; }
+  .sub { margin: 4px 0 0; font-size: 15px; color: var(--chalk); }
+  .sub .note { display: inline-block; margin-top: 4px; color: #fff; font-size: 13px; font-weight: 700; border: 1px solid var(--red-hi); border-radius: 4px; padding: 2px 8px; background: rgba(200,33,27,.25); }
 
-  /* Info */
-  .info { margin: 36px 0 24px; display: grid; gap: 10px; }
-  .card {
-    display: flex; align-items: center; gap: 14px;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
-    padding: 14px 16px; color: var(--text); text-decoration: none; font: inherit; text-align: left; width: 100%;
+  ul { list-style: none; margin: 14px 0 0; padding: 0; }
+  li { padding: 10px 0 11px; }
+  .row { display: flex; align-items: baseline; gap: 6px; }
+  .row b { font-size: 18px; font-weight: 700; color: #fff; }
+  .row .unit { font-size: 13px; color: var(--muted); font-weight: 600; margin-left: 2px; white-space: nowrap; }
+  .row .leader { flex: 1; min-width: 18px; border-bottom: 2px dotted var(--dots); transform: translateY(-4px); }
+  .row .price { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .row .price small { font-size: 11px; color: var(--muted); margin-left: 1px; font-weight: 600; }
+  .row2 { display: flex; justify-content: space-between; gap: 12px; margin-top: 3px; font-size: 14px; color: #cfc8c0; }
+  .row2 em { font-style: normal; }
+  .row2 em.it { font-family: Georgia, "Times New Roman", serif; font-style: italic; }
+  .row2 span { text-align: right; }
+
+  /* ── 가게 정보 (종이 패널) ── */
+  footer.paper { margin-top: 40px; padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); }
+  footer.paper::after { top: -9px; bottom: auto; transform: scaleY(-1); }
+  .pills { display: grid; gap: 10px; }
+  .pill {
+    display: flex; align-items: center; gap: 12px; width: 100%;
+    font: inherit; text-align: left; color: var(--ink); text-decoration: none;
+    background: rgba(255,255,255,.6); border: 2px solid var(--red); border-radius: 999px; padding: 6px 16px 6px 6px; cursor: pointer;
   }
-  button.card { cursor: pointer; }
-  .card svg { flex: none; width: 22px; height: 22px; color: var(--red); }
-  .card div { flex: 1; min-width: 0; }
-  .card small { display: block; color: var(--muted); font-size: 12px; }
-  .card span { font-weight: 600; word-break: break-word; }
-  .card em { flex: none; font-style: normal; font-size: 12px; color: var(--muted); }
-  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 0 0 40px; }
+  .pill i { flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--red); display: grid; place-items: center; }
+  .pill i svg { width: 20px; height: 20px; color: #fff; }
+  .pill div { flex: 1; min-width: 0; }
+  .pill small { display: block; font-size: 11px; color: #6f6862; font-weight: 600; letter-spacing: .5px; }
+  .pill strong { display: block; font-size: 16px; color: var(--red); word-break: break-word; }
+  .pill em { flex: none; font-style: normal; font-size: 12px; font-weight: 700; color: var(--ink); }
+  .vnd { text-align: center; margin: 18px 0 0; font-size: 12px; color: #6f6862; }
 
   .toast {
-    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px);
-    background: #fff; color: #111; font-size: 14px; font-weight: 600;
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 20;
+    background: var(--red); color: #fff; font-size: 14px; font-weight: 700;
     padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none;
   }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
 </style>
 </head>
 <body>
-<header class="wrap">
-  <div class="langs" id="langs"></div>
-  <h1 class="brand">숯<span>꾸</span>이</h1>
-  <p class="sub" id="sub"></p>
+<header class="paper">
+  <div class="wrap">
+    <div class="langs" id="langs"></div>
+    <div class="hero">
+      <img class="logo" src="img/logo.jpg" alt="烤肉 숯꾸이" width="395" height="520">
+      <div class="hero-text">
+        <h1 class="menu-word display">MENU</h1>
+        <p class="brand-sub viet">NHÀ HÀNG<br><span>THỊT NƯỚNG</span></p>
+        <div class="deco">◆◆◆</div>
+      </div>
+    </div>
+  </div>
 </header>
 
 <nav><div class="wrap" id="nav"></div></nav>
 
 <main class="wrap" id="menu"></main>
 
-<div class="wrap">
-  <div class="info">
-    <button class="card" id="wifi" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/></svg>
-      <div><small id="wifiLabel"></small><span id="wifiText"></span></div>
-      <em id="wifiCopy"></em>
-    </button>
-    <a class="card" id="call">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>
-      <div><small id="callLabel"></small><span id="callText"></span></div>
-    </a>
-    <a class="card" id="map" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
-      <div><small id="mapLabel"></small><span id="mapText"></span></div>
-    </a>
+<footer class="paper">
+  <div class="wrap">
+    <div class="pills">
+      <button class="pill" id="wifi" type="button">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg></i>
+        <div><small id="wifiLabel"></small><strong id="wifiText"></strong></div>
+        <em id="wifiCopy"></em>
+      </button>
+      <a class="pill" id="call">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></i>
+        <div><small id="callLabel"></small><strong id="callText"></strong></div>
+      </a>
+      <a class="pill" id="map" target="_blank" rel="noopener">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></i>
+        <div><small id="mapLabel"></small><strong id="mapText"></strong></div>
+      </a>
+    </div>
+    <p class="vnd" id="foot"></p>
   </div>
-</div>
-<footer class="wrap" id="foot"></footer>
+</footer>
 <div class="toast" id="toast"></div>
 
 <script src="menu.js"></script>
@@ -142,11 +186,11 @@
     ["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"],
   ];
   const UI = {
-    ko: { title: "메뉴", wifi: "와이파이 · 비밀번호", copy: "복사", copied: "비밀번호를 복사했어요", call: "전화 · 예약", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND)", h90: "최소 1시간 30분 전 예약", h120: "최소 2시간 전 예약" },
-    en: { title: "Menu", wifi: "Wi-Fi · Password", copy: "Copy", copied: "Password copied", call: "Call · Reservations", map: "Address · Map", vnd: "Prices in Vietnamese đồng (VND)", h90: "Order at least 1 hr 30 min ahead", h120: "Order at least 2 hours ahead" },
-    zh: { title: "菜单", wifi: "Wi-Fi · 密码", copy: "复制", copied: "密码已复制", call: "电话 · 预订", map: "地址 · 地图", vnd: "价格单位：越南盾（VND）", h90: "请至少提前1小时30分预订", h120: "请至少提前2小时预订" },
-    ja: { title: "メニュー", wifi: "Wi-Fi・パスワード", copy: "コピー", copied: "パスワードをコピーしました", call: "電話・ご予約", map: "住所・地図", vnd: "価格はベトナムドン（VND）です", h90: "1時間30分前までにご予約ください", h120: "2時間前までにご予約ください" },
-    vi: { title: "Thực đơn", wifi: "Wi-Fi · Mật khẩu", copy: "Sao chép", copied: "Đã sao chép mật khẩu", call: "Gọi điện · Đặt bàn", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND", h90: "Đặt trước tối thiểu 1 giờ 30 phút", h120: "Đặt trước tối thiểu 2 giờ" },
+    ko: { title: "메뉴", copy: "복사", copied: "비밀번호를 복사했어요", call: "전화 · 예약", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND)", serving: (u) => `1인분 ${u}`, h120: "최소 2시간 전 예약" },
+    en: { title: "Menu", copy: "Copy", copied: "Password copied", call: "Call · Reservations", map: "Address · Map", vnd: "Prices in Vietnamese đồng (VND)", serving: (u) => `${u} per serving`, h120: "Order at least 2 hours ahead" },
+    zh: { title: "菜单", copy: "复制", copied: "密码已复制", call: "电话 · 预订", map: "地址 · 地图", vnd: "价格单位：越南盾（VND）", serving: (u) => `每份 ${u}`, h120: "请至少提前2小时预订" },
+    ja: { title: "メニュー", copy: "コピー", copied: "パスワードをコピーしました", call: "電話・ご予約", map: "住所・地図", vnd: "価格はベトナムドン（VND）です", serving: (u) => `1人前 ${u}`, h120: "2時間前までにご予約ください" },
+    vi: { title: "Thực đơn", copy: "Sao chép", copied: "Đã sao chép mật khẩu", call: "Gọi điện · Đặt bàn", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND", serving: (u) => `${u} / phần`, h120: "Đặt trước tối thiểu 2 giờ" },
   };
   let observer;
   const SUPPORTED = LANGS.map(([c]) => c);
@@ -170,40 +214,49 @@
 
   const fmt = (n) => n.toLocaleString("en-US");
 
-  // 직원이 알아볼 수 있게 한국어/베트남어 이름을 보조로 표시
-  function secondary(name, lang) {
-    return ["ko", "vi"].filter((c) => c !== lang).map((c) => name[c]).join(" · ");
-  }
+  // 메뉴판처럼 아랫줄에 두 가지 이름을 함께 표시 (직원·동행 손님이 알아보기 쉽게)
+  // 왼쪽(이탤릭)/오른쪽: 한국어 → 베트남어·중국어, 베트남어 → 한국어·중국어, 그 외 → 한국어·베트남어
+  const SECONDARY = { ko: ["vi", "zh"], vi: ["ko", "zh"], en: ["ko", "vi"], zh: ["ko", "vi"], ja: ["ko", "vi"] };
 
   function render(lang) {
     const t = UI[lang];
     const R = window.RESTAURANT;
+    const [left, right] = SECONDARY[lang];
     document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
     document.title = `${R.brand.ko} · ${t.title}`;
-    $("sub").textContent = R.brand.sub;
 
     $("langs").innerHTML = LANGS.map(([c, label]) =>
       `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
 
     $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
 
-    $("menu").innerHTML = MENU.map((cat) => `
+    $("menu").innerHTML = MENU.map((cat) => {
+      const sub = [
+        cat.unit ? esc(t.serving(cat.unit)) : "",
+        cat.notice ? `<span class="note">${esc(t[cat.notice])}</span>` : "",
+      ].filter(Boolean).join("<br>");
+      return `
       <section id="${cat.id}">
-        <h2>${esc(cat.name[lang])}</h2>
+        ${cat.photo ? `<figure class="photo"><img src="${cat.photo}" alt="" loading="lazy"></figure>` : ""}
+        <div class="head">
+          <h2 class="display">${esc(cat.name[lang])}</h2>
+          ${sub ? `<p class="sub">${sub}</p>` : ""}
+        </div>
         <ul>${cat.items.map((it) => `
           <li>
-            <div class="name">
+            <div class="row">
               <b>${esc(it.name[lang])}</b>${it.unit ? `<span class="unit">${it.unit}</span>` : ""}
-              <small>${esc(secondary(it.name, lang))}</small>
-              ${it.notice ? `<span class="tag">${esc(t[it.notice])}</span>` : ""}
+              <span class="leader"></span>
+              <span class="price">${fmt(it.price)}<small>₫</small></span>
             </div>
-            <div class="price">${fmt(it.price)}<i>₫</i></div>
+            <div class="row2"><em class="${left === "vi" ? "it" : ""}">${esc(it.name[left])}</em><span>${esc(it.name[right])}</span></div>
           </li>`).join("")}
         </ul>
-      </section>`).join("");
+      </section>`;
+    }).join("");
 
-    $("wifiLabel").textContent = t.wifi;
-    $("wifiText").textContent = `${R.wifi.ssid} · ${R.wifi.password}`;
+    $("wifiLabel").textContent = `Wi-Fi · ${R.wifi.ssid}`;
+    $("wifiText").textContent = R.wifi.password;
     $("wifiCopy").textContent = t.copy;
     $("callLabel").textContent = t.call;
     $("callText").textContent = R.phone;
