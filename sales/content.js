@@ -2,10 +2,9 @@
 // 가격 단위: VND
 
 window.CONTACT = {
-  // TODO: 임시 값 — 실제 연락처로 교체
-  phone: "0900 000 000",
-  zalo: "0900 000 000",
-  kakao: null,          // 예: "kakao-id" (null이면 숨김)
+  phone: "0917 302 200",
+  zalo: "0917 302 200",
+  kakao: "jjw4164",     // 카카오톡 ID (null이면 숨김)
 };
 
 window.PRICES = {

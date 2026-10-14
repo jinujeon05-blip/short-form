@@ -30,4 +30,4 @@
 ## 영업용 소개서
 - `sales/`: 가게 사장님께 보여줄 소개서·가격표 (ko/vi/zh/ja/en). 문구·가격·연락처는 `sales/content.js`, 데모 화면·QR은 `sales/img/`, 인쇄용 PDF는 `sales/print/intro-<언어>.pdf`(A4 2쪽).
 - Vercel 프로젝트 `qrmenu-intro` → https://qrmenu-intro.vercel.app
-- 연락처는 아직 임시 값(`0900 000 000`)이다.
+- 연락처: 전화·Zalo 0917 302 200, 카카오톡 jjw4164
