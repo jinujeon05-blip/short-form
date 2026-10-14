@@ -33,6 +33,7 @@
 ## 영업용 소개서
 - `sales/`: 가게 사장님께 보여줄 소개서·가격표 (ko/vi/zh/ja/en). 문구·가격·연락처는 `sales/content.js`, 데모 화면·QR은 `sales/img/`, 인쇄용 PDF는 `sales/print/intro-<언어>.pdf`(A4 2쪽).
 - Vercel 프로젝트 `qrmenu-intro` → https://qrmenu-intro.vercel.app
+- 문의하기 영역 폰트: `sales/fonts/jalnan-sub.ttf`·`gmarket-sub.ttf`는 문의 문구·숫자만 남긴 경량판(베트남어 성조 글자 없음 → vi는 기본 글꼴). 문의 문구를 바꾸면 이 두 파일도 다시 만들어야 한다.
 - 연락처: 전화·Zalo 0917 302 200, 카카오톡 jjw4164
 
 ## 점주용 자료
