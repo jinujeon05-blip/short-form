@@ -24,6 +24,9 @@ window.DEMOS = [
   { id: "anvoi", url: "https://anvoi-menu.vercel.app", shot: "img/demo-anvoi.jpg", qr: "img/qr-anvoi.svg",
     name: "Ăn Vội", type: { ko: "비빔면 · 꽝응아이", vi: "Mì trộn · Quảng Ngãi", zh: "拌面 · 广义", ja: "まぜ麺 · クアンガイ", en: "Mixed noodles · Quảng Ngãi" },
     tag: { ko: "Zalo 주문 가능", vi: "Đặt món qua Zalo", zh: "可Zalo点餐", ja: "Zalo注文対応", en: "Zalo ordering" } },
+  { id: "baekcheon", url: "https://baekcheon-menu.vercel.app", shot: "img/demo-baekcheon.jpg", qr: "img/qr-baekcheon.svg",
+    name: "백천화덕아나고", type: { ko: "장어구이 · 경산", vi: "Lươn nướng · Gyeongsan", zh: "烤鳗鱼 · 庆山", ja: "アナゴ焼き · 慶山", en: "Eel grill · Gyeongsan" },
+    tag: { ko: "한국 매장", vi: "Cửa hàng tại Hàn Quốc", zh: "韩国门店", ja: "韓国の店舗", en: "Store in Korea" } },
 ];
 
 window.T = {

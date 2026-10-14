@@ -61,7 +61,7 @@
   .phone.c { left: 50%; top: 50px; transform: translateX(-50%); z-index: 2; }
 
   /* ── 데모 ── */
-  .demos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+  .demos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 28px; }
   .demo .tag { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 800; color: #fff; background: #0068ff; border-radius: 999px; padding: 2px 9px; }
   .demo { display: flex; gap: 16px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; text-decoration: none; color: inherit; }
   .demo .shot { flex: none; width: 112px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
@@ -200,7 +200,14 @@
     .demo { padding: 8px; gap: 10px; }
     .demo .shot { width: 70px; }
     .demo .qr { width: 64px; height: 64px; margin-top: 6px; }
-    .demo h3 { font-size: 15px; }
+    .demo h3 { font-size: 13px; }
+    .demos { grid-template-columns: repeat(4, 1fr); }
+    .demo { gap: 7px; padding: 7px; }
+    .demo .shot { width: 52px; }
+    .demo .type, .demo .url { font-size: 9px; }
+    .demo .qr { width: 52px; height: 52px; }
+    .demo .tag { font-size: 9px; padding: 1px 6px; margin-top: 3px; }
+    .demo h3 { word-break: keep-all; }
     .feat { padding: 10px 12px; }
     .feat p, .step p, .plan li, .opt, .faq p { font-size: 11px; }
     .steps, .plans { gap: 8px; margin-top: 12px; }

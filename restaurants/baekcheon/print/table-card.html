@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>백천화덕아나고 · QR 카드</title>
+<style>
+  @font-face { font-family: "Jalnan"; src: url("../../../public/fonts/Jalnan2.ttf"); }
+  @font-face { font-family: "Gmarket"; src: url("../../../public/fonts/GmarketSansTTFBold.ttf"); }
+  @page { size: 105mm 148mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --board: #18211b; --board-2: #24342a; --cream: #f5ecdc; --fire: #ff7a2f; --fire-2: #ffb03b; --red: #ff3b30; }
+  html, body { background: #fff; }
+  body { font-family: "Gmarket", "Inter", "WenQuanYi Zen Hei", sans-serif; color: var(--cream); }
+  .card {
+    position: relative; width: 105mm; height: 148mm; overflow: hidden; display: flex; flex-direction: column; align-items: center;
+    background: radial-gradient(90% 45% at 50% 100%, rgba(255,122,47,.38), transparent 70%), radial-gradient(120% 60% at 50% 0%, var(--board-2), var(--board) 75%);
+  }
+  .card::before { /* 칠판 느낌 점무늬 */
+    content: ""; position: absolute; inset: 0; opacity: .5;
+    background-image: radial-gradient(rgba(255,255,255,.06) .3mm, transparent .35mm); background-size: 3mm 3mm;
+  }
+  .card > * { position: relative; }
+  .logo { display: flex; align-items: center; gap: 2.2mm; margin-top: 8mm; }
+  .logo svg { width: 12mm; height: 12mm; }
+  .logo .name { display: flex; align-items: center; gap: 1.6mm; font-family: "Jalnan"; font-size: 10.5mm; line-height: 1; }
+  .logo .box { display: inline-grid; place-items: center; font-family: "Gmarket"; font-size: 3.2mm; line-height: 1.05; border: .5mm solid var(--cream); border-radius: .8mm; padding: .6mm .8mm; }
+  .logo .red { color: var(--red); }
+  .tag { margin-top: 2.4mm; font-size: 3.5mm; color: var(--fire-2); letter-spacing: .1mm; }
+  .photos { display: flex; gap: 2.2mm; margin-top: 4mm; }
+  .photos img { width: 17mm; height: 17mm; border-radius: 50%; object-fit: cover; border: .6mm solid var(--cream); box-shadow: 0 1mm 2.5mm rgba(0,0,0,.45); }
+  .qr-box { margin-top: 4.5mm; background: #fff; border-radius: 4mm; padding: 2mm; box-shadow: 0 0 0 .8mm var(--fire), 0 2mm 6mm rgba(0,0,0,.5); }
+  .qr-box img { display: block; width: 40mm; height: 40mm; }
+  .badge { position: absolute; right: -6mm; top: -3.5mm; transform: rotate(8deg); background: var(--red); color: #fff; font-size: 2.7mm; padding: 1mm 2.2mm .8mm; border-radius: 99mm; }
+  h1 { margin-top: 4.2mm; font-family: "Jalnan"; font-weight: 400; font-size: 6.4mm; line-height: 1.1; text-align: center; }
+  h1 span { color: var(--fire-2); }
+  .langs { display: grid; grid-template-columns: auto auto; gap: .6mm 4mm; margin-top: 2mm; font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; font-weight: 600; font-size: 2.6mm; color: #d6cdbd; }
+  .langs em { font-style: normal; display: inline-block; width: 4.6mm; font-size: 1.9mm; font-weight: 800; color: var(--fire); }
+  .event { margin-top: 3.4mm; font-size: 2.8mm; color: #fff; background: rgba(255,59,48,.18); border: .3mm dashed var(--fire-2); border-radius: 99mm; padding: 1.2mm 3.2mm 1mm; }
+  .event b { color: var(--fire-2); font-weight: 400; }
+  .ja { font-family: "IPAGothic", sans-serif; }
+  .card > footer { position: absolute; left: 0; right: 0; bottom: 0; height: 14mm; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: .9mm; background: linear-gradient(90deg, #c8231c, var(--fire)); color: #fff; }
+  footer .tel { font-size: 3.6mm; letter-spacing: .1mm; }
+  footer .addr { font-size: 2.6mm; opacity: .95; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M8 58V36a24 24 0 0 1 48 0v22" fill="none" stroke="#f5ecdc" stroke-width="5"/>
+      <path d="M8 46h48" stroke="#f5ecdc" stroke-width="3" stroke-dasharray="5 4"/>
+      <path d="M32 6c3 8 12 12 12 22a12 12 0 0 1-24 0c0-5 3-8 5-11 1 4 3 6 5 6-2-6 0-12 2-17z" fill="#ff5a2b"/>
+      <path d="M32 22c2 4 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3-1-3 0-5 1-8z" fill="#ffb03b"/>
+      <rect x="22" y="48" width="20" height="10" rx="2" fill="#ff5a2b"/>
+    </svg>
+    <div class="name">백천<span class="box">화<br>덕</span><span class="red">아나고</span></div>
+  </div>
+  <p class="tag">화덕 초벌구이 · 직화 불맛 쌀국수</p>
+  <div class="photos">
+    <img src="../img/anago.jpg" alt=""><img src="../img/gomjangeo.jpg" alt=""><img src="../img/pho-char.jpg" alt=""><img src="../img/dakgalbi.jpg" alt="">
+  </div>
+  <div class="qr-box">
+    <img src="qr.svg" alt="QR https://baekcheon-menu.vercel.app">
+    <span class="badge">5개 국어</span>
+  </div>
+  <h1>QR 찍고 <span>메뉴 보기</span></h1>
+  <div class="langs">
+    <div><em>EN</em>Scan for menu</div>
+    <div><em>ZH</em>扫码看菜单</div>
+    <div><em>JA</em><span class="ja">メニューを見る</span></div>
+    <div><em>VI</em>Quét mã xem thực đơn</div>
+  </div>
+  <div class="event">🎁 리뷰 이벤트 · <b>음료 1캔 또는 숯불구이 100g</b> 증정</div>
+  <footer>
+    <div class="tel">☎ 0507-1445-9603</div>
+    <div class="addr">경북 경산시 백천길 7</div>
+  </footer>
+</div>
+</body>
+</html>
