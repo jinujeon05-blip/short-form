@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#161414">
+<title>숯꾸이 메뉴</title>
+<meta name="description" content="숯꾸이 · Nhà Hàng Thịt Nướng — 190 Nguyễn Cao, Bắc Ninh">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #161414;
+    --surface: #211e1d;
+    --line: #3a3533;
+    --text: #f4efe9;
+    --muted: #a39b94;
+    --red: #d6312b;
+    --red-soft: #e85a4f;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.4;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+
+  /* Header */
+  header { padding: 28px 0 18px; text-align: center; }
+  .langs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 26px; }
+  .langs button {
+    font: inherit; font-size: 13px; color: var(--muted);
+    background: transparent; border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 12px; cursor: pointer;
+  }
+  .langs button[aria-pressed="true"] { color: #fff; background: var(--red); border-color: var(--red); }
+  .brand {
+    font-family: "Black Han Sans", sans-serif;
+    font-size: 64px; line-height: 1; margin: 0; letter-spacing: 2px;
+    color: var(--text);
+  }
+  .brand span { color: var(--red); }
+  .sub { margin: 10px 0 0; color: var(--muted); font-size: 14px; letter-spacing: 1px; }
+
+  /* Category nav */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(22, 20, 20, .94); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap { position: relative; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-top: 10px; padding-bottom: 10px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a {
+    flex: none; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600;
+    padding: 7px 12px; border-radius: 8px; white-space: nowrap;
+  }
+  nav a.active { color: #fff; background: var(--surface); }
+
+  /* Sections */
+  section { padding: 28px 0 4px; }
+  h2 {
+    display: inline-block; margin: 0 0 6px; padding: 4px 18px 4px 12px;
+    font-size: 20px; color: #fff;
+    background: var(--red);
+    clip-path: polygon(0 8%, 100% 0, 96% 100%, 2% 92%);
+  }
+  .notice { margin: 6px 0 4px; color: var(--red-soft); font-size: 13px; }
+  ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  li { display: flex; align-items: baseline; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  .name { flex: 1; min-width: 0; }
+  .name b { font-size: 17px; font-weight: 600; }
+  .name .unit { color: var(--muted); font-size: 13px; margin-left: 6px; font-weight: 400; }
+  .name small { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; }
+  .name .tag { display: inline-block; margin-top: 5px; font-size: 12px; color: var(--red-soft); border: 1px solid currentColor; border-radius: 4px; padding: 1px 6px; }
+  .price { flex: none; font-weight: 700; font-size: 17px; font-variant-numeric: tabular-nums; }
+  .price i { font-style: normal; font-size: 12px; color: var(--muted); margin-left: 2px; font-weight: 400; }
+
+  /* Info */
+  .info { margin: 36px 0 24px; display: grid; gap: 10px; }
+  .card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 16px; color: var(--text); text-decoration: none; font: inherit; text-align: left; width: 100%;
+  }
+  button.card { cursor: pointer; }
+  .card svg { flex: none; width: 22px; height: 22px; color: var(--red); }
+  .card div { flex: 1; min-width: 0; }
+  .card small { display: block; color: var(--muted); font-size: 12px; }
+  .card span { font-weight: 600; word-break: break-word; }
+  .card em { flex: none; font-style: normal; font-size: 12px; color: var(--muted); }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 0 0 40px; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px);
+    background: #fff; color: #111; font-size: 14px; font-weight: 600;
+    padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="langs" id="langs"></div>
+  <h1 class="brand">숯<span>꾸</span>이</h1>
+  <p class="sub" id="sub"></p>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap" id="menu"></main>
+
+<div class="wrap">
+  <div class="info">
+    <button class="card" id="wifi" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/></svg>
+      <div><small id="wifiLabel"></small><span id="wifiText"></span></div>
+      <em id="wifiCopy"></em>
+    </button>
+    <a class="card" id="call">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>
+      <div><small id="callLabel"></small><span id="callText"></span></div>
+    </a>
+    <a class="card" id="map" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <div><small id="mapLabel"></small><span id="mapText"></span></div>
+    </a>
+  </div>
+</div>
+<footer class="wrap" id="foot"></footer>
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<script>
+  const LANGS = [
+    ["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"],
+  ];
+  const UI = {
+    ko: { title: "메뉴", wifi: "와이파이 · 비밀번호", copy: "복사", copied: "비밀번호를 복사했어요", call: "전화 · 예약", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND)", h90: "최소 1시간 30분 전 예약", h120: "최소 2시간 전 예약" },
+    en: { title: "Menu", wifi: "Wi-Fi · Password", copy: "Copy", copied: "Password copied", call: "Call · Reservations", map: "Address · Map", vnd: "Prices in Vietnamese đồng (VND)", h90: "Order at least 1 hr 30 min ahead", h120: "Order at least 2 hours ahead" },
+    zh: { title: "菜单", wifi: "Wi-Fi · 密码", copy: "复制", copied: "密码已复制", call: "电话 · 预订", map: "地址 · 地图", vnd: "价格单位：越南盾（VND）", h90: "请至少提前1小时30分预订", h120: "请至少提前2小时预订" },
+    ja: { title: "メニュー", wifi: "Wi-Fi・パスワード", copy: "コピー", copied: "パスワードをコピーしました", call: "電話・ご予約", map: "住所・地図", vnd: "価格はベトナムドン（VND）です", h90: "1時間30分前までにご予約ください", h120: "2時間前までにご予約ください" },
+    vi: { title: "Thực đơn", wifi: "Wi-Fi · Mật khẩu", copy: "Sao chép", copied: "Đã sao chép mật khẩu", call: "Gọi điện · Đặt bàn", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND", h90: "Đặt trước tối thiểu 1 giờ 30 phút", h120: "Đặt trước tối thiểu 2 giờ" },
+  };
+  let observer;
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function storage(fn) { try { return fn(localStorage); } catch { return null; } }
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  const fmt = (n) => n.toLocaleString("en-US");
+
+  // 직원이 알아볼 수 있게 한국어/베트남어 이름을 보조로 표시
+  function secondary(name, lang) {
+    return ["ko", "vi"].filter((c) => c !== lang).map((c) => name[c]).join(" · ");
+  }
+
+  function render(lang) {
+    const t = UI[lang];
+    const R = window.RESTAURANT;
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand.ko} · ${t.title}`;
+    $("sub").textContent = R.brand.sub;
+
+    $("langs").innerHTML = LANGS.map(([c, label]) =>
+      `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}">
+        <h2>${esc(cat.name[lang])}</h2>
+        <ul>${cat.items.map((it) => `
+          <li>
+            <div class="name">
+              <b>${esc(it.name[lang])}</b>${it.unit ? `<span class="unit">${it.unit}</span>` : ""}
+              <small>${esc(secondary(it.name, lang))}</small>
+              ${it.notice ? `<span class="tag">${esc(t[it.notice])}</span>` : ""}
+            </div>
+            <div class="price">${fmt(it.price)}<i>₫</i></div>
+          </li>`).join("")}
+        </ul>
+      </section>`).join("");
+
+    $("wifiLabel").textContent = t.wifi;
+    $("wifiText").textContent = `${R.wifi.ssid} · ${R.wifi.password}`;
+    $("wifiCopy").textContent = t.copy;
+    $("callLabel").textContent = t.call;
+    $("callText").textContent = R.phone;
+    $("call").href = "tel:" + R.phone.replace(/\s/g, "");
+    $("mapLabel").textContent = t.map;
+    $("mapText").textContent = R.address;
+    $("map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.address);
+    $("foot").textContent = t.vnd;
+    observeSections();
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+
+  $("wifi").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(RESTAURANT.wifi.password); toast(UI[lang].copied); }
+    catch { toast(RESTAURANT.wifi.password); }
+  });
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+</body>
+</html>
