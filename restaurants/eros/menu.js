@@ -1,12 +1,12 @@
 // EROS 메뉴 데이터
 // 메뉴/가격 수정은 이 파일만 고치면 됩니다. 가격 단위: VND (화면에는 "k" = 1,000동으로 표시)
-// 주소·와이파이·연락처가 정해지면 아래 RESTAURANT에 채우면 화면 하단에 자동으로 나타납니다.
+// 주소·와이파이·연락처는 아래 RESTAURANT에서 수정합니다. (값이 null이면 화면에서 숨김)
 window.RESTAURANT = {
   brand: "EROS",
-  phone: null,      // 예: "0900 000 000"
-  address: null,    // 예: "123 Nguyễn ..., TP. ..."
+  phone: "0900 000 000",   // TODO: 임시 번호 — 실제 연락처로 교체
+  address: "300 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh",
   mapUrl: "https://maps.app.goo.gl/mV2aUGsGAk4gE4Gy6",  // 구글 지도 위치 (주소 글자 없이도 지도 버튼 표시)
-  wifi: null,       // 예: { ssid: "EROS", password: "12345678" }
+  wifi: { ssid: "EROS", password: "00000000" },  // TODO: 임시 값 — 실제 와이파이로 교체
 };
 
 window.MENU = [

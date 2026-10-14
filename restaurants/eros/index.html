@@ -114,18 +114,24 @@
   section.featured .row b { font-family: var(--serif); font-size: 19px; }
 
   /* ── 하단 정보 ── */
-  footer { padding: 26px 0 calc(30px + env(safe-area-inset-bottom)); text-align: center; }
+  footer.wrap { padding-top: 34px; padding-bottom: calc(30px + env(safe-area-inset-bottom)); text-align: center; }
   .info { display: grid; gap: 10px; margin-bottom: 18px; text-align: left; }
   .info:empty { display: none; }
   .card {
     display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; color: var(--text); text-decoration: none; text-align: left;
-    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; cursor: pointer;
+    background: linear-gradient(180deg, rgba(40, 28, 16, .7), rgba(16, 11, 7, .9));
+    border: 1.5px solid var(--gold); border-radius: 999px; padding: 6px 18px 6px 6px; cursor: pointer;
+    box-shadow: inset 0 0 0 3px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.45);
   }
-  .card svg { flex: none; width: 22px; height: 22px; color: var(--gold); }
+  .card i {
+    flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+    background: linear-gradient(180deg, var(--gold-hi), var(--gold) 60%, var(--gold-lo));
+  }
+  .card svg { width: 20px; height: 20px; color: #1a1209; }
   .card div { flex: 1; min-width: 0; }
-  .card small { display: block; font-size: 11px; color: var(--muted); letter-spacing: .5px; }
-  .card strong { display: block; font-size: 16px; color: var(--gold-hi); word-break: break-word; }
-  .card em { flex: none; font-style: normal; font-size: 12px; color: var(--muted); }
+  .card small { display: block; font-size: 11px; color: var(--muted); letter-spacing: .4px; }
+  .card strong { display: block; font-size: 16px; font-weight: 700; color: var(--gold-hi); word-break: break-word; }
+  .card em { flex: none; font-style: normal; font-size: 12px; font-weight: 700; color: var(--gold); }
   .vnd { font-size: 12px; color: var(--muted); margin: 0; }
   .toast {
     position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 20;
@@ -251,11 +257,11 @@
   // 정보가 입력된 항목만 표시 (menu.js의 RESTAURANT)
   function renderInfo(t, R) {
     const cards = [];
-    if (R.wifi) cards.push(`<button class="card" id="wifi" type="button">${ICONS.wifi}<div><small>${esc(t.wifi)} · ${esc(R.wifi.ssid)}</small><strong>${esc(R.wifi.password)}</strong></div><em>${esc(t.copy)}</em></button>`);
-    if (R.phone) cards.push(`<a class="card" href="tel:${esc(R.phone.replace(/\s/g, ""))}">${ICONS.call}<div><small>${esc(t.call)}</small><strong>${esc(R.phone)}</strong></div></a>`);
+    if (R.wifi) cards.push(`<button class="card" id="wifi" type="button"><i>${ICONS.wifi}</i><div><small>${esc(t.wifi)} · ${esc(R.wifi.ssid)}</small><strong>${esc(R.wifi.password)}</strong></div><em>${esc(t.copy)}</em></button>`);
+    if (R.phone) cards.push(`<a class="card" href="tel:${esc(R.phone.replace(/\s/g, ""))}"><i>${ICONS.call}</i><div><small>${esc(t.call)}</small><strong>${esc(R.phone)}</strong></div></a>`);
     if (R.address || R.mapUrl) {
       const href = R.mapUrl || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.address);
-      cards.push(`<a class="card" target="_blank" rel="noopener" href="${esc(href)}">${ICONS.map}<div><small>${esc(t.map)}</small><strong>${esc(R.address || t.openMap)}</strong></div></a>`);
+      cards.push(`<a class="card" target="_blank" rel="noopener" href="${esc(href)}"><i>${ICONS.map}</i><div><small>${esc(t.map)}</small><strong>${esc(R.address || t.openMap)}</strong></div></a>`);
     }
     $("info").innerHTML = cards.join("");
     $("wifi")?.addEventListener("click", async () => {
