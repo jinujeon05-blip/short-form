@@ -57,16 +57,18 @@
   .phone img { display: block; width: 100%; border-radius: 23px; aspect-ratio: 375 / 760; object-fit: cover; object-position: top; }
   .phone.a { left: 4%; top: 30px; transform: rotate(-7deg); }
   .phone.b { right: 4%; top: 0; transform: rotate(6deg); }
+  .phone.c { left: 50%; top: 50px; transform: translateX(-50%); z-index: 2; }
 
   /* ── 데모 ── */
-  .demos { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
+  .demos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+  .demo .tag { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 800; color: #fff; background: #0068ff; border-radius: 999px; padding: 2px 9px; }
   .demo { display: flex; gap: 16px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; text-decoration: none; color: inherit; }
   .demo .shot { flex: none; width: 112px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
   .demo .shot img { display: block; width: 100%; aspect-ratio: 375 / 600; object-fit: cover; object-position: top; }
   .demo h3 { font-size: 20px; }
   .demo .type { color: var(--muted); font-size: 14px; margin-top: 2px; }
   .demo .qr { width: 96px; height: 96px; margin-top: 10px; display: block; border-radius: 8px; border: 1px solid var(--line); }
-  .demo .url { font-size: 12px; color: var(--accent); margin-top: 6px; word-break: break-all; }
+  .demo .url { font-size: 11px; color: var(--accent); margin-top: 6px; word-break: break-all; }
 
   /* ── 특징 ── */
   .feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
@@ -123,7 +125,7 @@
     .phones { height: 330px; }
     .phone { width: 150px; border-radius: 24px; padding: 6px; }
     .phone img { border-radius: 19px; }
-    .phone.a { left: 8%; } .phone.b { right: 8%; }
+    .phone.a { left: 2%; } .phone.b { right: 2%; }
     .demos, .feats, .plans { grid-template-columns: 1fr; }
     .steps { grid-template-columns: 1fr 1fr; }
     .sec-title { font-size: 24px; }
@@ -145,7 +147,10 @@
     .phone img { border-radius: 14px; }
     .sec-title { font-size: 19px; }
     .demos, .feats { gap: 8px; margin-top: 12px; }
-    .demo { padding: 10px; }
+    .demo { padding: 8px; gap: 10px; }
+    .demo .shot { width: 70px; }
+    .demo .qr { width: 64px; height: 64px; margin-top: 6px; }
+    .demo h3 { font-size: 15px; }
     .feat { padding: 10px 12px; }
     .feat p, .step p, .plan li, .opt, .faq p { font-size: 11px; }
     .steps, .plans { gap: 8px; margin-top: 12px; }
@@ -254,7 +259,7 @@
       `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
 
     $("phones").innerHTML = DEMOS.map((d, i) =>
-      `<a class="phone ${i ? "b" : "a"}" href="${d.url}" target="_blank" rel="noopener"><img src="${d.shot}" alt="${esc(d.name)}"></a>`).join("");
+      `<a class="phone ${["a", "b", "c"][i] || "a"}" href="${d.url}" target="_blank" rel="noopener"><img src="${d.shot}" alt="${esc(d.name)}"></a>`).join("");
 
     $("demos").innerHTML = DEMOS.map((d) => `
       <a class="demo" href="${d.url}" target="_blank" rel="noopener">
@@ -262,6 +267,7 @@
         <div>
           <h3>${esc(d.name)}</h3>
           <div class="type">${esc(d.type[lang] || d.type.en)}</div>
+          ${d.tag ? `<span class="tag">${esc(d.tag[lang] || d.tag.en)}</span>` : ""}
           <img class="qr" src="${d.qr}" alt="QR ${esc(d.url)}">
           <div class="url">${esc(d.url.replace("https://", ""))}</div>
         </div>

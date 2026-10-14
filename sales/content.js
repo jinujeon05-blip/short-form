@@ -21,6 +21,9 @@ window.DEMOS = [
     name: "숯꾸이", type: { ko: "고깃집 · 박닌", vi: "Quán thịt nướng · Bắc Ninh", zh: "韩式烤肉 · 北宁", ja: "焼肉店 · バクニン", en: "Korean BBQ · Bắc Ninh" } },
   { id: "eros", url: "https://eros-menu.vercel.app", shot: "img/demo-eros.jpg", qr: "img/qr-eros.svg",
     name: "EROS", type: { ko: "바 · 박닌", vi: "Bar · Bắc Ninh", zh: "酒吧 · 北宁", ja: "バー · バクニン", en: "Bar · Bắc Ninh" } },
+  { id: "anvoi", url: "https://anvoi-menu.vercel.app", shot: "img/demo-anvoi.jpg", qr: "img/qr-anvoi.svg",
+    name: "Ăn Vội", type: { ko: "비빔면 · 꽝응아이", vi: "Mì trộn · Quảng Ngãi", zh: "拌面 · 广义", ja: "まぜ麺 · クアンガイ", en: "Mixed noodles · Quảng Ngãi" },
+    tag: { ko: "Zalo 주문 가능", vi: "Đặt món qua Zalo", zh: "可Zalo点餐", ja: "Zalo注文対応", en: "Zalo ordering" } },
 ];
 
 window.T = {
