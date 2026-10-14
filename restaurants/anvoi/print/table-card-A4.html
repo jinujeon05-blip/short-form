@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Ăn Vội · Thẻ QR · A4 4장</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 210mm; height: 297mm; position: relative; }
+  .grid { position: absolute; top: .5mm; left: 0; display: grid; grid-template-columns: 105mm 105mm; grid-template-rows: 148mm 148mm; }
+  iframe { width: 105mm; height: 148mm; border: 0; display: block; }
+  /* 자르는 선 */
+  .cut { position: absolute; background: #bbb; }
+  .v { left: 105mm; top: 0; width: .1mm; height: 297mm; }
+  .h { top: 148.5mm; left: 0; height: .1mm; width: 210mm; }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <iframe src="table-card.html"></iframe><iframe src="table-card.html"></iframe>
+    <iframe src="table-card.html"></iframe><iframe src="table-card.html"></iframe>
+  </div>
+  <div class="cut v"></div><div class="cut h"></div>
+</body>
+</html>

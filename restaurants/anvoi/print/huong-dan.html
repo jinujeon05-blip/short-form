@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Ăn Vội · Hướng dẫn sử dụng menu QR</title>
+<style>
+  @page { size: A4; margin: 12mm 12mm 14mm; }
+  * { box-sizing: border-box; }
+  :root { --cream: #fdf6f3; --wine: #7c2a2a; --rose: #a95c58; --blush: #f6e1dc; --blush-2: #fbeeea; --line: #efd9d3; --orange: #e8742c; --zalo: #0068ff; --text: #3d2523; --muted: #8a6d69; }
+  body { margin: 0; font-family: "Inter", "Liberation Sans", sans-serif; color: var(--text); font-size: 9.6pt; line-height: 1.38; }
+  h1, h2, h3 { margin: 0; color: var(--wine); line-height: 1.2; }
+  .page { break-after: page; }
+  .page:last-child { break-after: auto; }
+
+  /* 표지 */
+  .cover { display: flex; gap: 8mm; align-items: center; background: var(--cream); border-radius: 6mm; padding: 5mm 7mm; border: .4mm dashed var(--rose);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cover img.logo { width: 28mm; mix-blend-mode: multiply; }
+  .cover h1 { font-size: 19pt; font-weight: 900; }
+  .cover p { margin: 2mm 0 0; color: var(--muted); }
+  .cover .url { display: inline-block; margin-top: 3mm; font-weight: 800; color: #fff; background: var(--rose); border-radius: 99mm; padding: 1mm 4mm; }
+  .cover .qr { margin-left: auto; text-align: center; font-size: 8pt; color: var(--muted); }
+  .cover .qr img { width: 26mm; display: block; border: .4mm solid var(--line); border-radius: 2mm; background: #fff; }
+
+  h2 { font-size: 13pt; margin: 4mm 0 2mm; display: flex; align-items: center; gap: 2.5mm; }
+  h2 .no { display: inline-grid; place-items: center; width: 7mm; height: 7mm; border-radius: 50%; background: var(--wine); color: #fff; font-size: 10pt;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .box { background: var(--blush-2); border-radius: 3.5mm; padding: 3.5mm 4mm; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .box h3 { font-size: 11pt; margin-bottom: 1.5mm; }
+  .box ul { margin: 0; padding-left: 4.5mm; }
+  .box li { margin: .6mm 0; }
+
+  /* 손님 주문 순서 */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; }
+  .step img { height: 92mm; object-fit: cover; object-position: top; }
+  .step { text-align: center; }
+  .step img { width: 100%; border-radius: 3mm; border: .3mm solid var(--line); }
+  .step > b { display: inline-grid; place-items: center; width: 6mm; height: 6mm; border-radius: 50%; background: var(--orange); color: #fff; font-size: 9pt; margin: 2mm 0 1mm;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .step h3 { font-size: 10pt; }
+  .step p { margin: 1mm 0 0; font-size: 8.8pt; color: var(--muted); }
+
+  /* 주문서 예시 */
+  .msg { display: grid; grid-template-columns: 1.1fr .9fr; gap: 5mm; align-items: start; }
+  .bubble { background: #eaf2ff; border: .4mm solid #b9d3ff; border-radius: 4mm 4mm 4mm 1mm; padding: 3mm 4mm; font-size: 9pt; white-space: pre-line;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .bubble .tag { display: inline-block; font-size: 8pt; font-weight: 800; color: #fff; background: var(--zalo); border-radius: 1.2mm; padding: .2mm 1.6mm; margin-bottom: 1.5mm;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .read dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 1.4mm 3mm; font-size: 9.6pt; }
+  .read dt { font-weight: 800; color: var(--wine); white-space: nowrap; }
+  .read dd { margin: 0; }
+
+  /* 점주 처리 순서 */
+  ol.flow { list-style: none; margin: 0; padding: 0; counter-reset: f; display: grid; gap: 1.6mm; }
+  ol.flow li { counter-increment: f; position: relative; padding: 2mm 4mm 2mm 12mm; background: #fff; border: .35mm solid var(--line); border-radius: 3mm; }
+  ol.flow li::before { content: counter(f); position: absolute; left: 3mm; top: 1.8mm; width: 6.5mm; height: 6.5mm; border-radius: 50%; background: var(--rose); color: #fff;
+    display: grid; place-items: center; font-weight: 800; font-size: 9pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  ol.flow b { color: var(--wine); }
+  .reply { margin-top: 1.4mm; font-size: 9pt; color: var(--muted); }
+  .reply code { font-family: inherit; color: var(--text); background: var(--blush-2); border-radius: 1.2mm; padding: .2mm 1.4mm; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 9.6pt; }
+  th, td { text-align: left; padding: 1.4mm 2.5mm; border-bottom: .3mm solid var(--line); vertical-align: top; }
+  th { color: var(--wine); background: var(--blush-2); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .contact { margin-top: 2.5mm; padding: 2.6mm !important; text-align: center; background: var(--wine); color: #fff; border-radius: 4mm; padding: 4mm; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .contact b { font-size: 12pt; }
+  .note { font-size: 9pt; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ───────── Trang 1 ───────── -->
+<section class="page">
+  <div class="cover">
+    <img class="logo" src="../img/logo.jpg" alt="Ăn Vội">
+    <div>
+      <h1>Hướng dẫn sử dụng<br>Menu QR &amp; Đặt món qua Zalo</h1>
+      <p>Dành cho chủ quán và nhân viên Ăn Vội – Mì Trộn Siu Dính</p>
+      <span class="url">anvoi-menu.vercel.app</span>
+    </div>
+    <div class="qr"><img src="qr.svg" alt="QR">Quét thử</div>
+  </div>
+
+  <h2><span class="no">1</span>Menu QR này làm được gì?</h2>
+  <div class="grid2">
+    <div class="box">
+      <h3>Cho khách</h3>
+      <ul>
+        <li>Quét mã QR trên bàn là xem menu ngay, <b>không cần cài app</b>.</li>
+        <li>Menu <b>tự đổi sang ngôn ngữ</b> trên điện thoại của khách: Việt, Hàn, Anh, Trung, Nhật.</li>
+        <li>Chọn món, xem tổng tiền, gửi đơn cho quán <b>qua Zalo</b>.</li>
+        <li>Gọi điện, xem đường đi Google Maps chỉ với một chạm.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Cho quán</h3>
+      <ul>
+        <li>Đơn gửi đến Zalo <b>0969 092 694</b>, <b>luôn bằng tiếng Việt</b> – kể cả khi khách là người nước ngoài.</li>
+        <li>Đơn ghi rõ: món, số lượng, Indomie/Koreno, tổng tiền, hình thức, tên, SĐT, địa chỉ, ghi chú.</li>
+        <li>Đổi giá, thêm/bớt món: chỉ cần nhắn, mã QR <b>giữ nguyên</b>, không phải in lại.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2><span class="no">2</span>Khách đặt món như thế nào?</h2>
+  <div class="steps">
+    <div class="step"><img src="img/g1-home.jpg" alt=""><b>1</b><h3>Quét mã QR</h3><p>Menu mở ra bằng ngôn ngữ của khách.</p></div>
+    <div class="step"><img src="img/g2-add.jpg" alt=""><b>2</b><h3>Bấm vào giá để chọn món</h3><p>Mì: bấm giá Indomie hoặc Koreno. Số trên nút là số lượng.</p></div>
+    <div class="step"><img src="img/g3-sheet.jpg" alt=""><b>3</b><h3>Bấm “Xem đơn”</h3><p>Chỉnh số lượng, chọn Giao hàng / Mang về / Ăn tại quán, điền tên, SĐT, địa chỉ.</p></div>
+    <div class="step"><img src="img/g4-send.jpg" alt=""><b>4</b><h3>“Sao chép đơn &amp; mở Zalo”</h3><p>Zalo của quán mở ra, khách <strong>dán</strong> và bấm gửi.</p></div>
+  </div>
+  <p class="note">* Khách ăn tại quán có thể chỉ cần đưa màn hình “Đơn của bạn” cho nhân viên, không bắt buộc gửi Zalo.</p>
+</section>
+
+<!-- ───────── Trang 2 ───────── -->
+<section class="page">
+  <h2 style="margin-top:0"><span class="no">3</span>Quán nhận được tin nhắn như thế này</h2>
+  <div class="msg">
+    <div class="bubble"><span class="tag">Zalo</span>
+🍜 ĐƠN HÀNG – Ăn Vội
+• 2 x Mì Trứng (Indomie) – 50.000đ
+• 1 x Mì Thập Cẩm (Koreno) – 55.000đ
+• 1 x Gà Mix 3 Vị kèm Cơm Nóng – 80.000đ
+Tạm tính: 185.000đ
+Hình thức: Giao hàng
+Tên: Lan
+SĐT: 0905 123 456
+Địa chỉ: 25 Lê Lợi, Quảng Ngãi
+Ghi chú: Gà vị phô mai, ít cay
+(Khách dùng Tiếng Hàn)</div>
+    <div class="read">
+      <dl>
+        <dt>• 2 x …</dt><dd>Số lượng × tên món – thành tiền.</dd>
+        <dt>(Indomie)</dt><dd>Loại mì khách chọn: Indomie hoặc Koreno.</dd>
+        <dt>Tạm tính</dt><dd>Tổng tiền món, <b>chưa gồm phí ship</b>.</dd>
+        <dt>Hình thức</dt><dd>Giao hàng / Mang về / Ăn tại quán.</dd>
+        <dt>Ghi chú</dt><dd>Vị gà, độ cay, phô mai, nước ngọt Thái, yêu cầu khác.</dd>
+        <dt>(Khách dùng …)</dt><dd>Khách là người nước ngoài. Nên trả lời ngắn gọn, có thể dùng số và biểu tượng (✅ 🛵 💵).</dd>
+      </dl>
+    </div>
+  </div>
+
+  <h2><span class="no">4</span>Quy trình xử lý đơn (cho nhân viên)</h2>
+  <ol class="flow">
+    <li><b>Nhận tin nhắn Zalo</b> – kiểm tra món, loại mì, số lượng và ghi chú.
+      <div class="reply">Thiếu thông tin (vị gà, loại nước…)? Hỏi lại khách ngay trên Zalo.</div></li>
+    <li><b>Tính phí ship</b> (đơn Giao hàng) theo khoảng cách, cộng vào Tạm tính.
+      <div class="reply">Đơn giao hàng tối thiểu <b>50.000đ</b>, phí ship từ <b>5.000đ</b>.</div></li>
+    <li><b>Xác nhận đơn</b> với khách: tổng tiền và thời gian dự kiến.
+      <div class="reply">Mẫu: <code>✅ Quán đã nhận đơn. Tổng 190.000đ (ship 5.000đ). Khoảng 25 phút giao tới ạ 🛵</code></div></li>
+    <li><b>Làm món</b> – gà luôn chiên mới. Nhớ: <b>gà không bán buổi sáng</b>, nếu khách đặt buổi sáng hãy báo lại.</li>
+    <li><b>Giao / đưa món &amp; thu tiền.</b> Mang về: kèm combo nước + khăn ướt. Mì: tặng kèm nước ngọt.</li>
+  </ol>
+
+  <h2><span class="no">5</span>Lưu ý &amp; cập nhật menu</h2>
+  <table>
+    <tr><th style="width:38%">Trường hợp</th><th>Cách làm</th></tr>
+    <tr><td>Đổi giá, thêm / bớt món, hết món</td><td>Nhắn nội dung cần đổi cho người quản lý menu. Trang web cập nhật trong ngày, <b>mã QR không đổi</b>.</td></tr>
+    <tr><td>Món có giá dao động (phô mai thêm, nước ngọt Thái)</td><td>Không có nút chọn – khách ghi vào phần Ghi chú, quán báo giá khi xác nhận.</td></tr>
+    <tr><td>Trên 3 gói mì</td><td>Phụ thu 3.000đ/tô – cộng thêm khi xác nhận đơn.</td></tr>
+    <tr><td>Combo</td><td>Combo 199K không áp dụng mì bò trứng &amp; mì siêu topping. Khách chọn vị gà / loại mì trong Ghi chú.</td></tr>
+    <tr><td>Khách không gửi được Zalo</td><td>Khách có thể bấm “Gọi điện đặt món” hoặc đưa màn hình đơn cho nhân viên.</td></tr>
+    <tr><td>Thẻ QR</td><td>In thẻ A6 (hoặc 4 thẻ trên A4), đặt ở bàn và quầy. Nên ép plastic mờ để dễ quét.</td></tr>
+  </table>
+
+  <div class="contact">Cần đổi menu hoặc hỗ trợ? Nhắn <b>Zalo 0917 302 200</b></div>
+</section>
+</body>
+</html>
