@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0806">
+<title>EROS Menu</title>
+<meta name="description" content="EROS — Lounge & Bar menu">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,500&family=Noto+Serif+KR:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0806;
+    --panel: rgba(22, 16, 11, .82);
+    --gold: #d9a74a;
+    --gold-hi: #f6d58e;
+    --gold-lo: #8a6326;
+    --line: rgba(217, 167, 74, .32);
+    --text: #f3e9d8;
+    --muted: #a8977f;
+    --serif: "Playfair Display", "Noto Serif KR", "Noto Serif SC", "Noto Serif JP", Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; color: var(--text); min-height: 100vh;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.35;
+    background:
+      radial-gradient(90% 45% at 50% 0%, rgba(255, 170, 70, .20), transparent 70%),
+      radial-gradient(70% 40% at 0% 55%, rgba(120, 40, 20, .18), transparent 70%),
+      radial-gradient(70% 40% at 100% 85%, rgba(120, 40, 20, .16), transparent 70%),
+      /* 아르데코 다이아몬드 패턴 */
+      repeating-linear-gradient(45deg, rgba(217,167,74,.035) 0 1px, transparent 1px 22px),
+      repeating-linear-gradient(-45deg, rgba(217,167,74,.035) 0 1px, transparent 1px 22px),
+      var(--bg);
+    background-attachment: fixed;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+  .serif { font-family: var(--serif); }
+  .gold-text {
+    background: linear-gradient(180deg, var(--gold-hi) 0%, var(--gold) 55%, var(--gold-lo) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  /* ── 헤더 ── */
+  header { text-align: center; padding: 16px 0 10px; }
+  .langs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button {
+    font: inherit; font-size: 12.5px; font-weight: 600; letter-spacing: .3px; color: var(--muted);
+    background: rgba(0,0,0,.35); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; cursor: pointer;
+  }
+  .langs button[aria-pressed="true"] { color: #1a1209; background: linear-gradient(180deg, var(--gold-hi), var(--gold)); border-color: var(--gold); }
+  .neon {
+    display: block; width: min(86vw, 400px); margin: 22px auto 0; mix-blend-mode: screen;
+    -webkit-mask: radial-gradient(closest-side, #000 72%, transparent); mask: radial-gradient(closest-side, #000 72%, transparent);
+    filter: drop-shadow(0 0 18px rgba(255, 170, 70, .35));
+    animation: hum 6s infinite;
+  }
+  @keyframes hum { 0%, 100% { opacity: 1; } 47% { opacity: 1; } 48% { opacity: .82; } 49% { opacity: 1; } 51% { opacity: .9; } 52% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .neon { animation: none; } }
+  .tagline { margin: 4px 0 0; font-size: 12px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); }
+  .ornament { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 14px auto 0; color: var(--gold); max-width: 280px; }
+  .ornament::before, .ornament::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+  .ornament::after { background: linear-gradient(90deg, var(--gold), transparent); }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; margin-top: 16px; background: rgba(8, 6, 4, .92); backdrop-filter: blur(10px); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  nav .wrap { position: relative; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-top: 6px; padding-bottom: 6px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600; padding: 9px 12px; white-space: nowrap; position: relative; }
+  nav a.active { color: var(--gold-hi); }
+  nav a.active::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 3px; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+
+  /* ── 섹션 카드 (금색 액자) ── */
+  main { padding: 22px 0 8px; display: grid; gap: 22px; }
+  section {
+    position: relative; overflow: hidden; border-radius: 16px; padding: 20px 18px 10px;
+    background: linear-gradient(180deg, rgba(40, 28, 16, .55), var(--panel));
+    border: 1px solid var(--line);
+    box-shadow: inset 0 0 0 4px rgba(0,0,0,.35), inset 0 0 0 5px rgba(217,167,74,.14), 0 18px 40px rgba(0,0,0,.5);
+  }
+  section::before, section::after { /* 모서리 장식 */
+    content: "✦"; position: absolute; top: 8px; font-size: 10px; color: var(--gold); opacity: .8;
+  }
+  section::before { left: 11px; } section::after { right: 11px; }
+  .head { display: flex; align-items: center; gap: 12px; min-height: 64px; position: relative; z-index: 1; }
+  .head div { flex: 1; min-width: 0; }
+  h2 { margin: 0; font-size: 26px; font-weight: 800; line-height: 1.15; letter-spacing: .3px; }
+  .head small { display: block; margin-top: 3px; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); }
+  .icon {
+    flex: none; width: 84px; height: auto; mix-blend-mode: screen;
+    -webkit-mask: radial-gradient(closest-side, #000 70%, transparent); mask: radial-gradient(closest-side, #000 70%, transparent);
+  }
+  .art { /* 위스키 병 장식 */
+    position: absolute; right: -6px; top: 40px; height: 260px; width: auto; opacity: .38; mix-blend-mode: screen; pointer-events: none;
+    -webkit-mask: linear-gradient(#000 60%, transparent); mask: linear-gradient(#000 60%, transparent);
+  }
+  .note { position: relative; z-index: 1; margin: 10px 0 0; font-size: 12.5px; color: var(--gold-hi); background: rgba(217,167,74,.10); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; }
+  .rule { height: 1px; margin: 12px 0 2px; background: linear-gradient(90deg, var(--gold), rgba(217,167,74,.15)); position: relative; z-index: 1; }
+
+  ul { list-style: none; margin: 0; padding: 0; position: relative; z-index: 1; }
+  li { padding: 11px 0; border-bottom: 1px solid rgba(217,167,74,.10); }
+  li:last-child { border-bottom: 0; }
+  .row { display: flex; align-items: baseline; gap: 8px; }
+  .row b { font-size: 17px; font-weight: 600; color: var(--text); }
+  .row .leader { flex: 1; min-width: 16px; border-bottom: 1px dotted rgba(217,167,74,.55); transform: translateY(-4px); }
+  .row .price { font-family: var(--serif); font-size: 18px; font-weight: 800; white-space: nowrap; color: var(--gold-hi); font-variant-numeric: lining-nums tabular-nums; }
+  .row .price small { font-size: 12px; font-weight: 600; margin-left: 1px; color: var(--gold); }
+  .sub2 { margin-top: 3px; font-size: 13px; color: var(--muted); }
+  .desc { margin-top: 5px; font-size: 13px; color: var(--gold); }
+  .desc::before { content: "— "; opacity: .7; }
+  section.featured .row b { font-family: var(--serif); font-size: 19px; }
+
+  /* ── 하단 정보 ── */
+  footer { padding: 26px 0 calc(30px + env(safe-area-inset-bottom)); text-align: center; }
+  .info { display: grid; gap: 10px; margin-bottom: 18px; text-align: left; }
+  .info:empty { display: none; }
+  .card {
+    display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; color: var(--text); text-decoration: none; text-align: left;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; cursor: pointer;
+  }
+  .card svg { flex: none; width: 22px; height: 22px; color: var(--gold); }
+  .card div { flex: 1; min-width: 0; }
+  .card small { display: block; font-size: 11px; color: var(--muted); letter-spacing: .5px; }
+  .card strong { display: block; font-size: 16px; color: var(--gold-hi); word-break: break-word; }
+  .card em { flex: none; font-style: normal; font-size: 12px; color: var(--muted); }
+  .vnd { font-size: 12px; color: var(--muted); margin: 0; }
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 20;
+    background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: #1a1209; font-size: 14px; font-weight: 700;
+    padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="langs" id="langs"></div>
+  <img class="neon" src="img/logo.jpg" alt="EROS" width="475" height="160">
+  <p class="tagline serif" id="tagline"></p>
+  <div class="ornament">✦</div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap" id="menu"></main>
+
+<footer class="wrap">
+  <div class="info" id="info"></div>
+  <p class="vnd" id="foot"></p>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<script>
+  const LANGS = [
+    ["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"],
+  ];
+  const UI = {
+    ko: { title: "메뉴", wifi: "와이파이", copy: "복사", copied: "비밀번호를 복사했어요", call: "전화 · 예약", map: "주소 · 지도", openMap: "구글 지도에서 위치 보기", vnd: "가격 단위: k = 1,000 베트남 동(VND)" },
+    en: { title: "Menu", wifi: "Wi-Fi", copy: "Copy", copied: "Password copied", call: "Call · Reservations", map: "Address · Map", openMap: "Open in Google Maps", vnd: "Prices in VND · k = 1,000 đồng" },
+    zh: { title: "菜单", wifi: "Wi-Fi", copy: "复制", copied: "密码已复制", call: "电话 · 预订", map: "地址 · 地图", openMap: "在谷歌地图中查看", vnd: "价格单位：k = 1,000 越南盾（VND）" },
+    ja: { title: "メニュー", wifi: "Wi-Fi", copy: "コピー", copied: "パスワードをコピーしました", call: "電話・ご予約", map: "住所・地図", openMap: "Googleマップで見る", vnd: "価格はベトナムドン（VND）· k = 1,000ドン" },
+    vi: { title: "Thực đơn", wifi: "Wi-Fi", copy: "Sao chép", copied: "Đã sao chép mật khẩu", call: "Gọi điện · Đặt bàn", map: "Địa chỉ · Bản đồ", openMap: "Xem trên Google Maps", vnd: "Giá tính bằng VND · k = 1.000 đồng" },
+  };
+  // 섹션 제목 아래 작은 영문 표기 (원래 메뉴판처럼)
+  const EN_LABEL = (cat) => cat.name.en;
+
+  let observer;
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  function storage(fn) { try { return fn(localStorage); } catch { return null; } }
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  // 1,500,000 → "1,500k"
+  const fmt = (n) => (n / 1000).toLocaleString("en-US");
+
+  // 직원(한국어/베트남어)이 알아볼 수 있게 보조 이름 표시. 같은 이름(브랜드명 등)은 한 번만
+  const SECONDARY = { ko: ["vi", "zh"], vi: ["ko", "zh"], en: ["ko", "vi"], zh: ["ko", "vi"], ja: ["ko", "vi"] };
+  function secondary(name, lang) {
+    const seen = new Set([name[lang]]);
+    return SECONDARY[lang].map((c) => name[c]).filter((s) => s && !seen.has(s) && seen.add(s)).join(" · ");
+  }
+
+  function render(lang) {
+    const t = UI[lang];
+    const R = window.RESTAURANT;
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand} · ${t.title}`;
+    $("tagline").textContent = "Menu";
+
+    $("langs").innerHTML = LANGS.map(([c, label]) =>
+      `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}" class="${cat.id === "set" ? "featured" : ""}">
+        ${cat.art ? `<img class="art" src="${cat.art}" alt="" loading="lazy">` : ""}
+        <div class="head">
+          <div>
+            <h2 class="serif gold-text">${esc(cat.name[lang])}</h2>
+            ${lang !== "en" ? `<small>${esc(EN_LABEL(cat))}</small>` : ""}
+          </div>
+          ${cat.icon ? `<img class="icon" src="${cat.icon}" alt="" loading="lazy">` : ""}
+        </div>
+        ${cat.note ? `<p class="note">${esc(cat.note[lang])}</p>` : ""}
+        <div class="rule"></div>
+        <ul>${cat.items.map((it) => {
+          const sub = secondary(it.name, lang);
+          return `
+          <li>
+            <div class="row">
+              <b>${esc(it.name[lang])}</b>
+              <span class="leader"></span>
+              <span class="price">${fmt(it.price)}<small>k</small></span>
+            </div>
+            ${sub ? `<div class="sub2">${esc(sub)}</div>` : ""}
+            ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
+          </li>`;
+        }).join("")}
+        </ul>
+      </section>`).join("");
+
+    renderInfo(t, R);
+    $("foot").textContent = t.vnd;
+    observeSections();
+  }
+
+  const ICONS = {
+    wifi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/></svg>',
+    call: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>',
+    map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+  };
+
+  // 정보가 입력된 항목만 표시 (menu.js의 RESTAURANT)
+  function renderInfo(t, R) {
+    const cards = [];
+    if (R.wifi) cards.push(`<button class="card" id="wifi" type="button">${ICONS.wifi}<div><small>${esc(t.wifi)} · ${esc(R.wifi.ssid)}</small><strong>${esc(R.wifi.password)}</strong></div><em>${esc(t.copy)}</em></button>`);
+    if (R.phone) cards.push(`<a class="card" href="tel:${esc(R.phone.replace(/\s/g, ""))}">${ICONS.call}<div><small>${esc(t.call)}</small><strong>${esc(R.phone)}</strong></div></a>`);
+    if (R.address || R.mapUrl) {
+      const href = R.mapUrl || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.address);
+      cards.push(`<a class="card" target="_blank" rel="noopener" href="${esc(href)}">${ICONS.map}<div><small>${esc(t.map)}</small><strong>${esc(R.address || t.openMap)}</strong></div></a>`);
+    }
+    $("info").innerHTML = cards.join("");
+    $("wifi")?.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(R.wifi.password); toast(UI[lang].copied); }
+      catch { toast(R.wifi.password); }
+    });
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+</body>
+</html>
