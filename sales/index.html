@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16130f">
+<title>다국어 QR 메뉴판</title>
+<meta name="description" content="손님 휴대폰 언어로 자동으로 바뀌는 QR 메뉴판 — 한국어 · English · 中文 · 日本語 · Tiếng Việt">
+<style>
+  :root {
+    --ink: #16130f;
+    --ink-2: #2a251f;
+    --paper: #faf7f2;
+    --card: #ffffff;
+    --line: #e9e2d7;
+    --muted: #6f675d;
+    --accent: #e0452b;
+    --accent-2: #f2a03d;
+    --gold: #c99a3e;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "PingFang SC", "Noto Sans SC", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.5;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+  :lang(ko) body, :lang(ko) h1, :lang(ko) h2, :lang(ko) h3, :lang(ko) p { word-break: keep-all; }
+  :lang(ja) h1, :lang(zh-Hans) h1 { line-break: strict; }
+  h1, h2, h3 { line-height: 1.2; margin: 0; letter-spacing: -.3px; }
+  section { padding: 56px 0; }
+  .sec-title { font-size: 28px; font-weight: 800; }
+  .sec-sub { margin: 8px 0 0; color: var(--muted); }
+
+  /* ── 상단 ── */
+  .hero { background: radial-gradient(120% 90% at 85% 0%, #3a2416 0%, var(--ink) 55%); color: #fff; padding: 18px 0 56px; overflow: hidden; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .logo { font-weight: 800; letter-spacing: .5px; display: flex; align-items: center; gap: 8px; }
+  .logo i { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: grid; place-items: center; font-style: normal; font-size: 13px; }
+  .langs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #d8cfc3; background: transparent; border: 1px solid #5a4f43; border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: var(--ink); background: #fff; border-color: #fff; }
+  .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 28px; align-items: center; margin-top: 40px; }
+  .kicker { display: inline-block; font-size: 13px; font-weight: 700; color: var(--accent-2); border: 1px solid rgba(242,160,61,.4); border-radius: 999px; padding: 4px 12px; }
+  .hero h1 { font-size: clamp(32px, 5.4vw, 50px); font-weight: 900; margin-top: 16px; }
+  .hero h1 em { font-style: normal; background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { color: #d8cfc3; font-size: 17px; margin: 16px 0 0; max-width: 34em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+  .chips span { font-size: 13px; font-weight: 600; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 6px; padding: 3px 9px; }
+  .ctas { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 700; font-size: 15px; border-radius: 12px; padding: 12px 18px; }
+  .btn.primary { color: #fff; background: linear-gradient(135deg, var(--accent), #f0662f); box-shadow: 0 8px 22px rgba(224,69,43,.35); }
+  .btn.ghost { color: #fff; border: 1px solid rgba(255,255,255,.3); }
+  .phones { position: relative; height: 420px; }
+  .phone { position: absolute; width: 190px; border-radius: 30px; padding: 8px; background: #0b0a09; box-shadow: 0 30px 60px rgba(0,0,0,.55), inset 0 0 0 1px #3b342c; }
+  .phone img { display: block; width: 100%; border-radius: 23px; aspect-ratio: 375 / 760; object-fit: cover; object-position: top; }
+  .phone.a { left: 4%; top: 30px; transform: rotate(-7deg); }
+  .phone.b { right: 4%; top: 0; transform: rotate(6deg); }
+
+  /* ── 데모 ── */
+  .demos { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
+  .demo { display: flex; gap: 16px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; text-decoration: none; color: inherit; }
+  .demo .shot { flex: none; width: 112px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+  .demo .shot img { display: block; width: 100%; aspect-ratio: 375 / 600; object-fit: cover; object-position: top; }
+  .demo h3 { font-size: 20px; }
+  .demo .type { color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .demo .qr { width: 96px; height: 96px; margin-top: 10px; display: block; border-radius: 8px; border: 1px solid var(--line); }
+  .demo .url { font-size: 12px; color: var(--accent); margin-top: 6px; word-break: break-all; }
+
+  /* ── 특징 ── */
+  .feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+  .feat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+  .feat b { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: #fff1ec; color: var(--accent); font-size: 18px; }
+  .feat h3 { font-size: 17px; margin-top: 12px; }
+  .feat p { margin: 6px 0 0; font-size: 14.5px; color: var(--muted); }
+
+  /* ── 진행 순서 ── */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 28px; counter-reset: s; }
+  .step { position: relative; padding: 18px 16px; border-radius: 16px; background: var(--ink-2); color: #fff; }
+  .step::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); font-weight: 800; font-size: 14px; }
+  .step h3 { font-size: 16px; margin-top: 12px; }
+  .step p { margin: 6px 0 0; font-size: 14px; color: #cfc5b8; }
+
+  /* ── 가격 ── */
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; align-items: stretch; }
+  .plan { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 20px; display: flex; flex-direction: column; }
+  .plan.hot { border: 2px solid var(--accent); box-shadow: 0 14px 34px rgba(224,69,43,.14); }
+  .plan .badge { position: absolute; top: -12px; left: 20px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
+  .plan h3 { font-size: 18px; }
+  .plan .price { margin-top: 10px; font-size: 30px; font-weight: 900; letter-spacing: -.5px; }
+  .plan .price small { font-size: 14px; font-weight: 600; color: var(--muted); margin-left: 4px; letter-spacing: 0; }
+  .plan ul { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 8px; }
+  .plan li { position: relative; padding-left: 24px; font-size: 14.5px; }
+  .plan li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 900; }
+  .opts { margin-top: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 8px 20px; }
+  .opts h3 { font-size: 16px; padding: 12px 0 6px; }
+  .opt { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); font-size: 14.5px; }
+  .opt span:last-child { font-weight: 700; white-space: nowrap; }
+  .note { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+
+  /* ── FAQ ── */
+  .faqs { margin-top: 24px; display: grid; gap: 10px; }
+  .faq { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  .faq h3 { font-size: 16px; }
+  .faq h3::before { content: "Q. "; color: var(--accent); }
+  .faq p { margin: 6px 0 0; color: var(--muted); font-size: 14.5px; }
+
+  /* ── 문의 ── */
+  .contact { background: var(--ink); color: #fff; text-align: center; }
+  .contact p { color: #d8cfc3; margin: 8px 0 0; }
+  .contact-btns { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+  .contact-btns a { min-width: 200px; text-decoration: none; color: #fff; border: 1px solid #5a4f43; border-radius: 14px; padding: 12px 18px; text-align: left; }
+  .contact-btns a small { display: block; font-size: 12px; color: #b9ad9e; }
+  .contact-btns a strong { font-size: 18px; }
+  .contact-btns a.main { background: linear-gradient(135deg, var(--accent), #f0662f); border-color: transparent; }
+  .contact-btns a.main small { color: #ffe3da; }
+  footer { background: var(--ink); color: #8d8275; text-align: center; font-size: 12px; padding: 0 0 28px; }
+
+  @media screen and (max-width: 760px) {
+    section { padding: 44px 0; }
+    .hero-grid { grid-template-columns: 1fr; margin-top: 28px; }
+    .phones { height: 330px; }
+    .phone { width: 150px; border-radius: 24px; padding: 6px; }
+    .phone img { border-radius: 19px; }
+    .phone.a { left: 8%; } .phone.b { right: 8%; }
+    .demos, .feats, .plans { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .sec-title { font-size: 24px; }
+  }
+
+  /* ── 인쇄 (A4) ── */
+  @page { size: A4; margin: 10mm; }
+  @media print {
+    body { background: #fff; font-size: 11px; }
+    .wrap { max-width: none; padding: 0; }
+    .langs, .ctas { display: none; }
+    section { padding: 18px 0; break-inside: avoid; }
+    .hero { padding: 14px 18px 22px; border-radius: 14px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .hero-grid { margin-top: 14px; grid-template-columns: 1.2fr .8fr; }
+    .hero h1 { font-size: 27px; }
+    .hero p { font-size: 13px; }
+    .phones { height: 250px; }
+    .phone { width: 118px; border-radius: 18px; padding: 5px; }
+    .phone img { border-radius: 14px; }
+    .sec-title { font-size: 19px; }
+    .demos, .feats { gap: 8px; margin-top: 12px; }
+    .demo { padding: 10px; }
+    .feat { padding: 10px 12px; }
+    .feat p, .step p, .plan li, .opt, .faq p { font-size: 11px; }
+    .steps, .plans { gap: 8px; margin-top: 12px; }
+    .step, .plan { padding: 12px; }
+    .plan .price { font-size: 22px; }
+    #faq { display: none; }
+    .contact { border-radius: 14px; padding: 18px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .contact-btns { margin-top: 12px; }
+    .step, .contact, .plan .badge, .feat b, .btn, .demo .shot { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    footer { display: none; }
+    #steps { break-before: page; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="logo"><i>QR</i><span data-t="title"></span></div>
+      <div class="langs" id="langs"></div>
+    </div>
+    <div class="hero-grid">
+      <div>
+        <span class="kicker" data-t="kicker"></span>
+        <h1 data-html="heroTitle"></h1>
+        <p data-t="heroSub"></p>
+        <div class="chips"><span>한국어</span><span>English</span><span>中文</span><span>日本語</span><span>Tiếng Việt</span></div>
+        <div class="ctas">
+          <a class="btn primary" href="#demo" data-t="ctaDemo"></a>
+          <a class="btn ghost" href="#price" data-t="ctaPrice"></a>
+        </div>
+      </div>
+      <div class="phones" id="phones"></div>
+    </div>
+  </div>
+</header>
+
+<section id="demo"><div class="wrap">
+  <h2 class="sec-title" data-t="demoTitle"></h2>
+  <p class="sec-sub" data-t="demoSub"></p>
+  <div class="demos" id="demos"></div>
+</div></section>
+
+<section id="feat" style="padding-top:0"><div class="wrap">
+  <h2 class="sec-title" data-t="featTitle"></h2>
+  <div class="feats" id="feats"></div>
+</div></section>
+
+<section id="steps" style="padding-top:0"><div class="wrap">
+  <h2 class="sec-title" data-t="stepTitle"></h2>
+  <div class="steps" id="stepList"></div>
+</div></section>
+
+<section id="price" style="padding-top:0"><div class="wrap">
+  <h2 class="sec-title" data-t="priceTitle"></h2>
+  <div class="plans" id="plans"></div>
+  <div class="opts" id="opts"></div>
+  <p class="note" data-t="priceNote"></p>
+</div></section>
+
+<section id="faq" style="padding-top:0"><div class="wrap">
+  <h2 class="sec-title" data-t="faqTitle"></h2>
+  <div class="faqs" id="faqs"></div>
+</div></section>
+
+<section class="contact" id="contact"><div class="wrap">
+  <h2 class="sec-title" data-t="contactTitle"></h2>
+  <p data-t="contactSub"></p>
+  <div class="contact-btns" id="contactBtns"></div>
+</div></section>
+<footer>한국어 · English · 中文 · 日本語 · Tiếng Việt</footer>
+
+<script src="content.js"></script>
+<script>
+  const LANGS = [["ko", "한국어"], ["vi", "Tiếng Việt"], ["zh", "中文"], ["ja", "日本語"], ["en", "English"]];
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const FEAT_ICONS = ["🌐", "🎨", "🔳", "✏️", "📶", "📱"];
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const vnd = (n) => n.toLocaleString("en-US") + "₫";
+  // 문구 안의 {yearly} 같은 자리에 가격을 채움
+  const fill = (s) => s.replace(/\{(\w+)\}/g, (_, k) => vnd(PRICES[k]));
+  function storage(fn) { try { return fn(localStorage); } catch { return null; } }
+
+  // 우선순위: ?lang= → 직접 고른 언어 → 휴대폰 언어 → 한국어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("sales-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "ko";
+  }
+
+  function render(lang) {
+    const t = T[lang];
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = t.title;
+    document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = t[el.dataset.t]; });
+    document.querySelectorAll("[data-html]").forEach((el) => { el.innerHTML = t[el.dataset.html]; });
+
+    $("langs").innerHTML = LANGS.map(([c, label]) =>
+      `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+
+    $("phones").innerHTML = DEMOS.map((d, i) =>
+      `<a class="phone ${i ? "b" : "a"}" href="${d.url}" target="_blank" rel="noopener"><img src="${d.shot}" alt="${esc(d.name)}"></a>`).join("");
+
+    $("demos").innerHTML = DEMOS.map((d) => `
+      <a class="demo" href="${d.url}" target="_blank" rel="noopener">
+        <div class="shot"><img src="${d.shot}" alt="" loading="lazy"></div>
+        <div>
+          <h3>${esc(d.name)}</h3>
+          <div class="type">${esc(d.type[lang] || d.type.en)}</div>
+          <img class="qr" src="${d.qr}" alt="QR ${esc(d.url)}">
+          <div class="url">${esc(d.url.replace("https://", ""))}</div>
+        </div>
+      </a>`).join("");
+
+    $("feats").innerHTML = t.feats.map(([h, p], i) =>
+      `<div class="feat"><b>${FEAT_ICONS[i]}</b><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join("");
+
+    $("stepList").innerHTML = t.steps.map(([h, p]) => `<div class="step"><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join("");
+
+    const plan = (key, price, suffix, hot) => {
+      const [name, items] = t.plans[key];
+      return `<div class="plan ${hot ? "hot" : ""}">
+        ${hot ? `<span class="badge">${esc(t.popular)}</span>` : ""}
+        <h3>${esc(name)}</h3>
+        <div class="price">${vnd(price)}<small>${esc(suffix)}</small></div>
+        <ul>${items.map((s) => `<li>${esc(fill(s))}</li>`).join("")}</ul>
+      </div>`;
+    };
+    $("plans").innerHTML = plan("basic", PRICES.basic, t.once) + plan("premium", PRICES.premium, t.once, true) + plan("monthly", PRICES.monthly, t.perMonth);
+    $("opts").innerHTML = `<h3>${esc(t.optTitle)}</h3>` + t.opts.map(([a, b]) => `<div class="opt"><span>${esc(a)}</span><span>${esc(fill(b))}</span></div>`).join("");
+
+    $("faqs").innerHTML = t.faqs.map(([q, a]) => `<div class="faq"><h3>${esc(q)}</h3><p>${esc(a)}</p></div>`).join("");
+
+    const C = window.CONTACT, btns = [];
+    if (C.phone) btns.push(`<a class="main" href="tel:${esc(C.phone.replace(/\s/g, ""))}"><small>${esc(t.call)}</small><strong>${esc(C.phone)}</strong></a>`);
+    if (C.zalo) btns.push(`<a href="https://zalo.me/${esc(C.zalo.replace(/\D/g, ""))}" target="_blank" rel="noopener"><small>${esc(t.zalo)}</small><strong>${esc(C.zalo)}</strong></a>`);
+    if (C.kakao) btns.push(`<a><small>${esc(t.kakao)}</small><strong>${esc(C.kakao)}</strong></a>`);
+    $("contactBtns").innerHTML = btns.join("");
+  }
+
+  let lang = detectLang();
+  render(lang);
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("sales-lang", c));
+    render(lang);
+  });
+</script>
+</body>
+</html>
