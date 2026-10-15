@@ -21,28 +21,33 @@
       corp: "Công ty TNHH Thương mại và Dịch vụ DASAN · Giấy phép cho thuê lại lao động số 68/2023/SBN" },
   };
 
+  // 색은 가게 메뉴판이 정한 --pt-* 변수를 따른다 (없으면 다산 기본색). --pt-mode: dark 이면 흰 로고.
   const css = `
     .dasan { box-sizing: border-box; max-width: 560px; margin: 0 auto; padding: 18px 16px calc(22px + env(safe-area-inset-bottom)); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif; }
     .dasan * { box-sizing: border-box; }
-    .dasan-card { position: relative; display: block; text-decoration: none; color: #0e2a4f; background: #fff; border-radius: 16px; padding: 14px 14px 12px; border-top: 4px solid #c8102e; box-shadow: 0 6px 18px rgba(14,42,79,.18); line-height: 1.35; }
-    .dasan-tag { position: absolute; top: 10px; right: 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .3px; color: #6b7a90; border: 1px solid #d5dbe4; border-radius: 4px; padding: 1px 6px; }
-    .dasan-logo { display: block; height: 30px; width: auto; }
-    .dasan-title { margin: 10px 0 0; font-size: 15.5px; font-weight: 800; color: #0e2a4f; }
-    .dasan-sub { margin: 3px 0 0; font-size: 13px; color: #44546b; }
+    .dasan-card { position: relative; display: block; text-decoration: none; color: var(--pt-ink, #0e2a4f); background: var(--pt-bg, #fff); border-radius: 16px; padding: 14px 14px 12px; border: 1px solid var(--pt-line, transparent); border-top: 3px solid var(--pt-accent, #c8102e); box-shadow: var(--pt-shadow, 0 6px 18px rgba(14,42,79,.18)); line-height: 1.35; }
+    .dasan-tag { position: absolute; top: 10px; right: 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .3px; color: var(--pt-muted, #6b7a90); border: 1px solid var(--pt-line, #d5dbe4); border-radius: 4px; padding: 1px 6px; }
+    .dasan-logo { display: block; height: 28px; width: auto; }
+    .dasan-title { margin: 10px 0 0; font-size: 15.5px; font-weight: 800; color: var(--pt-ink, #0e2a4f); }
+    .dasan-sub { margin: 3px 0 0; font-size: 13px; color: var(--pt-muted, #44546b); }
     .dasan-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 11px; }
-    .dasan-tel { font-size: 13px; color: #0e2a4f; }
+    .dasan-tel { font-size: 13px; color: var(--pt-ink, #0e2a4f); }
     .dasan-tel b { font-size: 15px; font-weight: 800; white-space: nowrap; }
-    .dasan-tel small { display: block; font-size: 11px; color: #6b7a90; }
-    .dasan-cta { flex: none; font-size: 13px; font-weight: 800; color: #fff; background: #c8102e; border-radius: 999px; padding: 8px 13px; white-space: nowrap; }
-    .dasan-corp { margin: 9px 0 0; padding-top: 8px; border-top: 1px solid #e6eaf0; font-size: 10.5px; color: #8391a5; }
+    .dasan-tel small { display: block; font-size: 11px; color: var(--pt-muted, #6b7a90); }
+    .dasan-cta { flex: none; font-size: 13px; font-weight: 800; color: var(--pt-btn-ink, #fff); background: var(--pt-btn, #c8102e); border-radius: 999px; padding: 8px 13px; white-space: nowrap; }
+    .dasan-corp { margin: 9px 0 0; padding-top: 8px; border-top: 1px solid var(--pt-line, #e6eaf0); font-size: 10.5px; color: var(--pt-muted, #8391a5); opacity: .85; }
     :lang(ko) .dasan { word-break: keep-all; }
   `;
+
 
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const langOf = () => {
     const l = (document.documentElement.lang || "en").toLowerCase().split("-")[0];
     return T[l] ? l : "en";
   };
+
+  // 어두운 메뉴판에서는 흰 로고
+  const logo = () => getComputedStyle(document.documentElement).getPropertyValue("--pt-mode").trim() === "dark" ? "dasan-logo-white.png" : "dasan-logo.png";
 
   function mount() {
     const style = document.createElement("style");
@@ -58,7 +63,7 @@
       box.innerHTML = `
         <a class="dasan-card" href="${t.href}" target="_blank" rel="noopener">
           <span class="dasan-tag">${esc(t.tag)}</span>
-          <img class="dasan-logo" src="dasan-logo.png" alt="DASAN" width="360" height="85" loading="lazy">
+          <img class="dasan-logo" src="${logo()}" alt="DASAN" width="360" height="85" loading="lazy">
           <p class="dasan-title">${esc(t.title)}</p>
           <p class="dasan-sub">${esc(t.sub)}</p>
           <div class="dasan-row">
