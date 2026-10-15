@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가마솥 · QR 메뉴판 활용 가이드</title>
+<style>
+  @font-face { font-family: "Gmarket"; src: url("../../../public/fonts/GmarketSansTTFBold.ttf"); }
+  @page { size: A4; margin: 12mm 12mm 13mm; }
+  * { box-sizing: border-box; }
+  :root { --paper: #f7f3ec; --paper-2: #efe8dc; --band: #857866; --band-2: #6f6353; --ink: #2b2622; --muted: #7d7368; --line: #e2d9cb; --rust: #a5573c; }
+  body { margin: 0; font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; color: var(--ink); font-size: 9.6pt; line-height: 1.45; word-break: keep-all; }
+  h1, h2, h3 { margin: 0; font-family: "Gmarket", "WenQuanYi Zen Hei", sans-serif; font-weight: 400; line-height: 1.25; }
+  .page { break-after: page; }
+  .page:last-child { break-after: auto; }
+  .pc { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .cover { display: flex; gap: 7mm; align-items: center; background: var(--paper); border-left: 4mm solid var(--band); border-radius: 0 5mm 5mm 0; padding: 5mm 7mm; }
+  .cover .logo { width: 26mm; }
+  .cover h1 { font-size: 19pt; }
+  .cover p { margin: 1.5mm 0 0; color: var(--muted); }
+  .cover .url { display: inline-block; margin-top: 2.5mm; font-family: "Gmarket"; font-size: 10pt; color: #fff; background: var(--band); border-radius: 99mm; padding: 1.2mm 4mm .8mm; }
+  .cover .qr { margin-left: auto; text-align: center; font-size: 8pt; color: var(--muted); }
+  .cover .qr img { width: 25mm; display: block; border: .4mm solid var(--line); border-radius: 2mm; background: #fff; margin-bottom: 1mm; }
+
+  h2 { font-size: 13pt; margin: 5mm 0 2.5mm; display: flex; align-items: center; gap: 2.5mm; color: var(--band-2); }
+  h2 .no { display: inline-grid; place-items: center; width: 7mm; height: 7mm; border-radius: 50%; background: var(--band); color: #fff; font-size: 10pt; }
+  .lead { margin: 0 0 3mm; color: var(--muted); }
+
+  .shots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2.6mm; }
+  .shot { text-align: center; }
+  .shot img { width: 100%; height: auto; aspect-ratio: 1 / 2; object-fit: cover; object-position: top; border-radius: 3mm; border: .3mm solid var(--line); }
+  .shot b { display: inline-grid; place-items: center; width: 5.6mm; height: 5.6mm; border-radius: 50%; background: var(--rust); color: #fff; font-size: 8.5pt; margin: 1.8mm 0 .8mm; }
+  .shot h3 { font-size: 9.6pt; }
+  .shot p { margin: .8mm 0 0; font-size: 8.4pt; color: var(--muted); }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin-top: 4mm; }
+  .stat { background: var(--paper); border-radius: 3mm; padding: 3mm; text-align: center; }
+  .stat strong { display: block; font-family: "Gmarket"; font-size: 15pt; color: var(--rust); }
+  .stat span { font-size: 8.6pt; color: var(--muted); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 9.2pt; }
+  th, td { text-align: left; padding: 1.8mm 2.4mm; border-bottom: .3mm solid var(--line); vertical-align: top; }
+  th { font-family: "Gmarket"; font-weight: 400; color: #fff; background: var(--band); }
+  td:first-child { font-family: "Gmarket"; color: var(--band-2); white-space: nowrap; }
+  td.good { color: var(--ink); }
+
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5mm; }
+  .box { background: var(--paper); border-radius: 3.5mm; padding: 3mm 3.6mm; border-top: 1mm solid var(--band); }
+  .box h3 { font-size: 10.4pt; margin-bottom: 1.2mm; }
+  .box ul { margin: 0; padding-left: 4.2mm; }
+  .box li { margin: .5mm 0; }
+  .box .em { color: var(--rust); }
+
+  .msg { background: #fff; border: .35mm solid var(--line); border-radius: 3mm; padding: 2.6mm 3.4mm; font-size: 9pt; white-space: pre-line; }
+  .msg .tag { display: inline-block; font-family: "Gmarket"; font-size: 8pt; color: #fff; background: var(--rust); border-radius: 1.2mm; padding: .4mm 1.8mm .2mm; margin-bottom: 1.2mm; }
+  code { font-family: inherit; background: var(--paper-2); border-radius: 1.2mm; padding: .2mm 1.4mm; }
+
+  ul.check { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4mm; }
+  ul.check li { padding-left: 6mm; position: relative; }
+  ul.check li::before { content: ""; position: absolute; left: 0; top: .6mm; width: 3.4mm; height: 3.4mm; border: .4mm solid var(--band); border-radius: .8mm; }
+  .contact { margin-top: 4mm; text-align: center; background: var(--band); color: #fff; border-radius: 4mm; padding: 3.2mm; }
+  .contact b { font-family: "Gmarket"; font-weight: 400; font-size: 12pt; }
+  .note { font-size: 8.6pt; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ───────── 1쪽 ───────── -->
+<section class="page">
+  <div class="cover pc">
+    <img class="logo" src="../img/logo.png" alt="가마솥">
+    <div>
+      <h1>가마솥 QR 메뉴판<br>활용 가이드</h1>
+      <p>사장님과 직원분들이 메뉴판을 200% 활용하는 방법</p>
+      <span class="url pc">gamasot-menu.vercel.app</span>
+    </div>
+    <div class="qr"><img src="qr.svg" alt="QR">찍어서 바로 확인</div>
+  </div>
+
+  <h2><span class="no pc">1</span>손님은 이렇게 봅니다</h2>
+  <p class="lead">테이블 QR을 휴대폰 카메라로 찍으면 앱 설치 없이 바로 열립니다. 손님 휴대폰 언어(한국어·베트남어·영어·중국어·일본어)로 자동 표시돼요.</p>
+  <div class="shots">
+    <div class="shot"><img src="img/g1.jpg" alt=""><b class="pc">1</b><h3>첫 화면</h3><p>가마솥 로고와<br>언어 버튼</p></div>
+    <div class="shot"><img src="img/g2.jpg" alt=""><b class="pc">2</b><h3>메뉴 · 가격</h3><p>Must Try·BEST 표시,<br>S/L 가격, 포함 구성</p></div>
+    <div class="shot"><img src="img/g3.jpg" alt=""><b class="pc">3</b><h3>사진 크게 보기</h3><p>사진을 누르면<br>크게 보여요</p></div>
+    <div class="shot"><img src="img/g4.jpg" alt=""><b class="pc">4</b><h3>외국어 화면</h3><p>중국어 손님 화면.<br>아래에 한국어 이름</p></div>
+    <div class="shot"><img src="img/g5.jpg" alt=""><b class="pc">5</b><h3>맨 아래</h3><p>전화·예약·배달,<br>지도 바로 연결</p></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat pc"><strong>5개 언어</strong><span>휴대폰 언어 자동 인식</span></div>
+    <div class="stat pc"><strong>70개 메뉴</strong><span>9개 분류로 정리</span></div>
+    <div class="stat pc"><strong>사진 33장</strong><span>메뉴판 원본 사진 사용</span></div>
+    <div class="stat pc"><strong>0원 재인쇄</strong><span>가격이 바뀌어도 QR 그대로</span></div>
+  </div>
+  <h2 style="margin-top:6mm"><span class="no pc">✓</span>종이 메뉴판과 비교하면</h2>
+  <table>
+    <tr><th class="pc" style="width:24%"></th><th class="pc">종이 메뉴판</th><th class="pc">QR 메뉴판</th></tr>
+    <tr><td>가격 · 메뉴 변경</td><td>다시 디자인하고 인쇄 (비용·시간)</td><td>메시지 한 통이면 그날 반영, QR 그대로</td></tr>
+    <tr><td>외국인 손님</td><td>한국어·베트남어만, 직원이 설명</td><td>5개 언어로 손님이 직접 읽음</td></tr>
+    <tr><td>사진</td><td>지면이 좁아 일부만</td><td>33장, 누르면 크게</td></tr>
+    <tr><td>가게 밖에서</td><td>매장에 와야 볼 수 있음</td><td>링크로 Zalo·카톡·SNS 어디든 전달</td></tr>
+  </table>
+</section>
+
+<!-- ───────── 2쪽 ───────── -->
+<section class="page">
+  <h2><span class="no pc">2</span>기능별 좋은 점과 활용법</h2>
+  <table>
+    <tr><th class="pc" style="width:24%">기능</th><th class="pc" style="width:38%">좋은 점</th><th class="pc">이렇게 쓰세요</th></tr>
+    <tr><td>5개 언어 자동 전환</td><td class="good">외국인 손님도 혼자 메뉴를 읽고 고릅니다. 직원이 통역할 필요가 줄어요.</td><td>중국·일본·서양 손님 테이블에 "QR 찍어 보세요" 한마디면 끝.</td></tr>
+    <tr><td>두 언어 같이 표시</td><td class="good">한국어 화면엔 베트남어 이름, 외국어 화면엔 한국어 이름이 같이 나와요.</td><td>손님이 화면을 가리키면 베트남 직원도 바로 알아듣습니다. 주문 실수가 줄어요.</td></tr>
+    <tr><td>음식 사진 · 크게 보기</td><td class="good">처음 온 손님도 모양을 보고 고릅니다. 비싼 메뉴일수록 사진 효과가 큽니다.</td><td>간장게장·꽃게탕·복어찜처럼 객단가 높은 메뉴를 사진으로 권하세요.</td></tr>
+    <tr><td>Must Try · BEST · 스페셜</td><td class="good">무엇을 시킬지 고민하는 손님에게 추천 메뉴가 눈에 띕니다.</td><td>밀고 싶은 메뉴가 바뀌면 알려 주세요. 표시를 바로 옮겨 드립니다.</td></tr>
+    <tr><td>S / L 가격 · 포함 구성</td><td class="good">"몇 인분이에요?", "뭐가 같이 나와요?" 질문이 줄어듭니다.</td><td>계란찜·우렁 아욱국 포함, 2~3인 기준, 칼국수·고기 추가 가격까지 이미 들어 있어요.</td></tr>
+    <tr><td>수육 TIP · 꽃게 안내</td><td class="good">"뚜껑 덮고 2분", "연평도 암꽃게" 같은 가게의 자랑이 손님에게 그대로 전달돼요.</td><td>새로 알리고 싶은 이야기(재료, 조리법)가 있으면 문구를 보내 주세요.</td></tr>
+    <tr><td>전화 · 지도 버튼</td><td class="good">누르면 바로 전화가 걸리고 지도가 열립니다.</td><td>포장·배달·예약 손님이 번호를 따로 찾을 필요가 없어요.</td></tr>
+    <tr><td>수정이 쉬움</td><td class="good">가격·메뉴가 바뀌어도 종이 메뉴판을 다시 찍을 필요가 없습니다. QR도 그대로예요.</td><td>품절, 가격 인상, 새 메뉴, 시가 변동을 메시지로 보내면 그날 반영됩니다.</td></tr>
+    <tr><td>와이파이 안내 (추가 가능)</td><td class="good">비밀번호를 누르면 복사돼서 직원에게 묻지 않아도 됩니다.</td><td>와이파이 이름·비밀번호를 알려 주시면 넣어 드려요.</td></tr>
+  </table>
+
+  <h2><span class="no pc">3</span>상황별 활용 아이디어</h2>
+  <div class="grid3">
+    <div class="box pc"><h3>🍲 매장 테이블</h3><ul>
+      <li>모든 테이블에 QR 카드를 세워 두세요.</li>
+      <li>카운터·입구·대기석에도 하나씩.</li>
+      <li>종이 메뉴판과 <span class="em">같이</span> 두면 손님이 편한 쪽을 씁니다.</li></ul></div>
+    <div class="box pc"><h3>🛵 포장 · 배달</h3><ul>
+      <li>Zalo·카카오톡·페이스북에 메뉴 링크를 보내면 손님이 사진 보고 주문해요.</li>
+      <li>단골 단체방, 아파트 단톡방 공지에 링크 고정.</li></ul></div>
+    <div class="box pc"><h3>📅 예약 · 단체 회식</h3><ul>
+      <li>예약 확인 메시지에 링크를 함께 보내세요.</li>
+      <li>미리 메뉴를 정해 오면 회전이 빨라지고, 꽃게찜 같은 예약 메뉴도 팔기 쉬워요.</li></ul></div>
+    <div class="box pc"><h3>🌏 외국인 · 거래처 손님</h3><ul>
+      <li>한국 회사 주재원이 중국·일본 거래처를 데려올 때 언어 지정 링크를 보내 주세요 (3번 참고).</li></ul></div>
+    <div class="box pc"><h3>👩‍🍳 직원 교육</h3><ul>
+      <li>새 베트남 직원이 메뉴판으로 한국어·베트남어 이름과 사진을 함께 익힙니다.</li>
+      <li>"이 메뉴엔 뭐가 같이 나가요?"도 화면에 다 있어요.</li></ul></div>
+    <div class="box pc"><h3>📍 구글 지도 · SNS</h3><ul>
+      <li>구글 비즈니스 프로필의 "메뉴" 링크, 페이스북 페이지, 인스타 소개란에 주소를 넣으세요.</li>
+      <li>검색으로 찾아온 손님이 오기 전에 메뉴를 봅니다.</li></ul></div>
+  </div>
+</section>
+
+<!-- ───────── 3쪽 ───────── -->
+<section class="page">
+  <h2><span class="no pc">4</span>링크 보내는 법 · 문구 예시</h2>
+  <p class="lead">아래 문구를 복사해서 Zalo·카카오톡으로 보내면 됩니다. 주소 끝에 언어를 붙이면 그 언어로 바로 열려요.</p>
+  <table style="margin-bottom:3mm">
+    <tr><th class="pc" style="width:24%">언어</th><th class="pc">링크</th></tr>
+    <tr><td>자동 (휴대폰 언어)</td><td>https://gamasot-menu.vercel.app</td></tr>
+    <tr><td>한국어</td><td>https://gamasot-menu.vercel.app<b>?lang=ko</b></td></tr>
+    <tr><td>베트남어</td><td>https://gamasot-menu.vercel.app<b>?lang=vi</b></td></tr>
+    <tr><td>중국어 · 일본어 · 영어</td><td>…<b>?lang=zh</b> · …<b>?lang=ja</b> · …<b>?lang=en</b></td></tr>
+  </table>
+  <div class="grid2">
+    <div class="msg"><span class="tag pc">한국어 · 예약/배달 손님</span>
+안녕하세요, 하노이 송다 한식당 가마솥입니다 🍲
+메뉴와 사진은 여기서 보실 수 있어요 👇
+https://gamasot-menu.vercel.app?lang=ko
+포장·배달·예약: 088 930 1000</div>
+    <div class="msg"><span class="tag pc">베트남어 · Khách Việt</span>
+Nhà hàng Hàn Quốc Gamasot xin chào 🍲
+Xem thực đơn &amp; hình món ăn tại đây 👇
+https://gamasot-menu.vercel.app?lang=vi
+Đặt bàn · mang về · giao hàng: 088 930 1000</div>
+  </div>
+
+  <h2><span class="no pc">5</span>메뉴 수정은 이렇게</h2>
+  <table>
+    <tr><th class="pc" style="width:30%">이럴 때</th><th class="pc">이렇게 하세요</th></tr>
+    <tr><td>가격 변경 · 품절 · 새 메뉴</td><td>바꿀 내용을 메시지로 보내 주세요 (사진 한 장도 OK). 그날 안에 반영되고 <b>QR은 바뀌지 않아요.</b></td></tr>
+    <tr><td>추천 메뉴 바꾸기</td><td>"이번 달은 ○○를 Must Try로" 처럼 알려 주시면 표시를 옮겨 드려요.</td></tr>
+    <tr><td>음식 사진 교체 · 추가</td><td>휴대폰으로 찍은 사진을 보내 주세요. 밝은 곳에서 위에서 찍으면 가장 좋아요.</td></tr>
+    <tr><td>계절 메뉴 · 이벤트 안내</td><td>기간과 문구를 보내 주시면 메뉴판 상단에 안내를 넣어 드립니다.</td></tr>
+    <tr><td>QR 카드 추가 인쇄</td><td>받으신 PDF(A6 1장 / A4에 4장)를 인쇄소에 맡기세요. 무광 코팅하면 더 잘 찍힙니다.</td></tr>
+  </table>
+
+  <h2><span class="no pc">6</span>사장님 확인 부탁드려요</h2>
+  <div class="grid2">
+    <ul class="check">
+      <li>와이파이 이름 · 비밀번호 (메뉴판에 넣을지)</li>
+      <li>영업시간 · 휴무일</li>
+      <li>구글 지도 가게 링크</li>
+    </ul>
+    <ul class="check">
+      <li>보신 전골/수육: 외국어 화면에도 보여 줄지</li>
+      <li>사진과 메뉴 짝이 맞는지 (흑염소 전골, 아구지리, 냉이된장국, 도가니탕)</li>
+    </ul>
+  </div>
+
+  <p class="note" style="margin-top:3mm">※ 메뉴판 맨 아래의 파트너 배너(다산 인력공급)는 베트남 북부 인력이 필요할 때 문의하실 수 있는 협력사 안내입니다.</p>
+  <div class="contact pc">메뉴 수정 · 문의 &nbsp; <b>전화 · Zalo 0917 302 200</b> &nbsp;·&nbsp; 카카오톡 <b>jjw4164</b></div>
+  <p class="note" style="text-align:center;margin-top:2mm">가격 단위: 베트남 동(VND) · 메뉴판 주소 https://gamasot-menu.vercel.app</p>
+</section>
+</body>
+</html>
