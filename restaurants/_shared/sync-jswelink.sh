@@ -3,7 +3,7 @@
 cd "$(dirname "$0")/.." || exit 1
 SHOPS="baekcheon"
 for s in $SHOPS; do
-  cp _shared/jswelink.js _shared/jswelink-logo.png "$s/"
+  cp _shared/jswelink.js _shared/jswelink-logo-light.png _shared/jswelink-logo-dark.png "$s/"
   grep -q 'src="jswelink.js"' "$s/index.html" || sed -i 's#</body>#<script src="jswelink.js"></script>\n</body>#' "$s/index.html"
   echo "synced $s"
 done

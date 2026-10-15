@@ -21,27 +21,31 @@
   };
   const SLOGAN = "From Vietnam to Korea · Link the Future";
 
+  // 색은 가게 메뉴판이 정한 --pt-* 변수를 따른다 (없으면 JS welink 기본색: 네이비·골드). --pt-mode: light 이면 남색 글자 로고.
   const css = `
     .jsw { box-sizing: border-box; max-width: 560px; margin: 0 auto; padding: 18px 16px calc(22px + env(safe-area-inset-bottom)); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif; }
     .jsw * { box-sizing: border-box; }
-    .jsw-card { position: relative; display: block; overflow: hidden; text-decoration: none; color: #fff; border-radius: 16px; padding: 16px 16px 13px; line-height: 1.4;
-      background: radial-gradient(120% 90% at 100% 0%, rgba(201,163,90,.22), transparent 55%), linear-gradient(160deg, #0B1A33, #070B16);
-      border: 1px solid rgba(201,163,90,.55); box-shadow: 0 8px 22px rgba(7,11,22,.35); }
-    .jsw-tag { position: absolute; top: 11px; right: 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .3px; color: #C9A35A; border: 1px solid rgba(201,163,90,.6); border-radius: 4px; padding: 1px 6px; }
-    .jsw-logo { display: block; height: 30px; width: auto; }
-    .jsw-head { margin: 12px 0 0; font-size: 15.5px; font-weight: 800; color: #fff; }
-    .jsw-intro { margin: 4px 0 0; font-size: 12.8px; color: #c4cbd8; }
-    .jsw-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; padding-top: 11px; border-top: 1px solid rgba(201,163,90,.3); }
-    .jsw-slogan { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 12px; color: #C9A35A; }
-    .jsw-cta { flex: none; font-size: 13px; font-weight: 800; color: #0B1A33; background: linear-gradient(135deg, #e3c27e, #C9A35A); border-radius: 999px; padding: 8px 14px; white-space: nowrap; }
+    .jsw-card { position: relative; display: block; overflow: hidden; text-decoration: none; color: var(--pt-ink, #fff); border-radius: 16px; padding: 15px 16px 13px; line-height: 1.4;
+      background: var(--pt-bg, linear-gradient(160deg, #0B1A33, #070B16)); border: 1px solid var(--pt-line, rgba(201,163,90,.55)); border-top: 3px solid var(--pt-accent, #C9A35A); box-shadow: var(--pt-shadow, 0 8px 22px rgba(7,11,22,.35)); }
+    .jsw-tag { position: absolute; top: 11px; right: 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .3px; color: var(--pt-muted, #C9A35A); border: 1px solid var(--pt-line, rgba(201,163,90,.6)); border-radius: 4px; padding: 1px 6px; }
+    .jsw-logo { display: block; height: 28px; width: auto; }
+    .jsw-head { margin: 11px 0 0; font-size: 15.5px; font-weight: 800; color: var(--pt-ink, #fff); }
+    .jsw-intro { margin: 4px 0 0; font-size: 12.8px; color: var(--pt-muted, #c4cbd8); }
+    .jsw-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--pt-line, rgba(201,163,90,.3)); }
+    .jsw-slogan { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 12px; color: var(--pt-muted, #C9A35A); }
+    .jsw-cta { flex: none; font-size: 13px; font-weight: 800; color: var(--pt-btn-ink, #0B1A33); background: var(--pt-btn, linear-gradient(135deg, #e3c27e, #C9A35A)); border-radius: 999px; padding: 8px 14px; white-space: nowrap; }
     :lang(ko) .jsw { word-break: keep-all; }
   `;
+
 
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const langOf = () => {
     const l = (document.documentElement.lang || "en").toLowerCase().split("-")[0];
     return T[l] ? l : "en";
   };
+
+  // 밝은 메뉴판에서는 남색 글자 로고, 어두운 메뉴판(기본)에서는 흰 글자 로고
+  const logo = () => getComputedStyle(document.documentElement).getPropertyValue("--pt-mode").trim() === "light" ? "jswelink-logo-light.png" : "jswelink-logo-dark.png";
 
   function mount() {
     const style = document.createElement("style");
@@ -58,7 +62,7 @@
       box.innerHTML = `
         <a class="jsw-card" href="${t.url}" target="_blank" rel="noopener">
           <span class="jsw-tag">${esc(t.tag)}</span>
-          <img class="jsw-logo" src="jswelink-logo.png" alt="JS welink" width="440" height="98" loading="lazy">
+          <img class="jsw-logo" src="${logo()}" alt="JS welink" width="440" height="98" loading="lazy">
           <p class="jsw-head">${esc(t.head)}</p>
           <p class="jsw-intro">${esc(t.intro)}</p>
           <div class="jsw-row"><span class="jsw-slogan">${SLOGAN}</span><span class="jsw-cta">${esc(t.cta)} →</span></div>
