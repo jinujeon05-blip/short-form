@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가마솥 GAMASOT · QR 카드</title>
+<style>
+  @font-face { font-family: "Jalnan"; src: url("../../../public/fonts/Jalnan2.ttf"); }
+  @font-face { font-family: "Gmarket"; src: url("../../../public/fonts/GmarketSansTTFBold.ttf"); }
+  @page { size: 105mm 148mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --paper: #f7f3ec; --band: #857866; --band-2: #6f6353; --ink: #2b2622; --muted: #7d7368; --rust: #a5573c; }
+  html, body { background: #fff; }
+  body { font-family: "Gmarket", "Inter", "WenQuanYi Zen Hei", sans-serif; color: var(--ink); }
+  .card { position: relative; width: 105mm; height: 148mm; overflow: hidden; background: var(--paper); display: flex; flex-direction: column; align-items: center; border-left: 5mm solid var(--band); }
+  .card::after { /* 물결 무늬 */
+    content: ""; position: absolute; right: -2mm; top: 30mm; width: 34mm; height: 16mm; opacity: .9;
+    background:
+      radial-gradient(circle at 50% 100%, transparent 2.4mm, #ddd4c5 2.4mm 2.7mm, transparent 2.7mm 4mm, #ddd4c5 4mm 4.3mm, transparent 4.3mm 5.6mm, #ddd4c5 5.6mm 5.9mm, transparent 5.9mm) 0 0 / 12mm 6mm,
+      radial-gradient(circle at 50% 100%, transparent 2.4mm, #ddd4c5 2.4mm 2.7mm, transparent 2.7mm 4mm, #ddd4c5 4mm 4.3mm, transparent 4.3mm 5.6mm, #ddd4c5 5.6mm 5.9mm, transparent 5.9mm) 6mm 3mm / 12mm 6mm;
+  }
+  .corner { position: absolute; top: 5mm; width: 12mm; height: 12mm; border: .8mm solid #c9bda9; }
+  .corner.l { left: 4mm; border-right: 0; border-bottom: 0; }
+  .corner.r { right: 4mm; border-left: 0; border-bottom: 0; }
+  .card > * { position: relative; z-index: 1; }
+  .card > .corner { position: absolute; }
+  .logo { width: 24mm; margin-top: 8mm; }
+  .name { margin-top: 1mm; font-family: "Jalnan"; font-size: 9mm; letter-spacing: 1.2mm; line-height: 1; }
+  .en { margin-top: 1.2mm; font-size: 3.4mm; letter-spacing: 1.4mm; }
+  .tag { margin-top: 1.6mm; font-family: "Inter", sans-serif; font-weight: 600; font-size: 2.8mm; color: var(--muted); }
+  .photos { display: flex; gap: 2mm; margin-top: 3.2mm; }
+  .photos img { width: 16mm; height: 16mm; border-radius: 50%; object-fit: cover; background: #fff; border: .5mm solid #fff; box-shadow: 0 .8mm 2mm rgba(60,48,36,.25); }
+  .qr-box { margin-top: 3.6mm; background: #fff; border-radius: 3mm; padding: 2mm; box-shadow: 0 0 0 .7mm var(--band), 0 1.5mm 4mm rgba(60,48,36,.25); }
+  .qr-box img { display: block; width: 38mm; height: 38mm; }
+  .badge { font-family: "Inter", sans-serif; font-weight: 800; position: absolute; right: -6mm; top: -3mm; transform: rotate(8deg); background: var(--rust); color: #fff; font-size: 2.5mm; padding: .9mm 2mm .7mm; border-radius: 99mm; }
+  h1 { margin-top: 3.6mm; font-family: "Inter", sans-serif; font-weight: 900; font-size: 5.2mm; letter-spacing: .2mm; text-align: center; line-height: 1.15; }
+  h1 span { color: var(--rust); }
+  .langs { display: grid; grid-template-columns: auto auto; gap: .5mm 4mm; margin-top: 1.6mm; font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; font-weight: 600; font-size: 2.6mm; color: var(--muted); }
+  .langs em { font-style: normal; display: inline-block; width: 4.6mm; font-size: 1.9mm; font-weight: 800; color: var(--band); }
+  .ko { font-family: "Gmarket"; font-weight: 400; }
+  .ja { font-family: "IPAGothic", sans-serif; }
+  .card > footer { position: absolute; left: 0; right: 0; bottom: 0; height: 15mm; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: .8mm; background: var(--band); color: #f7f3ec; }
+  footer .tel { font-size: 3.6mm; letter-spacing: .2mm; }
+  footer .addr { font-family: "Inter", sans-serif; font-weight: 600; font-size: 2.4mm; }
+  footer .deli { font-family: "Inter", sans-serif; font-weight: 700; font-size: 2.2mm; opacity: .9; }
+</style>
+</head>
+<body>
+<div class="card">
+  <span class="corner l"></span><span class="corner r"></span>
+  <img class="logo" src="../img/logo.png" alt="">
+  <div class="name">가마솥</div>
+  <div class="en">GAMASOT</div>
+  <div class="tag">Nhà hàng Hàn Quốc</div>
+  <div class="photos">
+    <img src="../img/suyuk.jpg" alt=""><img src="../img/gejang.jpg" alt=""><img src="../img/galbijjim.jpg" alt=""><img src="../img/kkotgetang.jpg" alt="">
+  </div>
+  <div class="qr-box">
+    <img src="qr.svg" alt="QR https://gamasot-menu.vercel.app">
+    <span class="badge">5 ngôn ngữ</span>
+  </div>
+  <h1>QUÉT MÃ <span>XEM THỰC ĐƠN</span></h1>
+  <div class="langs">
+    <div><em>KO</em><span class="ko">QR 찍고 메뉴 보기</span></div>
+    <div><em>EN</em>Scan for menu</div>
+    <div><em>ZH</em>扫码看菜单</div>
+    <div><em>JA</em><span class="ja">メニューを見る</span></div>
+  </div>
+  <footer>
+    <div class="tel">☎ 088 930 1000</div>
+    <div class="addr">10A CT4, KĐT Sông Đà, Nam Từ Liêm, Hà Nội</div>
+    <div class="deli">Mang về · Giao hàng tận nơi</div>
+  </footer>
+</div>
+</body>
+</html>
