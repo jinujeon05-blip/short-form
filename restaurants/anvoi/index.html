@@ -168,9 +168,6 @@
   .preview summary { cursor: pointer; font-weight: 700; color: var(--rose); font-size: 13.5px; }
   .preview pre { white-space: pre-wrap; font: inherit; font-size: 14px; background: #fff; border: 1.5px dashed var(--line); border-radius: 12px; padding: 12px; margin: 8px 0 0; }
 
-  /* 콤보 카드 */
-  #combo ul.items > li { align-items: flex-start; background: var(--blush-2); border: 0; border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
-  #combo .price { font-size: 22px; }
 
   /* ── 하단 ── */
   footer.wrap { padding-top: 28px; padding-bottom: calc(30px + env(safe-area-inset-bottom)); }
@@ -366,11 +363,11 @@
     const cols = it.cols || cat.cols;
     return { it, price, variant: it.prices ? cols[vi] : "" };
   }
-  const cart = new Map(storage((s) => JSON.parse(s.getItem("anvoi-cart-v2") || "[]")) || []);
+  const cart = new Map(storage((s) => JSON.parse(s.getItem("anvoi-cart-v3") || "[]")) || []);
   for (const k of [...cart.keys()]) if (!lookup(k)) cart.delete(k);
   let mode = 0;
 
-  function saveCart() { storage((s) => s.setItem("anvoi-cart-v2", JSON.stringify([...cart]))); }
+  function saveCart() { storage((s) => s.setItem("anvoi-cart-v3", JSON.stringify([...cart]))); }
   const total = () => [...cart].reduce((n, [k, q]) => n + lookup(k).price * q, 0);
   const countAll = () => [...cart.values()].reduce((a, b) => a + b, 0);
 

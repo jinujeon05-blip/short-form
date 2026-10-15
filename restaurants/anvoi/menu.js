@@ -43,33 +43,7 @@ window.MENU = [
         desc: { ko: "토핑 전부 · Koreno는 매장 식사만", en: "All toppings · Koreno for dine-in only", zh: "全配料 · Koreno仅限堂食", ja: "全トッピング・Korenoは店内のみ", vi: "Đầy đủ topping · Koreno chỉ ăn tại chỗ" } },
     ],
   },
-  {
-    id: "combo",
-    photo: "img/banner-combo.jpg",
-    name: { ko: "콤보", en: "Combos", zh: "套餐", ja: "コンボ", vi: "Combo" },
-    items: [
-      { price: 69000, name: { ko: "콤보 69K", en: "Combo 69K", zh: "套餐 69K", ja: "コンボ 69K", vi: "Combo 69K" },
-        list: [
-          { ko: "믹스 비빔면 1 (Indomie, 토핑 5종)", en: "1 Mix noodles, 5 toppings (Indomie)", zh: "综合拌面1份（5种配料，Indomie）", ja: "ミックスまぜ麺1（5種、Indomie）", vi: "1 Mì mix 5 loại (Indomie)" },
-          { ko: "치킨볼 1 (맛 선택)", en: "1 Chicken bites (any flavor)", zh: "鸡肉丸1份（任选口味）", ja: "チキンボール1（味は自由）", vi: "1 Gà (chọn vị bất kỳ)" },
-          { ko: "음료 500ml 1", en: "1 Soft drink 500ml", zh: "汽水500ml 1瓶", ja: "ソフトドリンク500ml 1本", vi: "1 Nước ngọt 500ml" },
-        ] },
-      { price: 135000, name: { ko: "콤보 135K", en: "Combo 135K", zh: "套餐 135K", ja: "コンボ 135K", vi: "Combo 135K" },
-        list: [
-          { ko: "모둠 비빔면 1 (Indomie)", en: "1 Deluxe combo noodles (Indomie)", zh: "什锦拌面1份（Indomie）", ja: "全部のせまぜ麺1（Indomie）", vi: "1 Mì thập cẩm (Indomie)" },
-          { ko: "3가지 맛 치킨볼 + 밥 1", en: "1 Three-flavor chicken bites + rice", zh: "三味鸡肉丸配米饭1份", ja: "3種チキンボール＋ご飯1", vi: "1 Gà mix 3 vị kèm cơm" },
-          { ko: "음료 500ml 2", en: "2 Soft drinks 500ml", zh: "汽水500ml 2瓶", ja: "ソフトドリンク500ml 2本", vi: "2 Nước ngọt 500ml" },
-        ] },
-      { price: 199000, hot: true, name: { ko: "콤보 199K", en: "Combo 199K", zh: "套餐 199K", ja: "コンボ 199K", vi: "Combo 199K" },
-        list: [
-          { ko: "비빔면 2 (자유 선택, Indomie)", en: "2 Noodles of your choice (Indomie)", zh: "自选拌面2份（Indomie）", ja: "まぜ麺2（自由に選択、Indomie）", vi: "2 Mì tự chọn (Indomie)" },
-          { ko: "3가지 맛 치킨볼 + 밥 1", en: "1 Three-flavor chicken bites + rice", zh: "三味鸡肉丸配米饭1份", ja: "3種チキンボール＋ご飯1", vi: "1 Gà mix 3 vị kèm cơm" },
-          { ko: "음료 500ml 2", en: "2 Soft drinks 500ml", zh: "汽水500ml 2瓶", ja: "ソフトドリンク500ml 2本", vi: "2 Nước ngọt 500ml" },
-          { ko: "금귤 매실차 1", en: "1 Kumquat tea with salted plum", zh: "金桔话梅茶1杯", ja: "金柑と話梅のお茶1", vi: "1 Trà tắc xí muội" },
-        ],
-        desc: { ko: "소고기 계란·슈퍼 토핑 비빔면은 선택 불가", en: "Beef & egg and Super topping noodles not included", zh: "不适用牛肉鸡蛋拌面和超级配料拌面", ja: "牛肉と卵・スーパートッピングは対象外", vi: "Không áp dụng mì bò trứng & mì siêu topping" } },
-    ],
-  },
+
   {
     id: "topping",
     name: { ko: "토핑 추가", en: "Extra Toppings", zh: "加料", ja: "トッピング追加", vi: "Topping" },
