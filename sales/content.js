@@ -27,6 +27,9 @@ window.DEMOS = [
   { id: "baekcheon", url: "https://baekcheon-menu.vercel.app", shot: "img/demo-baekcheon.jpg", qr: "img/qr-baekcheon.svg",
     name: "백천화덕아나고", type: { ko: "장어구이 · 경산", vi: "Lươn nướng · Gyeongsan", zh: "烤鳗鱼 · 庆山", ja: "アナゴ焼き · 慶山", en: "Eel grill · Gyeongsan" },
     tag: { ko: "한국 매장", vi: "Cửa hàng tại Hàn Quốc", zh: "韩国门店", ja: "韓国の店舗", en: "Store in Korea" } },
+  { id: "gamasot", url: "https://gamasot-menu.vercel.app", shot: "img/demo-gamasot.jpg", qr: "img/qr-gamasot.svg",
+    name: "가마솥 GAMASOT", type: { ko: "한식당 · 하노이", vi: "Nhà hàng Hàn Quốc · Hà Nội", zh: "韩餐厅 · 河内", ja: "韓国料理店 · ハノイ", en: "Korean restaurant · Hanoi" },
+    tag: { ko: "메뉴 70개 · 사진", vi: "70 món · có ảnh", zh: "70道菜 · 附图", ja: "70品・写真付き", en: "70 dishes · photos" } },
 ];
 
 window.T = {
