@@ -3602,10 +3602,19 @@
     "about": {
       "ko": {
         "title": "명월 소개",
-        "description": "명월(明月, Minh Nguyệt)은 한국인과 베트남인을 위한 무료 음력·좋은 날·사주 서비스입니다.",
+        "description": "명월(明月, Minh Nguyệt)은 한국인과 베트남인을 위한 무료 음력·좋은 날·사주·꿈해몽 서비스입니다. 만든 이유와 운영 원칙, 계산 방식, 문의처를 소개합니다.",
         "blocks": [
           {
             "p": "명월(明月, Minh Nguyệt)은 ‘같은 달, 두 나라의 달력’을 주제로 한국인과 베트남인이 함께 쓸 수 있도록 만든 무료 서비스입니다. 베트남에 사는 한국인, 한국에 사는 베트남인, 한·베 가족과 커플이 서로의 달력과 문화를 쉽게 이해하는 것을 목표로 합니다."
+          },
+          {
+            "h": "왜 만들었나요?"
+          },
+          {
+            "p": "한국과 베트남은 같은 원리의 음력을 쓰지만, 기준 시간이 달라 설이나 기일이 하루씩 어긋나는 해가 있습니다. 띠도 토끼 대신 고양이가 있고, 결혼 날짜를 볼 때 한국은 아홉수와 삼재를, 베트남은 Kim Lâu를 따집니다. 두 나라 사이에서 생활하다 보면 “우리 집은 어느 나라 기준으로 해야 하지?” 하는 순간이 자주 찾아옵니다."
+          },
+          {
+            "p": "그런데 기존 사이트들은 대부분 한 나라 기준만 보여 주었습니다. 명월은 두 나라의 달력과 풍습을 한 화면에 나란히 놓고, 차이가 왜 생기는지까지 설명해 이런 고민을 덜어 드리려고 만들었습니다."
           },
           {
             "h": "제공하는 것"
@@ -3613,22 +3622,41 @@
           {
             "ul": [
               "한국 음력과 베트남 음력을 각각의 기준 시간으로 계산해 나란히 보여주는 달력",
-              "황도일, 12직, 황도시, 손 없는 날, Tam Nương 등을 반영한 좋은 날 달력",
-              "12띠 오늘의 운세, 무료 사주팔자, 한·베 궁합, 베트남 ↔ 한국 이름 변환",
-              "두 나라의 달력과 문화를 소개하는 가이드 글"
+              "황도일, 12직, 황도시, 손 없는 날, Tam Nương 등을 반영한 목적별 좋은 날 달력",
+              "무료 사주팔자, 한·베 궁합, 12띠 오늘의 운세, 삼재·Kim Lâu, 나이 계산기, 제사·기일 계산기",
+              "베트남 ↔ 한국 이름 변환과 두 언어로 부르기 좋은 이름을 찾는 한·베 작명",
+              "꿈 250가지와 태몽 30여 가지를 한국 전통 해몽과 베트남 풀이로 나란히 정리한 꿈해몽",
+              "두 나라의 명절·풍습·역법을 비교하는 가이드 글 30편"
+            ]
+          },
+          {
+            "h": "콘텐츠를 만드는 원칙"
+          },
+          {
+            "ul": [
+              "직접 쓴 글: 모든 해설과 가이드는 한국어와 베트남어로 직접 작성합니다. 다른 사이트의 글을 옮겨 오지 않습니다.",
+              "풍습은 풍습으로: 사주, 띠 궁합, 꿈해몽, 택일은 두 나라의 전통문화로 소개하며, 미래를 보장하는 예언으로 표현하지 않습니다. 건강·법률·돈 문제는 전문가 상담을 권합니다.",
+              "도박과 거리 두기: 베트남에서 흔한 꿈 번호(lô đề) 풀이처럼 불법 도박과 연결되는 정보는 제공하지 않습니다.",
+              "학설이 갈리는 부분은 밝히기: 야자시, 발음오행처럼 학파마다 다른 부분은 그 사실을 함께 적고, 가능하면 옵션으로 선택할 수 있게 합니다."
             ]
           },
           {
             "h": "계산 방식"
           },
           {
-            "p": "절기와 합삭 시각은 공개 천문 계산 라이브러리로 분 단위까지 계산하며, 출생 시각은 당시의 표준시와 서머타임을 반영합니다. 모든 계산은 이용자의 브라우저 안에서 이루어지고, 생년월일 같은 정보는 서버로 보내거나 저장하지 않습니다."
+            "p": "절기와 합삭 시각은 공개 천문 계산 라이브러리로 분 단위까지 계산하며, 출생 시각은 당시의 표준시와 서머타임을 반영합니다. 자세한 내용은 ‘계산 방식’ 페이지에 정리했습니다. 모든 계산은 이용자의 브라우저 안에서 이루어지고, 생년월일 같은 정보는 서버로 보내거나 저장하지 않습니다."
+          },
+          {
+            "h": "오류 제보와 수정"
+          },
+          {
+            "p": "날짜 계산이나 번역에 틀린 곳이 있으면 알려 주세요. 확인 후 바로 고치고, 계산 방식이 바뀌는 경우에는 계산 방식 페이지에 반영합니다. 특히 베트남어 표현이나 지역마다 다른 풍습에 대한 제보는 큰 도움이 됩니다."
           },
           {
             "h": "운영 및 문의"
           },
           {
-            "p": "명월은 베트남에 거주하는 한국인 개인이 운영합니다. 오류 제보, 제휴, 기타 문의는 아래 이메일로 보내 주세요."
+            "p": "명월은 베트남에 거주하는 한국인 개인이 운영합니다. 오류 제보, 제휴, 기타 문의는 아래 이메일로 보내 주세요. 보통 2~3일 안에 답장 드립니다."
           },
           {
             "p": "문의: {{email}}"
@@ -3640,10 +3668,19 @@
       },
       "vi": {
         "title": "Giới thiệu Minh Nguyệt",
-        "description": "Minh Nguyệt (明月, 명월) là dịch vụ âm lịch, xem ngày tốt và Tứ trụ miễn phí cho người Việt và người Hàn.",
+        "description": "Minh Nguyệt (明月, 명월) là dịch vụ âm lịch, xem ngày tốt, Tứ trụ và giải mộng miễn phí cho người Việt và người Hàn. Lý do ra đời, nguyên tắc nội dung, cách tính và thông tin liên hệ.",
         "blocks": [
           {
             "p": "Minh Nguyệt (明月, 명월) là dịch vụ miễn phí với chủ đề “Một vầng trăng, hai cuốn lịch”, dành cho người Việt và người Hàn. Mục tiêu là giúp người Hàn ở Việt Nam, người Việt ở Hàn Quốc và các gia đình, cặp đôi Việt – Hàn dễ dàng hiểu lịch và văn hóa của nhau."
+          },
+          {
+            "h": "Vì sao có Minh Nguyệt?"
+          },
+          {
+            "p": "Việt Nam và Hàn Quốc dùng âm lịch theo cùng nguyên lý, nhưng múi giờ khác nhau nên có năm Tết hay ngày giỗ lệch nhau một ngày. Con giáp của người Việt có mèo thay cho thỏ; khi xem ngày cưới, người Việt xét Kim Lâu, còn người Hàn kiêng “tuổi chín” và Tam Tai. Sống giữa hai nền văn hóa, ta thường xuyên tự hỏi: “Nhà mình nên theo lịch nước nào?”"
+          },
+          {
+            "p": "Phần lớn các trang hiện có chỉ hiển thị theo một nước. Minh Nguyệt đặt lịch và phong tục của hai nước cạnh nhau trên cùng một màn hình, đồng thời giải thích vì sao có sự khác biệt, để giảm bớt những băn khoăn đó."
           },
           {
             "h": "Chúng tôi cung cấp"
@@ -3651,22 +3688,41 @@
           {
             "ul": [
               "Lịch âm Việt Nam và Hàn Quốc tính riêng theo múi giờ của mỗi nước, hiển thị song song",
-              "Lịch ngày tốt với ngày Hoàng đạo, 12 Trực, giờ Hoàng đạo, Tam Nương, ngày “Son eomneun”",
-              "Tử vi 12 con giáp hằng ngày, lá số Tứ trụ, xem tuổi hợp, đổi tên Việt ↔ Hàn",
-              "Bài viết giới thiệu lịch pháp và văn hóa hai nước"
+              "Lịch ngày tốt theo mục đích với ngày Hoàng đạo, 12 Trực, giờ Hoàng đạo, Tam Nương, “ngày không có Son”",
+              "Lá số Tứ trụ, xem tuổi hợp Việt – Hàn, tử vi 12 con giáp hằng ngày, Tam Tai – Kim Lâu, tính tuổi, tính ngày giỗ",
+              "Đổi tên Việt ↔ Hàn và công cụ đặt tên dễ gọi trong cả hai ngôn ngữ",
+              "250 giấc mơ và hơn 30 giấc mơ báo con, giải theo quan niệm Hàn Quốc và Việt Nam",
+              "30 bài viết so sánh lễ tết, phong tục và lịch pháp hai nước"
+            ]
+          },
+          {
+            "h": "Nguyên tắc nội dung"
+          },
+          {
+            "ul": [
+              "Tự viết: mọi bài giải thích và hướng dẫn đều được viết trực tiếp bằng tiếng Việt và tiếng Hàn, không sao chép từ trang khác.",
+              "Phong tục là phong tục: Tứ trụ, xem tuổi, giải mộng, chọn ngày được giới thiệu như văn hóa truyền thống của hai nước, không phải lời tiên tri chắc chắn. Với vấn đề sức khỏe, pháp lý, tiền bạc, chúng tôi khuyên bạn hỏi ý kiến chuyên gia.",
+              "Tránh xa cờ bạc: không cung cấp “con số” lô đề theo giấc mơ hay bất kỳ thông tin nào liên quan đến cờ bạc bất hợp pháp.",
+              "Nói rõ khi có nhiều trường phái: với những điểm còn tranh luận như giờ Tý đêm, ngũ hành phát âm, chúng tôi ghi rõ và cho phép chọn tùy chọn khi có thể."
             ]
           },
           {
             "h": "Cách tính"
           },
           {
-            "p": "Thời điểm tiết khí và điểm Sóc được tính đến từng phút bằng thư viện thiên văn mã nguồn mở; giờ sinh được quy đổi theo múi giờ và giờ mùa hè tại thời điểm đó. Mọi phép tính diễn ra trên trình duyệt của bạn; ngày sinh không được gửi lên hay lưu trên máy chủ."
+            "p": "Thời điểm tiết khí và điểm Sóc được tính đến từng phút bằng thư viện thiên văn mã nguồn mở; giờ sinh được quy đổi theo múi giờ và giờ mùa hè tại thời điểm đó. Chi tiết có ở trang “Cách tính”. Mọi phép tính diễn ra trên trình duyệt của bạn; ngày sinh không được gửi lên hay lưu trên máy chủ."
+          },
+          {
+            "h": "Báo lỗi và chỉnh sửa"
+          },
+          {
+            "p": "Nếu thấy ngày tính sai hay bản dịch chưa đúng, xin hãy báo cho chúng tôi. Chúng tôi sẽ kiểm tra và sửa ngay; nếu cách tính thay đổi, trang Cách tính cũng sẽ được cập nhật. Những góp ý về cách diễn đạt tiếng Việt hay phong tục khác nhau giữa các vùng miền đặc biệt quý giá."
           },
           {
             "h": "Vận hành và liên hệ"
           },
           {
-            "p": "Minh Nguyệt do một cá nhân người Hàn sống tại Việt Nam vận hành. Mọi góp ý, báo lỗi hay hợp tác xin gửi về email dưới đây."
+            "p": "Minh Nguyệt do một cá nhân người Hàn sống tại Việt Nam vận hành. Mọi góp ý, báo lỗi hay hợp tác xin gửi về email dưới đây; thường chúng tôi sẽ trả lời trong 2–3 ngày."
           },
           {
             "p": "Liên hệ: {{email}}"
