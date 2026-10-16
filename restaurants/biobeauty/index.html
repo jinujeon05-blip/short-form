@@ -69,10 +69,10 @@
   .about { margin: 8px 0 0; font-size: 13.5px; color: var(--muted); }
 
   ul { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
-  li { display: flex; gap: 12px; align-items: stretch; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px; }
+  li { display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px; }
   li.hot { border: 2px solid var(--gold); background: linear-gradient(180deg, #fffaf0, #fff); }
-  .pic { flex: none; width: 76px; border-radius: 12px; overflow: hidden; background: var(--paper); display: grid; place-items: center; position: relative; }
-  .pic img { width: 100%; height: 100%; object-fit: contain; }
+  .pic { flex: none; width: 84px; height: 112px; align-self: flex-start; border-radius: 12px; overflow: hidden; background: var(--paper); display: grid; place-items: center; position: relative; }
+  .pic img { width: 100%; height: 100%; object-fit: cover; }
   .pic .tube { width: 22px; height: 64px; border-radius: 4px 4px 8px 8px; background: linear-gradient(180deg, #fff 0 58%, var(--c) 58% 100%); box-shadow: 0 0 0 1px #e3e3e3, 0 4px 8px rgba(0,0,0,.08); position: relative; }
   .pic .tube::before { content: ""; position: absolute; left: 3px; right: 3px; top: -6px; height: 6px; border-radius: 2px 2px 0 0; background: repeating-linear-gradient(90deg, #ddd 0 1px, #f4f4f4 1px 3px); }
   .pic .jar { width: 46px; height: 46px; border-radius: 10px; background: var(--c); box-shadow: inset 0 -10px 0 rgba(0,0,0,.12); display: grid; place-items: center; color: #fff; font-size: 9px; font-weight: 800; letter-spacing: .5px; }
@@ -92,6 +92,18 @@
   .qty .add { color: #fff; background: var(--green); }
   .qty .sub1 { color: var(--green); background: #e8efe9; }
   .qty b { min-width: 18px; text-align: center; font-size: 15px; }
+
+  details.more { flex-basis: 100%; border-top: 1px dashed var(--line); padding-top: 8px; margin-top: -2px; }
+  details.more summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 800; color: var(--green); padding: 2px 0; }
+  details.more summary::-webkit-details-marker { display: none; }
+  details.more summary::after { content: "▾"; transition: transform .2s; }
+  details.more[open] summary::after { transform: rotate(180deg); }
+  .more h4 { margin: 10px 0 4px; font-size: 12.5px; font-weight: 800; color: var(--gold); letter-spacing: .3px; }
+  .more ul.good { display: block; margin: 0; padding: 0; }
+  .more ul.good li { display: block; border: 0; background: none; padding: 0 0 0 18px; margin: 3px 0; border-radius: 0; font-size: 13.5px; color: var(--ink); position: relative; }
+  .more ul.good li::before { content: "✓"; position: absolute; left: 0; color: var(--green); font-weight: 900; }
+  .more p { margin: 0; font-size: 13.5px; color: #48524e; }
+  .more .test { margin-top: 10px; font-size: 12.5px; font-weight: 700; color: var(--green); background: #e8efe9; border-radius: 8px; padding: 7px 10px; }
 
   /* ── 상담 · 연락처 ── */
   .contact { margin-top: 32px; background: var(--green); color: #fff; padding: 26px 0 calc(26px + env(safe-area-inset-bottom)); }
@@ -183,31 +195,31 @@
 <script>
   const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
   const UI = {
-    ko: { title: "바이오&뷰티", tagline: "한국 더마 화장품 · 센테카솔 & 오가믹스 공식 판매처", sale: "전제품", off: "할인",
+    ko: { more: "효능 · 사용법", good: "효능", how: "사용법", test: "임상 결과", title: "바이오&뷰티", tagline: "한국 더마 화장품 · 센테카솔 & 오가믹스 공식 판매처", sale: "전제품", off: "할인",
       add: "담기", items: "개", view: "주문서 보기", sheet: "주문서", sub: "합계", name: "이름", phone: "전화번호", addr: "받으실 주소",
       pick: "상담원에게 주문서 보내기", send: (n) => `${n}님께 Zalo로 보내기`, copied: "주문서를 복사했어요 — Zalo에 붙여넣어 보내세요", clear: "주문서 비우기",
       cTitle: "상담 · 주문 문의", cLead: "궁금한 점은 편하게 물어보세요. 전화·Zalo 모두 가능해요.", call: "전화", kakao: "카카오톡",
       who: { ko: "한국어 상담", vi: "베트남어 상담" }, foot: "가격 단위: 베트남 동(VND) · 할인가는 전단지 기준이며 재고에 따라 바뀔 수 있어요.",
       order: "[주문서] 바이오&뷰티", total: "합계" },
-    en: { title: "Bio & Beauty", tagline: "Korean derma cosmetics · Official store for Centecassol & Ogamix", sale: "All items", off: "OFF",
+    en: { more: "Benefits & how to use", good: "Benefits", how: "How to use", test: "Clinical test", title: "Bio & Beauty", tagline: "Korean derma cosmetics · Official store for Centecassol & Ogamix", sale: "All items", off: "OFF",
       add: "Add", items: "items", view: "View order", sheet: "Your order", sub: "Total", name: "Your name", phone: "Phone number", addr: "Delivery address",
       pick: "Send your order to a consultant", send: (n) => `Send to ${n} on Zalo`, copied: "Order copied — paste it in Zalo to send", clear: "Clear order",
       cTitle: "Questions & Orders", cLead: "Feel free to ask anything — by phone or Zalo.", call: "Call", kakao: "KakaoTalk",
       who: { ko: "Korean support", vi: "Vietnamese support" }, foot: "Prices in Vietnamese đồng (VND) · Sale prices per our flyer, subject to stock.",
       order: "[Order] Bio & Beauty", total: "Total" },
-    zh: { title: "Bio & Beauty", tagline: "韩国药妆 · Centecassol & Ogamix 官方销售处", sale: "全场", off: "折扣",
+    zh: { more: "功效 · 用法", good: "功效", how: "用法", test: "临床测试", title: "Bio & Beauty", tagline: "韩国药妆 · Centecassol & Ogamix 官方销售处", sale: "全场", off: "折扣",
       add: "加入", items: "件", view: "查看订单", sheet: "我的订单", sub: "合计", name: "姓名", phone: "电话", addr: "收货地址",
       pick: "把订单发给顾问", send: (n) => `通过Zalo发给 ${n}`, copied: "订单已复制 — 粘贴到Zalo发送", clear: "清空订单",
       cTitle: "咨询 · 订购", cLead: "欢迎随时咨询，电话或Zalo均可。", call: "电话", kakao: "KakaoTalk",
       who: { ko: "韩语咨询", vi: "越南语咨询" }, foot: "价格单位：越南盾（VND）· 优惠价以传单为准，视库存而定。",
       order: "[订单] Bio & Beauty", total: "合计" },
-    ja: { title: "Bio & Beauty", tagline: "韓国ダーマコスメ · センテカソル & オガミックス 公式販売店", sale: "全商品", off: "OFF",
+    ja: { more: "効果・使い方", good: "効果", how: "使い方", test: "臨床試験", title: "Bio & Beauty", tagline: "韓国ダーマコスメ · センテカソル & オガミックス 公式販売店", sale: "全商品", off: "OFF",
       add: "追加", items: "点", view: "注文を見る", sheet: "ご注文", sub: "合計", name: "お名前", phone: "電話番号", addr: "お届け先住所",
       pick: "担当者に注文を送る", send: (n) => `${n} にZaloで送る`, copied: "注文をコピーしました — Zaloに貼り付けて送信", clear: "注文を空にする",
       cTitle: "ご相談・ご注文", cLead: "お気軽にお問い合わせください。電話・Zalo どちらでもOK。", call: "電話", kakao: "カカオトーク",
       who: { ko: "韓国語対応", vi: "ベトナム語対応" }, foot: "価格はベトナムドン（VND）· セール価格はチラシ基準、在庫により変わります。",
       order: "[ご注文] Bio & Beauty", total: "合計" },
-    vi: { title: "Bio & Beauty", tagline: "Dược mỹ phẩm Hàn Quốc · Đại lý chính hãng Centecassol & Ogamix", sale: "Toàn bộ", off: "GIẢM",
+    vi: { more: "Công dụng & cách dùng", good: "Công dụng", how: "Cách dùng", test: "Thử nghiệm lâm sàng", title: "Bio & Beauty", tagline: "Dược mỹ phẩm Hàn Quốc · Đại lý chính hãng Centecassol & Ogamix", sale: "Toàn bộ", off: "GIẢM",
       add: "Thêm", items: "sp", view: "Xem đơn", sheet: "Đơn hàng", sub: "Tổng", name: "Tên của bạn", phone: "Số điện thoại", addr: "Địa chỉ nhận hàng",
       pick: "Gửi đơn cho nhân viên tư vấn", send: (n) => `Gửi qua Zalo ${n}`, copied: "Đã sao chép đơn — dán vào Zalo để gửi", clear: "Xóa đơn",
       cTitle: "Tư vấn · Đặt hàng", cLead: "Cần tư vấn cứ hỏi nhé — gọi điện hoặc Zalo đều được.", call: "Gọi", kakao: "KakaoTalk",
@@ -246,6 +258,16 @@
     return `<span class="jar" style="--c:${it.color}">OGAMIX</span>`;
   }
 
+  function moreHtml(id, t) {
+    const d = (window.INFO || {})[id];
+    if (!d) return "";
+    return `<details class="more"><summary>${esc(t.more)}</summary>
+      <h4>${esc(t.good)}</h4><ul class="good">${d.good[lang].map((g) => `<li>${esc(g)}</li>`).join("")}</ul>
+      <h4>${esc(t.how)}</h4><p>${esc(d.how[lang])}</p>
+      ${d.test ? `<div class="test">🧪 ${esc(t.test)}: ${esc(d.test[lang])}</div>` : ""}
+    </details>`;
+  }
+
   function render() {
     const t = UI[lang];
     document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
@@ -272,6 +294,7 @@
                 <div class="qty" data-k="${it.id}"></div>
               </div>
             </div>
+            ${moreHtml(it.id, t)}
           </li>`).join("")}
         </ul>
       </section>`).join("");
