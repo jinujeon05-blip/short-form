@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>바이오&amp;뷰티 · QR 카드</title>
+<style>
+  @font-face { font-family: "Gmarket"; src: url("../../../public/fonts/GmarketSansTTFBold.ttf"); }
+  @page { size: 105mm 148mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --paper: #f8f5ee; --green: #1f4a3d; --green-2: #143329; --gold: #b8954a; --gold-hi: #e3c98c; --ink: #1e2a26; --muted: #6d7570; --sale: #c8102e; }
+  html, body { background: #fff; }
+  body { font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; color: var(--ink); }
+  .card { position: relative; width: 105mm; height: 148mm; overflow: hidden; background: var(--paper); display: flex; flex-direction: column; align-items: center; }
+  .top { width: 100%; height: 40mm; color: #fff; text-align: center; padding-top: 6mm;
+    background: radial-gradient(90% 90% at 50% 0%, #3c7564 0%, var(--green) 55%, var(--green-2) 100%); }
+  .kicker { font-weight: 800; font-size: 2.4mm; letter-spacing: 1.2mm; color: var(--gold-hi); }
+  .name { margin-top: 1.6mm; font-family: "Gmarket"; font-size: 9mm; line-height: 1; }
+  .en { margin-top: 1.4mm; font-weight: 600; font-size: 2.9mm; letter-spacing: .3mm; color: #d9e6df; }
+  .seals { position: absolute; top: 31mm; left: 0; right: 0; display: flex; justify-content: center; gap: 4mm; }
+  .seal { width: 21mm; height: 21mm; border-radius: 50%; display: grid; place-items: center; text-align: center; color: #3b2c0e;
+    background: radial-gradient(circle at 35% 30%, #f6e2a6, #d4ae5f 55%, #a98337 100%); box-shadow: 0 1mm 2.5mm rgba(0,0,0,.3), inset 0 0 0 .6mm rgba(255,255,255,.4), inset 0 0 0 1.3mm rgba(169,131,55,.5); }
+  .seal small { display: block; font-size: 1.75mm; font-weight: 800; }
+  .seal b { display: block; font-size: 6mm; font-weight: 900; line-height: 1; }
+  .seal i { display: block; font-style: normal; font-size: 1.9mm; font-weight: 900; }
+  .qr-box { margin-top: 16mm; position: relative; background: #fff; border-radius: 3mm; padding: 2mm; box-shadow: 0 0 0 .7mm var(--gold), 0 1.5mm 4mm rgba(31,74,61,.25); }
+  .qr-box img { display: block; width: 38mm; height: 38mm; }
+  .badge { font-weight: 800; position: absolute; right: -7mm; top: -3mm; transform: rotate(8deg); background: var(--sale); color: #fff; font-size: 2.4mm; padding: .9mm 2mm .7mm; border-radius: 99mm; }
+  h1 { margin-top: 3.4mm; font-weight: 900; font-size: 5mm; text-align: center; line-height: 1.15; }
+  h1 span { color: var(--sale); }
+  .langs { display: grid; grid-template-columns: auto auto; gap: .5mm 4mm; margin-top: 1.6mm; font-weight: 600; font-size: 2.6mm; color: var(--muted); }
+  .langs em { font-style: normal; display: inline-block; width: 4.6mm; font-size: 1.9mm; font-weight: 800; color: var(--gold); }
+  .ko { font-family: "Gmarket"; font-weight: 400; }
+  .ja { font-family: "IPAGothic", sans-serif; }
+  footer { position: absolute; left: 0; right: 0; bottom: 0; height: 17mm; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: .9mm; background: var(--green); color: #fff; }
+  footer .row { display: flex; gap: 4mm; font-weight: 800; font-size: 3.1mm; }
+  footer .row em { font-style: normal; font-size: 2mm; font-weight: 800; color: var(--green); background: var(--gold-hi); border-radius: .8mm; padding: .2mm .9mm; margin-right: 1mm; vertical-align: .3mm; }
+  footer .kk { font-weight: 700; font-size: 2.4mm; color: #cfe0d7; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top">
+    <div class="kicker">K-BEAUTY OFFICIAL STORE</div>
+    <div class="name">바이오&amp;뷰티</div>
+    <div class="en">Mỹ phẩm Hàn Quốc · Bio &amp; Beauty</div>
+  </div>
+  <div class="seals">
+    <div class="seal"><span><small>CENTECASSOL</small><b>80%</b><i>GIẢM</i></span></div>
+    <div class="seal"><span><small>OGAMIX</small><b>70%</b><i>GIẢM</i></span></div>
+  </div>
+  <div class="qr-box">
+    <img src="qr.svg" alt="QR https://biobeauty-menu.vercel.app">
+    <span class="badge">5 ngôn ngữ</span>
+  </div>
+  <h1>QUÉT MÃ <span>XEM GIÁ ƯU ĐÃI</span></h1>
+  <div class="langs">
+    <div><em>KO</em><span class="ko">QR 찍고 할인가 보기</span></div>
+    <div><em>EN</em>Scan for sale prices</div>
+    <div><em>ZH</em>扫码看优惠价</div>
+    <div><em>JA</em><span class="ja">セール価格を見る</span></div>
+  </div>
+  <footer>
+    <div class="row"><span><em>KO</em>0917 302 200</span><span><em>VI</em>0937 250 787</span></div>
+    <div class="kk">Zalo · ☎ · KakaoTalk jjw4164</div>
+  </footer>
+</div>
+</body>
+</html>
