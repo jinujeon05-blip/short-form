@@ -71,6 +71,18 @@
   .demo .qr { width: 96px; height: 96px; margin-top: 10px; display: block; border-radius: 8px; border: 1px solid var(--line); }
   .demo .url { font-size: 11px; color: var(--accent); margin-top: 6px; word-break: break-all; }
 
+  /* ── 함께 드리는 것 ── */
+  .kit { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+  .kit-item { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; }
+  .kit-pic { display: flex; justify-content: center; align-items: center; gap: 10px; height: 250px; padding: 18px; background: #f1ebe2; }
+  .kit-pic img { display: block; max-height: 100%; max-width: 100%; border-radius: 6px; box-shadow: 0 10px 24px rgba(22,19,15,.22); }
+  .kit-pic.sns img { border-radius: 10px; min-width: 0; max-width: 60%; }
+  .kit-pic.sns img + img { max-width: 34%; }
+  .kit-body { padding: 14px 16px 16px; }
+  .kit-body .size { display: inline-block; font-size: 12px; font-weight: 800; color: var(--accent); background: #fff1ec; border-radius: 999px; padding: 2px 9px; }
+  .kit-body h3 { font-size: 17px; margin-top: 8px; }
+  .kit-body p { margin: 6px 0 0; font-size: 14.5px; color: var(--muted); }
+
   /* ── 특징 ── */
   .feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
   .feat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
@@ -171,7 +183,8 @@
     .phone { width: 150px; border-radius: 24px; padding: 6px; }
     .phone img { border-radius: 19px; }
     .phone.a { left: 2%; } .phone.b { right: 2%; }
-    .demos, .feats, .plans { grid-template-columns: 1fr; }
+    .demos, .feats, .plans, .kit { grid-template-columns: 1fr; }
+    .kit-pic { height: 220px; }
     .steps { grid-template-columns: 1fr 1fr; }
     .sec-title { font-size: 24px; }
     .contact { padding: 56px 0 48px; }
@@ -192,7 +205,7 @@
     .hero-grid { margin-top: 14px; grid-template-columns: 1.2fr .8fr; }
     .hero h1 { font-size: 27px; }
     .hero p { font-size: 13px; }
-    .phones { height: 250px; }
+    .phones { height: 220px; }
     .phone { width: 118px; border-radius: 18px; padding: 5px; }
     .phone img { border-radius: 14px; }
     .sec-title { font-size: 19px; }
@@ -209,12 +222,25 @@
     .demo .qr { width: 52px; height: 52px; }
     .demo .tag { font-size: 9px; padding: 1px 6px; margin-top: 3px; }
     .demo h3 { word-break: keep-all; }
-    .feat { padding: 10px 12px; }
+    .feat { padding: 9px 11px; }
+    .feat b { float: left; width: 22px; height: 22px; border-radius: 7px; font-size: 12px; margin-right: 7px; }
+    .feat h3 { margin-top: 2px; font-size: 13px; }
+    .feat p { clear: both; margin-top: 5px; }
     .feat p, .step p, .plan li, .opt, .faq p { font-size: 11px; }
     .steps, .plans { gap: 8px; margin-top: 12px; }
     .step, .plan { padding: 12px; }
     .plan .price { font-size: 22px; }
     #faq { display: none; }
+    #kit { padding: 0 0 14px; }
+    #kit .sec-sub { display: none; }
+    .kit { gap: 8px; margin-top: 8px; }
+    .kit-item { flex-direction: row; align-items: center; border-radius: 12px; }
+    .kit-pic { flex: none; width: 34%; height: 76px; padding: 5px; gap: 4px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .kit-pic img { box-shadow: none; border: 1px solid var(--line); }
+    .kit-body { padding: 6px 8px; }
+    .kit-body h3 { font-size: 12px; margin-top: 3px; }
+    .kit-body p { font-size: 9px; margin-top: 2px; line-height: 1.35; }
+    .kit-body .size { font-size: 9px; padding: 1px 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .contact { border-radius: 14px; padding: 20px 18px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .contact h2 { font-size: 30px; margin-top: 8px; background: none; color: #fff; }
     .contact .c-sub { font-size: 12px; margin-top: 6px; }
@@ -258,6 +284,12 @@
   <h2 class="sec-title" data-t="demoTitle"></h2>
   <p class="sec-sub" data-t="demoSub"></p>
   <div class="demos" id="demos"></div>
+</div></section>
+
+<section id="kit" style="padding-top:0"><div class="wrap">
+  <h2 class="sec-title" data-t="kitTitle"></h2>
+  <p class="sec-sub" data-t="kitSub"></p>
+  <div class="kit" id="kit-list"></div>
 </div></section>
 
 <section id="feat" style="padding-top:0"><div class="wrap">
@@ -340,6 +372,14 @@
           <div class="url">${esc(d.url.replace("https://", ""))}</div>
         </div>
       </a>`).join("");
+
+    const KIT_PICS = [
+      '<div class="kit-pic"><img src="img/kit-a6.jpg" alt=""></div>',
+      '<div class="kit-pic"><img src="img/kit-a4.jpg" alt=""></div>',
+      '<div class="kit-pic sns"><img src="img/kit-sns-square.jpg" alt=""><img src="img/kit-sns-story.jpg" alt=""></div>',
+    ];
+    $("kit-list").innerHTML = (t.kit || []).map(([size, h, p], i) =>
+      `<div class="kit-item">${KIT_PICS[i] || ""}<div class="kit-body"><span class="size">${esc(size)}</span><h3>${esc(h)}</h3><p>${esc(p)}</p></div></div>`).join("");
 
     $("feats").innerHTML = t.feats.map(([h, p], i) =>
       `<div class="feat"><b>${FEAT_ICONS[i]}</b><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join("");
