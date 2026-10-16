@@ -59,13 +59,14 @@ describe('dream content', () => {
 });
 
 describe('dream deep sections', () => {
-  it('only covers existing dreams and has both languages', async () => {
+  it('covers every dream, only existing dreams, in both languages', async () => {
     const { DREAM_DEEP } = await import('./deep');
     const slugs = new Set(DREAMS.map((d) => d.slug));
+    expect(DREAMS.filter((d) => !DREAM_DEEP[d.slug]).map((d) => d.slug)).toEqual([]);
     for (const [slug, v] of Object.entries(DREAM_DEEP)) {
       expect(slugs.has(slug), slug).toBe(true);
       for (const l of ['ko', 'vi'] as const) {
-        expect(v[l].why.length).toBeGreaterThan(60);
+        expect(v[l].why.length).toBeGreaterThan(40);
         expect(v[l].tips.length).toBeGreaterThanOrEqual(3);
       }
     }

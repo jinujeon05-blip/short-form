@@ -1,15 +1,15 @@
-// Extra sections for the most searched dreams: a modern (psychological) reading and practical tips.
+// Extra sections for every dream: a modern (psychological) reading and practical tips.
 // Original wording. Folk readings stay in the Dream entries; this adds everyday context.
-import type { Lang } from '../../i18n';
+import type { DreamDeep } from './deepEntry';
+import { DEEP_ANIMALS } from './deep-animals';
+import { DEEP_NATURE } from './deep-nature';
+import { DEEP_PEOPLE } from './deep-people';
+import { DEEP_THINGS } from './deep-things';
 
-export interface DreamDeepText {
-  /** Why people tend to have this dream, from a modern point of view */
-  why: string;
-  /** What to do after the dream */
-  tips: string[];
-}
+export type { DreamDeep, DreamDeepText } from './deepEntry';
 
-export const DREAM_DEEP: Record<string, Record<Lang, DreamDeepText>> = {
+/** The 40 most searched dreams (written first, with longer readings) */
+const DEEP_TOP: Record<string, DreamDeep> = {
   pig: {
     ko: {
       why: '돼지꿈은 한국인에게 너무 유명해서, 경제적인 기대나 걱정이 클 때 더 자주 떠오르고 더 잘 기억되는 꿈이기도 합니다. 월급날, 계약, 이직처럼 돈과 관련된 일을 앞두고 있다면 그 기대가 꿈에 반영되었을 수 있습니다.',
@@ -411,3 +411,5 @@ export const DREAM_DEEP: Record<string, Record<Lang, DreamDeepText>> = {
     },
   },
 };
+
+export const DREAM_DEEP: Record<string, DreamDeep> = { ...DEEP_ANIMALS, ...DEEP_PEOPLE, ...DEEP_NATURE, ...DEEP_THINGS, ...DEEP_TOP };
