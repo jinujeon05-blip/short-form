@@ -30,6 +30,9 @@ window.DEMOS = [
   { id: "gamasot", url: "https://gamasot-menu.vercel.app", shot: "img/demo-gamasot.jpg", qr: "img/qr-gamasot.svg",
     name: "가마솥 GAMASOT", type: { ko: "한식당 · 하노이", vi: "Nhà hàng Hàn Quốc · Hà Nội", zh: "韩餐厅 · 河内", ja: "韓国料理店 · ハノイ", en: "Korean restaurant · Hanoi" },
     tag: { ko: "메뉴 70개 · 사진", vi: "70 món · có ảnh", zh: "70道菜 · 附图", ja: "70品・写真付き", en: "70 dishes · photos" } },
+  { id: "biobeauty", url: "https://biobeauty-menu.vercel.app", shot: "img/demo-biobeauty.jpg", qr: "img/qr-biobeauty.svg",
+    name: "바이오&뷰티", type: { ko: "화장품 할인 판매 · 베트남", vi: "Mỹ phẩm Hàn giảm giá · Việt Nam", zh: "韩国化妆品特卖 · 越南", ja: "韓国コスメ セール · ベトナム", en: "K-beauty sale · Vietnam" },
+    tag: { ko: "가게 말고 상품도 OK", vi: "Bán sản phẩm cũng được", zh: "商品销售也适用", ja: "商品販売にも", en: "Works for products too" } },
 ];
 
 window.T = {
