@@ -82,6 +82,8 @@ interface DreamUi {
   vietnam: string;
   cases: string;
   related: string;
+  why: string;
+  tips: string;
   back: string;
   dailyCta: string;
   disclaimer: string;
@@ -104,6 +106,8 @@ export const DREAM_UI: Record<Lang, DreamUi> = {
     vietnam: '🇻🇳 베트남에서는',
     cases: '상황별 풀이',
     related: '같이 많이 찾는 꿈',
+    why: '요즘 시각으로 보면: 왜 이런 꿈을 꿀까?',
+    tips: '이 꿈을 꾼 뒤 해 볼 일',
     back: '← 꿈해몽 전체 보기',
     dailyCta: '오늘의 띠별 운세도 보기 →',
     disclaimer: '꿈해몽은 전통 풍습과 속설에 따른 재미·참고용 풀이입니다. 같은 꿈이 반복되거나 불안·불면이 계속되면 몸과 마음의 피로 신호일 수 있으니 충분히 쉬고, 필요하면 전문가와 상담하세요.',
@@ -124,6 +128,8 @@ export const DREAM_UI: Record<Lang, DreamUi> = {
     vietnam: '🇻🇳 Quan niệm của người Việt',
     cases: 'Ý nghĩa theo từng tình huống',
     related: 'Giấc mơ liên quan',
+    why: 'Góc nhìn hiện đại: vì sao ta mơ như vậy?',
+    tips: 'Sau giấc mơ này, bạn có thể làm gì?',
     back: '← Xem tất cả giấc mơ',
     dailyCta: 'Xem tử vi hôm nay theo tuổi →',
     disclaimer: 'Giải mộng dựa trên quan niệm dân gian, chỉ mang tính tham khảo, giải trí. Nếu thường xuyên gặp ác mộng, mất ngủ hay lo âu, đó có thể là dấu hiệu cơ thể mệt mỏi — hãy nghỉ ngơi và tìm đến chuyên gia khi cần.',

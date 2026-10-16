@@ -75,6 +75,7 @@ function Shell({ route }: { route: Route }) {
     { path: '/', label: t.nav.today },
     { path: '/calendar', label: t.nav.calendar },
     { path: '/match', label: t.nav.match },
+    { path: '/dream', label: t.nav.dream },
     { path: '/name', label: t.nav.name },
     { path: '/saju', label: t.nav.saju },
   ];
@@ -92,7 +93,7 @@ function Shell({ route }: { route: Route }) {
           </Link>
           <nav className="nav" aria-label="main">
             {links.map((l) => (
-              <Link key={l.path} to={l.path} className={route.path === l.path ? 'on' : ''}>{l.label}</Link>
+              <Link key={l.path} to={l.path} className={route.path === l.path || (l.path !== '/' && route.path.startsWith(l.path + '/')) ? 'on' : ''}>{l.label}</Link>
             ))}
           </nav>
           <div className="lang" role="group" aria-label="language">

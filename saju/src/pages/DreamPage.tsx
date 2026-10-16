@@ -2,6 +2,7 @@ import { Baby } from 'lucide-react';
 import { Emoji } from '../components/Emoji';
 import { useMemo, useState } from 'react';
 import { CATEGORIES, DREAMS, DREAM_UI, Dream, DreamCategory, POPULAR, dreamBySlug, searchDreams } from '../content/dreams';
+import { DREAM_DEEP } from '../content/dreams/deep';
 import { useI18n } from '../i18n';
 import { Link, RoutePath, hrefFor } from '../router';
 import { AdSlot } from '../components/AdSlot';
@@ -87,6 +88,7 @@ export function DreamDetailPage({ slug }: { slug: string }) {
   const ui = DREAM_UI[lang];
   const d = dreamBySlug(slug)!;
   const x = d[lang];
+  const deep = DREAM_DEEP[d.slug]?.[lang];
   // Neighbours in the same category, starting right after this dream, so every page links to different ones.
   const same = DREAMS.filter((o) => o.category === d.category);
   const at = same.findIndex((o) => o.slug === d.slug);
@@ -124,6 +126,17 @@ export function DreamDetailPage({ slug }: { slug: string }) {
           </div>
         ))}
       </dl>
+
+      {deep && (
+        <>
+          <h2 className="article-h">{ui.why}</h2>
+          <p>{deep.why}</p>
+          <h2 className="article-h">{ui.tips}</h2>
+          <ul>
+            {deep.tips.map((t) => <li key={t}>{t}</li>)}
+          </ul>
+        </>
+      )}
 
       <AdSlot name="article" />
 

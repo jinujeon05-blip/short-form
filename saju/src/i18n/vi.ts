@@ -4,7 +4,7 @@ export const vi: Dict = {
   langName: 'Tiếng Việt',
   brand: 'Minh Nguyệt',
   brandSub: '明月 · 명월',
-  nav: { today: 'Hôm nay', calendar: 'Ngày tốt', match: 'Hợp tuổi', name: 'Tên Hàn', saju: 'Tứ trụ' },
+  nav: { today: 'Hôm nay', calendar: 'Ngày tốt', match: 'Hợp tuổi', dream: 'Giải mộng', name: 'Tên Hàn', saju: 'Tứ trụ' },
 
   hero: {
     eyebrow: 'Một vầng trăng, hai cuốn lịch',
