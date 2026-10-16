@@ -1,0 +1,114 @@
+// QR 메뉴판 가게 찾기 — 가게 목록은 이 파일만 고치면 됩니다.
+// 새 가게: STORES 에 한 줄 추가 (사장님 동의 받은 가게만). 사진은 ../img/demo-<id>.jpg (tools/demo.mjs 로 만듦)
+// region 은 REGIONS 의 키, cats 는 CATS 의 키(여러 개 가능), tags 는 TAGS 의 키.
+// keywords 는 화면에 안 나오고 검색에만 쓰임 (요리 이름, 다른 언어 표기 등).
+
+window.REGIONS = {
+  bacninh:   { ko: "박닌", vi: "Bắc Ninh", en: "Bac Ninh", zh: "北宁", ja: "バクニン" },
+  hanoi:     { ko: "하노이", vi: "Hà Nội", en: "Hanoi", zh: "河内", ja: "ハノイ" },
+  quangngai: { ko: "꽝응아이", vi: "Quảng Ngãi", en: "Quang Ngai", zh: "广义", ja: "クアンガイ" },
+  korea:     { ko: "한국", vi: "Hàn Quốc", en: "Korea", zh: "韩国", ja: "韓国" },
+  online:    { ko: "온라인 주문", vi: "Đặt online", en: "Online", zh: "线上订购", ja: "オンライン" },
+};
+
+window.CATS = {
+  bbq:    { icon: "🔥", ko: "고기구이", vi: "Đồ nướng", en: "BBQ & Grill", zh: "烧烤", ja: "焼肉・焼き物" },
+  korean: { icon: "🍲", ko: "한식", vi: "Món Hàn", en: "Korean food", zh: "韩餐", ja: "韓国料理" },
+  noodle: { icon: "🍜", ko: "면 · 간편식", vi: "Mì · Ăn nhanh", en: "Noodles & quick bites", zh: "面食 · 快餐", ja: "麺・軽食" },
+  bar:    { icon: "🍸", ko: "바 · 술집", vi: "Bar · Quán nhậu", en: "Bar & drinks", zh: "酒吧", ja: "バー・居酒屋" },
+  beauty: { icon: "💄", ko: "화장품", vi: "Mỹ phẩm", en: "Beauty", zh: "化妆品", ja: "コスメ" },
+};
+
+window.TAGS = {
+  zalo:   { ko: "Zalo 주문", vi: "Đặt món qua Zalo", en: "Order via Zalo", zh: "Zalo点单", ja: "Zalo注文" },
+  photos: { ko: "사진 메뉴", vi: "Có ảnh món", en: "Photo menu", zh: "带图菜单", ja: "写真付き" },
+  origin: { ko: "원산지 표시", vi: "Ghi nguồn gốc", en: "Origin labels", zh: "标注产地", ja: "原産地表示" },
+  wifi:   { ko: "와이파이", vi: "Wi-Fi", en: "Wi-Fi", zh: "Wi-Fi", ja: "Wi-Fi" },
+  sale:   { ko: "최대 80% 할인", vi: "Giảm đến 80%", en: "Up to 80% off", zh: "低至2折", ja: "最大80%オフ" },
+};
+
+window.STORES = [
+  { id: "sutkkui", name: "숯꾸이", sub: "Nhà Hàng Thịt Nướng", url: "https://sutkkui-menu.vercel.app",
+    region: "bacninh", cats: ["bbq", "korean"], tags: ["photos", "wifi"],
+    address: "190 Nguyễn Cao, TP. Bắc Ninh",
+    type: { ko: "한국식 고깃집", vi: "Quán thịt nướng Hàn Quốc", en: "Korean BBQ restaurant", zh: "韩式烤肉店", ja: "韓国焼肉店" },
+    keywords: "sutkkui suc kkui 삼겹살 돼지고기 소고기 냉면 전골 thịt heo thịt bò ba chỉ lẩu korean bbq pork beef 烤肉 五花肉 焼肉 サムギョプサル" },
+  { id: "eros", name: "EROS", sub: "Whisky · Cocktail · Soju", url: "https://eros-menu.vercel.app",
+    region: "bacninh", cats: ["bar"], tags: [],
+    address: "300 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh", map: "https://maps.app.goo.gl/mV2aUGsGAk4gE4Gy6",
+    type: { ko: "바 · 술집", vi: "Bar", en: "Bar", zh: "酒吧", ja: "バー" },
+    keywords: "에로스 위스키 칵테일 소주 맥주 안주 whisky cocktail soju beer rượu bia nhậu 威士忌 鸡尾酒 ウイスキー カクテル" },
+  { id: "anvoi", name: "Ăn Vội", sub: "Mì Trộn Siu Dính", url: "https://anvoi-menu.vercel.app",
+    region: "quangngai", cats: ["noodle"], tags: ["zalo", "photos"],
+    address: "157/45 Hùng Vương, Quảng Ngãi",
+    type: { ko: "비빔면 · 배달 · 포장", vi: "Mì trộn · Giao hàng · Mang đi", en: "Mixed noodles · Delivery · Takeaway", zh: "拌面 · 外卖 · 打包", ja: "まぜ麺・デリバリー・テイクアウト" },
+    keywords: "안보이 an voi 비빔면 라면 mì trộn indomie koreno gà khoai tây giao hàng noodles delivery 拌面 外卖 まぜそば" },
+  { id: "baekcheon", name: "백천화덕아나고", sub: "Baekcheon Anago", url: "https://baekcheon-menu.vercel.app",
+    region: "korea", cats: ["bbq", "korean"], tags: ["photos", "origin"],
+    address: "경북 경산시 백천길 7", map: "https://map.naver.com/p/entry/place/2005825852",
+    type: { ko: "화덕 장어구이 · 쌀국수", vi: "Cá chình biển nướng lò · Phở", en: "Wood-fired conger eel · Pho", zh: "炉烤星鳗 · 越南粉", ja: "窯焼きアナゴ・フォー" },
+    keywords: "백천 아나고 장어 붕장어 곰장어 막창 닭발 쌀국수 경산 대구 gyeongsan daegu eel conger anago cá chình phở 鳗鱼 星鳗 庆山 慶山 アナゴ 穴子 うなぎ" },
+  { id: "gamasot", name: "가마솥 GAMASOT", sub: "Nhà hàng Hàn Quốc", url: "https://gamasot-menu.vercel.app",
+    region: "hanoi", cats: ["korean"], tags: ["photos"],
+    address: "10A CT4, Khu Đô Thị Sông Đà, Nam Từ Liêm, Hà Nội",
+    type: { ko: "한식당 · 가마솥 요리", vi: "Nhà hàng Hàn Quốc · Món nấu nồi gang", en: "Korean restaurant · Iron-pot dishes", zh: "韩餐厅 · 铁锅料理", ja: "韓国料理店・釜料理" },
+    keywords: "가마솥 갈비찜 수육 꽃게 전골 아구찜 삼겹살 비빔밥 막걸리 gamasot galbi sườn hầm cua lẩu korean restaurant 韩国料理 排骨 カルビ 鍋" },
+  { id: "biobeauty", name: "Bio & Beauty", sub: "바이오&뷰티", url: "https://biobeauty-menu.vercel.app",
+    region: "online", cats: ["beauty"], tags: ["zalo", "sale"],
+    address: null,
+    type: { ko: "한국 화장품 할인 판매", vi: "Mỹ phẩm Hàn Quốc giảm giá", en: "Korean cosmetics on sale", zh: "韩国化妆品特卖", ja: "韓国コスメ セール" },
+    keywords: "바이오뷰티 센테카솔 오가믹스 연고 크림 세럼 마스크 centecassol ogamix kem dưỡng da mỹ phẩm skincare cosmetics 化妆品 护肤 コスメ スキンケア" },
+];
+
+window.SI = {
+  ko: {
+    title: "QR 메뉴판 가게 찾기",
+    heading: "QR 메뉴판으로 만나는 가게",
+    sub: "5개 언어 메뉴판이 있는 식당과 가게를 찾아보세요. 앱 설치 없이 바로 열립니다.",
+    search: "가게 이름, 음식, 지역으로 검색",
+    all: "전체", region: "지역", cat: "종류",
+    count: "{n}곳", empty: "조건에 맞는 가게가 없어요.", reset: "조건 초기화", clear: "검색어 지우기", unit: "곳",
+    menu: "메뉴 보기", map: "길찾기", ownerTitle: "사장님이신가요?",
+    ownerSub: "우리 가게도 손님 휴대폰 언어로 바뀌는 QR 메뉴판을 만들어 보세요.", ownerBtn: "QR 메뉴판 알아보기",
+  },
+  vi: {
+    title: "Tìm quán có thực đơn QR",
+    heading: "Các quán có thực đơn QR",
+    sub: "Tìm nhà hàng và cửa hàng có thực đơn 5 ngôn ngữ. Mở ngay, không cần cài ứng dụng.",
+    search: "Tìm theo tên quán, món ăn, khu vực",
+    all: "Tất cả", region: "Khu vực", cat: "Loại",
+    count: "{n} quán", empty: "Không có quán phù hợp.", reset: "Xóa bộ lọc", clear: "Xóa từ khóa", unit: "quán",
+    menu: "Xem thực đơn", map: "Chỉ đường", ownerTitle: "Bạn là chủ quán?",
+    ownerSub: "Làm thực đơn QR tự đổi sang ngôn ngữ điện thoại của khách cho quán của bạn.", ownerBtn: "Tìm hiểu thực đơn QR",
+  },
+  en: {
+    title: "Find places with QR menus",
+    heading: "Places with QR menus",
+    sub: "Find restaurants and shops with menus in 5 languages. Opens instantly — no app needed.",
+    search: "Search by name, food or area",
+    all: "All", region: "Area", cat: "Type",
+    count: "{n} places", count1: "1 place", empty: "No places match your filters.", reset: "Clear filters", clear: "Clear search", unit: "places",
+    menu: "View menu", map: "Directions", ownerTitle: "Own a restaurant or shop?",
+    ownerSub: "Get a QR menu that switches to your customer's phone language.", ownerBtn: "Learn about QR menus",
+  },
+  zh: {
+    title: "查找有二维码菜单的店",
+    heading: "提供二维码菜单的店铺",
+    sub: "查找提供5种语言菜单的餐厅和店铺。无需安装应用，扫码即开。",
+    search: "按店名、菜品、地区搜索",
+    all: "全部", region: "地区", cat: "类型",
+    count: "{n}家", empty: "没有符合条件的店铺。", reset: "清除筛选", clear: "清除搜索", unit: "家",
+    menu: "查看菜单", map: "导航", ownerTitle: "您是店主吗？",
+    ownerSub: "为您的店制作能自动切换为顾客手机语言的二维码菜单。", ownerBtn: "了解二维码菜单",
+  },
+  ja: {
+    title: "QRメニューのお店を探す",
+    heading: "QRメニューがあるお店",
+    sub: "5言語メニューのある飲食店・お店を探せます。アプリ不要ですぐ開けます。",
+    search: "店名・料理・地域で検索",
+    all: "すべて", region: "地域", cat: "種類",
+    count: "{n}件", empty: "条件に合うお店がありません。", reset: "条件をクリア", clear: "検索をクリア", unit: "件",
+    menu: "メニューを見る", map: "道案内", ownerTitle: "お店のオーナーですか？",
+    ownerSub: "お客様のスマホの言語に切り替わるQRメニューを作りませんか。", ownerBtn: "QRメニューについて",
+  },
+};

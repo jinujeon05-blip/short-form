@@ -83,6 +83,8 @@
   .kit-body h3 { font-size: 17px; margin-top: 8px; }
   .kit-body p { margin: 6px 0 0; font-size: 14.5px; color: var(--muted); }
 
+  .find { display: inline-flex; margin-top: 16px; font-weight: 700; font-size: 15px; color: var(--accent); text-decoration: none; border: 1px solid #f3c9bd; background: #fff; border-radius: 999px; padding: 9px 16px; }
+
   /* ── 특징 ── */
   .feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
   .feat { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
@@ -230,7 +232,7 @@
     .steps, .plans { gap: 8px; margin-top: 12px; }
     .step, .plan { padding: 12px; }
     .plan .price { font-size: 22px; }
-    #faq { display: none; }
+    #faq, .find { display: none; }
     #kit { padding: 0 0 14px; }
     #kit .sec-sub { display: none; }
     .kit { gap: 8px; margin-top: 8px; }
@@ -284,6 +286,7 @@
   <h2 class="sec-title" data-t="demoTitle"></h2>
   <p class="sec-sub" data-t="demoSub"></p>
   <div class="demos" id="demos"></div>
+  <a class="find" id="findLink" href="stores/"></a>
 </div></section>
 
 <section id="kit" style="padding-top:0"><div class="wrap">
@@ -380,6 +383,9 @@
     ];
     $("kit-list").innerHTML = (t.kit || []).map(([size, h, p], i) =>
       `<div class="kit-item">${KIT_PICS[i] || ""}<div class="kit-body"><span class="size">${esc(size)}</span><h3>${esc(h)}</h3><p>${esc(p)}</p></div></div>`).join("");
+
+    $("findLink").textContent = t.findLink + " →";
+    $("findLink").href = `stores/?lang=${lang}`;
 
     $("feats").innerHTML = t.feats.map(([h, p], i) =>
       `<div class="feat"><b>${FEAT_ICONS[i]}</b><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join("");

@@ -77,6 +77,12 @@
 - 소개서는 페이지 전체를 기기 기본 글꼴 하나로 통일한다. 잘난체·G마켓 산스에는 베트남어 성조 글자가 없어, 쓰면 베트남어에서 글꼴이 섞인다.
 - 연락처: 전화·Zalo 0917 302 200, 카카오톡 jjw4164
 
+## 가게 찾기 페이지 (손님용)
+- https://qrmenu-intro.vercel.app/stores/ (`sales/stores/`, 소개서와 같은 Vercel 프로젝트). 소개서 데모 칸 아래 링크로 연결됨.
+- 가게 목록·지역·종류·태그·화면 문구(5개 언어)는 `sales/stores/data.js` 하나에 있다. 사진은 소개서와 같은 `sales/img/demo-<가게>.jpg`.
+- 검색은 모든 언어의 이름·종류·지역·주소와 `keywords`(화면에 안 보임, 요리 이름 등)를 대상으로 하고 베트남어 성조를 무시한다 ("an voi" → Ăn Vội). 조건은 주소창(`?q=&region=&cat=`)에 남아 링크로 공유된다.
+- 새 가게는 사장님 동의를 받고 `STORES`에 추가한다. 지역·종류가 새로 생기면 `REGIONS`·`CATS`에도 넣는다. 15~20곳이 넘으면 지역을 나라/도시 두 단계로 나누는 것을 검토한다.
+
 ## 점주용 자료
 - Ăn Vội: `restaurants/anvoi/print/huong-dan-su-dung.pdf` (베트남어 사용설명서·주문 처리 순서, A4 2쪽, 원본 `huong-dan.html`, 화면 캡처 `print/img/g*.jpg`). 다른 가게도 같은 형식으로 만든다.
 - 가마솥: `restaurants/gamasot/print/guide-gamasot.pdf` (한국어 활용 가이드북, A4 3쪽: 손님 화면·기능별 좋은 점·상황별 활용·링크 문구·수정 방법, 원본 `guide.html`, 캡처 `print/img/g*.jpg`).
