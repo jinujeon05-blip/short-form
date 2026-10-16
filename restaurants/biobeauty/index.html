@@ -152,14 +152,14 @@
 
 <main class="wrap" id="menu"></main>
 
-<section class="contact" id="contact">
+<footer class="contact" id="contact">
   <div class="wrap">
     <h2 id="cTitle"></h2>
     <p class="lead" id="cLead"></p>
     <div class="people" id="people"></div>
     <p class="note" id="foot"></p>
   </div>
-</section>
+</footer>
 
 <div class="cartbar" id="cartbar" hidden>
   <button type="button" id="openCart"><span class="count" id="cartCount"></span><span class="total" id="cartTotal"></span><b id="cartCta"></b></button>
@@ -371,5 +371,6 @@
   for (const [id, key] of [["fName", "bb-name"], ["fPhone", "bb-phone"], ["fAddr", "bb-addr"]]) $(id).value = storage((s) => s.getItem(key)) || "";
   render();
 </script>
+<script src="dasan.js"></script>
 </body>
 </html>
