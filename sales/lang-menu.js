@@ -37,6 +37,7 @@
     .lm-item[aria-checked="true"] { color: var(--pt-accent, #e0452b); background: #faf4f0; }
     .lm-item .lm-check { margin-left: auto; font-size: 14px; visibility: hidden; }
     .lm-item[aria-checked="true"] .lm-check { visibility: visible; }
+    @media print { .lm { display: none !important; } }
   `;
 
   function mount() {

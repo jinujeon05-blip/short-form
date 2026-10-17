@@ -33,7 +33,7 @@ window.DEMOS = [
   { id: "biobeauty", url: "https://biobeauty-menu.vercel.app", shot: "img/demo-biobeauty.jpg", qr: "img/qr-biobeauty.svg",
     name: "바이오&뷰티", type: { ko: "화장품 할인 판매 · 베트남", vi: "Mỹ phẩm Hàn giảm giá · Việt Nam", zh: "韩国化妆品特卖 · 越南", ja: "韓国コスメ セール · ベトナム", en: "K-beauty sale · Vietnam" },
     tag: { ko: "가게 말고 상품도 OK", vi: "Bán sản phẩm cũng được", zh: "商品销售也适用", ja: "商品販売にも", en: "Works for products too" } },
-  { id: "suwonseong", url: "https://suwonseong-menu.vercel.app", shot: "img/demo-suwonseong.jpg", qr: "img/qr-suwonseong.svg",
+  { id: "suwonseong", hidden: true, url: "https://suwonseong-menu.vercel.app", shot: "img/demo-suwonseong.jpg", qr: "img/qr-suwonseong.svg",
     name: "수원성 SUWONSUNG", type: { ko: "고깃집 · 한식 · 하노이", vi: "Thịt nướng Hàn Quốc · Hà Nội", zh: "韩式烤肉 · 河内", ja: "焼肉・韓国料理・ハノイ", en: "Korean BBQ · Hanoi" } },
 ];
 

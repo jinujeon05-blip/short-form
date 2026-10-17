@@ -361,10 +361,12 @@
     $("langs").innerHTML = LANGS.map(([c, label]) =>
       `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
 
-    $("phones").innerHTML = DEMOS.map((d, i) =>
+    // hidden: true 인 가게는 사장님 동의 전이라 소개서에 안 보임 (SNS 이미지 도구용 데이터만 있음)
+    const SHOWN = DEMOS.filter((d) => !d.hidden);
+    $("phones").innerHTML = SHOWN.map((d, i) =>
       `<a class="phone ${["a", "b", "c"][i] || "a"}" href="${d.url}" target="_blank" rel="noopener"><img src="${d.shot}" alt="${esc(d.name)}"></a>`).join("");
 
-    $("demos").innerHTML = DEMOS.map((d) => `
+    $("demos").innerHTML = SHOWN.map((d) => `
       <a class="demo" href="${d.url}" target="_blank" rel="noopener">
         <div class="shot"><img src="${d.shot}" alt="" loading="lazy"></div>
         <div>
