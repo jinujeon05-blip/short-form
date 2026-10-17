@@ -27,6 +27,7 @@
 | `restaurants/baekcheon` | 백천화덕아나고 (경북 경산, 한국) | `baekcheon-menu` (팀 jinwoo8) | https://baekcheon-menu.vercel.app |
 | `restaurants/gamasot` | 가마솥 GAMASOT 한식당 (Hà Nội) | `gamasot-menu` (팀 jinwoo8) | https://gamasot-menu.vercel.app |
 | `restaurants/biobeauty` | 바이오&뷰티 (한국 화장품 할인 판매) | `biobeauty-menu` (팀 jinwoo8) | https://biobeauty-menu.vercel.app |
+| `restaurants/suwonseong` | 수원성 시푸차점 SUWONSUNG (Ciputra, Hà Nội) | `suwonseong-menu` (팀 jinwoo8) | https://suwonseong-menu.vercel.app |
 
 - Vercel 팀 기본값이 "모든 배포 로그인 보호"라서, 새 프로젝트마다 Deployment Protection을 `prod_deployment_urls_and_all_previews`로 바꿔야 손님이 로그인 없이 열 수 있다.
 - 테이블 QR 카드는 `restaurants/<가게>/print/`에 둔다: `qr.svg`(QR), `table-card.html`(A6 카드 원본), `table-card-A6.pdf`, `table-card-A4x4.pdf`(A4 한 장에 4개), `table-card.png`(300dpi). 폰트는 `public/fonts`(잘난체, G마켓 산스)를 쓴다.
@@ -35,6 +36,8 @@
 - 가마솥은 사장님 메뉴판 PDF(12쪽)에서 `pdfimages`로 음식 사진(투명 배경)을 뽑아 크림색 배경에 얹었다. S/L 가격은 `menu.js`의 `sizes`, 시가는 `price: null`.
 - 바이오&뷰티는 음식점이 아니라 화장품 할인 판매 페이지다 (센테카솔 80%·오가믹스 70%, 가격은 드라이브 전단지 기준). 상담원 2명(`menu.js`의 `contacts`: 0917 302 200 한국어+카카오톡, 0937 250 787 베트남어)에게 장바구니 주문서를 Zalo로 보낸다. 제품 사진(`img/p/<id>.jpg`, 3:4)은 카탈로그 PDF 페이지를 렌더해 잘라냈다. 제품별 효능·사용법·임상 결과는 `menu.js`의 `window.INFO`(카탈로그 원문 기준), 메뉴에서 접었다 펴는 칸으로 보인다. 소개서 데모에도 들어가 있다. 다산 배너 있음 (상담 섹션이 `<footer>`라 그 아래에 붙음).
 - 구글 드라이브 연결 도구는 10MB 넘는 파일을 못 받는다. 큰 PDF는 나눠 올려 달라고 하거나 `read_file_content`로 글자만 읽는다.
+- 드라이브 사진 받기: `download_file_content` 결과가 크면(약 6만 글자 이상) 하네스가 `/root/.claude/projects/<프로젝트>/<세션>/tool-results/mcp-Google_Drive-download_file_content-<숫자>.txt`(JSON `{content: base64, title, …}`)에 저장하고 경로를 알려 준다 → 알려 준 경로를 그대로 python으로 base64 풀어 저장. 작은 파일(약 45KB 이하)은 대화로 바로 들어와 저장할 수 없으니 사용자에게 채팅 첨부나 원본 크기 업로드를 부탁한다. WebP는 PIL로 jpg 변환.
+- 수원성은 매장 인쇄 메뉴판 사진과 구글 지도의 디지털 메뉴판 이미지(여러 판, 일부 지워짐)를 대조해 만들었다. 공식 영문 표기는 SUWONSUNG. 다산 배너는 사장님 동의 전이라 넣지 않았다.
 - 사진·로고는 사장님 메뉴판 디자인 원본에서 잘라 `restaurants/<가게>/img/`에 둔다.
 
 ## 작업 도구 (`tools/`)
@@ -56,6 +59,7 @@
 - **백천화덕아나고**: 와이파이(`wifi: null`), 영업시간.
 - **Ăn Vội**: 와이파이(`wifi: null`).
 - **바이오&뷰티**: 두 번째 연락처 0937 250 787을 "베트남어 상담"으로 표시함 — 맞는지. 가격은 드라이브 전단지 기준이라 바뀌면 `menu.js`의 `was`/`price` 수정.
+- **수원성**: 와이파이(`wifi: null`). 제육볶음 가격(인쇄본 400,000에 취소선, 디지털판 220,000 → 지금 220,000). 회냉면·갈비탕(디지털판에서 빠짐, 갈비탕은 뺐음)·새우구이·양념닭발·마늘치킨(최근 디지털판에서 지워져 뺐음)이 지금도 파는지. 다산 배너·가게 찾기 목록·소개서 데모에 넣어도 되는지.
 - 답을 받으면 해당 `menu.js`만 고치고 커밋·푸시 → 그 가게만 다시 배포 → 이 목록에서 지운다.
 
 ## 다산(DASAN) 파트너 배너

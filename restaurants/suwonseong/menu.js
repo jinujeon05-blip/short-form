@@ -1,6 +1,6 @@
 // 수원성 시푸차점 (Nhà hàng Hàn Quốc SUWONSUNG · Ciputra, Hà Nội) 메뉴 데이터
 // 메뉴/가격 수정은 이 파일만 고치면 됩니다. 가격 단위: VND (부가세 10% 별도)
-// price: 가격 / price: null = 메뉴판에서 가격이 가려져 확인 필요 / dessert: 고기 식사 후 후식 가격
+// price: 가격 / dessert: 메뉴판의 "후식" 가격 (고기와 함께 주문할 때)
 // sizes: [[{ko,en,…}, 가격], …] / unit: 중량 / tag: "best" · "special" / spicy: true
 // 원본: 구글 드라이브 "수원성 시푸차" 폴더 — 매장 메뉴판 사진(056~061)과 구글 지도 메뉴판 이미지
 // 베트남어·영어 이름은 사장님 메뉴판 표기를 따르고, 명백한 오타만 고침
@@ -12,8 +12,8 @@ window.RESTAURANT = {
   wifi: null, // 예: { ssid: "SUWONSUNG", password: "12345678" }
 };
 
-const WHOLE = { ko: "한 마리", en: "Whole", zh: "整条", ja: "一匹", vi: "Nguyên con" };
-const HALF = { ko: "반 마리", en: "Half", zh: "半条", ja: "半身", vi: "Nửa con" };
+const WHOLE = { ko: "한 마리", en: "Whole", zh: "整条", ja: "1尾", vi: "Nguyên con" };
+const HALF = { ko: "반 마리", en: "Half", zh: "半条", ja: "半尾", vi: "Nửa con" };
 
 window.MENU = [
   {
@@ -93,7 +93,7 @@ window.MENU = [
       { sizes: [[WHOLE, 1200000], [HALF, 600000]], tag: "special",
         name: { ko: "장어구이", en: "Grilled Eel", zh: "烤鳗鱼", ja: "うなぎ焼き", vi: "Cá chình nướng" } },
       { price: 240000,
-        name: { ko: "해물 부추전 or 파전", en: "Seafood Pancake (Chive or Green Onion)", zh: "海鲜韭菜饼或葱饼", ja: "海鮮ニラチヂミ / ネギチヂミ", vi: "Bánh hải sản hẹ hoặc hành" } },
+        name: { ko: "해물부추전 / 해물파전", en: "Seafood Pancake (Chive or Green Onion)", zh: "海鲜韭菜饼或葱饼", ja: "海鮮ニラチヂミ / ネギチヂミ", vi: "Bánh hải sản hẹ hoặc hành" } },
       { price: 900000,
         name: { ko: "소갈비찜", en: "Braised Beef Galbi", zh: "炖牛排骨", ja: "牛カルビチム", vi: "Sườn bò hầm" } },
       { price: 600000,
@@ -113,7 +113,7 @@ window.MENU = [
     name: { ko: "점심특선", en: "Lunch Specials", zh: "午餐特选", ja: "ランチ特選", vi: "Cơm trưa đặc biệt" },
     note: { ko: "정식에는 순두부찌개 · 우거지탕 · 된장찌개 중 하나를 골라 드립니다",
       en: "Each set comes with your choice of soft tofu stew, beef cabbage soup or soybean paste soup",
-      zh: "套餐可从嫩豆腐汤、牛骨白菜汤、大酱汤中任选一种",
+      zh: "套餐可从嫩豆腐汤、牛骨白菜干汤、大酱汤中任选一种",
       ja: "定食にはスンドゥブチゲ・ウゴジタン・テンジャンチゲから一つお選びいただけます",
       vi: "Chọn một món canh: canh đậu phụ non, canh xương bò rau cải hoặc canh tương" },
     items: [
@@ -130,7 +130,7 @@ window.MENU = [
     photo: "img/meals.jpg",
     name: { ko: "식사류", en: "Meals", zh: "饭类", ja: "お食事", vi: "Món ăn chính" },
     items: [
-      { price: 400000, spicy: true,
+      { price: 220000, spicy: true,
         name: { ko: "제육볶음", en: "Stir-fried Spicy Pork", zh: "辣炒猪肉", ja: "チェユクポックム（豚の辛味炒め）", vi: "Thịt lợn xào" } },
       { price: 200000, spicy: true,
         name: { ko: "제육덮밥", en: "Stir-fried Pork with Rice", zh: "辣炒猪肉盖饭", ja: "チェユク丼", vi: "Thịt lợn xào và cơm" } },
@@ -141,9 +141,9 @@ window.MENU = [
       { price: 180000,
         name: { ko: "순두부찌개", en: "Soft Tofu Stew", zh: "嫩豆腐汤", ja: "スンドゥブチゲ", vi: "Canh đậu phụ non" } },
       { price: 180000,
-        name: { ko: "콩비지찌개", en: "Soybean Paste Stew", zh: "豆渣汤", ja: "コンビジチゲ（おから鍋）", vi: "Canh đậu tương" } },
+        name: { ko: "콩비지찌개", en: "Kongbiji (Ground Soybean Stew)", zh: "豆渣汤", ja: "コンビジチゲ（おから鍋）", vi: "Canh đậu tương" } },
       { price: 180000,
-        name: { ko: "소고기 따로국밥", en: "Radish Beef Soup", zh: "萝卜牛肉汤饭", ja: "大根と牛肉のスープ", vi: "Canh củ cải thịt bò" } },
+        name: { ko: "소고기 따로국밥", en: "Radish Beef Soup", zh: "萝卜牛肉汤饭", ja: "牛肉クッパ（ご飯別添え）", vi: "Canh củ cải thịt bò" } },
       { price: 180000,
         name: { ko: "사골 우거지탕", en: "Bone Beef Cabbage Soup", zh: "牛骨白菜干汤", ja: "牛骨ウゴジタン", vi: "Canh xương bò rau cải" } },
       { price: 180000, spicy: true,
@@ -157,7 +157,7 @@ window.MENU = [
       { price: 180000,
         name: { ko: "설렁탕", en: "Beef Bone Soup (Seolleongtang)", zh: "牛骨雪浓汤", ja: "ソルロンタン", vi: "Canh thịt bò hầm" } },
       { price: 180000,
-        name: { ko: "황태해장국", en: "Dried Pollack Hangover Soup", zh: "明太鱼干醒酒汤", ja: "干しスケトウダラのヘジャンクッ", vi: "Canh cá tuyết giải rượu" } },
+        name: { ko: "황태해장국", en: "Dried Pollack Hangover Soup", zh: "明太鱼干醒酒汤", ja: "干しスケトウダラのヘジャンクッ", vi: "Canh cá tuyết giá đỗ" } },
       { price: 180000,
         name: { ko: "해물칼국수", en: "Seafood Noodle Soup", zh: "海鲜刀切面", ja: "海鮮カルグクス", vi: "Mỳ hải sản" } },
       { price: 180000,
@@ -167,20 +167,18 @@ window.MENU = [
       { price: 160000,
         name: { ko: "누룽지 + 된장찌개", en: "Scorched Rice + Soybean Paste Stew", zh: "锅巴 + 大酱汤", ja: "おこげ＋テンジャンチゲ", vi: "Cơm cháy + canh tương nhỏ" } },
       { price: 160000,
-        name: { ko: "돈가스", en: "Pork Cutlet", zh: "炸猪排", ja: "トンカツ", vi: "Thịt lợn chiên xù" } },
-      { price: null,
-        name: { ko: "갈비탕", en: "Beef Short Rib Soup", zh: "牛排骨汤", ja: "カルビタン", vi: "Canh sườn bò" } },
+        name: { ko: "돈가스", en: "Pork Cutlet Rice", zh: "炸猪排饭", ja: "トンカツライス", vi: "Cơm thịt lợn chiên xù" } },
     ],
   },
   {
     id: "noodles",
     photo: "img/naengmyeon.jpg",
-    name: { ko: "후식 · 면류", en: "Noodles & Sides", zh: "饭后 · 面类", ja: "締め・麺類", vi: "Tráng miệng · Món mỳ" },
-    note: { ko: "고기 · 구이를 드신 뒤에는 냉면을 후식 가격으로 드립니다",
-      en: "With grilled meat, cold noodles are served at the after-meal price",
-      zh: "点烤肉后，冷面可享饭后价",
-      ja: "焼肉の後は、冷麺を締めの価格でご提供します",
-      vi: "Gọi thịt nướng được hưởng giá tráng miệng cho món mỳ lạnh" },
+    name: { ko: "후식 · 면류", en: "Noodles & Sides", zh: "冷面 · 面类", ja: "締め・麺類", vi: "Tráng miệng · Món mỳ" },
+    note: { ko: "고기와 구이를 드신 후 깔끔하게 입가심하며 즐기는 후식과 면요리",
+      en: "Refreshing noodles and sides to finish your BBQ",
+      zh: "吃完烤肉后清爽解腻的面食与小菜",
+      ja: "焼肉の後にさっぱり楽しむ締めの麺とサイド",
+      vi: "Món mỳ và món phụ thanh mát sau khi ăn thịt nướng" },
     items: [
       { price: 160000, dessert: 100000,
         name: { ko: "물냉면", en: "Cold Noodles in Broth", zh: "水冷面", ja: "水冷麺", vi: "Miến lạnh nước" } },
@@ -188,13 +186,13 @@ window.MENU = [
         name: { ko: "비빔냉면", en: "Spicy Mixed Cold Noodles", zh: "拌冷面", ja: "ビビン冷麺", vi: "Miến lạnh trộn" } },
       { price: 160000, dessert: 100000, spicy: true,
         name: { ko: "회냉면", en: "Cold Noodles with Raw Fish", zh: "生鱼片冷面", ja: "フェ冷麺（刺身冷麺）", vi: "Miến lạnh gỏi cá" } },
-      { price: 180000,
+      { price: 160000,
         name: { ko: "콩국수", en: "Cold Soybean Noodles", zh: "豆浆冷面", ja: "コングクス（豆乳麺）", vi: "Mỳ đậu nành" } },
       { price: 160000,
         name: { ko: "찐만두", en: "Steamed Dumplings", zh: "蒸饺", ja: "蒸し餃子", vi: "Mandu hấp" } },
       { price: 200000,
-        name: { ko: "식사냉면 + 만두 2개", en: "Cold Noodles + 2 Dumplings", zh: "冷面 + 饺子2个", ja: "冷麺＋餃子2個", vi: "Miến lạnh + 2 mandu" },
-        desc: { ko: "물냉면 · 비빔냉면 중 선택", en: "Choose in broth or spicy mixed", zh: "可选水冷面或拌冷面", ja: "水冷麺・ビビン冷麺から選べます", vi: "Chọn miến nước hoặc miến trộn" } },
+        name: { ko: "식사냉면 + 만두 3개", en: "Cold Noodles + 3 Dumplings", zh: "冷面 + 饺子3个", ja: "冷麺＋餃子3個", vi: "Miến lạnh + 3 mandu" },
+        desc: { ko: "물냉면 · 비빔냉면 · 회냉면 중 선택", en: "Choose broth, spicy mixed or raw fish", zh: "可选水冷面、拌冷面或生鱼片冷面", ja: "水冷麺・ビビン冷麺・フェ冷麺から選べます", vi: "Chọn miến nước, miến trộn hoặc miến gỏi cá" } },
       { price: 40000,
         name: { ko: "후식 된장찌개", en: "Small Soybean Paste Stew", zh: "饭后大酱汤", ja: "締めのテンジャンチゲ", vi: "Canh tương nhỏ" } },
       { price: 40000,
