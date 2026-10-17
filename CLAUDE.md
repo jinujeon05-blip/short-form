@@ -48,7 +48,7 @@
 - `node tools/sns.mjs <가게> [vi|ko…] [버튼 글자, 기본 MENU] [가게 이름]` — SNS 홍보 이미지 `print/sns-square.png`(1080×1080, 게시물·Zalo)·`sns-story.png`(1080×1920, 스토리). 메뉴판 첫 화면+QR+주소, 색은 가게 `partner-theme`. 가게 이름·종류는 `sales/content.js`의 `DEMOS`에서 가져오므로 새 가게는 DEMOS에 먼저 넣는다. 한국 매장은 `ko`, 바이오&뷰티는 `vi SHOP "Bio & Beauty"`. 기본형에 포함이라 새 가게마다 만들어 사용자에게 보낸다.
 - `node tools/shot.mjs <가게> [ko,vi] [저장폴더]` — 휴대폰 크기 전체 화면 캡처 + 자바스크립트 오류·못 불러온 파일 확인.
 - `node tools/demo.mjs <가게>` — 소개서용 데모 화면 `sales/img/demo-<가게>.jpg`. 새 가게는 `sales/content.js`의 `DEMOS`에도 추가하고 QR을 `sales/img/qr-<가게>.svg`로 복사.
-- `node tools/sales-pdf.mjs` — 소개서 PDF 5개 언어. 각각 **2쪽**인지 출력해 준다 (데모가 늘면 인쇄용 `.demos` 칸 수 조정).
+- `node tools/sales-pdf.mjs` — 소개서 PDF 5개 언어. 각각 **2쪽**인지 출력해 준다 (데모가 늘면 인쇄용 `.demos` 칸 수 조정, 지금 7칸). `DEMOS`에 `hidden: true`를 붙이면 소개서에는 안 보이고 SNS 도구용 데이터로만 쓰인다.
 - `node tools/pdf.mjs <입력.html> <출력.pdf>` — 점주용 가이드 등 HTML → PDF.
 - `python3 -I tools/thumb.py <페이지.png> x0 y0 x1 y1 <출력.jpg>` — 카탈로그·메뉴판 페이지 그림에서 사진을 3:4로 잘라냄 (빈 곳은 배경을 흐리게 채움). 페이지 그림은 `pdftoppm -r 160 -png -f N -l N 파일.pdf 이름`으로 만든다. 투명 배경 사진은 `pdfimages -png -p`가 더 낫다.
 - `.claude/agents/`: finder(찾기, haiku)·polisher(글 다듬기, sonnet)·reviewer(검토, opus). 양 많은 찾기·번역 초안은 맡기면 메인 대화가 덜 길어진다.
@@ -59,7 +59,7 @@
 - **백천화덕아나고**: 와이파이(`wifi: null`), 영업시간.
 - **Ăn Vội**: 와이파이(`wifi: null`).
 - **바이오&뷰티**: 두 번째 연락처 0937 250 787을 "베트남어 상담"으로 표시함 — 맞는지. 가격은 드라이브 전단지 기준이라 바뀌면 `menu.js`의 `was`/`price` 수정.
-- **수원성**: 와이파이(`wifi: null`). 제육볶음 가격(인쇄본 400,000에 취소선, 디지털판 220,000 → 지금 220,000). 회냉면·갈비탕(디지털판에서 빠짐, 갈비탕은 뺐음)·새우구이·양념닭발·마늘치킨(최근 디지털판에서 지워져 뺐음)이 지금도 파는지. 가게 찾기 목록·소개서 데모에 넣어도 되는지 (소개서 `DEMOS`에는 `hidden: true`로 들어 있음).
+- **수원성**: 와이파이(`wifi: null`). 제육볶음 가격(인쇄본 400,000에 취소선, 디지털판 220,000 → 지금 220,000). 회냉면·갈비탕(디지털판에서 빠짐, 갈비탕은 뺐음)·새우구이·양념닭발·마늘치킨(최근 디지털판에서 지워져 뺐음)이 지금도 파는지.
 - 답을 받으면 해당 `menu.js`만 고치고 커밋·푸시 → 그 가게만 다시 배포 → 이 목록에서 지운다.
 
 ## 언어 선택 드롭다운 (모든 메뉴판·소개서·가게 찾기)
