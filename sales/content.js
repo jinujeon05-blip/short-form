@@ -33,6 +33,8 @@ window.DEMOS = [
   { id: "biobeauty", url: "https://biobeauty-menu.vercel.app", shot: "img/demo-biobeauty.jpg", qr: "img/qr-biobeauty.svg",
     name: "바이오&뷰티", type: { ko: "화장품 할인 판매 · 베트남", vi: "Mỹ phẩm Hàn giảm giá · Việt Nam", zh: "韩国化妆品特卖 · 越南", ja: "韓国コスメ セール · ベトナム", en: "K-beauty sale · Vietnam" },
     tag: { ko: "가게 말고 상품도 OK", vi: "Bán sản phẩm cũng được", zh: "商品销售也适用", ja: "商品販売にも", en: "Works for products too" } },
+  { id: "suwonseong", url: "https://suwonseong-menu.vercel.app", shot: "img/demo-suwonseong.jpg", qr: "img/qr-suwonseong.svg",
+    name: "수원성 SUWONSUNG", type: { ko: "고깃집 · 한식 · 하노이", vi: "Thịt nướng Hàn Quốc · Hà Nội", zh: "韩式烤肉 · 河内", ja: "焼肉・韓国料理・ハノイ", en: "Korean BBQ · Hanoi" } },
 ];
 
 window.T = {
@@ -45,12 +47,20 @@ window.T = {
     ctaPrice: "가격 보기",
     demoTitle: "지금 운영 중인 메뉴판",
     demoSub: "휴대폰 카메라로 QR을 찍거나 화면을 눌러 직접 확인해 보세요.",
+    findLink: "QR 메뉴판 가게 전체 보기 · 검색",
     open: "열어보기",
+    kitTitle: "함께 드리는 것",
+    kitSub: "메뉴판과 함께 바로 쓸 수 있는 인쇄용 파일과 SNS 이미지를 드려요. (예시: 숯꾸이)",
+    kit: [
+      ["A6 · PDF", "테이블 QR 카드", "테이블에 세워 두는 카드예요. 와이파이와 전화번호도 넣을 수 있어요."],
+      ["A4 · PDF", "A4 한 장에 4개", "A4 한 장에 카드 4개가 들어가요. 동네 인쇄소나 사무실 프린터로 뽑아 잘라 쓰면 돼요."],
+      ["1080×1080 · 1080×1920", "SNS 홍보 이미지", "페이스북·인스타그램 게시물과 스토리, Zalo 공유용 이미지예요. 가게 메뉴판 화면과 QR이 함께 들어가요."],
+    ],
     featTitle: "이런 점이 다릅니다",
     feats: [
       ["5개 언어 자동 전환", "휴대폰 언어를 알아서 감지해 바뀌고, 버튼으로 직접 고를 수도 있어요. 메뉴마다 한국어·베트남어 이름이 함께 나와 직원도 바로 알아봐요."],
       ["가게 맞춤 디자인", "고깃집은 칠판과 붓글씨, 바는 금색과 네온처럼 가게 분위기에 맞춰 디자인해요. 기존 메뉴판의 로고와 사진도 살려 드려요."],
-      ["테이블 QR 카드 제공", "인쇄용 QR 카드 PDF(A6 1장, A4 4장)를 함께 드려요. 와이파이와 전화번호도 카드에 넣어 드려요."],
+      ["테이블 QR 카드 제공", "인쇄용 QR 카드 PDF(A6 1장, A4 한 장에 4개)를 함께 드려요. 와이파이와 전화번호도 카드에 넣어 드려요."],
       ["가격이 바뀌어도 간단", "메뉴나 가격이 바뀌면 사진이나 메시지만 보내주세요. QR은 그대로라 카드를 다시 인쇄할 필요가 없어요."],
       ["와이파이 · 전화 · 지도", "와이파이 비밀번호 복사, 전화 걸기, 구글 지도 길찾기를 한 번에."],
       ["앱 설치 없음", "카메라로 찍으면 바로 열려요. 아이폰·안드로이드 모두 됩니다."],
@@ -68,7 +78,7 @@ window.T = {
     perMonth: "/ 월",
     popular: "추천",
     plans: {
-      basic: ["기본형", ["5개 언어 메뉴판", "기존 메뉴판 사진·로고 활용", "테이블 QR 카드 PDF", "와이파이 · 전화 · 지도 버튼"]],
+      basic: ["기본형", ["5개 언어 메뉴판", "기존 메뉴판 사진·로고 활용", "테이블 QR 카드 PDF (A6 · A4)", "SNS 홍보 이미지 2종", "와이파이 · 전화 · 지도 버튼"]],
       premium: ["프리미엄", ["기본형 전체 포함", "가게 분위기 맞춤 디자인", "음식 사진 정리 · 배치", "시안 수정 포함"]],
       monthly: ["월 관리", ["메뉴판 사이트 유지", "메뉴 · 가격 수정 월 4회까지", "연 결제 시 {yearly} (2개월 무료)"]],
     },
@@ -106,7 +116,15 @@ window.T = {
     ctaPrice: "Xem bảng giá",
     demoTitle: "Thực đơn đang hoạt động",
     demoSub: "Quét mã QR bằng camera điện thoại hoặc chạm vào hình để xem trực tiếp.",
+    findLink: "Xem tất cả quán · Tìm kiếm",
     open: "Mở xem",
+    kitTitle: "Đi kèm",
+    kitSub: "Cùng với thực đơn, chúng tôi tặng file in và hình ảnh SNS dùng được ngay. (Ví dụ: Sutkkui)",
+    kit: [
+      ["A6 · PDF", "Thẻ QR để bàn", "Thẻ đặt trên bàn. Có thể in kèm Wi-Fi và số điện thoại."],
+      ["A4 · PDF", "4 thẻ trên một tờ A4", "Một tờ A4 có 4 thẻ. In ở tiệm in gần nhà hoặc máy in văn phòng rồi cắt ra dùng."],
+      ["1080×1080 · 1080×1920", "Hình ảnh quảng bá SNS", "Hình cho bài đăng, story Facebook · Instagram và chia sẻ qua Zalo, kèm màn hình thực đơn và mã QR của quán."],
+    ],
     featTitle: "Điểm khác biệt",
     feats: [
       ["Tự động 5 ngôn ngữ", "Tự nhận ngôn ngữ điện thoại, khách cũng có thể tự chọn. Mỗi món đều kèm tên tiếng Hàn và tiếng Việt để nhân viên nhận ra ngay."],
@@ -129,7 +147,7 @@ window.T = {
     perMonth: "/ tháng",
     popular: "Đề xuất",
     plans: {
-      basic: ["Cơ bản", ["Thực đơn 5 ngôn ngữ", "Dùng ảnh và logo từ thực đơn cũ", "File PDF thẻ QR để bàn", "Nút Wi-Fi · Gọi điện · Bản đồ"]],
+      basic: ["Cơ bản", ["Thực đơn 5 ngôn ngữ", "Dùng ảnh và logo từ thực đơn cũ", "File PDF thẻ QR để bàn (A6 · A4)", "2 hình ảnh quảng bá SNS","Nút Wi-Fi · Gọi điện · Bản đồ"]],
       premium: ["Cao cấp", ["Bao gồm toàn bộ gói Cơ bản", "Thiết kế theo phong cách quán", "Chỉnh sửa và sắp xếp ảnh món ăn", "Bao gồm chỉnh sửa bản mẫu"]],
       monthly: ["Bảo trì hàng tháng", ["Duy trì trang thực đơn", "Sửa món · giá tối đa 4 lần/tháng", "Trả theo năm {yearly} (miễn phí 2 tháng)"]],
     },
@@ -167,7 +185,15 @@ window.T = {
     ctaPrice: "See pricing",
     demoTitle: "Menus live right now",
     demoSub: "Scan the QR with your phone camera or tap the screen to try it.",
+    findLink: "See all places · Search",
     open: "Open",
+    kitTitle: "What you also get",
+    kitSub: "Along with the menu, you get print files and social media images that are ready to use. (Example: Sutkkui)",
+    kit: [
+      ["A6 · PDF", "Table QR card", "A card that stands on the table. We can add your Wi-Fi and phone number too."],
+      ["A4 · PDF", "4 cards on one A4 sheet", "One A4 sheet holds 4 cards. Print at a local print shop or office printer, then cut."],
+      ["1080×1080 · 1080×1920", "Social media promo images", "Images for Facebook and Instagram posts and stories, and for sharing on Zalo. They show your menu screen and QR."],
+    ],
     featTitle: "What makes it different",
     feats: [
       ["5 languages, automatic", "It detects the phone's language and switches automatically; guests can also pick one. Each dish also shows its Korean and Vietnamese name so staff recognise it instantly."],
@@ -190,7 +216,7 @@ window.T = {
     perMonth: "/ month",
     popular: "Popular",
     plans: {
-      basic: ["Basic", ["5-language menu", "Uses photos & logo from your current menu", "Table QR card PDFs", "Wi-Fi · Call · Map buttons"]],
+      basic: ["Basic", ["5-language menu", "Uses photos & logo from your current menu", "Table QR card PDFs (A6 · A4)", "2 social media promo images","Wi-Fi · Call · Map buttons"]],
       premium: ["Premium", ["Everything in Basic", "Custom design for your venue", "Food photo clean-up & layout", "Draft revisions included"]],
       monthly: ["Monthly care", ["Menu site kept online", "Up to 4 menu / price edits a month", "Yearly: {yearly} (2 months free)"]],
     },
@@ -228,12 +254,20 @@ window.T = {
     ctaPrice: "查看价格",
     demoTitle: "正在使用中的菜单",
     demoSub: "用手机相机扫描二维码，或点击画面直接体验。",
+    findLink: "查看全部店铺 · 搜索",
     open: "打开",
+    kitTitle: "一并提供",
+    kitSub: "除菜单外，还提供可直接使用的打印文件和社交媒体图片。（示例：Sutkkui）",
+    kit: [
+      ["A6 · PDF", "二维码桌牌", "摆在桌上的桌牌，还可印上Wi-Fi和电话。"],
+      ["A4 · PDF", "一张A4排4个", "一张A4纸可排4个桌牌，用附近印刷店或办公室打印机打印后裁开即可。"],
+      ["1080×1080 · 1080×1920", "社交媒体宣传图", "适用于Facebook、Instagram帖子和快拍，以及Zalo分享，图中含店铺菜单画面和二维码。"],
+    ],
     featTitle: "我们的优势",
     feats: [
       ["5种语言自动切换", "自动识别手机语言，客人也可以自己选择。每道菜都附有韩语和越南语名称，服务员一看就懂。"],
       ["按店铺风格定制设计", "烤肉店用黑板和毛笔字，酒吧用金色和霓虹灯，配合店铺氛围设计，并保留原菜单的标志和照片。"],
-      ["附赠桌牌二维码", "提供可直接打印的二维码桌牌PDF（A6单张、A4四张），桌牌上还可印上Wi-Fi和电话。"],
+      ["附赠桌牌二维码", "提供可直接打印的二维码桌牌PDF（A6单张、一张A4排4个），桌牌上还可印上Wi-Fi和电话。"],
       ["改价格很简单", "菜品或价格有变动时，只需发照片或消息给我们。二维码不变，桌牌无需重印。"],
       ["Wi-Fi · 电话 · 地图", "一键复制Wi-Fi密码、拨打电话、谷歌地图导航。"],
       ["无需安装应用", "用相机一扫即可打开，苹果和安卓手机都能用。"],
@@ -251,7 +285,7 @@ window.T = {
     perMonth: "/ 月",
     popular: "推荐",
     plans: {
-      basic: ["基础版", ["5种语言菜单", "使用原菜单的照片和标志", "二维码桌牌PDF", "Wi-Fi · 电话 · 地图按钮"]],
+      basic: ["基础版", ["5种语言菜单", "使用原菜单的照片和标志", "二维码桌牌PDF（A6 · A4）", "2张社交媒体宣传图","Wi-Fi · 电话 · 地图按钮"]],
       premium: ["高级版", ["包含基础版全部内容", "按店铺风格定制设计", "菜品照片整理与排版", "包含样稿修改"]],
       monthly: ["月度维护", ["保持菜单网站运行", "每月最多修改菜单·价格4次", "按年付费 {yearly}（免2个月）"]],
     },
@@ -289,7 +323,15 @@ window.T = {
     ctaPrice: "料金を見る",
     demoTitle: "現在運用中のメニュー",
     demoSub: "スマホのカメラでQRを読み取るか、画面をタップしてお試しください。",
+    findLink: "すべてのお店を見る・検索",
     open: "開く",
+    kitTitle: "セットでお渡しするもの",
+    kitSub: "メニューと一緒に、すぐ使える印刷用ファイルとSNS用画像をお渡しします。（例：Sutkkui）",
+    kit: [
+      ["A6 · PDF", "テーブル用QRカード", "テーブルに立てて使うカードです。Wi-Fiや電話番号も入れられます。"],
+      ["A4 · PDF", "A4用紙1枚に4枚", "A4用紙1枚にカードが4枚入ります。近所の印刷所や事務所のプリンターで印刷して切って使えます。"],
+      ["1080×1080 · 1080×1920", "SNS用宣伝画像", "Facebook・Instagramの投稿やストーリーズ、Zaloでの共有に使える画像です。お店のメニュー画面とQRが入ります。"],
+    ],
     featTitle: "ここが違います",
     feats: [
       ["5言語に自動切り替え", "スマホの言語を自動で判別し、ボタンで選ぶこともできます。各メニューに韓国語・ベトナム語の名前も表示されるので、スタッフもすぐ分かります。"],
@@ -312,7 +354,7 @@ window.T = {
     perMonth: "/ 月",
     popular: "おすすめ",
     plans: {
-      basic: ["ベーシック", ["5言語メニュー", "今のメニューの写真・ロゴを活用", "テーブル用QRカードPDF", "Wi-Fi・電話・地図ボタン"]],
+      basic: ["ベーシック", ["5言語メニュー", "今のメニューの写真・ロゴを活用", "テーブル用QRカードPDF（A6・A4）", "SNS用宣伝画像 2種","Wi-Fi・電話・地図ボタン"]],
       premium: ["プレミアム", ["ベーシックの内容をすべて含む", "お店に合わせたオリジナルデザイン", "料理写真の整理・レイアウト", "デザイン案の修正込み"]],
       monthly: ["月額サポート", ["メニューサイトの維持", "メニュー・価格の修正 月4回まで", "年払い {yearly}（2か月分無料）"]],
     },
