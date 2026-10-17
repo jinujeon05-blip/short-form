@@ -7,7 +7,7 @@ window.RESTAURANT = {
   brand: { ko: "가마솥", en: "GAMASOT" },
   phone: "088 930 1000",
   address: "10A CT4, Khu Đô Thị Sông Đà, Nam Từ Liêm, Hà Nội",
-  wifi: null, // 예: { ssid: "GAMASOT", password: "12345678" }
+  wifi: { ssid: "Garden Gamasot", password: "66668888" },
 };
 
 window.MENU = [

@@ -33,7 +33,9 @@
   .badge { position: absolute; right: -6mm; top: -3.5mm; transform: rotate(8deg); background: var(--red); color: #fff; font-size: 2.7mm; padding: 1mm 2.2mm .8mm; border-radius: 99mm; }
   h1 { margin-top: 4.2mm; font-family: "Jalnan"; font-weight: 400; font-size: 6.4mm; line-height: 1.1; text-align: center; }
   h1 span { color: var(--fire-2); }
-  .langs { display: grid; grid-template-columns: auto auto; gap: .6mm 4mm; margin-top: 2mm; font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; font-weight: 600; font-size: 2.6mm; color: #d6cdbd; }
+  .h1-en { margin-top: 1mm; font-family: "Inter", sans-serif; font-weight: 800; font-size: 3.4mm; letter-spacing: .45mm; color: inherit; text-align: center; }
+  .h1-en span { color: var(--fire-2); }
+  .langs { display: flex; flex-wrap: wrap; justify-content: center; gap: .6mm 3.5mm; margin-top: 2mm; font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; font-weight: 600; font-size: 2.6mm; color: #d6cdbd; }
   .langs em { font-style: normal; display: inline-block; width: 4.6mm; font-size: 1.9mm; font-weight: 800; color: var(--fire); }
   .event { margin-top: 3.4mm; font-size: 2.8mm; color: #fff; background: rgba(255,59,48,.18); border: .3mm dashed var(--fire-2); border-radius: 99mm; padding: 1.2mm 3.2mm 1mm; }
   .event b { color: var(--fire-2); font-weight: 400; }
@@ -64,8 +66,8 @@
     <span class="badge">5개 국어</span>
   </div>
   <h1>QR 찍고 <span>메뉴 보기</span></h1>
+  <div class="h1-en">SCAN QR <span>FOR MENU</span></div>
   <div class="langs">
-    <div><em>EN</em>Scan for menu</div>
     <div><em>ZH</em>扫码看菜单</div>
     <div><em>JA</em><span class="ja">メニューを見る</span></div>
     <div><em>VI</em>Quét mã xem thực đơn</div>
