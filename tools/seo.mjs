@@ -7,12 +7,12 @@ import vm from 'vm';
 import { ROOT } from './pw.mjs';
 
 const DOMAIN = 'qrmenuasia.com';
-// type: schema.org 종류, cuisine: 요리 종류, country: 나라, currency: 가격 단위, phone: false 면 전화번호 생략(임시 번호)
+// naver: 네이버 서치어드바이저 소유 확인 코드(가게 주소를 네이버에 따로 등록한 경우), type: schema.org 종류, cuisine: 요리 종류, country: 나라, currency: 가격 단위, phone: false 면 전화번호 생략(임시 번호)
 const SHOPS = {
   sutkkui:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND' },
   eros:       { type: 'BarOrPub', cuisine: ['Bar'], country: 'VN', currency: 'VND', phone: false },
   anvoi:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Noodles'], country: 'VN', currency: 'VND' },
-  baekcheon:  { type: 'Restaurant', cuisine: ['Korean', 'Grilled eel'], country: 'KR', currency: 'KRW' },
+  baekcheon:  { type: 'Restaurant', cuisine: ['Korean', 'Grilled eel'], country: 'KR', currency: 'KRW', naver: 'b33f476ad38d2aafc7ea74651de94e5a2262361e' },
   gamasot:    { type: 'Restaurant', cuisine: ['Korean'], country: 'VN', currency: 'VND' },
   biobeauty:  { type: 'Store', country: 'VN', currency: 'VND' },
   suwonseong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Korean-Chinese'], country: 'VN', currency: 'VND' },
@@ -79,6 +79,7 @@ for (const [shop, cfg] of Object.entries(SHOPS)) {
 
   inject(`${dir}/index.html`, block([
     `<link rel="canonical" href="${url}">`,
+    cfg.naver ? `<meta name="naver-site-verification" content="${cfg.naver}">` : '',
     `<meta property="og:type" content="website">`,
     `<meta property="og:title" content="${esc(title)}">`,
     desc ? `<meta property="og:description" content="${esc(desc)}">` : '',
