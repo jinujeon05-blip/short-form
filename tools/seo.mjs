@@ -96,6 +96,7 @@ const sales = `${ROOT}/sales`;
 const main = `https://${DOMAIN}/`;
 inject(`${sales}/index.html`, block([
   `<link rel="canonical" href="${main}">`,
+  `<meta name="naver-site-verification" content="373cad11eece55044bada0b3b79a8f55a2b8e00c">`, // 네이버 서치어드바이저 소유 확인 (지우지 말 것)
   `<meta property="og:type" content="website">`,
   `<meta property="og:url" content="${main}">`,
   `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'QR Menu Asia', url: main })}</script>`,
