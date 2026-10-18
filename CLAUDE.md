@@ -37,7 +37,7 @@
 | `restaurants/suwonseong` | 수원성 시푸차점 SUWONSUNG (Ciputra, Hà Nội) | `suwonseong-menu` (팀 jinwoo8) | https://suwonseong.qrmenuasia.com / suwonseong-menu.vercel.app |
 
 - **도메인 `qrmenuasia.com`** (2026-10-18 Vercel에서 구매, 7개 가게·소개서 프로젝트에 연결 완료, 팀 jinwoo8, 자동 갱신 켜짐, 등록자 JEON JIN WOO). 가게별 하위 주소 `<가게>.qrmenuasia.com`, 소개서·가게 찾기는 `qrmenuasia.com`. 기존 `*.vercel.app` 주소도 계속 열리므로 이미 인쇄한 QR은 그대로 둔다. 새로 인쇄하는 QR·카드·SNS·포장재부터 새 주소로.
-- 검색 등록: 구글 서치 콘솔 도메인 확인용 TXT(`google-site-verification=…`)를 Vercel DNS의 qrmenuasia.com 루트에 넣음(2026-10-18). 네이버 서치어드바이저는 사용자 등록 대기. 애드센스는 사장님 반발·낮은 수익 때문에 보류(가게 찾기 페이지 방문자가 늘면 그 페이지만 재검토).
+- 검색 등록: 구글 서치 콘솔 도메인 확인용 TXT(`google-site-verification=…`)를 Vercel DNS의 qrmenuasia.com 루트에 넣음(2026-10-18). 서치 콘솔 소유권 확인 완료(도메인 속성, 하위 주소 전부 포함), 사이트맵은 `https://qrmenuasia.com/sitemap.xml` 하나만 제출하면 됨. 네이버 서치어드바이저는 사용자 등록 대기. 애드센스는 사장님 반발·낮은 수익 때문에 보류(가게 찾기 페이지 방문자가 늘면 그 페이지만 재검토).
 - Vercel 팀 기본값이 "모든 배포 로그인 보호"라서, 새 프로젝트마다 Deployment Protection을 `prod_deployment_urls_and_all_previews`로 바꿔야 손님이 로그인 없이 열 수 있다.
 - 테이블 QR 카드는 `restaurants/<가게>/print/`에 둔다: `qr.svg`(QR), `table-card.html`(A6 카드 원본), `table-card-A6.pdf`, `table-card-A4x4.pdf`(A4 한 장에 4개), `table-card.png`(300dpi). 폰트는 `public/fonts`(잘난체, G마켓 산스)를 쓴다.
 - 배포 방법: Vercel MCP `create_deployment`에 `gitSource`(github, org `jinujeon05-blip`, repo `short-form`, 브랜치·커밋 sha)와 `projectSettings.rootDirectory: "restaurants/<가게>"`를 넘긴다. 먼저 커밋·푸시해야 한다. (사진 등 바이너리도 함께 배포됨)
@@ -60,6 +60,7 @@
 - `node tools/demo.mjs <가게>` — 소개서용 데모 화면 `sales/img/demo-<가게>.jpg`. 새 가게는 `sales/content.js`의 `DEMOS`에도 추가하고 QR을 `sales/img/qr-<가게>.svg`로 복사.
 - `node tools/sales-pdf.mjs` — 소개서 PDF 5개 언어. 각각 **2쪽**인지 출력해 준다 (데모가 늘면 인쇄용 `.demos` 칸 수 조정, 지금 7칸). `DEMOS`에 `hidden: true`를 붙이면 소개서에는 안 보이고 SNS 도구용 데이터로만 쓰인다.
 - `node tools/mockup.mjs <가게>` — 포장재 시안 그림 `print/packaging-mockup.html` → `packaging-mockup.png`(2000×1250: 로고+QR 종이컵·배달 봉투·컵 스티커). 영업용 시안(인쇄 원고 아님). 지금은 Ăn Vội만 있음, 다른 가게는 html을 복사해 로고·문구·색만 바꾼다.
+- `node tools/seo.mjs` — 검색 등록 준비: 가게 `index.html` 머리에 대표 주소(canonical, `<가게>.qrmenuasia.com`)·링크 미리보기(og, 이미지는 `print/sns-square.png`)·가게 정보 JSON-LD(메뉴·가격 포함)를 `<!-- seo:start/end -->` 사이에 넣고 `robots.txt`·`sitemap.xml`을 만든다. 소개서에는 전체 사이트맵 `qrmenuasia.com/sitemap.xml`(모든 가게 포함). **메뉴·가격·주소를 고치거나 새 가게를 추가하면 다시 돌린다** (새 가게는 스크립트의 SHOPS에 추가).
 - `sh tools/export.sh <출력폴더> [가게…|sales]` — 보낼 파일(print/의 PDF·PNG·qr.svg)을 `<상호>_<파일>` 이름으로 복사. 새 가게는 스크립트의 `name()`에 상호 추가.
 - `node tools/pdf.mjs <입력.html> <출력.pdf>` — 점주용 가이드 등 HTML → PDF.
 - `python3 -I tools/thumb.py <페이지.png> x0 y0 x1 y1 <출력.jpg>` — 카탈로그·메뉴판 페이지 그림에서 사진을 3:4로 잘라냄 (빈 곳은 배경을 흐리게 채움). 페이지 그림은 `pdftoppm -r 160 -png -f N -l N 파일.pdf 이름`으로 만든다. 투명 배경 사진은 `pdfimages -png -p`가 더 낫다.

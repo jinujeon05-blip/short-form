@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sutkkui.qrmenuasia.com/sitemap.xml
