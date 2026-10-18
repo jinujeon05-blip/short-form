@@ -2,7 +2,7 @@
 // 원본은 restaurants/_shared/ 에만 두고, sync-stores.sh 로 각 가게 폴더에 복사한다.
 // 메뉴판 언어(<html lang>)가 바뀌면 문구와 링크 언어도 따라 바뀐다. 색은 가게의 --pt-* 변수를 따른다.
 (function () {
-  const URL = "https://qrmenu-intro.vercel.app/stores/";
+  const URL = "https://qrmenuasia.com/stores/";
   const T = {
     ko: { title: "QR 메뉴판 가게 더 보기", sub: "다른 식당·가게를 지역과 종류로 찾아보세요" },
     vi: { title: "Xem thêm quán có thực đơn QR", sub: "Tìm nhà hàng, cửa hàng theo khu vực và loại" },
