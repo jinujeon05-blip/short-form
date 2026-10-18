@@ -36,6 +36,7 @@
 | `restaurants/biobeauty` | 바이오&뷰티 (한국 화장품 할인 판매) | `biobeauty-menu` (팀 jinwoo8) | https://biobeauty-menu.vercel.app |
 | `restaurants/suwonseong` | 수원성 시푸차점 SUWONSUNG (Ciputra, Hà Nội) | `suwonseong-menu` (팀 jinwoo8) | https://suwonseong-menu.vercel.app |
 
+- **도메인 `qrmenuasia.com`** (2026-10-18 Vercel에서 구매, 팀 jinwoo8, 자동 갱신 켜짐, 등록자 JEON JIN WOO). 가게별 하위 주소 `<가게>.qrmenuasia.com`, 소개서·가게 찾기는 `qrmenuasia.com`. 기존 `*.vercel.app` 주소도 계속 열리므로 이미 인쇄한 QR은 그대로 둔다. 새로 인쇄하는 QR·카드·SNS·포장재부터 새 주소로.
 - Vercel 팀 기본값이 "모든 배포 로그인 보호"라서, 새 프로젝트마다 Deployment Protection을 `prod_deployment_urls_and_all_previews`로 바꿔야 손님이 로그인 없이 열 수 있다.
 - 테이블 QR 카드는 `restaurants/<가게>/print/`에 둔다: `qr.svg`(QR), `table-card.html`(A6 카드 원본), `table-card-A6.pdf`, `table-card-A4x4.pdf`(A4 한 장에 4개), `table-card.png`(300dpi). 폰트는 `public/fonts`(잘난체, G마켓 산스)를 쓴다.
 - 배포 방법: Vercel MCP `create_deployment`에 `gitSource`(github, org `jinujeon05-blip`, repo `short-form`, 브랜치·커밋 sha)와 `projectSettings.rootDirectory: "restaurants/<가게>"`를 넘긴다. 먼저 커밋·푸시해야 한다. (사진 등 바이너리도 함께 배포됨)
