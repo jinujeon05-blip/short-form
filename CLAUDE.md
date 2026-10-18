@@ -105,3 +105,7 @@
 - Ăn Vội: `restaurants/anvoi/print/huong-dan-su-dung.pdf` (베트남어 사용설명서·주문 처리 순서, A4 2쪽, 원본 `huong-dan.html`, 화면 캡처 `print/img/g*.jpg`). 다른 가게도 같은 형식으로 만든다.
 - 가마솥: `restaurants/gamasot/print/guide-gamasot.pdf` (한국어 활용 가이드북, A4 3쪽: 손님 화면·기능별 좋은 점·상황별 활용·링크 문구·수정 방법, 원본 `guide.html`, 캡처 `print/img/g*.jpg`).
 - Ăn Vội 메뉴판에는 장바구니 + Zalo 주문 기능이 있다 (주문서는 항상 베트남어로 작성).
+
+## AI 검색노출(GEO) 사업 검토 (2026-10-18, 검토 단계)
+- `business/ai-geo/ai-geo-숯꾸이-가마솥.xlsx`: 진단 체크리스트·질문테스트 기록표·가정·12개월 수익성·시나리오·두 가게 제안. 가정 숫자는 임의값이라 시범 후 실제 값으로 교체.
+- 진단 핵심: 메뉴판이 JS로 그려져(`<main id="menu"></main>` 비어 있음) AI 크롤러에 안 보임, JSON-LD·sitemap·robots·hreflang 없음, vercel.app 도메인. 숯꾸이·가마솥 모두 웹 검색에 안 나옴(검색 도구는 US 한정이라 참고용). ChatGPT·Gemini·네이버 직접 질문 테스트는 사용자가 해야 함.
