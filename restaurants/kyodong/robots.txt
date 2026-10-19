@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://kyodong.qrmenuasia.com/sitemap.xml
