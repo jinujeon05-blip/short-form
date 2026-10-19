@@ -42,6 +42,7 @@
 | `restaurants/suwonseong` | 수원성 시푸차점 SUWONSUNG (Ciputra, Hà Nội) | `suwonseong-menu` (팀 jinwoo8) | https://suwonseong.qrmenuasia.com / suwonseong-menu.vercel.app |
 | `restaurants/hellochicken` | 헬로치킨 Hello Chicken Beer & Pocha (Sunshine City, Ciputra, Hà Nội) — **가게 찾기용** | `hellochicken-menu` (팀 jinwoo8) | https://hellochicken.qrmenuasia.com |
 | `restaurants/kyodong` | 교동치킨 Kyodong Chicken (Sunshine City, Ciputra, Hà Nội) — **가게 찾기용** | `kyodong-menu` (팀 jinwoo8) | https://kyodong.qrmenuasia.com |
+| `restaurants/choongman` | 충만치킨 Choong Man Chicken (S3 SH01 Sunshine City, Hà Nội) — **가게 찾기용** | `choongman-menu` (팀 jinwoo8) | https://choongman.qrmenuasia.com |
 
 - **도메인 `qrmenuasia.com`** (2026-10-18 Vercel에서 구매, 7개 가게·소개서 프로젝트에 연결 완료, 팀 jinwoo8, 자동 갱신 켜짐, 등록자 JEON JIN WOO). 가게별 하위 주소 `<가게>.qrmenuasia.com`, 소개서·가게 찾기는 `qrmenuasia.com`. 기존 `*.vercel.app` 주소도 계속 열리므로 이미 인쇄한 QR은 그대로 둔다. 새로 인쇄하는 QR·카드·SNS·포장재부터 새 주소로.
 - 검색 등록: 구글 서치 콘솔 도메인 확인용 TXT(`google-site-verification=…`)를 Vercel DNS의 qrmenuasia.com 루트에 넣음(2026-10-18). 서치 콘솔 소유권 확인 완료(도메인 속성, 하위 주소 전부 포함), 사이트맵은 `https://qrmenuasia.com/sitemap.xml` 하나만 제출하면 됨. 2026-10-18 구글·네이버 모두 소유 확인과 사이트맵 제출 완료(구글: 9개 주소 발견, 성공). 네이버 서치어드바이저는 `https://qrmenuasia.com`을 HTML 태그 방식으로 확인(태그는 `tools/seo.mjs`가 소개서 머리에 넣음). 네이버는 하위 주소를 따로 등록해야 해서, 가게 주소는 필요하면 각각 추가 등록 → 백천(`https://baekcheon.qrmenuasia.com`) 등록함, 코드는 `tools/seo.mjs` SHOPS의 `naver`. 애드센스는 사장님 반발·낮은 수익 때문에 보류(가게 찾기 페이지 방문자가 늘면 그 페이지만 재검토).
@@ -56,6 +57,7 @@
 - 드라이브 사진 받기: `download_file_content` 결과가 크면(약 6만 글자 이상) 하네스가 `/root/.claude/projects/<프로젝트>/<세션>/tool-results/mcp-Google_Drive-download_file_content-<숫자>.txt`(JSON `{content: base64, title, …}`)에 저장하고 경로를 알려 준다 → 알려 준 경로를 그대로 python으로 base64 풀어 저장. 작은 파일(약 45KB 이하)은 대화로 바로 들어와 저장할 수 없으니 사용자에게 채팅 첨부나 원본 크기 업로드를 부탁한다. WebP는 PIL로 jpg 변환.
 - 헬로치킨은 **가게 찾기용**(2026-10-19, 사장님 동의·비용 없음): 메뉴 보기만(주문·Zalo·QR 카드 없음), 다산 파트너 배너는 있음. 수원성 메뉴판을 바탕으로 색만 간판의 초록·노랑으로 바꿈. 원본은 드라이브 `QR메뉴판/헬로치킨`(메뉴판 사진 063~082·085, 음식 사진, zip). 주소·전화는 구글 지도 기준(사용자 제공). 사진이 작아(294×220) 분류 사진은 2:1로 잘라 씀.
 - 교동치킨은 **가게 찾기용**(2026-10-19): 헬로치킨 페이지를 복사해 색을 로고·메뉴판의 청록·빨강으로 바꿈. 원본은 드라이브 `교동치킨 시푸차` 폴더(구글 지도 캡처 28장). 메뉴는 가게가 최근 올린 메뉴판(신메뉴 포함) 기준, 2년 전 메뉴판은 안 씀. 주소·전화는 구글 지도 기준(Mặt sau tòa S6, 0949 495 006, 오후 11시 종료). 사진은 `img/`(분류 사진 900×600, `logo.jpg`).
+- 충만치킨은 **가게 찾기용**(2026-10-19): 교동치킨 페이지를 복사해 메뉴판의 짙은 청록 + 로고 주황으로 바꿈. 원본은 드라이브 `충만치킨 션샤인` 폴더(구글 지도 캡처 14장: 메뉴판 9면·홍보 사진·매장 정보). 주소·전화는 구글 지도 기준(S3 SH01, 0336 562 936, 오후 11시 종료·주방 10시 30분). 가격은 부가세 별도. 분류 사진은 메뉴판의 접시 사진 3개를 동그랗게 잘라 한 장으로 붙임(`img/`, 900×450), `chicken.jpg`·`store.jpg`·`logo.jpg`는 홍보 사진에서 잘라냄.
 - 수원성은 매장 인쇄 메뉴판 사진과 구글 지도의 디지털 메뉴판 이미지(여러 판, 일부 지워짐)를 대조해 만들었다. 공식 영문 표기는 SUWONSUNG.
 - 사진·로고는 사장님 메뉴판 디자인 원본에서 잘라 `restaurants/<가게>/img/`에 둔다.
 

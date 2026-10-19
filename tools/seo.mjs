@@ -19,6 +19,7 @@ const SHOPS = {
   // 가게 찾기용(사장님 동의 없음) — SNS 이미지가 없어서 미리보기 사진은 가게 사진
   hellochicken: { type: 'Restaurant', cuisine: ['Korean', 'Korean fried chicken', 'Pocha'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   kyodong:      { type: 'Restaurant', cuisine: ['Korean', 'Korean fried chicken'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  choongman:    { type: 'Restaurant', cuisine: ['Korean', 'Korean fried chicken'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
