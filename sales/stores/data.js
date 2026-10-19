@@ -58,6 +58,12 @@ window.STORES = [
     address: "A21 Sunshine City, Khu đô thị Ciputra, Phú Thượng, Hà Nội",
     type: { ko: "고깃집 · 한식 · 중식", vi: "Thịt nướng Hàn Quốc · Món Hàn · Món Trung Hoa", en: "Korean BBQ · Korean & Korean-Chinese", zh: "韩式烤肉 · 韩餐 · 韩式中餐", ja: "焼肉・韓国料理・韓国式中華" },
     keywords: "수원성 시푸차 suwonsung suwonseong ciputra 시푸차 소모듬 갈비 왕갈비 삼겹살 항정살 장어 냉면 짜장면 짬뽕 탕수육 점심 정식 thịt nướng sườn bò ba chỉ cá chình miến lạnh mỳ tương đen korean bbq galbi eel naengmyeon jjajangmyeon 韩式烤肉 烤牛排 冷面 炸酱面 焼肉 カルビ 冷麺" },
+  // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
+  { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
+    address: "S1.2-SH09, Sunshine City, Khu đô thị Ciputra, Phú Thượng, Hà Nội",
+    type: { ko: "치킨 · 떡볶이 · 포차", vi: "Gà rán Hàn Quốc · Tteokbokki · Quán nhậu", en: "Korean fried chicken · Tteokbokki · Pocha bar", zh: "韩式炸鸡 · 炒年糕 · 小酒馆", ja: "韓国チキン・トッポッキ・ポチャ" },
+    keywords: "헬로치킨 hello chicken 치킨 후라이드 양념 간장 허니 뿌링클 순살 떡볶이 라볶이 부대찌개 닭볶음탕 찜닭 노가리 먹태 맥주 소주 포차 sunshine ciputra gà rán bia nhậu tteokbokki fried chicken beer soju 韩式炸鸡 炒年糕 啤酒 チキン トッポッキ ビール" },
   { id: "biobeauty", name: "Bio & Beauty", sub: "바이오&뷰티", url: "https://biobeauty.qrmenuasia.com",
     region: "online", cats: ["beauty"], tags: ["zalo", "sale"],
     address: null,

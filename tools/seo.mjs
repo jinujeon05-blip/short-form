@@ -16,6 +16,8 @@ const SHOPS = {
   gamasot:    { type: 'Restaurant', cuisine: ['Korean'], country: 'VN', currency: 'VND' },
   biobeauty:  { type: 'Store', country: 'VN', currency: 'VND' },
   suwonseong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Korean-Chinese'], country: 'VN', currency: 'VND' },
+  // 가게 찾기용(사장님 동의 없음) — SNS 이미지가 없어서 미리보기 사진은 가게 사진
+  hellochicken: { type: 'Restaurant', cuisine: ['Korean', 'Korean fried chicken', 'Pocha'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
@@ -56,7 +58,7 @@ for (const [shop, cfg] of Object.entries(SHOPS)) {
   const ld = { '@context': 'https://schema.org', '@type': cfg.type, name: brand, url };
   if (R.address) ld.address = { '@type': 'PostalAddress', streetAddress: R.address, addressCountry: cfg.country };
   if (phone) ld.telephone = phone.replace(/\s/g, '');
-  ld.image = `${url}print/sns-square.png`;
+  ld.image = `${url}${cfg.og || 'print/sns-square.png'}`;
   if (cfg.cuisine) ld.servesCuisine = cfg.cuisine;
   if (R.mapUrl) ld.hasMap = R.mapUrl;
   const sections = MENU.map((cat) => ({
@@ -84,7 +86,7 @@ for (const [shop, cfg] of Object.entries(SHOPS)) {
     `<meta property="og:title" content="${esc(title)}">`,
     desc ? `<meta property="og:description" content="${esc(desc)}">` : '',
     `<meta property="og:url" content="${url}">`,
-    `<meta property="og:image" content="${url}print/sns-square.png">`,
+    `<meta property="og:image" content="${url}${cfg.og || 'print/sns-square.png'}">`,
     `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`,
   ].filter(Boolean)));
   writeFileSync(`${dir}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${url}sitemap.xml\n`);
