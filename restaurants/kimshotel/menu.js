@@ -21,17 +21,17 @@ window.ORDER = {
   },
 };
 
-// 객실 (숙박비 안내문 기준, 1박 요금). 사진은 객실 종류와 짝이 맞는지 사장님 확인 필요.
+// 객실 (숙박비 안내문 기준, 1박 요금). 사진 짝은 사용자 확인(2026-10-19: 싱글·디럭스 사진을 서로 바꿈).
 const INCL = [
   { ko: "조식", en: "Breakfast", zh: "早餐", ja: "朝食", vi: "Bữa sáng" },
   { ko: "세탁 서비스", en: "Laundry", zh: "洗衣服务", ja: "ランドリー", vi: "Giặt là" },
   { ko: "창문 있는 객실", en: "Window room", zh: "有窗客房", ja: "窓付き客室", vi: "Phòng có cửa sổ" },
 ];
 window.ROOMS = [
-  { id: "single", price: 800000, guests: 1, photo: "img/room-single.jpg",
+  { id: "single", price: 800000, guests: 1, photo: "img/room-deluxe.jpg",
     name: { ko: "싱글룸", en: "Single Room", zh: "单人房", ja: "シングルルーム", vi: "Phòng đơn" },
     desc: { ko: "혼자 머무는 출장·장기 투숙에 알맞은 아늑한 객실", en: "A cozy room for solo business trips and long stays", zh: "适合出差和长住的舒适单人房", ja: "出張や長期滞在にぴったりの落ち着いた客室", vi: "Phòng ấm cúng cho khách công tác và ở dài ngày" } },
-  { id: "deluxe", price: 900000, guests: 1, photo: "img/room-deluxe.jpg",
+  { id: "deluxe", price: 900000, guests: 1, photo: "img/room-single.jpg",
     name: { ko: "디럭스 싱글룸", en: "Deluxe Single Room", zh: "豪华单人房", ja: "デラックスシングル", vi: "Phòng đơn lớn" },
     desc: { ko: "넓은 공간과 작업 책상, 티 테이블을 갖춘 대형 1인실", en: "A larger single room with a work desk and tea table", zh: "空间宽敞，配有办公桌和茶桌", ja: "ワークデスクとティーテーブル付きの広めの1人部屋", vi: "Phòng đơn rộng, có bàn làm việc và bàn trà" } },
   { id: "twin", price: 1200000, guests: 2, photo: "img/room-twin.jpg",
