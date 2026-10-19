@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Kim's Hotel · QR 카드</title>
+<style>
+  @font-face { font-family: "Gmarket"; src: url("../../../public/fonts/GmarketSansTTFBold.ttf"); }
+  @page { size: 105mm 148mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --navy: #141c2b; --navy-2: #1f2a40; --gold: #c3a061; --gold-2: #e9d6a8; --ivory: #f8f5ee; }
+  html, body { background: #fff; }
+  body { font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; color: var(--gold-2); }
+  /* 명함과 같은 짙은 남색 바탕 + 금색 테두리 */
+  .card { position: relative; width: 105mm; height: 148mm; overflow: hidden; display: flex; flex-direction: column; align-items: center;
+    background: radial-gradient(90% 45% at 50% 12%, rgba(195,160,97,.22), transparent 70%), linear-gradient(180deg, var(--navy-2), var(--navy)); }
+  .card::before { content: ""; position: absolute; inset: 3.2mm; border: .3mm solid rgba(195,160,97,.85); border-radius: 2mm; pointer-events: none; }
+  .card::after { content: ""; position: absolute; inset: 4.4mm; border: .15mm solid rgba(195,160,97,.45); border-radius: 1.4mm; pointer-events: none; }
+  .crest { width: 30mm; margin-top: 8mm; }
+  .place { margin-top: 1.6mm; font-weight: 700; font-size: 2.4mm; letter-spacing: 1.4mm; padding-left: 1.4mm; color: var(--gold); }
+  .photos { display: flex; gap: 2mm; margin-top: 4mm; }
+  .photos img { width: 12.5mm; height: 12.5mm; border-radius: 50%; object-fit: cover; border: .45mm solid var(--gold); }
+  .qr-box { position: relative; margin-top: 4.5mm; background: #fff; border-radius: 2.5mm; padding: 2mm; box-shadow: 0 0 0 .6mm var(--gold), 0 1.5mm 5mm rgba(0,0,0,.4); }
+  .qr-box img { display: block; width: 36mm; height: 36mm; }
+  .badge { position: absolute; right: -7mm; top: -3mm; transform: rotate(8deg); background: linear-gradient(180deg, #ecd9ab, var(--gold)); color: var(--navy); font-weight: 800; font-size: 2.4mm; padding: .9mm 2mm .7mm; border-radius: 99mm; }
+  h1 { margin-top: 4.4mm; font-weight: 800; font-size: 4.3mm; letter-spacing: .25mm; text-align: center; line-height: 1.2; color: #fff; }
+  h1 span { color: var(--gold-2); }
+  .h1-en { margin-top: 1mm; font-weight: 700; font-size: 3mm; letter-spacing: .5mm; text-align: center; color: var(--gold); }
+  .langs { display: flex; justify-content: center; gap: 3mm; margin-top: 2mm; font-weight: 600; font-size: 2.4mm; color: #cfc6b3; }
+  .langs em { font-style: normal; font-size: 1.8mm; font-weight: 800; color: var(--gold); margin-right: .8mm; }
+  .ko { font-family: "Gmarket"; font-weight: 400; }
+  .ja { font-family: "IPAGothic", sans-serif; }
+  footer { position: absolute; left: 6mm; right: 6mm; bottom: 7mm; text-align: center; border-top: .2mm solid rgba(195,160,97,.6); padding-top: 2.2mm; }
+  footer .tel { font-weight: 800; font-size: 3.3mm; letter-spacing: .2mm; color: #fff; }
+  footer .tel b { color: var(--gold); font-weight: 800; }
+  footer .addr { margin-top: .9mm; font-weight: 500; font-size: 2.2mm; color: #cfc6b3; }
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="crest" src="img/crest.png" alt="Kim's Hotel">
+  <div class="place">BẮC NINH</div>
+  <div class="photos">
+    <img src="img/c-room.jpg" alt=""><img src="img/c-noodle.jpg" alt=""><img src="img/c-mandu.jpg" alt=""><img src="img/c-room2.jpg" alt="">
+  </div>
+  <div class="qr-box">
+    <img src="qr.svg" alt="QR https://kimshotel.qrmenuasia.com">
+    <span class="badge">5 ngôn ngữ</span>
+  </div>
+  <h1>QUÉT MÃ <span>XEM THỰC ĐƠN & ĐẶT MÓN</span></h1>
+  <div class="h1-en">SCAN FOR MENU · ROOMS · ORDER</div>
+  <div class="langs">
+    <div><em>KO</em><span class="ko">메뉴·객실 보기 · Zalo 주문</span></div>
+    <div><em>ZH</em>扫码点餐</div>
+    <div><em>JA</em><span class="ja">メニュー・注文</span></div>
+  </div>
+  <footer>
+    <div class="tel"><b>☎ / Zalo</b> 034 742 0256</div>
+    <div class="addr">Lô 13 Đ. Hoàng Hoa Thám, P. Võ Cường, T. Bắc Ninh</div>
+  </footer>
+</div>
+</body>
+</html>

@@ -12,6 +12,7 @@ window.REGIONS = {
 };
 
 window.CATS = {
+  hotel:  { icon: "🏨", ko: "호텔 · 숙박", vi: "Khách sạn", en: "Hotels", zh: "酒店", ja: "ホテル" },
   bbq:    { icon: "🔥", ko: "고기구이", vi: "Đồ nướng", en: "BBQ & Grill", zh: "烧烤", ja: "焼肉・焼き物" },
   korean: { icon: "🍲", ko: "한식", vi: "Món Hàn", en: "Korean food", zh: "韩餐", ja: "韓国料理" },
   noodle: { icon: "🍜", ko: "면 · 간편식", vi: "Mì · Ăn nhanh", en: "Noodles & quick bites", zh: "面食 · 快餐", ja: "麺・軽食" },
@@ -58,6 +59,11 @@ window.STORES = [
     address: "A21 Sunshine City, Khu đô thị Ciputra, Phú Thượng, Hà Nội",
     type: { ko: "고깃집 · 한식 · 중식", vi: "Thịt nướng Hàn Quốc · Món Hàn · Món Trung Hoa", en: "Korean BBQ · Korean & Korean-Chinese", zh: "韩式烤肉 · 韩餐 · 韩式中餐", ja: "焼肉・韓国料理・韓国式中華" },
     keywords: "수원성 시푸차 suwonsung suwonseong ciputra 시푸차 소모듬 갈비 왕갈비 삼겹살 항정살 장어 냉면 짜장면 짬뽕 탕수육 점심 정식 thịt nướng sườn bò ba chỉ cá chình miến lạnh mỳ tương đen korean bbq galbi eel naengmyeon jjajangmyeon 韩式烤肉 烤牛排 冷面 炸酱面 焼肉 カルビ 冷麺" },
+  { id: "kimshotel", name: "Kim's Hotel", sub: "킴스호텔 · Hotel & Korean Kitchen", url: "https://kimshotel.qrmenuasia.com",
+    region: "bacninh", cats: ["hotel", "korean"], tags: ["zalo", "photos"],
+    address: "Lô 13 Đ. Hoàng Hoa Thám, P. Võ Cường, T. Bắc Ninh",
+    type: { ko: "호텔 · 1층 칼국수·만두 한식당", vi: "Khách sạn · Nhà hàng mì & Mandu Hàn Quốc", en: "Hotel · Korean noodle & dumpling restaurant", zh: "酒店 · 韩式刀切面饺子餐厅", ja: "ホテル・カルグクスとマンドゥの韓国料理店" },
+    keywords: "킴스호텔 킴스 호텔 kim's hotel kims hotel 숙박 객실 싱글룸 트윈룸 장기투숙 조식 칼국수 수제비 칼제비 손만두 만두국 박닌 bac ninh khách sạn phòng nghỉ mì kalguksu mandu hotel room 酒店 住宿 刀切面 饺子 北宁 ホテル 宿泊 カルグクス マンドゥ" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],

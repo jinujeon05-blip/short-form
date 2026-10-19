@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141c2b">
+<title>킴스호텔 Kim's Hotel · Bắc Ninh</title>
+<meta name="description" content="킴스호텔 Kim's Hotel — 박닌(Bắc Ninh) 한국인 운영 호텔 · 객실 안내와 1층 한식당(손칼국수·수제비·손만두) 메뉴 · Lô 13 Đ. Hoàng Hoa Thám, P. Võ Cường, T. Bắc Ninh">
+<style>
+  :root {
+    --navy: #141c2b;
+    --navy-2: #1f2a40;
+    --gold: #c3a061;
+    --gold-2: #e9d6a8;
+    --ivory: #f8f5ee;
+    --card: #fffdf8;
+    --ink: #1d2433;
+    --muted: #716b60;
+    --line: #e7dfcf;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; color: var(--ink); background: var(--ivory);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.45;
+  }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── 상단: 명함과 같은 짙은 남색 + 금박 엠블럼 ── */
+  header { position: relative; color: var(--gold-2); text-align: center; padding: 12px 0 34px; overflow: hidden;
+    background:
+      radial-gradient(90% 60% at 50% 18%, rgba(195,160,97,.20), transparent 70%),
+      linear-gradient(180deg, var(--navy-2), var(--navy)); }
+  header::after { content: ""; position: absolute; left: 16px; right: 16px; bottom: 14px; height: 5px;
+    border-top: 1px solid rgba(195,160,97,.7); border-bottom: 1px solid rgba(195,160,97,.35); }
+  .langs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: var(--gold-2); background: transparent; border: 1px solid rgba(195,160,97,.5); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: var(--navy); background: var(--gold-2); }
+  .crest { display: block; width: 168px; height: auto; margin: 26px auto 0; filter: drop-shadow(0 4px 14px rgba(0,0,0,.35)); }
+  h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .place { margin: 14px 0 0; font-size: 12px; font-weight: 700; letter-spacing: 6px; padding-left: 6px; color: var(--gold); }
+  .tagline { margin: 10px auto 0; max-width: 340px; font-size: 14.5px; color: #d9d2c2; }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; background: rgba(248,245,238,.96); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-top: 8px; padding-bottom: 8px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap; }
+  nav a.active { color: var(--gold-2); background: var(--navy); }
+
+  /* ── 공통 제목 ── */
+  section { padding: 34px 0 6px; }
+  .eyebrow { margin: 0; text-align: center; font-size: 11.5px; font-weight: 700; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; }
+  h2 { margin: 6px 0 0; text-align: center; font-size: 25px; font-weight: 800; letter-spacing: 1px; color: var(--navy); }
+  .rule { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0 0; color: var(--gold); }
+  .rule::before, .rule::after { content: ""; width: 46px; height: 1px; background: currentColor; opacity: .7; }
+  .rule i { width: 6px; height: 6px; transform: rotate(45deg); background: currentColor; }
+  .note { margin: 10px 0 0; text-align: center; font-size: 13.5px; color: var(--muted); }
+
+  /* ── 객실 ── */
+  .intro { margin: 14px 0 0; text-align: center; font-size: 14px; color: #4a4a4a; }
+  .incl { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; }
+  .incl span { font-size: 12.5px; font-weight: 700; color: var(--navy); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; }
+  .incl span::before { content: "✓ "; color: var(--gold); }
+  .room { margin-top: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 10px 24px rgba(20,28,43,.08); }
+  .room img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
+  .room .body { padding: 14px 16px 16px; }
+  .room .top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .room h3 { margin: 0; font-size: 19px; font-weight: 800; color: var(--navy); }
+  .room .guests { flex: none; font-size: 12px; font-weight: 700; color: var(--muted); }
+  .room .sub { margin-top: 2px; font-size: 13px; color: var(--muted); }
+  .room p { margin: 8px 0 0; font-size: 14px; color: #4a4a4a; }
+  .room .rate { display: flex; align-items: baseline; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .room .rate b { font-size: 21px; font-weight: 800; color: var(--navy); font-variant-numeric: tabular-nums; }
+  .room .rate b small { font-size: 13px; margin-left: 1px; }
+  .room .rate span { font-size: 12.5px; color: var(--muted); }
+  .book { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+  .book a { display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; font-size: 15px; font-weight: 800; border-radius: 14px; padding: 13px 10px; }
+  .book .zalo { color: var(--navy); background: linear-gradient(180deg, #ecd9ab, var(--gold)); box-shadow: 0 6px 16px rgba(195,160,97,.35); }
+  .book .tel { color: var(--gold-2); background: var(--navy); }
+  .book svg { width: 18px; height: 18px; }
+  .small { margin: 10px 0 0; text-align: center; font-size: 12px; color: var(--muted); }
+
+  /* ── 1층 식당 메뉴 ── */
+  .restaurant { margin-top: 40px; padding: 28px 0 8px; background: #fff; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .banner { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; border-radius: 16px; margin: 16px 0 0; box-shadow: 0 8px 20px rgba(20,28,43,.12); }
+  #menu section { padding-top: 26px; }
+  #menu h2 { font-size: 22px; }
+  ul { list-style: none; margin: 12px 0 0; padding: 0; }
+  li { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+  .tags span { font-size: 10.5px; font-weight: 800; letter-spacing: .5px; color: var(--navy); background: var(--gold-2); border-radius: 3px; padding: 1px 6px; }
+  .row { display: flex; align-items: baseline; gap: 8px; }
+  .row b { font-size: 17px; font-weight: 800; }
+  .row .leader { flex: 1; min-width: 10px; border-bottom: 1px dotted var(--gold); transform: translateY(-4px); }
+  .price { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--navy); }
+  .price small { font-size: 11px; color: var(--muted); margin-left: 1px; }
+  .desc { margin-top: 4px; font-size: 13px; color: #5b564d; }
+  li .sub { margin-top: 3px; font-size: 13px; color: var(--muted); }
+
+  /* ── 호텔 정보 ── */
+  footer { margin-top: 40px; background: linear-gradient(180deg, var(--navy-2), var(--navy)); color: #ddd5c4; padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); }
+  .thanks { text-align: center; font-size: 15px; line-height: 1.7; margin: 0 0 18px; color: var(--gold-2); }
+  .pills { display: grid; gap: 10px; }
+  .pill { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; text-align: left; color: var(--ink); text-decoration: none; background: var(--ivory); border: 0; border-radius: 16px; padding: 10px 14px 10px 10px; cursor: pointer; }
+  .pill i { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--navy); color: var(--gold-2); font-style: normal; font-size: 12px; font-weight: 800; }
+  .pill i svg { width: 20px; height: 20px; }
+  .pill div { flex: 1; min-width: 0; }
+  .pill small { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .pill strong { display: block; font-size: 16px; font-weight: 800; word-break: break-word; }
+  .vnd { text-align: center; margin: 16px 0 0; font-size: 12px; opacity: .8; }
+</style>
+<style id="partner-theme">
+  /* 하단 파트너 배너(다산)·가게 찾기 링크 색을 이 메뉴판에 맞춘다 */
+  :root { --pt-mode: light; --pt-bg: #fffdf8; --pt-ink: #1d2433; --pt-muted: #716b60; --pt-line: #e7dfcf; --pt-accent: #141c2b; --pt-btn: #141c2b; --pt-btn-ink: #e9d6a8; --pt-shadow: 0 6px 16px rgba(20,28,43,.10); }
+</style>
+<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
+<link rel="canonical" href="https://kimshotel.qrmenuasia.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="킴스호텔 Kim's Hotel · Bắc Ninh">
+<meta property="og:description" content="킴스호텔 Kim's Hotel — 박닌(Bắc Ninh) 한국인 운영 호텔 · 객실 안내와 1층 한식당(손칼국수·수제비·손만두) 메뉴 · Lô 13 Đ. Hoàng Hoa Thám, P. Võ Cường, T. Bắc Ninh">
+<meta property="og:url" content="https://kimshotel.qrmenuasia.com/">
+<meta property="og:image" content="https://kimshotel.qrmenuasia.com/print/sns-square.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Hotel","name":"킴스호텔 Kim's Hotel","url":"https://kimshotel.qrmenuasia.com/","address":{"@type":"PostalAddress","streetAddress":"Lô 13 Đ. Hoàng Hoa Thám, P. Võ Cường, T. Bắc Ninh","addressCountry":"VN"},"telephone":"0347420256","image":"https://kimshotel.qrmenuasia.com/print/sns-square.png","servesCuisine":["Korean"],"hasMenu":{"@type":"Menu","name":"킴스호텔 Kim's Hotel menu","inLanguage":["ko","en","zh","ja","vi"],"hasMenuSection":[{"@type":"MenuSection","name":"Handmade Noodle Soups","hasMenuItem":[{"@type":"MenuItem","name":"Kalguksu (Knife-cut Noodle Soup)","alternateName":["칼국수","Mì cắt tay Kalguksu","韩式刀切面","カルグクス（手打ちうどん）"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sujebi (Hand-torn Dough Soup)","alternateName":["수제비","Canh bột xé Sujebi","韩式面片汤","スジェビ（すいとん）"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Kaljebi (Noodles + Sujebi)","alternateName":["칼제비","Kaljebi (mì cắt + bột xé)","刀切面＋面片汤","カルジェビ（カルグクス＋スジェビ）"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Handmade Dumplings","hasMenuItem":[{"@type":"MenuItem","name":"Handmade Mandu (Dumplings)","alternateName":["손만두","Mandu hấp tự làm","手工饺子","手作りマンドゥ（餃子）"],"offers":{"@type":"Offer","price":180000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mandu-guk (Dumpling Soup)","alternateName":["손만두국","Canh Mandu tự làm","手工饺子汤","マンドゥクッ（餃子スープ）"],"offers":{"@type":"Offer","price":180000,"priceCurrency":"VND"}}]}]}}</script>
+<!-- seo:end -->
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="langs" id="langs"></div>
+    <img class="crest" src="img/crest.png" alt="Kim's Hotel" width="168" height="210">
+    <h1>Kim's Hotel 킴스호텔</h1>
+    <p class="place">BẮC NINH</p>
+    <p class="tagline" id="tagline"></p>
+  </div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<div class="wrap" id="stay">
+  <section id="rooms">
+    <p class="eyebrow">Rooms</p>
+    <h2 id="roomsTitle"></h2>
+    <div class="rule"><i></i></div>
+    <p class="intro" id="roomsIntro"></p>
+    <div class="incl" id="incl"></div>
+    <div id="roomList"></div>
+    <div class="book">
+      <a class="zalo" id="bookZalo" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg><span id="bookZaloT"></span></a>
+      <a class="tel" id="bookTel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg><span id="bookTelT"></span></a>
+    </div>
+    <p class="small" id="roomsSmall"></p>
+  </section>
+</div>
+
+<div class="restaurant">
+  <div class="wrap">
+    <p class="eyebrow">1F Restaurant</p>
+    <h2 id="restTitle"></h2>
+    <div class="rule"><i></i></div>
+    <p class="intro" id="restIntro"></p>
+  </div>
+  <main class="wrap" id="menu"></main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p class="thanks" id="thanks"></p>
+    <div class="pills">
+      <a class="pill" id="call">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></i>
+        <div><small id="callLabel"></small><strong id="callText"></strong></div>
+      </a>
+      <a class="pill" id="zalo" target="_blank" rel="noopener">
+        <i>Zalo</i>
+        <div><small id="zaloLabel"></small><strong id="zaloText"></strong></div>
+      </a>
+      <a class="pill" id="map" target="_blank" rel="noopener">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></i>
+        <div><small id="mapLabel"></small><strong id="mapText"></strong></div>
+      </a>
+    </div>
+    <p class="vnd" id="foot"></p>
+  </div>
+</footer>
+
+<script src="menu.js"></script>
+<script>
+  const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
+  const UI = {
+    ko: { title: "객실 · 식당 안내", tagline: "한국인이 운영하는 박닌의 편안한 호텔 · 1층 손칼국수 한식당", rooms: "객실 안내", restaurant: "1층 한식당", best: "BEST",
+      roomsIntro: "모든 객실에 조식과 세탁 서비스가 포함되어 있습니다.", night: "1박", guests: (n) => `${n}인`,
+      bookZalo: "Zalo 예약 문의", bookTel: "전화 예약", roomsSmall: "요금·빈 객실은 예약 문의로 확인해 드립니다 · 장기 투숙은 문의해 주세요",
+      restIntro: "매일 손으로 반죽하는 칼국수와 손만두 · 아래 메뉴를 담아 Zalo로 주문하실 수 있어요",
+      thanks: "킴스호텔을 찾아 주셔서 감사합니다.<br>편안한 시간 보내세요.", call: "전화 · 예약", zalo: "Zalo 문의", map: "주소 · 지도",
+      vnd: "가격 단위: 베트남 동(VND) · 객실 요금은 2025년 1월 1일 기준" },
+    en: { title: "Rooms & Restaurant", tagline: "A comfortable Korean-run hotel in Bắc Ninh · Handmade noodle restaurant on the 1st floor", rooms: "Our Rooms", restaurant: "1F Korean Restaurant", best: "BEST",
+      roomsIntro: "Breakfast and laundry service are included with every room.", night: "per night", guests: (n) => `${n} guest${n > 1 ? "s" : ""}`,
+      bookZalo: "Book via Zalo", bookTel: "Call to book", roomsSmall: "We'll confirm rates and availability when you contact us · Long stays welcome",
+      restIntro: "Hand-made noodles and dumplings, every day · Add dishes below and order via Zalo",
+      thanks: "Thank you for staying at Kim's Hotel.<br>We wish you a pleasant stay.", call: "Call · Reservations", zalo: "Zalo", map: "Address · Map",
+      vnd: "Prices in VND · Room rates effective January 1, 2025" },
+    zh: { title: "客房 · 餐厅", tagline: "北宁韩国人经营的舒适酒店 · 一楼手工刀切面韩餐厅", rooms: "客房介绍", restaurant: "一楼韩餐厅", best: "人气",
+      roomsIntro: "所有客房均含早餐和洗衣服务。", night: "每晚", guests: (n) => `${n}人`,
+      bookZalo: "Zalo 预订咨询", bookTel: "电话预订", roomsSmall: "房价及空房情况请咨询确认 · 欢迎长住",
+      restIntro: "每天手工和面的刀切面与饺子 · 可将下方菜品加入后通过Zalo点餐",
+      thanks: "感谢您入住Kim's Hotel。<br>祝您住宿愉快。", call: "电话 · 预订", zalo: "Zalo 咨询", map: "地址 · 地图",
+      vnd: "价格单位：越南盾（VND）· 房价自2025年1月1日起适用" },
+    ja: { title: "客室・レストラン", tagline: "韓国人オーナーが営むバクニンの快適なホテル・1階は手打ち麺の韓国料理店", rooms: "客室のご案内", restaurant: "1階 韓国料理店", best: "BEST",
+      roomsIntro: "全客室に朝食とランドリーサービスが含まれています。", night: "1泊", guests: (n) => `${n}名`,
+      bookZalo: "Zaloで予約", bookTel: "電話で予約", roomsSmall: "料金・空室はお問い合わせ時にご案内します・長期滞在もご相談ください",
+      restIntro: "毎日手ごねのカルグクスと手作りマンドゥ・下のメニューを追加してZaloで注文できます",
+      thanks: "キムズホテルをご利用いただきありがとうございます。<br>ごゆっくりお過ごしください。", call: "電話・ご予約", zalo: "Zalo お問い合わせ", map: "住所・地図",
+      vnd: "価格はベトナムドン（VND）・客室料金は2025年1月1日より適用" },
+    vi: { title: "Phòng & Nhà hàng", tagline: "Khách sạn do người Hàn quản lý tại Bắc Ninh · Nhà hàng mì tự làm ở tầng 1", rooms: "Phòng nghỉ", restaurant: "Nhà hàng Hàn Quốc tầng 1", best: "BEST",
+      roomsIntro: "Tất cả các phòng đều bao gồm bữa sáng và dịch vụ giặt là.", night: "/ đêm", guests: (n) => `${n} người`,
+      bookZalo: "Đặt phòng qua Zalo", bookTel: "Gọi đặt phòng", roomsSmall: "Giá và phòng trống sẽ được xác nhận khi liên hệ · Nhận khách ở dài ngày",
+      restIntro: "Mì và Mandu nhào tay mỗi ngày · Chọn món bên dưới và gọi qua Zalo",
+      thanks: "Cảm ơn quý khách đã lưu trú tại Kim's Hotel.<br>Chúc quý khách có kỳ nghỉ thoải mái.", call: "Gọi điện · Đặt phòng", zalo: "Zalo", map: "Địa chỉ · Bản đồ",
+      vnd: "Giá tính bằng VND · Giá phòng áp dụng từ 01/01/2025" },
+  };
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const storage = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  const won = (n) => `${n.toLocaleString("en-US")}<small>₫</small>`;
+  let observer;
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  function render(lang) {
+    const t = UI[lang], R = window.RESTAURANT;
+    const second = lang === "ko" ? "vi" : "ko";
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand.en} ${R.brand.ko} · ${t.title}`;
+    const zaloUrl = "https://zalo.me/" + R.zalo, telUrl = "tel:" + R.phone.replace(/[^\d+]/g, "");
+
+    $("langs").innerHTML = LANGS.map(([c, label]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+    $("tagline").textContent = t.tagline;
+    $("nav").innerHTML = [`<a href="#rooms">${esc(t.rooms)}</a>`, ...MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`)].join("");
+
+    $("roomsTitle").textContent = t.rooms;
+    $("roomsIntro").textContent = t.roomsIntro;
+    $("incl").innerHTML = ROOM_INCL.map((x) => `<span>${esc(x[lang])}</span>`).join("");
+    $("roomList").innerHTML = ROOMS.map((r) => `
+      <article class="room" id="room-${r.id}">
+        <img src="${r.photo}" alt="${esc(r.name[lang])}" loading="lazy" width="1200" height="800">
+        <div class="body">
+          <div class="top"><h3>${esc(r.name[lang])}</h3><span class="guests">${esc(t.guests(r.guests))}</span></div>
+          <div class="sub">${esc(r.name[second])}</div>
+          <p>${esc(r.desc[lang])}</p>
+          <div class="rate"><b>${won(r.price)}</b><span>${esc(t.night)}</span></div>
+        </div>
+      </article>`).join("");
+    $("bookZalo").href = zaloUrl; $("bookZaloT").textContent = t.bookZalo;
+    $("bookTel").href = telUrl; $("bookTelT").textContent = t.bookTel;
+    $("roomsSmall").textContent = t.roomsSmall;
+
+    $("restTitle").textContent = t.restaurant;
+    $("restIntro").textContent = t.restIntro;
+    // 장바구니(order.js)는 #menu > section(MENU 순서) > ul > li(items 순서)에 버튼을 붙인다
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}">
+        <h2>${esc(cat.name[lang])}</h2>
+        ${cat.photo ? `<img class="banner" src="${cat.photo}" alt="${esc(cat.name[lang])}" loading="lazy">` : ""}
+        ${cat.note ? `<p class="note">${esc(cat.note[lang])}</p>` : ""}
+        <ul>${cat.items.map((it) => `
+          <li>
+            ${it.tag ? `<div class="tags"><span>${esc(t[it.tag])}</span></div>` : ""}
+            <div class="row"><b>${esc(it.name[lang])}</b><span class="leader"></span><span class="price">${won(it.price)}</span></div>
+            ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
+            <div class="sub">${esc(it.name[second])}</div>
+          </li>`).join("")}</ul>
+      </section>`).join("");
+
+    $("thanks").innerHTML = t.thanks;
+    $("callLabel").textContent = t.call; $("callText").textContent = R.phone; $("call").href = telUrl;
+    $("zaloLabel").textContent = t.zalo; $("zaloText").textContent = R.phone; $("zalo").href = zaloUrl;
+    $("mapLabel").textContent = t.map; $("mapText").textContent = R.address;
+    $("map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.mapQuery + " " + R.address);
+    $("foot").textContent = t.vnd;
+    observeSections();
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  // 스크롤 위치에 맞춰 상단 탭 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("#rooms, #menu > section").forEach((s) => observer.observe(s));
+  }
+</script>
+<script src="stores-link.js"></script>
+<script src="lang-menu.js"></script>
+<script src="dasan.js"></script>
+<script src="order.js"></script>
+</body>
+</html>

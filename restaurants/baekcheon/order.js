@@ -2,6 +2,7 @@
 // 원본은 restaurants/_shared/ 에만 두고, sync-order.sh 로 각 가게 폴더에 복사한다.
 // 가게 설정은 menu.js 의 window.ORDER (없으면 기본값):
 //   staff: 주문서 언어(직원이 읽는 언어, 기본 "vi") · currency: "₫" | "원" · zalo: 주문 받을 Zalo 번호(null이면 버튼 숨김)
+//   labels: 문구 바꾸기(선택) — 예: 호텔은 { table: { ko: "객실 번호", vi: "Số phòng", … }, tablePh: { … } }
 // 메뉴 화면은 각 가게 index.html 이 그린다. 이 파일은 #menu > section(MENU 순서) > ul > li(items 순서)에 버튼만 붙인다.
 // 테이블 번호: QR 주소에 ?t=5 를 붙이면 주문서에 자동으로 들어간다.
 (function () {
@@ -17,6 +18,7 @@
     ja: { say: "この画面をスタッフに見せてください", add: "追加", items: "点", view: "注文を見る", title: "ご注文", total: "合計", table: "テーブル番号", tablePh: "例：5", note: "ご要望", notePh: "辛さ控えめ、取り皿2枚など", show: "スタッフに見せる", send: "注文をコピーしてZaloを開く", copied: "注文をコピーしました — Zaloに貼り付けて送信", copyFail: "コピーできませんでした — 下の内容をコピーしてください", clear: "空にする", preview: "注文内容を見る", market: "時価", after: "焼肉と一緒に", plus: "＋時価メニュー", hint: "最終金額はお店で確認します", close: "閉じる", added: "追加しました" },
     vi: { say: "Đưa màn hình này cho nhân viên", add: "Thêm", items: "món", view: "Xem đơn", title: "Đơn gọi món", total: "Tổng", table: "Số bàn", tablePh: "VD: 5", note: "Ghi chú", notePh: "Ít cay, thêm 2 bát…", show: "Đưa nhân viên xem", send: "Sao chép đơn & mở Zalo", copied: "Đã sao chép đơn — dán vào Zalo để gửi", copyFail: "Không sao chép được — hãy chép nội dung bên dưới", clear: "Xóa đơn", preview: "Xem nội dung đơn", market: "Thời giá", after: "Giá ăn kèm thịt nướng", plus: "+ món thời giá", hint: "Quán sẽ xác nhận số tiền cuối cùng", close: "Đóng", added: "Đã thêm" },
   };
+  for (const [k, byLang] of Object.entries(CFG.labels || {})) for (const [l, v] of Object.entries(byLang)) if (T[l]) T[l][k] = v;
   // 직원에게 보여주는 주문서 머리말 (직원 언어)
   const HEAD = { vi: "ĐƠN GỌI MÓN", ko: "주문서", en: "ORDER", zh: "点餐单", ja: "注文書" };
 
