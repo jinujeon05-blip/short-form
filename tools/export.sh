@@ -8,7 +8,7 @@ out="${1:?출력폴더를 주세요}"; shift
 name() {
   case "$1" in
     sutkkui) echo "숯꾸이" ;; eros) echo "EROS" ;; anvoi) echo "AnVoi" ;; baekcheon) echo "백천화덕아나고" ;;
-    gamasot) echo "가마솥" ;; biobeauty) echo "바이오뷰티" ;; suwonseong) echo "수원성" ;; hellochicken) echo "헬로치킨" ;; kyodong) echo "교동치킨" ;; choongman) echo "충만치킨" ;; sales) echo "QR메뉴판소개서" ;;
+    gamasot) echo "가마솥" ;; biobeauty) echo "바이오뷰티" ;; suwonseong) echo "수원성" ;; hellochicken) echo "헬로치킨" ;; kyodong) echo "교동치킨" ;; choongman) echo "충만치킨" ;; youone) echo "유원핫도그" ;; sales) echo "QR메뉴판소개서" ;;
     *) echo "$1" ;;
   esac
 }
