@@ -6,8 +6,8 @@
 // price: 가격 / sizes: [[{ko,en,…}, 가격], …] / tag: "new" · "best" / spicy: true
 window.RESTAURANT = {
   brand: { ko: "교동치킨", en: "Kyodong Chicken", sub: "Korean Chicken & Pub", branch: "Sunshine City · Ciputra" },
-  phone: null,   // TODO: 구글 지도 정보 받으면 넣기
-  address: "Sunshine City, Khu đô thị Ciputra, Phú Thượng, Hà Nội",   // TODO: 정확한 호수 확인
+  phone: "0949 495 006",
+  address: "Mặt sau tòa S6, Sunshine City, Khu đô thị Ciputra, Phú Thượng, Hà Nội",   // 구글 지도 기준 (S6동 뒤편)
   mapQuery: "Kyodong Chicken Sunshine City",
   wifi: null,
 };
