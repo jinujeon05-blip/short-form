@@ -54,7 +54,7 @@ window.STORES = [
     address: "10A CT4, Khu Đô Thị Sông Đà, Nam Từ Liêm, Hà Nội",
     type: { ko: "한식당 · 가마솥 요리", vi: "Nhà hàng Hàn Quốc · Món nấu nồi gang", en: "Korean restaurant · Iron-pot dishes", zh: "韩餐厅 · 铁锅料理", ja: "韓国料理店・釜料理" },
     keywords: "가마솥 갈비찜 수육 꽃게 전골 아구찜 삼겹살 비빔밥 막걸리 gamasot galbi sườn hầm cua lẩu korean restaurant 韩国料理 排骨 カルビ 鍋" },
-  { id: "suwonseong", name: "수원성 SUWONSUNG", sub: "Nhà hàng Hàn Quốc · Ciputra", url: "https://suwonseong.qrmenuasia.com",
+  { id: "suwonseong", name: "수원성 SUWONSUNG", sub: "Nhà hàng Hàn Quốc · Ciputra", url: "https://suwonseong.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
     address: "A21 Sunshine City, Khu đô thị Ciputra, Phú Thượng, Hà Nội",
     type: { ko: "고깃집 · 한식 · 중식", vi: "Thịt nướng Hàn Quốc · Món Hàn · Món Trung Hoa", en: "Korean BBQ · Korean & Korean-Chinese", zh: "韩式烤肉 · 韩餐 · 韩式中餐", ja: "焼肉・韓国料理・韓国式中華" },

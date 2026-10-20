@@ -33,11 +33,12 @@ window.DEMOS = [
   { id: "biobeauty", url: "https://biobeauty.qrmenuasia.com", shot: "img/demo-biobeauty.jpg", qr: "img/qr-biobeauty.svg",
     name: "바이오&뷰티", type: { ko: "화장품 할인 판매 · 베트남", vi: "Mỹ phẩm Hàn giảm giá · Việt Nam", zh: "韩国化妆品特卖 · 越南", ja: "韓国コスメ セール · ベトナム", en: "K-beauty sale · Vietnam" },
     tag: { ko: "가게 말고 상품도 OK", vi: "Bán sản phẩm cũng được", zh: "商品销售也适用", ja: "商品販売にも", en: "Works for products too" } },
-  { id: "suwonseong", url: "https://suwonseong.qrmenuasia.com", shot: "img/demo-suwonseong.jpg", qr: "img/qr-suwonseong.svg",
+  // 수원성은 손님 가게 찾기용으로 만든 것이라 소개서에서 뺌(2026-10-20 사용자) — SNS 도구용 데이터로만 남김
+  { id: "suwonseong", hidden: true, url: "https://suwonseong.qrmenuasia.com", shot: "img/demo-suwonseong.jpg", qr: "img/qr-suwonseong.svg",
     name: "수원성 SUWONSUNG", type: { ko: "고깃집 · 한식 · 하노이", vi: "Thịt nướng Hàn Quốc · Hà Nội", zh: "韩式烤肉 · 河内", ja: "焼肉・韓国料理・ハノイ", en: "Korean BBQ · Hanoi" } },
-  // 소개서 칸(7칸)은 그대로 두고 SNS 이미지 도구용으로만 씀
-  { id: "kimshotel", hidden: true, url: "https://kimshotel.qrmenuasia.com", shot: "img/demo-kimshotel.jpg", qr: "img/qr-kimshotel.svg",
-    name: "Kim's Hotel", type: { ko: "호텔 · 1층 한식당 · 박닌", vi: "Khách sạn · Nhà hàng Hàn Quốc · Bắc Ninh", zh: "酒店 · 韩餐厅 · 北宁", ja: "ホテル・韓国料理・バクニン", en: "Hotel & Korean Kitchen · Bac Ninh" } },
+  { id: "kimshotel", url: "https://kimshotel.qrmenuasia.com", shot: "img/demo-kimshotel.jpg", qr: "img/qr-kimshotel.svg",
+    name: "Kim's Hotel", type: { ko: "호텔 · 1층 한식당 · 박닌", vi: "Khách sạn · Nhà hàng Hàn Quốc · Bắc Ninh", zh: "酒店 · 韩餐厅 · 北宁", ja: "ホテル・韓国料理・バクニン", en: "Hotel & Korean Kitchen · Bac Ninh" },
+    tag: { ko: "호텔도 OK · 객실 안내", vi: "Khách sạn cũng được", zh: "酒店也适用", ja: "ホテルにも対応", en: "Works for hotels too" } },
 ];
 
 window.T = {
