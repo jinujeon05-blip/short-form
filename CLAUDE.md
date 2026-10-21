@@ -170,6 +170,14 @@
 - 소개서는 페이지 전체를 기기 기본 글꼴 하나로 통일한다. 잘난체·G마켓 산스에는 베트남어 성조 글자가 없어, 쓰면 베트남어에서 글꼴이 섞인다.
 - 연락처: 한국어 상담 전화·Zalo 0917 302 200, 카카오톡 jjw4164 / 베트남어 상담 전화·Zalo 0937 250 787(2026-10-21 추가, `content.js`의 `CONTACT.vi`). 문의하기 칸은 상담 언어별 두 묶음, 베트남어 화면에서는 베트남어 상담이 먼저 나온다. 인쇄본(PDF)에서는 두 묶음을 한 줄에 나란히 놓아 2쪽을 유지한다.
 
+## 방문 기록 (Vercel Web Analytics, 2026-10-21 시작)
+- 목적: 가게별 방문자 수를 영업 근거 자료로 쓰기. 사용자는 Vercel **Pro** 요금제. 가게마다 프로젝트가 따로라 가게별 집계는 자동.
+- 페이지에 코드(`/_vercel/insights/script.js`)는 `node tools/analytics.mjs`가 모든 가게 `index.html`과 `sales/index.html`·`sales/stores/index.html`에 넣는다(여러 번 돌려도 같음). **새 가게를 만들면 이 도구를 한 번 돌린다.**
+- 기록이 시작되려면 ① Vercel 대시보드에서 프로젝트마다 Analytics 탭 → Enable (이 환경에선 API·도구가 없어 사용자가 직접 켬) ② 켠 뒤 **다시 배포**. 켜기 전에 코드만 있으면 404만 나고 해롭지 않다.
+- 조회: Vercel MCP `count_pageviews`·`aggregate_pageviews`(프로젝트 이름, 기간, by: day·country·deviceType·referrerHostname·requestPath 등). 아직 안 켠 프로젝트는 `web_analytics_not_enabled` 오류.
+- QR·링크로 들어온 방문을 구분하려면 주소에 `?utm_source=qr`(가게 찾기에서 오는 링크는 `?utm_source=stores`) 같은 UTM을 붙인다 — Web Analytics가 utmSource로 집계한다. (`?src=`는 집계 안 됨)
+- 다음 단계(사용자와 합의): 몇 주 쌓은 뒤 admin(로그인 있는 집계 화면)·사장님용 월간 리포트. 메뉴 클릭·QR 스캔 같은 세부 기록은 필요할 때.
+
 ## 가게 찾기 페이지 (손님용)
 - https://qrmenuasia.com/stores/ (`sales/stores/`, 소개서와 같은 Vercel 프로젝트). 소개서 데모 칸 아래 링크로 연결됨.
 - 가게 목록·지역·종류·태그·화면 문구(5개 언어)는 `sales/stores/data.js` 하나에 있다. 사진은 소개서와 같은 `sales/img/demo-<가게>.jpg`.
