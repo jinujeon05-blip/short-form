@@ -35,6 +35,7 @@ const SHOPS = {
   lacherie:     { type: 'CafeOrCoffeeShop', cuisine: ['Coffee', 'Vietnamese coffee', 'Bingsu'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   snackshack:   { type: 'BarOrPub', cuisine: ['American', 'Burgers', 'Mexican', 'Craft beer'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   holoi:        { type: 'Restaurant', cuisine: ['Vietnamese', 'Pho', 'Beef noodle soup'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  ijang:        { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Charcoal grill'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
