@@ -23,6 +23,7 @@ const SHOPS = {
   youone:       { type: 'Restaurant', cuisine: ['Korean', 'Korean corn dog', 'Street food'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   kimshotel:    { type: 'Hotel', cuisine: ['Korean'], country: 'VN', currency: 'VND' },
   jokbal:       { type: 'Restaurant', cuisine: ['Korean', 'Jokbal', 'Bossam'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  daekuk:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Shabu-shabu'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

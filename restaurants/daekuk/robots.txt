@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://daekuk.qrmenuasia.com/sitemap.xml
