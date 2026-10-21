@@ -33,6 +33,7 @@ const SHOPS = {
   ureong:       { type: 'Restaurant', cuisine: ['Korean', 'Ssambap', 'Bibimbap'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   goodday:      { type: 'Restaurant', cuisine: ['Korean', 'Gimbap', 'Korean street food'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   lacherie:     { type: 'CafeOrCoffeeShop', cuisine: ['Coffee', 'Vietnamese coffee', 'Bingsu'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  snackshack:   { type: 'BarOrPub', cuisine: ['American', 'Burgers', 'Mexican', 'Craft beer'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
