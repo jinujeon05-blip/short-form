@@ -22,6 +22,7 @@ const SHOPS = {
   choongman:    { type: 'Restaurant', cuisine: ['Korean', 'Korean fried chicken'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   youone:       { type: 'Restaurant', cuisine: ['Korean', 'Korean corn dog', 'Street food'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   kimshotel:    { type: 'Hotel', cuisine: ['Korean'], country: 'VN', currency: 'VND' },
+  jokbal:       { type: 'Restaurant', cuisine: ['Korean', 'Jokbal', 'Bossam'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
