@@ -27,6 +27,7 @@ const SHOPS = {
   boknara:      { type: 'Restaurant', cuisine: ['Korean', 'Pufferfish', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   chibaengi:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Fried Chicken', 'Pub'], country: 'VN', currency: 'VND' },
   samwon:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  bangatgan:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Pub', 'Pocha'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
