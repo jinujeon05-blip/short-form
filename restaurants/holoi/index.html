@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8a1c26">
+<title>퍼보 호러이 Phở Bò Hồ Lợi 하노이 쌀국수 메뉴</title>
+<meta name="description" content="퍼보 호러이 Phở Bò Hồ Lợi — 하노이 서호 푸트엉의 소고기 쌀국수 · 28 ngõ 209 An Dương Vương, Phú Thượng, Tây Hồ, Hà Nội">
+<style>
+  :root {
+    --brick: #8a1c26;
+    --brick-2: #b3303a;
+    --paper: #fffaf2;
+    --paper-2: #f6e3d4;
+    --stone: #dcc0a8;
+    --ink: #2a1f1c;
+    --muted: #7a6a60;
+    --line: #efdccb;
+    --gold: #2f8a45;
+    --gold-2: #9fe0aa;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; color: var(--ink); background: var(--paper);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.4;
+  }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+  .serif { font-family: inherit; }
+
+  /* ── 상단: 남색 + 메뉴판 겨자색 ── */
+  header { position: relative; color: #fff; text-align: center; padding: 12px 0 46px;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(159,224,170,.22), transparent 60%),
+      linear-gradient(180deg, var(--brick-2), var(--brick)); }
+  header::after { /* 아래쪽 성가퀴 */
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 22px;
+    background: linear-gradient(90deg, var(--paper) 0 50%, transparent 50% 100%) 0 0 / 36px 100% repeat-x,
+                linear-gradient(var(--paper), var(--paper)) 0 100% / 100% 8px no-repeat;
+  }
+  .langs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #fbe9e6; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: var(--brick); background: #fff; border-color: #fff; }
+  .logo { display: block; width: 132px; height: auto; margin: 22px auto 0; border-radius: 14px; box-shadow: 0 6px 18px rgba(0,0,0,.28); }
+  h1 { margin: 18px 0 0; font-size: 36px; font-weight: 900; letter-spacing: 1px; line-height: 1.1; color: #fff; }
+  .en { margin: 8px 0 0; font-size: 13px; font-weight: 800; letter-spacing: 3px; color: var(--gold-2); padding-left: 3px; }
+  .branch { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--brick); background: var(--gold-2); border-radius: 999px; padding: 3px 12px; }
+  .tagline { margin: 12px 0 0; font-size: 14.5px; font-weight: 600; color: #fbe9e6; }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; background: var(--paper); border-bottom: 1px solid var(--line); box-shadow: 0 4px 12px rgba(138,28,38,.08); }
+  nav .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-top: 8px; padding-bottom: 8px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 700; padding: 7px 12px; border-radius: 999px; white-space: nowrap; }
+  nav a.active { color: #fff; background: var(--brick); }
+
+  /* ── 메뉴 ── */
+  section { padding: 28px 0 6px; }
+  .banner { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 8px 20px rgba(138,28,38,.14); }
+  .head { text-align: center; }
+  h2 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 2px; color: var(--brick); }
+  h2 small { display: block; margin-top: 4px; font-size: 14px; font-weight: 400; letter-spacing: .5px; color: var(--muted); }
+  .note { margin: 10px 0 0; text-align: center; font-size: 13.5px; color: var(--muted); }
+  .quote { margin: 16px 0 0; text-align: center; font-size: 15px; font-weight: 700; color: var(--brick); }
+  .quote::before { content: "“ "; color: var(--gold); }
+  .quote::after { content: " ”"; color: var(--gold); }
+
+  ul { list-style: none; margin: 10px 0 0; padding: 0; }
+  li { padding: 13px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+  .tags span { font-size: 10.5px; font-weight: 800; letter-spacing: .3px; color: #fff; background: var(--brick); border-radius: 3px; padding: 1px 6px; }
+  .tags .special { background: var(--gold); }
+  .tags .new { background: #e0452b; }
+  .tags .hot { background: #fff; color: #c2402a; border: 1px solid #e6b3a6; }
+  .row { display: flex; align-items: baseline; gap: 8px; }
+  .row b { font-size: 17px; font-weight: 800; }
+  .row .unit { font-size: 12px; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  .row .leader { flex: 1; min-width: 10px; border-bottom: 2px dotted var(--stone); transform: translateY(-4px); }
+  .price { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--brick); }
+  .price small { font-size: 11px; color: var(--muted); margin-left: 1px; }
+  .price.ask { font-size: 13px; color: var(--muted); }
+  .sizes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .sizes span { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 2px 8px; }
+  .sizes span i { font-style: normal; font-size: 11px; font-weight: 800; color: #fff; background: var(--brick); border-radius: 4px; padding: 0 5px; margin-right: 6px; }
+  .sizes span.after i { background: var(--gold); }
+  .desc { margin-top: 4px; font-size: 13px; color: #5f4f48; }
+  .sub { margin-top: 3px; font-size: 13px; color: var(--muted); }
+  .sub.it { font-style: italic; }
+
+  /* ── 가게 정보 ── */
+  footer { margin-top: 40px; background: var(--brick); color: #fbe9e6; padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); }
+  .thanks { text-align: center; font-size: 15px; line-height: 1.7; margin: 0 0 18px; }
+  .pills { display: grid; gap: 10px; }
+  .pill { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; text-align: left; color: var(--ink); text-decoration: none; background: var(--paper); border: 0; border-radius: 16px; padding: 10px 14px 10px 10px; cursor: pointer; }
+  .pill i { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--brick); }
+  .pill i svg { width: 20px; height: 20px; color: #fff; }
+  .pill div { flex: 1; min-width: 0; }
+  .pill small { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .pill strong { display: block; font-size: 16px; font-weight: 800; word-break: break-word; }
+  .pill em { flex: none; font-style: normal; font-size: 12px; font-weight: 700; color: var(--brick); }
+  .vnd { text-align: center; margin: 16px 0 0; font-size: 12px; opacity: .85; }
+
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 40; background: var(--brick); color: #fff; font-size: 14px; font-weight: 700; padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+<style id="partner-theme">
+  /* 하단 파트너 배너(다산)·가게 찾기 링크 색을 이 메뉴판에 맞춘다 */
+  :root { --pt-mode: light; --pt-bg: #fff; --pt-ink: #2a1f1c; --pt-muted: #7a6a60; --pt-line: #efdccb; --pt-accent: #8a1c26; --pt-btn: #8a1c26; --pt-btn-ink: #fff; --pt-shadow: 0 6px 16px rgba(138,28,38,.14); }
+</style>
+<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
+<link rel="canonical" href="https://holoi.qrmenuasia.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="퍼보 호러이 Phở Bò Hồ Lợi 하노이 쌀국수 메뉴">
+<meta property="og:description" content="퍼보 호러이 Phở Bò Hồ Lợi — 하노이 서호 푸트엉의 소고기 쌀국수 · 28 ngõ 209 An Dương Vương, Phú Thượng, Tây Hồ, Hà Nội">
+<meta property="og:url" content="https://holoi.qrmenuasia.com/">
+<meta property="og:image" content="https://holoi.qrmenuasia.com/img/store.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"퍼보 호러이 Phở Bò Hồ Lợi","url":"https://holoi.qrmenuasia.com/","address":{"@type":"PostalAddress","streetAddress":"28 ngõ 209 An Dương Vương, Phú Thượng, Tây Hồ, Hà Nội","addressCountry":"VN"},"telephone":"0904631565","image":"https://holoi.qrmenuasia.com/img/store.jpg","servesCuisine":["Vietnamese","Pho","Beef noodle soup"],"hasMenu":{"@type":"Menu","name":"퍼보 호러이 Phở Bò Hồ Lợi menu","inLanguage":["ko","en","zh","ja","vi"],"hasMenuSection":[{"@type":"MenuSection","name":"Phở 50K","hasMenuItem":[{"@type":"MenuItem","name":"Rare beef","alternateName":["살짝 익힌 소고기","Tái","半生牛肉","レア牛肉"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Rare beef + Well-done brisket","alternateName":["살짝 익힌 소고기 + 푹 익힌 양지","Tái chín","半生牛肉 + 熟牛腩","レア牛肉 + よく火の通ったバラ肉"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Rare beef + Flank","alternateName":["살짝 익힌 소고기 + 양지(남)","Tái nạm","半生牛肉 + 牛腩","レア牛肉 + バラ肉"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Well-done brisket","alternateName":["푹 익힌 양지","Chín","熟牛腩","よく火の通ったバラ肉"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Flank","alternateName":["양지(남)","Nạm","牛腩","バラ肉"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tendon","alternateName":["힘줄","Gân","牛筋","牛すじ"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Phở 55K","hasMenuItem":[{"@type":"MenuItem","name":"Rare beef + Fatty brisket","alternateName":["살짝 익힌 소고기 + 기름진 양지(저우)","Tái gầu","半生牛肉 + 肥牛腩","レア牛肉 + 脂身のバラ肉"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Rare beef + Garlic-sautéed beef","alternateName":["살짝 익힌 소고기 + 마늘 볶음 소고기(란)","Tái lăn","半生牛肉 + 蒜炒牛肉","レア牛肉 + ニンニク炒め牛肉"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Well-done brisket + Fatty brisket","alternateName":["푹 익힌 양지 + 기름진 양지(저우)","Chín gầu","熟牛腩 + 肥牛腩","よく火の通ったバラ肉 + 脂身のバラ肉"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Flank + Fatty brisket","alternateName":["양지(남) + 기름진 양지(저우)","Nạm gầu","牛腩 + 肥牛腩","バラ肉 + 脂身のバラ肉"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Rare beef + Tendon","alternateName":["살짝 익힌 소고기 + 힘줄","Tái gân","半生牛肉 + 牛筋","レア牛肉 + 牛すじ"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Well-done brisket + Tendon","alternateName":["푹 익힌 양지 + 힘줄","Chín gân","熟牛腩 + 牛筋","よく火の通ったバラ肉 + 牛すじ"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh flank","alternateName":["생 양지(남)","Nạm tươi","鲜牛腩","生のバラ肉"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Phở 60K","hasMenuItem":[{"@type":"MenuItem","name":"Lean core cut","alternateName":["사태 속살(로이)","Lõi","牛腱芯","すね肉の芯"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Rare beef + Flank + Fatty brisket","alternateName":["살짝 익힌 소고기 + 양지(남) + 기름진 양지(저우)","Tái nạm gầu","半生牛肉 + 牛腩 + 肥牛腩","レア牛肉 + バラ肉 + 脂身のバラ肉"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Garlic-sautéed beef + Well-done brisket","alternateName":["마늘 볶음 소고기(란) + 푹 익힌 양지","Lăn chín","蒜炒牛肉 + 熟牛腩","ニンニク炒め牛肉 + よく火の通ったバラ肉"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Garlic-sautéed beef + Fatty brisket","alternateName":["마늘 볶음 소고기(란) + 기름진 양지(저우)","Lăn gầu","蒜炒牛肉 + 肥牛腩","ニンニク炒め牛肉 + 脂身のバラ肉"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Garlic-sautéed beef + Fresh flank","alternateName":["마늘 볶음 소고기(란) + 생 양지(남)","Lăn nạm tươi","蒜炒牛肉 + 鲜牛腩","ニンニク炒め牛肉 + 生のバラ肉"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Garlic-sautéed beef + Flank","alternateName":["마늘 볶음 소고기(란) + 양지(남)","Lăn nạm","蒜炒牛肉 + 牛腩","ニンニク炒め牛肉 + バラ肉"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef wine stew (sốt vang)","alternateName":["소고기 와인 스튜(솟 방)","Sốt vang","红酒炖牛肉","牛肉の赤ワイン煮込み"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef wine stew (sốt vang) + Well-done brisket","alternateName":["소고기 와인 스튜(솟 방) + 푹 익힌 양지","Sốt vang chín","红酒炖牛肉 + 熟牛腩","牛肉の赤ワイン煮込み + よく火の通ったバラ肉"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef wine stew (sốt vang) + Rare beef","alternateName":["소고기 와인 스튜(솟 방) + 살짝 익힌 소고기","Sốt vang tái","红酒炖牛肉 + 半生牛肉","牛肉の赤ワイン煮込み + レア牛肉"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef wine stew (sốt vang) + Flank","alternateName":["소고기 와인 스튜(솟 방) + 양지(남)","Sốt vang nạm","红酒炖牛肉 + 牛腩","牛肉の赤ワイン煮込み + バラ肉"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Phở 65K","hasMenuItem":[{"@type":"MenuItem","name":"Rare beef + Fatty brisket + Tendon","alternateName":["살짝 익힌 소고기 + 기름진 양지(저우) + 힘줄","Tái gầu gân","半生牛肉 + 肥牛腩 + 牛筋","レア牛肉 + 脂身のバラ肉 + 牛すじ"],"offers":{"@type":"Offer","price":65000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tendon + Bone marrow","alternateName":["힘줄 + 골수","Gân tuỷ","牛筋 + 牛骨髓","牛すじ + 骨髄"],"offers":{"@type":"Offer","price":65000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fatty brisket + Bone marrow","alternateName":["기름진 양지(저우) + 골수","Gầu tuỷ","肥牛腩 + 牛骨髓","脂身のバラ肉 + 骨髄"],"offers":{"@type":"Offer","price":65000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh flank + Bone marrow","alternateName":["생 양지(남) + 골수","Nạm tươi tuỷ","鲜牛腩 + 牛骨髓","生のバラ肉 + 骨髄"],"offers":{"@type":"Offer","price":65000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef wine stew (sốt vang) + Fatty brisket","alternateName":["소고기 와인 스튜(솟 방) + 기름진 양지(저우)","Sốt vang gầu","红酒炖牛肉 + 肥牛腩","牛肉の赤ワイン煮込み + 脂身のバラ肉"],"offers":{"@type":"Offer","price":65000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef wine stew (sốt vang) + Fresh flank","alternateName":["소고기 와인 스튜(솟 방) + 생 양지(남)","Sốt vang nạm tươi","红酒炖牛肉 + 鲜牛腩","牛肉の赤ワイン煮込み + 生のバラ肉"],"offers":{"@type":"Offer","price":65000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Phở 70K","hasMenuItem":[{"@type":"MenuItem","name":"Tender braised ribs","alternateName":["푹 삶은 갈비","Sườn nhừ","软烂牛排骨","とろとろ煮込みスペアリブ"],"offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lean core cut + Fatty brisket","alternateName":["사태 속살(로이) + 기름진 양지(저우)","Lõi gầu","牛腱芯 + 肥牛腩","すね肉の芯 + 脂身のバラ肉"],"offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lean core cut + Flank","alternateName":["사태 속살(로이) + 양지(남)","Lõi nạm","牛腱芯 + 牛腩","すね肉の芯 + バラ肉"],"offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lean core cut + Well-done brisket","alternateName":["사태 속살(로이) + 푹 익힌 양지","Lõi chín","牛腱芯 + 熟牛腩","すね肉の芯 + よく火の通ったバラ肉"],"offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lean core cut + Tendon","alternateName":["사태 속살(로이) + 힘줄","Lõi gân","牛腱芯 + 牛筋","すね肉の芯 + 牛すじ"],"offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lean core cut + Bone marrow","alternateName":["사태 속살(로이) + 골수","Lõi tuỷ","牛腱芯 + 牛骨髓","すね肉の芯 + 骨髄"],"offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef wine stew (sốt vang) + Tendon + Bone marrow","alternateName":["소고기 와인 스튜(솟 방) + 힘줄 + 골수","Sốt vang gân tuỷ","红酒炖牛肉 + 牛筋 + 牛骨髓","牛肉の赤ワイン煮込み + 牛すじ + 骨髄"],"offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Phở 80K","hasMenuItem":[{"@type":"MenuItem","name":"Tender braised ribs + Lean core cut","alternateName":["푹 삶은 갈비 + 사태 속살(로이)","Sườn nhừ lõi","软烂牛排骨 + 牛腱芯","とろとろ煮込みスペアリブ + すね肉の芯"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tender braised ribs + Fatty brisket","alternateName":["푹 삶은 갈비 + 기름진 양지(저우)","Sườn nhừ gầu","软烂牛排骨 + 肥牛腩","とろとろ煮込みスペアリブ + 脂身のバラ肉"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tender braised ribs + Rare beef","alternateName":["푹 삶은 갈비 + 살짝 익힌 소고기","Sườn nhừ tái","软烂牛排骨 + 半生牛肉","とろとろ煮込みスペアリブ + レア牛肉"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tender braised ribs + Garlic-sautéed beef","alternateName":["푹 삶은 갈비 + 마늘 볶음 소고기(란)","Sườn nhừ lăn","软烂牛排骨 + 蒜炒牛肉","とろとろ煮込みスペアリブ + ニンニク炒め牛肉"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tender braised ribs + Fresh flank","alternateName":["푹 삶은 갈비 + 생 양지(남)","Sườn nhừ nạm tươi","软烂牛排骨 + 鲜牛腩","とろとろ煮込みスペアリブ + 生のバラ肉"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tender braised ribs + Beef wine stew (sốt vang)","alternateName":["푹 삶은 갈비 + 소고기 와인 스튜(솟 방)","Sườn nhừ sốt vang","软烂牛排骨 + 红酒炖牛肉","とろとろ煮込みスペアリブ + 牛肉の赤ワイン煮込み"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tender braised ribs + Bone marrow","alternateName":["푹 삶은 갈비 + 골수","Sườn nhừ tuỷ","软烂牛排骨 + 牛骨髓","とろとろ煮込みスペアリブ + 骨髄"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lean core cut + Fatty brisket + Bone marrow","alternateName":["사태 속살(로이) + 기름진 양지(저우) + 골수","Lõi gầu tuỷ","牛腱芯 + 肥牛腩 + 牛骨髓","すね肉の芯 + 脂身のバラ肉 + 骨髄"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lean core cut + Fatty brisket + Fresh flank","alternateName":["사태 속살(로이) + 기름진 양지(저우) + 생 양지(남)","Lõi gầu nạm tươi","牛腱芯 + 肥牛腩 + 鲜牛腩","すね肉の芯 + 脂身のバラ肉 + 生のバラ肉"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lean core cut + Fatty brisket + Tendon","alternateName":["사태 속살(로이) + 기름진 양지(저우) + 힘줄","Lõi gầu gân","牛腱芯 + 肥牛腩 + 牛筋","すね肉の芯 + 脂身のバラ肉 + 牛すじ"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lean core cut + Garlic-sautéed beef + Fresh flank","alternateName":["사태 속살(로이) + 마늘 볶음 소고기(란) + 생 양지(남)","Lõi lăn nạm tươi","牛腱芯 + 蒜炒牛肉 + 鲜牛腩","すね肉の芯 + ニンニク炒め牛肉 + 生のバラ肉"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Phở 90K","hasMenuItem":[{"@type":"MenuItem","name":"Special bowl","alternateName":["특별 한 그릇","Bát đặc biệt","特别碗","スペシャル（特製）"],"offers":{"@type":"Offer","price":90000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tender braised ribs + Lean core cut + Fatty brisket","alternateName":["푹 삶은 갈비 + 사태 속살(로이) + 기름진 양지(저우)","Sườn nhừ lõi gầu","软烂牛排骨 + 牛腱芯 + 肥牛腩","とろとろ煮込みスペアリブ + すね肉の芯 + 脂身のバラ肉"],"offers":{"@type":"Offer","price":90000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tender braised ribs + Lean core cut + Garlic-sautéed beef","alternateName":["푹 삶은 갈비 + 사태 속살(로이) + 마늘 볶음 소고기(란)","Sườn nhừ lõi lăn","软烂牛排骨 + 牛腱芯 + 蒜炒牛肉","とろとろ煮込みスペアリブ + すね肉の芯 + ニンニク炒め牛肉"],"offers":{"@type":"Offer","price":90000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Kids' bowl 30K","hasMenuItem":[{"@type":"MenuItem","name":"Kids · Pork meatball (mọc)","alternateName":["어린이 · 완자(목)","Bát trẻ con · Mọc","儿童 · 猪肉丸（mọc）","子ども用・肉団子（モック）"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Kids · Rare beef","alternateName":["어린이 · 살짝 익힌 소고기","Bát trẻ con · Tái","儿童 · 半生牛肉","子ども用・レア牛肉"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Kids · Well-done brisket","alternateName":["어린이 · 푹 익힌 양지","Bát trẻ con · Chín","儿童 · 熟牛腩","子ども用・よく火の通ったバラ肉"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Kids · Garlic-sautéed beef","alternateName":["어린이 · 마늘 볶음 소고기","Bát trẻ con · Lăn","儿童 · 蒜炒牛肉","子ども用・ニンニク炒め牛肉"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Extras & Sides","hasMenuItem":[{"@type":"MenuItem","name":"Sharing beef platter (small)","alternateName":["안주용 모둠 그릇 (소)","Bát nhậu nhỏ","下酒拼盘（小）","おつまみ盛り合わせ（小）"],"offers":{"@type":"Offer","price":200000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sharing beef platter (large)","alternateName":["안주용 모둠 그릇 (대)","Bát nhậu to","下酒拼盘（大）","おつまみ盛り合わせ（大）"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lean core cut, blanched (lõi chần)","alternateName":["로이 (데친 것)","Lõi chần","烫牛腱芯","すね肉の芯（さっと茹で）"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Braised ribs","alternateName":["갈비","Sườn","牛排骨","スペアリブ"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Extra rare beef","alternateName":["살짝 익힌 소고기 추가","Tái","加半生牛肉","レア牛肉 追加"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Extra garlic-sautéed beef","alternateName":["마늘 볶음 소고기 추가","Lăn","加蒜炒牛肉","ニンニク炒め牛肉 追加"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Extra tendon","alternateName":["힘줄 추가","Gân","加牛筋","牛すじ 追加"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Extra fresh flank","alternateName":["생 양지 추가","Nạm tươi","加鲜牛腩","生のバラ肉 追加"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Noodles only (no meat)","alternateName":["면만(고기 없음)","Phở không người lái","只要河粉（不加肉）","麺だけ（肉なし）"],"offers":{"@type":"Offer","price":15000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pork meatball (mọc)","alternateName":["완자(목)","Mọc","猪肉丸（mọc）","肉団子（モック）"],"offers":{"@type":"Offer","price":10000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Quẩy (fried dough sticks)","alternateName":["꿔이(튀김빵)","Quẩy","油条（quẩy）","クァイ（揚げパン）"],"offers":{"@type":"Offer","price":5000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Boiled free-range egg","alternateName":["토종닭 삶은 달걀","Trứng gà ta chần","水煮土鸡蛋","地鶏のゆで卵"],"offers":{"@type":"Offer","price":10000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Iced tea","alternateName":["아이스 티","Trà đá","冰茶","アイスティー"],"offers":{"@type":"Offer","price":5000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Take-home items","hasMenuItem":[{"@type":"MenuItem","name":"Well-done fatty brisket","alternateName":["푹 익힌 기름진 양지","Gầu chín","熟肥牛腩","よく火の通った脂身のバラ肉"],"offers":{"@type":"Offer","price":550000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Well-done flank","alternateName":["푹 익힌 양지(남)","Nạm chín","熟牛腩","よく火の通ったバラ肉（ネーム）"],"offers":{"@type":"Offer","price":490000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef wine stew (sốt vang)","alternateName":["소고기 와인 스튜(솟 방)","Sốt vang","红酒炖牛肉","牛肉の赤ワイン煮込み"],"offers":{"@type":"Offer","price":180000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Braised ribs","alternateName":["푹 삶은 갈비","Sườn hầm","炖牛排骨","煮込みスペアリブ"],"offers":{"@type":"Offer","price":380000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Braised oxtail (order 1 day ahead)","alternateName":["꼬리찜 (하루 전 예약)","Đuôi bò hầm (đặt trước 01 ngày)","炖牛尾（需提前1天预订）","牛テール煮込み（1日前予約）"],"offers":{"@type":"Offer","price":360000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Chili sauce","alternateName":["고추 소스","Tương ớt","辣椒酱","チリソース"],"offers":{"@type":"Offer","price":40000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef jerky (bò khô)","alternateName":["육포(보 코)","Bò khô","牛肉干","ビーフジャーキー（ボーコー）"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}}]}]}}</script>
+<!-- seo:end -->
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="langs" id="langs"></div>
+    <img class="logo" src="img/logo.png" alt="Phở Hồ Lợi">
+    <h1>Phở Bò Hồ Lợi</h1>
+    <p class="en">BEEF NOODLE SOUP</p>
+    <span class="branch" id="branch"></span>
+    <p class="tagline" id="tagline"></p>
+  </div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap" id="menu"></main>
+
+<footer>
+  <div class="wrap">
+    <p class="thanks" id="thanks"></p>
+    <div class="pills">
+      <button class="pill" id="wifi" type="button" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg></i>
+        <div><small id="wifiLabel"></small><strong id="wifiText"></strong></div>
+        <em id="wifiCopy"></em>
+      </button>
+      <a class="pill" id="call">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></i>
+        <div><small id="callLabel"></small><strong id="callText"></strong></div>
+      </a>
+      <a class="pill" id="map" target="_blank" rel="noopener">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></i>
+        <div><small id="mapLabel"></small><strong id="mapText"></strong></div>
+      </a>
+    </div>
+    <p class="vnd" id="foot"></p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<script>
+  const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
+  const UI = {
+    ko: { title: "메뉴", tagline: "소고기 쌀국수 · 부위 조합 자유 · 직접 만든 꿔이", free: "무료", new: "신메뉴", best: "BEST", special: "추천", spicy: "🌶 매콤", ask: "가격 문의", after: "후식",
+      thanks: "퍼보 호러이를 찾아 주셔서 감사합니다.<br>맛있게 드세요!", copy: "복사", copied: "비밀번호를 복사했어요",
+      call: "전화", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(K = 1,000₫) · 매장 벽 메뉴판 사진 기준이라 지금과 다를 수 있어요" },
+    en: { title: "Menu", tagline: "Beef phở · mix & match cuts · house-made quẩy", free: "Free", new: "NEW", best: "BEST", special: "Recommended", spicy: "🌶 Spicy", ask: "Ask staff", after: "Dessert",
+      thanks: "Thank you for visiting Phở Bò Hồ Lợi.<br>Enjoy your meal!", copy: "Copy", copied: "Password copied",
+      call: "Call", map: "Address · Map", vnd: "Prices in VND (K = 1,000₫) · Based on a photo of the in-store menu board; prices may have changed" },
+    zh: { title: "菜单", tagline: "牛肉河粉 · 部位自由搭配 · 自制油条", free: "免费", new: "新品", best: "人气", special: "推荐", spicy: "🌶 辣", ask: "请询问店员", after: "甜点",
+      thanks: "感谢您光临 Phở Bò Hồ Lợi。<br>祝您用餐愉快！", copy: "复制", copied: "密码已复制",
+      call: "电话", map: "地址 · 地图", vnd: "价格单位：越南盾（K = 1,000₫）· 根据店内菜单板照片，价格可能已变动" },
+    ja: { title: "メニュー", tagline: "牛肉フォー・部位の組み合わせ自由・自家製クァイ", free: "無料", new: "NEW", best: "BEST", special: "おすすめ", spicy: "🌶 辛口", ask: "店員にお尋ねください", after: "デザート",
+      thanks: "Phở Bò Hồ Lợi へようこそ。<br>ごゆっくりお召し上がりください！", copy: "コピー", copied: "パスワードをコピーしました",
+      call: "電話", map: "住所・地図", vnd: "価格はベトナムドン（K = 1,000₫）・店内メニュー板の写真基準のため変更の場合あり" },
+    vi: { title: "Thực đơn", tagline: "Phở bò · mix topping tuỳ thích · quẩy nhà tự làm", free: "Miễn phí", new: "MỚI", best: "BEST", special: "Đề xuất", spicy: "🌶 Cay", ask: "Hỏi nhân viên", after: "Tráng miệng",
+      thanks: "Cảm ơn quý khách đã đến Phở Bò Hồ Lợi.<br>Chúc quý khách ngon miệng!", copy: "Sao chép", copied: "Đã sao chép mật khẩu",
+      call: "Gọi điện", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND (K = 1.000₫) · Theo ảnh thực đơn tại quán, giá có thể đã thay đổi" },
+  };
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const storage = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  const fmt = (n) => n.toLocaleString("en-US");
+  const won = (n) => `${fmt(n)}<small>₫</small>`;
+  let observer;
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  function itemHtml(it, t, lang, second) {
+    const tags = [it.tag ? `<span class="${it.tag}">${esc(t[it.tag])}</span>` : "", it.spicy ? `<span class="hot">${esc(t.spicy)}</span>` : ""].join("");
+    const single = it.sizes ? "" : `<span class="leader"></span><span class="price ${it.price == null ? "ask" : ""}">${it.price == null ? esc(t.ask) : it.price === 0 ? esc(t.free) : won(it.price)}</span>`;
+    const sizes = it.sizes ? it.sizes.map(([label, p]) => `<span><i>${esc(label[lang])}</i>${won(p)}</span>`)
+      : it.dessert ? [`<span class="after"><i>${esc(t.after)}</i>${won(it.dessert)}</span>`] : [];
+    return `
+      <li>
+        ${tags.trim() ? `<div class="tags">${tags}</div>` : ""}
+        <div class="row"><b>${esc(it.name[lang])}</b>${it.unit ? `<span class="unit">${esc(it.unit[lang])}</span>` : ""}${single}</div>
+        ${sizes.length ? `<div class="sizes">${sizes.join("")}</div>` : ""}
+        ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
+        <div class="sub">${esc(it.name[second])}</div>
+      </li>`;
+  }
+
+  function render(lang) {
+    const t = UI[lang], R = window.RESTAURANT;
+    // 아랫줄: 한국어 화면 → 베트남어(직원과 소통용), 그 외 → 한국어
+    const second = lang === "ko" ? "vi" : "ko";
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand.en} ${R.brand.ko} · ${t.title}`;
+
+    $("langs").innerHTML = LANGS.map(([c, label]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+    $("branch").textContent = `${R.brand.branch} · Tây Hồ · Hà Nội`;
+    $("tagline").textContent = t.tagline;
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}">
+        ${cat.photo ? `<img class="banner" src="${cat.photo}" alt="${esc(cat.name[lang])}" loading="lazy">` : ""}
+        <div class="head"><h2 class="serif">${esc(cat.name[lang])}<small>${esc(cat.name[lang === "vi" ? "ko" : "vi"])}</small></h2></div>
+        ${cat.note ? `<p class="note">${esc(cat.note[lang])}</p>` : ""}
+        <ul>${cat.items.map((it) => itemHtml(it, t, lang, second)).join("")}</ul>
+        ${cat.quote ? `<p class="quote">${esc(cat.quote[lang])}</p>` : ""}
+      </section>`).join("");
+
+    $("thanks").innerHTML = t.thanks;
+    if (R.wifi) {
+      $("wifi").hidden = false;
+      $("wifiLabel").textContent = R.wifi.ssid ? `Wi-Fi · ${R.wifi.ssid}` : "Wi-Fi";
+      $("wifiText").textContent = R.wifi.password;
+      $("wifiCopy").textContent = t.copy;
+    }
+    $("call").hidden = !R.phone;
+    if (R.phone) {
+      $("callLabel").textContent = t.call;
+      $("callText").textContent = R.phone;
+      $("call").href = "tel:" + R.phone.replace(/[^\d+]/g, "");
+    }
+    $("mapLabel").textContent = t.map;
+    $("mapText").textContent = R.address;
+    $("map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.mapQuery + " " + R.address);
+    $("foot").textContent = t.vnd;
+    observeSections();
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+  $("wifi").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(RESTAURANT.wifi.password); toast(UI[lang].copied); }
+    catch { toast(RESTAURANT.wifi.password); }
+  });
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+<script src="stores-link.js"></script>
+<script src="lang-menu.js"></script>
+<script src="dasan.js"></script>
+</body>
+</html>

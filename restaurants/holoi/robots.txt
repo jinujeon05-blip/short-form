@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://holoi.qrmenuasia.com/sitemap.xml
