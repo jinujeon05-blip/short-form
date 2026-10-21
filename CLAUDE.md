@@ -162,7 +162,7 @@
 - Vercel 프로젝트 `qrmenu-intro` → https://qrmenuasia.com (www는 여기로 이동, 기존 https://qrmenu-intro.vercel.app 도 열림)
 - "함께 드리는 것" 섹션(`#kit`)은 숯꾸이 예시 그림 `sales/img/kit-a6.jpg`·`kit-a4.jpg`·`kit-sns-square.jpg`·`kit-sns-story.jpg`를 쓴다.
 - 소개서는 페이지 전체를 기기 기본 글꼴 하나로 통일한다. 잘난체·G마켓 산스에는 베트남어 성조 글자가 없어, 쓰면 베트남어에서 글꼴이 섞인다.
-- 연락처: 전화·Zalo 0917 302 200, 카카오톡 jjw4164
+- 연락처: 한국어 상담 전화·Zalo 0917 302 200, 카카오톡 jjw4164 / 베트남어 상담 전화·Zalo 0937 250 787(2026-10-21 추가, `content.js`의 `CONTACT.vi`). 문의하기 칸은 상담 언어별 두 묶음, 베트남어 화면에서는 베트남어 상담이 먼저 나온다. 인쇄본(PDF)에서는 두 묶음을 한 줄에 나란히 놓아 2쪽을 유지한다.
 
 ## 가게 찾기 페이지 (손님용)
 - https://qrmenuasia.com/stores/ (`sales/stores/`, 소개서와 같은 Vercel 프로젝트). 소개서 데모 칸 아래 링크로 연결됨.

@@ -156,6 +156,8 @@
   .contact .c-sub { margin: 12px auto 0; max-width: 520px; font-size: 18px; color: #e6dccf; }
   .contact .c-sub b { color: var(--accent-2); }
   .contact-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 36px auto 0; max-width: 860px; }
+  .contact-btns + .contact-btns { margin-top: 18px; }
+  .c-group { grid-column: 1 / -1; margin: 6px 0 -4px; text-align: left; font-size: 13px; font-weight: 800; letter-spacing: .5px; color: var(--accent-2); }
   .cbtn {
     position: relative; display: flex; align-items: center; gap: 14px; padding: 18px 18px; border-radius: 20px; text-align: left;
     text-decoration: none; color: #fff; cursor: pointer; font: inherit; border: 1px solid rgba(255,255,255,.12);
@@ -252,6 +254,14 @@
     .contact h2 { font-size: 30px; margin-top: 8px; background: none; color: #fff; }
     .contact .c-sub { font-size: 12px; margin-top: 6px; }
     .contact-btns { margin-top: 14px; gap: 8px; }
+    .c-group { font-size: 10px; margin: 2px 0 -4px; }
+    #contactBtns { display: flex; gap: 8px; margin-top: 14px; }
+    #contactBtns .contact-btns { flex: var(--n) 1 0; min-width: 0; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 6px; margin: 0; max-width: none; }
+    #contactBtns .cbtn { padding: 7px 8px; gap: 6px; min-width: 0; }
+    #contactBtns .cbtn small { font-size: 9px; }
+    #contactBtns .cbtn .ico { width: 28px; height: 28px; border-radius: 9px; }
+    #contactBtns .cbtn .ico svg { width: 16px; height: 16px; }
+    #contactBtns .cbtn strong { font-size: 12px; }
     .cbtn { padding: 10px 12px; gap: 10px; border-radius: 14px; box-shadow: none !important; }
     .cbtn .ico { width: 36px; height: 36px; border-radius: 11px; }
     .cbtn .ico svg { width: 20px; height: 20px; }
@@ -333,7 +343,7 @@
   <span class="c-kicker" data-t="contactKicker"></span>
   <h2 data-t="contactTitle"></h2>
   <p class="c-sub" data-t="contactSub"></p>
-  <div class="contact-btns" id="contactBtns"></div>
+  <div id="contactBtns"></div>
   <div class="c-langs"><span>한국어</span><span>English</span><span>中文</span><span>日本語</span><span>Tiếng Việt</span></div>
 </div></section>
 <footer>© QR Menu</footer>
@@ -428,10 +438,18 @@
     };
     const card = (cls, tag, attrs, label, value, hint) =>
       `<${tag} class="cbtn ${cls}" ${attrs}><span class="ico">${ICON[cls]}</span><span class="txt"><small>${esc(label)}</small><strong>${esc(value)}</strong><span class="hint">${esc(hint)}</span></span><span class="go">→</span></${tag}>`;
-    if (C.phone) btns.push(card("call", "a", `href="tel:${esc(C.phone.replace(/\s/g, ""))}"`, t.call, C.phone, t.callHint));
-    if (C.zalo) btns.push(card("zalo", "a", `href="https://zalo.me/${esc(C.zalo.replace(/\D/g, ""))}" target="_blank" rel="noopener"`, t.zalo, C.zalo, t.zaloHint));
+    const callBtn = (n) => card("call", "a", `href="tel:${esc(n.replace(/\s/g, ""))}"`, t.call, n, t.callHint);
+    const zaloBtn = (n) => card("zalo", "a", `href="https://zalo.me/${esc(n.replace(/\D/g, ""))}" target="_blank" rel="noopener"`, t.zalo, n, t.zaloHint);
+    if (C.phone) btns.push(callBtn(C.phone));
+    if (C.zalo) btns.push(zaloBtn(C.zalo));
     if (C.kakao) btns.push(card("kakao", "button", `type="button" id="kakaoBtn"`, t.kakao, C.kakao, t.kakaoHint));
-    $("contactBtns").innerHTML = btns.join("");
+    // 상담 언어별 묶음: 한국어(전화·Zalo·카카오톡) + 베트남어(전화·Zalo). 베트남어 화면이면 베트남어 상담을 먼저
+    const groups = [[`<span class="c-group">${esc(t.groupKo)}</span>` + btns.join(""), btns.length]];
+    if (C.vi) {
+      const vb = [C.vi.phone && callBtn(C.vi.phone), C.vi.zalo && zaloBtn(C.vi.zalo)].filter(Boolean);
+      groups[lang === "vi" ? "unshift" : "push"]([`<span class="c-group">${esc(t.groupVi)}</span>` + vb.join(""), vb.length]);
+    }
+    $("contactBtns").innerHTML = groups.map(([g, n]) => `<div class="contact-btns" style="--n:${n}">${g}</div>`).join("");
     const kb = $("kakaoBtn");
     if (kb) kb.addEventListener("click", () => {
       const done = () => { kb.classList.add("done"); kb.querySelector(".hint").textContent = t.copied; kb.querySelector(".go").textContent = "✓"; };

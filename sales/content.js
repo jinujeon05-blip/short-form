@@ -5,6 +5,8 @@ window.CONTACT = {
   phone: "0917 302 200",
   zalo: "0917 302 200",
   kakao: "jjw4164",     // 카카오톡 ID (null이면 숨김)
+  // 베트남어 상담 (null이면 숨김). 베트남어 화면에서는 이 칸이 먼저 나온다
+  vi: { phone: "0937 250 787", zalo: "0937 250 787" },
 };
 
 window.PRICES = {
@@ -112,6 +114,8 @@ window.T = {
     callHint: "바로 전화 걸기",
     zaloHint: "Zalo로 채팅하기",
     kakaoHint: "ID 복사하기",
+    groupKo: "한국어 상담",
+    groupVi: "베트남어 상담",
     copied: "복사됐어요!",
   },
   vi: {
@@ -181,6 +185,8 @@ window.T = {
     callHint: "Gọi ngay",
     zaloHint: "Nhắn tin Zalo",
     kakaoHint: "Sao chép ID",
+    groupKo: "Tư vấn tiếng Hàn",
+    groupVi: "Tư vấn tiếng Việt",
     copied: "Đã sao chép!",
   },
   en: {
@@ -250,6 +256,8 @@ window.T = {
     callHint: "Call now",
     zaloHint: "Chat on Zalo",
     kakaoHint: "Copy ID",
+    groupKo: "Korean",
+    groupVi: "Vietnamese",
     copied: "Copied!",
   },
   zh: {
@@ -319,6 +327,8 @@ window.T = {
     callHint: "立即拨打",
     zaloHint: "Zalo 聊天",
     kakaoHint: "复制 ID",
+    groupKo: "韩语咨询",
+    groupVi: "越南语咨询",
     copied: "已复制！",
   },
   ja: {
@@ -388,6 +398,8 @@ window.T = {
     callHint: "今すぐ電話",
     zaloHint: "Zaloでチャット",
     kakaoHint: "IDをコピー",
+    groupKo: "韓国語で相談",
+    groupVi: "ベトナム語で相談",
     copied: "コピーしました！",
   },
 };
