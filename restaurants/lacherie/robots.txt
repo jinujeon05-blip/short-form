@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://lacherie.qrmenuasia.com/sitemap.xml

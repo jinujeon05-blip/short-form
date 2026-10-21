@@ -32,6 +32,7 @@ const SHOPS = {
   eonnine:      { type: 'Restaurant', cuisine: ['Korean', 'Noodles', 'Gimbap'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   ureong:       { type: 'Restaurant', cuisine: ['Korean', 'Ssambap', 'Bibimbap'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   goodday:      { type: 'Restaurant', cuisine: ['Korean', 'Gimbap', 'Korean street food'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  lacherie:     { type: 'CafeOrCoffeeShop', cuisine: ['Coffee', 'Vietnamese coffee', 'Bingsu'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
