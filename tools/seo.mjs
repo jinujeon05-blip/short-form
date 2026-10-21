@@ -123,7 +123,7 @@ inject(`${sales}/index.html`, block([
   `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'QR Menu Asia', url: main })}</script>`,
 ]));
 const all = [main, `${main}stores/`, ...shopUrls];
-writeFileSync(`${sales}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${main}sitemap.xml\n`);
+writeFileSync(`${sales}/robots.txt`, `User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\nSitemap: ${main}sitemap.xml\n`);
 writeFileSync(`${sales}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${all.map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join('\n')}\n</urlset>\n`);
 console.log(`sales: 전체 사이트맵 ${all.length}개 주소 → ${main}sitemap.xml`);
 if (!existsSync(`${sales}/stores/index.html`)) console.log('주의: sales/stores/index.html 없음');

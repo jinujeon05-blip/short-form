@@ -170,13 +170,17 @@
 - 소개서는 페이지 전체를 기기 기본 글꼴 하나로 통일한다. 잘난체·G마켓 산스에는 베트남어 성조 글자가 없어, 쓰면 베트남어에서 글꼴이 섞인다.
 - 연락처: 한국어 상담 전화·Zalo 0917 302 200, 카카오톡 jjw4164 / 베트남어 상담 전화·Zalo 0937 250 787(2026-10-21 추가, `content.js`의 `CONTACT.vi`). 문의하기 칸은 상담 언어별 두 묶음, 베트남어 화면에서는 베트남어 상담이 먼저 나온다. 인쇄본(PDF)에서는 두 묶음을 한 줄에 나란히 놓아 2쪽을 유지한다.
 
-## 방문 기록 (Vercel Web Analytics, 2026-10-21 시작)
-- 목적: 가게별 방문자 수를 영업 근거 자료로 쓰기. 사용자는 Vercel **Pro** 요금제. 가게마다 프로젝트가 따로라 가게별 집계는 자동.
-- 페이지에 코드(`/_vercel/insights/script.js`)는 `node tools/analytics.mjs`가 모든 가게 `index.html`과 `sales/index.html`·`sales/stores/index.html`에 넣는다(여러 번 돌려도 같음). **새 가게를 만들면 이 도구를 한 번 돌린다.**
-- 기록이 시작되려면 ① Vercel 대시보드에서 프로젝트마다 Analytics 탭 → Enable (이 환경에선 API·도구가 없어 사용자가 직접 켬) ② 켠 뒤 **다시 배포**. 켜기 전에 코드만 있으면 404만 나고 해롭지 않다.
-- 조회: Vercel MCP `count_pageviews`·`aggregate_pageviews`(프로젝트 이름, 기간, by: day·country·deviceType·referrerHostname·requestPath 등). 아직 안 켠 프로젝트는 `web_analytics_not_enabled` 오류.
-- QR·링크로 들어온 방문을 구분하려면 주소에 `?utm_source=qr`(가게 찾기에서 오는 링크는 `?utm_source=stores`) 같은 UTM을 붙인다 — Web Analytics가 utmSource로 집계한다. (`?src=`는 집계 안 됨)
-- 다음 단계(사용자와 합의): 몇 주 쌓은 뒤 admin(로그인 있는 집계 화면)·사장님용 월간 리포트. 메뉴 클릭·QR 스캔 같은 세부 기록은 필요할 때.
+## 방문 기록 · 관리 화면 (자체 집계, 2026-10-21 시작)
+- 목적: 가게별 방문자 수를 영업 근거 자료로 쓰기. Vercel Web Analytics(프로젝트마다 켜야 함)는 쓰지 않는다 — 자체 집계가 새 가게도 자동 포함.
+- **흐름**: 모든 페이지 끝의 작은 코드(`<!-- analytics:start/end -->`, `node tools/analytics.mjs`가 넣음, 새 가게를 만들면 한 번 돌린다) → `sendBeacon`으로 `https://qrmenuasia.com/api/hit`(`sales/api/hit.js`) → Vercel Blob 저장소 `qrmenu-hits`(`store_FT8aWwdnulqIcDQB`, 공개, sin1)에 방문 1건 = 빈 파일 1개. 내용은 파일 경로(`hits/<날짜>/<가게>/<방문자해시>.<언어>.<국가>.<기기>.<유입>.<무작위>`)에 들어 있어 집계는 목록(list)만 읽는다.
+- 관리 화면: **https://qrmenuasia.com/admin** (`sales/admin/index.html`, 비밀번호 로그인, noindex). 가게별 방문자·페이지뷰·추이·모바일%·QR%, 가게를 누르면 일별 그래프·언어·기기·유입·국가·영업용 문구 복사. 데이터는 `sales/api/stats.js`(헤더 `x-admin-key`).
+- **비밀번호**와 해시 소금은 Vercel 프로젝트 `qrmenu-intro`의 환경변수(`ADMIN_PASSWORD`, `HASH_SALT`, 민감값)에만 있고 저장소에는 없다. 사용자에게 한 번 알려 줌(2026-10-21). 바꾸려면 `create_project_env`(upsert) 후 `qrmenu-intro`를 다시 배포.
+- 방문자 = **하루 단위 중복 제거**(날짜·소금·IP·브라우저를 섞은 해시, 개인 식별 불가)의 합. 페이지뷰 = 기록 수. 날짜는 베트남 시간. 로봇(UA에 bot·crawl·headless 등)은 서버에서 제외. 우리 주소(`*.qrmenuasia.com`, 옛 `*-menu.vercel.app`)가 아닌 곳이 보낸 신호는 버림.
+- **내 방문 제외**: 그 주소 끝에 `?notrack`을 붙여 한 번 열면 그 브라우저·그 주소에서는 기록 안 함(`?track`으로 해제). 영업 데모·테스트 때 쓴다.
+- **유입 구분**: QR·링크 주소에 `?utm_source=qr`(가게 찾기에서 오는 링크는 `?utm_source=stores`)를 붙이면 구분된다. 이미 인쇄한 QR은 꼬리표가 없어 "직접·QR(꼬리표 없음)". 새로 인쇄하는 QR부터 `?utm_source=qr`을 붙일 것.
+- 확인 방법: 저장소 `qrmenu-hits`의 `count`(`get_storage_stores_by_id`)가 방문마다 늘어난다. 함수 오류는 Vercel 런타임 로그(`get_runtime_logs`, 프로젝트 `qrmenu-intro`).
+- `qrmenu-intro`는 이제 정적 페이지 + `api/` 함수(Node, `@vercel/blob`) 프로젝트다(`sales/package.json`, `sales/vercel.json`). 고쳐서 배포하는 방법은 그대로(rootDirectory `sales`).
+- 나중에: 월간 리포트(PDF/링크), 메뉴 클릭·QR 스캔 세부 기록, 데이터가 많아지면 하루 단위 합계 파일로 롤업.
 
 ## 가게 찾기 페이지 (손님용)
 - https://qrmenuasia.com/stores/ (`sales/stores/`, 소개서와 같은 Vercel 프로젝트). 소개서 데모 칸 아래 링크로 연결됨.

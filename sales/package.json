@@ -1,0 +1,8 @@
+{
+  "name": "qrmenu-intro",
+  "private": true,
+  "description": "소개서·가게 찾기(정적 페이지) + 방문 집계 API(api/) + 관리 화면(admin/)",
+  "dependencies": {
+    "@vercel/blob": "^1.0.0"
+  }
+}
