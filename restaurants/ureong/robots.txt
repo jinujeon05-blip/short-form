@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ureong.qrmenuasia.com/sitemap.xml

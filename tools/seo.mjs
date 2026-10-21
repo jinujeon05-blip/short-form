@@ -30,6 +30,7 @@ const SHOPS = {
   bangatgan:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Pub', 'Pocha'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   chuam:        { type: 'Restaurant', cuisine: ['Korean', 'Korean Herbal Cuisine', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   eonnine:      { type: 'Restaurant', cuisine: ['Korean', 'Noodles', 'Gimbap'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  ureong:       { type: 'Restaurant', cuisine: ['Korean', 'Ssambap', 'Bibimbap'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
