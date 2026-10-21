@@ -64,6 +64,11 @@ window.STORES = [
     address: "Lô 13 Đ. Hoàng Hoa Thám, P. Võ Cường, T. Bắc Ninh",
     type: { ko: "호텔 · 1층 칼국수·만두 한식당", vi: "Khách sạn · Nhà hàng mì & Mandu Hàn Quốc", en: "Hotel · Korean noodle & dumpling restaurant", zh: "酒店 · 韩式刀切面饺子餐厅", ja: "ホテル・カルグクスとマンドゥの韓国料理店" },
     keywords: "킴스호텔 킴스 호텔 kim's hotel kims hotel 숙박 객실 싱글룸 트윈룸 장기투숙 조식 칼국수 수제비 칼제비 손만두 만두국 박닌 bac ninh khách sạn phòng nghỉ mì kalguksu mandu hotel room 酒店 住宿 刀切面 饺子 北宁 ホテル 宿泊 カルグクス マンドゥ" },
+  { id: "chibaengi", name: "치뱅이", sub: "GOLBAENGI CHICKEN · 박닌본점", url: "https://chibaengi.qrmenuasia.com",
+    region: "bacninh", cats: ["korean", "bar"], tags: ["zalo", "photos"],
+    address: "16 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh",
+    type: { ko: "치킨 · 골뱅이 · 떡볶이 호프", vi: "Gà rán · Ốc · Tokbokki · Quán nhậu Hàn Quốc", en: "Korean fried chicken · Sea snails · Tteokbokki pub", zh: "韩式炸鸡 · 海螺 · 辣炒年糕 · 啤酒屋", ja: "韓国チキン・ツブ貝・トッポッキ・ビアホール" },
+    keywords: "치뱅이 chibaengi 골뱅이치킨 golbaengi chicken 치킨 후라이드 양념 간장 반반 골뱅이 무침 골뱅이탕 숙회 떡볶이 고스트떡볶이 모듬튀김 바베큐치킨 닭도리탕 찜닭 오뎅탕 똥집 닭발 소떡소떡 마른안주 먹태 쥐포 호프 맥주 박닌 bac ninh ngọc hân công chúa gà rán gà chiên ốc trộn ốc luộc tokbokki mề gà chân gà nhậu fried chicken sea snail 炸鸡 海螺 年糕 啤酒 チキン ツブ貝 トッポッキ" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],

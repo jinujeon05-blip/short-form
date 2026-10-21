@@ -39,6 +39,9 @@ window.DEMOS = [
   { id: "kimshotel", url: "https://kimshotel.qrmenuasia.com", shot: "img/demo-kimshotel.jpg", qr: "img/qr-kimshotel.svg",
     name: "Kim's Hotel", type: { ko: "호텔 · 1층 한식당 · 박닌", vi: "Khách sạn · Nhà hàng Hàn Quốc · Bắc Ninh", zh: "酒店 · 韩餐厅 · 北宁", ja: "ホテル・韓国料理・バクニン", en: "Hotel & Korean Kitchen · Bac Ninh" },
     tag: { ko: "호텔도 OK · 객실 안내", vi: "Khách sạn cũng được", zh: "酒店也适用", ja: "ホテルにも対応", en: "Works for hotels too" } },
+  // 치뱅이(정식, 2026-10-21) — 소개서 데모 7칸은 그대로 두고 SNS 도구용으로만 넣음
+  { id: "chibaengi", hidden: true, url: "https://chibaengi.qrmenuasia.com", shot: "img/demo-chibaengi.jpg", qr: "img/qr-chibaengi.svg",
+    name: "치뱅이 CHIBAENGI", type: { ko: "치킨 · 골뱅이 호프 · 박닌", vi: "Gà rán · Ốc · Quán nhậu · Bắc Ninh", zh: "韩式炸鸡 · 海螺 · 啤酒屋 · 北宁", ja: "チキン・ツブ貝・ビアホール・バクニン", en: "Korean chicken & pub · Bac Ninh" } },
 ];
 
 window.T = {
