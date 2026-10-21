@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hellochicken.qrmenuasia.com/sitemap.xml

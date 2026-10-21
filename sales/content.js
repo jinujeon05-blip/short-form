@@ -17,24 +17,31 @@ window.PRICES = {
 };
 
 window.DEMOS = [
-  { id: "sutkkui", url: "https://sutkkui-menu.vercel.app", shot: "img/demo-sutkkui.jpg", qr: "img/qr-sutkkui.svg",
+  { id: "sutkkui", url: "https://sutkkui.qrmenuasia.com", shot: "img/demo-sutkkui.jpg", qr: "img/qr-sutkkui.svg",
     name: "숯꾸이", type: { ko: "고깃집 · 박닌", vi: "Quán thịt nướng · Bắc Ninh", zh: "韩式烤肉 · 北宁", ja: "焼肉店 · バクニン", en: "Korean BBQ · Bắc Ninh" } },
-  { id: "eros", url: "https://eros-menu.vercel.app", shot: "img/demo-eros.jpg", qr: "img/qr-eros.svg",
+  { id: "eros", url: "https://eros.qrmenuasia.com", shot: "img/demo-eros.jpg", qr: "img/qr-eros.svg",
     name: "EROS", type: { ko: "바 · 박닌", vi: "Bar · Bắc Ninh", zh: "酒吧 · 北宁", ja: "バー · バクニン", en: "Bar · Bắc Ninh" } },
-  { id: "anvoi", url: "https://anvoi-menu.vercel.app", shot: "img/demo-anvoi.jpg", qr: "img/qr-anvoi.svg",
+  { id: "anvoi", url: "https://anvoi.qrmenuasia.com", shot: "img/demo-anvoi.jpg", qr: "img/qr-anvoi.svg",
     name: "Ăn Vội", type: { ko: "비빔면 · 꽝응아이", vi: "Mì trộn · Quảng Ngãi", zh: "拌面 · 广义", ja: "まぜ麺 · クアンガイ", en: "Mixed noodles · Quảng Ngãi" },
     tag: { ko: "Zalo 주문 가능", vi: "Đặt món qua Zalo", zh: "可Zalo点餐", ja: "Zalo注文対応", en: "Zalo ordering" } },
-  { id: "baekcheon", url: "https://baekcheon-menu.vercel.app", shot: "img/demo-baekcheon.jpg", qr: "img/qr-baekcheon.svg",
+  { id: "baekcheon", url: "https://baekcheon.qrmenuasia.com", shot: "img/demo-baekcheon.jpg", qr: "img/qr-baekcheon.svg",
     name: "백천화덕아나고", type: { ko: "장어구이 · 경산", vi: "Lươn nướng · Gyeongsan", zh: "烤鳗鱼 · 庆山", ja: "アナゴ焼き · 慶山", en: "Eel grill · Gyeongsan" },
     tag: { ko: "한국 매장", vi: "Cửa hàng tại Hàn Quốc", zh: "韩国门店", ja: "韓国の店舗", en: "Store in Korea" } },
-  { id: "gamasot", url: "https://gamasot-menu.vercel.app", shot: "img/demo-gamasot.jpg", qr: "img/qr-gamasot.svg",
+  { id: "gamasot", url: "https://gamasot.qrmenuasia.com", shot: "img/demo-gamasot.jpg", qr: "img/qr-gamasot.svg",
     name: "가마솥 GAMASOT", type: { ko: "한식당 · 하노이", vi: "Nhà hàng Hàn Quốc · Hà Nội", zh: "韩餐厅 · 河内", ja: "韓国料理店 · ハノイ", en: "Korean restaurant · Hanoi" },
     tag: { ko: "메뉴 70개 · 사진", vi: "70 món · có ảnh", zh: "70道菜 · 附图", ja: "70品・写真付き", en: "70 dishes · photos" } },
-  { id: "biobeauty", url: "https://biobeauty-menu.vercel.app", shot: "img/demo-biobeauty.jpg", qr: "img/qr-biobeauty.svg",
+  { id: "biobeauty", url: "https://biobeauty.qrmenuasia.com", shot: "img/demo-biobeauty.jpg", qr: "img/qr-biobeauty.svg",
     name: "바이오&뷰티", type: { ko: "화장품 할인 판매 · 베트남", vi: "Mỹ phẩm Hàn giảm giá · Việt Nam", zh: "韩国化妆品特卖 · 越南", ja: "韓国コスメ セール · ベトナム", en: "K-beauty sale · Vietnam" },
     tag: { ko: "가게 말고 상품도 OK", vi: "Bán sản phẩm cũng được", zh: "商品销售也适用", ja: "商品販売にも", en: "Works for products too" } },
-  { id: "suwonseong", url: "https://suwonseong-menu.vercel.app", shot: "img/demo-suwonseong.jpg", qr: "img/qr-suwonseong.svg",
+  // 수원성은 손님 가게 찾기용으로 만든 것이라 소개서에서 뺌(2026-10-20 사용자) — SNS 도구용 데이터로만 남김
+  { id: "suwonseong", hidden: true, url: "https://suwonseong.qrmenuasia.com", shot: "img/demo-suwonseong.jpg", qr: "img/qr-suwonseong.svg",
     name: "수원성 SUWONSUNG", type: { ko: "고깃집 · 한식 · 하노이", vi: "Thịt nướng Hàn Quốc · Hà Nội", zh: "韩式烤肉 · 河内", ja: "焼肉・韓国料理・ハノイ", en: "Korean BBQ · Hanoi" } },
+  { id: "kimshotel", url: "https://kimshotel.qrmenuasia.com", shot: "img/demo-kimshotel.jpg", qr: "img/qr-kimshotel.svg",
+    name: "Kim's Hotel", type: { ko: "호텔 · 1층 한식당 · 박닌", vi: "Khách sạn · Nhà hàng Hàn Quốc · Bắc Ninh", zh: "酒店 · 韩餐厅 · 北宁", ja: "ホテル・韓国料理・バクニン", en: "Hotel & Korean Kitchen · Bac Ninh" },
+    tag: { ko: "호텔도 OK · 객실 안내", vi: "Khách sạn cũng được", zh: "酒店也适用", ja: "ホテルにも対応", en: "Works for hotels too" } },
+  // 치뱅이(정식, 2026-10-21) — 소개서 데모 7칸은 그대로 두고 SNS 도구용으로만 넣음
+  { id: "chibaengi", hidden: true, url: "https://chibaengi.qrmenuasia.com", shot: "img/demo-chibaengi.jpg", qr: "img/qr-chibaengi.svg",
+    name: "치뱅이 CHIBAENGI", type: { ko: "치킨 · 골뱅이 호프 · 박닌", vi: "Gà rán · Ốc · Quán nhậu · Bắc Ninh", zh: "韩式炸鸡 · 海螺 · 啤酒屋 · 北宁", ja: "チキン・ツブ貝・ビアホール・バクニン", en: "Korean chicken & pub · Bac Ninh" } },
 ];
 
 window.T = {

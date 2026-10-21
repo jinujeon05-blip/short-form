@@ -10,6 +10,9 @@ window.RESTAURANT = {
   wifi: { ssid: "Garden Gamasot", password: "66668888" },
 };
 
+// 장바구니·주문서 (_shared/order.js). staff = 주문서 언어, zalo = 주문 받을 Zalo 번호 (null이면 버튼 숨김)
+window.ORDER = { staff: "vi", currency: "₫", zalo: null }; // Zalo 주문은 꺼 둠 (켤 때: "0889301000")
+
 window.MENU = [
   {
     id: "suyuk",

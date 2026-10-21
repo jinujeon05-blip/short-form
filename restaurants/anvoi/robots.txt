@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://anvoi.qrmenuasia.com/sitemap.xml

@@ -4,13 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#16130f">
+<!-- 웹앱 아이콘 (tools/app-icon.mjs 로 만듦) -->
+<link rel="manifest" href="/stores/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="QR Stores">
 <title>QR 메뉴판 가게 찾기 · Tìm quán có thực đơn QR</title>
 <meta name="description" content="5개 언어 QR 메뉴판이 있는 식당·가게 목록 — 박닌, 하노이, 꽝응아이, 한국. Danh sách nhà hàng có thực đơn QR 5 ngôn ngữ. Restaurants with QR menus in Korean, English, Chinese, Japanese and Vietnamese.">
-<link rel="canonical" href="https://qrmenu-intro.vercel.app/stores/">
+<link rel="canonical" href="https://qrmenuasia.com/stores/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="QR 메뉴판 가게 찾기 · Tìm quán có thực đơn QR">
 <meta property="og:description" content="5개 언어 메뉴판이 있는 식당과 가게 · Nhà hàng có thực đơn 5 ngôn ngữ">
-<meta property="og:url" content="https://qrmenu-intro.vercel.app/stores/">
+<meta property="og:url" content="https://qrmenuasia.com/stores/">
 <style>
   :root {
     --ink: #16130f; --ink-2: #2a251f; --paper: #faf7f2; --card: #fff; --line: #e9e2d7;
@@ -126,13 +131,13 @@
   <div class="count" id="count"></div>
   <div class="grid" id="grid"></div>
   <noscript><ul>
-    <li><a href="https://sutkkui-menu.vercel.app">숯꾸이 — 한국식 고깃집, Bắc Ninh</a></li>
-    <li><a href="https://eros-menu.vercel.app">EROS — Bar, Bắc Ninh</a></li>
-    <li><a href="https://anvoi-menu.vercel.app">Ăn Vội — Mì trộn, Quảng Ngãi</a></li>
-    <li><a href="https://baekcheon-menu.vercel.app">백천화덕아나고 — 화덕 장어구이, 경북 경산</a></li>
-    <li><a href="https://gamasot-menu.vercel.app">가마솥 GAMASOT — 한식당, Hà Nội</a></li>
-    <li><a href="https://suwonseong-menu.vercel.app">수원성 SUWONSUNG — 고깃집 · 한식, Ciputra, Hà Nội</a></li>
-    <li><a href="https://biobeauty-menu.vercel.app">Bio &amp; Beauty — 한국 화장품 할인 판매</a></li>
+    <li><a href="https://sutkkui.qrmenuasia.com">숯꾸이 — 한국식 고깃집, Bắc Ninh</a></li>
+    <li><a href="https://eros.qrmenuasia.com">EROS — Bar, Bắc Ninh</a></li>
+    <li><a href="https://anvoi.qrmenuasia.com">Ăn Vội — Mì trộn, Quảng Ngãi</a></li>
+    <li><a href="https://baekcheon.qrmenuasia.com">백천화덕아나고 — 화덕 장어구이, 경북 경산</a></li>
+    <li><a href="https://gamasot.qrmenuasia.com">가마솥 GAMASOT — 한식당, Hà Nội</a></li>
+    <li><a href="https://suwonseong.qrmenuasia.com">수원성 SUWONSUNG — 고깃집 · 한식, Ciputra, Hà Nội</a></li>
+    <li><a href="https://biobeauty.qrmenuasia.com">Bio &amp; Beauty — 한국 화장품 할인 판매</a></li>
   </ul></noscript>
   <div class="empty" id="empty"><p data-t="empty"></p><button type="button" id="reset" data-t="reset"></button></div>
 

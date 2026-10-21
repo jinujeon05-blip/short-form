@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#292327">
+<title>족발신선생 박닌점 Jokbal Sinseonsaeng 메뉴</title>
+<meta name="description" content="족발신선생 박닌점 — 500°C 화덕족발·보쌈·냉채족발·반반 메뉴 · 195 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh">
+<style>
+  :root {
+    --brick: #292327;
+    --brick-2: #3d3236;
+    --paper: #f8f5ee;
+    --paper-2: #ece3d3;
+    --stone: #d9cdb8;
+    --ink: #2a2421;
+    --muted: #7a6e62;
+    --line: #e3d8c6;
+    --gold: #d7222a;
+    --gold-2: #f1dcc9;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; color: var(--ink); background: var(--paper);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.4;
+  }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+  .serif { font-family: inherit; }
+
+  /* ── 상단: 성곽(성가퀴) 모양 ── */
+  header { position: relative; color: #fff; text-align: center; padding: 12px 0 46px;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(230,200,138,.18), transparent 60%),
+      linear-gradient(180deg, var(--brick-2), var(--brick)); }
+  header::after { /* 아래쪽 성가퀴 */
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 22px;
+    background: linear-gradient(90deg, var(--paper) 0 50%, transparent 50% 100%) 0 0 / 36px 100% repeat-x,
+                linear-gradient(var(--paper), var(--paper)) 0 100% / 100% 8px no-repeat;
+  }
+  .langs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #e6efe5; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: var(--brick); background: #fff; border-color: #fff; }
+  .gate { display: block; width: 240px; height: 89px; object-fit: cover; margin: 22px auto 0; border-radius: 10px; }
+  h1 { margin: 14px 0 0; font-size: 30px; font-weight: 900; font-style: italic; letter-spacing: 0; line-height: 1; color: var(--gold-2); }
+  .en { margin: 10px 0 0; font-size: 16px; font-weight: 700; letter-spacing: 7px; color: var(--gold-2); padding-left: 7px; }
+  .branch { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--brick); background: var(--gold-2); border-radius: 999px; padding: 3px 12px; }
+  .tagline { margin: 12px 0 0; font-size: 14.5px; font-weight: 600; color: #e6efe5; }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; background: var(--paper); border-bottom: 1px solid var(--line); box-shadow: 0 4px 12px rgba(42,36,33,.08); }
+  nav .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-top: 8px; padding-bottom: 8px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 700; padding: 7px 12px; border-radius: 999px; white-space: nowrap; }
+  nav a.active { color: #fff; background: var(--brick); }
+
+  /* ── 메뉴 ── */
+  section { padding: 28px 0 6px; }
+  .banner { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 8px 20px rgba(42,36,33,.14); }
+  .head { text-align: center; }
+  h2 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 2px; color: var(--brick); }
+  h2 small { display: block; margin-top: 4px; font-size: 14px; font-weight: 400; letter-spacing: .5px; color: var(--muted); }
+  .note { margin: 10px 0 0; text-align: center; font-size: 13.5px; color: var(--muted); }
+  .quote { margin: 16px 0 0; text-align: center; font-size: 15px; font-weight: 700; color: var(--brick); }
+  .quote::before { content: "“ "; color: var(--gold); }
+  .quote::after { content: " ”"; color: var(--gold); }
+
+  ul { list-style: none; margin: 10px 0 0; padding: 0; }
+  li { padding: 13px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+  .tags span { font-size: 10.5px; font-weight: 800; letter-spacing: .3px; color: #fff; background: var(--brick); border-radius: 3px; padding: 1px 6px; }
+  .tags .special { background: var(--gold); }
+  .tags .new { background: #e0452b; }
+  .tags .hot { background: #fff; color: #c2402a; border: 1px solid #e6b3a6; }
+  .row { display: flex; align-items: baseline; gap: 8px; }
+  .row b { font-size: 17px; font-weight: 800; }
+  .row .unit { font-size: 12px; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  .row .leader { flex: 1; min-width: 10px; border-bottom: 2px dotted var(--stone); transform: translateY(-4px); }
+  .price { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--brick); }
+  .price small { font-size: 11px; color: var(--muted); margin-left: 1px; }
+  .price.ask { font-size: 13px; color: var(--muted); }
+  .sizes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .sizes span { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 2px 8px; }
+  .sizes span i { font-style: normal; font-size: 11px; font-weight: 800; color: #fff; background: var(--brick); border-radius: 4px; padding: 0 5px; margin-right: 6px; }
+  .sizes span.after i { background: var(--gold); }
+  .desc { margin-top: 4px; font-size: 13px; color: #5d544b; }
+  .sub { margin-top: 3px; font-size: 13px; color: var(--muted); }
+  .sub.it { font-style: italic; }
+
+  /* ── 가게 정보 ── */
+  footer { margin-top: 40px; background: var(--brick); color: #e6efe5; padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); }
+  .thanks { text-align: center; font-size: 15px; line-height: 1.7; margin: 0 0 18px; }
+  .pills { display: grid; gap: 10px; }
+  .pill { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; text-align: left; color: var(--ink); text-decoration: none; background: var(--paper); border: 0; border-radius: 16px; padding: 10px 14px 10px 10px; cursor: pointer; }
+  .pill i { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--brick); }
+  .pill i svg { width: 20px; height: 20px; color: #fff; }
+  .pill div { flex: 1; min-width: 0; }
+  .pill small { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .pill strong { display: block; font-size: 16px; font-weight: 800; word-break: break-word; }
+  .pill em { flex: none; font-style: normal; font-size: 12px; font-weight: 700; color: var(--brick); }
+  .vnd { text-align: center; margin: 16px 0 0; font-size: 12px; opacity: .85; }
+
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 40; background: var(--brick); color: #fff; font-size: 14px; font-weight: 700; padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+<style id="partner-theme">
+  /* 하단 파트너 배너(다산)·가게 찾기 링크 색을 이 메뉴판에 맞춘다 */
+  :root { --pt-mode: light; --pt-bg: #fff; --pt-ink: #241e20; --pt-muted: #6e6466; --pt-line: #e6ddd6; --pt-accent: #292327; --pt-btn: #292327; --pt-btn-ink: #fff; --pt-shadow: 0 6px 16px rgba(41,35,39,.12); }
+</style>
+<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
+<link rel="canonical" href="https://jokbal.qrmenuasia.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="족발신선생 박닌점 Jokbal Sinseonsaeng 메뉴">
+<meta property="og:description" content="족발신선생 박닌점 — 500°C 화덕족발·보쌈·냉채족발·반반 메뉴 · 195 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh">
+<meta property="og:url" content="https://jokbal.qrmenuasia.com/">
+<meta property="og:image" content="https://jokbal.qrmenuasia.com/img/store.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"족발신선생 Jokbal Sinseonsaeng","url":"https://jokbal.qrmenuasia.com/","address":{"@type":"PostalAddress","streetAddress":"195 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh","addressCountry":"VN"},"telephone":"0328561918","image":"https://jokbal.qrmenuasia.com/img/store.jpg","servesCuisine":["Korean","Jokbal","Bossam"],"hasMenu":{"@type":"Menu","name":"족발신선생 Jokbal Sinseonsaeng menu","inLanguage":["ko","en","zh","ja","vi"],"hasMenuSection":[{"@type":"MenuSection","name":"Oven-roasted Whole Jokbal","hasMenuItem":[{"@type":"MenuItem","name":"Whole Oven-roasted Jokbal (premium front leg)","alternateName":["화덕통구이족발 (프리미엄 앞다리)","Chân giò đút lò nguyên cái","炭炉风味烤全猪肘（精选超大猪前腿）","窯焼き丸ごとチョッパル（プレミアム前足）"],"offers":{"@type":"Offer","price":980000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Jokbal (Pork Trotters)","hasMenuItem":[{"@type":"MenuItem","name":"Braised Jokbal","alternateName":["족발","Chân giò hầm","卤猪肘","チョッパル"],"offers":{"@type":"Offer","price":650000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Oven-roasted Jokbal","alternateName":["화덕족발","Chân giò đút lò","炭炉烤猪肘","窯焼きチョッパル"],"offers":{"@type":"Offer","price":680000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Garlic Jokbal","alternateName":["마늘족발","Chân giò hầm tỏi","蒜香猪肘","にんにくチョッパル"],"offers":{"@type":"Offer","price":720000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Oven-roasted Jokbal","alternateName":["화덕불족 (매운족발)","Chân giò cay đút lò","炭烤辛辣猪肘","窯焼き激辛チョッパル"],"offers":{"@type":"Offer","price":700000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Oven-roasted Jokbal with Cheese","alternateName":["화덕치즈불족","Chân giò phô mai cay đút lò","炭烤辛辣芝士猪肘","窯焼きチーズ激辛チョッパル"],"offers":{"@type":"Offer","price":750000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cold Jokbal Salad with Mustard Sauce","alternateName":["냉채족발","Chân giò sốt mù tạt","芥末风味凉拌猪肘","冷菜チョッパル（からしソース）"],"offers":{"@type":"Offer","price":700000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Bossam (Pork Belly)","hasMenuItem":[{"@type":"MenuItem","name":"Bossam (Boiled Pork Belly)","alternateName":["보쌈","Thịt ba chỉ hầm","大酱炖五花肉","ポッサム"],"offers":{"@type":"Offer","price":650000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Oven-roasted Bossam","alternateName":["화덕보쌈","Thịt ba chỉ đút lò","炭炉烤五花肉","窯焼きポッサム"],"offers":{"@type":"Offer","price":680000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Garlic Bossam","alternateName":["마늘보쌈","Thịt ba chỉ hầm tỏi","蒜香五花肉","にんにくポッサム"],"offers":{"@type":"Offer","price":720000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Oven-roasted Bossam","alternateName":["매운보쌈","Ba chỉ cay đút lò","碳烤辛辣五花肉","激辛ポッサム"],"offers":{"@type":"Offer","price":700000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Half & Half · Single Portions","hasMenuItem":[{"@type":"MenuItem","name":"Half & Half Platter","alternateName":["반반 메뉴","Chế biến 2 món","半份拼盘","ハーフ＆ハーフ"],"offers":{"@type":"Offer","price":880000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Oven-roasted Jokbal (single)","alternateName":["1인 화덕족발","Chân giò đút lò (1 người)","1人份 炭炉烤猪肘","1人前 窯焼きチョッパル"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Jokbal (single)","alternateName":["1인 매운족발","Chân giò cay đút lò (1 người)","1人份 炭烤辛辣猪肘","1人前 激辛チョッパル"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Oven-roasted Bossam (single)","alternateName":["1인 화덕보쌈","Ba chỉ đút lò (1 người)","1人份 炭炉烤五花肉","1人前 窯焼きポッサム"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cold Jokbal Salad (single)","alternateName":["1인 냉채족발","Chân giò sốt mù tạt (1 người)","1人份 芥末凉拌猪肘","1人前 冷菜チョッパル"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Bossam (single)","alternateName":["1인 매운보쌈","Ba chỉ cay đút lò (1 người)","1人份 碳烤辛辣五花肉","1人前 激辛ポッサム"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Sides","hasMenuItem":[{"@type":"MenuItem","name":"Jaengban Noodles (spicy mixed buckwheat)","alternateName":["쟁반국수","Khay mỳ","盘荞麦面","チェンバンククス（混ぜそば）"],"offers":{"@type":"Offer","price":200000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Gorgonzola Pizza with Honey","alternateName":["고르곤졸라피자","Pizza phô mai kèm mật ong","戈贡佐拉披萨","ゴルゴンゾーラピザ"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Seafood Soft Tofu Soup","alternateName":["짬뽕순두부","Súp đậu hũ hải sản","炒码嫩豆腐","チャンポンスンドゥブ"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Jokbal Fried Rice","alternateName":["족발볶음밥","Cơm rang chân giò","猪肘炒饭","チョッパルチャーハン"],"offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Flying Fish Roe Rice Balls","alternateName":["날치알주먹밥","Cơm nắm trứng cá chuồn","飞鱼籽饭团","とびっこおにぎり"],"offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Egg","alternateName":["계란찜","Trứng hấp","石锅鸡蛋羹","ケランチム（韓国茶碗蒸し）"],"offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Rice","alternateName":["공기밥","Cơm trắng","米饭","ライス"],"offers":{"@type":"Offer","price":20000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Extra Sauce (spicy, garlic or mustard)","alternateName":["소스 추가 (매운 · 마늘 · 냉채)","Nước chấm (sốt cay, sốt tỏi, sốt mù tạt)","蘸料（辣味、蒜香、芥末）","追加ソース（辛・にんにく・冷菜）"],"offers":{"@type":"Offer","price":20000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Soups & Stews","hasMenuItem":[{"@type":"MenuItem","name":"Pork Bone Hangover Soup","alternateName":["뼈해장국","Canh xương hầm","骨头汤","ピョヘジャンクッ（豚骨スープ）"],"offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Budae Jjigae (Army Stew)","alternateName":["부대찌개","Canh quân đội","部队锅","プデチゲ"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stew Add-on (dumplings, rice cake or ham)","alternateName":["부대찌개 추가 (만두 · 떡 · 햄)","Gọi thêm (há cảo, bánh gạo, thịt hun khói)","另外加菜（饺子、米饼、熏猪肉）","プデチゲ追加（餃子・トック・ハム）"],"offers":{"@type":"Offer","price":90000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Drinks","hasMenuItem":[{"@type":"MenuItem","name":"Soju","alternateName":["소주","烧酒","焼酎"],"offers":{"@type":"Offer","price":140000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beer (Tiger, Heineken 330ml)","alternateName":["맥주 (타이거 · 하이네켄 330ml)","Bia Tiger / Bia Heineken 330ml","啤酒（老虎、喜力 330ml）","ビール（タイガー・ハイネケン 330ml）"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Soft Drinks (Coke, Sprite, Fanta)","alternateName":["음료수 (콜라 · 사이다 · 환타)","Nước ngọt (Coca, Sprite, Fanta)","饮料（可乐、雪碧、芬达）","ソフトドリンク（コーラ・サイダー・ファンタ）"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Makgeolli (Rice Wine)","alternateName":["막걸리","Rượu gạo","米酒","マッコリ"],"offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Chungha (Rice Wine)","alternateName":["청하","Chung Ha","清河","チョンハ（清酒）"],"offers":{"@type":"Offer","price":200000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bokbunja (Raspberry Wine)","alternateName":["복분자","Rượu quả mâm xôi","覆盆子酒"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}}]}]}}</script>
+<!-- seo:end -->
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="langs" id="langs"></div>
+    <img class="gate" src="img/logo.jpg" alt="족발신선생 Jokbal Sinseonsaeng" width="240" height="89">
+    <h1 class="script">Jokbal Sinseonsaeng</h1>
+    <p class="en">족발 · 보쌈</p>
+    <span class="branch" id="branch"></span>
+    <p class="tagline" id="tagline"></p>
+  </div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap" id="menu"></main>
+
+<footer>
+  <div class="wrap">
+    <p class="thanks" id="thanks"></p>
+    <div class="pills">
+      <button class="pill" id="wifi" type="button" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg></i>
+        <div><small id="wifiLabel"></small><strong id="wifiText"></strong></div>
+        <em id="wifiCopy"></em>
+      </button>
+      <a class="pill" id="call">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></i>
+        <div><small id="callLabel"></small><strong id="callText"></strong></div>
+      </a>
+      <a class="pill" id="map" target="_blank" rel="noopener">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></i>
+        <div><small id="mapLabel"></small><strong id="mapText"></strong></div>
+      </a>
+    </div>
+    <p class="vnd" id="foot"></p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<script>
+  const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
+  const UI = {
+    ko: { title: "메뉴", tagline: "500°C 화덕족발 · 보쌈 · 냉채족발", new: "신메뉴", best: "BEST", special: "추천", spicy: "🌶 매콤", ask: "가격 문의", after: "후식",
+      thanks: "족발신선생을 찾아 주셔서 감사합니다.<br>맛있는 시간 보내세요!", copy: "복사", copied: "비밀번호를 복사했어요",
+      call: "전화 · 예약", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND) · 메뉴·가격은 가게가 구글 지도에 올린 메뉴판 기준이며 바뀔 수 있어요" },
+    en: { title: "Menu", tagline: "500°C oven-roasted jokbal · Bossam · Cold jokbal", new: "NEW", best: "BEST", special: "Recommended", spicy: "🌶 Spicy", ask: "Ask staff", after: "With BBQ",
+      thanks: "Thank you for visiting Jokbal Sinseonsaeng.<br>Enjoy your meal!", copy: "Copy", copied: "Password copied",
+      call: "Call · Reservations", map: "Address · Map", vnd: "Prices in VND · Based on the menu the shop posted on Google Maps; items and prices may change" },
+    zh: { title: "菜单", tagline: "500°C炭炉烤猪肘 · 五花肉 · 凉拌猪肘", new: "新品", best: "人气", special: "推荐", spicy: "🌶 辣", ask: "请询问店员", after: "配烤肉价",
+      thanks: "感谢您光临猪肘申先生。<br>祝您用餐愉快！", copy: "复制", copied: "密码已复制",
+      call: "电话 · 预订", map: "地址 · 地图", vnd: "价格单位：越南盾（VND）· 以店家在谷歌地图上的菜单为准，可能有变动" },
+    ja: { title: "メニュー", tagline: "500°C窯焼きチョッパル・ポッサム・冷菜チョッパル", new: "NEW", best: "BEST", special: "おすすめ", spicy: "🌶 辛口", ask: "店員にお尋ねください", after: "焼肉と一緒に",
+      thanks: "チョッパル・シンソンセンへようこそ。<br>ごゆっくりお楽しみください。", copy: "コピー", copied: "パスワードをコピーしました",
+      call: "電話・ご予約", map: "住所・地図", vnd: "価格はベトナムドン（VND）・お店がGoogleマップに載せたメニュー基準のため変更の場合あり" },
+    vi: { title: "Thực đơn", tagline: "Chân giò đút lò 500°C · Thịt ba chỉ hầm · Chân giò sốt mù tạt", new: "MỚI", best: "BEST", special: "Đề xuất", spicy: "🌶 Cay", ask: "Hỏi nhân viên", after: "Giá ăn kèm thịt nướng",
+      thanks: "Cảm ơn quý khách đã đến Jokbal Sinseonsaeng.<br>Chúc quý khách ngon miệng!", copy: "Sao chép", copied: "Đã sao chép mật khẩu",
+      call: "Gọi điện · Đặt bàn", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND · Theo thực đơn quán đăng trên Google Maps, món và giá có thể thay đổi" },
+  };
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const storage = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  const fmt = (n) => n.toLocaleString("en-US");
+  const won = (n) => `${fmt(n)}<small>₫</small>`;
+  let observer;
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  function itemHtml(it, t, lang, second) {
+    const tags = [it.tag ? `<span class="${it.tag}">${esc(t[it.tag])}</span>` : "", it.spicy ? `<span class="hot">${esc(t.spicy)}</span>` : ""].join("");
+    const single = it.sizes ? "" : `<span class="leader"></span><span class="price ${it.price == null ? "ask" : ""}">${it.price == null ? esc(t.ask) : won(it.price)}</span>`;
+    const sizes = it.sizes ? it.sizes.map(([label, p]) => `<span><i>${esc(label[lang])}</i>${won(p)}</span>`)
+      : it.dessert ? [`<span class="after"><i>${esc(t.after)}</i>${won(it.dessert)}</span>`] : [];
+    return `
+      <li>
+        ${tags.trim() ? `<div class="tags">${tags}</div>` : ""}
+        <div class="row"><b>${esc(it.name[lang])}</b>${it.unit ? `<span class="unit">${esc(it.unit)}</span>` : ""}${single}</div>
+        ${sizes.length ? `<div class="sizes">${sizes.join("")}</div>` : ""}
+        ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
+        <div class="sub">${esc(it.name[second])}</div>
+      </li>`;
+  }
+
+  function render(lang) {
+    const t = UI[lang], R = window.RESTAURANT;
+    // 아랫줄: 한국어 화면 → 베트남어(직원과 소통용), 그 외 → 한국어
+    const second = lang === "ko" ? "vi" : "ko";
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand.en} ${R.brand.ko} · ${t.title}`;
+
+    $("langs").innerHTML = LANGS.map(([c, label]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+    $("branch").textContent = `${R.brand.branch} · Võ Cường`;
+    $("tagline").textContent = t.tagline;
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}">
+        ${cat.photo ? `<img class="banner" src="${cat.photo}" alt="${esc(cat.name[lang])}" loading="lazy">` : ""}
+        <div class="head"><h2 class="serif">${esc(cat.name[lang])}<small>${esc(cat.name[lang === "vi" ? "ko" : "vi"])}</small></h2></div>
+        ${cat.note ? `<p class="note">${esc(cat.note[lang])}</p>` : ""}
+        <ul>${cat.items.map((it) => itemHtml(it, t, lang, second)).join("")}</ul>
+        ${cat.quote ? `<p class="quote">${esc(cat.quote[lang])}</p>` : ""}
+      </section>`).join("");
+
+    $("thanks").innerHTML = t.thanks;
+    if (R.wifi) {
+      $("wifi").hidden = false;
+      $("wifiLabel").textContent = `Wi-Fi · ${R.wifi.ssid}`;
+      $("wifiText").textContent = R.wifi.password;
+      $("wifiCopy").textContent = t.copy;
+    }
+    $("call").hidden = !R.phone;
+    if (R.phone) {
+      $("callLabel").textContent = t.call;
+      $("callText").textContent = R.phone;
+      $("call").href = "tel:" + R.phone.replace(/[^\d+]/g, "");
+    }
+    $("mapLabel").textContent = t.map;
+    $("mapText").textContent = R.address;
+    $("map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.mapQuery + " " + R.address);
+    $("foot").textContent = t.vnd;
+    observeSections();
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+  $("wifi").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(RESTAURANT.wifi.password); toast(UI[lang].copied); }
+    catch { toast(RESTAURANT.wifi.password); }
+  });
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+<script src="stores-link.js"></script>
+<script src="lang-menu.js"></script>
+<script src="dasan.js"></script>
+</body>
+</html>

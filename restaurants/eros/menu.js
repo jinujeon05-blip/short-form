@@ -9,6 +9,9 @@ window.RESTAURANT = {
   wifi: { ssid: "EROS", password: "00000000" },  // TODO: 임시 값 — 실제 와이파이로 교체
 };
 
+// 장바구니·주문서 (_shared/order.js). staff = 주문서 언어, zalo = 주문 받을 Zalo 번호 (null이면 버튼 숨김)
+window.ORDER = { staff: "vi", currency: "₫", zalo: null }; // TODO: 실제 번호를 받으면 Zalo 켜기
+
 window.MENU = [
   {
     id: "set",

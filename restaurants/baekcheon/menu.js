@@ -10,6 +10,9 @@ window.RESTAURANT = {
   wifi: null, // 예: { ssid: "BAEKCHEON", password: "12345678" }
 };
 
+// 장바구니·주문서 (_shared/order.js). staff = 주문서 언어, zalo = 주문 받을 Zalo 번호 (null이면 버튼 숨김)
+window.ORDER = { staff: "ko", currency: "원", zalo: null };
+
 window.MENU = [
   {
     id: "grill",

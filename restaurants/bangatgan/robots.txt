@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://bangatgan.qrmenuasia.com/sitemap.xml

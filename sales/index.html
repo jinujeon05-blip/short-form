@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#16130f">
+<!-- 웹앱 아이콘 (tools/app-icon.mjs 로 만듦) -->
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="QR Menu">
 <title>다국어 QR 메뉴판</title>
 <meta name="description" content="손님 휴대폰 언어로 자동으로 바뀌는 QR 메뉴판 — 한국어 · English · 中文 · 日本語 · Tiếng Việt">
 <style>
@@ -258,6 +263,13 @@
     #steps { break-before: page; }
   }
 </style>
+<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
+<link rel="canonical" href="https://qrmenuasia.com/">
+<meta name="naver-site-verification" content="373cad11eece55044bada0b3b79a8f55a2b8e00c">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://qrmenuasia.com/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"QR Menu Asia","url":"https://qrmenuasia.com/"}</script>
+<!-- seo:end -->
 </head>
 <body>
 <header class="hero">

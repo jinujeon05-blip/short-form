@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<!-- Ăn Vội 포장재 시안 (종이컵 · 배달 봉투). 그림 출력: node tools/mockup.mjs anvoi -->
+<style>
+  :root { --cream: #fdf6f3; --wine: #7c2a2a; --rose: #a95c58; --blush: #f6e1dc; --orange: #e8742c; --zalo: #0068ff; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Inter", sans-serif; color: var(--wine); background: #fff; }
+  .stage {
+    width: 2000px; height: 1250px; position: relative; overflow: hidden;
+    background: radial-gradient(ellipse at 50% 35%, #fff 0%, #f3ebe7 70%, #e9dcd6 100%);
+    display: flex; align-items: flex-end; justify-content: center; gap: 150px; padding-bottom: 120px;
+  }
+  .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 250px; background: linear-gradient(#e6d6cf, #dccbc3); }
+  .item { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+  .label { margin-top: 34px; font-size: 26px; font-weight: 800; letter-spacing: .5px; color: #6b3a37; text-align: center; }
+  .label small { display: block; font-size: 19px; font-weight: 600; color: #9a7b77; margin-top: 4px; }
+  .shadow { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(rgba(60,25,20,.35), transparent 70%); z-index: -1; }
+
+  /* ── 종이컵 ── */
+  .cup { position: relative; width: 420px; height: 600px; }
+  .lid-top { position: absolute; left: -8px; right: -8px; top: 0; height: 44px; border-radius: 50%; background: linear-gradient(#fff, #ece4e1); box-shadow: inset 0 -4px 6px rgba(0,0,0,.08); z-index: 3; }
+  .lid-rim { position: absolute; left: -14px; right: -14px; top: 22px; height: 34px; border-radius: 0 0 50% 50% / 0 0 100% 100%; background: linear-gradient(90deg, #d8cfcc, #fff 40%, #f2ecea 60%, #cfc5c2); z-index: 2; }
+  .cup-body {
+    position: absolute; top: 46px; left: 0; width: 420px; height: 554px;
+    clip-path: polygon(0 0, 100% 0, 86% 100%, 14% 100%);
+    background: var(--cream);
+  }
+  .cup-body::after { /* 원통 음영 */
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, rgba(90,40,35,.30) 0%, rgba(90,40,35,.06) 18%, rgba(255,255,255,.35) 38%, rgba(255,255,255,0) 52%, rgba(90,40,35,.08) 75%, rgba(90,40,35,.34) 100%);
+  }
+  .cup-band { position: absolute; top: 0; left: 0; right: 0; height: 64px; background: var(--rose); }
+  .cup-band span { position: absolute; left: 0; right: 0; top: 19px; text-align: center; color: #fff; font-size: 22px; font-weight: 800; letter-spacing: 3px; }
+  .cup-dots { position: absolute; inset: 64px 0 0; background-image: radial-gradient(var(--blush) 2.2px, transparent 2.4px); background-size: 22px 22px; }
+  .cup-logo { position: absolute; top: 84px; left: 50%; transform: translateX(-50%); width: 200px; mix-blend-mode: multiply; }
+  .cup-tag { position: absolute; top: 292px; left: 50%; transform: translateX(-50%); white-space: nowrap; background: var(--wine); color: #fff; font-size: 21px; font-weight: 800; border-radius: 999px; padding: 7px 20px; }
+  .cup-qr { position: absolute; top: 352px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; background: #fff; border: 2.5px dashed var(--rose); border-radius: 16px; padding: 8px 12px 8px 8px; }
+  .cup-qr img { width: 92px; height: 92px; display: block; }
+  .cup-qr b { display: block; white-space: nowrap; font-size: 19px; font-weight: 800; line-height: 1.25; color: var(--wine); }
+  .cup-qr b em { font-style: normal; color: var(--orange); }
+  .cup-qr i { display: inline-block; white-space: nowrap; margin-top: 5px; font-style: normal; font-size: 12.5px; font-weight: 800; color: #fff; background: var(--zalo); border-radius: 6px; padding: 2px 6px; }
+  .cup-bottom { position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: var(--rose); }
+
+  /* ── 배달 봉투 ── */
+  .bag { position: relative; width: 640px; height: 820px; }
+  .handle { position: absolute; top: 0; width: 210px; height: 230px; border: 13px solid #c9a07a; border-bottom: 0; border-radius: 110px 110px 0 0; box-shadow: inset 0 3px 0 rgba(255,255,255,.3); }
+  .handle.l { left: 130px; } .handle.r { left: 300px; z-index: 0; border-color: #b38b67; }
+  .bag-side { position: absolute; top: 150px; right: -70px; width: 90px; height: 670px; background: linear-gradient(90deg, #e9cfc8, #d8b8b0); clip-path: polygon(0 0, 100% 3%, 100% 100%, 0 100%); }
+  .bag-side::after { content: ""; position: absolute; left: 44px; top: 0; bottom: 0; width: 2px; background: rgba(120,60,55,.18); }
+  .bag-front { position: absolute; top: 150px; left: 0; width: 640px; height: 670px; background: var(--cream); overflow: hidden; box-shadow: inset -18px 0 30px rgba(90,40,35,.10), inset 18px 0 24px rgba(255,255,255,.5); }
+  .bag-front::before { /* 왼쪽 위 와인색 물결 (메뉴판 모티프) */
+    content: ""; position: absolute; left: -110px; top: -170px; width: 380px; height: 300px; border-radius: 0 0 60% 40%; background: var(--rose);
+  }
+  .bag-fold { position: absolute; top: 150px; left: 0; width: 640px; height: 54px; background: linear-gradient(rgba(0,0,0,.07), rgba(0,0,0,0)); z-index: 2; }
+  .bag-dots { position: absolute; inset: 0; background-image: radial-gradient(var(--blush) 2.4px, transparent 2.6px); background-size: 26px 26px; }
+  .bag-in { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; padding-top: 46px; }
+  .bag-logo { width: 250px; mix-blend-mode: multiply; }
+  .bag-tag { margin-top: 6px; background: var(--wine); color: #fff; font-size: 30px; font-weight: 800; border-radius: 999px; padding: 9px 34px; box-shadow: 0 5px 0 rgba(124,42,42,.2); }
+  .bag-qr { margin-top: 26px; display: flex; align-items: center; gap: 22px; background: #fff; border: 3px dashed var(--rose); border-radius: 22px; padding: 14px 24px 14px 14px; }
+  .bag-qr img { width: 150px; height: 150px; display: block; }
+  .bag-qr b { display: block; font-size: 25px; font-weight: 800; line-height: 1.2; }
+  .bag-qr b em { font-style: normal; color: var(--orange); }
+  .bag-qr small { display: block; margin-top: 6px; font-size: 15px; font-weight: 800; letter-spacing: 1.5px; color: var(--rose); }
+  .bag-foot { position: absolute; left: 0; right: 0; bottom: 0; background: var(--rose); color: #fff; text-align: center; padding: 16px 0 18px; }
+  .bag-foot b { font-size: 25px; font-weight: 800; letter-spacing: .5px; }
+  .bag-foot b i { font-style: normal; font-size: 16px; background: #fff; color: var(--zalo); border-radius: 6px; padding: 2px 7px; margin-right: 8px; vertical-align: 3px; }
+  .bag-foot small { display: block; margin-top: 4px; font-size: 17px; font-weight: 600; opacity: .92; }
+  .bag-note { margin-top: 18px; font-size: 17px; font-weight: 700; color: var(--wine); border: 2px dashed var(--rose); border-radius: 999px; padding: 6px 18px; background: rgba(255,255,255,.7); }
+
+  /* ── 컵 스티커 (일반 컵에 붙이는 저렴한 방법) ── */
+  .sticker { width: 230px; height: 230px; border-radius: 50%; background: var(--cream); border: 7px solid var(--rose); box-shadow: 0 10px 24px rgba(90,40,35,.25); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .sticker img.q { width: 108px; height: 108px; }
+  .sticker b { font-size: 15px; font-weight: 800; margin-top: 6px; text-align: center; line-height: 1.15; }
+  .sticker b em { font-style: normal; color: var(--orange); }
+  .sticker .tiny { position: absolute; top: 12px; font-size: 14px; font-weight: 800; letter-spacing: 2px; color: var(--rose); }
+  .sticker-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 40px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="floor"></div>
+
+  <div class="item">
+    <div class="cup">
+      <div class="lid-top"></div><div class="lid-rim"></div>
+      <div class="cup-body">
+        <div class="cup-dots"></div>
+        <div class="cup-band"><span>MÌ TRỘN · ĂN VỘI</span></div>
+        <img class="cup-logo" src="../img/logo.jpg" alt="">
+        <div class="cup-tag">Mì Trộn Siu Dính</div>
+        <div class="cup-qr"><img src="qr.svg" alt=""><div><b>QUÉT MÃ<br><em>ĐẶT MÓN</em></b><i>Zalo 0969 092 694</i></div></div>
+        <div class="cup-bottom"></div>
+      </div>
+      <div class="shadow" style="width:380px;height:50px"></div>
+    </div>
+    <div class="label">Ly giấy in logo + QR<small>Paper cup 16oz · 2 mặt in</small></div>
+  </div>
+
+  <div class="item">
+    <div class="bag">
+      <div class="handle r"></div><div class="handle l"></div>
+      <div class="bag-side"></div>
+      <div class="bag-front">
+        <div class="bag-dots"></div>
+        <div class="bag-in">
+          <img class="bag-logo" src="../img/logo.jpg" alt="">
+          <div class="bag-tag">Mì Trộn Siu Dính</div>
+          <div class="bag-qr"><img src="qr.svg" alt=""><div><b>QUÉT MÃ<br><em>XEM MENU</em><br>& ĐẶT LẠI MÓN</b><small>SCAN · MENU & ORDER</small></div></div>
+          <div class="bag-note">Gom đơn trường học & lân cận – miễn phí ship</div>
+        </div>
+        <div class="bag-foot"><b><i>Zalo</i>0969 092 694 · ☎ 0944 837 894</b><small>157/45 Hùng Vương – Quảng Ngãi</small></div>
+      </div>
+      <div class="bag-fold"></div>
+      <div class="shadow" style="width:700px;height:60px"></div>
+    </div>
+    <div class="label">Túi giấy giao hàng<small>Delivery paper bag · 32 × 40 cm</small></div>
+  </div>
+
+  <div class="item sticker-wrap">
+    <div class="sticker"><span class="tiny">ĂN VỘI</span><img class="q" src="qr.svg" alt=""><b>QUÉT MÃ <em>ĐẶT MÓN</em></b></div>
+    <div class="label">Tem dán ly / hộp<small>Sticker Ø 6 cm · rẻ, in ít cũng được</small></div>
+  </div>
+</div>
+</body>
+</html>

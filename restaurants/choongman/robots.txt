@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://choongman.qrmenuasia.com/sitemap.xml

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://chibaengi.qrmenuasia.com/sitemap.xml

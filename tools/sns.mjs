@@ -64,7 +64,7 @@ const page = (W, H, story) => `<!doctype html><html><head><meta charset="utf-8">
     <div><span class="menu">${btn}</span><div class="qr">${qr}</div><div class="url">${url}</div><ul>${LINES.map(([f, t]) => `<li>${f} ${t}</li>`).join('')}</ul></div>`
   : `<div class="phone"><img src="data:image/jpeg;base64,${shot}"></div>
     <div><div class="name">${name}</div><div class="type">${type}</div><span class="menu">${btn}</span>
-      <div class="qr">${qr}</div><div class="url">${url}</div><ul>${LINES.slice(0, 3).map(([f, t]) => `<li>${f} ${t}</li>`).join('')}</ul></div>`}
+      <div class="qr">${qr}</div><div class="url">${url}</div><ul>${LINES.map(([f, t]) => `<li>${f} ${t}</li>`).join('')}</ul></div>`}
 </div></body></html>`;
 
 const out = `${ROOT}/restaurants/${shop}/print`; mkdirSync(out, { recursive: true });
