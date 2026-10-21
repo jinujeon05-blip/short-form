@@ -8,7 +8,7 @@ out="${1:?출력폴더를 주세요}"; shift
 name() {
   case "$1" in
     sutkkui) echo "숯꾸이" ;; eros) echo "EROS" ;; anvoi) echo "AnVoi" ;; baekcheon) echo "백천화덕아나고" ;;
-    gamasot) echo "가마솥" ;; biobeauty) echo "바이오뷰티" ;; suwonseong) echo "수원성" ;; hellochicken) echo "헬로치킨" ;; kyodong) echo "교동치킨" ;; choongman) echo "충만치킨" ;; youone) echo "유원핫도그" ;; kimshotel) echo "킴스호텔" ;; jokbal) echo "족발신선생" ;; daekuk) echo "대국" ;; boknara) echo "복나라" ;; chibaengi) echo "치뱅이" ;; samwon) echo "삼원" ;; bangatgan) echo "방앗간" ;; chuam) echo "추암" ;; eonnine) echo "언니네" ;; ureong) echo "우렁쌈밥" ;; sales) echo "QR메뉴판소개서" ;;
+    gamasot) echo "가마솥" ;; biobeauty) echo "바이오뷰티" ;; suwonseong) echo "수원성" ;; hellochicken) echo "헬로치킨" ;; kyodong) echo "교동치킨" ;; choongman) echo "충만치킨" ;; youone) echo "유원핫도그" ;; kimshotel) echo "킴스호텔" ;; jokbal) echo "족발신선생" ;; daekuk) echo "대국" ;; boknara) echo "복나라" ;; chibaengi) echo "치뱅이" ;; samwon) echo "삼원" ;; bangatgan) echo "방앗간" ;; chuam) echo "추암" ;; eonnine) echo "언니네" ;; ureong) echo "우렁쌈밥" ;; goodday) echo "굿데이김밥" ;; sales) echo "QR메뉴판소개서" ;;
     *) echo "$1" ;;
   esac
 }
