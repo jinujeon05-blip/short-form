@@ -13,7 +13,7 @@ const SHOPS = {
   eros:       { type: 'BarOrPub', cuisine: ['Bar'], country: 'VN', currency: 'VND', phone: false },
   anvoi:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Noodles'], country: 'VN', currency: 'VND' },
   baekcheon:  { type: 'Restaurant', cuisine: ['Korean', 'Grilled eel'], country: 'KR', currency: 'KRW', naver: 'b33f476ad38d2aafc7ea74651de94e5a2262361e' },
-  gamasot:    { type: 'Restaurant', cuisine: ['Korean'], country: 'VN', currency: 'VND' },
+  gamasot:    { type: 'Restaurant', cuisine: ['Korean'], country: 'VN', currency: 'VND', naver: '6d64ac159210cc85e66a84a64ce28822bab7c395' },
   biobeauty:  { type: 'Store', country: 'VN', currency: 'VND' },
   suwonseong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Korean-Chinese'], country: 'VN', currency: 'VND' },
   // 가게 찾기용(사장님 동의 없음) — SNS 이미지가 없어서 미리보기 사진은 가게 사진
