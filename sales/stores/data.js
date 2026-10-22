@@ -87,6 +87,11 @@ window.STORES = [
     address: "53 Lý Nhân Tông, Võ Cường, Bắc Ninh",
     type: { ko: "한식 BBQ · 찌개 · 전골 · 안주 · 치킨", vi: "BBQ Hàn Quốc · Canh · Lẩu · Mồi nhậu · Gà rán", en: "Korean BBQ · Stews · Hot pots · Snacks · Chicken", zh: "韩式烤肉 · 汤锅 · 火锅 · 下酒菜 · 炸鸡", ja: "韓国焼肉・チゲ・鍋・おつまみ・チキン" },
     keywords: "다다식당 다다 dada nha hang dada nhà hàng dada 한식 고깃집 bbq 삼겹살 항정살 목살 차돌박이 막창 소갈비살 세트 콤보 김치찌개 참치김치찌개 된장찌개 부대전골 부대찌개 닭도리탕 아구탕 곱창전골 어묵탕 꽁치김치찜 비빔밥 제육덮밥 볶음밥 라면 냉면 콩국수 계란말이 쥐포 소떡소떡 낙지볶음 문어볶음 닭발 아구찜 보쌈 치즈돈까스 해물파전 치킨 양념치킨 맥주 소주 lý nhân tông võ cường bắc ninh quán hàn quốc thịt nướng lẩu canh kim chi gà rán korean bbq pork belly stew hot pot 韩餐 烤肉 五花肉 泡菜汤 部队火锅 炸鸡 北宁 韓国料理 焼肉 サムギョプサル チゲ プデチゲ チキン バクニン" },
+  { id: "mujigae", name: "무지개 식당 Cầu Vồng", sub: "한식 포장마차 · 컵밥 · 스시 · 안주", url: "https://mujigae.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean", "japanese", "bar"], tags: ["photos"],
+    address: "40 Lý Nhân Tông, Võ Cường, Bắc Ninh",
+    type: { ko: "한식 포장마차 · 컵밥 · 스시 · 안주", vi: "Quán Hàn Quốc · Cơm cốc · Sushi · Mồi nhậu", en: "Korean pocha · Cup rice · Sushi · Bar bites", zh: "韩式大排档 · 杯饭 · 寿司 · 下酒菜", ja: "韓国ポチャ・カップご飯・寿司・おつまみ" },
+    keywords: "무지개 식당 무지개식당 무지개 포장마차 mujigae nhà hàng cầu vồng cau vong nha hang han quoc 한식 포장마차 포차 컵밥 스팸 컵밥 삼겹살 컵밥 제육 컵밥 황제 스페셜 세트 모듬튀김 떡볶이 김밥 참치마요김밥 열무국수 비빔국수 해물라면 해물국수 파스타 해물크림파스타 짜파게티 스시 초밥 모듬스시 장어덮밥 연어롤 새우롤 장어롤 돈까스 치즈돈까스 새우튀김 오징어튀김 김말이 군만두 순대 김떡순 김치볶음밥 해물볶음밥 과일팥빙수 빙수 순대야채볶음 김치전 해물파전 랍스터 치즈구이 가리비 백골뱅이 숙회 무침 막걸리 소주 사케 쿠보타 사와노츠루 맥주 사포로 lý nhân tông võ cường bắc ninh cơm cốc kimbap tokbokki sushi mồi nhậu cup rice kimbap tteokbokki sushi seafood pasta lobster scallop korean pocha 杯饭 紫菜包饭 辣炒年糕 寿司 韩式大排档 カップご飯 キンパ トッポッキ 寿司 ポチャ" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
