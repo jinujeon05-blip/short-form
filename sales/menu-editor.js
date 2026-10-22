@@ -235,7 +235,7 @@
         D = { menu: j.menu, info: j.info, srcLang: j.srcLang, updatedAt: j.updatedAt, source: 'custom' }; dirty = false;
         const parts = [T.saved];
         if (j.translated) parts.push(T.trOk.replace('{n}', j.translated));
-        if (j.pending) parts.push(T.trWarn.replace('{n}', j.pending));
+        if (j.pending) parts.push(T.trWarn.replace('{n}', j.pending) + (j.why ? ` (${j.why})` : ''));
         if (skipped) parts.push(T.skipped.replace('{n}', skipped));
         setMsg(parts.join(' '), !j.pending); paint();
       } catch (er) { fail(er); }
