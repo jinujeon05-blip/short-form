@@ -18,7 +18,7 @@ const it = (price, photo, ko, en, zh, ja, vi, x = {}) => ({ price, ...(photo ? {
 window.MENU = [
   {
     id: "soup",
-    name: T("돌솥 순대국", "Soondae-guk", "血肠汤饭", "スンデグク", "Canh thịt lợn"),
+    name: T("돌솥 순대국", "Soondae-guk", "猪肉汤饭", "スンデグク", "Canh thịt lợn"),
     note: T("돌솥밥이 함께 나와 식사 후 숭늉으로 마무리해요. 가격은 부가세 포함이에요.", "Served with stone-pot rice, finished with nurungji tea. Prices include VAT.", "配砂锅饭，饭后可喝锅巴茶。价格含增值税。", "石鍋ご飯が付き、食後はおこげ湯で締めます。価格は税込です。", "Kèm cơm thố, ăn xong dùng nước cơm cháy. Giá đã gồm VAT."),
     items: [
       it(205200, "dolsot", "돌솥 순대국", "Pork & soondae soup with stone-pot rice", "砂锅饭配猪肉汤", "石鍋ご飯付きスンデグク", "Cơm thố canh thịt lợn", { tag: "must" }),
@@ -27,14 +27,14 @@ window.MENU = [
   },
   {
     id: "side",
-    name: T("순대 · 수육 · 안주", "Soondae, suyuk & side dishes", "血肠 · 白切肉 · 下酒菜", "スンデ・スユク・おつまみ", "Lòng dồi · Thịt luộc · Món nhắm"),
+    name: T("순대 · 수육 · 안주", "Soondae, suyuk & side dishes", "血肠 · 蒸猪肉 · 下酒菜", "スンデ・スユク・おつまみ", "Lòng dồi · Thịt luộc · Món nhắm"),
     items: [
       it(216000, "sundae", "순대", "Korean blood sausage (soondae)", "韩国猪血肠", "スンデ（韓国式血腸）", "Lòng dồi Hàn Quốc"),
-      it(324000, "pyeonyuk", "편육", "Pressed boiled pork slices (pyeonyuk)", "韩国猪耳卷", "ピョニュク（豚耳の煮込みスライス）", "Giò tai Hàn Quốc"),
+      it(324000, "pyeonyuk", "편육", "Pyeonyuk (pressed boiled pork-ear slices)", "韩国猪耳卷", "ピョニュク（豚耳の煮込みスライス）", "Giò tai Hàn Quốc"),
       it(270000, "combo", "순대 + 편육", "Soondae + pyeonyuk combo", "猪血肠 + 猪耳卷", "スンデ＋ピョニュク盛り合わせ", "Combo lòng dồi + giò tai"),
       it(432000, "bokkeum", "곱창 순대 볶음", "Spicy stir-fried offal & soondae", "炒辣猪杂碎 + 猪血肠", "ホルモンとスンデの辛炒め", "Lòng + dồi xào cay", { spicy: true }),
       it(540000, null, "술국", "Special pork soup (sul-guk)", "特别猪肉汤", "特製豚スープ（スルグク）", "Canh thịt lợn đặc biệt"),
-      it(540000, "suyuk", "모듬 수육", "Assorted steamed pork (suyuk)", "姜蒸猪肉", "ゆで豚盛り合わせ（スユク）", "Thịt lợn hấp gừng"),
+      it(540000, "suyuk", "모듬 수육", "Ginger-steamed pork (suyuk)", "姜蒸猪肉", "生姜蒸し豚（スユク）", "Thịt lợn hấp gừng"),
     ],
   },
   {
@@ -51,7 +51,7 @@ window.MENU = [
   },
   {
     id: "takeout",
-    name: T("포장 김치", "Takeaway kimchi", "外带泡菜", "持ち帰りキムチ", "Kim chi mang về"),
+    name: T("포장 김치", "Takeaway kimchi", "外带泡菜", "持ち帰りキムチ", "Kim chí mang về"),
     items: [
       it(162000, null, "김치", "Kimchi", "泡菜", "キムチ", "Kim chí"),
       it(162000, null, "깍두기", "Kkakdugi (cubed radish kimchi)", "萝卜块泡菜", "カクテキ", "Củ cải muối"),
