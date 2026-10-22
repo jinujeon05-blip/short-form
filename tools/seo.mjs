@@ -37,6 +37,7 @@ const SHOPS = {
   holoi:        { type: 'Restaurant', cuisine: ['Vietnamese', 'Pho', 'Beef noodle soup'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   ijang:        { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Charcoal grill'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   baba:         { type: 'BarOrPub', cuisine: ['Korean', 'Korean pub', 'Pizza', 'Cocktails', 'Craft beer'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  orimyeongga:  { type: 'Restaurant', cuisine: ['Korean', 'Duck', 'Gamjatang', 'Bossam'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
