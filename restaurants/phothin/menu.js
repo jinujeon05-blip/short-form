@@ -84,23 +84,6 @@ window.MENU = [
     ],
   },
   {
-    id: "nhau",
-    name: T("안주류", "Bar snacks & stews", "下酒菜", "おつまみ", "Đồ nhậu"),
-    note: T("안주류는 오전 10시 이후에 주문할 수 있어요 · 가격은 1년 전 메뉴판 기준이라 확인해 주세요",
-      "Served after 10 AM · prices are from a menu posted a year ago, please check with staff",
-      "上午 10 点以后供应 · 价格依据一年前的菜单，请向店员确认",
-      "午前10時以降のご提供・価格は1年前のメニュー基準のため店員にご確認ください",
-      "Phục vụ sau 10:00 sáng · giá theo thực đơn một năm trước, vui lòng hỏi nhân viên"),
-    items: [
-      it(790000, "duoicay", "매운 소꼬리찜", "Spicy braised oxtail", "辣味炖牛尾", "辛口の牛テール煮込み", "Đuôi bò hầm sốt cay", { spicy: true }),
-      sz([[BIG, 750000], [SMALL, 550000]], "duoihan", "소꼬리찜", "Korean-style braised oxtail", "韩式炖牛尾", "韓国式牛テール煮込み", "Đuôi bò hầm Hàn Quốc"),
-      sz([[BIG, 650000], [SMALL, 490000]], "suonham", "왕갈비찜", "Korean-style braised beef short ribs", "韩式炖牛排骨", "韓国式牛カルビチム", "Sườn bò hầm Hàn Quốc"),
-      it(200000, "gan", "스지꼬지", "Beef tendon skewer soup", "牛筋串汤", "牛すじ串のスープ", "Canh gân bò"),
-      it(250000, "canhduoi", "소꼬리 곰탕 (안주)", "Oxtail soup (to share)", "牛尾汤（下酒）", "テールスープ（おつまみ）", "Canh đuôi bò"),
-      it(200000, "comcanh", "소꼬리 곰탕 (식사)", "Oxtail soup meal with rice & side dishes", "牛尾汤套餐（含米饭小菜）", "テールスープ定食（ごはん・副菜つき）", "Cơm canh đuôi bò"),
-    ],
-  },
-  {
     id: "drink",
     name: T("음료 · 주류", "Drinks", "饮料 · 酒类", "ドリンク・お酒", "Đồ uống"),
     items: [

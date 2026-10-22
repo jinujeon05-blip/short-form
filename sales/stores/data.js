@@ -75,7 +75,7 @@ window.STORES = [
     region: "hanoi", cats: ["noodle"], tags: ["zalo", "photos"],
     address: "Lô 5, TT1 Đình Thôn, Mỹ Đình, Từ Liêm, Hà Nội",
     type: { ko: "하노이 전통 소고기 쌀국수", vi: "Phở bò truyền thống Hà Nội", en: "Traditional Hanoi beef phở", zh: "河内传统牛肉河粉", ja: "ハノイ伝統の牛肉フォー" },
-    keywords: "퍼틴 pho thin phở thìn 13 lò đúc 쌀국수 소고기 쌀국수 퍼보 갈비 쌀국수 퍼쑤언 소꼬리 꼬리찜 도가니 미딩 mỹ đình đình thôn từ liêm hà nội phở bò phở sườn đuôi bò nem rán phở cuốn bánh xèo quẩy beef pho rice noodle oxtail 牛肉河粉 排骨河粉 牛尾 美庭 フォー 牛肉フォー テール" },
+    keywords: "퍼틴 pho thin phở thìn 13 lò đúc 쌀국수 소고기 쌀국수 퍼보 갈비 쌀국수 퍼쑤언 도가니 미딩 mỹ đình đình thôn từ liêm hà nội phở bò phở sườn nem rán phở cuốn bánh xèo quẩy beef pho rice noodle 牛肉河粉 排骨河粉 美庭 フォー 牛肉フォー" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
