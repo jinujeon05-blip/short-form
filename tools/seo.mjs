@@ -27,7 +27,7 @@ const SHOPS = {
   boknara:      { type: 'Restaurant', cuisine: ['Korean', 'Pufferfish', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   dada:         { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Stews', 'Chicken'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   jangolang:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Grilled eel', 'Hot pot'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
-  anjirang:     { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Gopchang', 'Makchang', 'Fried chicken'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  anjirang:     { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Gopchang', 'Makchang', 'Fried chicken'], country: 'VN', currency: 'VND', og: 'img/hero.jpg', naver: 'ca47ee18fdb77a8f2f443cb5831aaf7908723830' },
   madang:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Duck', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   naegohyang:   { type: 'Restaurant', cuisine: ['Korean', 'Soondae-guk', 'Pork soup'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   yukdeok:      { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Aged pork', 'Smoked duck'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
