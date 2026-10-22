@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://madang.qrmenuasia.com/sitemap.xml
