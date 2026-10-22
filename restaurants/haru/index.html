@@ -175,23 +175,23 @@
     ko: { title: "메뉴", tagline: "일식 이자카야 · 오마카세", chips: ["오후 3:30 영업 시작", "일본어 가능"],
       best: "BEST", new: "신메뉴", must: "추천", spicy: "🌶 매콤", ask: "가격 문의",
       quote: "하루를 찾아 주셔서 감사합니다.<br>맛있게 드세요!", copy: "복사", copied: "비밀번호를 복사했어요",
-      call: "전화", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND)" },
+      call: "전화", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND) · 메뉴·가격은 구글 지도에 올라온 메뉴판 기준이며 바뀔 수 있어요" },
     en: { title: "Menu", tagline: "Japanese izakaya · Omakase", chips: ["Opens 3:30 PM", "Japanese spoken"],
       best: "BEST", new: "NEW", must: "Must try", spicy: "🌶 Spicy", ask: "Ask staff",
       quote: "Thank you for visiting HARU.<br>Enjoy your meal!", copy: "Copy", copied: "Password copied",
-      call: "Call", map: "Address · Map", vnd: "Prices in Vietnamese đồng (VND)" },
+      call: "Call", map: "Address · Map", vnd: "Prices in Vietnamese đồng (VND) · Menu and prices are based on the menu posted on Google Maps and may change" },
     zh: { title: "菜单", tagline: "日式居酒屋 · 主厨发办", chips: ["下午 3:30 开始营业", "可说日语"],
       best: "人气", new: "新品", must: "必点", spicy: "🌶 辣", ask: "请询问店员",
       quote: "感谢您光临 HARU。<br>祝您用餐愉快！", copy: "复制", copied: "密码已复制",
-      call: "电话", map: "地址 · 地图", vnd: "价格单位：越南盾（VND）" },
+      call: "电话", map: "地址 · 地图", vnd: "价格单位：越南盾（VND） · 菜单和价格以谷歌地图上传的菜单为准，可能有变动" },
     ja: { title: "メニュー", tagline: "日本料理の居酒屋・おまかせ", chips: ["15:30 開店", "日本語OK"],
       best: "BEST", new: "NEW", must: "おすすめ", spicy: "🌶 辛口", ask: "店員にお尋ねください",
       quote: "ハルへようこそ。<br>ごゆっくりお召し上がりください！", copy: "コピー", copied: "パスワードをコピーしました",
-      call: "電話", map: "住所・地図", vnd: "価格はベトナムドン（VND）" },
+      call: "電話", map: "住所・地図", vnd: "価格はベトナムドン（VND） · メニュー・価格はGoogleマップに掲載されたメニュー基準で、変更になる場合があります" },
     vi: { title: "Thực đơn", tagline: "Izakaya Nhật · Omakase", chips: ["Mở cửa 15:30", "Nói được tiếng Nhật"],
       best: "BEST", new: "MỚI", must: "Nên thử", spicy: "🌶 Cay", ask: "Hỏi nhân viên",
       quote: "Cảm ơn quý khách đã đến HARU.<br>Chúc quý khách ngon miệng!", copy: "Sao chép", copied: "Đã sao chép mật khẩu",
-      call: "Gọi điện", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND" },
+      call: "Gọi điện", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND · Thực đơn và giá theo thực đơn đăng trên Google Maps, có thể thay đổi" },
   };
   const SUPPORTED = LANGS.map(([c]) => c);
   const $ = (id) => document.getElementById(id);
@@ -317,7 +317,6 @@
 </script>
 <script src="dasan.js"></script>
 <script src="stores-link.js"></script>
-<script src="disclaimer.js"></script>
 <script src="lang-menu.js"></script>
 <!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
 <script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
