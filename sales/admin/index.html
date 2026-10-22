@@ -77,6 +77,8 @@
       <button class="btn" id="out" type="button">나가기</button>
     </header>
 
+    <nav class="tabs" id="tabs"><button type="button" data-t="stats" aria-pressed="true">방문 현황</button><button type="button" data-t="shops" aria-pressed="false">가게 관리</button><button type="button" data-t="menu" aria-pressed="false">메뉴 편집</button><button type="button" data-t="report" aria-pressed="false">리포트</button><button type="button" data-t="sec" aria-pressed="false">보안·기록</button></nav>
+    <div id="tab-stats">
     <div class="cards" id="cards"></div>
 
     <div class="card">
@@ -98,10 +100,17 @@
       · 로봇(검색엔진 등)은 빼고, 사람 식별 정보는 저장하지 않아요. 날짜는 베트남 시간 기준이에요.<br>
       · 내 방문을 빼려면 그 가게 주소 끝에 <code>?notrack</code>을 붙여 한 번 열어 두세요(그 브라우저에서는 기록 안 함, 다시 기록하려면 <code>?track</code>).
     </p>
+    </div>
+    <div id="tab-shops" hidden></div>
+    <div id="tab-menu" hidden></div>
+    <div id="tab-report" hidden></div>
+    <div id="tab-sec" hidden></div>
   </div>
 </div>
 
 <script src="../stores/data.js"></script>
+<script src="../menu-editor.js"></script>
+<script src="crm.js"></script>
 <script>
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -126,6 +135,7 @@
       data = await r.json();
       $("login").hidden = true; $("app").hidden = false;
       render();
+      if (!window.__started) { window.__started = 1; window.QMAdmin && QMAdmin.start(); }
     } catch (e) { $("login").hidden = true; $("app").hidden = false; $("rows").innerHTML = '<tr><td colspan="7" class="zero">불러오지 못했어요. 잠시 뒤 새로고침해 주세요.</td></tr>'; }
   }
   function showLogin(msg) { $("app").hidden = true; $("login").hidden = false; $("err").textContent = msg || ""; $("pw").focus(); }

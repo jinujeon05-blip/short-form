@@ -77,3 +77,52 @@ function checkAdmin(req) {
 }
 
 module.exports = { dateOf, BOT, slug, shopFrom, srcOf, deviceOf, visitorId, encodeHit, decodeHit, aggregate, checkAdmin, TZ_OFFSET_MS };
+
+// ───────────────────────── 로그인 · 보안 (관리자·점주·리포트 링크) ─────────────────────────
+const S = require('./_store');
+const ipOf = (req) => String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').split(',')[0].trim();
+const ipHash = (req) => crypto.createHash('sha256').update(ipOf(req) + '|' + (process.env.HASH_SALT || 'x')).digest('hex').slice(0, 12);
+const hourKey = () => new Date().toISOString().slice(0, 13).replace(/[^0-9]/g, '');
+const MAX_FAILS = 8; // 한 시간에 틀린 비밀번호 8번이면 그 기기(IP)는 한 시간 막는다
+
+const failPrefix = (req) => `sec/fail/${hourKey()}/${ipHash(req)}.`;
+const isBlocked = async (req) => (await S.listAll(failPrefix(req))).length >= MAX_FAILS;
+const addFail = (req) => S.put(failPrefix(req) + S.rand(3), '1', { access: 'public', addRandomSuffix: false });
+
+const hmac = (label, body, len = 32) => crypto.createHmac('sha256', crypto.createHash('sha256').update(label + '|' + (process.env.HASH_SALT || 'x')).digest()).update(body).digest('hex').slice(0, len);
+const safeEq = (a, b) => a.length === b.length && crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+
+const ownerToken = (shop, ttl = 12 * 3600e3) => { const exp = Date.now() + ttl; return `${shop}.${exp}.${hmac('sess', `${shop}.${exp}`)}`; };
+function verifyOwnerToken(tok, shop) {
+  const [s, exp, sig] = String(tok || '').split('.');
+  if (!s || s !== shop || !(Date.now() < Number(exp)) || !sig) return false;
+  return safeEq(sig, hmac('sess', `${s}.${exp}`));
+}
+const reportToken = (shop) => hmac('rep', shop, 24);
+
+const hashPw = (pw, salt) => crypto.scryptSync(String(pw), salt, 32).toString('hex');
+const newPassword = () => {
+  const a = 'abcdefghjkmnpqrstuvwxyz23456789';
+  const pick = () => Array.from({ length: 4 }, () => a[crypto.randomInt(a.length)]).join('');
+  return `${pick()}-${pick()}-${pick()}`;
+};
+
+// 관리자 또는 그 가게 점주인지 판별 → 'admin' | 'owner' | null. 틀린 시도는 기록하고 너무 많으면 막는다.
+async function actorFor(req, shop) {
+  if (await isBlocked(req)) return 'blocked';
+  if (checkAdmin(req)) return 'admin';
+  if (shop && req.headers['x-owner-token'] && verifyOwnerToken(req.headers['x-owner-token'], shop)) return 'owner';
+  if (req.headers['x-admin-key'] || req.headers['x-owner-token']) await addFail(req).catch(() => {});
+  return null;
+}
+
+async function logEvent(actor, action, shop = '', note = '') {
+  const d = dateOf();
+  const p = `log/${d}/${Date.now()}.${slug(actor, 10)}.${slug(action, 16)}.${slug(shop, 14)}.${S.rand(2)}`;
+  await S.put(p + (note ? '.' + encodeURIComponent(String(note).slice(0, 60)).replace(/%/g, '') : ''), '1', { access: 'public', addRandomSuffix: false }).catch(() => {});
+}
+
+const readBody = (req) => (req.body && typeof req.body === 'object' ? req.body : typeof req.body === 'string' ? JSON.parse(req.body || '{}') : {});
+const validShop = (s) => /^[a-z0-9]{2,20}$/.test(String(s || ''));
+
+Object.assign(module.exports, { ipOf, ipHash, isBlocked, addFail, ownerToken, verifyOwnerToken, reportToken, hashPw, newPassword, actorFor, logEvent, readBody, validShop, safeEq });

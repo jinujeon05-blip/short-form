@@ -29,9 +29,9 @@ const P = {
   "꼬들살": T("꼬들살", "Pork neck", "猪颈肉", "豚首肉（コドゥルサル）", "Thịt gáy heo"),
 };
 const set = (letter, price, parts, ko, vi) => {
-  const l = (i) => parts.map((p) => P[p][i]).join(" + ");
+  const l = (lang) => parts.map((p) => P[p][lang]).join(" + ");
   return it(price, `${letter} 세트`, `Set ${letter}`, `套餐 ${letter}`, `セット ${letter}`, `Set ${letter}`,
-    { unit: SETU, desc: T(ko, l(1), l(2), l(3), vi) });
+    { unit: SETU, desc: T(ko, l("en"), l("zh"), l("ja"), vi) });
 };
 
 window.MENU = [

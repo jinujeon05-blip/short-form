@@ -15,7 +15,9 @@ async function listDay(date) {
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  if (!L.checkAdmin(req)) return res.status(401).json({ error: 'unauthorized' });
+  const actor = await L.actorFor(req, '');
+  if (actor === 'blocked') return res.status(429).json({ error: 'blocked' });
+  if (actor !== 'admin') return res.status(401).json({ error: 'unauthorized' });
   try {
     const days = Math.min(Math.max(parseInt(req.query.days, 10) || 30, 1), 92);
     const now = Date.now();

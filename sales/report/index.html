@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>QR 메뉴 방문 리포트</title>
+<style>
+  :root { --bg: #f6f3ee; --card: #fff; --ink: #1f2430; --muted: #7a7466; --line: #e7e0d2; --accent: #e8590c; --soft: #ffd8c2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; line-height: 1.5; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 18px; }
+  .top { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  h1 { font-size: 22px; margin: 6px 0 2px; } .sub { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+  .cards .card { margin: 0; } .cards small { color: var(--muted); font-size: 13px; } .cards b { display: block; font-size: 30px; font-variant-numeric: tabular-nums; }
+  h2 { font-size: 15px; margin: 0 0 8px; color: var(--muted); font-weight: 600; }
+  .bar { display: grid; grid-template-columns: 110px 1fr 44px; gap: 8px; align-items: center; font-size: 14px; margin: 6px 0; }
+  .bar .t { height: 10px; background: var(--soft); border-radius: 6px; overflow: hidden; } .bar .t i { display: block; height: 100%; background: var(--accent); }
+  .bar em { font-style: normal; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .foot { color: var(--muted); font-size: 12px; margin-top: 16px; }
+  .btn { font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 10px; padding: 7px 14px; cursor: pointer; }
+  .lang button { font: inherit; font-size: 13px; border: 1px solid var(--line); background: var(--card); color: var(--muted); padding: 5px 10px; cursor: pointer; }
+  .lang button[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+  @media (max-width: 640px) { .cards { grid-template-columns: 1fr; } .grid2 { grid-template-columns: 1fr; } }
+  @media print { body { background: #fff; } .top .noprint, .noprint { display: none !important; } .card { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top noprint"><span class="lang"><button data-l="ko" type="button">한국어</button><button data-l="vi" type="button">Tiếng Việt</button></span><button class="btn" id="print" type="button"></button></div>
+  <h1 id="h1"></h1><p class="sub" id="sub"></p>
+  <div id="body"></div>
+  <p class="foot" id="foot"></p>
+</div>
+<script src="../stores/data.js"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const q = new URLSearchParams(location.search);
+  const shop = (q.get('shop') || '').toLowerCase(), days = +q.get('days') || 30, tok = q.get('t') || '';
+  let ui = q.get('lang') === 'vi' ? 'vi' : 'ko', data = null;
+  const D = {
+    ko: { title: '방문 리포트', print: '인쇄 / PDF로 저장', vis: '방문자', pv: '페이지뷰', avg: '하루 평균 방문자', best: '가장 많이 온 날', daily: '일별 방문자', lang: '손님이 본 언어', dev: '접속 기기', src: '어디서 들어왔나',
+      period: (a, b, n) => `${a} ~ ${b} (${n}일)`, people: (n) => `${n}명`, foot: 'QR 메뉴판 방문 기록입니다. 같은 사람이 하루에 여러 번 열어도 방문자 1명으로 세고, 로봇(검색엔진 등)은 뺐어요. 날짜는 베트남 시간 기준이에요.', err: '리포트를 불러오지 못했어요. 링크를 다시 확인해 주세요.', empty: '이 기간에 기록된 방문이 아직 없어요.',
+      L: { ko: '한국어', vi: '베트남어', en: '영어', 'zh-hans': '중국어', zh: '중국어', ja: '일본어', na: '알 수 없음' }, V: { mobile: '휴대폰', desktop: '컴퓨터' }, S: { direct: '직접·QR', qr: 'QR 스캔', site: '사이트 내 이동', stores: '가게 찾기', search: '검색', social: 'SNS·메신저', link: '다른 링크', na: '알 수 없음' } },
+    vi: { title: 'Báo cáo lượt truy cập', print: 'In / Lưu PDF', vis: 'Khách truy cập', pv: 'Lượt xem trang', avg: 'Trung bình mỗi ngày', best: 'Ngày đông nhất', daily: 'Khách theo ngày', lang: 'Ngôn ngữ khách xem', dev: 'Thiết bị', src: 'Khách đến từ đâu',
+      period: (a, b, n) => `${a} ~ ${b} (${n} ngày)`, people: (n) => `${n} người`, foot: 'Ghi nhận lượt truy cập thực đơn QR. Một người mở nhiều lần trong ngày chỉ tính 1 khách; đã loại trừ robot. Ngày tính theo giờ Việt Nam.', err: 'Không tải được báo cáo. Vui lòng kiểm tra lại đường dẫn.', empty: 'Chưa có lượt truy cập nào trong khoảng thời gian này.',
+      L: { ko: 'Tiếng Hàn', vi: 'Tiếng Việt', en: 'Tiếng Anh', 'zh-hans': 'Tiếng Trung', zh: 'Tiếng Trung', ja: 'Tiếng Nhật', na: 'Không rõ' }, V: { mobile: 'Điện thoại', desktop: 'Máy tính' }, S: { direct: 'Trực tiếp/QR', qr: 'Quét QR', site: 'Từ trang khác của chúng tôi', stores: 'Tìm quán', search: 'Tìm kiếm', social: 'Mạng xã hội', link: 'Liên kết khác', na: 'Không rõ' } },
+  };
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const fmt = (n) => Number(n || 0).toLocaleString('ko-KR');
+  const store = (window.STORES || []).find((s) => s.id === shop);
+  function bars(title, obj, labels) {
+    const e = Object.entries(obj).sort((a, b) => b[1] - a[1]).slice(0, 6), tot = e.reduce((t, [, n]) => t + n, 0) || 1;
+    return `<div class="card"><h2>${title}</h2>${e.map(([k, n]) => `<div class="bar"><span>${esc(labels[k] || k.toUpperCase())}</span><span class="t"><i style="width:${Math.round(n / tot * 100)}%"></i></span><em>${Math.round(n / tot * 100)}%</em></div>`).join('') || '–'}</div>`;
+  }
+  function render() {
+    const t = D[ui], name = store ? store.name : shop;
+    document.documentElement.lang = ui; document.title = `${name} ${t.title}`;
+    $('h1').textContent = `${name} · ${t.title}`; $('print').textContent = t.print;
+    document.querySelectorAll('.lang button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.l === ui));
+    $('foot').textContent = t.foot;
+    if (!data) return;
+    const d = data.data, dates = data.dates;
+    $('sub').textContent = t.period(dates[0], dates[dates.length - 1], dates.length);
+    if (!d.vis) { $('body').innerHTML = `<div class="card">${t.empty}</div>`; return; }
+    const v = dates.map((x) => (d.days[x] ? d.days[x].vis : 0)), max = Math.max(1, ...v), bestI = v.indexOf(Math.max(...v));
+    const W = 720, H = 120, bw = W / v.length;
+    const svg = `<svg viewBox="0 0 ${W} ${H}" width="100%">${v.map((x, i) => `<rect x="${i * bw + 1}" y="${H - 16 - (x / max) * (H - 28)}" width="${Math.max(1, bw - 2)}" height="${(x / max) * (H - 28)}" rx="2" fill="#e8590c"><title>${dates[i]} · ${x}</title></rect>`).join('')}</svg>`;
+    $('body').innerHTML = `<div class="cards"><div class="card"><small>${t.vis}</small><b>${fmt(d.vis)}</b></div><div class="card"><small>${t.pv}</small><b>${fmt(d.pv)}</b></div><div class="card"><small>${t.avg}</small><b>${(d.vis / dates.length).toFixed(1)}</b></div></div>
+      <div class="card"><h2>${t.daily}</h2>${svg}<div style="font-size:13px;color:var(--muted)">${t.best}: ${dates[bestI]} · ${t.people(v[bestI])}</div></div>
+      <div class="grid2">${bars(t.lang, d.lang, t.L)}${bars(t.dev, d.dev, t.V)}</div>${bars(t.src, d.src, t.S)}`;
+  }
+  $('print').onclick = () => print();
+  document.querySelector('.lang').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { ui = b.dataset.l; render(); } });
+  render();
+  fetch(`/api/report?shop=${encodeURIComponent(shop)}&days=${days}&t=${encodeURIComponent(tok)}`).then((r) => (r.ok ? r.json() : Promise.reject())).then((j) => { data = j; render(); }).catch(() => { $('body').innerHTML = `<div class="card">${D[ui].err}</div>`; });
+</script>
+</body>
+</html>

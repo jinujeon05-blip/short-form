@@ -170,17 +170,18 @@
 - 소개서는 페이지 전체를 기기 기본 글꼴 하나로 통일한다. 잘난체·G마켓 산스에는 베트남어 성조 글자가 없어, 쓰면 베트남어에서 글꼴이 섞인다.
 - 연락처: 한국어 상담 전화·Zalo 0917 302 200, 카카오톡 jjw4164 / 베트남어 상담 전화·Zalo 0937 250 787(2026-10-21 추가, `content.js`의 `CONTACT.vi`). 문의하기 칸은 상담 언어별 두 묶음, 베트남어 화면에서는 베트남어 상담이 먼저 나온다. 인쇄본(PDF)에서는 두 묶음을 한 줄에 나란히 놓아 2쪽을 유지한다.
 
-## 방문 기록 · 관리 화면 (자체 집계, 2026-10-21 시작)
-- 목적: 가게별 방문자 수를 영업 근거 자료로 쓰기. Vercel Web Analytics(프로젝트마다 켜야 함)는 쓰지 않는다 — 자체 집계가 새 가게도 자동 포함.
-- **흐름**: 모든 페이지 끝의 작은 코드(`<!-- analytics:start/end -->`, `node tools/analytics.mjs`가 넣음, 새 가게를 만들면 한 번 돌린다) → `sendBeacon`으로 `https://qrmenuasia.com/api/hit`(`sales/api/hit.js`) → Vercel Blob 저장소 `qrmenu-hits`(`store_FT8aWwdnulqIcDQB`, 공개, sin1)에 방문 1건 = 빈 파일 1개. 내용은 파일 경로(`hits/<날짜>/<가게>/<방문자해시>.<언어>.<국가>.<기기>.<유입>.<무작위>`)에 들어 있어 집계는 목록(list)만 읽는다.
-- 관리 화면: **https://qrmenuasia.com/admin** (`sales/admin/index.html`, 비밀번호 로그인, noindex). 가게별 방문자·페이지뷰·추이·모바일%·QR%, 가게를 누르면 일별 그래프·언어·기기·유입·국가·영업용 문구 복사. 데이터는 `sales/api/stats.js`(헤더 `x-admin-key`).
-- **비밀번호**와 해시 소금은 Vercel 프로젝트 `qrmenu-intro`의 환경변수(`ADMIN_PASSWORD`, `HASH_SALT`, 민감값)에만 있고 저장소에는 없다. 사용자에게 한 번 알려 줌(2026-10-21). 바꾸려면 `create_project_env`(upsert) 후 `qrmenu-intro`를 다시 배포.
-- 방문자 = **하루 단위 중복 제거**(날짜·소금·IP·브라우저를 섞은 해시, 개인 식별 불가)의 합. 페이지뷰 = 기록 수. 날짜는 베트남 시간. 로봇(UA에 bot·crawl·headless 등)은 서버에서 제외. 우리 주소(`*.qrmenuasia.com`, 옛 `*-menu.vercel.app`)가 아닌 곳이 보낸 신호는 버림.
-- **내 방문 제외**: 그 주소 끝에 `?notrack`을 붙여 한 번 열면 그 브라우저·그 주소에서는 기록 안 함(`?track`으로 해제). 영업 데모·테스트 때 쓴다.
-- **유입 구분**: QR·링크 주소에 `?utm_source=qr`(가게 찾기에서 오는 링크는 `?utm_source=stores`)를 붙이면 구분된다. 이미 인쇄한 QR은 꼬리표가 없어 "직접·QR(꼬리표 없음)". 새로 인쇄하는 QR부터 `?utm_source=qr`을 붙일 것.
-- 확인 방법: 저장소 `qrmenu-hits`의 `count`(`get_storage_stores_by_id`)가 방문마다 늘어난다. 함수 오류는 Vercel 런타임 로그(`get_runtime_logs`, 프로젝트 `qrmenu-intro`).
-- `qrmenu-intro`는 이제 정적 페이지 + `api/` 함수(Node, `@vercel/blob`) 프로젝트다(`sales/package.json`, `sales/vercel.json`). 고쳐서 배포하는 방법은 그대로(rootDirectory `sales`).
-- 나중에: 월간 리포트(PDF/링크), 메뉴 클릭·QR 스캔 세부 기록, 데이터가 많아지면 하루 단위 합계 파일로 롤업.
+## 방문 기록 · 관리 화면 · 점주 메뉴 편집 (자체 시스템, 2026-10-21~22)
+`qrmenuasia.com` 프로젝트 `qrmenu-intro`(rootDirectory `sales`)가 정적 페이지 + `api/` 함수(Node, `@vercel/blob` ^1) + `admin/`·`owner/`·`report/` 화면을 모두 가진다. 저장소는 Vercel Blob `qrmenu-hits`(`store_FT8aWwdnulqIcDQB`, 공개, sin1) 하나. **새 가게를 만들면 `node tools/analytics.mjs`를 한 번 돌린다**(방문 신호 + 메뉴 불러오기 태그를 넣음).
+- **방문 집계**: 모든 페이지 끝 코드(`<!-- analytics:start/end -->`) → `sendBeacon` → `/api/hit` → Blob `hits/<날짜>/<가게>/<방문자해시>.<언어>.<국가>.<기기>.<유입>.<무작위>`(방문 1건 = 빈 파일 1개, 내용은 경로에). 방문자 = 하루 단위 중복 제거(날짜·소금·IP·브라우저 해시)의 합, 페이지뷰 = 기록 수, 날짜는 베트남 시간, 로봇 제외, 우리 주소 아닌 곳이 보낸 신호는 버림. **내 방문 제외**: 주소 끝 `?notrack`(해제 `?track`). **유입 구분**: 주소에 `?utm_source=qr`(가게 찾기 링크는 `?utm_source=stores`). 이미 인쇄한 QR은 꼬리표가 없어 "직접·QR".
+- **비밀번호**: 관리자 비밀번호는 Vercel 환경변수 `ADMIN_PASSWORD`(민감값, 사용자가 `jeon4164`로 지정 2026-10-22), 소금 `HASH_SALT`. 바꾸려면 `create_project_env`(upsert) 후 `qrmenu-intro` 재배포. 점주 비밀번호는 가게별(`sec/owners/<가게>-<무작위>.json`, scrypt 해시, **admin 가게 관리 탭에서 발급**, 한 번만 보여 줌). 비밀 파일은 경로에 무작위 글자를 붙여(`setSecret`) 주소를 추측할 수 없게 한다. 로그인 열쇠는 HMAC 토큰(점주 12시간). **틀린 로그인 8번/시간이면 그 IP를 한 시간 막는다**(`sec/fail/`).
+- **관리 화면** https://qrmenuasia.com/admin (`sales/admin/index.html` + `crm.js`): 방문 현황 / 가게 관리(영업 상태 5단계·연락처·요금·다음 연락일·메모·진행 기록, 점주 비밀번호 발급/끄기, 리포트 링크) / 메뉴 편집(점주 화면과 같은 편집기, 가게 선택) / 리포트(30일 방문 순위·링크 복사·엑셀 CSV) / 보안·기록(최근 3일 활동, 틀린 로그인 수). 영업 데이터는 비밀 파일 `sec/crm-…json`. 가게 목록은 `sales/stores/data.js`의 STORES(영업 상태 기본값: `listing:true`면 가게 찾기용, 아니면 정식).
+- **리포트** https://qrmenuasia.com/report/?shop=…&days=30&t=<열쇠> (`sales/report/index.html`, 로그인 없이 열림, 한국어/베트남어, 인쇄·PDF 저장). 열쇠는 가게마다 HMAC(`reportToken`). admin에서 링크를 만들어 사장님께 보낸다. `HASH_SALT`를 바꾸면 기존 링크·방문자 해시가 모두 달라진다.
+- **점주 메뉴 편집** https://qrmenuasia.com/owner/?shop=<가게> (`sales/owner/index.html` + 공용 `sales/menu-editor.js`, 한국어/베트남어 화면). 분류·메뉴 추가/수정/삭제/순서, 가격, 설명, 표시(BEST/신메뉴/추천), 매운맛, 사진(분류 배너·메뉴 항목 옆 작은 사진, 브라우저가 줄여서 올림 → `photos/<가게>/`), 전화·주소·와이파이, 이전 버전 되돌리기(`menu-hist/<가게>/`), 처음 메뉴로 초기화. 점주는 **한 언어(기본 베트남어, 백천은 한국어)만 입력**, 저장할 때 서버(`api/_ai.js`)가 나머지 언어를 자동 번역(Vercel AI Gateway, `anthropic/claude-haiku-4.5`, 환경변수 `TRANSLATE_MODEL`로 바꿈, 키는 `AI_GATEWAY_API_KEY` 또는 런타임 OIDC). 번역 실패 시 원문을 임시로 채우고 `_pending`으로 표시(화면은 비지 않음), 다시 저장하면 재시도. 자동 번역 글자는 `_auto`.
+- **손님 화면 반영**: 모든 가게 `index.html`에 `<script src="menu.js">` 바로 뒤 `<script src="https://qrmenuasia.com/api/override?shop=<가게>">`가 있다(`override:start/end`). 점주가 고친 메뉴(`menu/<가게>.json`, 공개)가 있으면 `window.MENU`·`RESTAURANT`(전화·주소·와이파이)를 바꿔 끼우고 메뉴 항목 사진을 붙인다(`.qm-photo`, MutationObserver로 언어 전환 뒤에도 유지). 없으면 `/* default */`만. 엣지 캐시 15초 → **저장 후 약 1분 안에 반영**. 실패해도 기본 `menu.js`로 나온다. 객실(킴스호텔 ROOMS) 등 MENU 밖 데이터는 편집 대상이 아니다.
+- 편집기 구조: 기본 메뉴는 가게 `menu.js`를 서버가 `https://<가게>.qrmenuasia.com/menu.js`에서 읽어 vm으로 실행해 JSON으로 만든다(처음 한 번). 항목 필드 `price·name·desc·unit·spicy·tag·sizes·dessert·photo`(sizes는 가격만 수정). 장바구니 가게는 MENU 순서로 버튼을 붙이므로 편집 후에도 순서대로 동작.
+- API(`sales/api/`): `hit`(수집) `stats`(관리자 집계) `admin`(CRM·점주 비밀번호·로그·리포트 링크) `menu`(편집: load/save/history/restore/reset) `photo`(업로드) `owner`(점주 로그인) `override`(손님용 스크립트) `report`(리포트 데이터). 공용 `_lib.js`(인증·집계)·`_store.js`(Blob JSON 저장)·`_menu.js`(검사·번역·기본 메뉴)·`_ai.js`(번역).
+- **시험 방법**: 이 환경은 외부(qrmenuasia.com)에 접속할 수 없다. 모의 Blob(`@vercel/blob` 가짜 모듈)로 실제 핸들러를 로컬에서 돌려 시험했다(2026-10-22: 방문→집계, CRM, 점주 로그인, 메뉴 저장·번역·기록·복원·초기화, 사진 올리기 경로, 로그인 잠금, 실제 가게 페이지 반영). 실서버 확인은 사용자 브라우저 또는 `get_storage_stores_by_id`(count)·`get_runtime_logs`.
+- 나중에: 월간 리포트 PDF 자동 발송, 하루 단위 합계 롤업(데이터가 많아지면 `stats`가 느려짐), 점주 화면에 테이블 QR 만들기·가게 정보 편집 확장.
 
 ## 가게 찾기 페이지 (손님용)
 - https://qrmenuasia.com/stores/ (`sales/stores/`, 소개서와 같은 Vercel 프로젝트). 소개서 데모 칸 아래 링크로 연결됨.
