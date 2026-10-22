@@ -5,7 +5,26 @@ const { translate } = require('./_ai');
 const LANGS = ['ko', 'en', 'zh', 'ja', 'vi'];
 const str = (v, max = 300) => (typeof v === 'string' ? v.slice(0, max) : '');
 const BLOB_HOST = /^https:\/\/[a-z0-9]+\.public\.blob\.vercel-storage\.com\//;
-const photoOk = (u) => (typeof u === 'string' && BLOB_HOST.test(u) ? u.slice(0, 400) : undefined);
+const photoOk = (u) => (typeof u === 'string' && (BLOB_HOST.test(u) || /^img\/[\w./-]+$/.test(u)) ? u.slice(0, 400) : undefined);
+
+// 편집기가 모르는 가게별 필드(Ăn Vội 주문 옵션, 바이오&뷰티 제품 번호·할인가, 분류 안내 등)는 지우지 않고 보존한다.
+// 단, 아무 값이나 받으면 안 되므로 "그 가게 기본 menu.js 에 실제로 있는 필드·값"과 똑같을 때만 통과시킨다.
+const KNOWN_I = new Set(['name', 'price', 'desc', 'unit', 'spicy', 'tag', 'sizes', 'dessert', 'photo']);
+const KNOWN_C = new Set(['id', 'name', 'items', 'note', 'photo']);
+const TAGS = ['best', 'new', 'special', 'must'];
+const keyOk = (k) => /^[A-Za-z_]\w{0,20}$/.test(k);
+function allowedExtras(defMenu) {
+  const set = new Set();
+  for (const c of defMenu || []) {
+    for (const k of Object.keys(c)) if (!KNOWN_C.has(k)) set.add('c:' + k + '=' + JSON.stringify(c[k]));
+    for (const it of c.items || []) for (const k of Object.keys(it)) if (!KNOWN_I.has(k)) set.add('i:' + k + '=' + JSON.stringify(it[k]));
+  }
+  return set;
+}
+const keepExtras = (src, out, known, prefix, allowed) => {
+  if (!allowed) return;
+  for (const k of Object.keys(src || {})) if (!known.has(k) && keyOk(k) && allowed.has(prefix + k + '=' + JSON.stringify(src[k]))) out[k] = src[k];
+};
 
 function cleanText(o, max = 300) {
   const t = {};
@@ -14,25 +33,29 @@ function cleanText(o, max = 300) {
   return t;
 }
 
-function cleanItem(it) {
+function cleanItem(it, allowed) {
   const out = { name: cleanText(it.name, 120) };
-  out.price = it.price === null || it.price === '' || it.price === undefined ? null : Math.max(0, Math.round(Number(it.price)) || 0);
+  if (it.price !== undefined) out.price = it.price === null || it.price === '' || it.price === undefined ? null : Math.max(0, Math.round(Number(it.price)) || 0);
   if (it.desc && LANGS.some((l) => str(it.desc[l]))) out.desc = cleanText(it.desc, 300);
-  if (it.unit && typeof it.unit === 'object') out.unit = cleanText(it.unit, 40);
+  if (typeof it.unit === 'string' && it.unit) out.unit = str(it.unit, 40);
+  else if (it.unit && typeof it.unit === 'object') out.unit = cleanText(it.unit, 40);
   if (it.spicy) out.spicy = true;
-  if (['best', 'new', 'special'].includes(it.tag)) out.tag = it.tag;
-  if (Array.isArray(it.sizes)) out.sizes = it.sizes.slice(0, 8).map((s) => [cleanText(s[0], 60), Math.max(0, Math.round(Number(s[1])) || 0)]);
+  if (TAGS.includes(it.tag)) out.tag = it.tag;
+  if (Array.isArray(it.sizes)) out.sizes = it.sizes.slice(0, 8).map((s) => [typeof s[0] === 'string' ? str(s[0], 60) : cleanText(s[0], 60), Math.max(0, Math.round(Number(s[1])) || 0)]);
   if (it.dessert) out.dessert = Math.max(0, Math.round(Number(it.dessert)) || 0);
   const p = photoOk(it.photo); if (p) out.photo = p;
+  keepExtras(it, out, KNOWN_I, 'i:', allowed);
   return out;
 }
 
-function cleanMenu(menu) {
+function cleanMenu(menu, defMenu) {
+  const allowed = defMenu ? allowedExtras(defMenu) : null;
   if (!Array.isArray(menu) || menu.length > 40) throw new Error('bad_menu');
   return menu.map((c, i) => {
-    const cat = { id: str(c.id, 30).replace(/[^a-zA-Z0-9_-]/g, '') || 'c' + i, name: cleanText(c.name, 80), items: (Array.isArray(c.items) ? c.items : []).slice(0, 300).map(cleanItem) };
+    const cat = { id: str(c.id, 30).replace(/[^a-zA-Z0-9_-]/g, '') || 'c' + i, name: cleanText(c.name, 80), items: (Array.isArray(c.items) ? c.items : []).slice(0, 300).map((x) => cleanItem(x, allowed)) };
+    keepExtras(c, cat, KNOWN_C, 'c:', allowed);
     if (c.note && LANGS.some((l) => str(c.note[l]))) cat.note = cleanText(c.note, 300);
-    const p = photoOk(c.photo); if (p) cat.photo = p; else if (typeof c.photo === 'string' && /^img\/[\w./-]+$/.test(c.photo)) cat.photo = c.photo; // 기존 가게 사진은 그대로
+    const p = photoOk(c.photo); if (p) cat.photo = p;
     return cat;
   });
 }
@@ -92,4 +115,20 @@ async function loadDefault(shop) {
   return { menu: w.MENU || [], info: { phone: R.phone ?? null, address: R.address || '', wifi: R.wifi ?? null } };
 }
 
-module.exports = { LANGS, cleanMenu, cleanInfo, fillTranslations, loadDefault };
+// 예전 저장본(v 없음)은 가게별 필드·항목 사진이 빠져 있다 → 기본 메뉴에서 같은 분류(id)·같은 항목(이름)을 찾아 빠진 것만 채운다.
+function restoreFromDefault(menu, defMenu) {
+  const nameKey = (it) => JSON.stringify([it.name && it.name.ko, it.name && it.name.vi]);
+  const byId = new Map((defMenu || []).map((c) => [c.id, c]));
+  for (const c of menu) {
+    const dc = byId.get(c.id); if (!dc) continue;
+    for (const k of Object.keys(dc)) if (!KNOWN_C.has(k) || k === 'photo') if (c[k] === undefined) c[k] = dc[k];
+    const byName = new Map((dc.items || []).map((it) => [nameKey(it), it]));
+    for (const it of c.items || []) {
+      const di = byName.get(nameKey(it)); if (!di) continue;
+      for (const k of Object.keys(di)) if (!['name', 'price', 'desc', 'sizes', 'unit', 'dessert', 'spicy'].includes(k) && it[k] === undefined) it[k] = di[k];
+    }
+  }
+  return menu;
+}
+
+module.exports = { LANGS, cleanMenu, cleanInfo, fillTranslations, loadDefault, restoreFromDefault };

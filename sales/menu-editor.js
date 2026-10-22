@@ -69,6 +69,7 @@
     const setMsg = (text, ok) => { msg = text ? { text, ok } : null; };
     const touch = () => { dirty = true; paintBar(); };
     const text = (o) => (o && o[D.srcLang]) || '';
+    const photoSrc = (u) => (!u ? '' : /^https?:/.test(u) ? u : `https://${opts.shop}.qrmenuasia.com/${u}`);
 
     // 원문(입력 언어)을 고치면, 자동 번역·대기·빈 칸이던 다른 언어는 비워서 저장 때 다시 번역되게 한다
     function editSrc(o, v) {
@@ -117,10 +118,10 @@
         const badge = (it.name._pending || []).includes(l) ? `<span class="badge todo">${T.todo}</span>` : (it.name._auto || []).includes(l) ? `<span class="badge">${T.auto}</span>` : '';
         return `<label>${LNAME[l]}${badge}</label><input data-ol="${l}" value="${esc(it.name[l])}" placeholder="${T.emptyAuto}">`;
       }).join('');
-      const sizes = it.sizes ? `<div class="small" style="margin-top:6px">${T.sizes}: ${it.sizes.map((s, si) => `${esc(s[0][D.srcLang] || s[0].ko || '')} <input data-size="${si}" type="number" style="width:110px;display:inline-block" value="${s[1]}">`).join(' · ')}</div>` : '';
+      const sizes = it.sizes ? `<div class="small" style="margin-top:6px">${T.sizes}: ${it.sizes.map((s, si) => `${esc(typeof s[0] === 'string' ? s[0] : (s[0][D.srcLang] || s[0].ko || ''))} <input data-size="${si}" type="number" style="width:110px;display:inline-block" value="${s[1]}">`).join(' · ')}</div>` : '';
       return `<div class="item" data-ci="${ci}" data-ii="${ii}">
         <div class="row">
-          <div class="ph fix">${it.photo ? `<img class="thumb" src="${esc(it.photo)}" alt="">` : `<div class="thumb"></div>`}</div>
+          <div class="ph fix">${it.photo ? `<img class="thumb" src="${esc(photoSrc(it.photo))}" alt="">` : `<div class="thumb"></div>`}</div>
           <div><label>${T.name}</label><input data-k="name" value="${esc(text(it.name))}"></div>
           ${it.sizes ? '' : `<div style="max-width:170px"><label>${T.price}</label><input data-k="price" type="number" inputmode="numeric" value="${it.price ?? ''}" placeholder="${T.priceAsk}"></div>`}
         </div>${sizes}
@@ -130,7 +131,7 @@
         </div>
         <details><summary>${T.more}</summary>
           <div class="row"><div><label>${T.desc}</label><input data-k="desc" value="${esc(text(it.desc))}"></div>
-          <div class="fix"><label>${T.tag}</label><select data-k="tag"><option value="">${T.tagNone}</option><option value="best"${it.tag === 'best' ? ' selected' : ''}>${T.tagBest}</option><option value="new"${it.tag === 'new' ? ' selected' : ''}>${T.tagNew}</option><option value="special"${it.tag === 'special' ? ' selected' : ''}>${T.tagSpecial}</option></select></div></div>
+          <div class="fix"><label>${T.tag}</label><select data-k="tag"><option value="">${T.tagNone}</option><option value="best"${it.tag === 'best' ? ' selected' : ''}>${T.tagBest}</option><option value="new"${it.tag === 'new' ? ' selected' : ''}>${T.tagNew}</option><option value="special"${it.tag === 'special' ? ' selected' : ''}>${T.tagSpecial}</option><option value="must"${it.tag === 'must' ? ' selected' : ''}>Must Try</option></select></div></div>
           <label><input type="checkbox" data-k="spicy" style="width:auto"${it.spicy ? ' checked' : ''}> ${T.spicy}</label>
           <div class="small" style="margin-top:8px"><b>${T.other}</b></div>${others}
         </details></div>`;
@@ -139,7 +140,7 @@
     function catHtml(c, ci) {
       return `<div class="cat" data-ci="${ci}">
         <div class="row">
-          <div class="ph fix">${c.photo ? `<img class="thumb big" src="${esc(c.photo.startsWith('http') ? c.photo : `https://${opts.shop}.qrmenuasia.com/${c.photo}`)}" alt="">` : `<div class="thumb big"></div>`}</div>
+          <div class="ph fix">${c.photo ? `<img class="thumb big" src="${esc(photoSrc(c.photo))}" alt="">` : `<div class="thumb big"></div>`}</div>
           <div><label>${T.catName}</label><input data-k="cname" value="${esc(text(c.name))}"></div>
         </div>
         <div class="tools">

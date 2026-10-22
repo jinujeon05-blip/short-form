@@ -19,7 +19,10 @@ module.exports = async (req, res) => {
   try {
     if (action === 'load') {
       const cur = await S.getJson(`menu/${shop}.json`);
-      if (cur) return res.json({ source: 'custom', ...cur });
+      if (cur) {
+        if (!cur.v) { try { const d = await M.loadDefault(shop); cur.menu = M.restoreFromDefault(cur.menu, d.menu); cur.repaired = true; } catch {} }
+        return res.json({ source: 'custom', ...cur });
+      }
       const d = await M.loadDefault(shop);
       return res.json({ source: 'default', menu: d.menu, info: d.info, srcLang: shop === 'baekcheon' ? 'ko' : 'vi', updatedAt: null });
     }
@@ -30,11 +33,12 @@ module.exports = async (req, res) => {
     if (req.method !== 'POST') return res.status(405).end();
     const body = L.readBody(req);
     if (action === 'save') {
-      const menu = M.cleanMenu(body.menu);
+      let def; try { def = await M.loadDefault(shop); } catch { return res.status(503).json({ error: 'no_default' }); }
+      const menu = M.cleanMenu(body.menu, def.menu);
       const info = M.cleanInfo(body.info);
       const srcLang = M.LANGS.includes(body.srcLang) ? body.srcLang : 'vi';
       const tr = await M.fillTranslations(req, menu, srcLang);
-      const doc = { menu, info, srcLang, updatedAt: Date.now(), by: actor };
+      const doc = { v: 2, menu, info, srcLang, updatedAt: Date.now(), by: actor };
       if (JSON.stringify(doc).length > 450000) return res.status(413).json({ error: 'too_big' });
       await S.setPublic(`menu/${shop}.json`, doc);
       await S.setPublic(`menu-hist/${shop}/${doc.updatedAt}.json`, doc);
@@ -46,7 +50,8 @@ module.exports = async (req, res) => {
       if (!path.startsWith(`menu-hist/${shop}/`)) return res.status(400).json({ error: 'bad_path' });
       const doc = await S.getJson(path);
       if (!doc) return res.status(404).json({ error: 'not_found' });
-      const next = { ...doc, updatedAt: Date.now(), by: actor };
+      if (!doc.v) { try { const d = await M.loadDefault(shop); doc.menu = M.restoreFromDefault(doc.menu, d.menu); } catch {} }
+      const next = { ...doc, v: 2, updatedAt: Date.now(), by: actor };
       await S.setPublic(`menu/${shop}.json`, next);
       await S.setPublic(`menu-hist/${shop}/${next.updatedAt}.json`, next);
       await L.logEvent(actor, 'menu-restore', shop);
