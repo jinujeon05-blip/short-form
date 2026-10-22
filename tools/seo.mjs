@@ -11,7 +11,7 @@ const DOMAIN = 'qrmenuasia.com';
 const SHOPS = {
   sutkkui:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND', naver: 'ca47ee18fdb77a8f2f443cb5831aaf7908723830' },
   eros:       { type: 'BarOrPub', cuisine: ['Bar'], country: 'VN', currency: 'VND', phone: false },
-  anvoi:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Noodles'], country: 'VN', currency: 'VND' },
+  anvoi:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Noodles'], country: 'VN', currency: 'VND', naver: 'c8c35a8918759c057be5313955e2ea9c92fdc072' },
   baekcheon:  { type: 'Restaurant', cuisine: ['Korean', 'Grilled eel'], country: 'KR', currency: 'KRW', naver: 'b33f476ad38d2aafc7ea74651de94e5a2262361e' },
   gamasot:    { type: 'Restaurant', cuisine: ['Korean'], country: 'VN', currency: 'VND', naver: '6d64ac159210cc85e66a84a64ce28822bab7c395' },
   biobeauty:  { type: 'Store', country: 'VN', currency: 'VND' },
