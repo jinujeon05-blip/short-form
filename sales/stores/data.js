@@ -113,6 +113,11 @@ window.STORES = [
     address: "35 Lý Nhân Tông, Võ Cường, Bắc Ninh",
     type: { ko: "소곱창 · 대창 · 막창 전문점", vi: "Chuyên lòng bò · đại tràng · dạ múi khế nướng", en: "Beef offal grill (gopchang · daechang · makchang)", zh: "牛杂烧烤专门店", ja: "牛ホルモン焼き専門店（コプチャン・テチャン・マクチャン）" },
     keywords: "수정곱창 수정 곱창 박닌 sujeong lòng bò korea lòng bò hàn quốc 곱창 소곱창 대창 소대창 막창 소막창 모듬곱창 곱창전골 전골 꽃삼겹 크림꽃삼겹 항정살 꼬들살 소갈비살 양념목살 명품육회 육회 뚝배기불고기 냉면 천연수정불판 수정불판 võ cường lý nhân tông bắc ninh lòng non bò đại tràng dạ múi khế lẩu lòng bò gỏi bò sống beef offal gopchang makchang daechang intestine hot pot crystal grill korean bbq 牛杂 牛小肠 牛大肠 牛皱胃 火锅 水晶烤盘 韩国烤肉 ホルモン コプチャン マクチャン テチャン ホルモン鍋 水晶焼き板 韓国料理" },
+  { id: "yukdeok", name: "육덕 Yukdeok", sub: "숙성 삼겹살 · 소고기 · 훈제 오리", url: "https://yukdeok.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["bbq", "korean"], tags: ["photos"],
+    address: "31N4 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh",
+    type: { ko: "숙성 삼겹살 · 소고기 · 훈제 오리 한식당", vi: "Ba chỉ ủ chín · Thịt bò · Vịt hun khói", en: "Aged pork belly · Beef · Smoked duck", zh: "熟成五花肉 · 牛肉 · 烟熏鸭", ja: "熟成サムギョプサル・牛肉・燻製鴨" },
+    keywords: "육덕 yukdeok yuk deok 박닌 육덕 nhà hàng hàn quốc 한식 삼겹살 숙성 삼겹살 숙성 목살 목살 갈매기살 뽈살 항정살 소고기 갈비살 꽃살 육회 훈제 오리 숯불 훈제오리 떡갈비 등갈비 김치찜 김치말이 국수 비빔국수 잔치국수 냉모밀 김치찌개 된장찌개 계란찜 võ cường ngọc hân công chúa bắc ninh thịt nướng hàn quốc ba chỉ heo thịt bò vịt hun khói gỏi bò aged pork belly beef smoked duck korean bbq yukhoe 熟成五花肉 牛肉 烟熏鸭 烤肉 韩国烤肉 熟成 サムギョプサル 熟成肉 燻製鴨 韓国料理 焼肉" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
