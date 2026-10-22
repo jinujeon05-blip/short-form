@@ -3,9 +3,9 @@
 // 메뉴판 언어(<html lang>)가 바뀌면 문구도 따라 바뀐다. 색은 가게의 --pt-* 변수를 따른다.
 (function () {
   const T = {
-    ko: { a: "구글 지도에 올린 메뉴판 기준이며 바뀔 수 있어요.", b: "사장님 동의 없이 손님 안내용으로 만든 페이지라 정보가 정확하지 않을 수 있어요." },
+    ko: { a: "구글 지도에 올라온 메뉴판 기준이며 바뀔 수 있어요.", b: "사장님 동의 없이 손님 안내용으로 만든 페이지라 정보가 정확하지 않을 수 있어요." },
     vi: { a: "Dựa trên thực đơn đăng trên Google Maps, có thể thay đổi.", b: "Trang này được tạo để hỗ trợ khách, chưa có sự đồng ý của chủ quán nên thông tin có thể chưa chính xác." },
-    en: { a: "Based on the menu posted on Google Maps and may change.", b: "This page was made for customer convenience without the owner's consent, so the information may not be accurate." },
+    en: { a: "Menu and prices are based on the menu posted on Google Maps and may change.", b: "This page was made for customer convenience without the owner's consent, so the information may not be accurate." },
     zh: { a: "以上依据谷歌地图上传的菜单，内容可能有变动。", b: "本页面未经店家同意、仅为方便顾客而制作，信息可能不准确。" },
     ja: { a: "Googleマップに掲載されたメニューに基づいており、変更になる場合があります。", b: "店舗の同意なくお客様の便宜のために作成したページのため、情報が正確でない可能性があります。" },
   };
@@ -24,6 +24,7 @@
   };
 
   function mount() {
+    if (document.querySelector(".qr-notice")) return;
     const style = document.createElement("style");
     style.textContent = css;
     document.head.appendChild(style);
