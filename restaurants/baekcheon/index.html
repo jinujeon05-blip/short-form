@@ -234,6 +234,7 @@
   }
 
   const fmt = (n) => n.toLocaleString("en-US");
+  const ASK = { ko: "가격 문의", vi: "Hỏi giá", en: "Ask price", zh: "询价", ja: "価格はお問い合わせ" }; // 가격이 비어 있는 메뉴 (점주가 가격을 안 넣은 경우)
 
   function render(lang) {
     const t = UI[lang], R = window.RESTAURANT;
@@ -255,7 +256,7 @@
           <li>
             ${it.photo ? `<button class="thumb" type="button" data-photo="${it.photo}" data-cap="${esc(it.name[lang])}"><img src="${it.photo}" alt="${esc(it.name[lang])}" loading="lazy"></button>` : ""}
             <div class="info">
-              <div class="row"><b>${esc(it.name[lang])}</b><span class="leader"></span><span class="price">${fmt(it.price)}<small>${esc(t.won)}</small></span></div>
+              <div class="row"><b>${esc(it.name[lang])}</b><span class="leader"></span><span class="price">${it.price == null ? esc(ASK[lang] || ASK.en) : `${fmt(it.price)}<small>${esc(t.won)}</small>`}</span></div>
               ${it.spicy || it.unit ? `<div class="tags">${it.spicy ? `<span class="hot">🌶 ${esc(t.spicy)}</span>` : ""}${it.unit ? `<span class="g">${esc(it.unit)}</span>` : ""}</div>` : ""}
               ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
               <div class="sub">${esc(it.name[second])}</div>

@@ -229,6 +229,7 @@
   }
 
   const fmt = (n) => n.toLocaleString("en-US");
+  const ASK = { ko: "가격 문의", vi: "Hỏi giá", en: "Ask price", zh: "询价", ja: "価格はお問い合わせ" }; // 가격이 비어 있는 메뉴 (점주가 가격을 안 넣은 경우)
 
   // 메뉴판처럼 아랫줄에 두 가지 이름을 함께 표시 (직원·동행 손님이 알아보기 쉽게)
   // 왼쪽(이탤릭)/오른쪽: 한국어 → 베트남어·중국어, 베트남어 → 한국어·중국어, 그 외 → 한국어·베트남어
@@ -263,7 +264,7 @@
             <div class="row">
               <b>${esc(it.name[lang])}</b>${it.unit ? `<span class="unit">${it.unit}</span>` : ""}
               <span class="leader"></span>
-              <span class="price">${fmt(it.price)}<small>₫</small></span>
+              <span class="price">${it.price == null ? esc(ASK[lang] || ASK.en) : `${fmt(it.price)}<small>₫</small>`}</span>
             </div>
             <div class="row2"><em class="${left === "vi" ? "it" : ""}">${esc(it.name[left])}</em><span>${esc(it.name[right])}</span></div>
           </li>`).join("")}

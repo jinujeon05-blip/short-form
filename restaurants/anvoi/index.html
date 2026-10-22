@@ -297,6 +297,7 @@
       return `<div class="prices">${it.prices.map((p, i) =>
         `<button type="button" class="add" data-k="${ci}-${ii}-${i}" data-n="+">${showLabels ? `<small class="pricecol">${esc(cols[i])}</small>` : ""}${fmt(p)}</button>`).join("")}</div>`;
     }
+    if (it.price == null) return `<div class="price">Hỏi giá</div>`;
     if (it.priceText) return `<div class="price">${esc(it.priceText)}<small>đ</small></div>`;
     return `<div class="price-wrap"><div class="price">${fmt(it.price)}<small>đ</small></div><button type="button" class="plus" data-k="${ci}-${ii}-0" data-n="+" aria-label="+"></button></div>`;
   }

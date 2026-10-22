@@ -10,6 +10,7 @@ async function translate(req, jobs) {
   const out = jobs.map(() => ({}));
   if (!jobs.length) return { out, ok: true };
   const token = tokenFrom(req);
+  if (!token) console.error('translate: no token (AI_GATEWAY_API_KEY / OIDC 없음)');
   if (!token) return { out, ok: false, why: 'no_token' };
   const model = process.env.TRANSLATE_MODEL || 'anthropic/claude-haiku-4.5';
   const items = jobs.map((j, i) => ({ id: i, from: LANG_NAME[j.from], to: j.to.map((l) => LANG_NAME[l]), text: j.text }));
@@ -23,7 +24,7 @@ Input: ${JSON.stringify(items)}`;
       headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` },
       body: JSON.stringify({ model, temperature: 0, messages: [{ role: 'user', content: prompt }] }),
     });
-    if (!r.ok) return { out, ok: false, why: 'http_' + r.status };
+    if (!r.ok) { console.error('translate http', r.status, (await r.text()).slice(0, 300)); return { out, ok: false, why: 'http_' + r.status }; }
     const j = await r.json();
     const txt = j.choices?.[0]?.message?.content || '';
     const m = txt.match(/\{[\s\S]*\}/);
@@ -34,6 +35,7 @@ Input: ${JSON.stringify(items)}`;
     });
     return { out, ok: true };
   } catch (e) {
+    console.error('translate error', e && e.message);
     return { out, ok: false, why: 'error' };
   }
 }

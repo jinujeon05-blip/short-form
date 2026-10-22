@@ -8,7 +8,7 @@
     ko: {
       loading: '불러오는 중…', save: '저장하고 손님 화면에 반영', saving: '저장하는 중…(번역 포함, 잠시 걸려요)', saved: '저장했어요. 손님 화면에는 1분 안에 반영돼요.',
       dirty: '저장하지 않은 변경이 있어요', clean: '저장된 상태', history: '이전 버전', reset: '처음 메뉴로 되돌리기', srcLang: '내가 입력하는 언어',
-      srcHelp: '이 언어로만 쓰면 돼요. 저장할 때 나머지 언어는 자동 번역돼요(고칠 수도 있어요).', info: '가게 정보', phone: '전화번호', address: '주소', wifi: '와이파이', ssid: '이름', pw: '비밀번호',
+      srcHelp: '한국어와 베트남어 두 칸에 직접 써 주세요. 영어·중국어·일본어는 자동 번역을 시도하고, 안 되면 입력한 글자가 그대로 보여요.', info: '가게 정보', phone: '전화번호', address: '주소', wifi: '와이파이', ssid: '이름', pw: '비밀번호',
       cats: '메뉴 분류', addCat: '+ 분류 추가', addItem: '+ 메뉴 추가', catName: '분류 이름', note: '안내 문구(선택)', name: '메뉴 이름', price: '가격(₫ 또는 ₩)', priceAsk: '비우면 "가격 문의"',
       desc: '설명(선택)', spicy: '매운 메뉴', tag: '표시', tagNone: '없음', tagBest: 'BEST', tagNew: '신메뉴', tagSpecial: '추천', photo: '사진', photoAdd: '사진 올리기', photoDel: '사진 지우기',
       other: '다른 언어로 보이는 글자', auto: '자동 번역', todo: '번역 대기', emptyAuto: '(저장하면 자동 번역)', del: '삭제', up: '▲', down: '▼', sizes: '여러 가격',
@@ -20,7 +20,7 @@
     vi: {
       loading: 'Đang tải…', save: 'Lưu và hiển thị cho khách', saving: 'Đang lưu (có dịch tự động, hơi lâu)…', saved: 'Đã lưu. Khách sẽ thấy trong vòng 1 phút.',
       dirty: 'Có thay đổi chưa lưu', clean: 'Đã lưu', history: 'Phiên bản cũ', reset: 'Khôi phục menu ban đầu', srcLang: 'Ngôn ngữ tôi nhập',
-      srcHelp: 'Chỉ cần nhập bằng ngôn ngữ này. Khi lưu, các ngôn ngữ còn lại sẽ được dịch tự động (có thể sửa).', info: 'Thông tin quán', phone: 'Số điện thoại', address: 'Địa chỉ', wifi: 'Wi-Fi', ssid: 'Tên', pw: 'Mật khẩu',
+      srcHelp: 'Vui lòng tự nhập vào hai ô tiếng Hàn và tiếng Việt. Tiếng Anh, Trung, Nhật sẽ thử dịch tự động; nếu không được, khách sẽ thấy chữ bạn đã nhập.', info: 'Thông tin quán', phone: 'Số điện thoại', address: 'Địa chỉ', wifi: 'Wi-Fi', ssid: 'Tên', pw: 'Mật khẩu',
       cats: 'Nhóm món', addCat: '+ Thêm nhóm', addItem: '+ Thêm món', catName: 'Tên nhóm', note: 'Ghi chú (không bắt buộc)', name: 'Tên món', price: 'Giá (₫ hoặc ₩)', priceAsk: 'Để trống = "Hỏi giá"',
       desc: 'Mô tả (không bắt buộc)', spicy: 'Món cay', tag: 'Nhãn', tagNone: 'Không', tagBest: 'BEST', tagNew: 'Món mới', tagSpecial: 'Đề xuất', photo: 'Ảnh', photoAdd: 'Tải ảnh lên', photoDel: 'Xóa ảnh',
       other: 'Chữ hiển thị ở ngôn ngữ khác', auto: 'dịch tự động', todo: 'chờ dịch', emptyAuto: '(sẽ tự dịch khi lưu)', del: 'Xóa', up: '▲', down: '▼', sizes: 'Nhiều mức giá',
@@ -68,14 +68,14 @@
     };
     const setMsg = (text, ok) => { msg = text ? { text, ok } : null; };
     const touch = () => { dirty = true; paintBar(); };
-    const text = (o) => (o && o[D.srcLang]) || '';
+    const text = (o) => (o && (o[D.srcLang] || o.vi || o.ko)) || '';
     const photoSrc = (u) => (!u ? '' : /^https?:/.test(u) ? u : `https://${opts.shop}.qrmenuasia.com/${u}`);
 
     // 원문(입력 언어)을 고치면, 자동 번역·대기·빈 칸이던 다른 언어는 비워서 저장 때 다시 번역되게 한다
-    function editSrc(o, v) {
-      o[D.srcLang] = v;
-      for (const l of LANGS) if (l !== D.srcLang && ((o._auto || []).includes(l) || (o._pending || []).includes(l) || !o[l])) o[l] = '';
-      o._auto = (o._auto || []).filter((l) => o[l]); o._pending = (o._pending || []).filter((l) => o[l]);
+    function editSrc(o, lang, v) {
+      o[lang] = v;
+      for (const l of LANGS) if (l !== lang && ((o._auto || []).includes(l) || (o._pending || []).includes(l) || !o[l])) o[l] = '';
+      o._auto = (o._auto || []).filter((l) => o[l] && l !== lang); o._pending = (o._pending || []).filter((l) => o[l] && l !== lang);
       if (!o._auto.length) delete o._auto; if (!o._pending.length) delete o._pending;
     }
     function editOther(o, l, v) {
@@ -108,13 +108,16 @@
       inp.click();
     }
 
+    // 한국어·베트남어 두 칸 (점주가 직접 입력). 영어·중국어·일본어는 저장할 때 자동 번역을 시도한다.
+    const dual = (o, key, label) => `<label>${label}</label><div class="row">${['ko', 'vi'].map((l) => `<div><input data-k="${key}" data-l="${l}" value="${esc(o && o[l])}" placeholder="${LNAME[l]}"></div>`).join('')}</div>`;
+
     function tx(o, key, label, area) {
       const tag = area ? 'textarea rows="2"' : 'input';
       return `<label>${label}</label><${tag} data-k="${key}" value="${esc(text(o))}">${area ? esc(text(o)) + '</textarea>' : ''}`;
     }
 
     function itemHtml(it, ci, ii) {
-      const others = LANGS.filter((l) => l !== D.srcLang).map((l) => {
+      const others = ['en', 'zh', 'ja'].map((l) => {
         const badge = (it.name._pending || []).includes(l) ? `<span class="badge todo">${T.todo}</span>` : (it.name._auto || []).includes(l) ? `<span class="badge">${T.auto}</span>` : '';
         return `<label>${LNAME[l]}${badge}</label><input data-ol="${l}" value="${esc(it.name[l])}" placeholder="${T.emptyAuto}">`;
       }).join('');
@@ -122,7 +125,7 @@
       return `<div class="item" data-ci="${ci}" data-ii="${ii}">
         <div class="row">
           <div class="ph fix">${it.photo ? `<img class="thumb" src="${esc(photoSrc(it.photo))}" alt="">` : `<div class="thumb"></div>`}</div>
-          <div><label>${T.name}</label><input data-k="name" value="${esc(text(it.name))}"></div>
+          <div>${dual(it.name, 'name', T.name)}</div>
           ${it.sizes ? '' : `<div style="max-width:170px"><label>${T.price}</label><input data-k="price" type="number" inputmode="numeric" value="${it.price ?? ''}" placeholder="${T.priceAsk}"></div>`}
         </div>${sizes}
         <div class="tools">
@@ -130,7 +133,7 @@
           <button class="btn sm" data-a="up">${T.up}</button><button class="btn sm" data-a="down">${T.down}</button><button class="btn sm danger" data-a="del">${T.del}</button>
         </div>
         <details><summary>${T.more}</summary>
-          <div class="row"><div><label>${T.desc}</label><input data-k="desc" value="${esc(text(it.desc))}"></div>
+          <div class="row"><div>${dual(it.desc, 'desc', T.desc)}</div>
           <div class="fix"><label>${T.tag}</label><select data-k="tag"><option value="">${T.tagNone}</option><option value="best"${it.tag === 'best' ? ' selected' : ''}>${T.tagBest}</option><option value="new"${it.tag === 'new' ? ' selected' : ''}>${T.tagNew}</option><option value="special"${it.tag === 'special' ? ' selected' : ''}>${T.tagSpecial}</option><option value="must"${it.tag === 'must' ? ' selected' : ''}>Must Try</option></select></div></div>
           <label><input type="checkbox" data-k="spicy" style="width:auto"${it.spicy ? ' checked' : ''}> ${T.spicy}</label>
           <div class="small" style="margin-top:8px"><b>${T.other}</b></div>${others}
@@ -141,13 +144,13 @@
       return `<div class="cat" data-ci="${ci}">
         <div class="row">
           <div class="ph fix">${c.photo ? `<img class="thumb big" src="${esc(photoSrc(c.photo))}" alt="">` : `<div class="thumb big"></div>`}</div>
-          <div><label>${T.catName}</label><input data-k="cname" value="${esc(text(c.name))}"></div>
+          <div>${dual(c.name, 'cname', T.catName)}</div>
         </div>
         <div class="tools">
           <button class="btn sm" data-a="cphoto">${T.photoAdd}</button>${c.photo ? `<button class="btn sm" data-a="cphotodel">${T.photoDel}</button>` : ''}
           <button class="btn sm" data-a="cup">${T.up}</button><button class="btn sm" data-a="cdown">${T.down}</button><button class="btn sm danger" data-a="cdel">${T.del}</button>
         </div>
-        <details><summary>${T.note}</summary><input data-k="cnote" value="${esc(text(c.note))}"></details>
+        <details><summary>${T.note}</summary>${dual(c.note, 'cnote', T.note)}</details>
         ${c.items.map((it, ii) => itemHtml(it, ci, ii)).join('') || `<div class="small" style="margin:8px 0">${T.emptyCat}</div>`}
         <button class="btn sm" data-a="additem">${T.addItem}</button>
       </div>`;
@@ -163,7 +166,7 @@
       root.innerHTML = `
         <div class="bar"><button class="btn pri" data-a="save">${T.save}</button><span class="st"></span><button class="btn" data-a="hist">${T.history}</button><button class="btn danger" data-a="reset">${T.reset}</button></div>
         ${msg ? `<div class="msg ${msg.ok ? 'ok' : ''}">${esc(msg.text)}</div>` : ''}
-        <div class="box"><div class="row"><div style="max-width:260px"><label>${T.srcLang}</label><select data-k="srcLang">${LANGS.map((l) => `<option value="${l}"${l === D.srcLang ? ' selected' : ''}>${LNAME[l]}</option>`).join('')}</select></div><div class="small" style="align-self:center">${T.srcHelp}</div></div></div>
+        <div class="box"><div class="small">${T.srcHelp}</div></div>
         <div class="box"><b>${T.info}</b>
           <div class="row"><div><label>${T.phone}</label><input data-i="phone" value="${esc(D.info.phone)}"></div><div><label>${T.address}</label><input data-i="address" value="${esc(D.info.address)}"></div></div>
           <div class="row"><div><label>${T.wifi} · ${T.ssid}</label><input data-i="ssid" value="${esc(D.info.wifi && D.info.wifi.ssid)}"></div><div><label>${T.wifi} · ${T.pw}</label><input data-i="wpw" value="${esc(D.info.wifi && D.info.wifi.password)}"></div></div>
@@ -176,27 +179,26 @@
     const swap = (a, i, j) => { if (j < 0 || j >= a.length) return; [a[i], a[j]] = [a[j], a[i]]; };
 
     root.addEventListener('input', (e) => {
-      const t = e.target, k = t.dataset.k, box = t.closest('.item, .cat'), item = t.closest('.item');
+      const t = e.target, k = t.dataset.k, lg = t.dataset.l, box = t.closest('.item, .cat'), item = t.closest('.item');
       if (t.dataset.i) {
         const f = t.dataset.i;
         if (f === 'phone' || f === 'address') D.info[f] = t.value;
         else { D.info.wifi = D.info.wifi || { ssid: '', password: '' }; D.info.wifi[f === 'ssid' ? 'ssid' : 'password'] = t.value; }
         return touch();
       }
-      if (k === 'srcLang') { D.srcLang = t.value; touch(); return paint(); }
       if (!box) return;
       const c = D.menu[+box.dataset.ci];
       if (item) {
         const it = c.items[+item.dataset.ii];
-        if (k === 'name') editSrc(it.name, t.value);
+        if (k === 'name') editSrc(it.name, lg, t.value);
         else if (k === 'price') it.price = t.value === '' ? null : Number(t.value);
-        else if (k === 'desc') { it.desc = it.desc || {}; editSrc(it.desc, t.value); }
+        else if (k === 'desc') { it.desc = it.desc || {}; editSrc(it.desc, lg, t.value); }
         else if (k === 'tag') it.tag = t.value || undefined;
         else if (k === 'spicy') it.spicy = t.checked || undefined;
         else if (t.dataset.ol) editOther(it.name, t.dataset.ol, t.value);
         else if (t.dataset.size !== undefined) it.sizes[+t.dataset.size][1] = Number(t.value) || 0;
-      } else if (k === 'cname') editSrc(c.name, t.value);
-      else if (k === 'cnote') { c.note = c.note || {}; editSrc(c.note, t.value); }
+      } else if (k === 'cname') editSrc(c.name, lg, t.value);
+      else if (k === 'cnote') { c.note = c.note || {}; editSrc(c.note, lg, t.value); }
       touch();
     });
 
@@ -235,7 +237,7 @@
         D = { menu: j.menu, info: j.info, srcLang: j.srcLang, updatedAt: j.updatedAt, source: 'custom' }; dirty = false;
         const parts = [T.saved];
         if (j.translated) parts.push(T.trOk.replace('{n}', j.translated));
-        if (j.pending) parts.push(T.trWarn.replace('{n}', j.pending));
+        if (j.pending) parts.push(T.trWarn.replace('{n}', j.pending) + (j.why ? ` (${j.why})` : ''));
         if (skipped) parts.push(T.skipped.replace('{n}', skipped));
         setMsg(parts.join(' '), !j.pending); paint();
       } catch (er) { fail(er); }
