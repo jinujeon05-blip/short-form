@@ -44,6 +44,9 @@ window.DEMOS = [
   // 치뱅이(정식, 2026-10-21) — 소개서 데모 7칸은 그대로 두고 SNS 도구용으로만 넣음
   { id: "chibaengi", hidden: true, url: "https://chibaengi.qrmenuasia.com", shot: "img/demo-chibaengi.jpg", qr: "img/qr-chibaengi.svg",
     name: "치뱅이 CHIBAENGI", type: { ko: "치킨 · 골뱅이 호프 · 박닌", vi: "Gà rán · Ốc · Quán nhậu · Bắc Ninh", zh: "韩式炸鸡 · 海螺 · 啤酒屋 · 北宁", ja: "チキン・ツブ貝・ビアホール・バクニン", en: "Korean chicken & pub · Bac Ninh" } },
+  // 퍼틴(정식, 2026-10-22)
+  { id: "phothin", hidden: true, url: "https://phothin.qrmenuasia.com", shot: "img/demo-phothin.jpg", qr: "img/qr-phothin.svg",
+    name: "퍼틴 PHỞ THÌN", type: { ko: "소고기 쌀국수 · 하노이", vi: "Phở bò truyền thống · Hà Nội", zh: "牛肉河粉 · 河内", ja: "牛肉フォー・ハノイ", en: "Beef phở · Hanoi" } },
 ];
 
 window.T = {

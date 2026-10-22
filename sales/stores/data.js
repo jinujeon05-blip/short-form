@@ -71,6 +71,11 @@ window.STORES = [
     address: "16 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh",
     type: { ko: "치킨 · 골뱅이 · 떡볶이 호프", vi: "Gà rán · Ốc · Tokbokki · Quán nhậu Hàn Quốc", en: "Korean fried chicken · Sea snails · Tteokbokki pub", zh: "韩式炸鸡 · 海螺 · 辣炒年糕 · 啤酒屋", ja: "韓国チキン・ツブ貝・トッポッキ・ビアホール" },
     keywords: "치뱅이 chibaengi 골뱅이치킨 golbaengi chicken 치킨 후라이드 양념 간장 반반 골뱅이 무침 골뱅이탕 숙회 떡볶이 고스트떡볶이 모듬튀김 바베큐치킨 닭도리탕 찜닭 오뎅탕 똥집 닭발 소떡소떡 마른안주 먹태 쥐포 호프 맥주 박닌 bac ninh ngọc hân công chúa gà rán gà chiên ốc trộn ốc luộc tokbokki mề gà chân gà nhậu fried chicken sea snail 炸鸡 海螺 年糕 啤酒 チキン ツブ貝 トッポッキ" },
+  { id: "phothin", name: "퍼틴 PHỞ THÌN", sub: "미딩 직영점 · 13 Lò Đúc", url: "https://phothin.qrmenuasia.com",
+    region: "hanoi", cats: ["noodle"], tags: ["zalo", "photos"],
+    address: "Lô 5, TT1 Đình Thôn, Mỹ Đình, Từ Liêm, Hà Nội",
+    type: { ko: "하노이 전통 소고기 쌀국수", vi: "Phở bò truyền thống Hà Nội", en: "Traditional Hanoi beef phở", zh: "河内传统牛肉河粉", ja: "ハノイ伝統の牛肉フォー" },
+    keywords: "퍼틴 pho thin phở thìn 13 lò đúc 쌀국수 소고기 쌀국수 퍼보 갈비 쌀국수 퍼쑤언 소꼬리 꼬리찜 도가니 미딩 mỹ đình đình thôn từ liêm hà nội phở bò phở sườn đuôi bò nem rán phở cuốn bánh xèo quẩy beef pho rice noodle oxtail 牛肉河粉 排骨河粉 牛尾 美庭 フォー 牛肉フォー テール" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
