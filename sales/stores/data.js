@@ -92,6 +92,11 @@ window.STORES = [
     address: "40 Lý Nhân Tông, Võ Cường, Bắc Ninh",
     type: { ko: "한식 포장마차 · 컵밥 · 스시 · 안주", vi: "Quán Hàn Quốc · Cơm cốc · Sushi · Mồi nhậu", en: "Korean pocha · Cup rice · Sushi · Bar bites", zh: "韩式大排档 · 杯饭 · 寿司 · 下酒菜", ja: "韓国ポチャ・カップご飯・寿司・おつまみ" },
     keywords: "무지개 식당 무지개식당 무지개 포장마차 mujigae nhà hàng cầu vồng cau vong nha hang han quoc 한식 포장마차 포차 컵밥 스팸 컵밥 삼겹살 컵밥 제육 컵밥 황제 스페셜 세트 모듬튀김 떡볶이 김밥 참치마요김밥 열무국수 비빔국수 해물라면 해물국수 파스타 해물크림파스타 짜파게티 스시 초밥 모듬스시 장어덮밥 연어롤 새우롤 장어롤 돈까스 치즈돈까스 새우튀김 오징어튀김 김말이 군만두 순대 김떡순 김치볶음밥 해물볶음밥 과일팥빙수 빙수 순대야채볶음 김치전 해물파전 랍스터 치즈구이 가리비 백골뱅이 숙회 무침 막걸리 소주 사케 쿠보타 사와노츠루 맥주 사포로 lý nhân tông võ cường bắc ninh cơm cốc kimbap tokbokki sushi mồi nhậu cup rice kimbap tteokbokki sushi seafood pasta lobster scallop korean pocha 杯饭 紫菜包饭 辣炒年糕 寿司 韩式大排档 カップご飯 キンパ トッポッキ 寿司 ポチャ" },
+  { id: "donamdong", name: "돈암동 찌개 Donamdong Chike", sub: "한식 찌개 · 전 · 안주", url: "https://donamdong.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean", "bar"], tags: ["photos"],
+    address: "18N3 Võ Cường 6, Võ Cường, Bắc Ninh",
+    type: { ko: "한식 찌개 · 전 · 안주", vi: "Canh lẩu Hàn · Bánh xèo · Mồi nhậu", en: "Korean stews · Pancakes · Bar snacks", zh: "韩式汤锅 · 煎饼 · 下酒菜", ja: "韓国チゲ・チヂミ・おつまみ" },
+    keywords: "돈암동 찌개 돈암동찌개 donamdong chike 돈암동 찌개 박닌 nhà hàng hàn quốc 한식 찌개 양푼 김치찌개 양푼 동태찌개 동태찌개 곤이 알탕 알탕 국물 닭볶음탕 닭볶음탕 닭알탕 등갈비 김치찜 등갈비 김치찌개 오뎅탕 청국장 삼겹살 대패삼겹살 항정살 편육 고등어구이 새우 소금구이 백숙 과메기 홍어 해물파전 김치전 애호박전 부추전 두부김치 순대 골뱅이무침 쥐포 먹태 콩국수 떡국 떡만두국 사리 라면사리 소주 막걸리 võ cường bắc ninh canh kimchi canh cá đông canh ruột trứng cá gà hầm bánh xèo mồi nhậu kimchi stew pollock stew chicken stew pork belly pancake makgeolli soju 韩餐 泡菜汤 明太鱼汤 炖鸡 煎饼 烧酒 韓国料理 キムチチゲ 鍋 チヂミ マッコリ" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
