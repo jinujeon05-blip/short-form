@@ -104,6 +104,18 @@
     .chip { font-size: 13px; padding: 5px 10px; }
     .search input { font-size: 15px; }
   }
+
+  /* 웹앱 설치 버튼 */
+  .install { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; font: inherit; font-size: 15px; font-weight: 800; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: 0; border-radius: 999px; padding: 11px 18px; cursor: pointer; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+  .install svg { width: 18px; height: 18px; }
+  .install[hidden] { display: none; }
+  .ins-back { position: fixed; inset: 0; z-index: 40; display: none; align-items: flex-end; justify-content: center; background: rgba(20,14,10,.6); }
+  .ins-back.show { display: flex; }
+  .ins-box { width: 100%; max-width: 480px; background: #fff; color: var(--ink); border-radius: 20px 20px 0 0; padding: 22px 20px calc(22px + env(safe-area-inset-bottom)); }
+  .ins-box h3 { font-size: 19px; font-weight: 900; }
+  .ins-box ol { margin: 14px 0 0; padding-left: 20px; font-size: 16px; line-height: 1.6; }
+  .ins-box li { margin-bottom: 4px; }
+  .ins-box .ins-close { width: 100%; margin-top: 16px; font: inherit; font-size: 16px; font-weight: 800; color: #fff; background: var(--ink); border: 0; border-radius: 12px; padding: 12px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -115,6 +127,7 @@
     </div>
     <h1 data-t="heading">QR 메뉴판으로 만나는 가게</h1>
     <p data-t="sub">5개 언어 메뉴판이 있는 식당과 가게를 찾아보세요.</p>
+    <button class="install" id="install" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 19h14"/></svg><span id="installText"></span></button>
   </div>
 </header>
 
@@ -279,6 +292,44 @@
   render();
 </script>
 <script src="/lang-menu.js"></script>
+
+<div class="ins-back" id="insBack" role="dialog" aria-modal="true"><div class="ins-box"><h3 id="insTitle"></h3><ol id="insSteps"></ol><button class="ins-close" id="insClose" type="button"></button></div></div>
+<!-- install:start (홈 화면 웹앱 설치 버튼) -->
+<script>
+(function () {
+  var T = {
+    ko: { btn: "앱으로 설치하기", ok: "닫기", ios: "홈 화면에 추가하는 방법", iosSteps: ["Safari 아래의 공유 버튼(□↑)을 누르세요", "'홈 화면에 추가'를 고르세요", "오른쪽 위 '추가'를 누르면 끝!"], other: "홈 화면에 추가하는 방법", otherSteps: ["브라우저 오른쪽 위 ⋮ 메뉴를 누르세요", "'홈 화면에 추가' 또는 '앱 설치'를 고르세요", "'추가'를 누르면 끝!"] },
+    en: { btn: "Install as app", ok: "Close", ios: "How to add to Home Screen", iosSteps: ["Tap the Share button (□↑) at the bottom of Safari", "Choose “Add to Home Screen”", "Tap “Add” at the top right"], other: "How to add to Home Screen", otherSteps: ["Tap the ⋮ menu at the top right of your browser", "Choose “Add to Home screen” or “Install app”", "Tap “Add”"] },
+    zh: { btn: "安装为应用", ok: "关闭", ios: "如何添加到主屏幕", iosSteps: ["点击 Safari 底部的分享按钮（□↑）", "选择“添加到主屏幕”", "点击右上角“添加”"], other: "如何添加到主屏幕", otherSteps: ["点击浏览器右上角的 ⋮ 菜单", "选择“添加到主屏幕”或“安装应用”", "点击“添加”"] },
+    ja: { btn: "アプリとしてインストール", ok: "閉じる", ios: "ホーム画面に追加する方法", iosSteps: ["Safariの下にある共有ボタン（□↑）をタップ", "「ホーム画面に追加」を選択", "右上の「追加」をタップ"], other: "ホーム画面に追加する方法", otherSteps: ["ブラウザ右上の ⋮ メニューをタップ", "「ホーム画面に追加」または「アプリをインストール」を選択", "「追加」をタップ"] },
+    vi: { btn: "Cài đặt như ứng dụng", ok: "Đóng", ios: "Cách thêm vào màn hình chính", iosSteps: ["Nhấn nút Chia sẻ (□↑) ở dưới Safari", "Chọn “Thêm vào MH chính”", "Nhấn “Thêm” ở góc trên bên phải"], other: "Cách thêm vào màn hình chính", otherSteps: ["Nhấn menu ⋮ ở góc trên bên phải trình duyệt", "Chọn “Thêm vào màn hình chính” hoặc “Cài đặt ứng dụng”", "Nhấn “Thêm”"] }
+  };
+  var $ = function (id) { return document.getElementById(id); };
+  var standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone;
+  var btn = $("install");
+  if (!btn || standalone) return;
+  var ua = navigator.userAgent;
+  var isIOS = /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var deferred = null;
+  var cur = function () { var l = document.documentElement.lang.split("-")[0]; return T[l] || T.ko; };
+  var paint = function () { $("installText").textContent = cur().btn; $("insClose").textContent = cur().ok; };
+  paint();
+  btn.hidden = false;
+  new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+  addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; });
+  addEventListener("appinstalled", function () { btn.hidden = true; });
+  btn.addEventListener("click", function () {
+    if (deferred) { deferred.prompt(); deferred.userChoice.then(function () { deferred = null; }); return; }
+    var t = cur(), steps = isIOS ? t.iosSteps : t.otherSteps;
+    $("insTitle").textContent = isIOS ? t.ios : t.other;
+    $("insSteps").innerHTML = steps.map(function (x) { return "<li>" + x.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</li>"; }).join("");
+    $("insBack").classList.add("show");
+  });
+  $("insClose").addEventListener("click", function () { $("insBack").classList.remove("show"); });
+  $("insBack").addEventListener("click", function (e) { if (e.target === this) this.classList.remove("show"); });
+})();
+</script>
+<!-- install:end -->
 <!-- sw:start (홈 화면 웹앱 설치용, sales/sw.js) -->
 <script>if ("serviceWorker" in navigator) addEventListener("load", function () { navigator.serviceWorker.register("/sw.js").catch(function () {}); });</script>
 <!-- sw:end -->
