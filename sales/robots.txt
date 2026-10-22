@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /owner/
+Disallow: /report/
+Disallow: /api/
 Sitemap: https://qrmenuasia.com/sitemap.xml
