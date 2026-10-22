@@ -25,6 +25,7 @@ const SHOPS = {
   jokbal:       { type: 'Restaurant', cuisine: ['Korean', 'Jokbal', 'Bossam'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   daekuk:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Shabu-shabu'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   boknara:      { type: 'Restaurant', cuisine: ['Korean', 'Pufferfish', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  haru:         { type: 'Restaurant', cuisine: ['Japanese', 'Izakaya', 'Omakase', 'Sushi'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   phothin:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Pho', 'Noodles'], country: 'VN', currency: 'VND' },
   chibaengi:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Fried Chicken', 'Pub'], country: 'VN', currency: 'VND' },
   samwon:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },

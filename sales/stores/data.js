@@ -18,6 +18,7 @@ window.CATS = {
   noodle: { icon: "🍜", ko: "면 · 간편식", vi: "Mì · Ăn nhanh", en: "Noodles & quick bites", zh: "面食 · 快餐", ja: "麺・軽食" },
   cafe:   { icon: "☕", ko: "카페 · 디저트", vi: "Cà phê · Tráng miệng", en: "Cafés & desserts", zh: "咖啡 · 甜品", ja: "カフェ・スイーツ" },
   western: { icon: "🍔", ko: "버거 · 양식", vi: "Burger · Món Âu Mỹ", en: "Burgers & Western", zh: "汉堡 · 西餐", ja: "バーガー・洋食" },
+  japanese: { icon: "🍣", ko: "일식", vi: "Món Nhật", en: "Japanese food", zh: "日料", ja: "日本料理" },
   bar:    { icon: "🍸", ko: "바 · 술집", vi: "Bar · Quán nhậu", en: "Bar & drinks", zh: "酒吧", ja: "バー・居酒屋" },
   beauty: { icon: "💄", ko: "화장품", vi: "Mỹ phẩm", en: "Beauty", zh: "化妆品", ja: "コスメ" },
 };
@@ -76,6 +77,11 @@ window.STORES = [
     address: "Lô 5, TT1 Đình Thôn, Mỹ Đình, Từ Liêm, Hà Nội",
     type: { ko: "하노이 전통 소고기 쌀국수", vi: "Phở bò truyền thống Hà Nội", en: "Traditional Hanoi beef phở", zh: "河内传统牛肉河粉", ja: "ハノイ伝統の牛肉フォー" },
     keywords: "퍼틴 pho thin phở thìn 13 lò đúc 쌀국수 소고기 쌀국수 퍼보 갈비 쌀국수 퍼쑤언 도가니 미딩 mỹ đình đình thôn từ liêm hà nội phở bò phở sườn nem rán phở cuốn bánh xèo quẩy beef pho rice noodle 牛肉河粉 排骨河粉 美庭 フォー 牛肉フォー" },
+  { id: "haru", name: "하루 HARU 御厨", sub: "일식 이자카야 · 오마카세", url: "https://haru.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["japanese", "bar"], tags: ["photos"],
+    address: "26N5 Đường Võ Cường 4, Võ Cường, Bắc Ninh",
+    type: { ko: "일식 이자카야 · 오마카세", vi: "Izakaya Nhật · Omakase", en: "Japanese izakaya · Omakase", zh: "日式居酒屋 · 主厨发办", ja: "日本料理の居酒屋・おまかせ" },
+    keywords: "하루 haru 하루 박닌 御厨 omakase 오마카세 일식 일본식 이자카야 izakaya 일식당 사시미 초밥 스시 참치타다끼 연어 사시미 참치회 츠쿠네 꼬치 모듬꼬치 가라아게 고로케 아게다시도후 계란말이 오뎅탕 나가사키 짬뽕 야끼소바 조개술찜 가리비 전복 버터구이 명란 사케 소주 하이볼 삿포로 생맥주 일본어 가능 võ cường bắc ninh nhà hàng nhật bản sashimi sushi nhà hàng haru korea 刺身 寿司 居酒屋 烤串 清酒 北宁 日本料理 居酒屋 おまかせ 寿司 刺身 焼き鳥 日本酒 バクニン" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
