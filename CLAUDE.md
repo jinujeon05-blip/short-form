@@ -181,6 +181,7 @@
 - 편집기 구조: 기본 메뉴는 가게 `menu.js`를 서버가 `https://<가게>.qrmenuasia.com/menu.js`에서 읽어 vm으로 실행해 JSON으로 만든다(처음 한 번). 항목 필드 `price·name·desc·unit·spicy·tag·sizes·dessert·photo`(sizes는 가격만 수정). 장바구니 가게는 MENU 순서로 버튼을 붙이므로 편집 후에도 순서대로 동작.
 - API(`sales/api/`): `hit`(수집) `stats`(관리자 집계) `admin`(CRM·점주 비밀번호·로그·리포트 링크) `menu`(편집: load/save/history/restore/reset) `photo`(업로드) `owner`(점주 로그인) `override`(손님용 스크립트) `report`(리포트 데이터). 공용 `_lib.js`(인증·집계)·`_store.js`(Blob JSON 저장)·`_menu.js`(검사·번역·기본 메뉴)·`_ai.js`(번역).
 - **시험 방법**: 이 환경은 외부(qrmenuasia.com)에 접속할 수 없다. 모의 Blob(`@vercel/blob` 가짜 모듈)로 실제 핸들러를 로컬에서 돌려 시험했다(2026-10-22: 방문→집계, CRM, 점주 로그인, 메뉴 저장·번역·기록·복원·초기화, 사진 올리기 경로, 로그인 잠금, 실제 가게 페이지 반영). 실서버 확인은 사용자 브라우저 또는 `get_storage_stores_by_id`(count)·`get_runtime_logs`.
+- **주의(2026-10-22 겪음)**: Vercel은 `/admin`처럼 끝에 `/` 없는 주소로도 연다 → `admin/`·`owner/`·`report/` 화면의 스크립트·파일 경로는 **반드시 절대 경로**(`/admin/crm.js`, `/menu-editor.js`, `/stores/data.js`)로 쓴다. 상대 경로(`crm.js`, `../x`)는 `/admin`에서 깨져 탭이 안 눌렸다. 시험도 `/admin`(슬래시 없이)으로 열어서 한다.
 - 나중에: 월간 리포트 PDF 자동 발송, 하루 단위 합계 롤업(데이터가 많아지면 `stats`가 느려짐), 점주 화면에 테이블 QR 만들기·가게 정보 편집 확장.
 
 ## 가게 찾기 페이지 (손님용)
