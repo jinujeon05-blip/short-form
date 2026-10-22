@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>퍼틴 PHỞ THÌN · QR 카드</title>
+<style>
+  @font-face { font-family: "Jalnan"; src: url("../../../public/fonts/Jalnan2.ttf"); }
+  @font-face { font-family: "Gmarket"; src: url("../../../public/fonts/GmarketSansTTFBold.ttf"); }
+  @page { size: 105mm 148mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --paper: #fbf6ec; --brick: #b3281a; --brick-2: #5a3420; --ink: #3f2416; --muted: #7d6a58; --gold: #f2c94c; }
+  html, body { background: #fff; }
+  body { font-family: "Gmarket", "Inter", "WenQuanYi Zen Hei", sans-serif; color: var(--ink); }
+  .card { position: relative; width: 105mm; height: 148mm; overflow: hidden; background: var(--paper); display: flex; flex-direction: column; align-items: center; }
+  /* 위쪽 빨간 띠 + 차양 무늬 */
+  .top { position: absolute; left: 0; right: 0; top: 0; height: 44mm; background: linear-gradient(180deg, #5a3420, #3f2416); }
+  .top::after { content: ""; position: absolute; left: 0; right: 0; bottom: -.2mm; height: 5mm;
+    background: linear-gradient(90deg, var(--paper) 0 50%, transparent 50% 100%) 0 0 / 8mm 100% repeat-x,
+                linear-gradient(var(--paper), var(--paper)) 0 100% / 100% 2mm no-repeat; }
+  .card > *:not(.top) { position: relative; z-index: 1; }
+  .gate { width: 12mm; margin-top: 3.4mm; border-radius: 1.6mm; box-shadow: 0 .6mm 1.6mm rgba(0,0,0,.25); }
+  .name { margin-top: 1.2mm; font-family: "Jalnan"; font-size: 10mm; letter-spacing: 1.6mm; line-height: 1; color: #fff; padding-left: 1.6mm; }
+  .en { margin-top: 1.4mm; font-family: "Inter", sans-serif; font-weight: 800; font-size: 3mm; letter-spacing: 1mm; color: var(--gold); padding-left: 1mm; }
+  .tag { margin-top: 12mm; font-family: "Inter", sans-serif; font-weight: 700; font-size: 2.8mm; color: var(--brick); }
+  .photos { display: flex; gap: 2mm; margin-top: 3mm; }
+  .photos img { width: 13mm; height: 13mm; border-radius: 50%; object-fit: cover; background: #fff; border: .5mm solid #fff; box-shadow: 0 .8mm 2mm rgba(42,36,33,.25); }
+  .qr-box { position: relative; margin-top: 4mm; background: #fff; border-radius: 3mm; padding: 2mm; box-shadow: 0 0 0 .7mm var(--brick), 0 1.5mm 4mm rgba(42,36,33,.22); }
+  .qr-box img { display: block; width: 37mm; height: 37mm; }
+  .badge { font-family: "Inter", sans-serif; font-weight: 800; position: absolute; right: -6mm; top: -3mm; transform: rotate(8deg); background: var(--ink); color: #fff; font-size: 2.5mm; padding: .9mm 2mm .7mm; border-radius: 99mm; }
+  h1 { margin-top: 4.4mm; font-family: "Inter", sans-serif; font-weight: 900; font-size: 5.2mm; letter-spacing: .2mm; text-align: center; line-height: 1.15; }
+  h1 span { color: var(--brick); }
+  .h1-en { margin-top: 1mm; font-family: "Inter", sans-serif; font-weight: 800; font-size: 3.4mm; letter-spacing: .45mm; color: inherit; text-align: center; }
+  .h1-en span { color: var(--brick); }
+  .langs { display: flex; flex-wrap: wrap; justify-content: center; gap: .5mm 3.5mm; margin-top: 2mm; font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; font-weight: 600; font-size: 2.6mm; color: var(--muted); }
+  .langs em { font-style: normal; display: inline-block; width: 4.6mm; font-size: 1.9mm; font-weight: 800; color: var(--brick); }
+  .ko { font-family: "Gmarket"; font-weight: 400; }
+  .ja { font-family: "IPAGothic", sans-serif; }
+  .card > footer { position: absolute !important; left: 0; right: 0; bottom: 0; height: 14mm; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: .9mm; background: var(--ink); color: #faf7f3; }
+  footer .tel { font-size: 3.6mm; letter-spacing: .2mm; }
+  footer .addr { font-family: "Inter", sans-serif; font-weight: 600; font-size: 2.4mm; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top"></div>
+  <img class="gate" src="../img/logo.png" alt="PHỞ THÌN">
+  <div class="name">퍼틴</div>
+  <div class="en">PHỞ THÌN · 13 LÒ ĐÚC</div>
+  <div class="tag">Phở bò truyền thống Hà Nội</div>
+  <div class="photos">
+    <img src="img/c-suon.jpg" alt=""><img src="img/c-tron.jpg" alt=""><img src="img/c-phocuon.jpg" alt=""><img src="img/c-duoihan.jpg" alt="">
+  </div>
+  <div class="qr-box">
+    <img src="qr.svg" alt="QR https://phothin.qrmenuasia.com">
+    <span class="badge">5 ngôn ngữ</span>
+  </div>
+  <h1>QUÉT MÃ <span>XEM THỰC ĐƠN</span></h1>
+  <div class="h1-en">SCAN QR <span>FOR MENU</span></div>
+  <div class="langs">
+    <div><em>KO</em><span class="ko">QR 찍고 메뉴 보기 · 주문</span></div>
+    <div><em>ZH</em>扫码看菜单</div>
+    <div><em>JA</em><span class="ja">メニューを見る</span></div>
+  </div>
+  <footer>
+    <div class="tel">☎ 0355 677 566</div>
+    <div class="addr">Lô 5, TT1 Đình Thôn, Mỹ Đình, Từ Liêm, Hà Nội</div>
+  </footer>
+</div>
+</body>
+</html>

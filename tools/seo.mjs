@@ -25,6 +25,7 @@ const SHOPS = {
   jokbal:       { type: 'Restaurant', cuisine: ['Korean', 'Jokbal', 'Bossam'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   daekuk:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Shabu-shabu'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   boknara:      { type: 'Restaurant', cuisine: ['Korean', 'Pufferfish', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  phothin:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Pho', 'Noodles'], country: 'VN', currency: 'VND' },
   chibaengi:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Fried Chicken', 'Pub'], country: 'VN', currency: 'VND' },
   samwon:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   bangatgan:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Pub', 'Pocha'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
@@ -36,6 +37,8 @@ const SHOPS = {
   snackshack:   { type: 'BarOrPub', cuisine: ['American', 'Burgers', 'Mexican', 'Craft beer'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   holoi:        { type: 'Restaurant', cuisine: ['Vietnamese', 'Pho', 'Beef noodle soup'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   ijang:        { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Charcoal grill'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  baba:         { type: 'BarOrPub', cuisine: ['Korean', 'Korean pub', 'Pizza', 'Cocktails', 'Craft beer'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  orimyeongga:  { type: 'Restaurant', cuisine: ['Korean', 'Duck', 'Gamjatang', 'Bossam'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://orimyeongga.qrmenuasia.com/sitemap.xml
