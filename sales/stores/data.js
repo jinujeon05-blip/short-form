@@ -108,6 +108,11 @@ window.STORES = [
     address: "21N8 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh",
     type: { ko: "삼겹살 · 쪽갈비 · 김치찜 한식당", vi: "Ba chỉ nướng · Sườn nướng · Kimchi hầm", en: "Pork belly · Pork ribs · Kimchi jjim", zh: "五花肉 · 猪排骨 · 炖泡菜", ja: "サムギョプサル・スペアリブ・キムチチム" },
     keywords: "꽃돼지 꽃돼지삼겹살 박닌 꽃돼지 kotteji kkotdwaeji nhà hàng hàn quốc 한식 삼겹살 항정살 목살 대패삼겹살 쪽갈비 쪽갈비구이 고갈비 닭꼬치 편육 묵은지 김치찜 매운 갈비찜 참치 김치찌개 부대찌개 순두부 된장찌개 오뎅탕 홍합탕 두부김치 먹태 제육볶음 돼지불백 물냉면 막국수 잔치국수 볶음밥 võ cường ngọc hân công chúa bắc ninh thịt ba chỉ sườn nướng canh kimchi lẩu quân đội pork belly pork ribs kimchi jjim korean bbq 五花肉 烤肉 猪排骨 炖泡菜 韩国烤肉 サムギョプサル スペアリブ キムチチム 韓国料理" },
+  { id: "sujeong", name: "수정곱창 Sujeong · Lòng bò Korea", sub: "소곱창 · 대창 · 막창 · 곱창전골", url: "https://sujeong.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["bbq", "korean"], tags: ["photos"],
+    address: "35 Lý Nhân Tông, Võ Cường, Bắc Ninh",
+    type: { ko: "소곱창 · 대창 · 막창 전문점", vi: "Chuyên lòng bò · đại tràng · dạ múi khế nướng", en: "Beef offal grill (gopchang · daechang · makchang)", zh: "牛杂烧烤专门店", ja: "牛ホルモン焼き専門店（コプチャン・テチャン・マクチャン）" },
+    keywords: "수정곱창 수정 곱창 박닌 sujeong lòng bò korea lòng bò hàn quốc 곱창 소곱창 대창 소대창 막창 소막창 모듬곱창 곱창전골 전골 꽃삼겹 크림꽃삼겹 항정살 꼬들살 소갈비살 양념목살 명품육회 육회 뚝배기불고기 냉면 천연수정불판 수정불판 võ cường lý nhân tông bắc ninh lòng non bò đại tràng dạ múi khế lẩu lòng bò gỏi bò sống beef offal gopchang makchang daechang tripe hot pot crystal grill korean bbq 牛杂 牛小肠 牛大肠 牛百叶 火锅 水晶烤盘 韩国烤肉 ホルモン コプチャン マクチャン テチャン ホルモン鍋 水晶焼き板 韓国料理" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
