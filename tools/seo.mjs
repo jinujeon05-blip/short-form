@@ -9,7 +9,7 @@ import { ROOT } from './pw.mjs';
 const DOMAIN = 'qrmenuasia.com';
 // naver: 네이버 서치어드바이저 소유 확인 코드(가게 주소를 네이버에 따로 등록한 경우), type: schema.org 종류, cuisine: 요리 종류, country: 나라, currency: 가격 단위, phone: false 면 전화번호 생략(임시 번호)
 const SHOPS = {
-  sutkkui:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND' },
+  sutkkui:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND', naver: 'ca47ee18fdb77a8f2f443cb5831aaf7908723830' },
   eros:       { type: 'BarOrPub', cuisine: ['Bar'], country: 'VN', currency: 'VND', phone: false },
   anvoi:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Noodles'], country: 'VN', currency: 'VND' },
   baekcheon:  { type: 'Restaurant', cuisine: ['Korean', 'Grilled eel'], country: 'KR', currency: 'KRW', naver: 'b33f476ad38d2aafc7ea74651de94e5a2262361e' },
@@ -27,7 +27,7 @@ const SHOPS = {
   boknara:      { type: 'Restaurant', cuisine: ['Korean', 'Pufferfish', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   dada:         { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Stews', 'Chicken'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   jangolang:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Grilled eel', 'Hot pot'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
-  anjirang:     { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Gopchang', 'Makchang', 'Fried chicken'], country: 'VN', currency: 'VND', og: 'img/hero.jpg', naver: 'ca47ee18fdb77a8f2f443cb5831aaf7908723830' },
+  anjirang:     { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Gopchang', 'Makchang', 'Fried chicken'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   madang:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Duck', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   naegohyang:   { type: 'Restaurant', cuisine: ['Korean', 'Soondae-guk', 'Pork soup'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   yukdeok:      { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Aged pork', 'Smoked duck'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
