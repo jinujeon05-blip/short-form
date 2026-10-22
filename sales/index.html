@@ -6,11 +6,14 @@
 <meta name="theme-color" content="#16130f">
 <!-- 웹앱 아이콘 (tools/app-icon.mjs 로 만듦) -->
 <link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="QR Menu">
 <title>다국어 QR 메뉴판</title>
-<meta name="description" content="손님 휴대폰 언어로 자동으로 바뀌는 QR 메뉴판 — 한국어 · English · 中文 · 日本語 · Tiếng Việt">
+<meta name="description" content="손님 휴대폰 언어로 자동으로 바뀌는 다국어 QR 메뉴판 — 한국어 · English · 中文 · 日本語 · Tiếng Việt. Multilingual QR menu for restaurants.">
 <style>
   :root {
     --ink: #16130f;
@@ -366,6 +369,7 @@
     if (SUPPORTED.includes(q)) return q;
     const saved = storage((s) => s.getItem("sales-lang"));
     if (SUPPORTED.includes(saved)) return saved;
+    if (/bot|crawl|spider|yeti|daum|slurp/i.test(navigator.userAgent)) return "ko"; // 검색 로봇은 영어 기기 언어라 설명이 영어로만 나오던 문제
     for (const l of navigator.languages || [navigator.language]) {
       const code = (l || "").toLowerCase().split("-")[0];
       if (SUPPORTED.includes(code)) return code;
