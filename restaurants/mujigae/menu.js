@@ -33,7 +33,7 @@ window.MENU = [
       it(90000, CUP, "삼겹살 컵밥", "Pork belly cup rice", "五花肉杯饭", "豚バラのカップご飯", "Cơm cốc thịt ba chỉ"),
       it(90000, CUP, "제육볶음 컵밥", "Spicy stir-fried pork cup rice", "辣炒猪肉杯饭", "豚肉の辛味炒めカップご飯", "Cơm cốc thịt lợn xào cay", { spicy: true }),
       it(90000, CUP, "베이컨·스팸 컵밥", "Bacon & Spam cup rice", "培根午餐肉杯饭", "ベーコンとスパムのカップご飯", "Cơm cốc thịt nguội, spam"),
-      it(110000, CUP, "황제 스페셜 컵밥", "Emperor special cup rice", "皇帝特制杯饭", "皇帝スペシャルカップご飯", "Cơm cốc đặc biệt", { tag: "must" }),
+      it(110000, CUP, "황제 스페셜 컵밥", "Emperor special cup rice", "皇帝特制杯饭", "皇帝スペシャルカップご飯", "Cơm cốc đặc biệt"),
     ],
   },
   {
@@ -46,7 +46,7 @@ window.MENU = [
         desc: T("모듬튀김 · 떡볶이 · 참치김밥 · 해물라면 · 모듬스시 6개", "Assorted fried snacks · Tteokbokki · Tuna kimbap · Seafood ramen · Assorted sushi (6 pcs)", "什锦炸物 · 辣炒年糕 · 金枪鱼紫菜包饭 · 海鲜拉面 · 什锦寿司（6贯）", "揚げ物盛り合わせ・トッポッキ・ツナキンパ・海鮮ラーメン・盛り合わせ寿司（6貫）", "Đồ chiên các loại · Tokbokki · Kimbap cá ngừ · Mỳ tôm hải sản · Sushi các loại (6PS)") }),
       it(580000, "set", "세트 C · 4인", "Set C (4 people)", "套餐C（4人）", "セットC（4名）", "Set C (4 người)", {
         desc: T("모듬튀김 · 떡볶이 · 참치김밥 · 해물라면 · 모듬스시 8개 · 과일팥빙수", "Assorted fried snacks · Tteokbokki · Tuna kimbap · Seafood ramen · Assorted sushi (8 pcs) · Fruit bingsu", "什锦炸物 · 辣炒年糕 · 金枪鱼紫菜包饭 · 海鲜拉面 · 什锦寿司（8贯）· 水果红豆刨冰", "揚げ物盛り合わせ・トッポッキ・ツナキンパ・海鮮ラーメン・盛り合わせ寿司（8貫）・フルーツピンス", "Đồ chiên các loại · Tokbokki · Kimbap cá ngừ · Mỳ tôm hải sản · Sushi các loại (8PS) · Bingsu trái cây"),
-        tag: "best" }),
+      }),
     ],
   },
   {
@@ -56,14 +56,14 @@ window.MENU = [
       it(50000, "kimbap", "김밥", "Kimbap", "紫菜包饭", "キンパ", "Kimbap thường"),
       it(60000, "kimbap_tuna", "참치마요김밥", "Tuna mayo kimbap", "金枪鱼蛋黄酱紫菜包饭", "ツナマヨキンパ", "Kimbap cá ngừ"),
       it(null, "kimbap_beef", "소고기김밥", "Beef kimbap", "牛肉紫菜包饭", "牛肉キンパ", "Kimbap thịt bò"),
-      it(80000, "kimbap_special", "무지개특선김밥", "Rainbow special kimbap", "彩虹特选紫菜包饭", "ムジゲ特選キンパ", "Kimbap đặc biệt", { tag: "best" }),
+      it(80000, "kimbap_special", "무지개특선김밥", "Rainbow special kimbap", "彩虹特选紫菜包饭", "ムジゲ特選キンパ", "Kimbap đặc biệt"),
     ],
   },
   {
     id: "noodle",
     name: T("면 · 파스타", "Noodles & pasta", "面 · 意面", "麺・パスタ", "Mỳ · Spaghetti"),
     items: [
-      it(120000, "noodle_yeolmu", "열무국수", "Young radish kimchi noodles", "小萝卜泡菜汤面", "ヨルム（若大根キムチ）そうめん", "Mỳ kim chi củ cải non"),
+      it(120000, "noodle_yeolmu", "열무국수", "Young radish kimchi noodles", "小萝卜泡菜汤面", "ヨルム（若大根キムチ）そうめん", "Mỳ kim chi"),
       it(150000, "noodle_seafood", "해물국수", "Seafood noodle soup", "海鲜汤面", "海鮮麺", "Mỳ hải sản"),
       it(120000, "noodle_bibim", "비빔국수", "Spicy mixed noodles (bibim guksu)", "辣拌面", "ビビム麺（辛口和え麺）", "Mỳ trộn", { spicy: true }),
       it(120000, "ramen", "해물라면", "Seafood ramen", "海鲜拉面", "海鮮ラーメン", "Mỳ tôm hải sản", { spicy: true }),
@@ -101,7 +101,7 @@ window.MENU = [
     id: "snack",
     name: T("튀김 · 분식", "Fried snacks & street food", "炸物 · 小吃", "揚げ物・粉食", "Đồ chiên · Món ăn vặt"),
     items: [
-      it(120000, "fry_mix", "모듬튀김", "Assorted tempura", "什锦天妇罗", "天ぷら盛り合わせ", "Chiên các loại", {
+      it(120000, "fry_mix", "모듬튀김", "Assorted fried snacks", "什锦炸物", "揚げ物盛り合わせ", "Chiên các loại", {
         desc: T("새우 3 · 오징어 3 · 고구마 3", "Shrimp 3 · Squid 3 · Sweet potato 3", "虾3 · 鱿鱼3 · 红薯3", "えび3・いか3・さつまいも3", "3 tôm chiên, 3 mực chiên, 3 khoai chiên") }),
       it(110000, "fry_shrimp", "새우튀김", "Fried shrimp", "炸虾", "えびフライ", "Tôm chiên", { unit: PCS(6) }),
       it(80000, "fry_squid", "오징어튀김", "Fried squid", "炸鱿鱼", "いかフライ", "Mực chiên", { unit: PCS(6) }),
@@ -129,7 +129,7 @@ window.MENU = [
       it(220000, "sundae_stir", "순대야채볶음", "Stir-fried sundae with vegetables", "蔬菜炒血肠", "スンデと野菜の炒め", "Sundae xào rau"),
       it(160000, "kimchijeon", "김치전", "Kimchi pancake", "泡菜煎饼", "キムチチヂミ", "Bánh xèo kim chi"),
       it(240000, "pajeon", "해물파전", "Seafood & scallion pancake", "海鲜葱饼", "海鮮ネギチヂミ", "Bánh xèo hải sản hành"),
-      it(550000, "lobster", "랍스터 치즈구이", "Cheese-baked Alaskan lobster", "芝士焗阿拉斯加龙虾", "アラスカロブスターのチーズ焼き", "Tôm hùm Alaska nướng phomai", { tag: "must" }),
+      it(550000, "lobster", "랍스터 치즈구이", "Cheese-baked Alaskan lobster", "芝士焗阿拉斯加龙虾", "アラスカロブスターのチーズ焼き", "Tôm hùm Alaska nướng phomai"),
       it(240000, "scallop_spicy", "가리비 양념구이", "Grilled scallops with seasoning", "调味烤扇贝", "ホタテの味付け焼き", "Sò điệp nướng gia vị"),
       it(260000, "scallop_cheese", "가리비 치즈구이", "Cheese-baked scallops", "芝士焗扇贝", "ホタテのチーズ焼き", "Sò điệp nướng phomai"),
       it(240000, "bulot_boiled", "백골뱅이 숙회", "Boiled white whelks (sukhoe)", "白骨螺（焯熟）", "ばい貝の湯引き", "Ốc Bulot hấp"),
