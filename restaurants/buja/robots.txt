@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://buja.qrmenuasia.com/sitemap.xml
