@@ -31,7 +31,7 @@ window.MENU = [
       it(180000, "bulgogi-dup", "불고기덮밥", "Bulgogi rice bowl", "烤牛肉盖饭", "プルコギ丼", "Cơm thịt bò xào"),
       it(170000, "ojingeo-dup", "오징어덮밥", "Spicy squid rice bowl", "铁板鱿鱼盖饭", "イカ炒め丼（辛口）", "Cơm mực xào cay", { spicy: true }),
       it(170000, "jeyuk-dup", "제육덮밥", "Spicy pork rice bowl (jeyuk-deopbap)", "铁板炒猪肉盖饭", "豚肉の辛口炒め丼（チェユクトッパプ）", "Cơm thịt lợn xào cay", { spicy: true }),
-      it(170000, "yeontan", "연탄불고기", "Charcoal-grilled bulgogi (yeontan-bulgogi)", "韩式炭火烤肉（연탄불고기）", "練炭プルコギ（炭火焼き）", "Thịt nướng bằng than"),
+      it(170000, "yeontan", "연탄불고기", "Briquette-grilled bulgogi (yeontan-bulgogi)", "韩式炭火烤肉（연탄불고기）", "練炭プルコギ（炭火焼き）", "Thịt nướng bằng than"),
       it(150000, "cheonggukjang", "청국장", "Cheonggukjang (fermented soybean stew)", "清麴酱汤（청국장）", "チョングッチャン（納豆チゲ）", "Súp đậu nành lên men"),
       it(200000, "dakgomtang", "닭곰탕", "Chicken gomtang (chicken soup)", "炖鸡汤", "鶏コムタン（鶏スープ）", "Canh gà"),
       it(200000, "dakkal", "닭칼국수", "Chicken kalguksu (noodle soup)", "鸡丝刀切面", "鶏カルグクス", "Mì gà kalguksu"),
@@ -44,7 +44,7 @@ window.MENU = [
     items: [
       it(190000, "sottukkeong", "솥뚜껑삼겹살", "Pork belly on a cauldron-lid grill", "锅盖五花肉", "釜蓋サムギョプサル", "Thịt ba chỉ lợn", { unit: G200 }),
       it(190000, "daepae", "대패삼겹살", "Thinly sliced pork belly", "刨子五花肉", "薄切りサムギョプサル", "Thịt lợn thái mỏng", { unit: G200 }),
-      it(210000, "usamgyeop", "우삼겹", "Beef brisket slices (usamgyeop)", "牛后胸（우삼겹）", "牛バラ肉スライス（ウサムギョプ）", "Thịt ba chỉ bò", { unit: G150 }),
+      it(210000, "usamgyeop", "우삼겹", "Sliced beef belly (usamgyeop)", "牛后胸（우삼겹）", "牛バラ肉スライス（ウサムギョプ）", "Thịt ba chỉ bò", { unit: G150 }),
       it(210000, "hangjeong", "항정살", "Pork jowl (hangjeongsal)", "雪花猪肉（항정살）", "豚トロ（ハンジョンサル）", "Thịt nạc vai heo", { unit: G150 }),
       it(300000, "buffet", "무한리필: 삼겹살 + 대패삼겹", "All-you-can-eat: pork belly + thin-sliced pork belly", "无限畅吃：五花肉 + 刨子五花肉", "食べ放題：サムギョプサル＋薄切りサムギョプサル", "Buffet: ba chỉ lợn + ba chỉ lợn thái mỏng", { unit: P1 }),
       it(330000, "buffet", "무한리필: 우삼겹 + 삼겹살 + 대패삼겹", "All-you-can-eat: beef brisket + pork belly + thin-sliced pork belly", "无限畅吃：牛后胸 + 五花肉 + 刨子五花肉", "食べ放題：ウサムギョプ＋サムギョプサル＋薄切りサムギョプサル", "Buffet: ba chỉ bò + ba chỉ lợn + ba chỉ lợn thái mỏng", { unit: P1 }),
@@ -59,8 +59,8 @@ window.MENU = [
       it(null, "kimchijjigae", "돼지 김치찌개", "Pork kimchi jjigae", "辣白菜火锅", "豚キムチチゲ", "Canh kim chi", { spicy: true, sizes: SL(440000, 600000) }),
       it(null, "galbijjim", "등갈비 김치찜 (30분 소요)", "Braised pork ribs with kimchi (takes 30 min)", "酸泡菜炖排骨（约需30分钟）", "スペアリブのキムチ蒸し煮（約30分）", "Sườn non om kim chi (mất 30 phút)", { spicy: true, sizes: SL(540000, 710000) }),
       it(null, "dakbokkeum", "닭볶음탕 (사전 예약)", "Spicy braised chicken (dak-bokkeum-tang) · reserve in advance", "辣炖鸡块（需提前预约）", "タッポックンタン（事前予約）", "Gà kho cay (đặt trước)", { spicy: true, sizes: [[T("1마리", "1 chicken", "1只", "1羽", "1 con"), 600000], [T("2마리", "2 chickens", "2只", "2羽", "2 con"), 920000]] }),
-      it(760000, "baeksuk", "닭/오리 백숙 + 죽 (2시간 전 예약 필수)", "Chicken/duck baeksuk + porridge (reserve 2 hours ahead)", "鸡/鸭褒汤 + 粥（需提前2小时预约）", "鶏／鴨のペクスク＋お粥（2時間前までに要予約）", "Súp gà/vịt + cháo (đặt trước 2 giờ)"),
-      it(980000, "baeksuk", "엄나무 백숙 + 죽 (2시간 전 예약 필수)", "Baeksuk with eomnamu (prickly ash) + porridge (reserve 2 hours ahead)", "刺楸（엄나무）褒汤 + 粥（需提前2小时预约）", "オムナム（ハリギリ）入りペクスク＋お粥（2時間前までに要予約）", "Súp hầm eomnamu + cháo (đặt trước 2 giờ)"),
+      it(760000, "baeksuk", "닭/오리 백숙 + 죽 (2시간 전 예약 필수)", "Chicken/duck baeksuk + porridge (reserve 2 hours ahead)", "鸡/鸭煲汤 + 粥（需提前2小时预约）", "鶏／鴨のペクスク＋お粥（2時間前までに要予約）", "Súp gà/vịt + cháo (đặt trước 2 giờ)"),
+      it(980000, "baeksuk", "엄나무 백숙 + 죽 (2시간 전 예약 필수)", "Chicken/duck baeksuk with eomnamu (castor aralia) + porridge (reserve 2 hours ahead)", "刺楸（엄나무）鸡/鸭煲汤 + 粥（需提前2小时预约）", "オムナム（ハリギリ）入りペクスク＋お粥（2時間前までに要予約）", "Súp gà/vịt hầm eomnamu + cháo (đặt trước 2 giờ)"),
     ],
   },
   {
@@ -80,7 +80,7 @@ window.MENU = [
     items: [
       it(440000, "gajami", "가자미조림", "Braised flatfish", "酱炖比目鱼", "カレイの煮付け", "Món cá bơn kho"),
       it(440000, "godeungeo", "고등어조림", "Braised mackerel", "炖青花鱼", "サバの煮付け", "Món cá thu kho"),
-      it(500000, "galchi", "갈치조림", "Braised cutlassfish", "辣炖带鱼", "太刀魚の煮付け", "Cá kiếm kho"),
+      it(500000, "galchi", "갈치조림", "Braised cutlassfish", "辣炖带鱼", "太刀魚の煮付け", "Cá kiếm kho", { spicy: true }),
     ],
   },
 ];
