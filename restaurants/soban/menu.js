@@ -21,8 +21,8 @@ window.MENU = [
     name: T("소꼬리 수육", "Boiled oxtail", "牛尾白切", "牛テールの茹で肉", "Đuôi bò hầm"),
     note: T("소꼬리 요리를 드신 뒤 남은 육수에 칼국수 사리를 넣어 드시는 분이 많아요.", "Many guests add kalguksu noodles to the leftover broth after the oxtail.", "吃完牛尾后，很多客人会把刀削面加进剩下的汤里。", "牛テールを食べた後、残ったスープにカルグクスを足して食べる方が多いです。", "Nhiều khách ăn xong đuôi bò sẽ cho thêm mì kalguksu vào nước dùng còn lại."),
     items: [
-      it(null, "suyuk", "소꼬리 수육 모듬", "Assorted boiled oxtail (suyuk)", "牛尾白切拼盘（수육）", "牛テールの茹で肉盛り合わせ（スユク）", "Các món đuôi bò hầm", { tag: "must", sizes: [[T("소", "Small", "小份", "小", "Nhỏ"), 750000], [T("대", "Large", "大份", "大", "Lớn"), 1100000]] }),
-      it(330000, null, "수육 추가", "Extra boiled oxtail", "加点牛尾肉", "スユク追加", "Thêm thịt hầm"),
+      it(null, "suyuk", "소꼬리 수육 모듬", "Assorted boiled beef with oxtail (suyuk)", "白煮牛尾拼盘（수육）", "牛テール入り茹で肉の盛り合わせ（スユク）", "Các món đuôi bò hầm", { tag: "must", sizes: [[T("소", "Small", "小份", "小", "Nhỏ"), 750000], [T("대", "Large", "大份", "大", "Lớn"), 1100000]] }),
+      it(330000, null, "수육 추가", "Extra boiled oxtail", "追加牛尾肉", "スユク追加", "Thêm thịt hầm"),
     ],
   },
   {
@@ -30,8 +30,8 @@ window.MENU = [
     name: T("식사류", "Soups & meals", "汤饭", "お食事", "Món chính"),
     items: [
       it(195000, "gomtang", "꼬리곰탕", "Oxtail soup (kkori-gomtang)", "牛尾汤（꼬리곰탕）", "テールコムタン（牛テールスープ）", "Canh đuôi bò"),
-      it(195000, null, "도가니탕", "Beef knee cartilage soup (doganitang)", "牛膝软骨汤（도가니탕）", "牛膝軟骨のスープ（トガニタン）", "Canh gân bò"),
-      it(185000, null, "소머리국", "Beef head soup (somori-guk)", "牛头汤（소머리국）", "牛頭スープ（ソモリクク）", "Canh đầu bò"),
+      it(195000, null, "도가니탕", "Ox knee & tendon soup (doganitang)", "牛膝牛筋汤（도가니탕）", "牛膝・牛すじスープ（トガニタン）", "Canh gân bò"),
+      it(185000, null, "소머리국", "Beef head soup (someori-guk)", "牛头汤（소머리국）", "牛頭スープ（ソモリグク）", "Canh đầu bò"),
       it(185000, null, "설렁탕", "Seolleongtang (beef bone soup)", "雪浓汤（설렁탕）", "ソルロンタン（牛骨スープ）", "Súp nạc bò"),
     ],
   },
@@ -39,8 +39,8 @@ window.MENU = [
     id: "side",
     name: T("사리 · 밥", "Noodles & rice", "加面 · 米饭", "追加麺・ご飯", "Món phụ"),
     items: [
-      it(55000, null, "칼국수", "Kalguksu noodles", "刀削面（칼국수）", "カルグクス", "Mỳ gạo"),
-      it(45000, null, "소면", "Somyeon thin noodles", "细面（소면）", "ソミョン（細麺）", "Mỳ sợi"),
+      it(55000, null, "칼국수", "Extra kalguksu noodles", "加刀切面（칼국수）", "カルグクス麺（追加）", "Mỳ gạo"),
+      it(45000, null, "소면", "Extra somyeon thin noodles", "加细面（소면）", "ソミョン（細麺・追加）", "Mỳ sợi"),
       it(20000, null, "공기밥", "Steamed rice", "米饭", "ご飯", "Cơm trắng"),
     ],
   },
