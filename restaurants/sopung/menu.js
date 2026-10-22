@@ -32,7 +32,7 @@ window.MENU = [
       it(280000, "pajeon", "해물파전", "Seafood pajeon (savory pancake)", "海鲜葱饼（해물파전）", "海鮮チヂミ（ヘムルパジョン）", "Bánh hải sản"),
       it(320000, "dakbal", "무뼈닭발 + 주먹밥", "Boneless spicy chicken feet + rice balls", "无骨鸡爪 + 饭团", "骨なし鶏足の辛炒め＋おにぎり", "Chân gà không xương + cơm nắm", { spicy: true }),
       it(340000, "jjukkumi", "쭈꾸미볶음", "Spicy stir-fried baby octopus (jjukkumi)", "辣炒小章鱼（쭈꾸미）", "イイダコ炒め（チュクミポックン）", "Bạch tuộc nhỏ xào cay", { spicy: true }),
-      it(280000, "komak", "꼬막무침", "Seasoned cockles (spicy)", "凉拌血蚶（꼬막무침）", "赤貝の和え物（コマクムチム）", "Sò huyết trộn cay", { spicy: true }),
+      it(280000, "komak", "꼬막무침", "Seasoned cockles (spicy)", "凉拌血蚶（꼬막무침）", "コマク（サルボウ貝）の和え物（コマクムチム）", "Sò huyết trộn cay", { spicy: true }),
       it(600000, "gaori", "가오리찜", "Spicy steamed skate wing (gaori-jjim)", "辣蒸鳐鱼（가오리찜）", "エイの辛蒸し（カオリチム）", "Cá đuối hấp", { spicy: true }),
       it(280000, "jeyuk", "제육볶음", "Spicy stir-fried pork (jeyuk-bokkeum)", "辣炒猪肉", "豚肉の辛口炒め（チェユクポックン）", "Thịt heo xào cay", { spicy: true }),
     ],
@@ -45,7 +45,7 @@ window.MENU = [
       it(130000, "hangjeong", "항정살", "Pork jowl (hangjeongsal)", "雪花猪肉（항정살）", "豚トロ（ハンジョンサル）", "Má heo", { unit: g(130) }),
       it(540000, "dwitgogi", "뒷고기 세트", "Special assorted pork set (dwitgogi)", "特色猪肉拼盘（뒷고기）", "特選豚肉盛り合わせ（トゥィッコギ）", "Set thịt heo nướng đặc biệt", { unit: g(550) }),
       it(140000, "ogyeop", "꼬들 생오겹살", "Fresh pork belly with skin (kkodeul-ogyeopsal)", "生五花肉（带皮）", "生オギョプサル（皮付き三枚肉）", "Ba chỉ heo tươi", { unit: g(130) }),
-      it(140000, "daepae", "대패 삼겹살", "Thinly sliced pork belly", "刨子五花肉", "薄切りサムギョプサル", "Ba chỉ heo mỏng", { unit: g(130) }),
+      it(140000, "daepae", "대패 삼겹살", "Thinly sliced pork belly", "薄切五花肉", "薄切りサムギョプサル", "Ba chỉ heo mỏng", { unit: g(130) }),
       it(160000, "gochujang", "고추장 삼겹살", "Gochujang-marinated pork belly", "辣酱五花肉", "コチュジャン味付けサムギョプサル", "Ba chỉ heo nướng sốt tương ớt", { unit: g(130), spicy: true }),
       it(220000, "seokgalbi", "석갈비", "Charcoal-grilled pork ribs (seok-galbi)", "炭烤猪排骨（석갈비）", "豚カルビ焼き（ソッカルビ）", "Sườn heo nướng", { unit: g(250) }),
     ],
@@ -67,14 +67,14 @@ window.MENU = [
   {
     id: "stew",
     name: T("국물 · 전골", "Stews & hot pots", "汤 · 火锅", "鍋・チゲ", "Canh & Lẩu"),
-    note: T("2~3인 기준이에요.", "Serves 2–3 people.", "2-3 人份。", "2〜3名様分です。", "Phần cho 2–3 người."),
+    note: T("따로 적힌 것 외에는 2~3인 기준이에요.", "Serves 2–3 people unless noted otherwise.", "除另有标注外均为 2-3 人份。", "特に記載がなければ2〜3名様分です。", "Phần cho 2–3 người, trừ khi ghi khác."),
     items: [
       it(null, "sundubu", "해물순두부", "Seafood soft tofu stew (sundubu)", "海鲜嫩豆腐汤", "海鮮スンドゥブ", "Canh đậu hũ non hải sản", { spicy: true, sizes: [[P23, 240000], [P34, 290000]] }),
       it(200000, "eomuk", "칼칼한 어묵탕", "Spicy fish cake soup", "鱼饼汤", "ピリ辛おでん鍋", "Canh chả cá", { spicy: true }),
       it(600000, "suji", "스지수육전골", "Beef tendon & boiled pork hot pot", "牛筋白肉火锅", "牛すじと茹で豚の鍋", "Lẩu gân bò thịt heo"),
       it(300000, "kimchijeongol", "돼지고기김치전골", "Pork & kimchi hot pot", "泡菜猪肉火锅", "豚肉キムチ鍋", "Lẩu kim chi thịt heo", { spicy: true }),
-      it(320000, "hobak", "호박고추장찌개", "Zucchini gochujang stew", "南瓜辣酱汤", "ズッキーニのコチュジャンチゲ", "Canh bí ngòi nấu tương ớt", { spicy: true }),
-      it(450000, "bulgogi", "옛맛서울불고기", "Traditional Seoul-style bulgogi hot pot", "首尔传统烤牛肉火锅", "ソウル風プルコギ鍋", "Thịt bò xào nước tương"),
+      it(320000, "hobak", "호박고추장찌개", "Zucchini gochujang stew", "西葫芦辣酱汤", "ズッキーニのコチュジャンチゲ", "Canh bí ngòi nấu tương ớt", { spicy: true }),
+      it(450000, "bulgogi", "옛맛서울불고기", "Traditional Seoul-style bulgogi hot pot", "首尔传统牛肉锅", "ソウル風プルコギ鍋", "Thịt bò xào nước tương"),
     ],
   },
   {
@@ -84,7 +84,7 @@ window.MENU = [
       it(180000, "boribibim", "보리비빔밥", "Barley bibimbap", "大麦拌饭", "麦ビビンバ", "Cơm trộn lúa mạch", { tag: "must" }),
       it(180000, "dolsot", "돌솥비빔밥", "Stone bowl bibimbap", "石锅拌饭", "石焼ビビンバ", "Cơm thố đá trộn"),
       it(180000, "tteokmandu", "떡만둣국", "Rice cake & dumpling soup", "年糕饺子汤", "トックマンドゥクク（餅入り餃子スープ）", "Canh bánh gạo & há cảo"),
-      it(180000, "hwangtae", "황태탕", "Dried pollack soup (hwangtae-tang)", "黄太鱼汤", "干しスケトウダラのスープ（ファンテタン）", "Canh cá minh thái khô"),
+      it(180000, "hwangtae", "황태탕", "Dried pollack soup (hwangtae-tang)", "干明太鱼汤", "干しスケトウダラのスープ（ファンテタン）", "Canh cá minh thái khô"),
       it(150000, "cheonggukjang", "청국장", "Cheonggukjang (fermented soybean stew)", "清麴酱汤（청국장）", "チョングッチャン（納豆チゲ）", "Canh tương đậu lên men", { tag: "must" }),
       it(180000, "seolleong", "설렁탕", "Seolleongtang (ox bone soup)", "雪浓汤", "ソルロンタン", "Canh xương bò hầm"),
       it(180000, "yukgaejang", "육개장", "Yukgaejang (spicy beef soup)", "辣牛肉汤", "ユッケジャン", "Canh thịt bò cay", { spicy: true }),
@@ -93,7 +93,7 @@ window.MENU = [
   },
   {
     id: "dessert",
-    name: T("후식 · 밥", "Rice & noodles", "饭 · 面食", "ご飯・麺", "Cơm & mì"),
+    name: T("밥 · 면", "Rice & noodles", "饭 · 面食", "ご飯・麺", "Cơm & mì"),
     items: [
       it(20000, "gongibap", "공기밥", "Steamed rice", "米饭", "ご飯", "Cơm trắng"),
       it(60000, "bibimguksu", "비빔국수", "Spicy bibim noodles", "拌面", "ビビン麺", "Bún trộn cay Hàn Quốc", { spicy: true }),

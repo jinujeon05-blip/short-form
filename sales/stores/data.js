@@ -117,7 +117,7 @@ window.STORES = [
     region: "bacninh", cats: ["korean", "bbq"], tags: ["photos"],
     address: "3 Đ. Võ Cường 12, Võ Cường, Bắc Ninh",
     type: { ko: "한식 · 숯불구이 · 보쌈 전문점", vi: "Nhà hàng Hàn Quốc · Thịt nướng than · Thịt hấp cuốn rau", en: "Korean restaurant · Charcoal grill · Bossam", zh: "韩餐·炭火烤肉·菜包肉", ja: "韓国料理・炭火焼き・ポッサム" },
-    keywords: "소풍 sopung 박닌 nhà hàng hàn quốc 한식 韓姐烤肉 병어조림 보쌈 아귀찜 오징어볶음 해물파전 무뼈닭발 쭈꾸미볶음 꼬막무침 가오리찜 제육볶음 항정살 뒷고기 오겹살 대패삼겹살 석갈비 민물장어 꽃살 안창살 차돌박이 육회 순두부 청국장 보리비빔밥 돌솥비빔밥 설렁탕 육개장 냉면 단체 룸" },
+    keywords: "소풍 sopung 박닌 nhà hàng hàn quốc 한식 韓姐烤肉 thịt nướng than thịt hấp cuốn rau cá chim kho cay korean bbq korean restaurant bossam charcoal grill võ cường 炭火烤肉 菜包肉 韩餐 焼肉 韓国料理 병어조림 보쌈 아귀찜 오징어볶음 해물파전 무뼈닭발 쭈꾸미볶음 꼬막무침 가오리찜 제육볶음 항정살 뒷고기 오겹살 대패삼겹살 석갈비 민물장어 꽃살 안창살 차돌박이 육회 순두부 청국장 보리비빔밥 돌솥비빔밥 설렁탕 육개장 냉면 단체 룸" },
   { id: "buja", name: "부자감자탕 Buja", sub: "감자탕 · 뼈해장국 · 삼겹살 · 백숙", url: "https://buja.qrmenuasia.com", listing: true,
     region: "bacninh", cats: ["korean", "bbq"], tags: ["photos"],
     address: "207 Nguyễn Cao, Kinh Bắc, Bắc Ninh",
