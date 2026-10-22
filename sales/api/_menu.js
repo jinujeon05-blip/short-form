@@ -81,11 +81,13 @@ async function fillTranslations(req, menu, srcLang) {
   }
   const jobs = [], refs = [];
   for (const o of objs) {
-    const text = o[src];
-    if (!text) continue;
-    const need = LANGS.filter((l) => l !== src && (!o[l] || (o._pending || []).includes(l)));
+    const pend0 = o._pending || [];
+    const from = [src, 'ko', 'vi'].find((l) => o[l] && !pend0.includes(l));
+    if (!from) continue;
+    const text = o[from];
+    const need = LANGS.filter((l) => l !== from && (!o[l] || (o._pending || []).includes(l)));
     if (!need.length) continue;
-    jobs.push({ text, from: src, to: need }); refs.push(o);
+    jobs.push({ text, from, to: need }); refs.push(o);
   }
   if (jobs.length > 250) throw new Error('too_many');
   const r = await translate(req, jobs);
@@ -95,7 +97,7 @@ async function fillTranslations(req, menu, srcLang) {
     for (const l of jobs[i].to) {
       const v = r.out[i][l];
       if (v) { o[l] = v; done++; o._auto = [...new Set([...(o._auto || []), l])]; }
-      else { o[l] = o[l] || o[src]; pend.add(l); pending++; }
+      else { o[l] = o[l] || jobs[i].text; pend.add(l); pending++; }
     }
     if (pend.size) o._pending = [...pend]; else delete o._pending;
   });
