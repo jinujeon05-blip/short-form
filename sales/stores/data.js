@@ -118,6 +118,11 @@ window.STORES = [
     address: "31N4 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh",
     type: { ko: "숙성 삼겹살 · 소고기 · 훈제 오리 한식당", vi: "Ba chỉ ủ chín · Thịt bò · Vịt hun khói", en: "Aged pork belly · Beef · Smoked duck", zh: "熟成五花肉 · 牛肉 · 烟熏鸭", ja: "熟成サムギョプサル・牛肉・燻製鴨" },
     keywords: "육덕 yukdeok yuk deok 박닌 육덕 nhà hàng hàn quốc 한식 삼겹살 숙성 삼겹살 숙성 목살 목살 갈매기살 뽈살 항정살 소고기 갈비살 꽃살 육회 훈제 오리 숯불 훈제오리 떡갈비 등갈비 김치찜 김치말이 국수 비빔국수 잔치국수 냉모밀 김치찌개 된장찌개 계란찜 võ cường ngọc hân công chúa bắc ninh thịt nướng hàn quốc ba chỉ heo thịt bò vịt hun khói gỏi bò aged pork belly beef smoked duck korean bbq yukhoe 熟成五花肉 牛肉 烟熏鸭 烤肉 韩国烤肉 熟成 サムギョプサル 熟成肉 燻製鴨 韓国料理 焼肉" },
+  { id: "naegohyang", name: "내고향 돌솥순대국 Nae Gohyang", sub: "돌솥 순대국 · 순대 · 수육", url: "https://naegohyang.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean"], tags: ["photos"],
+    address: "11B CT5, KĐT Mỹ Đình - Mễ Trì, Từ Liêm, Hà Nội",
+    type: { ko: "돌솥 순대국 · 순대 · 수육 전문점", vi: "Cơm thố canh thịt lợn · Lòng dồi · Thịt luộc", en: "Stone-pot soondae-guk · Soondae · Suyuk", zh: "砂锅血肠汤饭 · 血肠 · 白切肉", ja: "石鍋スンデグク・スンデ・スユク" },
+    keywords: "내고향 내고향순대국 내고향 돌솥순대국 nae gohyang naegohyang nhà hàng hàn quốc 한식 순대국 돌솥순대국 순대 편육 수육 모듬수육 곱창순대볶음 술국 막걸리 소주 김치 깍두기 미딩 mỹ đình mễ trì từ liêm hà nội cơm thố canh thịt lợn lòng dồi giò tai thịt lợn hấp gừng soondae sundae guk korean sausage soup suyuk pyeonyuk makgeolli 砂锅 血肠 汤饭 猪耳卷 白切肉 米酒 スンデ スンデグク 石鍋 スユク マッコリ" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
