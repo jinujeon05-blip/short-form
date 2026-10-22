@@ -33,6 +33,11 @@ window.TAGS = {
 };
 
 window.STORES = [
+  { id: "biobeauty", name: "Bio & Beauty", sub: "바이오&뷰티", url: "https://biobeauty.qrmenuasia.com",
+    region: "online", cats: ["beauty"], tags: ["zalo", "sale"],
+    address: null,
+    type: { ko: "한국 화장품 할인 판매", vi: "Mỹ phẩm Hàn Quốc giảm giá", en: "Korean cosmetics on sale", zh: "韩国化妆品特卖", ja: "韓国コスメ セール" },
+    keywords: "바이오뷰티 센테카솔 오가믹스 연고 크림 세럼 마스크 centecassol ogamix kem dưỡng da mỹ phẩm skincare cosmetics 化妆品 护肤 コスメ スキンケア" },
   { id: "sutkkui", name: "숯꾸이", sub: "Nhà Hàng Thịt Nướng", url: "https://sutkkui.qrmenuasia.com",
     region: "bacninh", cats: ["bbq", "korean"], tags: ["photos", "wifi"],
     address: "190 Nguyễn Cao, TP. Bắc Ninh",
@@ -234,11 +239,6 @@ window.STORES = [
     address: "33 Đ. Nguyễn Tất Tố, Võ Cường, Bắc Ninh",
     type: { ko: "한식 오리요리 전문점", vi: "Quán vịt Hàn Quốc · Canh khoai tây · Bossam", en: "Korean duck restaurant · Gamjatang · Bossam", zh: "韩式鸭肉料理专门店", ja: "韓国式鴨料理専門店" },
     keywords: "오리명가 오리 명가 orimyeongga ori myeongga 鴨料名家 鸭料名家 nhà hàng vịt vịt quán vịt 오리요리 오리주물럭 오리 주물럭 생오리구이 오리로스 오리훈제 오리백숙 닭백숙 옻오리 옻닭 건송이버섯 백숙 감자탕 닭볶음탕 묵은지 닭볶음탕 목살 주물럭 삼겹살 항정살 돼지 김치찌개 홍어찜 홍어삼합 마늘보쌈 굴보쌈 보쌈 잔치국수 해물파전 부추전 홍어전 동태전 굴튀김 소주 막걸리 설원 võ cường nguyễn tất tố bắc ninh vịt xào cay vịt nướng vịt hun khói vịt hầm canh khoai tây gà hầm kim chi bossam korean duck duck bbq duck baeksuk gamjatang pork bone stew bossam oyster bossam pajeon 鸭肉 烤鸭 熏鸭 土豆炖猪骨 菜包肉 鴨料理 カムジャタン ポッサム ペクスク チヂミ" },
-  { id: "biobeauty", name: "Bio & Beauty", sub: "바이오&뷰티", url: "https://biobeauty.qrmenuasia.com",
-    region: "online", cats: ["beauty"], tags: ["zalo", "sale"],
-    address: null,
-    type: { ko: "한국 화장품 할인 판매", vi: "Mỹ phẩm Hàn Quốc giảm giá", en: "Korean cosmetics on sale", zh: "韩国化妆品特卖", ja: "韓国コスメ セール" },
-    keywords: "바이오뷰티 센테카솔 오가믹스 연고 크림 세럼 마스크 centecassol ogamix kem dưỡng da mỹ phẩm skincare cosmetics 化妆品 护肤 コスメ スキンケア" },
 ];
 
 window.SI = {
