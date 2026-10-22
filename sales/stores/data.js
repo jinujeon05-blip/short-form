@@ -128,6 +128,11 @@ window.STORES = [
     address: "Song Da Building CT5, Mễ Trì, Từ Liêm, Hà Nội",
     type: { ko: "돌판 구이 · 숙성 고기 · 오리 · 한국 직송 해산물", vi: "Nướng đá · Thịt ủ chín · Vịt · Hải sản nhập Hàn Quốc", en: "Stone-plate grill · Aged meat · Duck · Korea-direct seafood", zh: "石板烧烤 · 熟成肉 · 鸭肉 · 韩国直送海鲜", ja: "石板焼き・熟成肉・ダック・韓国直送海鮮" },
     keywords: "마당 마당돌판구이 돌판구이 madang stone plate grill 돌판 삼겹살 숙성 삼겹살 교차숙성 목살 가브리살 항정살 와규 프라임 꽃살 안창살 생갈비 차돌배기 돼지막창 특양 오리 오리소금구이 오리주물럭 오리훈제 오리탕 꼼장어 양념꼼장어 소금꼼장어 관자 전복버터구이 더덕구이 육회 산낙지 육회탕탕이 병어회 멍게회 한치회 뭉티기 홍어삼합 홍어 아나고회 굴사시미 참소라 굴김치 꼬막무침 황태구이 과메기 묵무침 문어숙회 배추전 부추전 해물파전 굴전 동태전 태극전 동태찌개 잔새우매운탕 장어전골 함흥냉면 비빔냉면 묵사발 유부우동 신라면 홍어라면 솥밥 갈비탕 추어탕 술국 조개전골 무한 미딩 mễ trì từ liêm hà nội nướng đá thịt ủ chín vịt nướng lươn hải sản nhập hàn quốc lẩu hải sản hoàng đế aged pork belly duck eel sashimi yukhoe sannakji hongeo pancake naengmyeon 石板烤肉 熟成 鸭 鳗鱼 刺身 煎饼 冷面 韩国烤肉 石板焼き 熟成肉 ダック うなぎ 刺身 チヂミ 冷麺 韓国料理" },
+  { id: "jangsucheon", name: "장수천 민물장어 Jang su cheon", sub: "한방 민물장어 · 소고기 · 가마솥밥", url: "https://jangsucheon.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean", "bbq"], tags: ["photos"],
+    address: "22 P. Bùi Thị Xuân, Võ Cường, Bắc Ninh",
+    type: { ko: "한방 민물장어 · 소고기 · 가마솥밥 한식당", vi: "Cá chình nướng Hàn Quốc · Thịt bò · Cơm niêu", en: "Korean freshwater eel grill · Beef · Cauldron rice", zh: "韩式烤淡水鳗鱼 · 牛肉 · 铁锅饭", ja: "韓国式うなぎ焼き・牛肉・釜飯" },
+    keywords: "장수천 장수천민물장어 민물장어 한방 민물장어 장어 장어구이 jang su cheon jangsucheon jsc nhà hàng lươn nướng hàn quốc 한식 무항생제 소생갈비 생갈비살 꽃살 꽃등심 육회 장어탕 꼬리곰탕 도가니탕 소고기 순두부 냉이 된장찌개 가마솥밥 소주 참이슬 처음처럼 진로 좋은데이 백세주 복분자 막걸리 맥주 võ cường bùi thị xuân bắc ninh cá chình lươn nướng lươn cơm niêu canh đuôi bò sườn bò gỏi bò freshwater eel grilled eel unagi korean eel beef ribs yukhoe oxtail soup 淡水鳗鱼 烤鳗鱼 鳗鱼 牛肉 铁锅饭 牛尾汤 うなぎ 鰻 ウナギ 韓国料理 釜飯" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
