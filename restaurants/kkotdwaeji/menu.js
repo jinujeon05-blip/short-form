@@ -33,7 +33,7 @@ window.MENU = [
     note: SOUP_NOTE,
     items: [
       it(520000, null, "삼겹 모듬 콤보 (600g)", "Pork combo (600 g)", "猪肉拼盘（600克）", "豚肉コンボ（600g）", "Combo thịt heo (600g)"),
-      it(480000, null, "세트 1", "Set 1", "套餐1", "セット1", "Sét 1", { desc: T("편육 + 고갈비(고등어구이) + 막국수", "Boiled pork slices (pyeonyuk) + grilled mackerel + buckwheat noodles", "猪肉冻 + 烤青花鱼 + 拌荞麦面", "ポッサム風ゆで豚 + サバの焼き物 + マッククス", "Giò + Cá + Mỳ") }),
+      it(480000, null, "세트 1", "Set 1", "套餐1", "セット1", "Sét 1", { desc: T("편육 + 고갈비(고등어구이) + 막국수", "Boiled pork slices (pyeonyuk) + grilled mackerel + buckwheat noodles", "韩式猪肉冻 + 烤青花鱼 + 拌荞麦面", "ゆで豚（ピョニュク） + サバの焼き物 + マッククス", "Giò + Cá + Mỳ") }),
       it(480000, null, "세트 2", "Set 2", "套餐2", "セット2", "Sét 2", { desc: T("닭꼬치 + 두부김치 + 찌개", "Chicken skewers + tofu with stir-fried kimchi + stew", "鸡肉串 + 炒泡菜配豆腐 + 汤", "焼き鳥串 + 豆腐キムチ + チゲ", "Gà xiên + Đậu phụ kimchi + Canh") }),
       it(480000, null, "세트 3", "Set 3", "套餐3", "セット3", "Sét 3", { desc: T("닭꼬치 + 편육 + 찌개", "Chicken skewers + boiled pork slices + stew", "鸡肉串 + 韩式猪肉冻 + 汤", "焼き鳥串 + ゆで豚 + チゲ", "Gà xiên + Giò + Canh") }),
       it(600000, "jokgalbi", "세트 4", "Set 4", "套餐4", "セット4", "Sét 4", { desc: T("쪽갈비 + 삼겹살 + 찌개", "Grilled pork ribs + pork belly + stew", "烤猪排骨 + 五花肉 + 汤", "豚スペアリブ + サムギョプサル + チゲ", "Sườn + ba chỉ + Canh") }),
@@ -57,7 +57,7 @@ window.MENU = [
     name: T("찌개 · 찜 · 탕", "Stews & hot pots", "炖菜 · 汤锅", "チゲ・蒸し煮・鍋", "Canh · Lẩu · Món hầm"),
     items: [
       it(null, "kimchijjim", "묵은지 김치찜", "Braised aged kimchi with pork", "炖老泡菜", "熟成キムチの蒸し煮", "Canh kimchi hầm", { sizes: [[T("중", "M", "中", "中", "Nhỏ"), 500000], [T("대", "L", "大", "大", "Lớn"), 650000]] }),
-      it(null, "galbijjim", "매운 갈비찜", "Spicy braised short ribs", "麻辣炖排骨", "辛いカルビチム", "Canh sườn hầm cay", { sizes: [[T("중", "M", "中", "中", "Nhỏ"), 500000], [T("대", "L", "大", "大", "Lớn"), 650000]], spicy: true }),
+      it(null, "galbijjim", "매운 갈비찜", "Spicy braised pork ribs", "麻辣炖排骨", "辛いカルビチム", "Canh sườn hầm cay", { sizes: [[T("중", "M", "中", "中", "Nhỏ"), 500000], [T("대", "L", "大", "大", "Lớn"), 650000]], spicy: true }),
       it(140000, null, "돼지 김치찌개", "Pork kimchi stew", "猪肉泡菜汤", "豚キムチチゲ", "Canh kimchi", { unit: ONE }),
       it(160000, "kimchi", "참치 김치찌개", "Tuna kimchi stew", "金枪鱼泡菜汤", "ツナキムチチゲ", "Canh kimchi cá ngừ", { unit: ONE }),
       it(140000, null, "김치 꿀꿀이", "Kimchi pork-and-rice soup (kimchi kkulkkuri)", "泡菜汤饭", "キムチクルクリ（汁ご飯）", "Kimchi kunkuni"),
@@ -74,7 +74,7 @@ window.MENU = [
     items: [
       it(200000, null, "편육", "Boiled pork slices (pyeonyuk)", "韩式猪肉冻", "ゆで豚（ピョニュク）", "Giò thủ Hàn Quốc", { unit: G(200) }),
       it(180000, null, "두부김치", "Tofu with stir-fried kimchi", "炒泡菜配豆腐", "豆腐キムチ", "Kimchi xào & đậu phụ"),
-      it(180000, null, "먹태", "Dried pollock (meoktae), 1 fish", "干明太鱼（1条）", "干しスケトウダラ（モクテ）1尾", "Cá minh thái", { unit: T("1마리", "1 fish", "1条", "1尾", "1 con") }),
+      it(180000, null, "먹태", "Dried pollock (meoktae)", "干明太鱼", "干しスケトウダラ（モクテ）", "Cá minh thái", { unit: T("1마리", "1 fish", "1条", "1尾", "1 con") }),
       it(280000, null, "꼬치 오뎅탕", "Fish cake skewer soup", "鱼饼串汤", "串おでん鍋", "Canh chả cá xiên"),
       it(260000, null, "홍합탕", "Mussel soup", "青口汤", "ムール貝のスープ", "Canh vẹm biển"),
     ],
