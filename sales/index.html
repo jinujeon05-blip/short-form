@@ -468,6 +468,9 @@
   });
 </script>
 <script src="lang-menu.js"></script>
+<!-- sw:start (홈 화면 웹앱 설치용, sales/sw.js) -->
+<script>if ("serviceWorker" in navigator) addEventListener("load", function () { navigator.serviceWorker.register("/sw.js").catch(function () {}); });</script>
+<!-- sw:end -->
 <!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
 <script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
 <!-- analytics:end -->
