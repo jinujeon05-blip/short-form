@@ -112,7 +112,7 @@ window.STORES = [
     region: "bacninh", cats: ["bbq", "korean"], tags: ["photos"],
     address: "35 Lý Nhân Tông, Võ Cường, Bắc Ninh",
     type: { ko: "소곱창 · 대창 · 막창 전문점", vi: "Chuyên lòng bò · đại tràng · dạ múi khế nướng", en: "Beef offal grill (gopchang · daechang · makchang)", zh: "牛杂烧烤专门店", ja: "牛ホルモン焼き専門店（コプチャン・テチャン・マクチャン）" },
-    keywords: "수정곱창 수정 곱창 박닌 sujeong lòng bò korea lòng bò hàn quốc 곱창 소곱창 대창 소대창 막창 소막창 모듬곱창 곱창전골 전골 꽃삼겹 크림꽃삼겹 항정살 꼬들살 소갈비살 양념목살 명품육회 육회 뚝배기불고기 냉면 천연수정불판 수정불판 võ cường lý nhân tông bắc ninh lòng non bò đại tràng dạ múi khế lẩu lòng bò gỏi bò sống beef offal gopchang makchang daechang tripe hot pot crystal grill korean bbq 牛杂 牛小肠 牛大肠 牛百叶 火锅 水晶烤盘 韩国烤肉 ホルモン コプチャン マクチャン テチャン ホルモン鍋 水晶焼き板 韓国料理" },
+    keywords: "수정곱창 수정 곱창 박닌 sujeong lòng bò korea lòng bò hàn quốc 곱창 소곱창 대창 소대창 막창 소막창 모듬곱창 곱창전골 전골 꽃삼겹 크림꽃삼겹 항정살 꼬들살 소갈비살 양념목살 명품육회 육회 뚝배기불고기 냉면 천연수정불판 수정불판 võ cường lý nhân tông bắc ninh lòng non bò đại tràng dạ múi khế lẩu lòng bò gỏi bò sống beef offal gopchang makchang daechang intestine hot pot crystal grill korean bbq 牛杂 牛小肠 牛大肠 牛皱胃 火锅 水晶烤盘 韩国烤肉 ホルモン コプチャン マクチャン テチャン ホルモン鍋 水晶焼き板 韓国料理" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
