@@ -298,17 +298,18 @@
 <script>
 (function () {
   var T = {
-    ko: { btn: "앱으로 설치하기", ok: "닫기", ios: "홈 화면에 추가하는 방법", iosSteps: ["Safari 아래의 공유 버튼(□↑)을 누르세요", "'홈 화면에 추가'를 고르세요", "오른쪽 위 '추가'를 누르면 끝!"], other: "홈 화면에 추가하는 방법", otherSteps: ["브라우저 오른쪽 위 ⋮ 메뉴를 누르세요", "'홈 화면에 추가' 또는 '앱 설치'를 고르세요", "'추가'를 누르면 끝!"] },
-    en: { btn: "Install as app", ok: "Close", ios: "How to add to Home Screen", iosSteps: ["Tap the Share button (□↑) at the bottom of Safari", "Choose “Add to Home Screen”", "Tap “Add” at the top right"], other: "How to add to Home Screen", otherSteps: ["Tap the ⋮ menu at the top right of your browser", "Choose “Add to Home screen” or “Install app”", "Tap “Add”"] },
-    zh: { btn: "安装为应用", ok: "关闭", ios: "如何添加到主屏幕", iosSteps: ["点击 Safari 底部的分享按钮（□↑）", "选择“添加到主屏幕”", "点击右上角“添加”"], other: "如何添加到主屏幕", otherSteps: ["点击浏览器右上角的 ⋮ 菜单", "选择“添加到主屏幕”或“安装应用”", "点击“添加”"] },
-    ja: { btn: "アプリとしてインストール", ok: "閉じる", ios: "ホーム画面に追加する方法", iosSteps: ["Safariの下にある共有ボタン（□↑）をタップ", "「ホーム画面に追加」を選択", "右上の「追加」をタップ"], other: "ホーム画面に追加する方法", otherSteps: ["ブラウザ右上の ⋮ メニューをタップ", "「ホーム画面に追加」または「アプリをインストール」を選択", "「追加」をタップ"] },
-    vi: { btn: "Cài đặt như ứng dụng", ok: "Đóng", ios: "Cách thêm vào màn hình chính", iosSteps: ["Nhấn nút Chia sẻ (□↑) ở dưới Safari", "Chọn “Thêm vào MH chính”", "Nhấn “Thêm” ở góc trên bên phải"], other: "Cách thêm vào màn hình chính", otherSteps: ["Nhấn menu ⋮ ở góc trên bên phải trình duyệt", "Chọn “Thêm vào màn hình chính” hoặc “Cài đặt ứng dụng”", "Nhấn “Thêm”"] }
+    ko: { btn: "앱으로 설치하기", ok: "닫기", sam: "삼성 인터넷에서는 설치가 막힐 수 있어요", samSteps: ["크롬(Chrome) 앱에서 이 주소를 열어 주세요: qrmenuasia.com/stores", "크롬 오른쪽 위 ⋮ 메뉴를 누르세요", "'앱 설치' 또는 '홈 화면에 추가'를 고르면 끝!"], ios: "홈 화면에 추가하는 방법", iosSteps: ["Safari 아래의 공유 버튼(□↑)을 누르세요", "'홈 화면에 추가'를 고르세요", "오른쪽 위 '추가'를 누르면 끝!"], other: "홈 화면에 추가하는 방법", otherSteps: ["브라우저 오른쪽 위 ⋮ 메뉴를 누르세요", "'홈 화면에 추가' 또는 '앱 설치'를 고르세요", "'추가'를 누르면 끝!"] },
+    en: { btn: "Install as app", ok: "Close", sam: "Installing may be blocked in Samsung Internet", samSteps: ["Open this address in the Chrome app: qrmenuasia.com/stores", "Tap the ⋮ menu at the top right of Chrome", "Choose “Install app” or “Add to Home screen”"], ios: "How to add to Home Screen", iosSteps: ["Tap the Share button (□↑) at the bottom of Safari", "Choose “Add to Home Screen”", "Tap “Add” at the top right"], other: "How to add to Home Screen", otherSteps: ["Tap the ⋮ menu at the top right of your browser", "Choose “Add to Home screen” or “Install app”", "Tap “Add”"] },
+    zh: { btn: "安装为应用", ok: "关闭", sam: "三星浏览器可能会阻止安装", samSteps: ["请在 Chrome 应用中打开此网址：qrmenuasia.com/stores", "点击 Chrome 右上角的 ⋮ 菜单", "选择“安装应用”或“添加到主屏幕”"], ios: "如何添加到主屏幕", iosSteps: ["点击 Safari 底部的分享按钮（□↑）", "选择“添加到主屏幕”", "点击右上角“添加”"], other: "如何添加到主屏幕", otherSteps: ["点击浏览器右上角的 ⋮ 菜单", "选择“添加到主屏幕”或“安装应用”", "点击“添加”"] },
+    ja: { btn: "アプリとしてインストール", ok: "閉じる", sam: "Samsung Internetではインストールがブロックされる場合があります", samSteps: ["Chromeアプリでこのアドレスを開いてください：qrmenuasia.com/stores", "Chrome右上の ⋮ メニューをタップ", "「アプリをインストール」または「ホーム画面に追加」を選択"], ios: "ホーム画面に追加する方法", iosSteps: ["Safariの下にある共有ボタン（□↑）をタップ", "「ホーム画面に追加」を選択", "右上の「追加」をタップ"], other: "ホーム画面に追加する方法", otherSteps: ["ブラウザ右上の ⋮ メニューをタップ", "「ホーム画面に追加」または「アプリをインストール」を選択", "「追加」をタップ"] },
+    vi: { btn: "Cài đặt như ứng dụng", ok: "Đóng", sam: "Samsung Internet có thể chặn việc cài đặt", samSteps: ["Mở địa chỉ này trong ứng dụng Chrome: qrmenuasia.com/stores", "Nhấn menu ⋮ ở góc trên bên phải Chrome", "Chọn “Cài đặt ứng dụng” hoặc “Thêm vào màn hình chính”"], ios: "Cách thêm vào màn hình chính", iosSteps: ["Nhấn nút Chia sẻ (□↑) ở dưới Safari", "Chọn “Thêm vào MH chính”", "Nhấn “Thêm” ở góc trên bên phải"], other: "Cách thêm vào màn hình chính", otherSteps: ["Nhấn menu ⋮ ở góc trên bên phải trình duyệt", "Chọn “Thêm vào màn hình chính” hoặc “Cài đặt ứng dụng”", "Nhấn “Thêm”"] }
   };
   var $ = function (id) { return document.getElementById(id); };
   var standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone;
   var btn = $("install");
   if (!btn || standalone) return;
   var ua = navigator.userAgent;
+  var isSamsung = /SamsungBrowser/i.test(ua);
   var isIOS = /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   var deferred = null;
   var cur = function () { var l = document.documentElement.lang.split("-")[0]; return T[l] || T.ko; };
@@ -319,9 +320,9 @@
   addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; });
   addEventListener("appinstalled", function () { btn.hidden = true; });
   btn.addEventListener("click", function () {
-    if (deferred) { deferred.prompt(); deferred.userChoice.then(function () { deferred = null; }); return; }
-    var t = cur(), steps = isIOS ? t.iosSteps : t.otherSteps;
-    $("insTitle").textContent = isIOS ? t.ios : t.other;
+    if (deferred && !isSamsung) { deferred.prompt(); deferred.userChoice.then(function () { deferred = null; }); return; }
+    var t = cur(), steps = isSamsung ? t.samSteps : isIOS ? t.iosSteps : t.otherSteps;
+    $("insTitle").textContent = isSamsung ? t.sam : isIOS ? t.ios : t.other;
     $("insSteps").innerHTML = steps.map(function (x) { return "<li>" + x.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</li>"; }).join("");
     $("insBack").classList.add("show");
   });

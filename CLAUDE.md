@@ -266,7 +266,7 @@
 - https://qrmenuasia.com/stores/ (`sales/stores/`, 소개서와 같은 Vercel 프로젝트). 소개서 데모 칸 아래 링크로 연결됨.
 - 가게 목록·지역·종류·태그·화면 문구(5개 언어)는 `sales/stores/data.js` 하나에 있다. 사진은 소개서와 같은 `sales/img/demo-<가게>.jpg`.
 - 검색은 모든 언어의 이름·종류·지역·주소와 `keywords`(화면에 안 보임, 요리 이름 등)를 대상으로 하고 베트남어 성조를 무시한다 ("an voi" → Ăn Vội). 조건은 주소창(`?q=&region=&cat=`)에 남아 링크로 공유된다.
-- **웹앱 설치 버튼(2026-10-22)**: 가게 찾기 맨 위 "앱으로 설치하기" 버튼(`sales/stores/index.html`의 `<!-- install:start/end -->`, 5개 언어). 안드로이드 크롬은 `beforeinstallprompt`로 설치 창을 바로 띄우고, 아이폰·그 외 브라우저는 "홈 화면에 추가" 방법 안내 창을 보여 준다. 이미 앱으로 열었으면(standalone) 버튼 숨김. 삼성 인터넷은 아이콘에 자기 행성 배지가 붙을 수 있음(위 설명). 배포는 사용자 확인 후.
+- **웹앱 설치 버튼(2026-10-22)**: 가게 찾기 맨 위 "앱으로 설치하기" 버튼(`sales/stores/index.html`의 `<!-- install:start/end -->`, 5개 언어). 안드로이드 크롬은 `beforeinstallprompt`로 설치 창을 바로 띄우고, 아이폰·그 외 브라우저는 "홈 화면에 추가" 방법 안내 창을 보여 준다. 이미 앱으로 열었으면(standalone) 버튼 숨김. 삼성 인터넷은 설치하면 구글 Play 프로텍트가 '안전하지 않은 앱 차단됨'(Android 이전 버전용 앱)을 띄우므로(사용자 폰 확인 2026-10-22, 브라우저가 만든 설치 파일 탓으로 우리가 못 고침) **UA가 SamsungBrowser면 설치 창을 띄우지 않고 '크롬에서 열어 설치' 안내만 보여 준다**.
 - 각 가게 메뉴판 맨 아래(파트너 배너 다음)에 "QR 메뉴판 가게 더 보기" 링크가 있다. 원본은 `restaurants/_shared/stores-link.js` 하나, 고친 뒤 `restaurants/_shared/sync-stores.sh`로 복사하고 가게마다 다시 배포한다. 메뉴판 언어를 따라 문구와 `?lang=`이 바뀌고, 색은 가게 `partner-theme`(`--pt-*`)를 따른다.
 - 새 가게는 사장님 동의를 받고 `STORES`에 추가한다. 목록에 넣은 가게는 `sync-stores.sh`의 SHOPS에도 넣는다. 지역·종류가 새로 생기면 `REGIONS`·`CATS`에도 넣는다. 15~20곳이 넘으면 지역을 나라/도시 두 단계로 나누는 것을 검토한다.
 
