@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jangolang.qrmenuasia.com/sitemap.xml
