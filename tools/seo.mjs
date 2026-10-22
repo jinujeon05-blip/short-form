@@ -26,6 +26,7 @@ const SHOPS = {
   daekuk:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Shabu-shabu'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   boknara:      { type: 'Restaurant', cuisine: ['Korean', 'Pufferfish', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   dada:         { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Stews', 'Chicken'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  buja:         { type: 'Restaurant', cuisine: ['Korean', 'Gamjatang', 'Korean BBQ', 'Haejangguk'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   soban:        { type: 'Restaurant', cuisine: ['Korean', 'Oxtail', 'Gomtang'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   donggoone:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Grilled eel', 'Hagfish'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   jangolang:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Grilled eel', 'Hot pot'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
