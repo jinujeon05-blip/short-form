@@ -111,7 +111,7 @@ window.STORES = [
   { id: "anjirang", name: "안지랑 곱창 막창 Anjirang", sub: "곱창 · 막창 · 염통구이 · 옛날통닭", url: "https://anjirang.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
     address: "Ngõ 179 Đ. Đình Thôn, Đình Thôn, Từ Liêm, Hà Nội",
-    type: { ko: "곱창 · 막창 전문점", vi: "Chuyên lòng bò · dạ dày heo nướng kiểu Hàn", en: "Korean offal grill (gopchang · makchang)", zh: "烤牛杂·烤猪肠专门店", ja: "コプチャン・マクチャン専門店" },
+    type: { ko: "곱창 · 막창 전문점", vi: "Lòng nướng · Khấu heo nướng kiểu Hàn", en: "Korean offal grill (gopchang · makchang)", zh: "烤牛杂·烤猪肠专门店", ja: "コプチャン・マクチャン専門店" },
     keywords: "안지랑 곱창 막창 안지랑곱창막창 anjirang gopchang makchang 곱창 막창 염통 염통구이 대패삼겹살 삼겹살 옛날통닭 통닭 된장찌개 공기밥 볶음밥 소주 맥주 생맥주 사포로 saporo 세트 하노이 미딩 딩톤 đình thôn mỹ đình từ liêm hà nội lòng nướng khấu heo nướng tim nướng ba chỉ heo gà chiên nguyên con canh tương đậu bia tươi korean bbq offal grill gopchang makchang fried chicken doenjang 烤牛杂 烤猪肠 烤心脏 五花肉 炸鸡 大酱汤 韩国烤肉 ホルモン コプチャン マクチャン 豚マクチャン フライドチキン 韓国料理 焼肉" },
   { id: "sujeong", name: "수정곱창 Sujeong · Lòng bò Korea", sub: "소곱창 · 대창 · 막창 · 곱창전골", url: "https://sujeong.qrmenuasia.com", listing: true,
     region: "bacninh", cats: ["bbq", "korean"], tags: ["photos"],
