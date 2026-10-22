@@ -82,6 +82,11 @@ window.STORES = [
     address: "26N5 Đường Võ Cường 4, Võ Cường, Bắc Ninh",
     type: { ko: "일식 이자카야 · 오마카세", vi: "Izakaya Nhật · Omakase", en: "Japanese izakaya · Omakase", zh: "日式居酒屋 · 主厨发办", ja: "日本料理の居酒屋・おまかせ" },
     keywords: "하루 haru 하루 박닌 御厨 omakase 오마카세 일식 일본식 이자카야 izakaya 일식당 사시미 초밥 스시 참치타다끼 연어 사시미 참치회 츠쿠네 꼬치 모듬꼬치 가라아게 고로케 아게다시도후 계란말이 오뎅탕 나가사키 짬뽕 야끼소바 조개술찜 가리비 전복 버터구이 명란 사케 소주 하이볼 삿포로 생맥주 일본어 가능 võ cường bắc ninh nhà hàng nhật bản sashimi sushi nhà hàng haru korea 刺身 寿司 居酒屋 烤串 清酒 北宁 日本料理 居酒屋 おまかせ 寿司 刺身 焼き鳥 日本酒 バクニン" },
+  { id: "dada", name: "다다식당 DADA", sub: "한식 BBQ · 찌개 · 전골 · 치킨", url: "https://dada.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["bbq", "korean"], tags: ["photos"],
+    address: "53 Lý Nhân Tông, Võ Cường, Bắc Ninh",
+    type: { ko: "한식 BBQ · 찌개 · 전골 · 안주 · 치킨", vi: "BBQ Hàn Quốc · Canh · Lẩu · Mồi nhậu · Gà rán", en: "Korean BBQ · Stews · Hot pots · Snacks · Chicken", zh: "韩式烤肉 · 汤锅 · 火锅 · 下酒菜 · 炸鸡", ja: "韓国焼肉・チゲ・鍋・おつまみ・チキン" },
+    keywords: "다다식당 다다 dada nha hang dada nhà hàng dada 한식 고깃집 bbq 삼겹살 항정살 목살 차돌박이 막창 소갈비살 세트 콤보 김치찌개 참치김치찌개 된장찌개 부대전골 부대찌개 닭도리탕 아구탕 곱창전골 어묵탕 꽁치김치찜 비빔밥 제육덮밥 볶음밥 라면 냉면 콩국수 계란말이 쥐포 소떡소떡 낙지볶음 문어볶음 닭발 아구찜 보쌈 치즈돈까스 해물파전 치킨 양념치킨 맥주 소주 lý nhân tông võ cường bắc ninh quán hàn quốc thịt nướng lẩu canh kim chi gà rán korean bbq pork belly stew hot pot 韩餐 烤肉 五花肉 泡菜汤 部队火锅 炸鸡 北宁 韓国料理 焼肉 サムギョプサル チゲ プデチゲ チキン バクニン" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
