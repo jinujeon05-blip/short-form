@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d1d1f">
+<title>바바 BABA 박닌 메뉴</title>
+<meta name="description" content="바바 BABA — 박닌 Võ Cường 한식 주점 · 바 · 콤보·피자·치킨·시그니처 칵테일·크래프트 비어 · 227 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh">
+<style>
+  :root {
+    --brick: #1d1d1f;
+    --brick-2: #323236;
+    --paper: #f2f1ee;
+    --paper-2: #e6e4df;
+    --stone: #c9c6bf;
+    --ink: #1b1b1c;
+    --muted: #6f6d68;
+    --line: #dcdad4;
+    --gold: #c8242b;
+    --gold-2: #c9a45c;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; color: var(--ink); background: var(--paper);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.4;
+  }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+  .serif { font-family: inherit; }
+
+  /* ── 상단: 짙은 먹색 + 금색 ── */
+  header { position: relative; color: #fff; text-align: center; padding: 12px 0 46px;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(201,164,92,.18), transparent 60%),
+      linear-gradient(180deg, var(--brick-2), var(--brick)); }
+  header::after { /* 아래쪽 성가퀴 */
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 22px;
+    background: linear-gradient(90deg, var(--paper) 0 50%, transparent 50% 100%) 0 0 / 36px 100% repeat-x,
+                linear-gradient(var(--paper), var(--paper)) 0 100% / 100% 8px no-repeat;
+  }
+  .langs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #e8e6e1; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.28); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: var(--brick); background: #fff; border-color: #fff; }
+  .logo { display: block; width: 210px; height: auto; margin: 26px auto 0; }
+  h1 { margin: 16px 0 0; font-size: 38px; font-weight: 900; letter-spacing: 3px; padding-left: 3px; line-height: 1.1; color: #fff; }
+  .en { margin: 8px 0 0; font-size: 13px; font-weight: 800; letter-spacing: 3px; color: var(--gold-2); padding-left: 3px; }
+  .branch { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--brick); background: var(--gold-2); border-radius: 999px; padding: 3px 12px; }
+  .tagline { margin: 12px 0 0; font-size: 14.5px; font-weight: 600; color: #e8e6e1; }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; background: var(--paper); border-bottom: 1px solid var(--line); box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+  nav .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-top: 8px; padding-bottom: 8px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 700; padding: 7px 12px; border-radius: 999px; white-space: nowrap; }
+  nav a.active { color: #fff; background: var(--brick); }
+
+  /* ── 메뉴 ── */
+  section { padding: 28px 0 6px; }
+  .banner { display: block; width: 100%; height: auto; aspect-ratio: 900 / 330; object-fit: cover; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 8px 20px rgba(0,0,0,.14); }
+  .head { text-align: center; }
+  h2 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 2px; color: var(--brick); }
+  h2 small { display: block; margin-top: 4px; font-size: 14px; font-weight: 400; letter-spacing: .5px; color: var(--muted); }
+  .note { margin: 10px 0 0; text-align: center; font-size: 13.5px; color: var(--muted); }
+  .quote { margin: 16px 0 0; text-align: center; font-size: 15px; font-weight: 700; color: var(--brick); }
+  .quote::before { content: "“ "; color: var(--gold); }
+  .quote::after { content: " ”"; color: var(--gold); }
+
+  ul { list-style: none; margin: 10px 0 0; padding: 0; }
+  li { padding: 13px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+  .tags span { font-size: 10.5px; font-weight: 800; letter-spacing: .3px; color: #fff; background: var(--brick); border-radius: 3px; padding: 1px 6px; }
+  .tags .special { background: var(--gold); }
+  .tags .new { background: #c8242b; }
+  .tags .hot { background: #fff; color: #c2402a; border: 1px solid #e6b3a6; }
+  .row { display: flex; align-items: baseline; gap: 8px; }
+  .row b { font-size: 17px; font-weight: 800; }
+  .row .unit { font-size: 12px; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  .row .leader { flex: 1; min-width: 10px; border-bottom: 2px dotted var(--stone); transform: translateY(-4px); }
+  .price { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--brick); }
+  .price small { font-size: 11px; color: var(--muted); margin-left: 1px; }
+  .price.ask { font-size: 13px; color: var(--muted); }
+  .sizes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .sizes span { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 2px 8px; }
+  .sizes span i { font-style: normal; font-size: 11px; font-weight: 800; color: #fff; background: var(--brick); border-radius: 4px; padding: 0 5px; margin-right: 6px; }
+  .sizes span.after i { background: var(--gold); }
+  .desc { margin-top: 4px; font-size: 13px; color: #4d4b46; }
+  .sub { margin-top: 3px; font-size: 13px; color: var(--muted); }
+  .sub.it { font-style: italic; }
+
+  /* ── 가게 정보 ── */
+  footer { margin-top: 40px; background: var(--brick); color: #e8e6e1; padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); }
+  .thanks { text-align: center; font-size: 15px; line-height: 1.7; margin: 0 0 18px; }
+  .pills { display: grid; gap: 10px; }
+  .pill { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; text-align: left; color: var(--ink); text-decoration: none; background: var(--paper); border: 0; border-radius: 16px; padding: 10px 14px 10px 10px; cursor: pointer; }
+  .pill i { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--brick); }
+  .pill i svg { width: 20px; height: 20px; color: #fff; }
+  .pill div { flex: 1; min-width: 0; }
+  .pill small { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .pill strong { display: block; font-size: 16px; font-weight: 800; word-break: break-word; }
+  .pill em { flex: none; font-style: normal; font-size: 12px; font-weight: 700; color: var(--brick); }
+  .vnd { text-align: center; margin: 16px 0 0; font-size: 12px; opacity: .85; }
+
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 40; background: var(--brick); color: #fff; font-size: 14px; font-weight: 700; padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+<style id="partner-theme">
+  /* 하단 파트너 배너(다산)·가게 찾기 링크 색을 이 메뉴판에 맞춘다 */
+  :root { --pt-mode: light; --pt-bg: #fff; --pt-ink: #1b1b1c; --pt-muted: #6f6d68; --pt-line: #dcdad4; --pt-accent: #1d1d1f; --pt-btn: #1d1d1f; --pt-btn-ink: #fff; --pt-shadow: 0 6px 16px rgba(0,0,0,.14); }
+</style>
+<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
+<link rel="canonical" href="https://baba.qrmenuasia.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="바바 BABA 박닌 메뉴">
+<meta property="og:description" content="바바 BABA — 박닌 Võ Cường 한식 주점 · 바 · 콤보·피자·치킨·시그니처 칵테일·크래프트 비어 · 227 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh">
+<meta property="og:url" content="https://baba.qrmenuasia.com/">
+<meta property="og:image" content="https://baba.qrmenuasia.com/img/store.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BarOrPub","name":"바바 BABA","url":"https://baba.qrmenuasia.com/","address":{"@type":"PostalAddress","streetAddress":"227 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh","addressCountry":"VN"},"telephone":"0354671233","image":"https://baba.qrmenuasia.com/img/store.jpg","servesCuisine":["Korean","Korean pub","Pizza","Cocktails","Craft beer"],"hasMenu":{"@type":"Menu","name":"바바 BABA menu","inLanguage":["ko","en","zh","ja","vi"],"hasMenuSection":[{"@type":"MenuSection","name":"BABA Combo","hasMenuItem":[{"@type":"MenuItem","name":"Beer tower combo","alternateName":["맥주타워 콤보","Combo tháp bia","啤酒塔套餐","ビールタワーコンボ"],"offers":{"@type":"Offer","price":1150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Soju combo","alternateName":["소주 콤보","Combo soju","烧酒套餐","焼酎コンボ"],"offers":{"@type":"Offer","price":1000000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Wine combo","alternateName":["와인 콤보","Combo rượu vang","红酒套餐","ワインコンボ"],"offers":{"@type":"Offer","price":1880000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Korean menu","hasMenuItem":[{"@type":"MenuItem","name":"Tteokbokki","alternateName":["떡볶이","Tteokbokki (bánh gạo cay)","辣炒年糕","トッポッキ"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Seafood oven cheese tteokbokki","alternateName":["해물 오븐 치즈 떡볶이","Tteokbokki hải sản phô mai nướng","海鲜烤芝士炒年糕","海鮮オーブンチーズトッポッキ"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy whelk with somen noodles","alternateName":["골뱅이 소면","Ốc biển trộn mì somen cay","辣拌海螺素面","ピリ辛ツブ貝のそうめん"],"offers":{"@type":"Offer","price":400000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried whelk","alternateName":["골뱅이 볶음","Ốc biển xào","炒海螺","ツブ貝の炒め"],"offers":{"@type":"Offer","price":350000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fish cake soup","alternateName":["어묵탕","Lẩu chả cá","鱼饼汤","おでん鍋"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Seafood jjamppong soup","alternateName":["해물 짬뽕탕","Canh hải sản kiểu jjamppong","海鲜辣汤","海鮮チャンポンスープ"],"offers":{"@type":"Offer","price":450000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Dried seafood & snacks","hasMenuItem":[{"@type":"MenuItem","name":"Semi-dried squid","alternateName":["반건조 오징어","Mực bán khô","半干鱿鱼","半乾燥イカ"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled dried pollack (meoktae)","alternateName":["먹태","Cá minh thái khô nướng (meoktae)","烤干明太鱼（먹태）","焼きミョクテ（干しスケトウダラ）"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Hanchi squid & dried filefish","alternateName":["한치 & 쥐포","Mực hanchi & cá bò khô","小鱿鱼与马面鱼干","ヤリイカ＆カワハギの干物"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mixed dried snacks","alternateName":["모둠 마른 안주","Mồi khô thập cẩm","干货拼盘","乾き物盛り合わせ"],"offers":{"@type":"Offer","price":350000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Dragon Palace set","alternateName":["용궁 세트","Set Long Cung","龙宫套餐","竜宮セット"],"offers":{"@type":"Offer","price":450000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cheese BABA platter","alternateName":["치즈바바","Đĩa phô mai BABA","BABA 芝士拼盘","チーズBABA"],"offers":{"@type":"Offer","price":449000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Chicken","hasMenuItem":[{"@type":"MenuItem","name":"Fried chicken (boneless)","alternateName":["후라이드 치킨","Gà rán không xương","炸鸡（无骨）","フライドチキン（骨なし）"],"offers":{"@type":"Offer","price":350000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Soy garlic chicken","alternateName":["간장 치킨","Gà sốt xì dầu","酱油炸鸡","醤油チキン"],"offers":{"@type":"Offer","price":360000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Yangnyeom (sweet & spicy) chicken","alternateName":["양념 치킨","Gà sốt cay ngọt (yangnyeom)","甜辣炸鸡","ヤンニョムチキン"],"offers":{"@type":"Offer","price":360000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Half & half chicken","alternateName":["반반 치킨","Gà nửa rán nửa sốt","半半炸鸡","ハーフ＆ハーフチキン"],"offers":{"@type":"Offer","price":360000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Pizza","hasMenuItem":[{"@type":"MenuItem","name":"Margherita","alternateName":["마르게리타","Pizza Margherita","玛格丽特披萨","マルゲリータ"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Gorgonzola","alternateName":["고르곤졸라","Pizza Gorgonzola","戈贡佐拉披萨","ゴルゴンゾーラ"],"offers":{"@type":"Offer","price":280000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Hawaiian","alternateName":["하와이안","Pizza Hawaii","夏威夷披萨","ハワイアン"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cheese frittata","alternateName":["치즈 프리타타","Frittata phô mai","芝士蛋饼","チーズフリッタータ"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Oven & Grill","hasMenuItem":[{"@type":"MenuItem","name":"Quesadilla","alternateName":["케사디야","墨西哥芝士饼","ケサディーヤ"],"offers":{"@type":"Offer","price":220000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mixed sausage platter","alternateName":["모둠 소시지","Xúc xích thập cẩm","香肠拼盘","ソーセージ盛り合わせ"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Chop steak","alternateName":["찹스테이크","Bò áp chảo cắt miếng (chop steak)","切块牛排","チョップステーキ"],"offers":{"@type":"Offer","price":450000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steak platter","alternateName":["스테이크 플래터","Đĩa bít tết","牛排拼盘","ステーキプラッター"],"offers":{"@type":"Offer","price":590000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Deep-fried","hasMenuItem":[{"@type":"MenuItem","name":"Fish cake strip fries","alternateName":["어묵채 튀김","Chả cá chiên sợi","鱼饼丝天妇罗","細切りおでん揚げ"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Oven cheese fries","alternateName":["오븐 치즈 감자튀김","Khoai tây chiên phô mai nướng","烤芝士薯条","オーブンチーズポテト"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pork cutlet","alternateName":["돈까스","Thịt heo chiên xù (tonkatsu)","炸猪排","とんかつ"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mixed fried platter","alternateName":["모둠튀김","Đồ chiên thập cẩm","炸物拼盘","揚げ物盛り合わせ"],"offers":{"@type":"Offer","price":200000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Salad","hasMenuItem":[{"@type":"MenuItem","name":"Cajun salad","alternateName":["케이준 샐러드","Salad Cajun","卡津沙拉","ケイジャンサラダ"],"offers":{"@type":"Offer","price":350000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mexican salad","alternateName":["멕시칸 샐러드","Salad Mexico","墨西哥沙拉","メキシカンサラダ"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef salad","alternateName":["비프 샐러드","Salad bò","牛肉沙拉","ビーフサラダ"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Avocado chicken breast salad","alternateName":["아보카도 닭가슴살 샐러드","Salad bơ ức gà","牛油果鸡胸肉沙拉","アボカドと鶏むね肉のサラダ"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Yogurt fruit salad","alternateName":["요거트 과일 샐러드","Salad trái cây sữa chua","酸奶水果沙拉","ヨーグルトフルーツサラダ"],"offers":{"@type":"Offer","price":220000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Finger food","hasMenuItem":[{"@type":"MenuItem","name":"Canapé","alternateName":["카나페","开胃小点","カナッペ"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cherry tomato fingers","alternateName":["방울토마토 핑거","Cà chua bi xiên","圣女果小串","ミニトマトのピンチョス"],"offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cheese-baked mushrooms","alternateName":["양송이버섯 치즈구이","Nấm mỡ nướng phô mai","芝士烤蘑菇","マッシュルームのチーズ焼き"],"offers":{"@type":"Offer","price":200000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tuna mayo cucumber rolls","alternateName":["참치마요 오이롤","Cuộn dưa leo cá ngừ sốt mayo","金枪鱼蛋黄酱黄瓜卷","ツナマヨきゅうりロール"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Meals","hasMenuItem":[{"@type":"MenuItem","name":"Shrimp curry cream udon","alternateName":["새우 커리 크림 우동","Udon tôm cà ri kem","咖喱奶油虾乌冬","エビカレークリームうどん"],"offers":{"@type":"Offer","price":220000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy seafood stir-fried udon","alternateName":["해산물 볶음 우동","Udon xào hải sản","海鲜炒乌冬","海鮮炒めうどん"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Fruit","hasMenuItem":[{"@type":"MenuItem","name":"Mixed fruit platter","alternateName":["모둠 과일 안주","Đĩa trái cây thập cẩm","水果拼盘","フルーツ盛り合わせ"],"offers":{"@type":"Offer","price":320000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tropical fruit punch bowl","alternateName":["열대과일 화채","Chè trái cây nhiệt đới (hwachae)","热带水果冰饮","トロピカルフルーツ・ファチェ"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Beer","hasMenuItem":[{"@type":"MenuItem","name":"Jasmine IPA","offers":{"@type":"Offer","price":99000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pomelo IPA","offers":{"@type":"Offer","price":99000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Nitro Irish","offers":{"@type":"Offer","price":99000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Amber Ale","offers":{"@type":"Offer","price":99000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Salted Lime","offers":{"@type":"Offer","price":99000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Passion Ale","offers":{"@type":"Offer","price":99000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Carlsberg","offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"1664 Blanc","offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sapporo","offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sapporo Black","offers":{"@type":"Offer","price":90000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Signature cocktails","hasMenuItem":[{"@type":"MenuItem","name":"Peachy Melody","offers":{"@type":"Offer","price":220000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Euphoria","offers":{"@type":"Offer","price":220000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Salut","offers":{"@type":"Offer","price":240000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"All About Grape","offers":{"@type":"Offer","price":220000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Zest","offers":{"@type":"Offer","price":200000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Coffee Melody","offers":{"@type":"Offer","price":200000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Green Fairy","offers":{"@type":"Offer","price":220000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Good Old Day","offers":{"@type":"Offer","price":240000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Coco Mango","offers":{"@type":"Offer","price":240000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tropi Cassion","offers":{"@type":"Offer","price":220000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Jack's Whirlwind","offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Merhii Martini","offers":{"@type":"Offer","price":240000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Classic cocktails","hasMenuItem":[{"@type":"MenuItem","name":"Margarita","offers":{"@type":"Offer","price":170000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Whiskey Sour","offers":{"@type":"Offer","price":170000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Song Of The Birds","offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fallen Angel","offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pornstar NOVA","offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mai Tai","offers":{"@type":"Offer","price":180000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Black Russian","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"White Russian","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Negroni","offers":{"@type":"Offer","price":170000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Ping Pong Cocktail","offers":{"@type":"Offer","price":200000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"10.7.1 Cock's Tail","offers":{"@type":"Offer","price":200000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"El Presidente","offers":{"@type":"Offer","price":180000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Mixed drinks","hasMenuItem":[{"@type":"MenuItem","name":"Gin Tonic","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Highball","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tequila Pop","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Jäger Bomb","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Rum Coke","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Vodka Red Bull","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Mocktails (non-alcoholic)","hasMenuItem":[{"@type":"MenuItem","name":"Very Berry","offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cutie Tiny","offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Dayjua","offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Coco Passion","offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Peachy Blueri","offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Oranginal","offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Shots","hasMenuItem":[{"@type":"MenuItem","name":"B52","offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"B53","offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"B54","offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"B55","offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"B57","offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tequila shot","alternateName":["데킬라 샷","龙舌兰 Shot","テキーラショット"],"offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"BABA bottled spirits","hasMenuItem":[{"@type":"MenuItem","name":"Orange Whisky Cinnamon","offers":{"@type":"Offer","price":170000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mango Rum","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Jackmine Panda Rum","offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lemon Vodka","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Smoky Tequila Cinnamon","offers":{"@type":"Offer","price":170000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pineapple Gin","offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Rossi Berry Gin","offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Butterfly Bluecuracao Gin","offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Highballs","hasMenuItem":[{"@type":"MenuItem","name":"Mojito Highball","alternateName":["모히토 하이볼","莫吉托高球","モヒートハイボール"],"offers":{"@type":"Offer","price":140000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tom Collins Highball","alternateName":["톰 콜린스 하이볼","汤姆柯林斯高球","トム・コリンズ・ハイボール"],"offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Green Grape Highball","alternateName":["청포도 하이볼","Highball nho xanh","青葡萄高球","マスカットハイボール"],"offers":{"@type":"Offer","price":140000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Long Island Iced Tea","alternateName":["롱아일랜드 아이스티","长岛冰茶","ロングアイランド・アイスティー"],"offers":{"@type":"Offer","price":170000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Single malt whisky","hasMenuItem":[{"@type":"MenuItem","name":"Glenfiddich 12","alternateName":["글렌피딕 12년","格兰菲迪 12 年","グレンフィディック12年"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Glenlivet 12","alternateName":["글렌리벳 12년","格兰威特 12 年","グレンリベット12年"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Macallan 12","alternateName":["맥캘란 12년","麦卡伦 12 年","マッカラン12年"],"offers":{"@type":"Offer","price":550000,"priceCurrency":"VND"}}]}]}}</script>
+<!-- seo:end -->
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="langs" id="langs"></div>
+    <img class="logo" src="img/logo.png" alt="BABA">
+    <h1>바바</h1>
+    <p class="en">BREATHE AND BE ALIVE</p>
+    <span class="branch" id="branch"></span>
+    <p class="tagline" id="tagline"></p>
+  </div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap" id="menu"></main>
+
+<footer>
+  <div class="wrap">
+    <p class="thanks" id="thanks"></p>
+    <div class="pills">
+      <button class="pill" id="wifi" type="button" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg></i>
+        <div><small id="wifiLabel"></small><strong id="wifiText"></strong></div>
+        <em id="wifiCopy"></em>
+      </button>
+      <a class="pill" id="call">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></i>
+        <div><small id="callLabel"></small><strong id="callText"></strong></div>
+      </a>
+      <a class="pill" id="map" target="_blank" rel="noopener">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></i>
+        <div><small id="mapLabel"></small><strong id="mapText"></strong></div>
+      </a>
+    </div>
+    <p class="vnd" id="foot"></p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<!-- override:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script src="https://qrmenuasia.com/api/override?shop=baba"></script>
+<!-- override:end -->
+<script>
+  const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
+  const UI = {
+    ko: { title: "메뉴", tagline: "박닌의 중심에서, 조용히 살아나는 감각의 공간", free: "무료", new: "신메뉴", best: "BEST", special: "추천", spicy: "🌶 매콤", ask: "가격 문의", after: "후식",
+      thanks: "바바를 찾아 주셔서 감사합니다.<br>좋은 음악, 맛있는 음식, 분위기까지 즐기세요!", copy: "복사", copied: "비밀번호를 복사했어요",
+      call: "전화", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND) · 가게가 구글 지도에 올린 메뉴판 기준(음식 1년 전·음료 8개월 전)이라 지금과 다를 수 있어요 · 음식 부가세 8% 별도(콤보 10%) · 오후 5시 영업 시작" },
+    en: { title: "Menu", tagline: "A quietly vivid space in the heart of Bắc Ninh", free: "Free", new: "NEW", best: "BEST", special: "Recommended", spicy: "🌶 Spicy", ask: "Ask staff", after: "Dessert",
+      thanks: "Thank you for visiting BABA.<br>Good music, great food and the perfect vibe — enjoy!", copy: "Copy", copied: "Password copied",
+      call: "Call", map: "Address · Map", vnd: "Prices in VND · Based on the menu posted on Google Maps (food 1 year ago, drinks 8 months ago); prices may have changed · Food excludes 8% VAT (combos 10%) · Opens at 5 PM" },
+    zh: { title: "菜单", tagline: "在北宁中心，静静唤醒感官的空间", free: "免费", new: "新品", best: "人气", special: "推荐", spicy: "🌶 辣", ask: "请询问店员", after: "饭后菜单",
+      thanks: "感谢您光临 BABA。<br>美妙的音乐、美味的料理与舒适的氛围，祝您享受愉快时光！", copy: "复制", copied: "密码已复制",
+      call: "电话", map: "地址 · 地图", vnd: "价格单位：越南盾（VND）· 根据店家在谷歌地图上传的菜单（餐食为一年前、饮品为 8 个月前），价格可能已变动 · 餐食另加 8% 增值税（套餐 10%）· 下午 5 点营业" },
+    ja: { title: "メニュー", tagline: "バクニンの中心で、静かに感覚が目覚める空間", free: "無料", new: "NEW", best: "BEST", special: "おすすめ", spicy: "🌶 辛口", ask: "店員にお尋ねください", after: "デザート",
+      thanks: "BABAへようこそ。<br>良い音楽、美味しい料理、素敵な雰囲気をお楽しみください！", copy: "コピー", copied: "パスワードをコピーしました",
+      call: "電話", map: "住所・地図", vnd: "価格はベトナムドン（VND）・Googleマップに投稿されたメニュー基準（料理は1年前、ドリンクは8か月前）のため変更の場合あり・料理は付加価値税8%別（コンボ10%）・17時開店" },
+    vi: { title: "Thực đơn", tagline: "Không gian đánh thức giác quan lặng lẽ giữa lòng Bắc Ninh", free: "Miễn phí", new: "MỚI", best: "BEST", special: "Đề xuất", spicy: "🌶 Cay", ask: "Hỏi nhân viên", after: "Tráng miệng",
+      thanks: "Cảm ơn quý khách đã đến BABA.<br>Chúc quý khách tận hưởng âm nhạc hay, món ngon và không khí tuyệt vời!", copy: "Sao chép", copied: "Đã sao chép mật khẩu",
+      call: "Gọi điện", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND · Theo thực đơn quán đăng trên Google Maps (món ăn 1 năm trước, đồ uống 8 tháng trước), giá có thể đã thay đổi · Món ăn chưa gồm VAT 8% (combo 10%) · Mở cửa lúc 17:00" },
+  };
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const storage = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  const fmt = (n) => n.toLocaleString("en-US");
+  const won = (n) => `${fmt(n)}<small>₫</small>`;
+  let observer;
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  function itemHtml(it, t, lang, second) {
+    const tags = [it.tag ? `<span class="${it.tag}">${esc(t[it.tag])}</span>` : "", it.spicy ? `<span class="hot">${esc(t.spicy)}</span>` : ""].join("");
+    const single = it.sizes ? "" : `<span class="leader"></span><span class="price ${it.price == null ? "ask" : ""}">${it.price == null ? esc(t.ask) : it.price === 0 ? esc(t.free) : won(it.price)}</span>`;
+    const sizes = it.sizes ? it.sizes.map(([label, p]) => `<span><i>${esc(label[lang])}</i>${won(p)}</span>`)
+      : it.dessert ? [`<span class="after"><i>${esc(t.after)}</i>${won(it.dessert)}</span>`] : [];
+    return `
+      <li>
+        ${tags.trim() ? `<div class="tags">${tags}</div>` : ""}
+        <div class="row"><b>${esc(it.name[lang])}</b>${it.unit ? `<span class="unit">${esc(it.unit[lang])}</span>` : ""}${single}</div>
+        ${sizes.length ? `<div class="sizes">${sizes.join("")}</div>` : ""}
+        ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
+        ${it.name[second] && it.name[second] !== it.name[lang] ? `<div class="sub">${esc(it.name[second])}</div>` : ""}
+      </li>`;
+  }
+
+  function render(lang) {
+    const t = UI[lang], R = window.RESTAURANT;
+    // 아랫줄: 한국어 화면 → 베트남어(직원과 소통용), 그 외 → 한국어
+    const second = lang === "ko" ? "vi" : "ko";
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand.en} ${R.brand.ko} · ${t.title}`;
+
+    $("langs").innerHTML = LANGS.map(([c, label]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+    $("branch").textContent = R.brand.branch;
+    $("tagline").textContent = t.tagline;
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}">
+        ${cat.photo ? `<img class="banner" src="${cat.photo}" alt="${esc(cat.name[lang])}" loading="lazy">` : ""}
+        <div class="head"><h2 class="serif">${esc(cat.name[lang])}<small>${esc(cat.name[lang === "vi" ? "ko" : "vi"])}</small></h2></div>
+        ${cat.note ? `<p class="note">${esc(cat.note[lang])}</p>` : ""}
+        <ul>${cat.items.map((it) => itemHtml(it, t, lang, second)).join("")}</ul>
+        ${cat.quote ? `<p class="quote">${esc(cat.quote[lang])}</p>` : ""}
+      </section>`).join("");
+
+    $("thanks").innerHTML = t.thanks;
+    if (R.wifi) {
+      $("wifi").hidden = false;
+      $("wifiLabel").textContent = R.wifi.ssid ? `Wi-Fi · ${R.wifi.ssid}` : "Wi-Fi";
+      $("wifiText").textContent = R.wifi.password;
+      $("wifiCopy").textContent = t.copy;
+    }
+    $("call").hidden = !R.phone;
+    if (R.phone) {
+      $("callLabel").textContent = t.call;
+      $("callText").textContent = R.phone;
+      $("call").href = "tel:" + R.phone.replace(/[^\d+]/g, "");
+    }
+    $("mapLabel").textContent = t.map;
+    $("mapText").textContent = R.address;
+    $("map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.mapQuery + " " + R.address);
+    $("foot").textContent = t.vnd;
+    observeSections();
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+  $("wifi").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(RESTAURANT.wifi.password); toast(UI[lang].copied); }
+    catch { toast(RESTAURANT.wifi.password); }
+  });
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+<script src="stores-link.js"></script>
+<script src="lang-menu.js"></script>
+<script src="dasan.js"></script>
+<!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
+<!-- analytics:end -->
+</body>
+</html>

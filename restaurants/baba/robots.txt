@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://baba.qrmenuasia.com/sitemap.xml
