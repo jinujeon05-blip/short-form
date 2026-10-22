@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://donggoone.qrmenuasia.com/sitemap.xml

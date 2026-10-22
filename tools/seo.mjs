@@ -9,11 +9,11 @@ import { ROOT } from './pw.mjs';
 const DOMAIN = 'qrmenuasia.com';
 // naver: 네이버 서치어드바이저 소유 확인 코드(가게 주소를 네이버에 따로 등록한 경우), type: schema.org 종류, cuisine: 요리 종류, country: 나라, currency: 가격 단위, phone: false 면 전화번호 생략(임시 번호)
 const SHOPS = {
-  sutkkui:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND' },
+  sutkkui:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND', naver: 'ca47ee18fdb77a8f2f443cb5831aaf7908723830' },
   eros:       { type: 'BarOrPub', cuisine: ['Bar'], country: 'VN', currency: 'VND', phone: false },
-  anvoi:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Noodles'], country: 'VN', currency: 'VND' },
+  anvoi:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Noodles'], country: 'VN', currency: 'VND', naver: 'c8c35a8918759c057be5313955e2ea9c92fdc072' },
   baekcheon:  { type: 'Restaurant', cuisine: ['Korean', 'Grilled eel'], country: 'KR', currency: 'KRW', naver: 'b33f476ad38d2aafc7ea74651de94e5a2262361e' },
-  gamasot:    { type: 'Restaurant', cuisine: ['Korean'], country: 'VN', currency: 'VND' },
+  gamasot:    { type: 'Restaurant', cuisine: ['Korean'], country: 'VN', currency: 'VND', naver: '6d64ac159210cc85e66a84a64ce28822bab7c395' },
   biobeauty:  { type: 'Store', country: 'VN', currency: 'VND' },
   suwonseong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Korean-Chinese'], country: 'VN', currency: 'VND' },
   // 가게 찾기용(사장님 동의 없음) — SNS 이미지가 없어서 미리보기 사진은 가게 사진
@@ -26,6 +26,12 @@ const SHOPS = {
   daekuk:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Shabu-shabu'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   boknara:      { type: 'Restaurant', cuisine: ['Korean', 'Pufferfish', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   dada:         { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Stews', 'Chicken'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  sopung:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Charcoal grill', 'Bossam'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  buja:         { type: 'Restaurant', cuisine: ['Korean', 'Gamjatang', 'Korean BBQ', 'Haejangguk'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  soban:        { type: 'Restaurant', cuisine: ['Korean', 'Oxtail', 'Gomtang'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  donggoone:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Grilled eel', 'Hagfish'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  jangolang:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Grilled eel', 'Hot pot'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  anjirang:     { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Gopchang', 'Makchang', 'Fried chicken'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   madang:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Duck', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   jangsucheon:  { type: 'Restaurant', cuisine: ['Korean', 'Grilled eel', 'Korean BBQ', 'Beef'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   naegohyang:   { type: 'Restaurant', cuisine: ['Korean', 'Soondae-guk', 'Pork soup'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
@@ -37,7 +43,7 @@ const SHOPS = {
   mujigae:      { type: 'Restaurant', cuisine: ['Korean', 'Korean street food', 'Sushi', 'Snacks'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   haru:         { type: 'Restaurant', cuisine: ['Japanese', 'Izakaya', 'Omakase', 'Sushi'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   phothin:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Pho', 'Noodles'], country: 'VN', currency: 'VND' },
-  chibaengi:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Fried Chicken', 'Pub'], country: 'VN', currency: 'VND' },
+  chibaengi:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Fried Chicken', 'Pub'], country: 'VN', currency: 'VND', naver: '75034e35cb9a0796e18c8813a4247a29e24b28ec' },
   samwon:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   bangatgan:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Pub', 'Pocha'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   chuam:        { type: 'Restaurant', cuisine: ['Korean', 'Korean Herbal Cuisine', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },

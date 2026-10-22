@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://soban.qrmenuasia.com/sitemap.xml
