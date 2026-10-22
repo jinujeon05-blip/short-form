@@ -1,6 +1,6 @@
 # 네이버 서치어드바이저 등록용 주소 목록 (2026-10-22)
 # 사이트 추가: 아래 '사이트 주소'를 한 줄씩 붙여넣기 → HTML 태그 코드 받기 → 소유 확인 후 '사이트맵 주소' 제출
-# 전체 42곳 (이미 등록: qrmenuasia.com 소개서·가게 찾기, baekcheon 1곳 → 아래 목록은 남은 41곳)
+# 전체 43곳 (이미 등록: qrmenuasia.com 소개서·가게 찾기, baekcheon 1곳 → 아래 목록은 남은 42곳)
 
 ## 사이트 주소 (사이트 추가에 붙여넣기)
 https://anjirang.qrmenuasia.com
@@ -26,6 +26,7 @@ https://holoi.qrmenuasia.com
 https://ijang.qrmenuasia.com
 https://jangolang.qrmenuasia.com
 https://donggoone.qrmenuasia.com
+https://soban.qrmenuasia.com
 https://jokbal.qrmenuasia.com
 https://kimshotel.qrmenuasia.com
 https://kkotdwaeji.qrmenuasia.com
@@ -69,6 +70,7 @@ https://holoi.qrmenuasia.com/sitemap.xml
 https://ijang.qrmenuasia.com/sitemap.xml
 https://jangolang.qrmenuasia.com/sitemap.xml
 https://donggoone.qrmenuasia.com/sitemap.xml
+https://soban.qrmenuasia.com/sitemap.xml
 https://jokbal.qrmenuasia.com/sitemap.xml
 https://kimshotel.qrmenuasia.com/sitemap.xml
 https://kkotdwaeji.qrmenuasia.com/sitemap.xml
