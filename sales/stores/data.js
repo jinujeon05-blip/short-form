@@ -172,7 +172,7 @@ window.STORES = [
     region: "bacninh", cats: ["bbq", "korean"], tags: ["photos"],
     address: "30 Đ. Ng Tất Tố, Võ Cường, Bắc Ninh",
     type: { ko: "소고기 · 돼지고기 구이 · 전골 · 냉면 한식당", vi: "Thịt bò · Thịt heo nướng · Lẩu · Mì lạnh Hàn Quốc", en: "Korean BBQ · Beef & pork · Hot pots · Cold noodles", zh: "韩式烤肉 · 牛肉 · 猪肉 · 火锅 · 冷面", ja: "韓国焼肉・牛肉・豚肉・鍋・冷麺" },
-    keywords: "보문뜰 bomunttl bomun ttl 보문 뜰 보문뜰베트남 nhà hàng nướng hàn quốc 한식 고기구이 돼지갈비 항정살 양념 항정살 삼겹살 대패삼겹살 막창 소고기 꽃갈비살 안창살 갈비살 부채살 우삼겹 곱창 꽃등심 세트 석쇠 불고기 언양식 곱창전골 불고기전골 등갈비 김치찜 샤브샤브 오뎅나베 칼국수 유부쫄면 냉면 비빔냉면 갈비탕 육개장 돌솥비빔밥 두루치기 파전 오징어무침 김치찌개 된장찌개 떡볶이 계란찜 막걸리 소주 경주 võ cường nguyễn tất tố bắc ninh thịt nướng hàn quốc thịt heo thịt bò sườn heo ba chỉ lòng non lẩu mì lạnh cơm trộn bát đá canh sườn bò korean bbq pork belly beef short rib hot pot naengmyeon bibimbap galbitang gyeongju 韩式烤肉 烤肉 五花肉 牛肉 火锅 冷面 韩国料理 焼肉 韓国料理 カルビ 冷麺 慶州" },
+    keywords: "보문뜰 bomunttl bomun ttl 보문 뜰 보문뜰베트남 nhà hàng nướng hàn quốc 한식 고기구이 돼지갈비 항정살 양념 항정살 삼겹살 대패삼겹살 막창 소고기 꽃갈비살 안창살 갈비살 부채살 우삼겹 곱창 꽃등심 세트 석쇠 불고기 언양식 곱창전골 불고기전골 등갈비 김치찜 샤브샤브 오뎅나베 칼국수 유부쫄면 냉면 비빔냉면 갈비탕 육개장 돌솥비빔밥 두루치기 파전 오징어무침 김치찌개 된장찌개 떡볶이 계란찜 막걸리 소주 경주 võ cường ngô tất tố ng tất tố bắc ninh thịt nướng hàn quốc thịt heo thịt bò sườn heo ba chỉ lòng non lẩu mì lạnh cơm trộn bát đá canh sườn bò korean bbq pork belly beef short rib hot pot naengmyeon bibimbap galbitang gyeongju 韩式烤肉 烤肉 五花肉 牛肉 火锅 冷面 韩国料理 焼肉 韓国料理 カルビ 冷麺 慶州" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],

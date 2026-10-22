@@ -3,7 +3,7 @@
 // 메뉴/가격 수정은 이 파일만 고치면 됩니다. 가격 단위: VND
 // price: 가격(null이면 '가격 문의') / sizes: [[라벨, 가격], …] / unit / tag: "best"·"new"·"must" / spicy: true / desc / photo
 // 원본: 구글 드라이브 "보문뜰" 폴더의 구글 지도 캡처 21장(가게 인쇄 메뉴책 사진 — 돼지고기·소고기 양념/원미·세트·석쇠구이·전골·면·밥·단품·주류 — 같은 쪽을 찍은 사진이 여러 장, 가게 앞 사진, 지도 정보, 가게 홈페이지 bomunttl.com).
-// 메뉴책에 한국어·베트남어·중국어가 있어 한·베·중은 메뉴책 표기를 따르고, 영어·일본어는 새로 옮김.
+// 메뉴책에 한국어·베트남어·중국어가 있어 한·베·중은 메뉴책 표기를 따르되(명백한 오기·부위 이름은 바로잡음), 영어·일본어는 새로 옮김.
 window.RESTAURANT = {
   brand: { ko: "보문뜰", en: "BOMUNTTL", branch: { ko: "박닌", en: "Bắc Ninh" } },
   phone: "0852 884 900",
@@ -20,9 +20,9 @@ const PLUS = (a, b) => T(`고기 추가 ${a}₫` + (b ? ` · 야채 추가 ${b}�
 // 소고기 부위(양념·원미 공통, 메뉴책 표기)
 const BEEF = {
   kkotgalbi: ["꽃갈비살", "Flower short rib (kkot-galbisal)", "牛肋肉", "コッカルビサル（花カルビ）", "Nạc sườn bò hoa"],
-  anchang: ["안창살", "Outside skirt (anchangsal)", "牛横膈膜肉", "アンチャンサル（横隔膜）", "Diềm thăn bò"],
+  anchang: ["안창살", "Skirt steak (anchangsal)", "牛横膈膜肉", "ハラミ（アンチャンサル）", "Diềm thăn bò"],
   galbisal: ["갈비살", "Boneless short rib (galbisal)", "牛肋眼", "カルビサル", "Thăn sườn bò"],
-  buchae: ["부채살", "Shoulder center cut (buchaesal)", "牛肩芯", "ブチェサル（肩芯）", "Lõi vai bò"],
+  buchae: ["부채살", "Top blade (buchaesal)", "牛肩芯", "ミスジ（ブチェサル）", "Lõi vai bò"],
   usam: ["우삼겹", "Beef belly (usamgyeop)", "牛五花肉", "ウサムギョプ（牛バラ）", "Ba chỉ bò"],
   gopchang: ["곱창", "Beef small intestine (gopchang)", "牛小肠", "牛コプチャン（小腸）", "Lòng non"],
   deungsim: ["꽃등심", "Marbled ribeye (kkot-deungsim)", "牛后腰肉", "コットゥンシム（霜降りリブロース）", "Nạc lưng bò"],
@@ -35,8 +35,8 @@ window.MENU = [
     name: T("돼지고기", "Pork", "猪肉", "豚肉", "Thịt heo"),
     items: [
       it(350000, null, "돼지갈비 (양념)", "Marinated pork ribs", "香烤猪排骨", "味付け豚カルビ", "Sườn heo tẩm gia vị", { unit: G(300) }),
-      it(230000, null, "항정살", "Pork jowl (hangjeongsal)", "猪颊肉", "豚ののど肉（ハンジョンサル）", "Thịt má heo thái lát nguyên vị", { unit: G(180) }),
-      it(230000, null, "양념 항정살", "Marinated pork jowl", "调味猪颊肉", "味付けハンジョンサル", "Thịt má heo thái lát tẩm gia vị", { unit: G(180) }),
+      it(230000, null, "항정살", "Pork jowl (hangjeongsal)", "猪颊肉", "豚トロ（ハンジョンサル）", "Thịt má heo thái lát nguyên vị", { unit: G(180) }),
+      it(230000, null, "양념 항정살", "Marinated pork jowl", "调味猪颊肉", "味付け豚トロ（ハンジョンサル）", "Thịt má heo thái lát tẩm gia vị", { unit: G(180) }),
       it(210000, null, "삼겹살", "Thick-cut pork belly (samgyeopsal)", "五花肉", "厚切りサムギョプサル", "Ba chỉ heo cắt dày", { unit: G(180) }),
       it(210000, null, "대패삼겹살", "Thin-sliced pork belly (daepae)", "原味五花猪肉片", "薄切りサムギョプサル（テペ）", "Ba chỉ heo thái lát nguyên vị", { unit: G(180) }),
       it(210000, null, "양념 대패삼겹살", "Marinated thin-sliced pork belly", "调味五花猪肉片", "味付け薄切りサムギョプサル", "Ba chỉ heo thái lát tẩm gia vị", { unit: G(180) }),
@@ -72,8 +72,8 @@ window.MENU = [
     name: T("세트", "Sets", "套餐", "セット", "Set"),
     items: [
       it(600000, "setpork", "돼지고기 구이 세트", "Pork BBQ set", "猪肉套餐", "豚肉焼きセット", "Set thịt heo", { desc: T("삼겹살 + 대패삼겹살 + 항정살", "Thick-cut pork belly + thin-sliced pork belly + pork jowl", "五花肉 + 五花肉片 + 猪颊肉", "サムギョプサル + 薄切りサムギョプサル + ハンジョンサル", "Ba chỉ lợn cắt dày + Ba chỉ lát mỏng + má heo") }),
-      it(800000, "setbeefm", "소고기 양념 세트", "Marinated beef set", "调味牛肉套餐", "味付け牛肉セット", "Set thịt bò tẩm vị", { desc: T("갈비살 + 우삼겹 + 안창살 + 부채살", "Boneless short rib + beef belly + outside skirt + shoulder center cut", "牛肋眼 + 牛五花肉 + 牛横膈膜肉 + 牛肩芯", "カルビサル + ウサムギョプ + アンチャンサル + ブチェサル", "Thăn sườn bò + Ba chỉ bò + Diềm thăn bò + Lõi vai bò") }),
-      it(900000, "setbeef", "소고기 구이 세트 (원미)", "Plain beef BBQ set", "原味牛肉套餐", "牛肉焼きセット（味付けなし）", "Set thịt bò nguyên vị", { desc: T("갈비살 + 우삼겹 + 꽃등심 + 부채살", "Boneless short rib + beef belly + marbled ribeye + shoulder center cut", "牛肋眼 + 牛五花肉 + 牛后腰肉 + 牛肩芯", "カルビサル + ウサムギョプ + コットゥンシム + ブチェサル", "Thăn sườn bò + Ba chỉ bò + Nạc lưng bò + Lõi vai bò") }),
+      it(800000, "setbeefm", "소고기 양념 세트", "Marinated beef set", "调味牛肉套餐", "味付け牛肉セット", "Set thịt bò tẩm vị", { desc: T("갈비살 + 우삼겹 + 안창살 + 부채살", "Boneless short rib + beef belly + skirt steak + top blade", "牛肋眼 + 牛五花肉 + 牛横膈膜肉 + 牛肩芯", "カルビサル + ウサムギョプ + ハラミ + ミスジ", "Thăn sườn bò + Ba chỉ bò + Diềm thăn bò + Lõi vai bò") }),
+      it(900000, "setbeef", "소고기 구이 세트 (원미)", "Plain beef BBQ set", "原味牛肉套餐", "牛肉焼きセット（味付けなし）", "Set thịt bò nguyên vị", { desc: T("갈비살 + 우삼겹 + 꽃등심 + 부채살", "Boneless short rib + beef belly + marbled ribeye + top blade", "牛肋眼 + 牛五花肉 + 牛后腰肉 + 牛肩芯", "カルビサル + ウサムギョプ + コットゥンシム + ミスジ", "Thăn sườn bò + Ba chỉ bò + Nạc lưng bò + Lõi vai bò") }),
     ],
   },
   {
@@ -91,7 +91,7 @@ window.MENU = [
     note: T("2~3인분 기준이에요.", "Each pot serves 2–3 people.", "每份适合2-3人食用。", "1つで2〜3人前です。", "Mỗi phần dành cho 2–3 người ăn."),
     items: [
       it(600000, null, "곱창 전골", "Beef offal hot pot (gopchang jeongol)", "韩式牛杂汤", "コプチャンチョンゴル（ホルモン鍋）", "Canh lòng bò"),
-      it(550000, null, "불고기 전골", "Korean bulgogi hot pot", "韩式牛肉火锅", "プルコギ鍋", "Lẩu thịt bò Bulgogi Hàn Quốc", { desc: PLUS("250,000") }),
+      it(550000, null, "불고기 전골", "Korean bulgogi hot pot", "韩式 Bulgogi 牛肉火锅", "プルコギ鍋", "Lẩu thịt bò Bulgogi Hàn Quốc", { desc: PLUS("250,000") }),
       it(520000, null, "등갈비 김치찜", "Braised pork ribs with kimchi", "韩式泡菜炖猪排骨", "豚スペアリブのキムチ蒸し煮", "Sườn heo hầm kim chi"),
       it(500000, null, "소고기 샤브샤브", "Beef shabu-shabu hot pot", "牛肉火锅", "牛肉しゃぶしゃぶ", "Lẩu thịt bò", { desc: PLUS("250,000", "50,000") }),
       it(300000, null, "오뎅나베 (어묵 전골)", "Korean fish cake hot pot", "韩国鱼丸火锅", "おでん鍋", "Lẩu cá viên Hàn Quốc"),
