@@ -232,8 +232,8 @@
 - 나중에: 월간 리포트 PDF 자동 발송, 하루 단위 합계 롤업(데이터가 많아지면 `stats`가 느려짐), 점주 화면에 테이블 QR 만들기·가게 정보 편집 확장.
 
 ## 메뉴판 왼쪽 위 "QR MENU" 로고 (모든 메뉴판, 사용자 지시 2026-10-22)
-- 모든 메뉴판(정식·가게 찾기용) 맨 위 **왼쪽 구석**에 주황색 "QR MENU" 로고(38px)를 붙이고, 누르면 가게 찾기 페이지(`https://qrmenuasia.com/stores/?lang=<언어>`)가 새 탭으로 열린다. 언어 선택 버튼(오른쪽 위)의 반대편이라 겹치지 않는다(34곳 캡처로 확인).
-- 원본 `restaurants/_shared/qr-home.js`·`qr-menu-logo.png`(소개서 아이콘 `sales/icons/icon-192.png`을 96px로 줄인 것) 하나, `restaurants/_shared/sync-home.sh`로 복사(대상은 `sync-lang.sh`의 SHOPS 전체) + `lang-menu.js` 다음에 `<script src="qr-home.js">`가 들어간다. 새 가게는 `sync-lang.sh` SHOPS에 넣으면 같이 처리된다. `node tools/check-listing.mjs`가 가게 찾기용 전체에 이 로고가 있는지 검사한다.
+- 모든 메뉴판(정식·가게 찾기용) 맨 위 **왼쪽 구석**에 "QR MENU" 로고 + 짧은 글자("가게 더 보기")가 든 **흰색 알약 버튼**을 붙이고(오른쪽 언어 버튼과 같은 모양·높이 29px·그림자로 좌우 짝, 처음 만든 38px 주황 네모는 모서리에 따로 붙은 느낌이라 바꿈), 누르면 가게 찾기 페이지(`https://qrmenuasia.com/stores/?lang=<언어>`)가 새 탭으로 열린다. 언어 선택 버튼(오른쪽 위)의 반대편이라 겹치지 않는다(34곳 캡처로 확인).
+- 원본 `restaurants/_shared/qr-home.js`·`qr-menu-logo.png`(소개서 아이콘 `sales/icons/icon-192.png`을 96px로 줄인 것, 알약 안에서 19px로 표시) 하나, `restaurants/_shared/sync-home.sh`로 복사(대상은 `sync-lang.sh`의 SHOPS 전체) + `lang-menu.js` 다음에 `<script src="qr-home.js">`가 들어간다. 새 가게는 `sync-lang.sh` SHOPS에 넣으면 같이 처리된다. `node tools/check-listing.mjs`가 가게 찾기용 전체에 이 로고가 있는지 검사한다.
 - **홈 화면 아이콘의 지구본 모양**: 우리 아이콘 파일(`sales/icons/`)에는 지구본이 없다. 삼성 인터넷이 '웹앱으로 설치'할 수 없는 페이지를 홈 화면에 추가하면 자기 로고(파란 행성)를 아이콘 모서리에 배지로 붙인다. 소개서(`/`)·가게 찾기(`/stores/`)에 최소 서비스 워커 `sales/sw.js`(요청을 그대로 통과, 저장 안 함)와 등록 코드를 넣어 '웹앱 설치'가 되게 했다(`<!-- sw:start/end -->`). 기존 바로가기는 삭제하고 새로 추가해야 바뀐다. 실제 휴대폰에서의 확인은 사용자 몫. 가게 메뉴판 자체에는 웹앱 설정이 없다(손님이 가게를 홈 화면에 추가할 일이 적고, 우리 아이콘으로 바뀌면 안 되므로).
 
 ## 가게 찾기 페이지 (손님용)

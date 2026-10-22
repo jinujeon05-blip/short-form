@@ -4,9 +4,17 @@
 (function () {
   const URL = "https://qrmenuasia.com/stores/";
   const LABEL = { ko: "QR 메뉴판 가게 더 보기", vi: "Xem thêm quán có thực đơn QR", en: "More places with QR menus", zh: "更多提供二维码菜单的店铺", ja: "QRメニューのお店をもっと見る" };
+  const SHORT = { ko: "가게 더 보기", vi: "Xem thêm quán", en: "More places", zh: "更多店铺", ja: "他のお店" };
+  // 오른쪽 위 언어 버튼(lang-menu.js)과 같은 알약 모양·높이·그림자로 맞춰 양쪽 구석에 짝을 이룬다
   const css = `
-    .qr-home { position: absolute; top: 12px; left: 12px; z-index: 60; display: block; width: 38px; height: 38px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.35); line-height: 0; }
-    .qr-home img { display: block; width: 100%; height: 100%; border-radius: 10px; }
+    .qr-home { position: absolute; z-index: 60; top: calc(10px + env(safe-area-inset-top)); left: max(12px, env(safe-area-inset-left)); box-sizing: border-box;
+      display: flex; align-items: center; gap: 6px; margin: 0; padding: 4px 11px 4px 4px; text-decoration: none; white-space: nowrap;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+      font-size: 13.5px; font-weight: 700; line-height: 1; letter-spacing: 0; color: #222; background: rgba(255,255,255,.94); border: 1px solid rgba(0,0,0,.12);
+      border-radius: 999px; box-shadow: 0 4px 14px rgba(0,0,0,.18); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    .qr-home img { display: block; flex: none; width: 19px; height: 19px; border-radius: 6px; }
+    .qr-home:focus-visible { outline: 2px solid var(--pt-accent, #e0452b); outline-offset: 2px; }
+    @media print { .qr-home { display: none !important; } }
   `;
   const langOf = () => {
     const l = (document.documentElement.lang || "en").toLowerCase().split("-")[0];
@@ -21,12 +29,13 @@
     a.className = "qr-home";
     a.target = "_blank";
     a.rel = "noopener";
-    a.innerHTML = '<img src="qr-menu-logo.png" width="38" height="38" alt="QR MENU">';
+    a.innerHTML = '<img src="qr-menu-logo.png" width="19" height="19" alt="QR MENU"><span class="qr-home-t"></span>';
     const render = () => {
       const l = langOf();
       a.href = `${URL}?lang=${l}`;
       a.setAttribute("aria-label", LABEL[l]);
       a.title = LABEL[l];
+      a.querySelector(".qr-home-t").textContent = SHORT[l];
     };
     render();
     document.body.appendChild(a);
