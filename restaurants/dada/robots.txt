@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dada.qrmenuasia.com/sitemap.xml
