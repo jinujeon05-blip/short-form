@@ -103,6 +103,11 @@ window.STORES = [
     address: "232 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh",
     type: { ko: "활어회 · 낙지탕탕 · 해산물 포장마차", vi: "Gỏi cá tươi · Gỏi bạch tuộc · Hải sản", en: "Live sashimi · Octopus · Seafood pocha", zh: "活鱼刺身 · 生拌章鱼 · 海鲜大排档", ja: "活魚の刺身・ナクチタンタン・海鮮ポチャ" },
     keywords: "바다쇼 바다쇼포장마차 바다 포장마차 바다 포차 bada show badasho nhà hàng hải sản hải sản 해산물 횟집 활어회 회 감성돔 병어 쥐치 쥐치회 하모 아나고 오도리 생새우 갑오징어 낙지탕탕 낙지 문어 소주 sashimi live fish octopus nakji-tangtang seafood pocha gỏi cá cá gáy cá chim cá thăn cá nhạc gỏi tôm gỏi mực gỏi bạch tuộc võ cường ngọc hân công chúa bắc ninh 海鲜 刺身 活鱼 生拌章鱼 大排档 海鮮 刺身 活魚 ナクチ ポチャ" },
+  { id: "kkotdwaeji", name: "꽃돼지 삼겹살 Kotteji", sub: "삼겹살 · 쪽갈비 · 김치찜", url: "https://kkotdwaeji.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["bbq", "korean"], tags: ["photos"],
+    address: "21N8 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh",
+    type: { ko: "삼겹살 · 쪽갈비 · 김치찜 한식당", vi: "Ba chỉ nướng · Sườn nướng · Kimchi hầm", en: "Pork belly · Pork ribs · Kimchi jjim", zh: "五花肉 · 猪排骨 · 炖泡菜", ja: "サムギョプサル・スペアリブ・キムチチム" },
+    keywords: "꽃돼지 꽃돼지삼겹살 박닌 꽃돼지 kotteji kkotdwaeji nhà hàng hàn quốc 한식 삼겹살 항정살 목살 대패삼겹살 쪽갈비 쪽갈비구이 고갈비 닭꼬치 편육 묵은지 김치찜 매운 갈비찜 참치 김치찌개 부대찌개 순두부 된장찌개 오뎅탕 홍합탕 두부김치 먹태 제육볶음 돼지불백 물냉면 막국수 잔치국수 볶음밥 võ cường ngọc hân công chúa bắc ninh thịt ba chỉ sườn nướng canh kimchi lẩu quân đội pork belly pork ribs kimchi jjim korean bbq 五花肉 烤肉 猪排骨 炖泡菜 韩国烤肉 サムギョプサル スペアリブ キムチチム 韓国料理" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
