@@ -38,7 +38,7 @@ const SHOPS = {
   mujigae:      { type: 'Restaurant', cuisine: ['Korean', 'Korean street food', 'Sushi', 'Snacks'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   haru:         { type: 'Restaurant', cuisine: ['Japanese', 'Izakaya', 'Omakase', 'Sushi'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   phothin:      { type: 'Restaurant', cuisine: ['Vietnamese', 'Pho', 'Noodles'], country: 'VN', currency: 'VND' },
-  chibaengi:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Fried Chicken', 'Pub'], country: 'VN', currency: 'VND' },
+  chibaengi:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Fried Chicken', 'Pub'], country: 'VN', currency: 'VND', naver: '75034e35cb9a0796e18c8813a4247a29e24b28ec' },
   samwon:       { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   bangatgan:    { type: 'Restaurant', cuisine: ['Korean', 'Korean Pub', 'Pocha'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   chuam:        { type: 'Restaurant', cuisine: ['Korean', 'Korean Herbal Cuisine', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
