@@ -33,9 +33,9 @@ window.MENU = [
     note: SOUP_NOTE,
     items: [
       it(520000, null, "삼겹 모듬 콤보 (600g)", "Pork combo (600 g)", "猪肉拼盘（600克）", "豚肉コンボ（600g）", "Combo thịt heo (600g)"),
-      it(480000, null, "세트 1", "Set 1", "套餐1", "セット1", "Sét 1", { desc: T("편육 + 고갈비(고등어구이) + 막국수", "Boiled pork slices + grilled mackerel + buckwheat noodles", "猪肉冻 + 烤青花鱼 + 拌荞麦面", "ポッサム風ゆで豚 + サバの焼き物 + マッククス", "Giò + Cá + Mỳ") }),
+      it(480000, null, "세트 1", "Set 1", "套餐1", "セット1", "Sét 1", { desc: T("편육 + 고갈비(고등어구이) + 막국수", "Boiled pork slices (pyeonyuk) + grilled mackerel + buckwheat noodles", "猪肉冻 + 烤青花鱼 + 拌荞麦面", "ポッサム風ゆで豚 + サバの焼き物 + マッククス", "Giò + Cá + Mỳ") }),
       it(480000, null, "세트 2", "Set 2", "套餐2", "セット2", "Sét 2", { desc: T("닭꼬치 + 두부김치 + 찌개", "Chicken skewers + tofu with stir-fried kimchi + stew", "鸡肉串 + 炒泡菜配豆腐 + 汤", "焼き鳥串 + 豆腐キムチ + チゲ", "Gà xiên + Đậu phụ kimchi + Canh") }),
-      it(480000, null, "세트 3", "Set 3", "套餐3", "セット3", "Sét 3", { desc: T("닭꼬치 + 편육 + 찌개", "Chicken skewers + boiled pork slices + stew", "鸡肉串 + 猪肉冻 + 汤", "焼き鳥串 + ゆで豚 + チゲ", "Gà xiên + Giò + Canh") }),
+      it(480000, null, "세트 3", "Set 3", "套餐3", "セット3", "Sét 3", { desc: T("닭꼬치 + 편육 + 찌개", "Chicken skewers + boiled pork slices + stew", "鸡肉串 + 韩式猪肉冻 + 汤", "焼き鳥串 + ゆで豚 + チゲ", "Gà xiên + Giò + Canh") }),
       it(600000, "jokgalbi", "세트 4", "Set 4", "套餐4", "セット4", "Sét 4", { desc: T("쪽갈비 + 삼겹살 + 찌개", "Grilled pork ribs + pork belly + stew", "烤猪排骨 + 五花肉 + 汤", "豚スペアリブ + サムギョプサル + チゲ", "Sườn + ba chỉ + Canh") }),
     ],
   },
