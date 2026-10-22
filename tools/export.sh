@@ -8,7 +8,7 @@ out="${1:?출력폴더를 주세요}"; shift
 name() {
   case "$1" in
     sutkkui) echo "숯꾸이" ;; eros) echo "EROS" ;; anvoi) echo "AnVoi" ;; baekcheon) echo "백천화덕아나고" ;;
-    gamasot) echo "가마솥" ;; phothin) echo "퍼틴" ;; haru) echo "하루" ;; mujigae) echo "무지개식당" ;; donamdong) echo "돈암동찌개" ;; dada) echo "다다식당" ;; biobeauty) echo "바이오뷰티" ;; suwonseong) echo "수원성" ;; hellochicken) echo "헬로치킨" ;; kyodong) echo "교동치킨" ;; choongman) echo "충만치킨" ;; youone) echo "유원핫도그" ;; kimshotel) echo "킴스호텔" ;; jokbal) echo "족발신선생" ;; daekuk) echo "대국" ;; boknara) echo "복나라" ;; chibaengi) echo "치뱅이" ;; samwon) echo "삼원" ;; bangatgan) echo "방앗간" ;; chuam) echo "추암" ;; eonnine) echo "언니네" ;; ureong) echo "우렁쌈밥" ;; goodday) echo "굿데이김밥" ;; lacherie) echo "LaCherie" ;; snackshack) echo "SnackShack" ;; holoi) echo "퍼보호러이" ;; ijang) echo "이장네돈가" ;; baba) echo "바바" ;; orimyeongga) echo "오리명가" ;; sales) echo "QR메뉴판소개서" ;;
+    gamasot) echo "가마솥" ;; phothin) echo "퍼틴" ;; haru) echo "하루" ;; mujigae) echo "무지개식당" ;; donamdong) echo "돈암동찌개" ;; badasho) echo "바다쇼" ;; dada) echo "다다식당" ;; biobeauty) echo "바이오뷰티" ;; suwonseong) echo "수원성" ;; hellochicken) echo "헬로치킨" ;; kyodong) echo "교동치킨" ;; choongman) echo "충만치킨" ;; youone) echo "유원핫도그" ;; kimshotel) echo "킴스호텔" ;; jokbal) echo "족발신선생" ;; daekuk) echo "대국" ;; boknara) echo "복나라" ;; chibaengi) echo "치뱅이" ;; samwon) echo "삼원" ;; bangatgan) echo "방앗간" ;; chuam) echo "추암" ;; eonnine) echo "언니네" ;; ureong) echo "우렁쌈밥" ;; goodday) echo "굿데이김밥" ;; lacherie) echo "LaCherie" ;; snackshack) echo "SnackShack" ;; holoi) echo "퍼보호러이" ;; ijang) echo "이장네돈가" ;; baba) echo "바바" ;; orimyeongga) echo "오리명가" ;; sales) echo "QR메뉴판소개서" ;;
     *) echo "$1" ;;
   esac
 }
