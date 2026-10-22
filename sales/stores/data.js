@@ -123,6 +123,11 @@ window.STORES = [
     address: "11B CT5, KĐT Mỹ Đình - Mễ Trì, Từ Liêm, Hà Nội",
     type: { ko: "돌솥 순대국 · 순대 · 수육 전문점", vi: "Cơm thố canh thịt lợn · Lòng dồi · Thịt luộc", en: "Stone-pot soondae-guk · Soondae · Suyuk", zh: "砂锅血肠汤饭 · 血肠 · 白切肉", ja: "石鍋スンデグク・スンデ・スユク" },
     keywords: "내고향 내고향순대국 내고향 돌솥순대국 nae gohyang naegohyang nhà hàng hàn quốc 한식 순대국 돌솥순대국 순대 편육 수육 모듬수육 곱창순대볶음 술국 막걸리 소주 김치 깍두기 미딩 mỹ đình mễ trì từ liêm hà nội cơm thố canh thịt lợn lòng dồi giò tai thịt lợn hấp gừng soondae sundae guk korean sausage soup suyuk pyeonyuk makgeolli 砂锅 血肠 汤饭 猪耳卷 白切肉 米酒 スンデ スンデグク 石鍋 スユク マッコリ" },
+  { id: "madang", name: "마당 돌판구이 Madang", sub: "숙성 삼겹살 · 소고기 · 돌판 오리 · 꼼장어", url: "https://madang.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bbq", "korean", "seafood"], tags: ["photos"],
+    address: "Song Da Building CT5, Mễ Trì, Từ Liêm, Hà Nội",
+    type: { ko: "돌판 구이 · 숙성 고기 · 오리 · 한국 직송 해산물", vi: "Nướng đá · Thịt ủ chín · Vịt · Hải sản nhập Hàn Quốc", en: "Stone-plate grill · Aged meat · Duck · Korea-direct seafood", zh: "石板烧烤 · 熟成肉 · 鸭肉 · 韩国直送海鲜", ja: "石板焼き・熟成肉・ダック・韓国直送海鮮" },
+    keywords: "마당 마당돌판구이 돌판구이 madang stone plate grill 돌판 삼겹살 숙성 삼겹살 교차숙성 목살 가브리살 항정살 와규 프라임 꽃살 안창살 생갈비 차돌배기 돼지막창 특양 오리 오리소금구이 오리주물럭 오리훈제 오리탕 꼼장어 양념꼼장어 소금꼼장어 관자 전복버터구이 더덕구이 육회 산낙지 육회탕탕이 병어회 멍게회 한치회 뭉티기 홍어삼합 홍어 아나고회 굴사시미 참소라 굴김치 꼬막무침 황태구이 과메기 묵무침 문어숙회 배추전 부추전 해물파전 굴전 동태전 태극전 동태찌개 잔새우매운탕 장어전골 함흥냉면 비빔냉면 묵사발 유부우동 신라면 홍어라면 솥밥 갈비탕 추어탕 술국 조개전골 무한 미딩 mễ trì từ liêm hà nội nướng đá thịt ủ chín vịt nướng lươn hải sản nhập hàn quốc lẩu hải sản hoàng đế aged pork belly duck eel sashimi yukhoe sannakji hongeo pancake naengmyeon 石板烤肉 熟成 鸭 鳗鱼 刺身 煎饼 冷面 韩国烤肉 石板焼き 熟成肉 ダック うなぎ 刺身 チヂミ 冷麺 韓国料理" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
