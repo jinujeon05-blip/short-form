@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b1b1b">
+<title>스튜디오 안 사진관 · 하노이 한국 사진관 An Studio</title>
+<meta name="description" content="스튜디오 안 사진관(Studio An) — 하노이 한국 사진관 · 프로필·증명·커플·한복·웨딩·가족 촬영 · TT4 Lô 98, Từ Liêm, Hà Nội">
+<style>
+  :root {
+    --ink: #1b1b1b;
+    --paper: #faf7f3;
+    --card: #fff;
+    --muted: #6d6862;
+    --line: #e8e1d9;
+    --rose: #d9738a;
+    --rose-l: #fbe9ee;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; color: var(--ink); background: var(--paper);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.45;
+  }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+
+  /* 상단: 스튜디오 사진 + 로고 */
+  header { position: relative; text-align: center; padding-bottom: 22px; background: var(--card); border-bottom: 1px solid var(--line); }
+  .hero { position: relative; height: 230px; background: #ddd url(img/hero.jpg) center / cover no-repeat; }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,0) 70%, rgba(255,255,255,.55) 100%); }
+  .langs { position: absolute; top: 12px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #fff; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.4); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: var(--ink); background: #fff; border-color: #fff; }
+  .logo { position: relative; z-index: 1; display: block; width: 112px; height: 112px; margin: -56px auto 0; border-radius: 50%; border: 4px solid #fff; background: #fff url(img/logo.jpg) center / 150% no-repeat; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  h1 { margin: 10px 0 0; font-size: 26px; font-weight: 900; letter-spacing: -.3px; }
+  .en { margin: 2px 0 0; font-size: 12.5px; font-weight: 700; letter-spacing: 1.4px; color: var(--muted); }
+  .tagline { margin: 10px 0 0; font-size: 15px; color: var(--ink); font-weight: 600; }
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 12px; }
+  .chips span { font-size: 12.5px; font-weight: 700; color: var(--ink); background: var(--rose-l); border-radius: 999px; padding: 4px 11px; }
+  .quick { display: flex; gap: 8px; margin-top: 16px; }
+  .quick a { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; font-size: 15px; font-weight: 800; padding: 12px 10px; border-radius: 14px; color: #fff; background: var(--ink); }
+  .quick a.alt { color: var(--ink); background: #fff; border: 1.5px solid var(--ink); }
+  .quick svg { width: 18px; height: 18px; flex: none; }
+
+  /* 본문 */
+  main { padding-bottom: 8px; }
+  section { margin-top: 26px; }
+  h2 { display: flex; align-items: baseline; gap: 8px; margin: 0 0 12px; padding-bottom: 8px; font-size: 20px; font-weight: 900; border-bottom: 2px solid var(--ink); }
+  h2 small { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+  .sub { margin: -4px 0 10px; font-size: 13.5px; color: var(--muted); }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .grid figure { position: relative; margin: 0; border-radius: 12px; overflow: hidden; background: #e9e4dc; cursor: zoom-in; aspect-ratio: 3 / 4; }
+  .grid figure.wide { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+  #where { margin-top: 10px; }
+  #where figure.wide { aspect-ratio: 4 / 3; }
+  #where img { object-position: center 30%; }
+  .grid img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .grid figcaption { position: absolute; left: 8px; bottom: 8px; font-size: 12px; font-weight: 800; color: #fff; background: rgba(0,0,0,.55); border-radius: 999px; padding: 3px 9px; }
+
+  .info { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 4px 16px; }
+  .info div { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .info div:last-child { border-bottom: 0; }
+  .info dt { flex: none; width: 74px; font-size: 13px; font-weight: 700; color: var(--muted); }
+  .info dd { margin: 0; font-size: 15px; font-weight: 700; word-break: break-word; }
+  .info dd small { display: block; margin-top: 2px; font-size: 12.5px; font-weight: 500; color: var(--muted); }
+  .info a { color: var(--ink); }
+
+  footer { margin-top: 26px; padding: 22px 0 26px; text-align: center; background: var(--ink); color: #f1ece6; }
+  .quote { margin: 0; font-size: 15px; font-weight: 700; }
+  .vnd { text-align: center; margin: 14px 0 0; font-size: 12px; opacity: .8; }
+
+  .zoom { position: fixed; inset: 0; z-index: 70; display: none; place-items: center; padding: 16px; background: rgba(20,20,20,.92); cursor: zoom-out; }
+  .zoom.show { display: grid; }
+  .zoom figure { margin: 0; max-width: 520px; width: 100%; }
+  .zoom img { width: 100%; max-height: 82vh; object-fit: contain; border-radius: 14px; display: block; }
+  .zoom figcaption { margin-top: 10px; text-align: center; font-size: 16px; font-weight: 800; color: #fff; }
+</style>
+<style id="partner-theme">
+  /* 하단 파트너 배너(다산)·가게 찾기 링크 색을 이 페이지에 맞춘다 */
+  :root { --pt-mode: light; --pt-bg: #ffffff; --pt-ink: #1b1b1b; --pt-muted: #6d6862; --pt-line: #e8e1d9; --pt-accent: #d9738a; --pt-btn: #1b1b1b; --pt-btn-ink: #ffffff; --pt-shadow: 0 6px 18px rgba(0,0,0,.12); }
+</style>
+
+
+<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
+<link rel="canonical" href="https://studioan.qrmenuasia.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="스튜디오 안 사진관 · 하노이 한국 사진관 An Studio">
+<meta property="og:description" content="스튜디오 안 사진관(Studio An) — 하노이 한국 사진관 · 프로필·증명·커플·한복·웨딩·가족 촬영 · TT4 Lô 98, Từ Liêm, Hà Nội">
+<meta property="og:url" content="https://studioan.qrmenuasia.com/">
+<meta property="og:image" content="https://studioan.qrmenuasia.com/img/hero.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"스튜디오 안 사진관 An Studio","url":"https://studioan.qrmenuasia.com/","address":{"@type":"PostalAddress","streetAddress":"TT4 Lô 98 P, Khu đô thị, Từ Liêm, Hà Nội","addressCountry":"VN"},"telephone":"0988862720","image":"https://studioan.qrmenuasia.com/img/hero.jpg","hasMap":"https://www.google.com/maps/place/Studio+An+%EC%8A%A4%ED%8A%9C%EB%94%94%EC%98%A4+%EC%95%88+%EC%82%AC%EC%A7%84%EA%B4%80/@21.0170696,105.778749,20z/data=!4m6!3m5!1s0x3135abd7b191c4cf:0xbabff6f27230bad0!8m2!3d21.0170696!4d105.7790709!16s%2Fg%2F11fnqc0qzh"}</script>
+<!-- seo:end -->
+</head>
+<body>
+<header>
+  <div class="hero"><div class="langs" id="langs"></div></div>
+  <div class="wrap">
+    <span class="logo" role="img" aria-label="An studio"></span>
+    <h1>스튜디오 안 사진관</h1>
+    <p class="en">AN STUDIO · HÀ NỘI</p>
+    <p class="tagline" id="tagline"></p>
+    <div class="chips" id="chips"></div>
+    <div class="quick">
+      <a id="call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg><span id="callBtn"></span></a>
+      <a class="alt" id="map" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><span id="mapBtn"></span></a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section>
+    <h2 id="hSample"></h2>
+    <p class="sub" id="subSample"></p>
+    <div class="grid" id="sample"></div>
+  </section>
+  <section>
+    <h2 id="hStudio"></h2>
+    <div class="grid" id="studio"></div>
+  </section>
+  <section>
+    <h2 id="hInfo"></h2>
+    <dl class="info" id="info"></dl>
+    <div class="grid" id="where"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="quote" id="quote"></p>
+    <p class="vnd" id="foot"></p>
+  </div>
+</footer>
+
+<div class="zoom" id="zoom"><figure><img id="zoomImg" alt=""><figcaption id="zoomCap"></figcaption></figure></div>
+
+<script src="menu.js"></script>
+<script>
+  // 스튜디오 안 사진관 (Studio An · 하노이 한국 사진관) — 가게 찾기용(손님 검색용, 사장님 동의·비용 없음): 정보·샘플 사진·문의만 보여 줌. 장바구니·Zalo 주문 없음.
+  // 원본: 구글 드라이브 "QR메뉴판/스튜디오 안 사진관"(사진 수집기 v1.5) — 가게 계정 사진 etc_33~45(스튜디오 세트·샘플 인물 사진·로고)와 손님·가게 사진 etc_27~32.
+  // 메뉴·가격표가 없는 촬영 스튜디오라 메뉴 대신 샘플 사진·위치·문의 구성(사용자 메모). 가격은 지도에 없어 적지 않음.
+  const R = window.RESTAURANT; // menu.js
+  const SHOP = { phone: R.phone, tel: R.phone.replace(/\s/g, ""), address: R.address, rating: R.rating, map: R.mapUrl };
+
+  const T = (ko, en, zh, ja, vi) => ({ ko, en, zh, ja, vi });
+  // [사진, 이름(5개 언어), wide 여부]
+  const SAMPLES = [
+    ["profile-1", T("프로필 · 증명사진", "Profile photo", "形象照", "プロフィール写真", "Ảnh profile")],
+    ["portrait-1", T("인물 화보", "Portrait", "人像写真", "ポートレート", "Ảnh chân dung")],
+    ["hanbok-1", T("한복 촬영", "Hanbok shoot", "韩服拍摄", "韓服撮影", "Chụp hanbok"), true],
+    ["wedding-1", T("웨딩 · 커플", "Wedding & couple", "婚纱 · 情侣", "ウェディング・カップル", "Ảnh cưới · cặp đôi")],
+    ["family-1", T("가족 사진", "Family photo", "全家福", "家族写真", "Ảnh gia đình")],
+    ["portrait-2", T("인물 화보", "Portrait", "人像写真", "ポートレート", "Ảnh chân dung")],
+    ["profile-2", T("프로필 · 증명사진", "Profile photo", "形象照", "プロフィール写真", "Ảnh profile")],
+    ["portrait-3", T("인물 화보", "Portrait", "人像写真", "ポートレート", "Ảnh chân dung")],
+    ["hanbok-2", T("한복 촬영", "Hanbok shoot", "韩服拍摄", "韓服撮影", "Chụp hanbok")],
+  ];
+  const BUILDING = T("찾아오는 길 (TT4 건물)", "How to find us (TT4 building)", "交通指引（TT4楼）", "道順（TT4ビル）", "Đường đến (tòa TT4)");
+  const STUDIO = [
+    ["studio-1", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Khu vực chụp")],
+    ["studio-2", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Khu vực chụp")],
+    ["studio-3", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Khu vực chụp"), true],
+    ["wardrobe-1", T("의상 코너", "Wardrobe", "服装区", "衣装コーナー", "Khu trang phục")],
+    ["wardrobe-2", T("의상 코너", "Wardrobe", "服装区", "衣装コーナー", "Khu trang phục")],
+    ["frames", T("액자 전시", "Photo frames", "相框展示", "フォト額の展示", "Khung ảnh trưng bày"), true],
+  ];
+
+  const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
+  const UI = {
+    ko: { title: "스튜디오 안 사진관", tagline: "하노이 한국 사진관 · 촬영 샘플 보고 전화로 문의하세요", chips: ["프로필 · 증명", "인물 화보", "한복", "웨딩 · 커플", "가족"],
+      call: "촬영 문의 전화", map: "길찾기", hSample: "촬영 샘플", subSample: "사진을 누르면 크게 볼 수 있어요", hStudio: "스튜디오", hInfo: "촬영 문의",
+      labels: { tel: "전화", addr: "주소", hours: "영업시간", rating: "구글 평점" }, hoursText: "오전 10:00 ~ 오후 7:00",
+      quote: "촬영 일정과 가격은 전화로 문의해 주세요.",
+      vnd: "사진·정보는 가게와 손님이 구글 지도에 올린 자료 기준이며 바뀔 수 있어요" },
+    en: { title: "Studio An", tagline: "Korean photo studio in Hanoi · See the samples, then call to ask", chips: ["Profile & ID", "Portraits", "Hanbok", "Wedding & couple", "Family"],
+      call: "Call to book", map: "Directions", hSample: "Sample photos", subSample: "Tap a photo to enlarge", hStudio: "The studio", hInfo: "Contact",
+      labels: { tel: "Phone", addr: "Address", hours: "Hours", rating: "Google rating" }, hoursText: "10:00 – 19:00",
+      quote: "Please call us for schedules and prices.",
+      vnd: "Photos and info are based on what the studio and customers posted on Google Maps and may change" },
+    zh: { title: "An Studio 摄影馆", tagline: "河内韩国摄影馆 · 先看样片，再来电咨询", chips: ["形象照 · 证件照", "人像写真", "韩服", "婚纱 · 情侣", "全家福"],
+      call: "来电咨询拍摄", map: "导航", hSample: "拍摄样片", subSample: "点击照片可放大", hStudio: "影棚", hInfo: "拍摄咨询",
+      labels: { tel: "电话", addr: "地址", hours: "营业时间", rating: "谷歌评分" }, hoursText: "上午10:00 ~ 下午7:00",
+      quote: "拍摄时间与价格请来电咨询。",
+      vnd: "照片与信息以店家和顾客在谷歌地图上传的资料为准，可能有变动" },
+    ja: { title: "スタジオ アン写真館", tagline: "ハノイの韓国写真館 · サンプルを見てお電話でお問い合わせください", chips: ["プロフィール・証明写真", "ポートレート", "韓服（ハンボク）", "ウェディング・カップル", "家族写真"],
+      call: "撮影のお問い合わせ", map: "道案内", hSample: "撮影サンプル", subSample: "写真をタップすると拡大します", hStudio: "スタジオ", hInfo: "お問い合わせ",
+      labels: { tel: "電話", addr: "住所", hours: "営業時間", rating: "Google評価" }, hoursText: "午前10:00 ~ 午後7:00",
+      quote: "撮影日程と料金はお電話でお問い合わせください。",
+      vnd: "写真・情報はお店とお客様がGoogleマップに載せた資料を基準としており、変更になる場合があります" },
+    vi: { title: "Studio An", tagline: "Studio ảnh Hàn Quốc tại Hà Nội · Xem ảnh mẫu rồi gọi điện hỏi", chips: ["Ảnh thẻ · profile", "Ảnh chân dung", "Hanbok", "Ảnh cưới · cặp đôi", "Ảnh gia đình"],
+      call: "Gọi hỏi chụp ảnh", map: "Chỉ đường", hSample: "Ảnh mẫu", subSample: "Chạm vào ảnh để xem lớn", hStudio: "Studio", hInfo: "Liên hệ",
+      labels: { tel: "Điện thoại", addr: "Địa chỉ", hours: "Giờ mở cửa", rating: "Đánh giá Google" }, hoursText: "10:00 – 19:00",
+      quote: "Vui lòng gọi điện để hỏi lịch chụp và giá.",
+      vnd: "Ảnh và thông tin theo tư liệu studio và khách đăng trên Google Maps, có thể thay đổi" },
+  };
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const storage = (fn) => { try { return fn(localStorage); } catch { return null; } };
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  const gridHtml = (list, lang) => list.map(([f, name, wide]) => {
+    const n = name[lang] || name.en;
+    return `<figure class="${wide ? "wide" : ""}" data-img="img/${f}.jpg" data-cap="${esc(n)}"><img src="img/${f}.jpg" alt="${esc(n)}" loading="lazy"><figcaption>${esc(n)}</figcaption></figure>`;
+  }).join("");
+
+  function render(lang) {
+    const t = UI[lang];
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = lang === "ko" ? `${t.title} · An Studio` : `${t.title} · ${UI.ko.title}`;
+    $("langs").innerHTML = LANGS.map(([c, l]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${l}</button>`).join("");
+    $("tagline").textContent = t.tagline;
+    $("chips").innerHTML = t.chips.map((c) => `<span>${esc(c)}</span>`).join("");
+    $("call").href = `tel:${SHOP.tel}`;
+    $("callBtn").textContent = t.call;
+    $("map").href = SHOP.map;
+    $("mapBtn").textContent = t.map;
+    $("hSample").textContent = t.hSample;
+    $("subSample").textContent = t.subSample;
+    $("hStudio").textContent = t.hStudio;
+    $("hInfo").textContent = t.hInfo;
+    $("sample").innerHTML = gridHtml(SAMPLES, lang);
+    $("studio").innerHTML = gridHtml(STUDIO, lang);
+    $("where").innerHTML = gridHtml([["building", BUILDING, true]], lang);
+    const L = t.labels;
+    $("info").innerHTML = [
+      [L.tel, `<a href="tel:${SHOP.tel}">${esc(SHOP.phone)}</a>`],
+      [L.addr, `<a href="${SHOP.map}" target="_blank" rel="noopener">${esc(SHOP.address)}</a>`],
+      [L.hours, esc(t.hoursText)],
+      [L.rating, `★ ${esc(SHOP.rating)}`],
+    ].map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${v}</dd></div>`).join("");
+    $("quote").textContent = t.quote;
+    $("foot").textContent = t.vnd;
+  }
+
+  let lang = detectLang();
+  render(lang);
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+  // 사진 크게 보기
+  document.addEventListener("click", (e) => {
+    const f = e.target.closest("figure[data-img]");
+    if (f) { $("zoomImg").src = f.dataset.img; $("zoomImg").alt = f.dataset.cap; $("zoomCap").textContent = f.dataset.cap; $("zoom").classList.add("show"); }
+    else if (e.target.closest("#zoom")) $("zoom").classList.remove("show");
+  });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") $("zoom").classList.remove("show"); });
+</script>
+<!-- override:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script src="https://qrmenuasia.com/api/override?shop=studioan"></script>
+<!-- override:end -->
+<script src="dasan.js"></script>
+<script src="stores-link.js"></script>
+<script src="lang-menu.js"></script>
+<script src="qr-home.js"></script>
+<!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
+<!-- analytics:end -->
+</body>
+</html>
