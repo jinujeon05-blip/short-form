@@ -55,7 +55,7 @@
 | `restaurants/sopung` | 소풍 SOPUNG 韓姐烤肉 한식·숯불구이·보쌈·병어조림 (3 Đ. Võ Cường 12, Võ Cường, Bắc Ninh) — **가게 찾기용** | `sopung-menu` (팀 jinwoo8, 배포 전) | https://sopung.qrmenuasia.com |
 | `restaurants/cheong` | 청식당 NHÀ HÀNG HÀN QUỐC 한국식 중화요리 짜장·짬뽕·탕수육 (54 Lý Nhân Tông, Võ Cường, Bắc Ninh, 간판 01 N5 Lý Nhân Tông) — **가게 찾기용** | `cheong-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://cheong.qrmenuasia.com |
 | `restaurants/joseon` | 조선시대 하노이 본점 Nhà Hàng Joseon Sidae 한식 뼈찜·목뼈감자탕·세트 (TT4/khu P. Đỗ Đình Thiện, khu đô thị, Từ Liêm, Hà Nội) — **가게 찾기용** | `joseon-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://joseon.qrmenuasia.com |
-| `restaurants/namme` | 남매식당 Namme 한식 남매술상·김치찜·오삼불고기·감자탕 (107 CT5 Mỹ Đình, Từ Liêm, Hà Nội) — **가게 찾기용** | `namme-menu` (팀 jinwoo8, 배포 전) | https://namme.qrmenuasia.com |
+| `restaurants/namme` | 남매식당 Namme 한식 남매술상·김치찜·오삼불고기·감자탕 (107 CT5 Mỹ Đình, Từ Liêm, Hà Nội) — **가게 찾기용** | `namme-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://namme.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
