@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://kkongsi.qrmenuasia.com/sitemap.xml
