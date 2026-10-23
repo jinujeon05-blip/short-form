@@ -159,9 +159,9 @@
   ];
   const BUILDING = T("찾아오는 길 (TT4 건물)", "How to find us (TT4 building)", "交通指引（TT4楼）", "道順（TT4ビル）", "Đường đến (tòa TT4)");
   const STUDIO = [
-    ["studio-1", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Phim trường")],
-    ["studio-2", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Phim trường")],
-    ["studio-3", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Phim trường"), true],
+    ["studio-1", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Khu vực chụp")],
+    ["studio-2", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Khu vực chụp")],
+    ["studio-3", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Khu vực chụp"), true],
     ["wardrobe-1", T("의상 코너", "Wardrobe", "服装区", "衣装コーナー", "Khu trang phục")],
     ["wardrobe-2", T("의상 코너", "Wardrobe", "服装区", "衣装コーナー", "Khu trang phục")],
     ["frames", T("액자 전시", "Photo frames", "相框展示", "フォト額の展示", "Khung ảnh trưng bày"), true],
@@ -179,17 +179,17 @@
       labels: { tel: "Phone", addr: "Address", hours: "Hours", rating: "Google rating" }, hoursText: "10:00 – 19:00",
       quote: "Please call us for schedules and prices.",
       vnd: "Photos and info are based on what the studio and customers posted on Google Maps and may change" },
-    zh: { title: "安 摄影工作室", tagline: "河内韩国写真馆 · 先看样片，再来电咨询", chips: ["形象照 · 证件照", "人像写真", "韩服", "婚纱 · 情侣", "全家福"],
+    zh: { title: "An Studio 摄影馆", tagline: "河内韩国摄影馆 · 先看样片，再来电咨询", chips: ["形象照 · 证件照", "人像写真", "韩服", "婚纱 · 情侣", "全家福"],
       call: "来电咨询拍摄", map: "导航", hSample: "拍摄样片", subSample: "点击照片可放大", hStudio: "影棚", hInfo: "拍摄咨询",
       labels: { tel: "电话", addr: "地址", hours: "营业时间", rating: "谷歌评分" }, hoursText: "上午10:00 ~ 下午7:00",
       quote: "拍摄时间与价格请来电咨询。",
       vnd: "照片与信息以店家和顾客在谷歌地图上传的资料为准，可能有变动" },
-    ja: { title: "スタジオ アン写真館", tagline: "ハノイの韓国写真館 · サンプルを見てお電話でお問い合わせください", chips: ["プロフィール・証明写真", "ポートレート", "韓服", "ウェディング・カップル", "家族写真"],
+    ja: { title: "スタジオ アン写真館", tagline: "ハノイの韓国写真館 · サンプルを見てお電話でお問い合わせください", chips: ["プロフィール・証明写真", "ポートレート", "韓服（ハンボク）", "ウェディング・カップル", "家族写真"],
       call: "撮影のお問い合わせ", map: "道案内", hSample: "撮影サンプル", subSample: "写真をタップすると拡大します", hStudio: "スタジオ", hInfo: "お問い合わせ",
       labels: { tel: "電話", addr: "住所", hours: "営業時間", rating: "Google評価" }, hoursText: "午前10:00 ~ 午後7:00",
       quote: "撮影日程と料金はお電話でお問い合わせください。",
       vnd: "写真・情報はお店とお客様がGoogleマップに載せた資料を基準としており、変更になる場合があります" },
-    vi: { title: "Studio An", tagline: "Studio ảnh Hàn Quốc tại Hà Nội · Xem ảnh mẫu rồi gọi điện hỏi", chips: ["Ảnh profile · thẻ", "Ảnh chân dung", "Hanbok", "Ảnh cưới · cặp đôi", "Ảnh gia đình"],
+    vi: { title: "Studio An", tagline: "Studio ảnh Hàn Quốc tại Hà Nội · Xem ảnh mẫu rồi gọi điện hỏi", chips: ["Ảnh thẻ · profile", "Ảnh chân dung", "Hanbok", "Ảnh cưới · cặp đôi", "Ảnh gia đình"],
       call: "Gọi hỏi chụp ảnh", map: "Chỉ đường", hSample: "Ảnh mẫu", subSample: "Chạm vào ảnh để xem lớn", hStudio: "Studio", hInfo: "Liên hệ",
       labels: { tel: "Điện thoại", addr: "Địa chỉ", hours: "Giờ mở cửa", rating: "Đánh giá Google" }, hoursText: "10:00 – 19:00",
       quote: "Vui lòng gọi điện để hỏi lịch chụp và giá.",
@@ -221,7 +221,7 @@
   function render(lang) {
     const t = UI[lang];
     document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
-    document.title = `${t.title} · An Studio`;
+    document.title = lang === "ko" ? `${t.title} · An Studio` : `${t.title} · ${UI.ko.title}`;
     $("langs").innerHTML = LANGS.map(([c, l]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${l}</button>`).join("");
     $("tagline").textContent = t.tagline;
     $("chips").innerHTML = t.chips.map((c) => `<span>${esc(c)}</span>`).join("");
