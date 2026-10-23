@@ -11,9 +11,9 @@ describe('taemong', () => {
 });
 
 describe('dream content', () => {
-  it('has 250 unique, complete entries', () => {
-    expect(DREAMS).toHaveLength(250);
-    expect(new Set(DREAMS.map((d) => d.slug)).size).toBe(250);
+  it('has 300 unique, complete entries', () => {
+    expect(DREAMS).toHaveLength(300);
+    expect(new Set(DREAMS.map((d) => d.slug)).size).toBe(300);
     for (const d of DREAMS) {
       for (const l of ['ko', 'vi'] as const) {
         expect(d[l].summary.length).toBeGreaterThan(20);
@@ -52,7 +52,11 @@ describe('dream content', () => {
     const { PEOPLE_DREAMS_5 } = await import('./people5');
     const { NATURE_DREAMS_5 } = await import('./nature5');
     const { SITUATION_DREAMS_6 } = await import('./situations6');
-    for (const d of [...ANIMAL_DREAMS_6, ...PEOPLE_DREAMS_5, ...NATURE_DREAMS_5, ...SITUATION_DREAMS_6]) {
+    const { ANIMAL_DREAMS_7 } = await import('./animals7');
+    const { PEOPLE_DREAMS_6 } = await import('./people6');
+    const { NATURE_DREAMS_6 } = await import('./nature6');
+    const { SITUATION_DREAMS_7 } = await import('./situations7');
+    for (const d of [...ANIMAL_DREAMS_6, ...PEOPLE_DREAMS_5, ...NATURE_DREAMS_5, ...SITUATION_DREAMS_6, ...ANIMAL_DREAMS_7, ...PEOPLE_DREAMS_6, ...NATURE_DREAMS_6, ...SITUATION_DREAMS_7]) {
       for (const k of [...d.ko.keywords, ...d.vi.keywords]) expect(searchDreams(k)[0]?.slug, `${d.slug}: ${k}`).toBe(d.slug);
     }
   });
