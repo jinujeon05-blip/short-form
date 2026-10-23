@@ -36,6 +36,12 @@ const SHOPS = {
   jangsucheon:  { type: 'Restaurant', cuisine: ['Korean', 'Grilled eel', 'Korean BBQ', 'Beef'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   bomunttl:     { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef', 'Pork', 'Naengmyeon'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   geumdwaeji:   { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork belly', 'Stews'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  jamaedang:    { type: 'Restaurant', cuisine: ['Korean', 'Korean course', 'Seafood', 'Skate', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  studioan:     { type: 'LocalBusiness', noMenu: true, country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  cheong:       { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Korean', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  joseon:       { type: 'Restaurant', cuisine: ['Korean', 'Gamjatang', 'Braised pork neck bones', 'Set menus'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  namme:        { type: 'Restaurant', cuisine: ['Korean', 'Sulsang', 'Kimchi jjim', 'Osam bulgogi', 'Gamjatang'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  inyeon:       { type: 'Restaurant', cuisine: ['Korean', 'Jokbal', 'Pork feet', 'Bossam', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   naegohyang:   { type: 'Restaurant', cuisine: ['Korean', 'Soondae-guk', 'Pork soup'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   yukdeok:      { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Aged pork', 'Smoked duck'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   sujeong:      { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef offal', 'Gopchang'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
@@ -115,7 +121,7 @@ for (const [shop, cfg] of Object.entries(SHOPS)) {
   }));
   if (cfg.type === 'Store') {
     ld.hasOfferCatalog = { '@type': 'OfferCatalog', name: brand, itemListElement: sections.map((s) => ({ '@type': 'OfferCatalog', name: s.name, itemListElement: s.hasMenuItem.map((i) => ({ '@type': 'Offer', itemOffered: { '@type': 'Product', name: i.name, alternateName: i.alternateName }, price: i.offers?.price, priceCurrency: cfg.currency })) })) };
-  } else {
+  } else if (!cfg.noMenu) {
     ld.hasMenu = { '@type': 'Menu', name: `${brand} menu`, inLanguage: ['ko', 'en', 'zh', 'ja', 'vi'], hasMenuSection: sections };
   }
 

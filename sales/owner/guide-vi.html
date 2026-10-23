@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hướng dẫn quản lý thực đơn QR cho chủ quán</title>
+<style>
+  /* Hướng dẫn cho chủ quán, bản tiếng Việt. Cấu trúc và số thứ tự giống bản tiếng Hàn (guide-ko.html). In: node tools/pdf.mjs sales/owner/guide-vi.html sales/print/owner-guide-vi.pdf */
+  @page { size: A4; margin: 12mm 12mm 13mm; }
+  * { box-sizing: border-box; }
+  :root { --paper: #f7f3ec; --paper-2: #efe8dc; --accent: #e8590c; --accent-d: #c2410c; --ink: #2b2622; --muted: #7d7368; --line: #e2d9cb; --ok: #2b8a3e; --red: #e03131; }
+  body { margin: 0; font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; color: var(--ink); font-size: 9.5pt; line-height: 1.45; word-break: keep-all; }
+  h1, h2, h3 { margin: 0; font-weight: 800; line-height: 1.25; }
+  .page { break-after: page; }
+  .page:last-child { break-after: auto; }
+  .pc { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .cover { background: var(--paper); border-left: 4mm solid var(--accent); border-radius: 0 5mm 5mm 0; padding: 6mm 7mm; }
+  .cover .kicker { color: var(--accent-d); font-weight: 800; font-size: 9pt; letter-spacing: .3mm; }
+  .cover h1 { font-size: 24pt; margin-top: 1.5mm; }
+  .cover p { margin: 1.8mm 0 0; color: var(--muted); }
+  .url { display: inline-block; margin-top: 3mm; font-weight: 800; font-size: 10.5pt; color: #fff; background: var(--accent); border-radius: 99mm; padding: 1.6mm 5mm; }
+
+  h2 { font-size: 15pt; margin: 7mm 0 2.5mm; display: flex; align-items: center; gap: 2.5mm; color: var(--accent-d); }
+  h2 .no { display: inline-grid; place-items: center; width: 7mm; height: 7mm; border-radius: 50%; background: var(--accent); color: #fff; font-size: 10pt; flex: none; }
+  .lead { margin: 0 0 3mm; color: var(--muted); }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .box { background: var(--paper); border-radius: 3.5mm; padding: 3mm 3.6mm; border-top: 1mm solid var(--accent); }
+  .box h3 { font-size: 11.6pt; margin-bottom: 1mm; }
+  .box p { margin: 0; color: #4b443d; }
+  .box ul { margin: 0; padding-left: 4.4mm; }
+  .box li { margin: .6mm 0; }
+  .shot { margin: 0; }
+  .shot img { width: 100%; display: block; border-radius: 3mm; border: .3mm solid var(--line); }
+  .shot figcaption { margin-top: 1.2mm; font-size: 8.4pt; color: var(--muted); text-align: center; }
+  ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; display: grid; gap: 2.2mm; }
+  ol.steps li { counter-increment: s; padding-left: 8mm; position: relative; }
+  ol.steps li::before { content: counter(s); position: absolute; left: 0; top: .3mm; width: 5.6mm; height: 5.6mm; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; font-size: 8.5pt; display: grid; place-items: center; line-height: 1; }
+  ol.legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.6mm; font-size: 9.1pt; }
+  ol.legend li { padding-left: 7.4mm; position: relative; }
+  ol.legend li b.n { position: absolute; left: 0; top: .2mm; width: 5.4mm; height: 5.4mm; border-radius: 50%; background: var(--red); color: #fff; font-size: 8pt; display: grid; place-items: center; line-height: 1; }
+  ol.legend li strong { color: var(--ink); }
+  table { width: 100%; border-collapse: collapse; font-size: 9.2pt; }
+  th, td { text-align: left; padding: 1.8mm 2.4mm; border-bottom: .3mm solid var(--line); vertical-align: top; }
+  th { color: #fff; background: var(--accent); font-weight: 800; }
+  td:first-child { font-weight: 800; color: var(--accent-d); white-space: nowrap; width: 30mm; }
+  .note { margin-top: 2.4mm; background: #fff4e6; border-left: 1.2mm solid var(--accent); border-radius: 0 3mm 3mm 0; padding: 2.6mm 3.6mm; font-size: 9.2pt; }
+  .note b { color: var(--accent-d); }
+  .tick li { list-style: none; position: relative; padding-left: 5mm; }
+  .tick { margin: 0; padding: 0; }
+  .tick li::before { content: ""; position: absolute; left: .4mm; top: 1.6mm; width: 2.2mm; height: 1.2mm; border-left: .7mm solid var(--ok); border-bottom: .7mm solid var(--ok); transform: rotate(-45deg); }
+  .soon li::before { width: 2mm; height: 2mm; top: 1.5mm; left: .3mm; border: 0; border-radius: 50%; background: var(--accent); transform: none; }
+  .idea li::before { width: 1.6mm; height: 1.6mm; top: 1.5mm; left: .3mm; border: .5mm solid var(--muted); border-radius: 50%; background: none; transform: none; }
+  .col h3 { font-size: 10.4pt; padding: 1.6mm 3mm; border-radius: 2.4mm; color: #fff; margin-bottom: 2mm; }
+  .col.now h3 { background: var(--ok); } .col.soon h3 { background: var(--accent); } .col.idea h3 { background: #868e96; }
+  .col { background: var(--paper); border-radius: 3.5mm; padding: 2.6mm 3mm 3mm; }
+  .col li { margin: .9mm 0; font-size: 9.1pt; }
+  .col .when { display: block; font-size: 8pt; color: var(--muted); }
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 3mm; }
+  .contact div { background: var(--accent); color: #fff; border-radius: 3.5mm; padding: 3.2mm 4mm; }
+  .contact small { display: block; opacity: .9; font-size: 8.4pt; }
+  .contact strong { font-size: 15pt; }
+  footer { margin-top: 1mm; text-align: center; font-size: 8pt; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- Trang 1 -->
+<section class="page">
+  <div class="cover pc">
+    <div class="kicker">THỰC ĐƠN QR · HƯỚNG DẪN CHO CHỦ QUÁN</div>
+    <h1>Tự sửa thực đơn của quán bạn</h1>
+    <p>Giá thay đổi? Có món mới? Bạn không cần gọi cho chúng tôi, cứ sửa ngay trên điện thoại hoặc máy tính. Sau khi lưu, màn hình của khách đổi trong khoảng 1 phút.</p>
+    <span class="url">qrmenuasia.com/owner/?shop=maquan</span>
+  </div>
+
+  <h2><span class="no pc">1</span>Bạn có thể tự làm những việc này</h2>
+  <div class="grid3">
+    <div class="box pc"><h3>Đổi giá</h3><p>Chỉ cần sửa con số. Món có nhiều cỡ (nhỏ, vừa, lớn) thì sửa giá từng cỡ.</p></div>
+    <div class="box pc"><h3>Thêm, xóa, đổi thứ tự món</h3><p>Tạo món mới, nhóm mới, xóa món không cần nữa và đổi thứ tự bằng ▲▼.</p></div>
+    <div class="box pc"><h3>Tải ảnh lên</h3><p>Chọn ảnh trong điện thoại, hệ thống tự thu nhỏ. Có thể thêm ảnh bìa nhóm và ảnh cạnh từng món.</p></div>
+    <div class="box pc"><h3>Mô tả và nhãn</h3><p>Viết mô tả món, gắn các nhãn như BEST, Món mới, Đề xuất và nhãn món cay.</p></div>
+    <div class="box pc"><h3>Thông tin quán</h3><p>Đổi số điện thoại, địa chỉ, Wi-Fi. Nếu nhập Wi-Fi, màn hình khách sẽ có nút "Sao chép".</p></div>
+    <div class="box pc"><h3>Quay lại bản cũ</h3><p>Lỡ sửa nhầm cũng không sao. Bạn có thể quay về bản đã lưu trước đó hoặc về thực đơn ban đầu.</p></div>
+  </div>
+
+  <h2><span class="no pc">2</span>Đăng nhập</h2>
+  <div class="grid2">
+    <figure class="shot"><img src="guide-img/login-vi.png" alt="Màn hình đăng nhập"><figcaption>Màn hình đăng nhập (chọn 한국어 / Tiếng Việt ở góc trên bên phải)</figcaption></figure>
+    <div>
+      <ol class="steps">
+        <li>Mở <b>đường link chúng tôi đã gửi</b>. <b>Mã quán</b> đã có sẵn trong đó.</li>
+        <li>Nhập <b>Mật khẩu</b> rồi bấm <b>[Vào]</b>.</li>
+        <li>Làm xong, bấm <b>[Thoát]</b> ở góc trên bên phải. Nếu quên bấm, sau 12 giờ hệ thống tự đăng xuất.</li>
+      </ol>
+      <div class="note"><b>Mỗi quán có một mật khẩu riêng</b>, chúng tôi chỉ gửi một lần. Nếu bạn quên hoặc người khác biết mật khẩu, hãy liên hệ ngay, chúng tôi sẽ tạo mật khẩu mới. Nhập sai mật khẩu nhiều lần (8 lần trong một giờ) thì địa chỉ internet đó bị khóa đăng nhập một giờ; thiết bị dùng chung Wi-Fi cũng có thể bị khóa theo.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Trang 2 -->
+<section class="page">
+  <h2 style="margin-top:0"><span class="no pc">3</span>Làm quen với màn hình</h2>
+  <p class="lead">Số màu đỏ trên ảnh là số của phần giải thích bên cạnh. Tên món, mô tả và tên nhóm có hai ô: tiếng Hàn và tiếng Việt.</p>
+  <div class="grid2" style="grid-template-columns: 1.3fr 1fr; align-items: start;">
+    <figure class="shot"><img src="guide-img/editor-vi.png" alt="Màn hình chỉnh sửa thực đơn"><figcaption>Màn hình chỉnh sửa thực đơn</figcaption></figure>
+    <ol class="legend">
+      <li><b class="n pc">1</b><strong>Lưu và hiển thị cho khách</strong> — Sửa xong nhớ bấm nút này. Chưa bấm thì màn hình khách chưa đổi.</li>
+      <li><b class="n pc">2</b><strong>Trạng thái lưu</strong> — Nếu thấy chữ cam "Có thay đổi chưa lưu" nghĩa là bạn chưa lưu. Lưu xong sẽ hiện "Đã lưu".</li>
+      <li><b class="n pc">3</b><strong>Phiên bản cũ</strong> — Hiện danh sách các lần đã lưu. Bấm [Dùng phiên bản này] ở thời điểm bạn muốn; sau khi xác nhận, thực đơn quay lại <b>ngay</b> và khách thấy luôn.</li>
+      <li><b class="n pc">4</b><strong>Khôi phục menu ban đầu</strong> — Xóa mọi chỗ đã sửa và về thực đơn ban đầu (danh sách phiên bản cũ vẫn còn). Sau khi xác nhận, khách thấy ngay.</li>
+      <li><b class="n pc">5</b><strong>Hướng dẫn nhập</strong> — Chỉ cần viết <b>một trong hai ô</b> (tiếng Hàn hoặc tiếng Việt) là lưu được. Ô còn lại để trống thì hệ thống thử tự dịch; bạn tự viết thì chính xác nhất.</li>
+      <li><b class="n pc">6</b><strong>Nhóm món</strong> — Tên nhóm, ảnh bìa, thứ tự (▲▼), xóa. Các món nằm trong nhóm.</li>
+      <li><b class="n pc">7</b><strong>Ảnh món</strong> — Ảnh nhỏ hiện cạnh tên món.</li>
+      <li><b class="n pc">8</b><strong>Tên món</strong> — Ô tiếng Hàn và ô tiếng Việt.</li>
+      <li><b class="n pc">9</b><strong>Giá (₫ hoặc ₩)</strong> — Chỉ nhập số (ví dụ: 750000). Để trống thì khách thấy "Hỏi giá". Món có nhiều cỡ (nhỏ, vừa, lớn) sẽ có ô giá cho từng cỡ; không đổi được tên cỡ, và để trống ô giá thì lưu thành 0.</li>
+      <li><b class="n pc">10</b><strong>Tải ảnh lên, Xóa ảnh, ▲▼ thứ tự, Xóa</strong> — Khi bấm [Xóa], hệ thống hỏi lại một lần nữa.</li>
+      <li><b class="n pc">11</b><strong>Xem thêm</strong> — Bấm để mở ra, sẽ thấy phần mô tả và nhãn như ảnh bên dưới.</li>
+    </ol>
+  </div>
+
+  <h2><span class="no pc">3-2</span>Khi bấm [Xem thêm]</h2>
+  <div class="grid2" style="grid-template-columns: 1fr 1fr; align-items: start;">
+    <figure class="shot"><img src="guide-img/item-vi.png" alt="Màn hình một món đã mở rộng"><figcaption>Màn hình khi mở rộng một món</figcaption></figure>
+    <ol class="legend">
+      <li><b class="n pc">12</b><strong>Mô tả (không bắt buộc)</strong> — Viết ngắn gọn giới thiệu hoặc lưu ý (ví dụ: "2–3 người", "Hôm nay hết món").</li>
+      <li><b class="n pc">13</b><strong>Nhãn</strong> — Chọn một trong: Không / BEST / Món mới / Đề xuất / Must Try (món nên thử). Khách sẽ thấy nhãn nhỏ cạnh món.</li>
+      <li><b class="n pc">14</b><strong>Món cay</strong> — Đánh dấu chọn thì màn hình khách có biểu tượng món cay.</li>
+      <li><b class="n pc">15</b><strong>Chữ hiển thị ở ngôn ngữ khác</strong> — Tên món mà khách nói tiếng Anh, Trung, Nhật nhìn thấy. Nếu bạn tự viết, khách sẽ thấy đúng chữ đó. Nếu để trống, hệ thống thử tự dịch khi lưu, nhưng phần kết nối dịch đang được chuẩn bị nên hiện tại có thể vẫn hiện chữ bạn đã nhập.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- Trang 3 -->
+<section class="page">
+  <h2 style="margin-top:0"><span class="no pc">4</span>Muốn làm gì thì làm thế này</h2>
+  <table>
+    <tr><th>Việc muốn làm</th><th>Cách làm</th></tr>
+    <tr><td>Đổi giá</td><td>Tìm món, sửa số ở <b>ô Giá</b> (9) → bấm <b>[Lưu và hiển thị cho khách]</b> (1) ở trên cùng.</td></tr>
+    <tr><td>Thêm món mới</td><td>Bấm <b>[+ Thêm món]</b> ở cuối nhóm → nhập tên (tiếng Hàn, tiếng Việt) và giá → nếu cần, bấm [Tải ảnh lên] → lưu. <b>Món để trống tên sẽ bị bỏ khi lưu.</b></td></tr>
+    <tr><td>Xóa món, đổi thứ tự</td><td>Bấm <b>[Xóa]</b> của món đó (xác nhận thêm một lần) hoặc <b>▲▼</b> → lưu.</td></tr>
+    <tr><td>Tạo nhóm mới</td><td>Bấm <b>[+ Thêm nhóm]</b> ở cuối màn hình → nhập Tên nhóm → rồi [+ Thêm món] trong nhóm đó.</td></tr>
+    <tr><td>Tải hoặc đổi ảnh</td><td>Bấm <b>[Tải ảnh lên]</b> → chọn ảnh trong điện thoại (tự thu nhỏ khi tải) → lưu. Muốn bỏ ảnh thì bấm [Xóa ảnh].</td></tr>
+    <tr><td>Báo món mới</td><td>[Xem thêm] → chọn Nhãn là <b>Món mới</b>. Khách sẽ thấy nhãn NEW. Món bán chạy chọn BEST, món nên thử chọn Đề xuất.</td></tr>
+    <tr><td>Hôm nay hết món</td><td>Ở [Xem thêm], viết "Hôm nay hết món" vào ô Mô tả rồi lưu. Bán lại thì xóa dòng đó.</td></tr>
+    <tr><td>Điện thoại, địa chỉ, Wi-Fi</td><td>Sửa ô <b>Thông tin quán</b> ở trên cùng rồi lưu. Nhập tên và mật khẩu Wi-Fi thì cuối màn hình khách có nút sao chép Wi-Fi.</td></tr>
+    <tr><td>Lỡ sửa nhầm</td><td>Chưa lưu thì tải lại trang là về bản đã lưu gần nhất. Đã lưu thì quay lại ở <b>[Phiên bản cũ]</b> (3) hoặc bấm <b>[Khôi phục menu ban đầu]</b> (4).</td></tr>
+  </table>
+
+  <h2><span class="no pc">5</span>Cần biết</h2>
+  <div class="grid2">
+    <div class="box pc"><h3>Lưu → khoảng 1 phút sau đổi</h3><ul><li>Sau khi lưu, màn hình khách đổi <b>trong khoảng 1 phút</b>.</li><li>Đóng trang mà chưa lưu thì phần đã sửa sẽ mất (trước khi đóng sẽ có cảnh báo). Đăng nhập sẽ hết khi bạn đóng tab hoặc sau 12 giờ; nếu thấy "Mật khẩu không đúng" thì hãy đăng nhập lại. Nên lưu thường xuyên.</li><li>Nếu màn hình trống, hãy tải lại trang một lần.</li></ul></div>
+    <div class="box pc"><h3>Về bản dịch</h3><ul><li>Tiếng Hàn và tiếng Việt hiển thị <b>đúng như bạn viết</b>.</li><li>Tính năng tự dịch sang Anh, Trung, Nhật đang chuẩn bị, nên hiện tại <b>bạn tự viết sẽ chính xác nhất</b> (ô số 15).</li><li>Nếu để trống, khách có thể thấy chữ bạn đã nhập nguyên bản.</li></ul></div>
+    <div class="box pc"><h3>Mẹo chụp ảnh</h3><ul><li>Chọn ảnh sáng, món ăn chiếm phần lớn khung hình.</li><li>Ảnh quá nặng có thể không tải lên được. Khi đó hãy chụp lại hoặc thu nhỏ rồi tải lại.</li><li>Ảnh hiện nhỏ cạnh món. Khách bấm vào sẽ thấy ảnh lớn.</li></ul></div>
+    <div class="box pc"><h3>Dùng an toàn</h3><ul><li>Chỉ cho người thật sự cần (chủ quán, nhân viên) biết mật khẩu.</li><li>Dùng máy tính chung thì xong nhớ bấm <b>[Thoát]</b>.</li><li>Để trống ô giá thì khách thấy "Hỏi giá". Chỉ để trống khi bạn muốn vậy.</li></ul></div>
+  </div>
+</section>
+
+<!-- Trang 4 -->
+<section class="page">
+  <h2 style="margin-top:0"><span class="no pc">6</span>Báo cáo lượt truy cập — có bao nhiêu khách xem thực đơn QR?</h2>
+  <p class="lead">Chúng tôi sẽ gửi cho bạn một <b>link riêng</b>. Mở không cần mật khẩu, xem tốt trên điện thoại, và có thể [In / Lưu PDF]. Ai có link cũng xem được, vì vậy đừng chia sẻ bừa bãi.</p>
+  <div class="grid3">
+    <div class="box pc"><h3>Khách truy cập và lượt xem trang</h3><p>Số khách truy cập trong khoảng thời gian (mặc định 30 ngày). Một người mở nhiều lần trong ngày chỉ tính 1; sang ngày khác quay lại thì tính thêm 1. Lượt xem trang là số lần mở trang.</p></div>
+    <div class="box pc"><h3>Trung bình ngày, ngày đông nhất</h3><p>Xem ngay số người trung bình mỗi ngày và ngày đông khách nhất.</p></div>
+    <div class="box pc"><h3>Khách theo ngày</h3><p>Mỗi ngày bạn có thể xem khách có tăng sau cuối tuần hay sau sự kiện không.</p></div>
+    <div class="box pc"><h3>Ngôn ngữ khách xem</h3><p>Khách xem bằng tiếng Hàn, Việt, Anh, Trung hay Nhật. Dùng để biết nên chăm bản dịch nào.</p></div>
+    <div class="box pc"><h3>Thiết bị</h3><p>Tỉ lệ khách xem bằng điện thoại và bằng máy tính.</p></div>
+    <div class="box pc"><h3>Khách đến từ đâu</h3><p>Quét QR trên bàn, hay từ trang tìm quán hoặc tìm kiếm.</p></div>
+  </div>
+  <div class="note">Robot (như công cụ tìm kiếm) không được tính. Ngày tính theo giờ Việt Nam. Thẻ QR đã in và đang dùng sẽ được gộp vào mục "Trực tiếp/QR".</div>
+
+  <h2><span class="no pc">7</span>Lộ trình — sắp tới sẽ tốt hơn nữa</h2>
+  <div class="grid3">
+    <div class="col now pc"><h3>Dùng được ngay</h3><ul class="tick">
+      <li>Tự sửa món, giá, mô tả, ảnh</li>
+      <li>Tự nhập tiếng Hàn và tiếng Việt, màn hình khách 5 ngôn ngữ</li>
+      <li>Sửa điện thoại, địa chỉ, Wi-Fi</li>
+      <li>Quay lại bản cũ, về thực đơn ban đầu</li>
+      <li>Link báo cáo lượt xem (in, PDF)</li>
+    </ul></div>
+    <div class="col soon pc"><h3>Dự kiến</h3><ul class="tick soon">
+      <li>Kết nối <b>tự dịch</b> sang Anh, Trung, Nhật</li>
+      <li><b>Tự gửi PDF</b> báo cáo lượt xem hằng tháng</li>
+      <li>Tạo <b>QR bàn</b> ngay trong màn hình chủ quán</li>
+      <li>Thêm mục <b>sửa thông tin quán</b> như giờ mở cửa, giới thiệu quán</li>
+    </ul></div>
+    <div class="col idea pc"><h3>Quyết định theo ý kiến bạn</h3><ul class="tick idea">
+      <li>Báo cáo lượt xem nhanh và chi tiết hơn</li>
+      <li>Đưa chức năng hay dùng lên đầu màn hình</li>
+      <li>Cần chức năng nào khác, hãy cho chúng tôi biết!</li>
+    </ul></div>
+  </div>
+  <div class="note"><b>Lưu ý</b> Chức năng "dự kiến" và "theo ý kiến" chưa có ngày ra mắt cụ thể. Chức năng nào được nhiều chủ quán mong muốn, chúng tôi làm trước.</div>
+
+  <h2><span class="no pc">8</span>Khi cần giúp đỡ</h2>
+  <p class="lead">Chỉ cần gửi một tấm ảnh cũng được. Chúng tôi có thể sửa giúp bạn.</p>
+  <div class="contact">
+    <div class="pc"><small>Hỗ trợ tiếng Việt · Zalo · điện thoại</small><strong>0937 250 787</strong><small>Tiếng Việt · Zalo</small></div>
+    <div class="pc"><small>Hỗ trợ tiếng Hàn · Zalo · điện thoại</small><strong>0917 302 200</strong><small>KakaoTalk ID: jjw4164</small></div>
+  </div>
+  <footer>QR MENU · qrmenuasia.com</footer>
+</section>
+
+</body>
+</html>

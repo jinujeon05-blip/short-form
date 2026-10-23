@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://inyeon.qrmenuasia.com/sitemap.xml
