@@ -54,7 +54,7 @@
 | `restaurants/buja` | 부자감자탕 BUJA 감자탕·뼈해장국·삼겹살·백숙 (207 Nguyễn Cao, Kinh Bắc, Bắc Ninh) — **가게 찾기용** | `buja-menu` (팀 jinwoo8, 2026-10-22 배포, 가게 찾기 목록도 반영) | https://buja.qrmenuasia.com |
 | `restaurants/sopung` | 소풍 SOPUNG 韓姐烤肉 한식·숯불구이·보쌈·병어조림 (3 Đ. Võ Cường 12, Võ Cường, Bắc Ninh) — **가게 찾기용** | `sopung-menu` (팀 jinwoo8, 배포 전) | https://sopung.qrmenuasia.com |
 | `restaurants/cheong` | 청식당 NHÀ HÀNG HÀN QUỐC 한국식 중화요리 짜장·짬뽕·탕수육 (54 Lý Nhân Tông, Võ Cường, Bắc Ninh, 간판 01 N5 Lý Nhân Tông) — **가게 찾기용** | `cheong-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://cheong.qrmenuasia.com |
-| `restaurants/studioan` | 스튜디오 안 사진관 An Studio (하노이 한국 사진관, TT4 Lô 98 P, Từ Liêm, Hà Nội, 0988 862 720) — **가게 찾기용**, 메뉴 없는 촬영 스튜디오 | `studioan-menu` (미배포) | https://studioan.qrmenuasia.com |
+| `restaurants/studioan` | 스튜디오 안 사진관 An Studio (하노이 한국 사진관, TT4 Lô 98 P, Từ Liêm, Hà Nội, 0988 862 720) — **가게 찾기용**, 메뉴 없는 촬영 스튜디오 | `studioan-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://studioan.qrmenuasia.com |
 | `restaurants/joseon` | 조선시대 하노이 본점 Nhà Hàng Joseon Sidae 한식 뼈찜·목뼈감자탕·세트 (TT4/khu P. Đỗ Đình Thiện, khu đô thị, Từ Liêm, Hà Nội) — **가게 찾기용** | `joseon-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://joseon.qrmenuasia.com |
 | `restaurants/namme` | 남매식당 Namme 한식 남매술상·김치찜·오삼불고기·감자탕 (107 CT5 Mỹ Đình, Từ Liêm, Hà Nội) — **가게 찾기용** | `namme-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://namme.qrmenuasia.com |
 | `restaurants/inyeon` | 인연식당 Nhân Duyên 하노이 원조 족발 전문점·보쌈·구이·볶음 (Lô 103 TT3, Hoàng Trọng Mậu / KĐT Mỹ Đình, Từ Liêm, Hà Nội) — **가게 찾기용** | `inyeon-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://inyeon.qrmenuasia.com |
