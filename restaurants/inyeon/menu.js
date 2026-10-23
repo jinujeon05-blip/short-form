@@ -23,22 +23,22 @@ const SL = (a, b) => [[L_S, a], [L_L, b]]; // 소·대
 window.MENU = [
   {
     id: "special",
-    name: T("추천 · 족발", "Specials · Pork feet", "招牌 · 猪脚（족발）", "おすすめ・チョッパル", "ĐẶC BIỆT"),
+    name: T("추천 · 족발", "Specials · Pork feet", "招牌 · 猪蹄（족발）", "おすすめ・チョッパル", "ĐẶC BIỆT"),
     note: T(
       "족발은 대(1kg)와 소(0.5kg) 중에서 골라요. 주먹밥을 곁들이면 더 맛있어요.",
       "Pork feet come in Large (1 kg) or Small (0.5 kg). They taste even better with rice balls.",
-      "猪脚可选大份（1公斤）或小份（0.5公斤）。搭配饭团更美味。",
+      "猪蹄可选大份（1公斤）或小份（0.5公斤）。搭配饭团更美味。",
       "チョッパルは大（1kg）と小（0.5kg）からお選びいただけます。おにぎりと一緒に食べるとさらにおいしいです。",
       "Chân giò gồm cỡ lớn 1kg và nhỏ 0,5kg. Ăn kèm cơm nắm sẽ ngon hơn."
     ),
     items: [
-      it(null, "waengjokbal", "왕족발", "Korean-style pork feet (wang-jokbal)", "韩式大猪脚（왕족발）", "ワン・チョッパル（韓国式豚足）", "Chân Giò Truyền thống Hàn Quốc", {
+      it(null, "waengjokbal", "왕족발", "Korean-style pork feet (wang-jokbal)", "韩式大猪蹄（왕족발）", "ワン・チョッパル（韓国式豚足）", "Chân Giò Truyền thống Hàn Quốc", {
         tag: "best",
-        desc: T("돼지 족을 간장 양념에 푹 삶은 한국식 족발", "Pig's trotters simmered in a soy-based sauce, Korean style", "猪脚用酱油酱汁炖煮的韩式招牌菜", "豚足を醤油ダレでじっくり煮込んだ韓国式チョッパル", "Chân giò heo nấu mềm trong sốt xì dầu theo kiểu Hàn Quốc"),
+        desc: T("돼지 족을 간장 양념에 푹 삶은 한국식 족발", "Pig's trotters simmered in a soy-based sauce, Korean style", "猪蹄用酱油酱汁炖煮的韩式招牌菜", "豚足を醤油ダレでじっくり煮込んだ韓国式チョッパル", "Chân giò heo nấu mềm trong sốt xì dầu theo kiểu Hàn Quốc"),
         sizes: SL(350000, 630000),
       }),
-      it(null, "naengchae", "냉채족발", "Pork feet with cold salad (naengchae-jokbal)", "凉菜猪脚（냉채족발）", "冷菜チョッパル（サラダ添え豚足）", "Chân Giò Kèm SaLad", {
-        desc: T("족발에 새콤한 냉채 샐러드를 곁들인 메뉴", "Pork feet served with a tangy cold salad", "猪脚搭配酸爽凉拌沙拉", "チョッパルに酸味のある冷菜サラダを添えました", "Chân giò ăn kèm salad lạnh chua nhẹ"),
+      it(null, "naengchae", "냉채족발", "Pork feet with cold salad (naengchae-jokbal)", "凉菜猪蹄（냉채족발）", "冷菜チョッパル（サラダ添え豚足）", "Chân Giò Kèm SaLad", {
+        desc: T("족발에 새콤한 냉채 샐러드를 곁들인 메뉴", "Pork feet served with a tangy cold salad", "猪蹄搭配酸爽凉拌沙拉", "チョッパルに酸味のある冷菜サラダを添えました", "Chân giò ăn kèm salad lạnh chua nhẹ"),
         sizes: SL(420000, 730000),
       }),
       it(320000, "makguksu", "쟁반막국수", "Cold buckwheat noodles with sauce (jaengban-makguksu)", "拌荞麦冷面拼盘（쟁반막국수）", "チェンバン・マックグクス（冷たいそばの和え麺）", "Mì Lạnh Trộn Sốt"),
