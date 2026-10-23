@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://yeha.qrmenuasia.com/sitemap.xml

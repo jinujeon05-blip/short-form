@@ -311,6 +311,11 @@ window.STORES = [
     address: "Ngõ 179 Đ. Đình Thôn, Đình Thôn, Từ Liêm, Hà Nội",
     type: { ko: "삼겹살 · 한우차돌 · 육회 · 찌개 한국식 고기구이", vi: "Thịt nướng Hàn Quốc · Ba chỉ · Bò Hàn · Gỏi bò sống · Canh", en: "Korean BBQ · Pork belly · Korean beef · Yukhoe · Stews", zh: "韩式烤肉 · 五花肉 · 韩牛 · 生拌牛肉 · 汤锅", ja: "韓国焼肉・サムギョプサル・韓牛・ユッケ・チゲ" },
     keywords: "오뚜기식당 오뚜기 식당 ottugi ottuki ottugi restaurant 오뚜기 하노이 hà nội từ liêm tu liem đình thôn dinh thon mỹ đình my dinh nhà hàng hàn quốc 한식 고기구이 고깃집 삼겹살 냉동삼겹살 꽃대패삼겹살 대패삼겹살 돈차돌 꽃항정 항정살 한우차돌 1++ 생삼겹살 한판 영천식 육회 뭉티기 김치찌개 된장찌개 냄비라면 짜파게티 팔도비빔면 볶음밥 치즈볶음밥 치즈감자전 팥빙수 소주 참이슬 진로 처음처럼 좋은데이 하이볼 보드카맨 맥주 타이거 사이공 thịt ba chỉ thịt nướng hàn quốc gỏi bò sống 韩式烤肉 五花肉 烤肉 韩牛 韓国焼肉 サムギョプサル ユッケ チゲ korean bbq pork belly yukhoe soju" },
+  { id: "yeha", name: "예하카페&파스타 Yeha Cafe & Pasta", sub: "와플 · 빙수 · 커피 · 파스타 · 포케 · 분식", url: "https://yeha.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["cafe", "western"], tags: [],
+    address: "120 TT3 Khu do thi, Đ. Mỹ Đình, Song Da, Từ Liêm, Hà Nội",
+    type: { ko: "카페 · 와플 · 빙수 · 파스타 · 포케 · 분식", vi: "Quán cà phê · Waffle · Bingsu · Mì Ý · Poke · Đồ ăn vặt Hàn", en: "Café · Waffles · Bingsu · Pasta · Poke · Korean snacks", zh: "咖啡馆 · 华夫饼 · 刨冰 · 意面 · 波奇饭 · 韩式小吃", ja: "カフェ・ワッフル・ビンス・パスタ・ポキ・韓国軽食" },
+    keywords: "예하카페 예하 카페 예하카페&파스타 예하카페앤파스타 예하 카페 파스타 yeha yeha cafe yeha cafe pasta yeha cafe & pasta yeha & cook yeha food yeha waffle yeha bingsu yeha poke 하노이 hà nội từ liêm tu liem mỹ đình my dinh song da sông đà khu đô thị tt3 120 tt3 카페 디저트 카페 와플 와붕 빙수 눈꽃빙수 눈꽃망고빙수 인절미빙수 말차빙수 오레오빙수 딸기빙수 커피빙수 망고치즈타르트빙수 소금빵 치즈타르트 아이스크림 소프트아이스크림 아포가토 커피 아메리카노 라떼 콜드브루 에이드 스무디 착즙주스 파스타 로제쉬림프파스타 트러플크림파스타 필라프 리조또 목살스테이크샐러드 런치세트 브런치 샌드위치 포케 건강한식사 떡볶이 로제떡볶이 신땡떡볶이 신땡김밥 김밥 컵밥 컵버거 돈가스 닭강정 순살치킨 쥐포 분식 튀김 한국 카페 quán cà phê hàn quốc bánh waffle bingsu mì ý poke tokbokki kimbap cà phê dessert cafe waffle shaved ice korean cafe pasta korean snack tteokbokki gimbap chicken cutlet 咖啡馆 华夫饼 刨冰 意面 炒年糕 紫菜包饭 カフェ ワッフル かき氷 ビンス パスタ トッポッキ キンパ" },
 ];
 
 window.SI = {
