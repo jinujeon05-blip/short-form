@@ -36,7 +36,7 @@ try:
 except ImportError:  # 없어도 동작한다(크기 표시·webp 변환만 빠짐)
   Image = None
 
-VERSION = "1.1"
+VERSION = "1.2"
 PORT = int(os.environ.get("QRMENU_PORT", "8765"))
 HOME = Path.home() / ".qrmenu_photos"
 JOBS = HOME / "jobs"
@@ -86,6 +86,7 @@ class Job:
     self.tabs_found = []
     self.photos = []  # dict(id, file, tabs, latest_rank, url, bytes, w, h, cls)
     self.saved = None
+    self.debug = []  # 단계별 화면 캡처·화면 구조 요약 (구글 지도 구조가 바뀌었을 때 고치려고)
     self.stop = False
     self.dir = JOBS / self.id
     self.lock = threading.Lock()
@@ -111,6 +112,7 @@ class Job:
           "notice": self.notice, "logs": list(self.logs), "info": self.info,
           "candidates": self.candidates, "tabs_found": self.tabs_found,
           "photos": self.photos, "params": self.params, "saved": self.saved,
+          "debug": self.debug,
       }
 
   def persist(self):
@@ -122,7 +124,7 @@ class Job:
   def load(cls, path):
     d = json.loads(path.read_text("utf-8"))
     job = cls(d["params"], d["id"])
-    for k in ("status", "info", "candidates", "tabs_found", "photos", "saved", "logs"):
+    for k in ("status", "info", "candidates", "tabs_found", "photos", "saved", "logs", "debug"):
       setattr(job, k, d.get(k) or getattr(job, k))
     if job.status == "running":
       job.status = "stopped"
@@ -191,6 +193,82 @@ JS_HOURS = """() => {
     if (n >= 3 && t.length > best.length && t.length < 800) best = t;
   });
   return best;
+}"""
+
+# 가게 화면(개요·메뉴 탭)의 사진을 바로 위 제목(메뉴·하이라이트 등)과 함께 읽는다.
+JS_SECTIONS = """() => {
+  const vis = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+  const root = document.querySelector('div[role=main]') || document.body;
+  const heads = [...root.querySelectorAll('h1,h2,h3,[role=heading]')].filter(vis);
+  const pics = [];
+  root.querySelectorAll('img').forEach(img => {
+    const s = img.currentSrc || img.src || '';
+    if (/googleusercontent|ggpht/.test(s)) pics.push([img, s]);
+  });
+  root.querySelectorAll('[style*="background-image"]').forEach(el => {
+    const m = (el.getAttribute('style') || '').match(/url\\(["']?(https:[^"')]+)["']?\\)/);
+    if (m && /googleusercontent|ggpht/.test(m[1])) pics.push([el, m[1]]);
+  });
+  const out = [];
+  for (const [el, u] of pics) {
+    const r = el.getBoundingClientRect();
+    if (r.width < 60 && r.height < 60) continue;  // 리뷰 작성자 얼굴 등
+    let sec = '';
+    for (const h of heads) if (h.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) sec = h.innerText.trim();
+    out.push({u, sec});
+  }
+  const sc = [root, ...root.querySelectorAll('div')].find(d => d.scrollHeight > d.clientHeight + 50 &&
+               /(auto|scroll)/.test(getComputedStyle(d).overflowY));
+  if (sc) sc.scrollBy(0, 700);
+  return out;
+}"""
+
+# 제목 글자(words)가 들어간 칸의 첫 사진을 누른다 → 크게 보기 화면
+JS_CLICK_SECTION = """(words) => {
+  const root = document.querySelector('div[role=main]') || document.body;
+  const heads = [...root.querySelectorAll('h1,h2,h3,[role=heading]')];
+  const h = heads.find(h => words.some(w => h.innerText.trim().toLowerCase().includes(w)));
+  if (!h) return false;
+  const imgs = [...root.querySelectorAll('img, [style*="background-image"]')].filter(el =>
+    (h.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) &&
+    /googleusercontent|ggpht/.test((el.currentSrc || el.src || el.getAttribute('style') || '')) &&
+    el.getBoundingClientRect().width >= 60);
+  if (!imgs.length) return false;
+  const t = imgs[0].closest('button,a,[role=button],[jsaction]') || imgs[0];
+  t.scrollIntoView({block: 'center'}); t.click();
+  return true;
+}"""
+
+# 화면에서 가장 크게 보이는 사진 (크게 보기 화면의 지금 사진)
+JS_BIG = """() => {
+  const cand = [...document.querySelectorAll('img')].map(e => [e, e.currentSrc || e.src || '']);
+  document.querySelectorAll('[style*="background-image"]').forEach(e => {
+    const m = (e.getAttribute('style') || '').match(/url\\(["']?(https:[^"')]+)["']?\\)/);
+    if (m) cand.push([e, m[1]]);
+  });
+  let best = '', area = 0;
+  for (const [e, u] of cand) {
+    if (!/googleusercontent|ggpht/.test(u)) continue;
+    const r = e.getBoundingClientRect();
+    const w = Math.min(r.right, innerWidth) - Math.max(r.left, 0);
+    const h = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0);
+    if (w > 0 && h > 0 && w * h > area) { area = w * h; best = u; }
+  }
+  return {u: best, frac: area / (innerWidth * innerHeight)};
+}"""
+
+# 진단: 지금 화면의 구조 요약
+JS_DIAG = """() => {
+  const vis = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+  const t = el => (el.getAttribute('aria-label') || el.innerText || '').trim().slice(0, 60);
+  return {
+    tabs: [...document.querySelectorAll('[role=tab]')].filter(vis).map(t),
+    heads: [...document.querySelectorAll('h1,h2,h3,[role=heading]')].filter(vis).map(t).slice(0, 20),
+    photo_buttons: [...document.querySelectorAll('button[aria-label],a[aria-label]')].filter(vis).map(t)
+      .filter(s => /사진|photo|ảnh|hình|메뉴|menu/i.test(s)).slice(0, 20),
+    photo_index_links: document.querySelectorAll('a[data-photo-index]').length,
+    photo_imgs: [...document.querySelectorAll('img')].filter(i => /googleusercontent|ggpht/.test(i.currentSrc || i.src || '')).length,
+  };
 }"""
 
 
@@ -392,6 +470,90 @@ def grab_tab(page, job, key, limit):
   return urls
 
 
+MENU_WORDS = ["메뉴", "menu", "thực đơn"]
+FOOD_WORDS = ["하이라이트", "highlight", "nổi bật", "인기"]
+OVERVIEW_WORDS = ["개요", "overview", "tổng quan"]
+
+
+def snap(page, job, name):
+  """진단용 화면 캡처 + 구조 요약 (저장할 때 드라이브 묶음에 같이 들어간다)."""
+  try:
+    d = job.dir / "debug"
+    d.mkdir(parents=True, exist_ok=True)
+    f = d / f"debug_{len(job.debug) + 1:02d}_{name}.jpg"
+    page.screenshot(path=str(f), type="jpeg", quality=55)
+    info = page.evaluate(JS_DIAG)
+    info.update(step=name, file=f.name, url=page.url[:300])
+    job.debug.append(info)
+  except Exception as exc:
+    job.log(f"  진단 캡처 실패({name}): {str(exc).splitlines()[0][:80]}")
+
+
+def click_tab(page, words):
+  """보이는 탭 중 이름에 words가 든 첫 탭을 누른다."""
+  for t in page.evaluate(JS_TABS):
+    label = t["label"].lower()
+    if t["visible"] and any(w in label for w in words):
+      try:
+        page.locator("[role=tab]").nth(t["i"]).click(timeout=5000)
+        page.wait_for_timeout(2500)
+        return True
+      except Exception:
+        return False
+  return False
+
+
+def on_place(page):
+  try:
+    return page.locator("h1.DUwDvf, button[data-item-id='address']").first.is_visible()
+  except Exception:
+    return False
+
+
+def back_to_place(page, job):
+  for action in ("esc", "back", "goto"):
+    if on_place(page):
+      return
+    try:
+      if action == "esc":
+        page.keyboard.press("Escape")
+      elif action == "back":
+        page.go_back(wait_until="domcontentloaded", timeout=20000)
+      else:
+        page.goto(job.info["maps_url"], wait_until="domcontentloaded", timeout=40000)
+    except Exception:
+      pass
+    page.wait_for_timeout(2500)
+
+
+def viewer_walk(page, job, key, limit):
+  """크게 보기 화면에서 → 키로 넘기며 큰 사진 주소를 모은다(화면 구조에 덜 의존)."""
+  urls, seen, same = [], set(), 0
+  for _ in range(limit * 2 + 6):
+    job.check()
+    r = page.evaluate(JS_BIG)
+    k = photo_key(r["u"]) if r["u"] and r["frac"] > 0.12 else None
+    if k and k not in seen:
+      seen.add(k)
+      urls.append(r["u"])
+      same = 0
+    else:
+      same += 1
+    if same >= 4 or len(urls) >= limit:
+      break
+    page.keyboard.press("ArrowRight")
+    page.wait_for_timeout(1100)
+  job.log(f"  {TAB_KO.get(key, key)}: 크게 보기에서 {len(urls)}장")
+  return urls
+
+
+def in_viewer(page):
+  try:
+    return page.evaluate(JS_BIG)["frac"] > 0.25
+  except Exception:
+    return False
+
+
 def collect(page, job):
   limit = int(job.params.get("max_per_tab") or 80)
   found = {}  # key(원본 주소) → {"url", "tabs": [], "latest_rank", "order"}
@@ -407,8 +569,46 @@ def collect(page, job):
       if tab == "latest" and rec["latest_rank"] is None:
         rec["latest_rank"] = n
 
+  def add_sections(items):
+    for it in items:
+      sec = it["sec"].lower()
+      tab = ("menu" if any(w in sec for w in MENU_WORDS) else
+             "food" if any(w in sec for w in FOOD_WORDS) else "all")
+      add([it["u"]], tab)
+
+  snap(page, job, "place")
+  # 1) 가게 첫 화면(개요)에 보이는 사진
+  job.step = "가게 화면 사진 읽는 중"
+  for _ in range(4):
+    add_sections(page.evaluate(JS_SECTIONS))
+    page.wait_for_timeout(700)
+
+  # 2) 가게 화면의 '메뉴' 탭: 메뉴 칸 = 메뉴판, 하이라이트 칸 = 음식
+  job.check()
+  if click_tab(page, MENU_WORDS):
+    job.step = "메뉴 탭 읽는 중"
+    before = len(found)
+    for _ in range(8):
+      add_sections(page.evaluate(JS_SECTIONS))
+      page.wait_for_timeout(800)
+    snap(page, job, "menu_tab")
+    job.log(f"메뉴 탭: 사진 {len(found) - before}장 더 찾음")
+    # 메뉴 칸 첫 사진을 크게 열어 → 키로 메뉴판 사진을 모두 넘겨 본다
+    if page.evaluate(JS_CLICK_SECTION, MENU_WORDS):
+      page.wait_for_timeout(3000)
+      snap(page, job, "menu_viewer")
+      if in_viewer(page):
+        add(viewer_walk(page, job, "menu", limit), "menu")
+      back_to_place(page, job)
+    click_tab(page, OVERVIEW_WORDS)
+  else:
+    job.log("가게 화면에 '메뉴' 탭이 없어요.")
+
+  # 3) 사진 갤러리 (전체·최신·메뉴·음식·가게 제공 탭)
+  job.check()
   if open_gallery(page, job):
     page.wait_for_timeout(2000)
+    snap(page, job, "gallery")
     tabs = page.evaluate(JS_TABS)
     plan = []
     for t in tabs:
@@ -436,10 +636,19 @@ def collect(page, job):
       except Exception as exc:
         job.log(f"  {TAB_KO[key]} 탭 실패: {str(exc).splitlines()[0][:100]}")
   else:
-    for _ in range(4):
-      page.mouse.wheel(0, 1500)
-      page.wait_for_timeout(1000)
-    add(page.evaluate(JS_GRAB_LOOSE), "all")
+    # 갤러리 목록이 안 열리면: 맨 위 큰 사진을 눌러 크게 보기에서 넘겨 본다
+    back_to_place(page, job)
+    snap(page, job, "no_gallery")
+    try:
+      page.locator("div[role=main] img").first.click(timeout=5000)
+      page.wait_for_timeout(3000)
+      if in_viewer(page):
+        snap(page, job, "hero_viewer")
+        add(viewer_walk(page, job, "all", limit), "all")
+    except StopJob:
+      raise
+    except Exception as exc:
+      job.log(f"  맨 위 사진 열기 실패: {str(exc).splitlines()[0][:80]}")
   job.log(f"모은 사진 주소(중복 뺌): {len(found)}개")
   return list(found.values())
 
@@ -612,7 +821,7 @@ def save_job(job, body):
   dest.mkdir(parents=True, exist_ok=True)
   # 예전에 이 수집기로 저장한 파일만 지운다(사용자가 넣은 다른 파일은 둔다)
   for f in dest.iterdir():
-    if re.fullmatch(r"(menu|food|store|etc)_\d+\.jpg|claude_bundle_\d+\.zip", f.name):
+    if re.fullmatch(r"(menu|food|store|etc)_\d+\.jpg|claude_bundle_\d+\.zip|debug_\d+_\w+\.jpg", f.name):
       f.unlink()
 
   info = dict(job.info)
@@ -652,6 +861,7 @@ def save_job(job, body):
       "memo": body.get("memo", ""), "bundles": bundles,
       "counts": {CLASS_KO[k]: sum(1 for i in items if i["class"] == k) for k, _, p in CLASSES if p},
       "photos": items,
+      "debug": job.debug,
       "notes": ("tabs=구글 지도 갤러리에서 그 사진이 보인 탭. owner=가게(소유자)가 올린 사진. "
                 "latest_rank=최신 탭 순서(1이 가장 최근). 올린 날짜·올린 사람 이름은 수집하지 않음."),
   }
@@ -659,12 +869,18 @@ def save_job(job, body):
   (dest / "store_info.json").write_text(mjson, "utf-8")
   guide = make_guide(manifest)
   (dest / "클로드_안내.md").write_text(guide, "utf-8")
-  for bname, part in zip(bundles, parts):
+  debug_files = sorted((job.dir / "debug").glob("debug_*.jpg")) if (job.dir / "debug").is_dir() else []
+  for f in debug_files:
+    shutil.copyfile(f, dest / f.name)
+  for n, (bname, part) in enumerate(zip(bundles, parts)):
     with zipfile.ZipFile(dest / bname, "w", zipfile.ZIP_STORED) as z:
       z.writestr("store_info.json", mjson)
       z.writestr("클로드_안내.md", guide)
       for it in part:
         z.write(dest / it["file"], it["file"])
+      if n == 0:  # 진단 캡처는 첫 묶음에
+        for f in debug_files:
+          z.write(f, f.name)
 
   rel = drive_relative(dest)
   job.saved = {
