@@ -301,6 +301,11 @@ window.STORES = [
     address: "TT4 Lô 98 P, Khu đô thị, Từ Liêm, Hà Nội",
     type: { ko: "한국 사진관 · 프로필 · 한복 · 웨딩 · 가족 촬영", vi: "Studio ảnh Hàn Quốc · Profile · Hanbok · Ảnh cưới · Gia đình", en: "Korean photo studio · Profile · Hanbok · Wedding · Family", zh: "韩国写真馆 · 形象照 · 韩服 · 婚纱 · 全家福", ja: "韓国写真館・プロフィール・韓服・ウェディング・家族写真" },
     keywords: "스튜디오 안 사진관 스튜디오안 안스튜디오 안 사진관 an studio studio an studioan 하노이 한국 사진관 사진관 사진 촬영 스튜디오 프로필 증명사진 여권사진 비자사진 한복 한복촬영 웨딩 웨딩촬영 커플 가족사진 가족 화보 인물 화보 증명 từ liêm tu liem chụp ảnh studio ảnh hàn quốc chụp ảnh hanbok ảnh cưới ảnh gia đình ảnh profile ảnh thẻ 摄影 写真馆 照相馆 证件照 韩服 婚纱 全家福 写真 証明写真 韓服 ウェディング 家族写真 photo studio portrait family wedding hanbok passport photo" },
+  { id: "jamaedang", name: "자매당 JAMAEDANG", sub: "한식 코스 · 통갈치조림 · 홍어 세트 · 전 · 고기", url: "https://jamaedang.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "seafood"], tags: ["photos"],
+    address: "Ngõ 176 Đ. Đình Thôn, D7 - Fivestar, Từ Liêm, Hà Nội",
+    type: { ko: "한식 코스 · 통갈치조림 · 홍어 · 탕 · 전 · 고기", vi: "Set ẩm thực Hàn Quốc · Cá hố kho cay · Cá đuối lên men · Canh lẩu · Bánh · Thịt", en: "Korean course · Braised cutlassfish · Skate · Hot pots · Pancakes · Meat", zh: "韩式套餐 · 红烧带鱼 · 发酵鳐鱼 · 汤锅 · 煎饼 · 烤肉", ja: "韓国コース・タチウオの煮付け・ホンオ(発酵エイ)・鍋・チヂミ・肉料理" },
+    keywords: "자매당 자매 당 jamaedang jamedang jamae dang 하노이 자매당 từ liêm tu liem đình thôn dinh thon fivestar d7 nhà hàng hàn quốc 한식 한식당 한식카세 자매 한식카세 코스 통갈치조림 갈치조림 갈치구이 고등어구이 고등어조림 홍어 홍어세트 삭힌 홍어 수육 대구탕 해신탕 아귀지리 해물탕 꽃게탕 아귀찜 해물찜 육전 새우전 관자전 모둠전 해물파전 해물김치전 막회 오징어초무침 골뱅이무침 김치손만두전골 불고기손만두전골 LA갈비 소갈비살 돼지갈비 꼬막비빔밥 제육쌈밥 해물칼국수 시골칼국수 들깨수제비 콩나물국밥 해물된장찌개 정식 화요 막걸리 소주 맥주 cá hố kho cay cá đuối lên men lẩu hải sản bánh hàn quốc sườn bò thịt luộc 韩餐 韩式料理 带鱼 鳐鱼 煎饼 烤肉 汤锅 韓国料理 チヂミ 鍋 タチウオ korean restaurant korean course skate set cutlassfish hot pot pancake galbi hanoi" },
 ];
 
 window.SI = {

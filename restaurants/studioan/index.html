@@ -54,9 +54,6 @@
   .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .grid figure { position: relative; margin: 0; border-radius: 12px; overflow: hidden; background: #e9e4dc; cursor: zoom-in; aspect-ratio: 3 / 4; }
   .grid figure.wide { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
-  #where { margin-top: 10px; }
-  #where figure.wide { aspect-ratio: 4 / 3; }
-  #where img { object-position: center 30%; }
   .grid img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .grid figcaption { position: absolute; left: 8px; bottom: 8px; font-size: 12px; font-weight: 800; color: #fff; background: rgba(0,0,0,.55); border-radius: 999px; padding: 3px 9px; }
 
@@ -123,7 +120,6 @@
   <section>
     <h2 id="hInfo"></h2>
     <dl class="info" id="info"></dl>
-    <div class="grid" id="where"></div>
   </section>
 </main>
 
@@ -157,7 +153,6 @@
     ["portrait-3", T("인물 화보", "Portrait", "人像写真", "ポートレート", "Ảnh chân dung")],
     ["hanbok-2", T("한복 촬영", "Hanbok shoot", "韩服拍摄", "韓服撮影", "Chụp hanbok")],
   ];
-  const BUILDING = T("찾아오는 길 (TT4 건물)", "How to find us (TT4 building)", "交通指引（TT4楼）", "道順（TT4ビル）", "Đường đến (tòa TT4)");
   const STUDIO = [
     ["studio-1", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Khu vực chụp")],
     ["studio-2", T("촬영 세트", "Shooting set", "拍摄场景", "撮影セット", "Khu vực chụp")],
@@ -235,7 +230,6 @@
     $("hInfo").textContent = t.hInfo;
     $("sample").innerHTML = gridHtml(SAMPLES, lang);
     $("studio").innerHTML = gridHtml(STUDIO, lang);
-    $("where").innerHTML = gridHtml([["building", BUILDING, true]], lang);
     const L = t.labels;
     $("info").innerHTML = [
       [L.tel, `<a href="tel:${SHOP.tel}">${esc(SHOP.phone)}</a>`],
