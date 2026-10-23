@@ -36,6 +36,7 @@ const SHOPS = {
   jangsucheon:  { type: 'Restaurant', cuisine: ['Korean', 'Grilled eel', 'Korean BBQ', 'Beef'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   bomunttl:     { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef', 'Pork', 'Naengmyeon'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   geumdwaeji:   { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork belly', 'Stews'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  cheong:       { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Korean', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   naegohyang:   { type: 'Restaurant', cuisine: ['Korean', 'Soondae-guk', 'Pork soup'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   yukdeok:      { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Aged pork', 'Smoked duck'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   sujeong:      { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef offal', 'Gopchang'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
