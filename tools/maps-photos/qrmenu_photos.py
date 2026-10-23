@@ -20,7 +20,6 @@ import subprocess
 import sys
 import threading
 import time
-import traceback
 import uuid
 import webbrowser
 import zipfile
@@ -36,7 +35,7 @@ try:
 except ImportError:  # 없어도 동작한다(크기 표시·webp 변환만 빠짐)
   Image = None
 
-VERSION = "1.3"
+VERSION = "1.4"
 PORT = int(os.environ.get("QRMENU_PORT", "8765"))
 HOME = Path.home() / ".qrmenu_photos"
 JOBS = HOME / "jobs"
@@ -132,7 +131,15 @@ class Job:
     return job
 
 
-STATE = {"job": None}
+STATE = {"job": None, "login_proc": None}
+
+PROFILE_BUSY = ("로그인용 크롬 창이 아직 열려 있어요. 그 크롬 창(Google 지도·about:blank 탭이 있는 창)을 "
+                "모두 닫은 뒤 '수집 시작'을 다시 눌러 주세요.")
+
+
+def login_open():
+  proc = STATE["login_proc"]
+  return proc is not None and proc.poll() is None
 
 
 # ---------------------------------------------------------------------------
@@ -322,6 +329,8 @@ def launch(p, job):
   opts = dict(headless=not job.params.get("show_browser", True), locale="ko-KR",
               viewport={"width": 1400, "height": 900},
               args=["--disable-blink-features=AutomationControlled"])
+  if login_open():
+    raise RuntimeError(PROFILE_BUSY)
   errors = []
   for channel in ("chrome", "msedge", None):
     try:
@@ -330,6 +339,8 @@ def launch(p, job):
       job.log(f"브라우저 시작: {channel or '내장 Chromium'}")
       return ctx
     except Exception as exc:
+      if "has been closed" in str(exc):  # 같은 프로필을 다른 크롬 창이 쓰는 중
+        raise RuntimeError(PROFILE_BUSY)
       errors.append(f"{channel or 'chromium'}: {str(exc).splitlines()[0][:120]}")
   job.log("크롬·엣지를 못 열어 내장 Chromium을 설치합니다(처음 한 번, 몇 분).")
   for e in errors:
@@ -792,9 +803,9 @@ def run_job(job):
     job.status, job.step = "stopped", "멈춤"
     job.log("사용자가 멈춤")
   except Exception as exc:
-    job.status, job.step = "error", f"오류: {exc}"
-    job.log(f"오류: {exc}")
-    job.log(traceback.format_exc().strip().splitlines()[-1])
+    short = str(exc).strip().splitlines()[0][:200] if str(exc).strip() else type(exc).__name__
+    job.status, job.step = "error", f"오류: {short}"
+    job.log(f"오류: {short}")
   finally:
     job.notice = ""
     try:
@@ -1020,6 +1031,8 @@ class Handler(BaseHTTPRequestHandler):
       if self.path == "/api/start":
         if job and job.status == "running":
           return self._send(409, {"error": "이미 수집 중이에요."})
+        if login_open():
+          return self._send(409, {"error": PROFILE_BUSY})
         if not (body.get("query") or "").strip():
           return self._send(400, {"error": "가게 이름이나 구글 지도 링크를 넣어 주세요."})
         job = Job({"query": body["query"].strip(), "name": body.get("name", ""),
@@ -1096,7 +1109,7 @@ def open_login():
     raise ValueError("수집이 끝난 뒤에 로그인해 주세요.")
   profile = HOME / "chrome-profile"
   profile.mkdir(parents=True, exist_ok=True)
-  subprocess.Popen([chrome, f"--user-data-dir={profile}", "--no-first-run", "--new-window",
+  STATE["login_proc"] = subprocess.Popen([chrome, f"--user-data-dir={profile}", "--no-first-run", "--new-window",
                     "https://accounts.google.com/ServiceLogin?continue=https://www.google.com/maps"])
 
 
@@ -1353,7 +1366,7 @@ $('start').onclick = async () => {
   } catch (e) { alert(e.message); }
 };
 $('stop').onclick = () => api('/api/stop', {});
-$('login').onclick = () => api('/api/login', {}).then(() => alert('크롬 창이 열려요. 구글에 로그인한 뒤 그 크롬 창을 닫고 수집을 시작하세요.')).catch(e => alert(e.message));
+$('login').onclick = () => api('/api/login', {}).then(() => alert('크롬 창이 열려요. 구글에 로그인한 뒤 그 크롬 창을 꼭 닫고(X) 수집을 시작하세요.')).catch(e => alert(e.message));
 $('toggleLog').onclick = () => { $('log').hidden = !$('log').hidden; };
 $('save').onclick = async () => {
   const info = {}; document.querySelectorAll('#info input').forEach(i => info[i.dataset.k] = i.value);
