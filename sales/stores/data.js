@@ -310,7 +310,7 @@ window.STORES = [
     region: "hanoi", cats: ["bbq", "korean"], tags: [],
     address: "Ngõ 179 Đ. Đình Thôn, Đình Thôn, Từ Liêm, Hà Nội",
     type: { ko: "삼겹살 · 한우차돌 · 육회 · 찌개 한국식 고기구이", vi: "Thịt nướng Hàn Quốc · Ba chỉ · Bò Hàn · Gỏi bò sống · Canh", en: "Korean BBQ · Pork belly · Korean beef · Yukhoe · Stews", zh: "韩式烤肉 · 五花肉 · 韩牛 · 生拌牛肉 · 汤锅", ja: "韓国焼肉・サムギョプサル・韓牛・ユッケ・チゲ" },
-    keywords: "오뚜기식당 오뚜기 식당 ottugi ottuki ottugi restaurant 오뚜기 하노이 hà nội từ liêm tu liem đình thôn dinh thon mỹ đình my dinh nhà hàng hàn quốc 한식 고기구이 고깃집 삼겹살 냉동삼겹살 꽃대패삼겹살 대패삼겹살 돈차돌 꽃항정 항정살 한우차돌 1++ 생삼겹살 한판 영천식 육회 뭉티기 김치찌개 된장찌개 냄비라면 짜파게티 팔도비빔면 볶음밥 치즈볶음밥 치즈감자전 팥빙수 소주 참이슬 진로 처음처럼 좋은데이 하이볼 막걸리 보드카맨 맥주 타이거 사이공 thịt ba chỉ thịt nướng hàn quốc gỏi bò sống 韩式烤肉 五花肉 烤肉 韩牛 韓国焼肉 サムギョプサル ユッケ チゲ korean bbq pork belly yukhoe soju" },
+    keywords: "오뚜기식당 오뚜기 식당 ottugi ottuki ottugi restaurant 오뚜기 하노이 hà nội từ liêm tu liem đình thôn dinh thon mỹ đình my dinh nhà hàng hàn quốc 한식 고기구이 고깃집 삼겹살 냉동삼겹살 꽃대패삼겹살 대패삼겹살 돈차돌 꽃항정 항정살 한우차돌 1++ 생삼겹살 한판 영천식 육회 뭉티기 김치찌개 된장찌개 냄비라면 짜파게티 팔도비빔면 볶음밥 치즈볶음밥 치즈감자전 팥빙수 소주 참이슬 진로 처음처럼 좋은데이 하이볼 보드카맨 맥주 타이거 사이공 thịt ba chỉ thịt nướng hàn quốc gỏi bò sống 韩式烤肉 五花肉 烤肉 韩牛 韓国焼肉 サムギョプサル ユッケ チゲ korean bbq pork belly yukhoe soju" },
 ];
 
 window.SI = {

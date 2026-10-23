@@ -33,7 +33,7 @@ window.MENU = [
   },
   {
     id: "extra",
-    name: {"ko": "추가 메뉴", "en": "Extra Menu", "zh": "追加菜单", "ja": "追加メニュー", "vi": "Món gọi thêm"},
+    name: {"ko": "추가 메뉴", "en": "Extra Menu", "zh": "加购菜单", "ja": "追加メニュー", "vi": "Món gọi thêm"},
     items: [
       {"price": 280000, "photo": "img/yukhoe.jpg", "unit": "150g", "name": {"ko": "영천식 육회", "en": "Yeongcheon-style Yukhoe (marinated raw beef)", "zh": "永川式生拌牛肉(Yukhoe)", "ja": "ユッケ", "vi": "Thịt bò sống trộn kiểu Yeongcheon (Yukhoe)"}, "desc": {"ko": "신선한 소고기를 향신료에 재운 요리", "en": "Fresh beef marinated in spices", "zh": "用香料腌制的新鲜牛肉料理", "ja": "新鮮な牛肉をスパイスでマリネした料理", "vi": "Món thịt bò tươi ướp gia vị"}},
       {"price": 380000, "unit": "150g", "name": {"ko": "대구식 뭉티기", "en": "Daegu-style Mungtigi (raw beef)", "zh": "大邱式生牛肉片(Mungtigi)", "ja": "ムンティギ", "vi": "Thịt bò sống kiểu Daegu (Mungtigi)"}, "desc": {"ko": "생소고기를 고춧가루로 만든 디핑소스와 함께 드세요", "en": "Enjoy raw beef with a dipping sauce made from chili powder", "zh": "生牛肉搭配辣椒粉调制的蘸酱食用", "ja": "生牛肉をチリパウダーから作ったディップソースでいただきます。", "vi": "Thưởng thức thịt bò sống cùng nước chấm làm từ bột ớt"}},
