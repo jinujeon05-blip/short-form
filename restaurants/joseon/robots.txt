@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://joseon.qrmenuasia.com/sitemap.xml
