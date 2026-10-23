@@ -306,6 +306,11 @@ window.STORES = [
     address: "Ngõ 176 Đ. Đình Thôn, D7 - Fivestar, Từ Liêm, Hà Nội",
     type: { ko: "한식 코스 · 통갈치조림 · 홍어 · 탕 · 전 · 고기", vi: "Set ẩm thực Hàn Quốc · Cá hố kho cay · Cá đuối lên men · Canh lẩu · Bánh · Thịt", en: "Korean course · Braised cutlassfish · Skate · Hot pots · Pancakes · Meat", zh: "韩式套餐 · 红烧带鱼 · 发酵鳐鱼 · 汤锅 · 煎饼 · 烤肉", ja: "韓国コース・タチウオの煮付け・ホンオ(発酵エイ)・鍋・チヂミ・肉料理" },
     keywords: "자매당 자매 당 jamaedang jamedang jamae dang 하노이 자매당 từ liêm tu liem đình thôn dinh thon fivestar d7 nhà hàng hàn quốc 한식 한식당 한식카세 자매 한식카세 코스 통갈치조림 갈치조림 갈치구이 고등어구이 고등어조림 홍어 홍어세트 삭힌 홍어 수육 대구탕 해신탕 아귀지리 해물탕 꽃게탕 아귀찜 해물찜 육전 새우전 관자전 모둠전 해물파전 해물김치전 막회 오징어초무침 골뱅이무침 김치손만두전골 불고기손만두전골 LA갈비 소갈비살 돼지갈비 꼬막비빔밥 제육쌈밥 해물칼국수 시골칼국수 들깨수제비 콩나물국밥 해물된장찌개 정식 화요 막걸리 소주 맥주 cá hố kho cay cá đuối lên men lẩu hải sản bánh hàn quốc sườn bò thịt luộc 韩餐 韩式料理 带鱼 鳐鱼 煎饼 烤肉 汤锅 韓国料理 チヂミ 鍋 タチウオ korean restaurant korean course skate set cutlassfish hot pot pancake galbi hanoi" },
+  { id: "ottugi", name: "오뚜기식당 OTTUGI", sub: "삼겹살 · 한우차돌 · 육회 · 찌개", url: "https://ottugi.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bbq", "korean"], tags: [],
+    address: "Ngõ 179 Đ. Đình Thôn, Đình Thôn, Từ Liêm, Hà Nội",
+    type: { ko: "삼겹살 · 한우차돌 · 육회 · 찌개 한국식 고기구이", vi: "Thịt nướng Hàn Quốc · Ba chỉ · Bò Hàn · Gỏi bò sống · Canh", en: "Korean BBQ · Pork belly · Korean beef · Yukhoe · Stews", zh: "韩式烤肉 · 五花肉 · 韩牛 · 生拌牛肉 · 汤锅", ja: "韓国焼肉・サムギョプサル・韓牛・ユッケ・チゲ" },
+    keywords: "오뚜기식당 오뚜기 식당 ottugi ottuki ottugi restaurant 오뚜기 하노이 hà nội từ liêm tu liem đình thôn dinh thon mỹ đình my dinh nhà hàng hàn quốc 한식 고기구이 고깃집 삼겹살 냉동삼겹살 꽃대패삼겹살 대패삼겹살 돈차돌 꽃항정 항정살 한우차돌 1++ 생삼겹살 한판 영천식 육회 뭉티기 김치찌개 된장찌개 냄비라면 짜파게티 팔도비빔면 볶음밥 치즈볶음밥 치즈감자전 팥빙수 소주 참이슬 진로 처음처럼 좋은데이 하이볼 보드카맨 맥주 타이거 사이공 thịt ba chỉ thịt nướng hàn quốc gỏi bò sống 韩式烤肉 五花肉 烤肉 韩牛 韓国焼肉 サムギョプサル ユッケ チゲ korean bbq pork belly yukhoe soju" },
 ];
 
 window.SI = {
