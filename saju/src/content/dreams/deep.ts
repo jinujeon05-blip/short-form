@@ -5,6 +5,7 @@ import { DEEP_ANIMALS } from './deep-animals';
 import { DEEP_NATURE } from './deep-nature';
 import { DEEP_PEOPLE } from './deep-people';
 import { DEEP_THINGS } from './deep-things';
+import { DEEP_NEW } from './deep-new';
 
 export type { DreamDeep, DreamDeepText } from './deepEntry';
 
@@ -412,4 +413,4 @@ const DEEP_TOP: Record<string, DreamDeep> = {
   },
 };
 
-export const DREAM_DEEP: Record<string, DreamDeep> = { ...DEEP_ANIMALS, ...DEEP_PEOPLE, ...DEEP_NATURE, ...DEEP_THINGS, ...DEEP_TOP };
+export const DREAM_DEEP: Record<string, DreamDeep> = { ...DEEP_ANIMALS, ...DEEP_PEOPLE, ...DEEP_NATURE, ...DEEP_THINGS, ...DEEP_NEW, ...DEEP_TOP };
