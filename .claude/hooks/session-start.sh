@@ -1,6 +1,6 @@
 #!/bin/bash
 # 새 세션이 시작될 때: 최신 main을 받아 작업 브랜치를 맞추고, 지금 상태를 요약해 Claude에게 알려 준다.
-# (여기서 출력한 글은 세션 맨 앞에 들어간다. 자세한 규칙·가게 목록·남은 할 일은 CLAUDE.md)
+# (여기서 출력한 글은 세션 맨 앞에 들어간다. 공통 규칙은 CLAUDE.md, 가게 목록·남은 할 일은 docs/stores.md·docs/todo.md)
 set -uo pipefail
 [ "${CLAUDE_CODE_REMOTE:-}" = "true" ] || exit 0
 cd "${CLAUDE_PROJECT_DIR:-.}" || exit 0
@@ -26,5 +26,5 @@ fi
 echo "- main 최근 커밋:"
 git log --oneline -5 origin/main 2>/dev/null | sed 's/^/  - /'
 echo "- 담당 3명(finder 찾기·polisher 글·reviewer 검토, .claude/agents)이 있다. \"담당별로\" 나누라는 말은 CLAUDE.md의 \"담당(AI 에이전트) 분담\" 표대로 나누는 것이다."
-echo "- 다른 세션도 같은 저장소를 고친다. CLAUDE.md(가게 목록·도구·남은 할 일)를 기준으로 이어서 일하고, **배포 직전에는 항상 \`git fetch origin main\` 후 main이 브랜치에 포함됐는지 확인**한다 (뒤처진 브랜치로 배포하면 다른 세션 작업이 사이트에서 사라진다)."
+echo "- 다른 세션도 같은 저장소를 고친다. CLAUDE.md(공통 규칙·도구)와 docs/(가게 목록·남은 할 일)를 기준으로 이어서 일하고, **배포 직전에는 항상 \`git fetch origin main\` 후 main이 브랜치에 포함됐는지 확인**한다 (뒤처진 브랜치로 배포하면 다른 세션 작업이 사이트에서 사라진다)."
 exit 0
