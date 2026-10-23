@@ -36,7 +36,7 @@ try:
 except ImportError:  # 없어도 동작한다(크기 표시·webp 변환만 빠짐)
   Image = None
 
-VERSION = "1.2"
+VERSION = "1.3"
 PORT = int(os.environ.get("QRMENU_PORT", "8765"))
 HOME = Path.home() / ".qrmenu_photos"
 JOBS = HOME / "jobs"
@@ -86,7 +86,8 @@ class Job:
     self.tabs_found = []
     self.photos = []  # dict(id, file, tabs, latest_rank, url, bytes, w, h, cls)
     self.saved = None
-    self.debug = []  # 단계별 화면 캡처·화면 구조 요약 (구글 지도 구조가 바뀌었을 때 고치려고)
+    self.debug = []
+    self.logged_out = False  # 단계별 화면 캡처·화면 구조 요약 (구글 지도 구조가 바뀌었을 때 고치려고)
     self.stop = False
     self.dir = JOBS / self.id
     self.lock = threading.Lock()
@@ -112,7 +113,7 @@ class Job:
           "notice": self.notice, "logs": list(self.logs), "info": self.info,
           "candidates": self.candidates, "tabs_found": self.tabs_found,
           "photos": self.photos, "params": self.params, "saved": self.saved,
-          "debug": self.debug,
+          "debug": self.debug, "logged_out": self.logged_out,
       }
 
   def persist(self):
@@ -124,7 +125,7 @@ class Job:
   def load(cls, path):
     d = json.loads(path.read_text("utf-8"))
     job = cls(d["params"], d["id"])
-    for k in ("status", "info", "candidates", "tabs_found", "photos", "saved", "logs", "debug"):
+    for k in ("status", "info", "candidates", "tabs_found", "photos", "saved", "logs", "debug", "logged_out"):
       setattr(job, k, d.get(k) or getattr(job, k))
     if job.status == "running":
       job.status = "stopped"
@@ -425,28 +426,46 @@ def read_info(page, job):
   job.log(f"가게: {info['name']} | {info['category']} | {info['address']} | {info['phone'] or '전화 없음'}")
 
 
+# 가게 맨 위 큰 사진 버튼: 이름이 '<가게> 사진'(로그인 안 한 화면에서 확인, 2026-10-23 청식당).
+# 리뷰 사진('…님의 리뷰에 포함된…')·리뷰어 얼굴('<사람> 사진')·'사진 추가'는 뺀다.
+JS_HERO = """(name) => {
+  const bad = /추가|올리기|님의|리뷰|review|Add|Thêm|đánh giá/i;
+  const btns = [...document.querySelectorAll('button[aria-label],a[aria-label]')].filter(b => {
+    const r = b.getBoundingClientRect(); return r.width > 0 && r.height > 0;
+  });
+  const lab = b => b.getAttribute('aria-label').trim();
+  const hit = btns.find(b => name && lab(b) === name + ' 사진') ||
+              btns.find(b => name && lab(b).startsWith(name) && /사진|photo|ảnh/i.test(lab(b)) && !bad.test(lab(b))) ||
+              btns.find(b => /^(Photo of|Ảnh về|Hình ảnh)/i.test(lab(b)) && !bad.test(lab(b))) ||
+              document.querySelector('button.aoRNLd');
+  if (!hit) return '';
+  hit.click();
+  return lab(hit) || 'button.aoRNLd';
+}"""
+
+
 def open_gallery(page, job):
+  """맨 위 큰 사진을 누른다 → 'grid'(탭 있는 사진 목록) / 'viewer'(크게 보기) / ''(실패)."""
   job.step = "사진 갤러리 여는 중"
-  sels = ["button.aoRNLd",  # 가게 맨 위 큰 사진
-          "button[aria-label$='의 사진']", "button[aria-label^='Photo of']",
-          "button[aria-label^='Ảnh']", "button[aria-label*='사진 및 동영상']",
-          "button[aria-label*='Photos']"]
-  for sel in sels:
-    loc = page.locator(sel).first
-    try:
-      if not loc.count():
-        continue
-      label = loc.get_attribute("aria-label") or ""
-      if re.search(r"추가|올리기|Add|Thêm", label):
-        continue
-      loc.click(timeout=5000)
-      page.wait_for_selector("a[data-photo-index]", timeout=8000)
-      job.log("사진 갤러리 열림")
-      return True
-    except Exception:
-      continue
-  job.log("사진 갤러리를 못 열었어요 → 가게 화면에 보이는 사진만 모읍니다.")
-  return False
+  try:
+    label = page.evaluate(JS_HERO, job.info.get("name") or "")
+  except Exception:
+    label = ""
+  if not label:
+    job.log("맨 위 사진 버튼을 못 찾았어요.")
+    return ""
+  job.log(f"사진 버튼 누름: {label}")
+  for _ in range(10):
+    page.wait_for_timeout(800)
+    if page.locator("a[data-photo-index]").count():
+      job.log("사진 목록(갤러리) 열림")
+      return "grid"
+  if in_viewer(page):
+    job.log("크게 보기 화면 열림")
+    return "viewer"
+  snap(page, job, "after_photo_click")
+  job.log("사진 버튼을 눌렀지만 갤러리가 안 보여요.")
+  return ""
 
 
 def grab_tab(page, job, key, limit):
@@ -577,6 +596,14 @@ def collect(page, job):
       add([it["u"]], tab)
 
   snap(page, job, "place")
+  try:
+    job.logged_out = page.evaluate("""() => [...document.querySelectorAll('a[href*="ServiceLogin"],a[aria-label],button[aria-label]')]
+      .some(e => { const r = e.getBoundingClientRect();
+        return r.width > 0 && (/ServiceLogin/.test(e.href || '') || /^(로그인|Sign in|Đăng nhập)$/.test((e.getAttribute('aria-label') || e.innerText || '').trim())); })""")
+  except Exception:
+    job.logged_out = False
+  if job.logged_out:
+    job.log("⚠ 수집용 크롬이 구글에 로그인돼 있지 않아요 → '메뉴' 탭이 안 보일 수 있어요. 대시보드의 '구글 로그인' 버튼으로 한 번 로그인하세요.")
   # 1) 가게 첫 화면(개요)에 보이는 사진
   job.step = "가게 화면 사진 읽는 중"
   for _ in range(4):
@@ -606,7 +633,11 @@ def collect(page, job):
 
   # 3) 사진 갤러리 (전체·최신·메뉴·음식·가게 제공 탭)
   job.check()
-  if open_gallery(page, job):
+  mode = open_gallery(page, job)
+  if mode == "viewer":
+    snap(page, job, "hero_viewer")
+    add(viewer_walk(page, job, "all", limit), "all")
+  elif mode == "grid":
     page.wait_for_timeout(2000)
     snap(page, job, "gallery")
     tabs = page.evaluate(JS_TABS)
@@ -636,19 +667,7 @@ def collect(page, job):
       except Exception as exc:
         job.log(f"  {TAB_KO[key]} 탭 실패: {str(exc).splitlines()[0][:100]}")
   else:
-    # 갤러리 목록이 안 열리면: 맨 위 큰 사진을 눌러 크게 보기에서 넘겨 본다
-    back_to_place(page, job)
-    snap(page, job, "no_gallery")
-    try:
-      page.locator("div[role=main] img").first.click(timeout=5000)
-      page.wait_for_timeout(3000)
-      if in_viewer(page):
-        snap(page, job, "hero_viewer")
-        add(viewer_walk(page, job, "all", limit), "all")
-    except StopJob:
-      raise
-    except Exception as exc:
-      job.log(f"  맨 위 사진 열기 실패: {str(exc).splitlines()[0][:80]}")
+    job.log("사진 갤러리를 못 열었어요 → 가게 화면에 보이는 사진만 모읍니다.")
   job.log(f"모은 사진 주소(중복 뺌): {len(found)}개")
   return list(found.values())
 
@@ -995,6 +1014,9 @@ class Handler(BaseHTTPRequestHandler):
       return self._send(400, {"error": "잘못된 요청"})
     job = STATE["job"]
     try:
+      if self.path == "/api/login":
+        open_login()
+        return self._send(200, {"ok": True})
       if self.path == "/api/start":
         if job and job.status == "running":
           return self._send(409, {"error": "이미 수집 중이에요."})
@@ -1063,6 +1085,19 @@ def find_chrome():
     if p.is_file():
       return str(p)
   return shutil.which("google-chrome") or shutil.which("chrome")
+
+
+def open_login():
+  chrome = find_chrome()
+  if not chrome:
+    raise ValueError("크롬을 찾지 못했어요. 크롬을 설치해 주세요.")
+  job = STATE["job"]
+  if job and job.status == "running":
+    raise ValueError("수집이 끝난 뒤에 로그인해 주세요.")
+  profile = HOME / "chrome-profile"
+  profile.mkdir(parents=True, exist_ok=True)
+  subprocess.Popen([chrome, f"--user-data-dir={profile}", "--no-first-run", "--new-window",
+                    "https://accounts.google.com/ServiceLogin?continue=https://www.google.com/maps"])
 
 
 def open_dashboard(url):
@@ -1161,14 +1196,16 @@ table.hist{width:100%;border-collapse:collapse;font-size:13px}table.hist td{padd
   <div class="row" style="margin-top:10px">
     <label class="check"><input type="checkbox" id="show" checked> 크롬 창 보이기 (로봇 확인이 뜨면 직접 체크)</label>
     <span style="flex:1"></span>
+    <button id="login" title="수집용 크롬에서 구글에 로그인합니다(처음 한 번). 로그인 후 그 크롬 창을 닫으세요.">구글 로그인</button>
     <button id="stop" hidden>멈춤</button>
     <button class="primary" id="start">수집 시작</button>
   </div>
-  <p class="muted" style="margin:8px 0 0">링크가 가장 정확해요. 이름으로 찾으면 검색 결과 첫 가게를 고릅니다.</p>
+  <p class="muted" style="margin:8px 0 0">링크가 가장 정확해요. 이름으로 찾으면 검색 결과 첫 가게를 고릅니다. 처음 한 번은 <b>구글 로그인</b>을 눌러 로그인하고 그 크롬 창을 닫으세요(로그인해야 '메뉴' 탭이 보여요).</p>
 </section>
 
 <section class="card" id="statusCard" hidden>
   <div class="row"><span class="step" id="step"></span><span style="flex:1"></span><button id="toggleLog">기록 보기</button></div>
+  <div class="notice" id="loginWarn" hidden style="margin:8px 0 0">수집용 크롬이 구글에 로그인돼 있지 않아 '메뉴' 탭이 안 보였을 수 있어요. 위의 <b>구글 로그인</b>을 눌러 로그인하고 그 크롬 창을 닫은 뒤 다시 수집해 주세요.</div>
   <div class="muted" id="cands"></div>
   <pre class="log" id="log" hidden></pre>
 </section>
@@ -1228,6 +1265,7 @@ function render() {
   if (!S) return;
   first_fill();
   $('step').textContent = (running ? '⏳ ' : S.status === 'done' ? '✅ ' : S.status === 'error' ? '⚠️ ' : '') + (S.step || '');
+  $('loginWarn').hidden = !(S.logged_out && !running);
   $('cands').textContent = S.candidates && S.candidates.length > 1 ? '검색 결과: ' + S.candidates.join(' · ') : '';
   const log = $('log'); const atBottom = log.scrollTop + log.clientHeight >= log.scrollHeight - 5;
   log.textContent = S.logs.join('\n'); if (atBottom) log.scrollTop = log.scrollHeight;
@@ -1315,6 +1353,7 @@ $('start').onclick = async () => {
   } catch (e) { alert(e.message); }
 };
 $('stop').onclick = () => api('/api/stop', {});
+$('login').onclick = () => api('/api/login', {}).then(() => alert('크롬 창이 열려요. 구글에 로그인한 뒤 그 크롬 창을 닫고 수집을 시작하세요.')).catch(e => alert(e.message));
 $('toggleLog').onclick = () => { $('log').hidden = !$('log').hidden; };
 $('save').onclick = async () => {
   const info = {}; document.querySelectorAll('#info input').forEach(i => info[i.dataset.k] = i.value);
