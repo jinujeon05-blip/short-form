@@ -46,7 +46,7 @@ const UNIT1 = T("1인분", "per serving", "每份", "1人前", "1 suất");
 window.MENU = [
   {
     id: "sulsang",
-    name: T("남매술상", "Namme Sulsang platters", "南妹酒桌（술상）", "ナムメ酒膳（スルサン）", "Mâm rượu (Sulsang)"),
+    name: T("남매술상", "Namme Sulsang platters", "南妹酒桌（술상）", "ナンメ酒膳（スルサン）", "Mâm rượu (Sulsang)"),
     note: T(
       "한국 통영에서 직접 공수한 신선한 제철 해산물로 차린 모둠 안주 상이에요. 구성은 계절과 시장 상황에 따라 달라질 수 있어요.",
       "Assorted drinking-food platters made with fresh seasonal seafood brought directly from Tongyeong, Korea. Contents may change with the season and market conditions.",
@@ -55,16 +55,16 @@ window.MENU = [
       "Hải sản tươi nhập trực tiếp từ Tongyeong, Hàn Quốc; thành phần có thể thay đổi theo mùa."
     ),
     items: [
-      it(null, "season", "남매 계절스페셜", "Namme seasonal special", "南妹季节特选", "ナムメ 季節スペシャル", "Set hải sản", {
+      it(null, "season", "남매 계절스페셜", "Namme seasonal special", "南妹季节特选", "ナンメ 季節スペシャル", "Set hải sản", {
         tag: "best",
-        desc: T("홍어 + 보쌈 + 문어 + 갑오징어 + 제철해산물 2종", "Skate (hongeo) + bossam + octopus + cuttlefish + 2 kinds of seasonal seafood", "红鱼（홍어）+ 菜包肉（보쌈）+ 章鱼 + 墨鱼 + 2种时令海鲜", "ホンオ + ポッサム + タコ + コウイカ + 旬の海鮮2種", "Cá đuối muối + bosam + bạch tuộc + mực mai + 2 loại hải sản theo mùa"),
+        desc: T("홍어 + 보쌈 + 문어 + 갑오징어 + 제철해산물 2종", "Skate (hongeo) + bossam + octopus + cuttlefish + 2 kinds of seasonal seafood", "鳐鱼（홍어）+ 菜包肉（보쌈）+ 章鱼 + 墨鱼 + 2种时令海鲜", "ホンオ + ポッサム + タコ + コウイカ + 旬の海鮮2種", "Cá đuối muối + bosam + bạch tuộc + mực mai + 2 loại hải sản theo mùa"),
         sizes: MLX(1090000, 1390000, 1690000),
       }),
-      it(null, "hongeo", "홍어삼합", "Hongeo samhap (fermented skate, boiled pork and kimchi)", "红鱼三合（홍어삼합）", "ホンオサンハプ（発酵エイ・茹で豚・キムチの盛り合わせ）", "Cá muối bosam", {
-        desc: T("삭힌 홍어 + 수육 + 김치 모듬", "Fermented skate + boiled pork + kimchi platter", "发酵红鱼 + 白切肉 + 泡菜拼盘", "発酵させたエイ + 茹で豚 + キムチの盛り合わせ", "Cá đuối lên men + thịt heo luộc + kim chi"),
+      it(null, "hongeo", "홍어삼합", "Hongeo samhap (fermented skate, boiled pork and kimchi)", "鳐鱼三合（홍어삼합）", "ホンオサンハプ（発酵エイ・茹で豚・キムチの盛り合わせ）", "Cá muối bosam", {
+        desc: T("삭힌 홍어 + 수육 + 김치 모듬", "Fermented skate + boiled pork + kimchi platter", "发酵鳐鱼 + 白切肉 + 泡菜拼盘", "発酵させたエイ + 茹で豚 + キムチの盛り合わせ", "Cá đuối lên men + thịt heo luộc + kim chi"),
         sizes: SML(430000, 530000, 730000),
       }),
-      it(null, "hongeo-octo", "홍어삼합+문어", "Hongeo samhap + octopus", "红鱼三合（홍어삼합）+ 章鱼", "ホンオサンハプ + タコ", "Cá muối bosam bạch tuộc", { sizes: SML(430000, 730000, 1030000) }),
+      it(null, "hongeo-octo", "홍어삼합+문어", "Hongeo samhap + octopus", "鳐鱼三合（홍어삼합）+ 章鱼", "ホンオサンハプ + タコ", "Cá muối bosam bạch tuộc", { sizes: SML(430000, 730000, 1030000) }),
       it(null, "mugu-bossam", "갑오징어+보쌈", "Cuttlefish + bossam", "墨鱼 + 菜包肉（보쌈）", "コウイカ + ポッサム", "Mực mai bosam", { sizes: SML(280000, 420000, 580000) }),
       it(null, "octo-bossam", "문어+보쌈", "Octopus + bossam", "章鱼 + 菜包肉（보쌈）", "タコ + ポッサム", "Bạch tuộc bosam", { sizes: SML(430000, 690000, 790000) }),
       it(null, "sepia-octo", "갑오징어+문어", "Cuttlefish + octopus", "墨鱼 + 章鱼", "コウイカ + タコ", "Mực mai bạch tuộc", { sizes: SML(490000, 750000, 950000) }),
@@ -76,13 +76,14 @@ window.MENU = [
     name: T("안주", "Anju (drinking snacks)", "下酒菜（안주）", "おつまみ（アンジュ）", "Món nhắm"),
     items: [
       it(230000, null, "명란계란말이", "Rolled omelette with pollock roe (myeongran)", "明太鱼子蛋卷（명란계란말이）", "明太子入り卵焼き（ミョンナンケランマリ）", "Trứng cuộn trứng cá minh thái", { desc: T("계란말이 속 고소하고 짭조름한 명란", "Savory, lightly salty pollock roe inside a rolled omelette", "蛋卷里包着咸香的明太鱼子", "卵焼きの中に香ばしく塩気のある明太子", "Trứng cuộn bên trong có trứng cá minh thái béo, hơi mặn") }),
-      it(230000, null, "육새우전", "Beef and shrimp jeon (yuk-saeu-jeon)", "牛肉虾饼拼盘（육새우전）", "牛肉とエビのジョン（ユクセウジョン）", "Bánh bò và tôm chiên", { desc: T("쫄깃한 육전과 통통한 새우전 한 접시", "A plate of chewy beef pancake and plump shrimp pancake", "一盘筋道的牛肉饼和饱满的虾饼", "もちもちの牛肉ジョンとぷりぷりのエビジョンを一皿に", "Một đĩa thịt bò chiên dai ngon và tôm chiên đầy đặn") }),
+      it(230000, null, "육새우전", "Beef and shrimp jeon (yuk-saeu-jeon)", "牛肉虾饼拼盘（육새우전）", "牛肉とエビのジョン（ユクセウジョン）", "Thịt bò chiên trứng và tôm chiên", { desc: T("쫄깃한 육전과 통통한 새우전 한 접시", "A plate of chewy beef pancake and plump shrimp pancake", "一盘筋道的牛肉饼和饱满的虾饼", "もちもちの牛肉ジョンとぷりぷりのエビジョンを一皿に", "Một đĩa thịt bò chiên dai ngon và tôm chiên đầy đặn") }),
       it(230000, null, "왕새우전", "Jumbo shrimp jeon (wang-saeu-jeon)", "大虾饼（왕새우전）", "大エビのジョン（ワンセウジョン）", "Tôm lớn chiên", { desc: T("오동통한 새우 부침", "Pan-fried plump shrimp", "饱满多汁的煎虾", "ふっくらしたエビの焼きもの", "Tôm to mập chiên giòn") }),
       it(230000, null, "육전", "Beef jeon (yukjeon, pan-fried beef)", "牛肉饼（육전）", "牛肉のジョン（ユクジョン）", "Bò chiên trứng", { desc: T("쫄깃한 소고기 부침", "Chewy pan-fried beef", "筋道的煎牛肉", "もちもちの牛肉の焼きもの", "Thịt bò chiên trứng dai ngon") }),
       it(230000, null, "굴전", "Oyster jeon (gul-jeon)", "牡蛎饼（굴전）", "牡蠣のジョン（クルジョン）", "Hàu chiên trứng", { desc: T("굴의 감칠맛으로 더 고소한", "Extra savory with the rich flavor of oysters", "牡蛎的鲜味让它更香", "牡蠣のうま味でいっそう香ばしい", "Vị ngọt đậm của hàu làm món thêm béo ngậy") }),
-      it(230000, null, "어묵탕", "Fish cake soup (eomuk-tang)", "鱼饼汤（어묵탕）", "おでん鍋（オムクタン）", "Lẩu chả cá", { desc: T("시원하고 얼큰한 국물", "Refreshing, spicy-hot broth", "清爽微辣的汤底", "さっぱりと辛みのあるスープ", "Nước dùng thanh mát, hơi cay") }),
+      it(230000, null, "어묵탕", "Fish cake soup (eomuk-tang)", "鱼饼汤（어묵탕）", "おでん鍋（オムクタン）", "Canh chả cá", { desc: T("시원하고 얼큰한 국물", "Refreshing, spicy-hot broth", "清爽微辣的汤底", "さっぱりと辛みのあるスープ", "Nước dùng thanh mát, hơi cay") }),
       it(150000, null, "부추전", "Chive pancake (buchu-jeon)", "韭菜饼（부추전）", "ニラチヂミ（プチュジョン）", "Bánh xèo hẹ", { desc: T("겉은 바삭 속은 쫄깃하고 고소한", "Crispy outside, chewy and savory inside", "外酥内韧，香气十足", "外はカリッと、中はもちもちで香ばしい", "Vỏ giòn, bên trong dai và béo thơm") }),
-      it(400000, null, "순대볶음", "Stir-fried sundae (sundae-bokkeum, Korean blood sausage)", "辣炒血肠（순대볶음）", "スンデ炒め（ピリ辛）", "Dồi nướng xào cay", { spicy: true, desc: T("순대에 갖은 채소를 넣어 매콤하게 볶아낸 술안주", "Korean sausage stir-fried spicy with assorted vegetables, a perfect drinking snack", "血肠加入多种蔬菜辣炒而成的下酒菜", "スンデにいろいろな野菜を加えてピリ辛に炒めたおつまみ", "Dồi Hàn Quốc xào cay cùng nhiều loại rau, rất hợp để nhắm rượu") }),
+      it(400000, null, "순대볶음", "Stir-fried sundae (sundae-bokkeum, Korean blood sausage)", "辣炒血肠（순대볶음）", "スンデ炒め（ピリ辛）", "Dồi Hàn Quốc xào cay", { spicy: true, desc: T("순대에 갖은 채소를 넣어 매콤하게 볶아낸 술안주", "Korean sausage stir-fried spicy with assorted vegetables, a perfect drinking snack", "血肠加入多种蔬菜辣炒而成的下酒菜", "スンデにいろいろな野菜を加えてピリ辛に炒めたおつまみ", "Dồi Hàn Quốc xào cay cùng nhiều loại rau, rất hợp để nhắm rượu") }),
+      it(590000, null, "통영생굴 (300g)", "Tongyeong fresh oysters (300 g)", "统营鲜生蚝（300克）", "統営産生ガキ（300g）", "Hàu sống Tongyeong (300g)", { desc: T("한국 통영에서 직송한 생굴", "Fresh raw oysters flown in from Tongyeong, Korea", "韩国统营直送鲜生蚝", "韓国・統営から直送の生ガキ", "Hàu sống nhập trực tiếp từ Tongyeong, Hàn Quốc") }),
     ],
   },
   {
@@ -107,7 +108,7 @@ window.MENU = [
     id: "osam",
     name: T("오삼불고기", "Osam bulgogi (pork & squid)", "鱿鱼五花肉烤肉（오삼불고기）", "オサムプルコギ（イカと豚バラ）", "Ba chỉ heo xào mực"),
     items: [
-      it(null, "osam", "남매 오삼불고기", "Namme osam bulgogi (spicy stir-fried pork belly and squid)", "南妹鱿鱼五花肉（오삼불고기）", "ナムメ オサムプルコギ（イカと豚バラの辛口炒め）", "Ba chỉ heo xào mực", { tag: "best", spicy: true, sizes: ML(530000, 630000) }),
+      it(null, "osam", "남매 오삼불고기", "Namme osam bulgogi (spicy stir-fried pork belly and squid)", "南妹鱿鱼五花肉（오삼불고기）", "ナンメ オサムプルコギ（イカと豚バラの辛口炒め）", "Ba chỉ heo xào mực", { tag: "best", spicy: true, sizes: ML(530000, 630000) }),
       it(150000, null, "오징어 100g 추가", "Extra squid 100g", "加鱿鱼 100g", "イカ追加 100g", "Thêm mực 100g"),
       it(130000, null, "삼겹살 100g 추가", "Extra pork belly 100g", "加五花肉 100g", "豚バラ追加 100g", "Thêm ba chỉ 100g"),
       it(40000, null, "소면 100g 추가", "Extra thin wheat noodles (somyeon) 100g", "加细面（소면）100g", "そうめん追加 100g", "Thêm mì 100g"),
@@ -139,18 +140,21 @@ window.MENU = [
       it(null, null, "간장게장 정식", "Ganjang-gejang set (soy-marinated raw crab)", "酱油蟹套餐（간장게장 정식）", "カンジャンケジャン定食（生ガニの醤油漬け）", "Cua ngâm xì dầu (Ganjang-gejang)", { tag: "best", sizes: CRAB(270000, 600000, 800000) }),
       it(170000, null, "게 추가 (1마리)", "Extra crab (1 crab)", "加蟹（1只）", "カニ追加（1杯）", "Thêm cua (1 con)"),
       it(230000, null, "보쌈 정식 (1인)", "Bossam set (1 person)", "菜包肉套餐（보쌈 정식，1人）", "ポッサム定食（1人前）", "Cơm bosam (1 người)"),
-      it(200000, null, "뼈해장국", "Pork bone hangover soup (ppyeo-haejangguk)", "猪骨醒酒汤（뼈해장국）", "豚骨ヘジャンクク（酔い覚ましスープ）", "Canh xương lợn", { tag: "best" }),
-      it(170000, null, "장터국밥", "Jangteo gukbap (beef and napa cabbage soup with rice)", "集市汤饭（장터국밥，牛肉白菜）", "チャンターグッパ（牛肉と白菜のスープごはん）", "Canh thịt bò cải thảo"),
+      it(220000, null, "뼈해장국", "Pork bone hangover soup (ppyeo-haejangguk)", "猪骨醒酒汤（뼈해장국）", "豚骨ヘジャンクク（酔い覚ましスープ）", "Canh xương lợn", { tag: "best" }),
+      it(190000, null, "장터국밥", "Jangteo gukbap (beef and napa cabbage soup with rice)", "集市汤饭（장터국밥，牛肉白菜）", "チャンターグッパ（牛肉と白菜のスープごはん）", "Canh thịt bò cải thảo"),
       it(170000, null, "설렁탕", "Seolleongtang (ox bone soup)", "雪浓汤（설렁탕）", "ソルロンタン（牛骨スープ）", "Canh mì thịt bò"),
       it(200000, null, "뚝배기 불고기", "Bulgogi in a clay pot (ttukbaegi bulgogi)", "砂锅烤肉（뚝배기 불고기）", "土鍋プルコギ（トゥッペギプルコギ）", "Thịt bò xào nồi đất"),
       it(200000, null, "제육볶음", "Jeyuk-bokkeum (spicy stir-fried pork)", "辣炒猪肉（제육볶음）", "ジェユクポックム（豚肉の辛口炒め）", "Thịt heo xào cay", { tag: "best", spicy: true }),
-      it(180000, null, "오징어볶음", "Ojingeo-bokkeum (spicy stir-fried squid)", "辣炒鱿鱼（오징어볶음）", "イカ炒め（オジンオポックム、辛口）", "Mực ống xào cay", { spicy: true }),
+      it(200000, null, "오징어볶음", "Ojingeo-bokkeum (spicy stir-fried squid)", "辣炒鱿鱼（오징어볶음）", "イカ炒め（オジンオポックム、辛口）", "Mực ống xào cay", { spicy: true }),
       it(220000, null, "고등어구이", "Grilled mackerel (godeungeo-gui)", "烤鲭鱼（고등어구이）", "サバの塩焼き（コドゥンオグイ）", "Cá thu nướng"),
       it(150000, null, "계란말이", "Rolled omelette (gyeran-mari)", "蛋卷（계란말이）", "卵焼き（ケランマリ）", "Trứng cuộn"),
       it(120000, null, "스팸+계란후라이", "Spam and fried egg", "午餐肉 + 煎蛋", "スパム + 目玉焼き", "Spam & trứng ốp"),
       it(170000, null, "김치찌개", "Kimchi stew (kimchi-jjigae)", "泡菜汤（김치찌개）", "キムチチゲ", "Canh kimchi"),
-      it(170000, null, "꽁치 김치찌개", "Kimchi stew with saury (kkongchi kimchi-jjigae)", "秋刀鱼泡菜汤（꽁치 김치찌개）", "サンマ入りキムチチゲ（コンチキムチチゲ）", "Canh kimchi cá"),
+      it(190000, null, "꽁치 김치찌개", "Kimchi stew with saury (kkongchi kimchi-jjigae)", "秋刀鱼泡菜汤（꽁치 김치찌개）", "サンマ入りキムチチゲ（コンチキムチチゲ）", "Canh kimchi cá"),
       it(170000, null, "순두부찌개", "Soft tofu stew (sundubu-jjigae)", "嫩豆腐汤（순두부찌개）", "スンドゥブチゲ（やわらか豆腐鍋）", "Canh đậu hũ non"),
+      it(170000, null, "된장찌개", "Soybean paste stew (doenjang-jjigae)", "大酱汤（된장찌개）", "テンジャンチゲ", "Canh đậu tương"),
+      it(240000, null, "오삼불고기 (1인 식사)", "Osam bulgogi (single-serving meal)", "鱿鱼五花肉（오삼불고기）1人套餐", "オサムプルコギ（1人前の食事）", "Ba chỉ heo xào mực (suất 1 người)", { spicy: true }),
+      it(200000, null, "떡만두국", "Tteok-mandu-guk (rice cake and dumpling soup)", "年糕饺子汤（떡만두국）", "トックマンドゥクク（餅入り餃子スープ）", "Canh bánh gạo mandu"),
     ],
   },
   {
