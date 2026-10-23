@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ottugi.qrmenuasia.com/sitemap.xml
