@@ -18,8 +18,8 @@ window.MENU = [
     id: "signature",
     name: {"ko": "대표 메뉴", "en": "Signature", "zh": "招牌菜", "ja": "看板メニュー", "vi": "Món đặc trưng"},
     items: [
-      {"price": 950000, "photo": "img/course.jpg", "name": {"ko": "자매 한식카세", "en": "JAMEDANG KOREAN COURSE", "zh": "자매당韩式主厨套餐", "ja": "자매당 韓国料理おまかせコース", "vi": "Set ẩm thực Hàn Quốc cao cấp"}, "desc": {"ko": "신선한 제철 식재료로 정성껏 준비한 자매당 프리미엄 코스 요리 (식전죽 · 모둠회 · 해산물 · 소갈비살 · 수육 · 홍어 · 초무침 · 꽃게탕 · 식사 · 후식)", "en": "Premium course made with fresh seasonal ingredients. (Appetizer porridge · Assorted sashimi · Seafood · Beef short rib · Boiled pork · Fermented skate · Spicy seasoned salad · Spicy crab stew · Meal · Dessert)", "zh": "选用新鲜时令食材精心准备的자매당高级套餐。(开胃粥 · 什锦生鱼片 · 海鲜 · 牛小排肉 · 白切肉 · 发酵鳐鱼 · 醋拌小菜 · 花蟹汤 · 主食 · 甜点)", "ja": "新鮮な旬の食材で心を込めて準備した자매당のプレミアムコース料理。(前菜のお粥 · 刺身盛り合わせ · 海鮮 · 牛カルビ肉 · ゆで豚 · ホンオ(発酵エイ) · 酢和え · ワタリガニのスープ · お食事 · デザート)", "vi": "Thực đơn cao cấp được chế biến từ nguyên liệu tươi ngon theo mùa. (Cháo khai vị · Sashimi tổng hợp · Hải sản · Thịt sườn bò · Thịt luộc · Cá đuối lên men · Gỏi trộn cay · Canh ghẹ · Mỳ/Cơm · Tráng miệng)"}, "tag": "best"},
-      {"price": 1650000, "photo": "img/cutlassfish.jpg", "name": {"ko": "통갈치조림", "en": "BRAISED WHOLE CUTLASSFISH", "zh": "红烧整条带鱼", "ja": "太刀魚の丸ごと煮付け", "vi": "Cá Hố Kho Cay"}, "desc": {"ko": "통갈치를 매콤한 양념에 신선한 해산물과 함께 푸짐하게 조려낸 자매당의 대표 메뉴", "en": "Whole cutlassfish braised generously in a spicy sauce with fresh seafood, a signature dish of Jamaedang", "zh": "整条带鱼配新鲜海鲜,用香辣酱汁满满炖煮而成,자매당的招牌菜", "ja": "太刀魚を丸ごと、新鮮な海鮮と一緒にピリ辛のタレでたっぷり煮込んだ、자매당の看板メニュー", "vi": "Món cá hố nguyên con được kho với sốt cay đặc biệt cùng hải sản tươi ngon, mang hương vị đặc trưng của Jamedang."}, "tag": "best", "spicy": true},
+      {"price": 950000, "photo": "img/course.jpg", "unit": {"ko": "1인", "en": "1 pax", "zh": "每人", "ja": "1名様", "vi": "1 khách"}, "name": {"ko": "자매 한식카세", "en": "JAMAEDANG KOREAN COURSE", "zh": "자매당韩式主厨套餐", "ja": "자매당 韓国料理おまかせコース", "vi": "Set ẩm thực Hàn Quốc cao cấp"}, "desc": {"ko": "신선한 제철 식재료로 정성껏 준비한 자매당 프리미엄 코스 요리 (식전죽 · 모둠회 · 해산물 · 소갈비살 · 수육 · 홍어 · 초무침 · 꽃게탕 · 식사 · 후식)", "en": "Premium course made with fresh seasonal ingredients. (Appetizer porridge · Assorted sashimi · Seafood · Beef short rib · Boiled pork · Fermented skate · Spicy seasoned salad · Spicy crab stew · Meal · Dessert)", "zh": "选用新鲜时令食材精心准备的자매당高级套餐。(开胃粥 · 什锦生鱼片 · 海鲜 · 牛小排肉 · 白切肉 · 发酵鳐鱼 · 醋拌小菜 · 花蟹汤 · 主食 · 甜点)", "ja": "新鮮な旬の食材で心を込めて準備した자매당のプレミアムコース料理。(前菜のお粥 · 刺身盛り合わせ · 海鮮 · 牛カルビ肉 · ゆで豚 · ホンオ(発酵エイ) · 酢和え · ワタリガニのスープ · お食事 · デザート)", "vi": "Thực đơn cao cấp được chế biến từ nguyên liệu tươi ngon theo mùa. (Cháo khai vị · Sashimi tổng hợp · Hải sản · Thịt sườn bò · Thịt luộc · Cá đuối lên men · Gỏi trộn cay · Canh ghẹ · Mỳ/Cơm · Tráng miệng)"}, "tag": "best"},
+      {"price": 1650000, "photo": "img/cutlassfish.jpg", "name": {"ko": "통갈치조림", "en": "BRAISED WHOLE CUTLASSFISH", "zh": "红烧整条带鱼", "ja": "太刀魚の丸ごと煮付け", "vi": "Cá Hố Kho Cay"}, "desc": {"ko": "통갈치를 매콤한 양념에 신선한 해산물과 함께 푸짐하게 조려낸 자매당의 대표 메뉴", "en": "Whole cutlassfish braised generously in a spicy sauce with fresh seafood, a signature dish of Jamaedang", "zh": "整条带鱼配新鲜海鲜,用香辣酱汁满满炖煮而成,자매당的招牌菜", "ja": "太刀魚を丸ごと、新鮮な海鮮と一緒にピリ辛のタレでたっぷり煮込んだ、자매당の看板メニュー", "vi": "Món cá hố nguyên con được kho với sốt cay đặc biệt cùng hải sản tươi ngon, mang hương vị đặc trưng của Jamaedang."}, "tag": "best", "spicy": true},
     ],
   },
   {
@@ -53,7 +53,7 @@ window.MENU = [
   },
   {
     id: "jeon",
-    name: {"ko": "전", "en": "Korean pancakes", "zh": "煎饼", "ja": "チヂミ", "vi": "Các loại bánh (điều)"},
+    name: {"ko": "전", "en": "Korean pancakes", "zh": "煎饼", "ja": "チヂミ", "vi": "Các loại bánh"},
     items: [
       {"price": 550000, "name": {"ko": "육전", "en": "Beef pancake (yukjeon)", "zh": "牛肉煎饼", "ja": "ユクチョン(牛肉のチヂミ)", "vi": "Bánh Thịt Bò"}, "desc": {"ko": "테이블 자리에서 정성껏 만들어드립니다.", "en": "Made fresh at your table.", "zh": "在餐桌旁为您精心现做。", "ja": "テーブルで心を込めてお作りします。", "vi": "Được chế biến trực tiếp tại bàn."}},
       {"price": 450000, "name": {"ko": "새우전", "en": "Shrimp pancake (saeujeon)", "zh": "虾煎饼", "ja": "エビのチヂミ", "vi": "Bánh tôm"}, "desc": {"ko": "테이블 자리에서 정성껏 만들어드립니다.", "en": "Made fresh at your table.", "zh": "在餐桌旁为您精心现做。", "ja": "テーブルで心を込めてお作りします。", "vi": "Được chế biến trực tiếp tại bàn."}},
@@ -91,7 +91,7 @@ window.MENU = [
     name: {"ko": "식사", "en": "Meals", "zh": "主食餐点", "ja": "お食事", "vi": "Món ăn"},
     items: [
       {"price": 250000, "photo": "img/kkomak.jpg", "name": {"ko": "꼬막비빔밥정식", "en": "Cockle bibimbap set meal", "zh": "蚶子拌饭套餐", "ja": "コマク(赤貝に似た貝)ビビンバ定食", "vi": "Cơm Trộn Sò Huyết"}},
-      {"price": 240000, "name": {"ko": "제육쌈밥정식", "en": "Spicy stir-fried pork ssam rice set meal", "zh": "辣炒猪肉包饭套餐", "ja": "豚肉のピリ辛炒めサムパ定食", "vi": "Cơm thịt heo xào cay"}, "spicy": true},
+      {"price": 240000, "name": {"ko": "제육쌈밥정식", "en": "Spicy stir-fried pork ssam rice set meal", "zh": "辣炒猪肉包饭套餐", "ja": "豚肉のピリ辛炒めサムパプ定食", "vi": "Cơm thịt heo xào cay"}, "spicy": true},
       {"price": 260000, "name": {"ko": "(뼈)돼지갈비정식", "en": "Pork ribs (bone-in) set meal", "zh": "猪排骨(带骨)套餐", "ja": "豚カルビ(骨付き)定食", "vi": "Cơm Sườn Heo Nướng"}},
       {"price": 250000, "photo": "img/mackerel.jpg", "name": {"ko": "고등어구이정식", "en": "Grilled mackerel set meal", "zh": "烤青花鱼套餐", "ja": "サバ焼き定食", "vi": "Cá Thu Nướng"}},
       {"price": 250000, "name": {"ko": "고등어조림정식", "en": "Braised mackerel set meal", "zh": "红烧青花鱼套餐", "ja": "サバの煮付け定食", "vi": "Cá Thu Kho"}},
