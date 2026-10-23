@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR 메뉴판 · 점주 메뉴 관리 설명서</title>
+<style>
+  /* 점주용 설명서 한국어판. 베트남어판(guide-vi.html)과 구조·번호가 같다. 인쇄: node tools/pdf.mjs sales/owner/guide-ko.html sales/print/owner-guide-ko.pdf */
+  @page { size: A4; margin: 12mm 12mm 13mm; }
+  * { box-sizing: border-box; }
+  :root { --paper: #f7f3ec; --paper-2: #efe8dc; --accent: #e8590c; --accent-d: #c2410c; --ink: #2b2622; --muted: #7d7368; --line: #e2d9cb; --ok: #2b8a3e; --red: #e03131; }
+  body { margin: 0; font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; color: var(--ink); font-size: 10.3pt; line-height: 1.5; word-break: keep-all; }
+  h1, h2, h3 { margin: 0; font-weight: 800; line-height: 1.25; }
+  .page { break-after: page; }
+  .page:last-child { break-after: auto; }
+  .pc { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .cover { background: var(--paper); border-left: 4mm solid var(--accent); border-radius: 0 5mm 5mm 0; padding: 6mm 7mm; }
+  .cover .kicker { color: var(--accent-d); font-weight: 800; font-size: 9pt; letter-spacing: .3mm; }
+  .cover h1 { font-size: 24pt; margin-top: 1.5mm; }
+  .cover p { margin: 1.8mm 0 0; color: var(--muted); }
+  .url { display: inline-block; margin-top: 3mm; font-weight: 800; font-size: 10.5pt; color: #fff; background: var(--accent); border-radius: 99mm; padding: 1.6mm 5mm; }
+
+  h2 { font-size: 15pt; margin: 7mm 0 2.5mm; display: flex; align-items: center; gap: 2.5mm; color: var(--accent-d); }
+  h2 .no { display: inline-grid; place-items: center; width: 7mm; height: 7mm; border-radius: 50%; background: var(--accent); color: #fff; font-size: 10pt; flex: none; }
+  .lead { margin: 0 0 3mm; color: var(--muted); }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .box { background: var(--paper); border-radius: 3.5mm; padding: 3mm 3.6mm; border-top: 1mm solid var(--accent); }
+  .box h3 { font-size: 11.6pt; margin-bottom: 1mm; }
+  .box p { margin: 0; color: #4b443d; }
+  .box ul { margin: 0; padding-left: 4.4mm; }
+  .box li { margin: .6mm 0; }
+  .shot { margin: 0; }
+  .shot img { width: 100%; display: block; border-radius: 3mm; border: .3mm solid var(--line); }
+  .shot figcaption { margin-top: 1.2mm; font-size: 8.4pt; color: var(--muted); text-align: center; }
+  ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; display: grid; gap: 2.2mm; }
+  ol.steps li { counter-increment: s; padding-left: 8mm; position: relative; }
+  ol.steps li::before { content: counter(s); position: absolute; left: 0; top: .3mm; width: 5.6mm; height: 5.6mm; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; font-size: 8.5pt; display: grid; place-items: center; line-height: 1; }
+  ol.legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.9mm; font-size: 9.6pt; }
+  ol.legend li { padding-left: 7.4mm; position: relative; }
+  ol.legend li b.n { position: absolute; left: 0; top: .2mm; width: 5.4mm; height: 5.4mm; border-radius: 50%; background: var(--red); color: #fff; font-size: 8pt; display: grid; place-items: center; line-height: 1; }
+  ol.legend li strong { color: var(--ink); }
+  table { width: 100%; border-collapse: collapse; font-size: 9.7pt; }
+  th, td { text-align: left; padding: 1.8mm 2.4mm; border-bottom: .3mm solid var(--line); vertical-align: top; }
+  th { color: #fff; background: var(--accent); font-weight: 800; }
+  td:first-child { font-weight: 800; color: var(--accent-d); white-space: nowrap; width: 30mm; }
+  .note { margin-top: 3mm; background: #fff4e6; border-left: 1.2mm solid var(--accent); border-radius: 0 3mm 3mm 0; padding: 2.6mm 3.6mm; font-size: 10pt; }
+  .note b { color: var(--accent-d); }
+  .tick li { list-style: none; position: relative; padding-left: 5mm; }
+  .tick { margin: 0; padding: 0; }
+  .tick li::before { content: "✔"; position: absolute; left: 0; color: var(--ok); font-weight: 800; }
+  .soon li::before { content: "●"; color: var(--accent); }
+  .idea li::before { content: "○"; color: var(--muted); }
+  .col h3 { font-size: 10.4pt; padding: 1.6mm 3mm; border-radius: 2.4mm; color: #fff; margin-bottom: 2mm; }
+  .col.now h3 { background: var(--ok); } .col.soon h3 { background: var(--accent); } .col.idea h3 { background: #868e96; }
+  .col { background: var(--paper); border-radius: 3.5mm; padding: 2.6mm 3mm 3mm; }
+  .col li { margin: 1.1mm 0; font-size: 9.6pt; }
+  .col .when { display: block; font-size: 8pt; color: var(--muted); }
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 3mm; }
+  .contact div { background: var(--accent); color: #fff; border-radius: 3.5mm; padding: 3.2mm 4mm; }
+  .contact small { display: block; opacity: .9; font-size: 8.4pt; }
+  .contact strong { font-size: 15pt; }
+  footer { margin-top: 5mm; text-align: center; font-size: 8pt; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- 1쪽 -->
+<section class="page">
+  <div class="cover pc">
+    <div class="kicker">QR 메뉴판 · 점주님 설명서</div>
+    <h1>내 메뉴판, 직접 고치는 방법</h1>
+    <p>가격이 바뀌었나요? 신메뉴가 나왔나요? 전화하지 않아도 점주님 휴대폰·컴퓨터에서 바로 고칠 수 있어요. 저장하면 약 1분 안에 손님 화면이 바뀌어요.</p>
+    <span class="url">qrmenuasia.com/owner/?shop=가게아이디</span>
+  </div>
+
+  <h2><span class="no pc">1</span>이런 걸 직접 할 수 있어요</h2>
+  <div class="grid3">
+    <div class="box pc"><h3>가격 바꾸기</h3><p>메뉴 가격을 숫자만 고치면 끝. 크기별(소·중·대) 가격도 각각 고칠 수 있어요.</p></div>
+    <div class="box pc"><h3>메뉴 추가·삭제·순서</h3><p>새 메뉴·새 분류를 만들고, 필요 없는 메뉴는 지우고, ▲▼로 순서를 바꿔요.</p></div>
+    <div class="box pc"><h3>사진 올리기</h3><p>휴대폰 사진을 골라 올리면 알아서 크기를 줄여 줘요. 분류 배너 사진, 메뉴 옆 사진 모두 가능해요.</p></div>
+    <div class="box pc"><h3>설명·표시</h3><p>메뉴 설명을 적고 BEST·신메뉴·추천 표시와 매운 메뉴 표시를 붙여요.</p></div>
+    <div class="box pc"><h3>가게 정보</h3><p>전화번호·주소·와이파이를 바꿔요. 와이파이를 넣으면 손님 화면에 "복사" 버튼이 생겨요.</p></div>
+    <div class="box pc"><h3>되돌리기</h3><p>실수해도 괜찮아요. 이전에 저장한 버전으로, 또는 처음 메뉴로 되돌릴 수 있어요.</p></div>
+  </div>
+
+  <h2><span class="no pc">2</span>로그인</h2>
+  <div class="grid2">
+    <figure class="shot"><img src="guide-img/login-ko.png" alt="로그인 화면"><figcaption>로그인 화면 (오른쪽 위에서 한국어 / Tiếng Việt 선택)</figcaption></figure>
+    <div>
+      <ol class="steps">
+        <li><b>우리가 보내 드린 주소</b>를 열어요. 가게 아이디가 이미 들어 있어요.</li>
+        <li><b>비밀번호</b>를 넣고 <b>[들어가기]</b>를 눌러요.</li>
+        <li>다 끝나면 오른쪽 위 <b>[나가기]</b>. 안 눌러도 12시간 뒤에는 자동으로 로그아웃돼요.</li>
+      </ol>
+      <div class="note"><b>비밀번호는 가게마다 따로</b> 만들어 한 번만 알려 드려요. 잊어버렸거나 다른 사람이 알게 됐다면 바로 연락 주세요. 새로 만들어 드려요. 비밀번호를 연속으로 틀리면 한 시간 동안 로그인이 막혀요.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2쪽 -->
+<section class="page">
+  <h2 style="margin-top:0"><span class="no pc">3</span>화면 둘러보기</h2>
+  <p class="lead">빨간 번호가 아래 설명의 번호예요. 모든 칸은 한국어·베트남어 두 칸에 직접 써 주세요.</p>
+  <div class="grid2" style="grid-template-columns: 1.3fr 1fr; align-items: start;">
+    <figure class="shot"><img src="guide-img/editor-ko.png" alt="메뉴 편집 화면"><figcaption>메뉴 편집 화면</figcaption></figure>
+    <ol class="legend">
+      <li><b class="n pc">1</b><strong>저장하고 손님 화면에 반영</strong> — 고친 뒤 꼭 눌러야 해요. 누르기 전에는 손님 화면이 바뀌지 않아요.</li>
+      <li><b class="n pc">2</b><strong>저장 상태</strong> — "저장하지 않은 변경이 있어요"가 주황색으로 보이면 아직 저장 전이에요.</li>
+      <li><b class="n pc">3</b><strong>이전 버전</strong> — 저장한 기록 목록이 나와요. 원하는 시점의 [이 버전으로]를 누르면 되돌아가요.</li>
+      <li><b class="n pc">4</b><strong>처음 메뉴로 되돌리기</strong> — 고친 내용을 모두 지우고 처음 메뉴로 돌아가요(이전 버전 기록은 남아요).</li>
+      <li><b class="n pc">5</b><strong>입력 안내</strong> — 한국어·베트남어 두 칸에 직접 써 주세요.</li>
+      <li><b class="n pc">6</b><strong>메뉴 분류</strong> — 분류 이름·배너 사진·순서(▲▼)·삭제. 분류 안에 메뉴가 들어 있어요.</li>
+      <li><b class="n pc">7</b><strong>메뉴 사진</strong> — 메뉴 이름 옆에 작게 보이는 사진이에요.</li>
+      <li><b class="n pc">8</b><strong>메뉴 이름</strong> — 한국어 칸과 베트남어 칸.</li>
+      <li><b class="n pc">9</b><strong>가격</strong> — 숫자만 써요(예: 150000). 비워 두면 손님 화면에 "가격 문의"로 나와요. 크기별 가격 메뉴는 크기마다 가격 칸이 나와요.</li>
+      <li><b class="n pc">10</b><strong>사진 올리기·지우기, ▲▼ 순서, 삭제</strong> — 삭제는 확인 창이 한 번 더 떠요.</li>
+      <li><b class="n pc">11</b><strong>더 보기</strong> — 눌러서 펼치면 아래 그림처럼 설명·표시가 나와요.</li>
+    </ol>
+  </div>
+
+  <h2><span class="no pc">3-2</span>[더 보기]를 펼치면</h2>
+  <div class="grid2" style="grid-template-columns: 1fr 1fr; align-items: start;">
+    <figure class="shot"><img src="guide-img/item-ko.png" alt="메뉴 항목 펼친 화면"><figcaption>메뉴 한 개를 펼친 화면</figcaption></figure>
+    <ol class="legend">
+      <li><b class="n pc">12</b><strong>설명(선택)</strong> — 메뉴 소개나 안내를 짧게 써요(예: "2~3인분", "오늘 품절").</li>
+      <li><b class="n pc">13</b><strong>표시</strong> — 없음 / BEST / 신메뉴 / 추천 중에서 골라요. 손님 화면에 작은 표시가 붙어요.</li>
+      <li><b class="n pc">14</b><strong>매운 메뉴</strong> — 체크하면 손님 화면에 매운맛 표시가 붙어요.</li>
+      <li><b class="n pc">15</b><strong>다른 언어로 보이는 글자</strong> — 영어·중국어·일본어 손님이 보는 글자예요. 비워 두면 저장할 때 자동 번역을 시도하고, 직접 써 두면 그 글자가 그대로 보여요.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 3쪽 -->
+<section class="page">
+  <h2 style="margin-top:0"><span class="no pc">4</span>이럴 땐 이렇게</h2>
+  <table>
+    <tr><th>하고 싶은 일</th><th>방법</th></tr>
+    <tr><td>가격 바꾸기</td><td>메뉴를 찾아 <b>가격 칸</b>(9)의 숫자를 고쳐요 → 맨 위 <b>[저장하고 손님 화면에 반영]</b>(1).</td></tr>
+    <tr><td>새 메뉴 넣기</td><td>그 분류 맨 아래 <b>[+ 메뉴 추가]</b> → 이름(한국어·베트남어)과 가격 입력 → 필요하면 [사진 올리기] → 저장. <b>이름이 비어 있는 메뉴는 저장할 때 빠져요.</b></td></tr>
+    <tr><td>메뉴 지우기·순서 바꾸기</td><td>그 메뉴의 <b>[삭제]</b>(확인 창에서 한 번 더) 또는 <b>▲▼</b> → 저장.</td></tr>
+    <tr><td>새 분류 만들기</td><td>화면 맨 아래 <b>[+ 분류 추가]</b> → 분류 이름 입력 → 그 안에 [+ 메뉴 추가].</td></tr>
+    <tr><td>사진 올리기·바꾸기</td><td><b>[사진 올리기]</b> → 휴대폰 사진 선택(자동으로 줄여서 올라가요) → 저장. 지우려면 [사진 지우기].</td></tr>
+    <tr><td>신메뉴 알리기</td><td>[더 보기] → 표시를 <b>신메뉴</b>로. 손님 화면에 NEW 표시가 붙어요. 인기 메뉴는 BEST, 추천 메뉴는 추천.</td></tr>
+    <tr><td>오늘만 못 파는 메뉴</td><td>[더 보기] 설명 칸에 "오늘 품절"처럼 적고 저장. 다시 팔 때 지우면 돼요.</td></tr>
+    <tr><td>전화·주소·와이파이</td><td>맨 위 <b>가게 정보</b> 칸을 고치고 저장. 와이파이 이름·비밀번호를 넣으면 손님 화면 아래에 와이파이 복사 버튼이 생겨요.</td></tr>
+    <tr><td>실수했을 때</td><td>저장 전이면 페이지를 새로 고침하면 처음 상태로 돌아가요. 저장했다면 <b>[이전 버전]</b>(3)에서 되돌리거나 <b>[처음 메뉴로 되돌리기]</b>(4).</td></tr>
+  </table>
+
+  <h2><span class="no pc">5</span>알아 두세요</h2>
+  <div class="grid2">
+    <div class="box pc"><h3>저장 → 약 1분 뒤 반영</h3><ul><li>저장하면 손님 화면에는 <b>약 1분 안에</b> 바뀌어요.</li><li>저장하지 않고 창을 닫으면 고친 내용이 사라져요(닫기 전에 경고가 떠요).</li><li>화면이 비어 보이면 새로 고침을 한 번 눌러 주세요.</li></ul></div>
+    <div class="box pc"><h3>번역은 이렇게 돼요</h3><ul><li>한국어·베트남어는 <b>쓰신 그대로</b> 보여요.</li><li>영어·중국어·일본어 자동 번역 연결은 준비 중이라, 지금은 <b>직접 써 주시면 가장 정확해요</b>(15번 칸).</li><li>비워 두면 입력한 글자가 그대로 보일 수 있어요.</li></ul></div>
+    <div class="box pc"><h3>사진 팁</h3><ul><li>음식이 크게 나온 밝은 사진이 좋아요.</li><li>너무 큰 파일은 올라가지 않을 수 있어요. 그럴 땐 다시 찍거나 줄여서 올려 주세요.</li><li>사진은 메뉴 옆에 작고 동그랗게 보이고, 누르면 크게 보여요.</li></ul></div>
+    <div class="box pc"><h3>안전하게 쓰기</h3><ul><li>비밀번호는 점주님과 직원 중 꼭 필요한 분만 알아 두세요.</li><li>공용 컴퓨터에서는 쓰고 나서 <b>[나가기]</b>를 눌러요.</li><li>가격 칸을 비우면 "가격 문의"로 나와요. 일부러 비울 때만 비워요.</li></ul></div>
+  </div>
+</section>
+
+<!-- 4쪽 -->
+<section class="page">
+  <h2 style="margin-top:0"><span class="no pc">6</span>방문 리포트 — QR 메뉴판을 몇 명이 봤을까?</h2>
+  <p class="lead">우리가 점주님께 <b>전용 링크</b>를 보내 드려요. 비밀번호 없이 열리고, 휴대폰에서도 보기 좋고, [인쇄 / PDF로 저장]도 돼요.</p>
+  <div class="grid3">
+    <div class="box pc"><h3>방문자·페이지뷰</h3><p>기간(기본 30일) 동안 몇 명이 메뉴판을 열었는지. 같은 분이 하루에 여러 번 열어도 1명으로 세요.</p></div>
+    <div class="box pc"><h3>하루 평균·가장 많이 온 날</h3><p>하루 평균 방문자와 가장 붐빈 날을 한눈에 볼 수 있어요.</p></div>
+    <div class="box pc"><h3>일별 방문자 그래프</h3><p>요일·행사 뒤에 손님이 늘었는지 날마다 확인해요.</p></div>
+    <div class="box pc"><h3>손님이 본 언어</h3><p>한국어·베트남어·영어·중국어·일본어 중 어떤 언어로 봤는지. 메뉴 번역을 챙길 때 참고해요.</p></div>
+    <div class="box pc"><h3>접속 기기</h3><p>휴대폰으로 본 손님과 컴퓨터로 본 손님의 비율.</p></div>
+    <div class="box pc"><h3>어디서 들어왔나</h3><p>테이블 QR을 찍고 왔는지, 가게 찾기·검색에서 왔는지. 우리 가게 방문은 기록하지 않도록 설정할 수 있어요.</p></div>
+  </div>
+  <div class="note">로봇(검색엔진 등)은 빼고 세요. 날짜는 베트남 시간 기준이에요. 이미 인쇄해서 쓰고 있는 QR 카드는 "직접·QR"로 모여요.</div>
+
+  <h2><span class="no pc">7</span>로드맵 — 앞으로 이렇게 더 좋아져요</h2>
+  <div class="grid3">
+    <div class="col now pc"><h3>지금 쓸 수 있어요</h3><ul class="tick">
+      <li>메뉴·가격·설명·사진 직접 수정</li>
+      <li>한국어·베트남어 직접 입력, 5개 언어 손님 화면</li>
+      <li>전화·주소·와이파이 수정</li>
+      <li>이전 버전·처음 메뉴로 되돌리기</li>
+      <li>방문 리포트 링크(인쇄·PDF)</li>
+    </ul></div>
+    <div class="col soon pc"><h3>준비 중이에요</h3><ul class="tick soon">
+      <li>영어·중국어·일본어 <b>자동 번역</b> 연결</li>
+      <li>월간 방문 리포트 <b>PDF 자동 보내기</b></li>
+      <li>점주 화면에서 <b>테이블 QR</b> 바로 만들기</li>
+      <li>영업시간·가게 소개 문구 등 <b>가게 정보 편집</b> 늘리기</li>
+    </ul></div>
+    <div class="col idea pc"><h3>점주님 의견으로 정해요</h3><ul class="tick idea">
+      <li>방문 리포트를 더 빠르고 자세하게</li>
+      <li>자주 쓰는 기능을 위쪽에 모아 보기</li>
+      <li>그 밖에 필요한 기능은 알려 주세요!</li>
+    </ul></div>
+  </div>
+  <div class="note"><b>참고</b> 준비 중·의견으로 정하는 기능은 출시 시기가 정해진 것이 아니에요. 점주님이 많이 원하시는 기능부터 먼저 만들어요.</div>
+
+  <h2><span class="no pc">8</span>도움이 필요하면</h2>
+  <p class="lead">사진 한 장만 보내 주셔도 돼요. 대신 고쳐 드릴 수도 있어요.</p>
+  <div class="contact">
+    <div class="pc"><small>한국어 상담 · Zalo · 전화</small><strong>0917 302 200</strong><small>카카오톡 ID: jjw4164</small></div>
+    <div class="pc"><small>베트남어 상담 · Zalo · 전화</small><strong>0937 250 787</strong><small>Tiếng Việt · Zalo</small></div>
+  </div>
+  <footer>QR 메뉴 · qrmenuasia.com</footer>
+</section>
+
+</body>
+</html>

@@ -44,6 +44,7 @@
 - 새 가게는 사장님 동의를 받고 `STORES`에 추가한다. 목록에 넣은 가게는 `sync-stores.sh`의 SHOPS에도 넣는다. 지역·종류가 새로 생기면 `REGIONS`·`CATS`에도 넣는다. 15~20곳이 넘으면 지역을 나라/도시 두 단계로 나누는 것을 검토한다.
 
 ## 점주용 자료
+- **점주 메뉴 관리 설명서 + 로드맵(2026-10-23, 한국어·베트남어 A4 4쪽, 가게 공통)**: `sales/owner/guide-ko.html`·`guide-vi.html` → `node tools/pdf.mjs sales/owner/guide-ko.html sales/print/owner-guide-ko.pdf`(vi도 같게). 내용: 할 수 있는 일·로그인·화면 둘러보기(빨간 번호 1~15)·상황별 방법·알아 둘 것·방문 리포트·로드맵(지금/준비 중/의견으로 정함)·문의처. 화면 그림은 `node tools/owner-shots.mjs`(가짜 서버로 편집기를 띄워 데모 데이터로 캡처 → `sales/owner/guide-img/`). **편집기(`sales/menu-editor.js`)·로그인 화면이 바뀌면 캡처와 두 HTML을 같이 고친다.** 로드맵의 '준비 중'은 `docs/admin-system.md`의 '나중에'·번역 현황과 맞춘 것이라, 그쪽이 바뀌면 로드맵도 고친다(시기는 약속하지 않음). 점주에게 보낼 때 파일 이름은 `점주설명서_한국어.pdf`·`Huong-dan_thuc-don_vi.pdf`처럼 복사해서 보낸다.
 - Ăn Vội: `restaurants/anvoi/print/huong-dan-su-dung.pdf` (베트남어 사용설명서·주문 처리 순서, A4 2쪽, 원본 `huong-dan.html`, 화면 캡처 `print/img/g*.jpg`). 다른 가게도 같은 형식으로 만든다.
 - 가마솥: `restaurants/gamasot/print/guide-gamasot.pdf` (한국어 활용 가이드북, A4 3쪽: 손님 화면·기능별 좋은 점·상황별 활용·링크 문구·수정 방법, 원본 `guide.html`, 캡처 `print/img/g*.jpg`).
 - Ăn Vội 메뉴판에는 장바구니 + Zalo 주문 기능이 있다 (주문서는 항상 베트남어로 작성).
