@@ -165,13 +165,13 @@
 <footer>© QR Menu</footer>
 <script src="/stores/dasan.js"></script>
 <script>
-// 다산 배너: 처음 화면은 정식 계약 가게 바로 다음(목록 사이), 검색·지역·종류를 고르면 맨 아래(footer 다음)
+// 다산 배너: 처음 화면과 지역(하노이·박닌 등)만 고른 화면은 정식 계약 가게 바로 다음(목록 사이), 검색·종류를 고르면 맨 아래(footer 다음)
 (function () {
   function place() {
     var box = document.querySelector("aside.dasan");
     if (!box) return;
     var slot = document.getElementById("dasanSlot");
-    var filtered = !!(state.q || state.region || state.cat);
+    var filtered = !!(state.q || state.cat);
     if (!filtered && slot) slot.appendChild(box);
     else document.querySelector("footer").after(box);
   }
