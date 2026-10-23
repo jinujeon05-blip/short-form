@@ -39,6 +39,7 @@ const SHOPS = {
   cheong:       { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Korean', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   joseon:       { type: 'Restaurant', cuisine: ['Korean', 'Gamjatang', 'Braised pork neck bones', 'Set menus'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   namme:        { type: 'Restaurant', cuisine: ['Korean', 'Sulsang', 'Kimchi jjim', 'Osam bulgogi', 'Gamjatang'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  inyeon:       { type: 'Restaurant', cuisine: ['Korean', 'Jokbal', 'Pork feet', 'Bossam', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   naegohyang:   { type: 'Restaurant', cuisine: ['Korean', 'Soondae-guk', 'Pork soup'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   yukdeok:      { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Aged pork', 'Smoked duck'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   sujeong:      { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef offal', 'Gopchang'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
