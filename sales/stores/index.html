@@ -163,6 +163,21 @@
   </section>
 </main>
 <footer>© QR Menu</footer>
+<script src="/stores/dasan.js"></script>
+<script>
+// 다산 배너: 처음 화면은 "사장님이신가요?" 상자 바로 밑, 검색·지역·종류를 고르면 맨 아래(footer 다음)
+(function () {
+  function place() {
+    var box = document.querySelector("aside.dasan");
+    if (!box) return;
+    var filtered = !!(state.q || state.region || state.cat);
+    if (filtered) document.querySelector("footer").after(box);
+    else document.querySelector("section.owner").after(box);
+  }
+  window.dasanPlace = place;
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", place); else place();
+})();
+</script>
 
 <script src="/stores/data.js"></script>
 <script>
@@ -236,6 +251,7 @@
     const list = STORES.filter((s) => matches(s));
     $("count").textContent = list.length === 1 && t.count1 ? t.count1 : t.count.replace("{n}", list.length);
     $("empty").style.display = list.length ? "none" : "block";
+    if (window.dasanPlace) window.dasanPlace();
     $("grid").innerHTML = list.map((s) => {
       const menuUrl = `${s.url}/?lang=${lang}`;
       const map = s.map || (s.address ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(s.name + " " + s.address) : null);
