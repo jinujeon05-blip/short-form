@@ -35,7 +35,7 @@ try:
 except ImportError:  # 없어도 동작한다(크기 표시·webp 변환만 빠짐)
   Image = None
 
-VERSION = "1.4"
+VERSION = "1.5"
 PORT = int(os.environ.get("QRMENU_PORT", "8765"))
 HOME = Path.home() / ".qrmenu_photos"
 JOBS = HOME / "jobs"
@@ -323,6 +323,30 @@ def _strip_label(s):
   return rest.strip() if sep and len(head) < 15 else s.strip()
 
 
+def close_profile_chrome(profile):
+  """수집기 전용 프로필(profile)을 쓰는 크롬·엣지만 찾아 끈다(평소 쓰는 크롬은 그대로). 끈 개수."""
+  path = str(profile)
+  try:
+    if sys.platform.startswith("win"):
+      ps = ("$p='" + path.replace("'", "''") + "'; $n=0; "
+            "Get-CimInstance Win32_Process -Filter \"Name='chrome.exe' or Name='msedge.exe'\" | "
+            "Where-Object { $_.CommandLine -and $_.CommandLine.Contains($p) } | "
+            "ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue; $n++ }; $n")
+      out = subprocess.run(["powershell", "-NoProfile", "-Command", ps], capture_output=True,
+                           text=True, timeout=30, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+      return int((out.stdout or "0").strip().splitlines()[-1] or 0)
+    out = subprocess.run(["ps", "-eo", "pid=,comm=,args="], capture_output=True, text=True)
+    n = 0
+    for line in out.stdout.splitlines():
+      pid, comm, args = (line.strip().split(None, 2) + ["", ""])[:3]
+      if re.search(r"chrom|msedge", comm, re.I) and path in args:
+        os.kill(int(pid), 9)
+        n += 1
+    return n
+  except Exception:
+    return 0
+
+
 def launch(p, job):
   profile = HOME / "chrome-profile"  # 로봇 확인·동의를 한 번 하면 기억된다
   profile.mkdir(parents=True, exist_ok=True)
@@ -339,8 +363,16 @@ def launch(p, job):
       job.log(f"브라우저 시작: {channel or '내장 Chromium'}")
       return ctx
     except Exception as exc:
-      if "has been closed" in str(exc):  # 같은 프로필을 다른 크롬 창이 쓰는 중
-        raise RuntimeError(PROFILE_BUSY)
+      if "has been closed" in str(exc):  # 같은 프로필을 다른 크롬이 쓰는 중(창을 닫아도 뒤에 남은 크롬)
+        n = close_profile_chrome(profile)
+        job.log(f"수집용 프로필을 쓰던 크롬 {n}개를 닫고 다시 엽니다.")
+        time.sleep(3)
+        try:
+          ctx = p.chromium.launch_persistent_context(str(profile), **kw)
+          job.log(f"브라우저 시작: {channel or '내장 Chromium'}")
+          return ctx
+        except Exception:
+          raise RuntimeError(PROFILE_BUSY)
       errors.append(f"{channel or 'chromium'}: {str(exc).splitlines()[0][:120]}")
   job.log("크롬·엣지를 못 열어 내장 Chromium을 설치합니다(처음 한 번, 몇 분).")
   for e in errors:
