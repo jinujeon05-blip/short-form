@@ -184,6 +184,11 @@ window.STORES = [
     address: "54 Lý Nhân Tông, Võ Cường, Bắc Ninh",
     type: { ko: "짜장면 · 짬뽕 · 탕수육 · 누룽지탕 한국식 중화요리", vi: "Mì tương đen · Mì hải sản cay · Thịt chua ngọt — món Hoa kiểu Hàn", en: "Korean-Chinese · Jjajangmyeon · Jjamppong · Sweet & sour pork", zh: "韩式中华料理 · 炸酱面 · 炒码面 · 糖醋肉", ja: "韓国式中華・チャジャン麺・チャンポン・タンスユク" },
     keywords: "청식당 청 식당 cheong cheongsikdang chung sikdang 박닌 중국집 중식 중화요리 한국식 중화요리 짜장면 짜장 간짜장 유니짜장 삼선짜장 쟁반짜장 짬뽕 삼선짬뽕 알탕짬뽕 오뎅짬뽕 차돌박이짬뽕 백짬뽕 매생이 짬짜면 탕짬면 탕짜면 볶짬면 탕수육 사천탕수육 깐풍기 깐풍육 깐쇼새우 깐풍새우 난자완스 팔보채 유산슬 전가복 고추잡채 잡채 마파두부 군만두 누룽지탕 해물누룽지탕 알짬뽕탕 볶음밥 새우볶음밥 짜장밥 짬뽕밥 마파두부덮밥 잡탕밥 송이덮밥 중화비빔밥 냉우동 중화비빔국수 냉면 콩국수 순두부 김치찌개 부대찌개 불낙전골 고량주 백년호도 nhà hàng hàn quốc lý nhân tông võ cường bắc ninh mì tương đen jjajangmyeon mì hải sản cay jjamppong thịt chua ngọt tangsuyuk cơm rang lẩu xúc xích lẩu bò bạch tuộc canh kim chi korean chinese black bean noodles sweet and sour pork fried rice 炸酱面 炒码面 海鲜辣汤面 糖醋肉 干烹鸡 锅巴汤 炒饭 韩式中餐 チャジャン麺 ジャージャー麺 チャンポン タンスユク 韓国中華" },
+  { id: "joseon", name: "조선시대 하노이 Joseon Sidae", sub: "뼈찜 · 감자탕 · 대패삼겹살 세트", url: "https://joseon.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean"], tags: ["photos"],
+    address: "TT4/khu P. Đỗ Đình Thiện, khu đô thị, Từ Liêm, Hà Nội",
+    type: { ko: "뼈찜 · 목뼈감자탕 · 아구찜 · 세트 한식당", vi: "Xương cổ hầm · Canh xương heo · Cá mặt quỷ xào cay — nhà hàng Hàn Quốc", en: "Braised pork neck bones · Gamjatang · Spicy monkfish · Korean set menus", zh: "炖猪颈骨·土豆排骨汤·辣炒鮟鱇鱼·韩餐套餐", ja: "骨付き首肉の煮込み・カムジャタン・アグィチム・セットの韓国料理店" },
+    keywords: "조선시대 조선시대하노이 하노이본점 조선시대 하노이 본점 joseon sidae joseonsidae nhà hàng joseon sidae 하노이 từ liêm đỗ đình thiện khu đô thị 한식 한식당 뼈찜 조선시대뼈찜 목뼈 목뼈감자탕 감자탕 간장뼈구이 불뼈구이 간장뼈찜 불뼈찜 갑오징어찜 아구찜 아귀찜 알곤이찜 대패삼겹살 세트 세트메뉴 뼈해장국 목뼈해장국 우거지해장국 된장찌개 물냉면 김치말이국수 냉모밀 갑오징어볶음 계란찜 부추전 매실에이드 막걸리 소주 맥주 canh xương cổ heo hầm khoai tây xương cổ nướng xì dầu xương cổ nướng cay xương cổ hầm mực xào cay cá mặt quỷ xào cay trứng cá xào cay thịt ba chỉ nướng trà mơ trứng hấp miến lạnh braised pork neck bones gamjatang spicy monkfish pork belly set menu cold noodles 朝鲜时代 炖猪颈骨 土豆排骨汤 辣炒鮟鱇鱼 烤五花肉 套餐 骨付き首肉 カムジャタン アグィチム サムギョプサル セット" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bar"], tags: ["photos"],
