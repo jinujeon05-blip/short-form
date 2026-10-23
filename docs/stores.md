@@ -54,6 +54,7 @@
 | `restaurants/buja` | 부자감자탕 BUJA 감자탕·뼈해장국·삼겹살·백숙 (207 Nguyễn Cao, Kinh Bắc, Bắc Ninh) — **가게 찾기용** | `buja-menu` (팀 jinwoo8, 2026-10-22 배포, 가게 찾기 목록도 반영) | https://buja.qrmenuasia.com |
 | `restaurants/sopung` | 소풍 SOPUNG 韓姐烤肉 한식·숯불구이·보쌈·병어조림 (3 Đ. Võ Cường 12, Võ Cường, Bắc Ninh) — **가게 찾기용** | `sopung-menu` (팀 jinwoo8, 배포 전) | https://sopung.qrmenuasia.com |
 | `restaurants/cheong` | 청식당 NHÀ HÀNG HÀN QUỐC 한국식 중화요리 짜장·짬뽕·탕수육 (54 Lý Nhân Tông, Võ Cường, Bắc Ninh, 간판 01 N5 Lý Nhân Tông) — **가게 찾기용** | `cheong-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://cheong.qrmenuasia.com |
+| `restaurants/studioan` | 스튜디오 안 사진관 An Studio (하노이 한국 사진관, TT4 Lô 98 P, Từ Liêm, Hà Nội, 0988 862 720) — **가게 찾기용**, 메뉴 없는 촬영 스튜디오 | `studioan-menu` (미배포) | https://studioan.qrmenuasia.com |
 | `restaurants/joseon` | 조선시대 하노이 본점 Nhà Hàng Joseon Sidae 한식 뼈찜·목뼈감자탕·세트 (TT4/khu P. Đỗ Đình Thiện, khu đô thị, Từ Liêm, Hà Nội) — **가게 찾기용** | `joseon-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://joseon.qrmenuasia.com |
 | `restaurants/namme` | 남매식당 Namme 한식 남매술상·김치찜·오삼불고기·감자탕 (107 CT5 Mỹ Đình, Từ Liêm, Hà Nội) — **가게 찾기용** | `namme-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://namme.qrmenuasia.com |
 | `restaurants/inyeon` | 인연식당 Nhân Duyên 하노이 원조 족발 전문점·보쌈·구이·볶음 (Lô 103 TT3, Hoàng Trọng Mậu / KĐT Mỹ Đình, Từ Liêm, Hà Nội) — **가게 찾기용** | `inyeon-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://inyeon.qrmenuasia.com |
@@ -114,3 +115,4 @@
 - 수원성은 손님 가게 찾기용으로 만든 것(사장님 의뢰 아님) → 소개서 데모에서 뺌(`DEMOS`의 `hidden: true`), 가게 찾기 목록에 `listing: true`. 소개서 데모 7칸: 숯꾸이·EROS·Ăn Vội·백천·가마솥·바이오&뷰티·킴스호텔.
 - 수원성은 매장 인쇄 메뉴판 사진과 구글 지도의 디지털 메뉴판 이미지(여러 판, 일부 지워짐)를 대조해 만들었다. 공식 영문 표기는 SUWONSUNG.
 - 사진·로고는 사장님 메뉴판 디자인 원본에서 잘라 `restaurants/<가게>/img/`에 둔다.
+- 스튜디오 안 사진관 An Studio는 **가게 찾기용**(2026-10-23, 메뉴가 없는 촬영 스튜디오 — 사용자 메모 "메뉴가 없어, 사진촬영 같은 정보와 샘플 사진들과 문의하는 쪽으로"): 흰·크림 바탕 + 검정 버튼 + 연한 장미색, 위쪽은 스튜디오 라운지 사진(`img/hero.jpg`)과 둥근 로고(`img/logo.jpg`, 구글 지도 가게 로고), 구성은 촬영 샘플(프로필·인물·한복·웨딩·가족) → 스튜디오(촬영 세트·의상 코너·액자) → 촬영 문의(전화·주소·영업시간·평점·건물 사진). 메뉴·장바구니 없음, 가격은 지도에 없어 적지 않고 "촬영 일정과 가격은 전화로 문의" 안내와 전화·길찾기 버튼만. 원본은 드라이브 `QR메뉴판/스튜디오 안 사진관`(사진 45장 전부 '기타', 가게 계정 사진 `etc_33~45`) — **`claude_bundle_1.zip`(8.5MB)은 드라이브 도구가 못 받아**(연결이 끊김) 묶음 2(`etc_27~45`, 19장)만 받아 씀. 손님이 올린 `etc_01~26`은 쓰지 않음. 정보는 `menu.js`의 `RESTAURANT`(전화 0988 862 720, 영업 10:00~19:00, 평점 4.8)에 한 곳으로 둠. `tools/seo.mjs`의 `noMenu: true`(메뉴가 없는 가게는 JSON-LD에 메뉴를 넣지 않음, 종류 LocalBusiness), 가게 찾기 종류 `photo`(📸 사진관 · 스튜디오) 새로 추가. 하단 줄은 가격 단위가 없어 "사진·정보는 가게와 손님이 구글 지도에 올린 자료 기준이며 바뀔 수 있어요"로 5개 언어에 맞춤.
