@@ -12,6 +12,10 @@
 """
 
 import hashlib
+import hmac
+import ipaddress
+import secrets
+import socket
 import json
 import os
 import re
@@ -35,11 +39,11 @@ try:
 except ImportError:  # 없어도 동작한다(크기 표시·webp 변환만 빠짐)
   Image = None
 
-VERSION = "1.5"
+VERSION = "1.6"
 PORT = int(os.environ.get("QRMENU_PORT", "8765"))
 HOME = Path.home() / ".qrmenu_photos"
 JOBS = HOME / "jobs"
-BUNDLE_LIMIT = 8 * 1024 * 1024  # 드라이브 연결 도구가 10MB 넘는 파일을 못 받음
+BUNDLE_LIMIT = int(4.5 * 1024 * 1024)  # 8MB 넘는 묶음은 드라이브 연결 도구가 받다가 끊김(2026-10-23)
 PHOTO_SIZE = 1600
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36")
@@ -905,7 +909,8 @@ def save_job(job, body):
     raise ValueError("저장할 사진이 없어요(모두 '제외').")
 
   # 8MB 단위로 묶음 나누기 (드라이브 연결 도구 10MB 제한)
-  parts, cur, size = [], [], 0
+  debug_files = sorted((job.dir / "debug").glob("debug_*.jpg")) if (job.dir / "debug").is_dir() else []
+  parts, cur, size = [], [], sum(f.stat().st_size for f in debug_files)
   for it in items:
     if cur and size + it["bytes"] > BUNDLE_LIMIT:
       parts.append(cur)
@@ -931,7 +936,6 @@ def save_job(job, body):
   (dest / "store_info.json").write_text(mjson, "utf-8")
   guide = make_guide(manifest)
   (dest / "클로드_안내.md").write_text(guide, "utf-8")
-  debug_files = sorted((job.dir / "debug").glob("debug_*.jpg")) if (job.dir / "debug").is_dir() else []
   for f in debug_files:
     shutil.copyfile(f, dest / f.name)
   for n, (bname, part) in enumerate(zip(bundles, parts)):
@@ -1010,12 +1014,157 @@ def open_folder(path):
 # ---------------------------------------------------------------------------
 # 대시보드 서버 (127.0.0.1 전용)
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# 휴대폰에서 쓰기 (Tailscale 등으로 PC에 접속). 기본은 꺼짐, PC 화면에서만 켤 수 있다.
+# ---------------------------------------------------------------------------
+REMOTE_PORT = PORT + 1
+SETTINGS_FILE = HOME / "settings.json"
+TAILSCALE_NET = ipaddress.ip_network("100.64.0.0/10")
+FAILS = {}  # ip → [틀린 횟수, 막힌 시각까지]
+REMOTE = {"server": None}
+
+
+def load_settings():
+  try:
+    s = json.loads(SETTINGS_FILE.read_text("utf-8"))
+  except Exception:
+    s = {}
+  s.setdefault("remote", False)
+  s.setdefault("lan", False)
+  s.setdefault("pin_hash", "")
+  s.setdefault("salt", secrets.token_hex(8))
+  s.setdefault("secret", secrets.token_hex(16))
+  return s
+
+
+def save_settings(s):
+  HOME.mkdir(parents=True, exist_ok=True)
+  SETTINGS_FILE.write_text(json.dumps(s), "utf-8")
+
+
+def hash_pin(pin, salt):
+  return hashlib.pbkdf2_hmac("sha256", pin.encode(), salt.encode(), 200_000).hex()
+
+
+def remote_token(s):
+  """PIN이 바뀌면 같이 바뀐다 → 예전에 로그인한 휴대폰은 다시 PIN을 넣어야 한다."""
+  return hmac.new(s["secret"].encode(), s["pin_hash"].encode(), "sha256").hexdigest()
+
+
+def ip_allowed(ip, s):
+  try:
+    a = ipaddress.ip_address(ip)
+  except ValueError:
+    return False
+  if a.is_loopback or a in TAILSCALE_NET:
+    return True
+  return bool(s.get("lan")) and a.is_private
+
+
+def local_addresses():
+  """이 PC의 주소들: Tailscale(100.x)과 같은 와이파이용 주소."""
+  ips = set()
+  for target in ("100.100.100.100", "8.8.8.8"):
+    try:
+      sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+      sk.connect((target, 80))
+      ips.add(sk.getsockname()[0])
+      sk.close()
+    except OSError:
+      pass
+  try:
+    ips.update(socket.gethostbyname_ex(socket.gethostname())[2])
+  except OSError:
+    pass
+  out = []
+  for ip in sorted(ips):
+    a = ipaddress.ip_address(ip)
+    if a.is_loopback:
+      continue
+    out.append({"ip": ip, "tailscale": a in TAILSCALE_NET})
+  return out
+
+
+def start_remote():
+  if REMOTE["server"]:
+    return
+  srv = ThreadingHTTPServer(("0.0.0.0", REMOTE_PORT), RemoteHandler)
+  REMOTE["server"] = srv
+  threading.Thread(target=srv.serve_forever, daemon=True).start()
+  print(f"휴대폰 접속 켬 — 포트 {REMOTE_PORT}")
+
+
+def stop_remote():
+  srv = REMOTE["server"]
+  if srv:
+    REMOTE["server"] = None
+    threading.Thread(target=srv.shutdown, daemon=True).start()
+    print("휴대폰 접속 끔")
+
+
+def remote_status():
+  s = load_settings()
+  host = socket.gethostname().lower()
+  addrs = local_addresses()
+  urls = [{"url": f"http://{a['ip']}:{REMOTE_PORT}", "tailscale": a["tailscale"]}
+          for a in addrs if a["tailscale"] or s["lan"]]
+  if any(a["tailscale"] for a in addrs):
+    urls.insert(0, {"url": f"http://{host}:{REMOTE_PORT}", "tailscale": True})
+  return {"enabled": bool(REMOTE["server"]), "has_pin": bool(s["pin_hash"]), "lan": s["lan"],
+          "port": REMOTE_PORT, "urls": urls,
+          "tailscale": any(a["tailscale"] for a in addrs)}
+
+
+def set_remote(body):
+  s = load_settings()
+  pin = str(body.get("pin") or "").strip()
+  if pin:
+    if not re.fullmatch(r"\d{6,12}", pin):
+      raise ValueError("PIN은 숫자 6~12자리로 정해 주세요.")
+    s["pin_hash"] = hash_pin(pin, s["salt"])
+  s["lan"] = bool(body.get("lan"))
+  want = bool(body.get("enabled"))
+  if want and not s["pin_hash"]:
+    raise ValueError("먼저 PIN(숫자 6자리 이상)을 정해 주세요.")
+  s["remote"] = want
+  save_settings(s)
+  if want:
+    try:
+      start_remote()
+    except OSError as exc:
+      s["remote"] = False
+      save_settings(s)
+      raise ValueError(f"휴대폰 접속을 켜지 못했어요(포트 {REMOTE_PORT}): {exc}")
+  else:
+    stop_remote()
+  return remote_status()
+
+
+PIN_PAGE = """<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>QR메뉴 사진 수집기</title>
+<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f5f3ef;
+font:16px/1.5 system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif;color:#1d1b18}
+@media (prefers-color-scheme:dark){body{background:#171614;color:#eee9e1}input{background:#22201d;color:#eee9e1}}
+form{width:min(320px,90vw);text-align:center}input{width:100%;box-sizing:border-box;font-size:24px;letter-spacing:6px;
+text-align:center;padding:12px;border:1px solid #ccc;border-radius:10px;margin:14px 0}
+button{width:100%;padding:12px;font-size:17px;border:0;border-radius:10px;background:#e8590c;color:#fff;font-weight:700}
+p{color:#888;font-size:14px}#e{color:#c92a2a}</style></head><body>
+<form id="f"><b>QR메뉴 사진 수집기</b><p>PC에서 정한 PIN을 넣어 주세요</p>
+<input id="pin" type="password" inputmode="numeric" autocomplete="current-password" autofocus>
+<button>열기</button><p id="e"></p></form>
+<script>document.getElementById('f').onsubmit=async e=>{e.preventDefault();
+const r=await fetch('/api/pin',{method:'POST',headers:{'Content-Type':'application/json','X-QR':'1'},
+body:JSON.stringify({pin:document.getElementById('pin').value})});
+if(r.ok)location.reload();else document.getElementById('e').textContent=(await r.json()).error;};</script></body></html>"""
+
+
 class Handler(BaseHTTPRequestHandler):
+  remote = False
 
   def log_message(self, *a):
     pass
 
-  def _send(self, code, body, ctype="application/json; charset=utf-8"):
+  def _send(self, code, body, ctype="application/json; charset=utf-8", headers=None):
     if isinstance(body, (dict, list)):
       body = json.dumps(body, ensure_ascii=False).encode("utf-8")
     elif isinstance(body, str):
@@ -1024,14 +1173,45 @@ class Handler(BaseHTTPRequestHandler):
     self.send_header("Content-Type", ctype)
     self.send_header("Content-Length", str(len(body)))
     self.send_header("Cache-Control", "no-store")
+    for k, v in (headers or {}).items():
+      self.send_header(k, v)
     self.end_headers()
     self.wfile.write(body)
 
+  def _authed(self):
+    """휴대폰(원격) 요청: 허용된 주소 + PIN 쿠키가 있어야 한다. PC 안 요청은 항상 통과."""
+    if not self.remote:
+      return True
+    s = load_settings()
+    cookie = self.headers.get("Cookie") or ""
+    m = re.search(r"(?:^|;\s*)qrpin=([0-9a-f]{64})", cookie)
+    return bool(s["pin_hash"]) and bool(m) and hmac.compare_digest(m.group(1), remote_token(s))
+
+  def _gate(self):
+    """원격 접속에서 막아야 하면 응답을 보내고 True."""
+    if not self.remote:
+      return False
+    if not ip_allowed(self.client_address[0], load_settings()):
+      self._send(403, {"error": "허용되지 않은 주소예요(Tailscale로 접속해 주세요)."})
+      return True
+    return False
+
   def do_GET(self):
+    if self._gate():
+      return
     u = urlparse(self.path)
     job = STATE["job"]
     if u.path == "/":
-      return self._send(200, PAGE, "text/html; charset=utf-8")
+      if not self._authed():
+        return self._send(200, PIN_PAGE, "text/html; charset=utf-8")
+      return self._send(200, PAGE.replace("__REMOTE__", "true" if self.remote else "false"),
+                        "text/html; charset=utf-8")
+    if not self._authed():
+      return self._send(401, {"error": "PIN을 넣어 주세요."})
+    if u.path == "/api/remote":
+      if self.remote:
+        return self._send(403, {"error": "PC에서만 바꿀 수 있어요."})
+      return self._send(200, remote_status())
     if u.path == "/api/state":
       return self._send(200, {"job": job.public() if job else None, "version": VERSION,
                               "default_base": str(detect_drive_dir()),
@@ -1051,12 +1231,22 @@ class Handler(BaseHTTPRequestHandler):
     # 다른 웹사이트가 이 서버로 요청을 보내지 못하게 (사용자 정의 머리글은 교차 출처에서 막힌다)
     if self.headers.get("X-QR") != "1":
       return self._send(403, {"error": "forbidden"})
+    if self._gate():
+      return
     try:
       body = json.loads(self.rfile.read(int(self.headers.get("Content-Length") or 0)) or b"{}")
     except Exception:
       return self._send(400, {"error": "잘못된 요청"})
+    if self.remote and self.path == "/api/pin":
+      return self._pin(body)
+    if not self._authed():
+      return self._send(401, {"error": "PIN을 넣어 주세요."})
+    if self.remote and self.path in ("/api/open", "/api/login", "/api/remote"):
+      return self._send(403, {"error": "이 기능은 PC에서만 쓸 수 있어요."})
     job = STATE["job"]
     try:
+      if self.path == "/api/remote":
+        return self._send(200, set_remote(body))
       if self.path == "/api/login":
         open_login()
         return self._send(200, {"ok": True})
@@ -1096,6 +1286,25 @@ class Handler(BaseHTTPRequestHandler):
     except (ValueError, OSError) as exc:
       return self._send(400, {"error": str(exc)})
     self._send(404, {"error": "없음"})
+
+
+class RemoteHandler(Handler):
+  remote = True
+
+  def _pin(self, body):
+    ip = self.client_address[0]
+    cnt, until = FAILS.get(ip, [0, 0])
+    if until > time.time():
+      return self._send(429, {"error": "여러 번 틀려서 10분 동안 막혔어요."})
+    s = load_settings()
+    pin = str(body.get("pin") or "")
+    if s["pin_hash"] and hmac.compare_digest(hash_pin(pin, s["salt"]), s["pin_hash"]):
+      FAILS.pop(ip, None)
+      return self._send(200, {"ok": True}, headers={
+          "Set-Cookie": f"qrpin={remote_token(s)}; Max-Age=2592000; Path=/; HttpOnly; SameSite=Strict"})
+    cnt += 1
+    FAILS[ip] = [0, time.time() + 600] if cnt >= 5 else [cnt, 0]
+    return self._send(403, {"error": "PIN이 틀렸어요." + (" 10분 뒤에 다시 해 주세요." if cnt >= 5 else "")})
 
 
 def restore_last_job():
@@ -1168,6 +1377,11 @@ def main():
     return
   url = f"http://127.0.0.1:{PORT}"
   print(f"QR메뉴 사진 수집기 v{VERSION} — {url}\n이 창을 닫으면 대시보드가 꺼집니다.")
+  if load_settings()["remote"]:
+    try:
+      start_remote()
+    except OSError as exc:
+      print(f"휴대폰 접속을 켜지 못했어요: {exc}")
   if "--no-browser" not in sys.argv:
     threading.Timer(0.8, lambda: open_dashboard(url)).start()
   try:
@@ -1224,28 +1438,31 @@ pre.log{max-height:180px;overflow:auto;background:var(--bg);border-radius:8px;pa
 .lb .bar{color:#fff;margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
 .lb .bar button{background:#fff2;color:#fff;border-color:#fff4}.lb .bar button.on{background:#fff;color:#000}
 table.hist{width:100%;border-collapse:collapse;font-size:13px}table.hist td{padding:5px 4px;border-top:1px solid var(--line)}
-@media (max-width:600px){main{padding:10px}.photos{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){main{padding:10px}.photos{grid-template-columns:repeat(2,1fr)}header .muted{display:none}.lb .bar{font-size:13px}.lb .bar button{padding:8px 10px}}
+.remote-only{display:none}body.remote .remote-only{display:block}body.remote .pc-only{display:none!important}
+.qr{background:#fff;padding:8px;border-radius:8px;display:inline-block}.urls{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start}
 </style></head><body>
 <header><b>QR메뉴 사진 수집기</b><span class="v" id="ver"></span><span class="muted" style="margin-left:auto">구글 지도 → 고르기 → 드라이브 → Claude</span></header>
 <main>
 <div class="notice" id="notice" hidden></div>
+<div class="card remote-only muted">휴대폰으로 PC의 수집기를 쓰는 중이에요. 수집은 PC에서 돌아가고, 저장도 PC의 드라이브 폴더로 가요. 구글 로봇 확인이 뜨면 PC 앞에서만 체크할 수 있어요.</div>
 
 <section class="card">
   <h2>1. 가게 찾기</h2>
   <div class="grid2">
     <div><label>가게 이름 또는 구글 지도 링크</label><input id="q" placeholder="예: 박닌 수원성  /  https://maps.app.goo.gl/…"></div>
     <div><label>드라이브 폴더 이름 (비우면 지도의 가게 이름)</label><input id="name" placeholder="예: 수원성"></div>
-    <div><label>저장 위치</label><input id="base"></div>
+    <div class="pc-only"><label>저장 위치</label><input id="base"></div>
     <div><label>탭마다 최대 사진 수</label><input id="max" type="number" min="10" max="300" value="80"></div>
   </div>
   <div class="row" style="margin-top:10px">
     <label class="check"><input type="checkbox" id="show" checked> 크롬 창 보이기 (로봇 확인이 뜨면 직접 체크)</label>
     <span style="flex:1"></span>
-    <button id="login" title="수집용 크롬에서 구글에 로그인합니다(처음 한 번). 로그인 후 그 크롬 창을 닫으세요.">구글 로그인</button>
+    <button id="login" class="pc-only" title="수집용 크롬에서 구글에 로그인합니다(처음 한 번). 로그인 후 그 크롬 창을 닫으세요.">구글 로그인</button>
     <button id="stop" hidden>멈춤</button>
     <button class="primary" id="start">수집 시작</button>
   </div>
-  <p class="muted" style="margin:8px 0 0">링크가 가장 정확해요. 이름으로 찾으면 검색 결과 첫 가게를 고릅니다. 처음 한 번은 <b>구글 로그인</b>을 눌러 로그인하고 그 크롬 창을 닫으세요(로그인해야 '메뉴' 탭이 보여요).</p>
+  <p class="muted" style="margin:8px 0 0">링크가 가장 정확해요. 이름으로 찾으면 검색 결과 첫 가게를 고릅니다.<span class="pc-only"> 처음 한 번은 <b>구글 로그인</b>을 눌러 로그인하고 그 크롬 창을 닫으세요(로그인해야 '메뉴' 탭이 보여요).</span></p>
 </section>
 
 <section class="card" id="statusCard" hidden>
@@ -1271,7 +1488,18 @@ table.hist{width:100%;border-collapse:collapse;font-size:13px}table.hist td{padd
 <section class="card" id="savedCard" hidden>
   <h2>4. 저장 완료 → Claude 세션에 아래 문장을 보내세요</h2>
   <div class="box" id="prompt"></div>
-  <div class="row" style="margin-top:8px"><button id="copy">문장 복사</button><button id="openDir">폴더 열기</button><span class="muted" id="savedPath"></span></div>
+  <div class="row" style="margin-top:8px"><button id="copy">문장 복사</button><button id="openDir" class="pc-only">폴더 열기</button><span class="muted" id="savedPath"></span></div>
+</section>
+
+<section class="card pc-only" id="remoteCard">
+  <h2>휴대폰에서 쓰기 <span class="muted">— 외근 중에도 휴대폰으로 이 수집기를 씁니다(PC는 켜 두기)</span></h2>
+  <div class="grid2">
+    <div><label>PIN (숫자 6~12자리, 휴대폰에서 처음 한 번 입력)</label><input id="pin" type="password" inputmode="numeric" placeholder="바꿀 때만 입력"></div>
+    <div><label>&nbsp;</label><label class="check"><input type="checkbox" id="remoteOn"> 휴대폰 접속 켜기</label>
+      <label class="check"><input type="checkbox" id="remoteLan"> 같은 와이파이에서도 허용(Tailscale 없이)</label></div>
+  </div>
+  <div class="row" style="margin-top:8px"><button class="primary" id="remoteSave">저장</button><span class="muted" id="remoteMsg"></span></div>
+  <div class="urls" id="remoteUrls" style="margin-top:10px"></div>
 </section>
 
 <section class="card">
@@ -1287,16 +1515,18 @@ table.hist{width:100%;border-collapse:collapse;font-size:13px}table.hist td{padd
 
 <script>
 const $ = id => document.getElementById(id);
+const REMOTE = __REMOTE__;  // 서버가 휴대폰 문으로 들어온 요청인지 알려 줌
+if (REMOTE) document.body.classList.add('remote');
 let S = null, CLASSES = [], TAB_KO = {}, filter = 'all', lbIndex = -1, timer = null, infoFilled = '';
 const api = (path, body) => fetch(path, body === undefined ? {} : {method:'POST', headers:{'Content-Type':'application/json','X-QR':'1'}, body:JSON.stringify(body)})
-  .then(async r => { const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; });
+  .then(async r => { if (r.status === 401) { location.reload(); throw new Error('PIN'); } const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; });
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const INFO_FIELDS = [['name','가게 이름'],['category','업종'],['address','주소'],['phone','전화'],['hours','영업시간'],['website','웹사이트'],['rating','평점'],['maps_url','구글 지도 링크']];
 
 async function load(first) {
   const st = await api('/api/state');
   CLASSES = st.classes; TAB_KO = st.tab_ko; $('ver').textContent = 'v' + st.version;
-  if (first) { $('base').value = localStorage.getItem('qr_base') || st.default_base; loadHist(); }
+  if (first) { $('base').value = localStorage.getItem('qr_base') || st.default_base; loadHist(); if (!REMOTE) loadRemote(); }
   S = st.job; render();
   clearTimeout(timer);
   if (S && S.status === 'running') timer = setTimeout(() => load(false), 1000);
@@ -1305,7 +1535,7 @@ async function load(first) {
 function render() {
   const running = S && S.status === 'running';
   $('start').disabled = running; $('stop').hidden = !running;
-  $('notice').hidden = !(S && S.notice); if (S && S.notice) $('notice').textContent = S.notice;
+  $('notice').hidden = !(S && S.notice); if (S && S.notice) $('notice').textContent = S.notice + (REMOTE ? ' (휴대폰으로는 체크할 수 없어요 — PC 앞에서 체크하거나 멈춤을 누르세요.)' : '');
   $('statusCard').hidden = !S;
   if (!S) return;
   first_fill();
@@ -1368,6 +1598,14 @@ function showLb() {
     `<button data-lb="1">→</button><span>${lbIndex + 1}/${lbList.length} ${p.tabs.includes('owner') ? '· 가게 제공' : ''} ${p.latest_rank ? '· 최신 ' + p.latest_rank : ''}</span><button data-lb="0">닫기 (Esc)</button>`;
 }
 function closeLb() { $('lb').classList.remove('open'); lbIndex = -1; }
+let touchX = null;
+$('lb').addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, {passive: true});
+$('lb').addEventListener('touchend', e => {
+  if (touchX === null || lbIndex < 0) return;
+  const dx = e.changedTouches[0].clientX - touchX; touchX = null;
+  if (Math.abs(dx) < 50) return;
+  lbIndex = Math.max(0, Math.min(lbList.length - 1, lbIndex + (dx < 0 ? 1 : -1))); showLb();
+});
 document.addEventListener('keydown', e => {
   if (lbIndex < 0) return;
   if (e.key === 'Escape') closeLb();
@@ -1394,7 +1632,7 @@ $('start').onclick = async () => {
   try {
     localStorage.setItem('qr_base', $('base').value);
     await api('/api/start', {query: $('q').value, name: $('name').value, base: $('base').value, max_per_tab: +$('max').value, show_browser: $('show').checked});
-    filter = 'all'; infoFilled = ''; load(false);
+    filter = 'all'; infoFilled = ''; $('memo').value = ''; load(false);
   } catch (e) { alert(e.message); }
 };
 $('stop').onclick = () => api('/api/stop', {});
@@ -1409,11 +1647,48 @@ $('save').onclick = async () => {
   } catch (e) { alert(e.message); }
   $('save').disabled = false;
 };
-$('copy').onclick = () => navigator.clipboard.writeText($('prompt').textContent).then(() => { $('copy').textContent = '복사됨'; setTimeout(() => $('copy').textContent = '문장 복사', 1500); });
+function copyText(t) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+  const ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove();
+  return ok ? Promise.resolve() : Promise.reject(new Error('copy'));
+}
+$('copy').onclick = () => copyText($('prompt').textContent)
+  .then(() => { $('copy').textContent = '복사됨'; setTimeout(() => $('copy').textContent = '문장 복사', 1500); })
+  .catch(() => alert('복사가 안 되면 문장을 길게 눌러 복사해 주세요.'));
 $('openDir').onclick = () => api('/api/open', {path: S.saved.path}).catch(e => alert(e.message));
+function showRemote(r) {
+  $('remoteOn').checked = r.enabled; $('remoteLan').checked = r.lan;
+  $('remoteMsg').textContent = (r.has_pin ? 'PIN 설정됨. ' : 'PIN을 먼저 정해 주세요. ') +
+    (r.enabled ? '휴대폰 접속 켜짐.' : '휴대폰 접속 꺼짐.') + (r.tailscale ? '' : ' Tailscale이 이 PC에서 안 보여요(설치·로그인 확인).');
+  const box = $('remoteUrls'); box.innerHTML = '';
+  if (!r.enabled) return;
+  if (!r.urls.length) { box.innerHTML = '<span class="muted">접속 주소가 없어요. Tailscale을 켜거나 \'같은 와이파이에서도 허용\'을 켜 주세요.</span>'; return; }
+  r.urls.forEach(u => {
+    const d = document.createElement('div');
+    d.innerHTML = `<div class="qr"></div><div class="muted" style="margin-top:4px">${esc(u.url)}<br>${u.tailscale ? '어디서나(Tailscale)' : '같은 와이파이에서만'}</div>`;
+    box.appendChild(d);
+    loadQR().then(() => new QRCode(d.firstChild, {text: u.url, width: 130, height: 130}))
+      .catch(() => d.firstChild.remove());  // QR을 못 그려도 주소 글자는 보인다
+  });
+}
+// QR 그림 도구는 필요할 때만 따로 불러온다(못 불러와도 화면이 멈추지 않게)
+function loadQR() {
+  if (window.QRCode) return Promise.resolve();
+  return new Promise((ok, no) => {
+    const sc = document.createElement('script');
+    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    sc.onload = ok; sc.onerror = no; setTimeout(no, 8000); document.head.appendChild(sc);
+  });
+}
+async function loadRemote() { try { showRemote(await api('/api/remote')); } catch (e) {} }
+$('remoteSave').onclick = async () => {
+  try { showRemote(await api('/api/remote', {pin: $('pin').value, enabled: $('remoteOn').checked, lan: $('remoteLan').checked})); $('pin').value = ''; }
+  catch (e) { alert(e.message); }
+};
 async function loadHist() {
   const h = await api('/api/history?base=' + encodeURIComponent($('base').value));
-  $('hist').innerHTML = h.length ? h.map(r => `<tr><td>${esc(r.folder)}</td><td class="muted">${esc(r.at.replace('T', ' '))}</td><td>${r.count}장</td><td><button data-open="${esc(r.path)}">폴더 열기</button></td></tr>`).join('') : '<tr><td class="muted">아직 없음</td></tr>';
+  $('hist').innerHTML = h.length ? h.map(r => `<tr><td>${esc(r.folder)}</td><td class="muted">${esc(r.at.replace('T', ' '))}</td><td>${r.count}장</td><td><button class="pc-only" data-open="${esc(r.path)}">폴더 열기</button></td></tr>`).join('') : '<tr><td class="muted">아직 없음</td></tr>';
 }
 load(true);
 </script></body></html>
