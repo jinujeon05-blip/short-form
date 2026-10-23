@@ -41,9 +41,11 @@
 - 검색은 모든 언어의 이름·종류·지역·주소와 `keywords`(화면에 안 보임, 요리 이름 등)를 대상으로 하고 베트남어 성조를 무시한다 ("an voi" → Ăn Vội). 조건은 주소창(`?q=&region=&cat=`)에 남아 링크로 공유된다.
 - **웹앱 설치 버튼(2026-10-22)**: 가게 찾기 맨 위 "앱으로 설치하기" 버튼(`sales/stores/index.html`의 `<!-- install:start/end -->`, 5개 언어). 안드로이드 크롬은 `beforeinstallprompt`로 설치 창을 바로 띄우고, 아이폰·그 외 브라우저는 "홈 화면에 추가" 방법 안내 창을 보여 준다. 이미 앱으로 열었으면(standalone) 버튼 숨김. 삼성 인터넷은 설치하면 구글 Play 프로텍트가 '안전하지 않은 앱 차단됨'(Android 이전 버전용 앱)을 띄우므로(사용자 폰 확인 2026-10-22, 브라우저가 만든 설치 파일 탓으로 우리가 못 고침) **UA가 SamsungBrowser면 설치 창을 띄우지 않고 '크롬에서 열어 설치' 안내만 보여 준다**.
 - 각 가게 메뉴판 맨 아래(파트너 배너 다음)에 "QR 메뉴판 가게 더 보기" 링크가 있다. 원본은 `restaurants/_shared/stores-link.js` 하나, 고친 뒤 `restaurants/_shared/sync-stores.sh`로 복사하고 가게마다 다시 배포한다. 메뉴판 언어를 따라 문구와 `?lang=`이 바뀌고, 색은 가게 `partner-theme`(`--pt-*`)를 따른다.
+- **다산 배너 위치(2026-10-23 사용자 지시)**: 가게 찾기 페이지(`sales/stores/index.html`, 원본 복사본 `sales/stores/dasan.js`)는 처음 화면에서 **정식 계약 가게 바로 다음**(가게 찾기용 앞)에 다산 배너가 나오고, 검색·지역·종류를 고르면 **맨 아래(footer 다음)**로 간다. 정식 가게는 목록 앞쪽에 정렬된다. 정식/찾기용 구분은 `data.js`의 `listing: true` 여부이고(관리 화면 기본값과 같음), **관리 화면에서 상태를 바꿔도 공개 페이지는 안 바뀐다** → 가게가 정식으로 바뀌면 `data.js`에서 그 가게의 `listing: true`를 지운다. `restaurants/_shared/dasan.js`를 고치면 `sales/stores/dasan.js`에도 복사한다.
 - 새 가게는 사장님 동의를 받고 `STORES`에 추가한다. 목록에 넣은 가게는 `sync-stores.sh`의 SHOPS에도 넣는다. 지역·종류가 새로 생기면 `REGIONS`·`CATS`에도 넣는다. 15~20곳이 넘으면 지역을 나라/도시 두 단계로 나누는 것을 검토한다.
 
 ## 점주용 자료
+- **점주 메뉴 관리 설명서 + 로드맵(2026-10-23, 한국어·베트남어 A4 4쪽, 가게 공통)**: `sales/owner/guide-ko.html`·`guide-vi.html` → `node tools/pdf.mjs sales/owner/guide-ko.html sales/print/owner-guide-ko.pdf`(vi도 같게). 내용: 할 수 있는 일·로그인·화면 둘러보기(빨간 번호 1~15)·상황별 방법·알아 둘 것·방문 리포트·로드맵(지금/준비 중/의견으로 정함)·문의처. 화면 그림은 `node tools/owner-shots.mjs`(가짜 서버로 편집기를 띄워 데모 데이터로 캡처 → `sales/owner/guide-img/`). **편집기(`sales/menu-editor.js`)·로그인 화면이 바뀌면 캡처와 두 HTML을 같이 고친다.** 로드맵의 '준비 중'은 `docs/admin-system.md`의 '나중에'·번역 현황과 맞춘 것이라, 그쪽이 바뀌면 로드맵도 고친다(시기는 약속하지 않음). 점주에게 보낼 때 파일 이름은 `점주설명서_한국어.pdf`·`Huong-dan_thuc-don_vi.pdf`처럼 복사해서 보낸다.
 - Ăn Vội: `restaurants/anvoi/print/huong-dan-su-dung.pdf` (베트남어 사용설명서·주문 처리 순서, A4 2쪽, 원본 `huong-dan.html`, 화면 캡처 `print/img/g*.jpg`). 다른 가게도 같은 형식으로 만든다.
 - 가마솥: `restaurants/gamasot/print/guide-gamasot.pdf` (한국어 활용 가이드북, A4 3쪽: 손님 화면·기능별 좋은 점·상황별 활용·링크 문구·수정 방법, 원본 `guide.html`, 캡처 `print/img/g*.jpg`).
 - Ăn Vội 메뉴판에는 장바구니 + Zalo 주문 기능이 있다 (주문서는 항상 베트남어로 작성).
