@@ -36,7 +36,7 @@ try:
 except ImportError:  # 없어도 동작한다(크기 표시·webp 변환만 빠짐)
   Image = None
 
-VERSION = "1.0"
+VERSION = "1.1"
 PORT = int(os.environ.get("QRMENU_PORT", "8765"))
 HOME = Path.home() / ".qrmenu_photos"
 JOBS = HOME / "jobs"
@@ -833,6 +833,34 @@ def restore_last_job():
       pass
 
 
+def find_chrome():
+  """PC에 깔린 크롬 실행 파일 (없으면 None)."""
+  if sys.platform.startswith("win"):
+    for env in ("PROGRAMFILES", "PROGRAMFILES(X86)", "LOCALAPPDATA"):
+      base = os.environ.get(env)
+      if base:
+        p = Path(base) / "Google" / "Chrome" / "Application" / "chrome.exe"
+        if p.is_file():
+          return str(p)
+  elif sys.platform == "darwin":
+    p = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+    if p.is_file():
+      return str(p)
+  return shutil.which("google-chrome") or shutil.which("chrome")
+
+
+def open_dashboard(url):
+  """대시보드는 크롬으로 연다(기본 브라우저가 엣지여도). 크롬이 없으면 기본 브라우저."""
+  chrome = find_chrome()
+  if chrome:
+    try:
+      subprocess.Popen([chrome, "--new-window", url])
+      return
+    except OSError:
+      pass
+  webbrowser.open(url)
+
+
 def main():
   JOBS.mkdir(parents=True, exist_ok=True)
   restore_last_job()
@@ -840,12 +868,12 @@ def main():
     server = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
   except OSError:
     print(f"이미 실행 중이에요 → http://127.0.0.1:{PORT}")
-    webbrowser.open(f"http://127.0.0.1:{PORT}")
+    open_dashboard(f"http://127.0.0.1:{PORT}")
     return
   url = f"http://127.0.0.1:{PORT}"
   print(f"QR메뉴 사진 수집기 v{VERSION} — {url}\n이 창을 닫으면 대시보드가 꺼집니다.")
   if "--no-browser" not in sys.argv:
-    threading.Timer(0.8, lambda: webbrowser.open(url)).start()
+    threading.Timer(0.8, lambda: open_dashboard(url)).start()
   try:
     server.serve_forever()
   except KeyboardInterrupt:
@@ -860,7 +888,7 @@ PAGE = r"""<!doctype html>
 :root{--bg:#f5f3ef;--card:#fff;--ink:#1d1b18;--muted:#6f6a62;--line:#e3ded5;--accent:#e8590c;--accent-ink:#fff;
 --menu:#e8590c;--food:#2b8a3e;--store:#1971c2;--other:#7950f2;--skip:#868e96;--warn:#fff3bf;--warn-ink:#5c4400}
 @media (prefers-color-scheme:dark){:root{--bg:#171614;--card:#22201d;--ink:#eee9e1;--muted:#a39d93;--line:#3a3631;--warn:#4a3d00;--warn-ink:#ffe8a3}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif}
 header{padding:14px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);background:var(--card)}
 header b{font-size:17px}header .v{color:var(--muted);font-size:12px}
 main{max-width:1280px;margin:0 auto;padding:16px}
