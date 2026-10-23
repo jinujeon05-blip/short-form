@@ -56,7 +56,7 @@
 | `restaurants/cheong` | 청식당 NHÀ HÀNG HÀN QUỐC 한국식 중화요리 짜장·짬뽕·탕수육 (54 Lý Nhân Tông, Võ Cường, Bắc Ninh, 간판 01 N5 Lý Nhân Tông) — **가게 찾기용** | `cheong-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://cheong.qrmenuasia.com |
 | `restaurants/studioan` | 스튜디오 안 사진관 An Studio (하노이 한국 사진관, TT4 Lô 98 P, Từ Liêm, Hà Nội, 0988 862 720) — **가게 찾기용**, 메뉴 없는 촬영 스튜디오 | `studioan-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://studioan.qrmenuasia.com |
 | `restaurants/jamaedang` | 자매당 JAMAEDANG 한식 코스·통갈치조림·홍어 세트 (Ngõ 176 Đ. Đình Thôn, D7 - Fivestar, Từ Liêm, Hà Nội, 0925 692 817) — **가게 찾기용** | `jamaedang-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://jamaedang.qrmenuasia.com |
-| `restaurants/ottugi` | 오뚜기식당 OTTUGI 한국식 고기구이 (Ngõ 179 Đ. Đình Thôn, Từ Liêm, Hà Nội, 0942 441 531) — **가게 찾기용** | `ottugi-menu` (미배포) | https://ottugi.qrmenuasia.com |
+| `restaurants/ottugi` | 오뚜기식당 OTTUGI 한국식 고기구이 (Ngõ 179 Đ. Đình Thôn, Từ Liêm, Hà Nội, 0942 441 531) — **가게 찾기용** | `ottugi-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://ottugi.qrmenuasia.com |
 | `restaurants/joseon` | 조선시대 하노이 본점 Nhà Hàng Joseon Sidae 한식 뼈찜·목뼈감자탕·세트 (TT4/khu P. Đỗ Đình Thiện, khu đô thị, Từ Liêm, Hà Nội) — **가게 찾기용** | `joseon-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://joseon.qrmenuasia.com |
 | `restaurants/namme` | 남매식당 Namme 한식 남매술상·김치찜·오삼불고기·감자탕 (107 CT5 Mỹ Đình, Từ Liêm, Hà Nội) — **가게 찾기용** | `namme-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://namme.qrmenuasia.com |
 | `restaurants/inyeon` | 인연식당 Nhân Duyên 하노이 원조 족발 전문점·보쌈·구이·볶음 (Lô 103 TT3, Hoàng Trọng Mậu / KĐT Mỹ Đình, Từ Liêm, Hà Nội) — **가게 찾기용** | `inyeon-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://inyeon.qrmenuasia.com |
