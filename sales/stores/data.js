@@ -182,7 +182,7 @@ window.STORES = [
   { id: "cheong", name: "청식당", sub: "한국식 중화요리 · 짜장면 · 짬뽕 · 탕수육", url: "https://cheong.qrmenuasia.com", listing: true,
     region: "bacninh", cats: ["chinese", "korean", "noodle"], tags: ["photos"],
     address: "54 Lý Nhân Tông, Võ Cường, Bắc Ninh",
-    type: { ko: "짜장면 · 짬뽕 · 탕수육 · 누룽지탕 한국식 중화요리", vi: "Mì tương đen · Mì hải sản cay · Thịt chua ngọt — món Hoa kiểu Hàn", en: "Korean-Chinese · Jjajangmyeon · Jjamppong · Sweet & sour pork", zh: "韩式中华料理 · 炸酱面 · 海鲜辣汤面 · 糖醋肉", ja: "韓国式中華・チャジャン麺・チャンポン・タンスユク" },
+    type: { ko: "짜장면 · 짬뽕 · 탕수육 · 누룽지탕 한국식 중화요리", vi: "Mì tương đen · Mì hải sản cay · Thịt chua ngọt — món Hoa kiểu Hàn", en: "Korean-Chinese · Jjajangmyeon · Jjamppong · Sweet & sour pork", zh: "韩式中华料理 · 炸酱面 · 炒码面 · 糖醋肉", ja: "韓国式中華・チャジャン麺・チャンポン・タンスユク" },
     keywords: "청식당 청 식당 cheong cheongsikdang chung sikdang 박닌 중국집 중식 중화요리 한국식 중화요리 짜장면 짜장 간짜장 유니짜장 삼선짜장 쟁반짜장 짬뽕 삼선짬뽕 알탕짬뽕 오뎅짬뽕 차돌박이짬뽕 백짬뽕 매생이 짬짜면 탕짬면 탕짜면 볶짬면 탕수육 사천탕수육 깐풍기 깐풍육 깐쇼새우 깐풍새우 난자완스 팔보채 유산슬 전가복 고추잡채 잡채 마파두부 군만두 누룽지탕 해물누룽지탕 알짬뽕탕 볶음밥 새우볶음밥 짜장밥 짬뽕밥 마파두부덮밥 잡탕밥 송이덮밥 중화비빔밥 냉우동 중화비빔국수 냉면 콩국수 순두부 김치찌개 부대찌개 불낙전골 고량주 백년호도 nhà hàng hàn quốc lý nhân tông võ cường bắc ninh mì tương đen jjajangmyeon mì hải sản cay jjamppong thịt chua ngọt tangsuyuk cơm rang lẩu xúc xích lẩu bò bạch tuộc canh kim chi korean chinese black bean noodles sweet and sour pork fried rice 炸酱面 炒码面 海鲜辣汤面 糖醋肉 干烹鸡 锅巴汤 炒饭 韩式中餐 チャジャン麺 ジャージャー麺 チャンポン タンスユク 韓国中華" },
   // 가게 찾기용(listing: 사장님 동의·비용 없이 손님 검색용으로 만든 메뉴판, 주문 기능 없음)
   { id: "hellochicken", name: "Hello Chicken", sub: "헬로치킨 · Beer & Pocha", url: "https://hellochicken.qrmenuasia.com", listing: true,

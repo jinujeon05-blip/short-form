@@ -50,7 +50,7 @@ window.MENU = [
     name: T("누룽지탕 · 짬뽕탕", "Scorched Rice Soup · Jjamppong Soup", "锅巴汤 · 炒码汤", "おこげスープ · チャンポンスープ", "Súp cơm cháy · Lẩu hải sản cay"),
     items: [
       it(700000, "nurungji", "해물누룽지탕", "Seafood Nurungji-tang (scorched rice soup)", "海鲜锅巴汤", "海鮮おこげスープ", "Súp cơm cháy hải sản"),
-      it(500000, "maesaengi-nurungji", "매생이 누룽지탕", "Maesaengi Seaweed Nurungji-tang", "青苔锅巴汤", "メセンイ(海藻)おこげスープ", "Súp cơm cháy rong maesaengi"),
+      it(500000, "maesaengi-nurungji", "매생이 누룽지탕", "Maesaengi Seaweed Nurungji-tang", "海藻锅巴汤", "メセンイ(海藻)おこげスープ", "Súp cơm cháy rong maesaengi"),
       it(500000, "aljjamppongtang", "알짬뽕탕", "Fish Roe Jjamppong-tang (spicy seafood soup)", "鱼籽炒码汤", "魚卵チャンポンスープ", "Lẩu hải sản cay trứng cá", { spicy: true }),
       it(600000, null, "술국 해물짬뽕탕", "Seafood Jjamppong-tang (drinking soup)", "下酒海鲜炒码汤", "海鮮チャンポンスープ(酒の肴スープ)", "Lẩu hải sản cay (canh nhậu)", { spicy: true }),
     ],
@@ -83,10 +83,10 @@ window.MENU = [
   {
     id: "jjamppong",
     name: T("짬뽕 · 우동", "Jjamppong · Udon", "炒码面 · 乌冬面", "チャンポン · うどん", "Mì hải sản cay · Udon"),
-    note: T("기본 짬뽕 가격은 벽 메뉴판 사진에서 안 보여요. 직원에게 물어봐 주세요.", "The price of the basic jjamppong is not visible in the wall menu photo. Please ask the staff.", "基本款炒码面的价格在墙上菜单照片中看不清，请询问店员。", "基本のチャンポンの値段は壁のメニュー写真で読み取れませんでした。スタッフにお尋ねください。", "Giá mì hải sản cay cơ bản không thấy rõ trong ảnh thực đơn treo tường. Vui lòng hỏi nhân viên."),
+    note: T("짬뽕 가격은 직원에게 물어봐 주세요.", "Please ask the staff for the jjamppong price.", "炒码面价格请询问店员。", "チャンポンの価格は店員にお尋ねください。", "Vui lòng hỏi nhân viên giá mì hải sản cay (Jjamppong)."),
     items: [
       it(null, null, "짬뽕", "Jjamppong (spicy seafood noodle soup)", "炒码面(韩式海鲜辣汤面)", "チャンポン(韓国式)", "Mì hải sản cay (Jjamppong)", { spicy: true }),
-      it(170000, "samseon-maesaengi", "삼선짬뽕 매생이", "Samseon Jjamppong with Maesaengi (3 seafoods)", "三鲜炒码面(青苔)", "三鮮チャンポン メセンイ入り", "Mì hải sản cay 3 loại với rong maesaengi"),
+      it(170000, "samseon-maesaengi", "삼선짬뽕 매생이", "Samseon Jjamppong with Maesaengi (3 seafoods)", "三鲜炒码面(海藻)", "三鮮チャンポン メセンイ入り", "Mì hải sản cay 3 loại với rong maesaengi"),
       it(190000, "altang-jjamppong", "알탕짬뽕", "Fish Roe Jjamppong", "鱼籽炒码面", "魚卵チャンポン", "Mì hải sản cay trứng cá", { spicy: true }),
       it(170000, "odeng", "오뎅짬뽕", "Fish Cake Jjamppong", "鱼饼炒码面", "おでんチャンポン", "Mì hải sản cay chả cá", { spicy: true }),
       it(170000, null, "차돌박이짬뽕", "Brisket Jjamppong", "牛腩炒码面", "牛バラ肉チャンポン", "Mì hải sản cay ba chỉ bò", { spicy: true }),
@@ -114,7 +114,7 @@ window.MENU = [
     items: [
       it(120000, "naengudong", "냉우동", "Cold Udon", "冷乌冬面", "冷やしうどん", "Udon lạnh"),
       it(140000, "bibimguksu", "중화비빔국수", "Chinese-style Spicy Mixed Noodles", "中式辣拌面", "中華風ビビン麺(辛口)", "Mì trộn cay kiểu Hoa", { spicy: true }),
-      it(120000, null, "물냉면", "Mul Naengmyeon (cold broth noodles)", "汤冷面", "ムルネンミョン(水冷麺)", "Mì lạnh nước (Mul naengmyeon)"),
+      it(120000, "real-naengmyeon", "물냉면", "Mul Naengmyeon (cold broth noodles)", "汤冷面", "ムルネンミョン(水冷麺)", "Mì lạnh nước (Mul naengmyeon)"),
       it(140000, null, "비빔냉면", "Bibim Naengmyeon (spicy cold noodles)", "辣拌冷面", "ビビン冷麺", "Mì lạnh trộn cay (Bibim naengmyeon)", { spicy: true }),
       it(120000, null, "콩국수", "Kongguksu (cold soy milk noodles)", "豆浆冷面", "コングクス(冷たい豆乳麺)", "Mì lạnh sữa đậu nành"),
     ],
@@ -132,7 +132,7 @@ window.MENU = [
       it(170000, null, "삼선짬뽕밥", "Samseon Jjamppongbap (3 seafoods)", "三鲜炒码汤饭", "三鮮チャンポンクッパ", "Cơm canh hải sản cay 3 loại", { spicy: true }),
       it(170000, null, "차돌박이짬뽕밥", "Brisket Jjamppongbap", "牛腩炒码汤饭", "牛バラ肉チャンポンクッパ", "Cơm canh hải sản cay ba chỉ bò", { spicy: true }),
       it(140000, "mapa", "마파두부덮밥", "Mapo Tofu Rice Bowl", "麻婆豆腐盖饭", "マーボー豆腐丼", "Cơm đậu hũ Mapo", { spicy: true }),
-      it(140000, "gochu", "고추덮밥", "Gochu Deopbap (pepper stir-fry over rice)", "青椒肉丝盖饭", "チンジャオロース丼", "Cơm thịt xào ớt chuông", { spicy: true }),
+      it(140000, "gochu", "고추덮밥", "Gochu Deopbap (pepper stir-fry over rice)", "青椒肉丝盖饭", "チンジャオロース丼", "Cơm thịt xào ớt chuông"),
       it(140000, "bibimbap", "중화비빔밥", "Chinese-style Bibimbap", "中式拌饭", "中華風ビビンバ", "Cơm trộn kiểu Hoa", { spicy: true }),
       it(140000, null, "잡채밥", "Japchaebap (japchae over rice)", "杂菜盖饭", "チャプチェ丼", "Cơm miến xào Japchae"),
       it(150000, null, "제육덮밥", "Jeyuk Deopbap (spicy pork over rice)", "辣炒猪肉盖饭", "豚肉辛味炒め丼", "Cơm thịt heo xào cay", { spicy: true }),
