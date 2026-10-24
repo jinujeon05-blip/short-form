@@ -372,6 +372,11 @@ window.STORES = [
     address: "73 P. Trần Văn Lai, Từ Liêm, Hà Nội",
     type: { ko: "생돈까스 · 분식 · 김밥 · 찌개 · 라면 한식", vi: "Món Hàn · Cốt lết chiên xù · Món ăn vặt · Kimbap · Canh · Mì", en: "Korean food · Fresh pork cutlet · Street snacks · Gimbap · Stews", zh: "韩餐 · 鲜炸猪排 · 韩式小吃 · 紫菜包饭 · 汤锅", ja: "韓国料理・生とんかつ・軽食・キンパ・チゲ・ラーメン" },
     keywords: "바보아저씨 바보 아저씨 babo babo restaurant 하노이 hà nội từ liêm tu liem trần văn lai tran van lai 73 trần văn lai nhà hàng babo nhà hàng hàn quốc 한식 분식 한식당 생돈까스 돈까스 돈가스 생선까스 치킨까스 치즈돈까스 함박스테이크 파마산돈까스 고치도그 정식 김밥 참치김밥 치즈김밥 떡볶이 치즈떡볶이 라볶이 쫄볶이 순대 떡순대 떡국 만둣국 떡만둣국 찜닭 김치찌개 참치김치찌개 된장찌개 부대찌개 꽁치김치찌개 닭도리탕 낙지소면 동태찌개 오뎅탕 골뱅이비빔면 두부김치 오므라이스 비빔밥 김치볶음밥 제육덮밥 낙지덮밥 불고기덮밥 오징어덮밥 뚝배기불고기 비빔국수 열무국수 콩국수 잔치국수 쫄면 모밀국수 라면 해장라면 cốt lết chiên xù kimbap tokbokki canh kimchi mì lạnh 韩餐 鲜炸猪排 紫菜包饭 韩式小吃 年糕 韓国料理 とんかつ キンパ トッポッキ" },
+  { id: "dduldul", name: "둘둘분식 Haihai Tokbokki", sub: "떡볶이 · 김밥 · 튀김 · 순대 · 냉면 · 쌈밥", url: "https://dduldul.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["noodle", "korean"], tags: ["photos"],
+    address: "35 P. Đỗ Đình Thiện, Từ Liêm, Hà Nội",
+    type: { ko: "떡볶이 · 김밥 · 튀김 · 순대 · 냉면 한국 분식", vi: "Món ăn vặt Hàn Quốc · Tokbokki · Kimbap · Đồ chiên · Dồi · Mì lạnh", en: "Korean snack bar · Tteokbokki · Gimbap · Fried snacks · Sundae · Naengmyeon", zh: "韩式小吃 · 辣炒年糕 · 紫菜包饭 · 炸物 · 血肠 · 冷面", ja: "韓国軽食・トッポッキ・キンパ・天ぷら・スンデ・冷麺" },
+    keywords: "둘둘분식 둘둘 분식 haihai tokbokki haihai tteokbokki hai hai tokbokki dduldul dul dul bunsik 하노이 hà nội từ liêm tu liem đỗ đình thiện do dinh thien 35 đỗ đình thiện mỹ đình my dinh nhà hàng hàn quốc quán ăn vặt hàn quốc 한식 분식 분식집 떡볶이 컵떡볶이 순대 떡튀순 어묵 오뎅 소떡소떡 떡꼬치 찐만두 모둠튀김 김말이 야채튀김 고구마튀김 계란튀김 오징어튀김 고추튀김 김밥 치즈김밥 참치김밥 꼬마김밥 고쌈냉면 매운냉면 냉면 열무국수 잔치국수 해장라면 짜계치 라면사리 고기찌개 닭도리탕 우렁제육쌈밥 우렁불백쌈밥 돈까스 삼겹살비빔밥 tokbokki kimbap đồ chiên dồi mì lạnh món ăn vặt hàn quốc 韩式小吃 辣炒年糕 紫菜包饭 冷面 韓国軽食 トッポッキ キンパ 冷麺" },
 ];
 
 window.SI = {
