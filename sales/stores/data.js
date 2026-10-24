@@ -377,6 +377,11 @@ window.STORES = [
     address: "35 P. Đỗ Đình Thiện, Từ Liêm, Hà Nội",
     type: { ko: "떡볶이 · 김밥 · 튀김 · 순대 · 냉면 한국 분식", vi: "Món ăn vặt Hàn Quốc · Tokbokki · Kimbap · Đồ chiên · Dồi · Mì lạnh", en: "Korean snack bar · Tteokbokki · Gimbap · Fried snacks · Sundae · Naengmyeon", zh: "韩式小吃 · 辣炒年糕 · 紫菜包饭 · 炸物 · 血肠 · 冷面", ja: "韓国軽食・トッポッキ・キンパ・天ぷら・スンデ・冷麺" },
     keywords: "둘둘분식 둘둘 분식 haihai tokbokki haihai tteokbokki hai hai tokbokki dduldul dul dul bunsik 하노이 hà nội từ liêm tu liem đỗ đình thiện do dinh thien 35 đỗ đình thiện mỹ đình my dinh nhà hàng hàn quốc quán ăn vặt hàn quốc 한식 분식 분식집 떡볶이 컵떡볶이 순대 떡튀순 어묵 오뎅 소떡소떡 떡꼬치 찐만두 모둠튀김 김말이 야채튀김 고구마튀김 계란튀김 오징어튀김 고추튀김 김밥 치즈김밥 참치김밥 꼬마김밥 고쌈냉면 매운냉면 냉면 열무국수 잔치국수 해장라면 짜계치 라면사리 고기찌개 닭도리탕 우렁제육쌈밥 우렁불백쌈밥 돈까스 삼겹살비빔밥 tokbokki kimbap đồ chiên dồi mì lạnh món ăn vặt hàn quốc 韩式小吃 辣炒年糕 紫菜包饭 冷面 韓国軽食 トッポッキ キンパ 冷麺" },
+  { id: "yega", name: "예가 YEGA", sub: "누룽지닭백숙 · 닭볶음탕 · 훈제 · 막국수", url: "https://yega.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "bbq"], tags: ["photos", "wifi"],
+    address: "The Emerald Vietnam, E3-(SH16), 1 Floor, CT8, Từ Liêm, Hà Nội",
+    type: { ko: "누룽지닭백숙 · 닭볶음탕 · 훈제오리 · 막국수 한식", vi: "Món Hàn · Gà hầm cơm cháy · Gà xào cay · Vịt hun khói · Mì lạnh", en: "Korean food · Nurungji chicken soup · Spicy chicken stew · Smoked duck · Makguksu", zh: "韩餐 · 锅巴鸡肉汤 · 辣炖鸡 · 熏鸭 · 荞麦冷面", ja: "韓国料理・おこげ鶏ペクスク・タッポックンタン・燻製鴨・マッククス" },
+    keywords: "예가 yega yega restaurant 예가식당 하노이 hà nội từ liêm tu liem the emerald emerald ct8 mỹ đình my dinh nhà hàng hàn quốc 한식 백숙 누룽지백숙 누룽지닭백숙 누룽지오리백숙 엄나무닭백숙 엄나무오리백숙 능이백숙 능이닭백숙 능이오리백숙 누룽지죽 훈제오리 훈제삼겹살 수제떡갈비 진꽃살 스모크치킨 훈제소시지 모듬 새우소금구이 닭볶음탕 제육볶음 도토리묵무침 메밀전병 문어숙회 쟁반막국수 봉평막국수 들깨수제비 들깨메밀국수 평일점심특선 제육한상 훈제삼겹한상 gà hầm cơm cháy vịt hun khói gà xào cay mì lạnh 韩餐 锅巴鸡肉汤 辣炖鸡 熏鸭 荞麦冷面 韓国料理 おこげ鶏 タッポックンタン 燻製鴨 マッククス" },
 ];
 
 window.SI = {

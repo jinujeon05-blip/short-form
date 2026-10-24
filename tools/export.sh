@@ -18,6 +18,7 @@ name() {
     jjajang) echo "짜장도둑" ;;
     babo) echo "바보아저씨" ;;
     dduldul) echo "둘둘분식" ;;
+    yega) echo "예가" ;;
     mannyang) echo "만냥포차" ;;
     cheonan) echo "천안이발관" ;;
     seonsan) echo "선산곱창" ;;
