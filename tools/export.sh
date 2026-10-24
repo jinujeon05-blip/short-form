@@ -13,6 +13,7 @@ name() {
     yeha) echo "예하카페" ;;
     kkongsi) echo "꽁시꽁시" ;;
     jeonbotdae) echo "전봇대" ;;
+    miz) echo "미즈" ;;
     namme) echo "남매식당" ;;
     inyeon) echo "인연식당" ;;
     *) echo "$1" ;;
