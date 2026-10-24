@@ -40,6 +40,7 @@ const SHOPS = {
   yeha:         { type: 'Restaurant', cuisine: ['Cafe', 'Dessert', 'Waffle', 'Bingsu', 'Pasta', 'Korean snacks'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   kkongsi:      { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Korean', 'Noodles', 'Course meals'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   jeonbotdae:   { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef', 'Pork belly', 'Gamjatang'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  miz:          { type: 'Restaurant', cuisine: ['Japanese', 'Sushi', 'Sashimi', 'Tuna', 'Course meals'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   jamaedang:    { type: 'Restaurant', cuisine: ['Korean', 'Korean course', 'Seafood', 'Skate', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   studioan:     { type: 'LocalBusiness', noMenu: true, country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   cheong:       { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Korean', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },

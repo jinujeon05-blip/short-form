@@ -326,6 +326,11 @@ window.STORES = [
     address: "Tòa CT4 KĐT, 114 Đơn nguyên 3, Từ Liêm, Hà Nội",
     type: { ko: "소고기 · 삼겹살 · 감자탕 · 팔당오징어 한국식 고기구이", vi: "Thịt nướng Hàn Quốc · Thịt bò · Ba chỉ · Canh xương khoai tây · Mực Paldang", en: "Korean BBQ · Beef · Pork belly · Gamjatang · Paldang squid", zh: "韩式烤肉 · 牛肉 · 五花肉 · 土豆排骨汤 · 辣炒鱿鱼", ja: "韓国焼肉・牛肉・サムギョプサル・カムジャタン・イカ炒め" },
     keywords: "전봇대 전봇대식당 전봇대 식당 jeonbotdae jeonbotdae restaurant geon bot dae geonbotdae gun bot dae 하노이 hà nội từ liêm tu liem ct4 kđt khu đô thị đơn nguyên 3 114 đơn nguyên 3 mỹ đình my dinh nhà hàng thịt nướng hàn quốc nhà hàng chuyên dâu bò hàn quốc 한식 고기구이 고깃집 한국 소고기 소고기 차돌박이 차돌삼합 안창살 양념안창살 토시살 갈비살 치마살 꽃살 우대갈비 LA양념갈비 la갈비 소고기모듬 숙성생삼겹살 생삼겹살 냉동삼겹살 대패삼겹살 숙성생목살 항정살 양념돼지갈비 돈차돌 감자탕 통뼈감자탕 뼈해장국 팔당오징어 오징어볶음 골뱅이소면 숙성홍어 홍어 육회 갑오징어초무침 김치전 두부김치 감자전 차돌된장찌개 김치찌개 물냉면 비빔냉면 초계국수 쫄면 차돌라면 실비김치라면 계란찜 초밥 점심특선 점심 특선 런치세트 제육덮밥 육쌈냉면 육회비빔밥 철판돼지불고기 갈비탕 북어국 소주 막걸리 사케 하이볼 맥주 thịt bò thịt heo ba chỉ nướng canh xương khoai tây mực paldang gỏi bò sống korean bbq korean beef pork belly gamjatang pork bone stew paldang squid lunch special soju sake highball 韩式烤肉 韩国烤肉 五花肉 牛肉 土豆排骨汤 焼肉 サムギョプサル カムジャタン 韓国料理" },
+  { id: "miz", name: "미즈 MIZ", sub: "일식 · 초밥 · 회 · 참치 코스 · 점심 메뉴", url: "https://miz.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese"], tags: ["photos"],
+    address: "Lô 29 - TT4, P. Trần Văn Lai, Từ Liêm, Hà Nội",
+    type: { ko: "초밥 · 회 · 참치 코스 · 점심 메뉴 일식 레스토랑", vi: "Sushi · Sashimi · Set cá ngừ · Thực đơn trưa — nhà hàng Nhật", en: "Japanese restaurant · Sushi · Sashimi · Tuna courses · Lunch menu", zh: "日本料理 · 寿司 · 刺身 · 金枪鱼套餐 · 午餐菜单", ja: "日本料理・寿司・刺身・マグロコース・ランチメニュー" },
+    keywords: "미즈 미즈레스토랑 미즈 레스토랑 미즈일식 미즈 일식 miz miz restaurant miz japanese restaurant 하노이 hà nội từ liêm tu liem trần văn lai tran van lai tt4 lô 29 lo 29 mỹ đình my dinh nhà hàng nhật bản nhà hàng nhật 일식 일본 음식 일식당 초밥 모둠초밥 장어초밥 새우초밥 회초밥 연어초밥 회정식 연어회정식 보리굴비 회덮밥 연어덮밥 물회 장어덮밥 알밥 튀김우동 알탕 동태탕 동태지리 새우튀김 생선까스 가오리찜 모둠회 참치 참다랑어 머리살 참치도로 오도로 울대살 돌문어숙회 참소라숙회 갑오징어회 연어회 양미리구이 고노와다 사케 일본 청주 하쿠시카 카센 막걸리 소주 화요 점심 점심 메뉴 저녁 코스 sushi sashimi tuna course toro otoro lunch menu japanese sake nhà hàng sushi sashimi cá ngừ set trưa 日本料理 寿司 刺身 金枪鱼 清酒 日本料理 寿司 刺身 マグロ 日本酒 ランチ" },
 ];
 
 window.SI = {
