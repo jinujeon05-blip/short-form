@@ -60,7 +60,7 @@ window.MENU = [
       {"price": 205000, "name": {"ko": "과일 간장 삼겹살", "en": "Fruit Soy-marinated Pork Belly", "zh": "水果酱油五花肉", "ja": "フルーツ醤油サムギョプサル", "vi": "Ba chỉ heo ướp sốt hoa quả"}},
       {"price": 145000, "name": {"ko": "껍데기", "en": "Pork Skin (Kkeopdegi)", "zh": "猪皮(Kkeopdegi)", "ja": "豚皮(コプデギ)", "vi": "Bì heo"}},
       {"price": 195000, "name": {"ko": "숙성 목살", "en": "Aged Pork Neck (Moksal)", "zh": "熟成猪颈肉(Moksal)", "ja": "熟成モクサル", "vi": "Thịt Cổ Heo"}},
-      {"price": 195000, "tag": "best", "photo": "img/samgyeop.jpg", "name": {"ko": "숙성 삼겹살", "en": "Aged Pork Belly (Samgyeopsal)", "zh": "熟成五花肉", "ja": "熟成サムギョプサル", "vi": "Ba chỉ heo"}},
+      {"price": 195000, "tag": "best", "name": {"ko": "숙성 삼겹살", "en": "Aged Pork Belly (Samgyeopsal)", "zh": "熟成五花肉", "ja": "熟成サムギョプサル", "vi": "Ba chỉ heo"}},
       {"price": 205000, "spicy": true, "name": {"ko": "매운 양념 삼겹살", "en": "Spicy Marinated Pork Belly", "zh": "辣酱五花肉", "ja": "辛口味付けサムギョプサル", "vi": "Ba chỉ heo sốt cay"}},
     ],
   },
