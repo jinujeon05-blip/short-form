@@ -39,7 +39,7 @@ window.MENU = [
     "name": {
      "ko": "선산곱창 (곱창전골)",
      "en": "Seonsan Gopchang (Beef Intestine Hot Pot)",
-     "zh": "肠肉火锅",
+     "zh": "牛肠火锅",
      "ja": "ホルモン鍋(ソンサンコプチャン)",
      "vi": "Lòng lẩu"
     },
@@ -151,7 +151,7 @@ window.MENU = [
      "en": "Bongi Grilled Pork Intestine",
      "zh": "烤猪大肠(봉이)",
      "ja": "豚マクチャン焼き(ポンイ)",
-     "vi": "Thịt lợn nướng"
+     "vi": "Ruột heo nướng (막창)"
     }
    },
    {
@@ -222,7 +222,7 @@ window.MENU = [
      "en": "Acorn Jelly Salad",
      "zh": "橡子凉粉拌菜",
      "ja": "どんぐりゼリーの和え物",
-     "vi": "Gỏi thạch đotori"
+     "vi": "Gỏi thạch hạt dẻ (dotori)"
     }
    },
    {
