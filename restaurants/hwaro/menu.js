@@ -3,7 +3,7 @@
 // 메뉴/가격 수정은 이 파일만 고치면 됩니다. 가격 단위: VND
 // price: 가격(null이면 '가격 문의', 0이면 무료) / sizes: [[라벨, 가격], …] / tag / spicy: true / desc / photo
 // 원본: 구글 드라이브 "QR메뉴판/화로상회" — 메뉴판 사진 22장 중 가게 계정 사진은 menu_07·menu_08.
-// 사진끼리 값이 다른 곳은 menu_21(한국어·베트남어) 기준: 감자탕 M 349,000 / L 549,000, 냉면+고기 돼지 179,000 / 소 199,000.
+// 사진끼리 값이 다른 곳은 사용자 지시(2026-10-24): 사진마다 값이 다르면 높은 쪽을 쓴다 → 감자탕 M 389,000 / L 599,000, 냉면+고기 돼지 199,000 / 소 199,000(menu_21은 349·549, 돼지 179).
 window.RESTAURANT = {
   brand: { ko: "화로상회", en: "Hwaro Sanghoe", branch: { ko: "박닌", en: "Bắc Ninh" } },
   phone: "0349 241 281",
@@ -94,8 +94,8 @@ window.MENU = [
     items: [
       {"price": 199000, "name": {"ko": "뼈해장국", "en": "Pork Bone Hangover Soup (Ppyeo Haejangguk)", "zh": "猪骨醒酒汤(Ppyeo Haejangguk)", "ja": "骨付き豚肉のヘジャンクク", "vi": "Canh Xương Hầm"}},
       {"price": 259000, "tag": "best", "name": {"ko": "갈비탕", "en": "Beef Short Rib Soup (Galbitang)", "zh": "牛排骨汤(Galbitang)", "ja": "カルビタン", "vi": "Canh Sườn Bò"}},
-      {"sizes": [[{"ko": "M(중)", "en": "M (Medium)", "zh": "M(中)", "ja": "M(中)", "vi": "M (vừa)"}, 349000], [{"ko": "L(대)", "en": "L (Large)", "zh": "L(大)", "ja": "L(大)", "vi": "L (lớn)"}, 549000]], "name": {"ko": "감자탕", "en": "Pork Bone & Potato Soup (Gamjatang)", "zh": "土豆排骨汤(Gamjatang)", "ja": "カムジャタン", "vi": "Canh Xương Khoai Tây"}},
-      {"tag": "best", "sizes": [[{"ko": "돼지", "en": "Pork", "zh": "猪肉", "ja": "豚肉", "vi": "Thịt heo"}, 179000], [{"ko": "소", "en": "Beef", "zh": "牛肉", "ja": "牛肉", "vi": "Thịt bò"}, 199000]], "name": {"ko": "냉면+고기", "en": "Cold Noodles with Grilled Meat", "zh": "冷面+烤肉", "ja": "冷麺+焼肉", "vi": "Mì Lạnh Thịt Nướng"}},
+      {"sizes": [[{"ko": "M(중)", "en": "M (Medium)", "zh": "M(中)", "ja": "M(中)", "vi": "M (vừa)"}, 389000], [{"ko": "L(대)", "en": "L (Large)", "zh": "L(大)", "ja": "L(大)", "vi": "L (lớn)"}, 599000]], "name": {"ko": "감자탕", "en": "Pork Bone & Potato Soup (Gamjatang)", "zh": "土豆排骨汤(Gamjatang)", "ja": "カムジャタン", "vi": "Canh Xương Khoai Tây"}},
+      {"tag": "best", "sizes": [[{"ko": "돼지", "en": "Pork", "zh": "猪肉", "ja": "豚肉", "vi": "Thịt heo"}, 199000], [{"ko": "소", "en": "Beef", "zh": "牛肉", "ja": "牛肉", "vi": "Thịt bò"}, 199000]], "name": {"ko": "냉면+고기", "en": "Cold Noodles with Grilled Meat", "zh": "冷面+烤肉", "ja": "冷麺+焼肉", "vi": "Mì Lạnh Thịt Nướng"}},
     ],
   },
   {
@@ -115,8 +115,6 @@ window.MENU = [
       {"price": 135000, "name": {"ko": "자몽 소주", "en": "Grapefruit Soju", "zh": "西柚烧酒", "ja": "グレープフルーツ焼酎", "vi": "Soju vị bưởi"}},
       {"price": 150000, "name": {"ko": "쌀막걸리 (국순당)", "en": "Rice Makgeolli (Kooksoondang)", "zh": "米酒马格利(国纯堂)", "ja": "米マッコリ(麹醇堂)", "vi": "Rượu gạo Makgeolli (Kooksoondang)"}},
       {"price": 155000, "name": {"ko": "알밤 막걸리 (우리술)", "en": "Chestnut Makgeolli (Woorisool)", "zh": "栗子马格利(Woorisool)", "ja": "栗マッコリ(ウリスル)", "vi": "Rượu gạo hạt dẻ Makgeolli (Woorisool)"}},
-      // 원본 글자 불확실 — 확인 필요
-      {"price": 50000, "name": {"ko": "타오메오(사과) 담금주", "en": "Tao Meo (Apple) Infused Liquor / Rượu táo mèo", "zh": "苹果酒(Táo mèo)", "ja": "タオメオ(りんご)漬け込み酒 / Rượu táo mèo", "vi": "Rượu táo mèo"}},
       {"price": 100000, "name": {"ko": "보드카맨", "en": "Vodka Men", "zh": "Vodka Men", "ja": "ウォッカメン", "vi": "Rượu Vodka Men"}},
       {"price": 20000, "name": {"ko": "코카콜라", "en": "Coca-Cola", "zh": "可口可乐", "ja": "コカ・コーラ", "vi": "Coca"}},
       {"price": 20000, "name": {"ko": "스프라이트", "en": "Sprite", "zh": "雪碧", "ja": "スプライト", "vi": "Sprite"}},
