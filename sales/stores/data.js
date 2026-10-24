@@ -23,6 +23,7 @@ window.CATS = {
   japanese: { icon: "🍣", ko: "일식", vi: "Món Nhật", en: "Japanese food", zh: "日料", ja: "日本料理" },
   bar:    { icon: "🍸", ko: "바 · 술집", vi: "Bar · Quán nhậu", en: "Bar & drinks", zh: "酒吧", ja: "バー・居酒屋" },
   photo:  { icon: "📸", ko: "사진관 · 스튜디오", vi: "Studio ảnh", en: "Photo studios", zh: "摄影工作室", ja: "写真館" },
+  massage: { icon: "💈", ko: "이발관 · 마사지", vi: "Cắt tóc · Massage", en: "Barber & massage", zh: "理发 · 按摩", ja: "理髪・マッサージ" },
   beauty: { icon: "💄", ko: "화장품", vi: "Mỹ phẩm", en: "Beauty", zh: "化妆品", ja: "コスメ" },
 };
 
@@ -336,6 +337,11 @@ window.STORES = [
     address: "174 Đ. Hoàng Hoa Thám, Võ Cường, Bắc Ninh",
     type: { ko: "한국식 포차 · 안주 · 탕 · 튀김 · 전", vi: "Quán nhậu Hàn Quốc — món nhậu, canh lẩu, đồ chiên", en: "Korean pocha · Bar food · Soups · Fried dishes", zh: "韩式酒馆 · 下酒菜 · 汤锅 · 炸物", ja: "韓国式ポチャ・おつまみ・鍋・揚げ物" },
     keywords: "만냥포차 만냥 포차 한국식 포차 한식 술집 mannyang man nyang pocha man nhiang quán nhậu hàn quốc quán nhậu hàn bắc ninh bac ninh võ cường vo cuong hoàng hoa thám hoang hoa tham 174 hoàng hoa thám 박닌 안주 한국 안주 냉제육 thịt lợn luộc lạnh 닭볶음탕 gà hầm cay 해물짬뽕탕 canh hải sản cay jjambbong 백골뱅이탕 canh ốc biển 오뎅탕 canh chả cá 쭈꾸미 볶음 bạch tuộc con xào cay 국물닭발 chân gà sốt cay 마늘 닭똥집 mề gà xào tỏi 연탄불고기 thịt heo nướng than tổ ong 골뱅이무침 쥐포 차돌떡볶이 bánh gạo cay 사천식 오이무침 바삭치킨 gà rán 진미채튀김 mực xé chiên 열빙어튀김 cá trứng chiên 부추전 bánh hẹ 감자전 bánh khoai tây 우동 계란찜 번데기탕 canh nhộng tằm 설탕토마토 cà chua ướp đường 0392531302 0392 531 302" },
+  { id: "cheonan", name: "천안 이발관 天安理发店", sub: "이발 · 마사지 · 염색 · 박닌", url: "https://cheonan.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["massage"], tags: ["photos"],
+    address: "66 P. Lương Thế Vinh, Kinh Bắc, Bắc Ninh",
+    type: { ko: "이발관 · 마사지 · 발 관리 · 염색", vi: "Tiệm cắt tóc · Massage · Chăm sóc chân · Nhuộm tóc", en: "Barbershop · Massage · Foot care · Hair coloring", zh: "理发店 · 按摩 · 足部护理 · 染发", ja: "理髪店・マッサージ・フットケア・カラー" },
+    keywords: "천안 이발관 천안이발관 천안 이발소 마사지 이발 이발관 마사지 한국 이발관 박닌 cheon an barbershop cheon an barber shop cheonan barbershop barber premium barbershop 天安理发店 天安 理发店 按摩 理发 tiệm cắt tóc cắt tóc hàn quốc tiệm cắt tóc hàn quốc massage bắc ninh bac ninh kinh bắc kinh bac lương thế vinh luong the vinh 66 lương thế vinh 4핸드 4 hand massage 발각질 tẩy da chết chân 프리미엄 마사지 커트 염색 nhuộm tóc 0866431006 0866 431 006" },
 ];
 
 window.SI = {
