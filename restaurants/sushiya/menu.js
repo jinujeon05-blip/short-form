@@ -928,7 +928,7 @@ window.MENU = [
     "name": {
      "ko": "소주 (참이슬 · 새로 · 진로)",
      "en": "Soju (Chamisul · Saero · Jinro)",
-     "zh": "烧酒(真露 · 新乐 · 진로)",
+     "zh": "烧酒(真露 · 新乐 · Jinro)",
      "ja": "焼酎(チャミスル · セロ · ジンロ)",
      "vi": "Soju (Chamisul · Saero · Jinro)"
     }
