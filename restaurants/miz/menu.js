@@ -70,7 +70,7 @@ window.MENU = [
     name: {"ko": "저녁 단품", "en": "Dinner À la carte", "zh": "晚餐单点", "ja": "ディナー一品料理", "vi": "Món lẻ buổi tối"},
     note: {"ko": "가격은 모두 부가세(VAT) 포함이에요.", "en": "All prices include VAT.", "zh": "所有价格均含增值税(VAT)。", "ja": "価格はすべて付加価値税(VAT)込みです。", "vi": "Tất cả giá đã bao gồm VAT."},
     items: [
-      {"price": 500000, "name": {"ko": "양미리구이 10마리 (겨울철)", "en": "Grilled Yangmiri (sand lance), 10 pieces · winter season", "zh": "烤玉筋鱼 Yangmiri 10条(冬季)", "ja": "ヤンミリ(イカナゴ)焼き 10匹(冬季)", "vi": "Cá yangmiri nướng"}, "desc": {"ko": "굽는 데 30분 걸려요.", "en": "Grilling takes 30 minutes.", "zh": "烤制需要30分钟。", "ja": "焼き上がりまで30分かかります。", "vi": "Thời gian nướng mất 30 phút."}},
+      {"price": 500000, "name": {"ko": "양미리구이 10마리 (겨울철)", "en": "Grilled Yangmiri (sand lance), 10 pieces · winter season", "zh": "烤玉筋鱼 Yangmiri 10条(冬季)", "ja": "ヤンミリ(イカナゴ)焼き 10匹(冬季)", "vi": "Cá yangmiri nướng, 10 con (mùa đông)"}, "desc": {"ko": "굽는 데 30분 걸려요.", "en": "Grilling takes 30 minutes.", "zh": "烤制需要30分钟。", "ja": "焼き上がりまで30分かかります。", "vi": "Thời gian nướng mất 30 phút."}},
       {"price": 100000, "unit": {"ko": "1인", "en": "1 pax", "zh": "1人", "ja": "1名", "vi": "1 người"}, "name": {"ko": "고노와다", "en": "Konowata (sea cucumber innards & sake) Dipping Sauce", "zh": "海参肠酒渍酱(Konowata)", "ja": "このわた(なまこの腸と日本酒のつけダレ)", "vi": "Sốt chấm gỏi (ruột hải sâm & sake)"}},
       {"price": 1300000, "unit": {"ko": "1인", "en": "1 pax", "zh": "1人", "ja": "1名", "vi": "1 người"}, "name": {"ko": "돌문어숙회", "en": "Octopus Sashimi (blanched)", "zh": "水煮章鱼片", "ja": "真ダコの湯引き", "vi": "Gỏi bạch tuộc Nhật"}},
       {"price": 1300000, "unit": {"ko": "1인", "en": "1 pax", "zh": "1人", "ja": "1名", "vi": "1 người"}, "name": {"ko": "참소라숙회", "en": "Chamsora (turban shell) Sashimi (blanched)", "zh": "水煮海螺片 Chamsora", "ja": "チャムソラ(巻貝)の湯引き", "vi": "Gỏi ốc Hàn Quốc"}},
@@ -83,7 +83,7 @@ window.MENU = [
     name: {"ko": "주류 · 음료", "en": "Liquor & Drinks", "zh": "酒类 · 饮品", "ja": "お酒・ドリンク", "vi": "Rượu · Đồ uống"},
     note: {"ko": "가격은 모두 부가세(VAT) 포함이에요. 외부 주류를 가져오시면 콜키지는 1병당 300,000동이에요.", "en": "All prices include VAT. If you bring your own alcohol, the corkage fee is 300,000 VND per bottle.", "zh": "所有价格均含增值税(VAT)。自带酒水的开瓶费为每瓶300,000越南盾。", "ja": "価格はすべて付加価値税(VAT)込みです。お酒の持ち込みの場合、持ち込み料は1本につき300,000ドンです。", "vi": "Tất cả giá đã bao gồm VAT. Nếu mang rượu từ bên ngoài vào, phí mở rượu là 300,000 đồng cho mỗi chai."},
     items: [
-      {"price": 770000, "name": {"ko": "화요 25도", "en": "Hwayo 25", "zh": "火尧 Hwayo 25度", "ja": "ファヨ25度", "vi": "Rượu Hwayo 25"}},
+      {"price": 770000, "name": {"ko": "화요 25도", "en": "Hwayo 25", "zh": "Hwayo 25度", "ja": "ファヨ25度", "vi": "Rượu Hwayo 25"}},
       {"price": 550000, "name": {"ko": "복분자", "en": "Bokbunja (black raspberry wine)", "zh": "覆盆子酒 Bokbunja", "ja": "ポクブンジャ(覆盆子酒)", "vi": "Rượu dâu Bokbunja"}},
       {"price": 330000, "name": {"ko": "백세주", "en": "Baekseju", "zh": "百岁酒 Baekseju", "ja": "ペクセジュ(百歳酒)", "vi": "Rượu sâm Baekseju"}},
       {"price": 270000, "name": {"ko": "청하", "en": "Chungha (Korean sake)", "zh": "清河 Chungha(韩国清酒)", "ja": "チョンハ(韓国の清酒)", "vi": "Rượu sake Hàn Chungha"}},
