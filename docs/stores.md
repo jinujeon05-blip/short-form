@@ -57,7 +57,7 @@
 | `restaurants/studioan` | 스튜디오 안 사진관 An Studio (하노이 한국 사진관, TT4 Lô 98 P, Từ Liêm, Hà Nội, 0988 862 720) — **가게 찾기용**, 메뉴 없는 촬영 스튜디오 | `studioan-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://studioan.qrmenuasia.com |
 | `restaurants/jamaedang` | 자매당 JAMAEDANG 한식 코스·통갈치조림·홍어 세트 (Ngõ 176 Đ. Đình Thôn, D7 - Fivestar, Từ Liêm, Hà Nội, 0925 692 817) — **가게 찾기용** | `jamaedang-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://jamaedang.qrmenuasia.com |
 | `restaurants/ottugi` | 오뚜기식당 OTTUGI 한국식 고기구이 (Ngõ 179 Đ. Đình Thôn, Từ Liêm, Hà Nội, 0942 441 531) — **가게 찾기용** | `ottugi-menu` (미배포) | https://ottugi.qrmenuasia.com |
-| `restaurants/hwaro` | 화로상회 Hoa Rô BBQ 한국식 고기구이·세트·쿼이라인 (29N7 Đ. Ng Tất Tố, Võ Cường, Bắc Ninh, 0349 241 281) — **가게 찾기용** | `hwaro-menu` (미배포) | https://hwaro.qrmenuasia.com |
+| `restaurants/hwaro` | 화로상회 Hoa Rô BBQ 한국식 고기구이·세트·쿼이라인 (29N7 Đ. Ng Tất Tố, Võ Cường, Bắc Ninh, 0349 241 281) — **가게 찾기용** | `hwaro-menu` | https://hwaro.qrmenuasia.com |
 | `restaurants/yeha` | 예하카페&파스타 Yeha Cafe & Pasta 카페·와플·빙수·파스타·포케·분식 (120 TT3 Khu do thi, Đ. Mỹ Đình, Song Da, Từ Liêm, Hà Nội, 0852 091 719, 08:00~22:00) — **가게 찾기용** | `yeha-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://yeha.qrmenuasia.com |
 | `restaurants/kkongsi` | 꽁시꽁시 恭喜恭喜 Gông Xi Gông Xi 한국식 중화요리·점심 특선·코스 (63 TT4, P. Đỗ Đình Thiện, KĐT Mỹ Đình - Sông Đà, Từ Liêm, Hà Nội, 0985 691 548, 2011년부터) — **가게 찾기용** | `kkongsi-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://kkongsi.qrmenuasia.com |
 | `restaurants/jeonbotdae` | 전봇대 Geon Bot Dae 한국식 소고기·삼겹살·감자탕·팔당오징어 (Tòa CT4 KĐT, 114 Đơn nguyên 3, Từ Liêm, Hà Nội, 0354 985 588) — **가게 찾기용** | `jeonbotdae-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://jeonbotdae.qrmenuasia.com |
