@@ -27,4 +27,5 @@ echo "- main 최근 커밋:"
 git log --oneline -5 origin/main 2>/dev/null | sed 's/^/  - /'
 echo "- 담당 3명(finder 찾기·polisher 글·reviewer 검토, .claude/agents)이 있다. \"담당별로\" 나누라는 말은 CLAUDE.md의 \"담당(AI 에이전트) 분담\" 표대로 나누는 것이다."
 echo "- 다른 세션도 같은 저장소를 고친다. CLAUDE.md(공통 규칙·도구)와 docs/(가게 목록·남은 할 일)를 기준으로 이어서 일하고, **배포 직전에는 항상 \`git fetch origin main\` 후 main이 브랜치에 포함됐는지 확인**한다 (뒤처진 브랜치로 배포하면 다른 세션 작업이 사이트에서 사라진다)."
+echo "- **표준 = 가마솥** (docs/standard.md): 새 가게는 \`node tools/new-shop.mjs <가게> <listing|full> <logo|sign>\`로 만들고(로고 있으면 로고, 없으면 간판 사진), 배포 전 \`node tools/check-standard.mjs <가게>\`·\`check-listing.mjs\` 통과. 표준에 없는 요소는 넣지 말고 먼저 묻기. 실수 규칙은 CLAUDE.md 2장."
 exit 0
