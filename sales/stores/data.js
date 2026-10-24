@@ -331,6 +331,11 @@ window.STORES = [
     address: "Lô 29 - TT4, P. Trần Văn Lai, Từ Liêm, Hà Nội",
     type: { ko: "초밥 · 회 · 참치 코스 · 점심 메뉴 일식 레스토랑", vi: "Sushi · Sashimi · Set cá ngừ · Thực đơn trưa — nhà hàng Nhật", en: "Japanese restaurant · Sushi · Sashimi · Tuna courses · Lunch menu", zh: "日本料理 · 寿司 · 刺身 · 金枪鱼套餐 · 午餐菜单", ja: "日本料理・寿司・刺身・マグロコース・ランチメニュー" },
     keywords: "미즈 미즈레스토랑 미즈 레스토랑 미즈일식 미즈 일식 miz miz restaurant miz japanese restaurant 하노이 hà nội từ liêm tu liem trần văn lai tran van lai tt4 lô 29 lo 29 mỹ đình my dinh nhà hàng nhật bản nhà hàng nhật 일식 일본 음식 일식당 초밥 모둠초밥 장어초밥 새우초밥 회초밥 연어초밥 회정식 연어회정식 보리굴비 회덮밥 연어덮밥 물회 장어덮밥 알밥 튀김우동 알탕 동태탕 동태지리 새우튀김 생선까스 가오리찜 모둠회 참치 참다랑어 머리살 참치도로 오도로 울대살 돌문어숙회 참소라숙회 갑오징어회 연어회 양미리구이 고노와다 사케 일본 청주 하쿠시카 카센 막걸리 소주 화요 점심 점심 메뉴 저녁 코스 sushi sashimi tuna course toro otoro lunch menu japanese sake nhà hàng sushi sashimi cá ngừ set trưa 日本料理 寿司 刺身 金枪鱼 清酒 日本料理 寿司 刺身 マグロ 日本酒 ランチ" },
+  { id: "mannyang", name: "만냥포차", sub: "한국식 포차 · 안주 · 탕 · 튀김 · 전", url: "https://mannyang.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean", "bar"], tags: ["photos"],
+    address: "174 Đ. Hoàng Hoa Thám, Võ Cường, Bắc Ninh",
+    type: { ko: "한국식 포차 · 안주 · 탕 · 튀김 · 전", vi: "Quán nhậu Hàn Quốc — món nhậu, canh lẩu, đồ chiên", en: "Korean pocha · Bar food · Soups · Fried dishes", zh: "韩式酒馆 · 下酒菜 · 汤锅 · 炸物", ja: "韓国式ポチャ・おつまみ・鍋・揚げ物" },
+    keywords: "만냥포차 만냥 포차 한국식 포차 한식 술집 mannyang man nyang pocha man nhiang quán nhậu hàn quốc quán nhậu hàn bắc ninh bac ninh võ cường vo cuong hoàng hoa thám hoang hoa tham 174 hoàng hoa thám 박닌 안주 한국 안주 냉제육 thịt lợn luộc lạnh 닭볶음탕 gà hầm cay 해물짬뽕탕 canh hải sản cay jjambbong 백골뱅이탕 canh ốc biển 오뎅탕 canh chả cá 쭈꾸미 볶음 bạch tuộc con xào cay 국물닭발 chân gà sốt cay 마늘 닭똥집 mề gà xào tỏi 연탄불고기 thịt heo nướng than tổ ong 골뱅이무침 쥐포 차돌떡볶이 bánh gạo cay 사천식 오이무침 바삭치킨 gà rán 진미채튀김 mực xé chiên 열빙어튀김 cá trứng chiên 부추전 bánh hẹ 감자전 bánh khoai tây 우동 계란찜 번데기탕 canh nhộng tằm 설탕토마토 cà chua ướp đường 0392531302 0392 531 302" },
 ];
 
 window.SI = {

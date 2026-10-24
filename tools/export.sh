@@ -14,6 +14,7 @@ name() {
     kkongsi) echo "꽁시꽁시" ;;
     jeonbotdae) echo "전봇대" ;;
     miz) echo "미즈" ;;
+    mannyang) echo "만냥포차" ;;
     namme) echo "남매식당" ;;
     inyeon) echo "인연식당" ;;
     *) echo "$1" ;;
