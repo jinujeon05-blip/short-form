@@ -77,7 +77,10 @@ for (const id of ids) {
   else if (listing) [/구글 지도/, /Google Maps/, /谷歌/, /Googleマップ/, /Google Maps/].forEach((r, i) => { if (!r.test(vnd[i])) err.push(`${['ko', 'en', 'zh', 'ja', 'vi'][i]} 가격 단위 줄에 구글 지도 문구 없음`); });
   // ⑥ 글꼴 섞임
   const fams = new Set([...h.matchAll(/@font-face\s*{[^}]*font-family:\s*["']?([^"';]+)/g)].map((m) => m[1]));
-  if (fams.size > 1) warn.push(`웹 글꼴이 ${fams.size}개 (${[...fams].join(', ')}) — 한 페이지 글꼴 섞지 않기`);
+  if (fams.size > 1) err.push(`웹 글꼴이 ${fams.size}개 (${[...fams].join(', ')}) — 한 페이지 글꼴 섞지 않기`);
+  // body 말고 다른 font-family 를 쓰면 섞임 (가마솥 자체는 표준 이전이라 그대로 둠, 사용자 지시 2026-10-24)
+  const ff = [...h.replace(/<script[\s\S]*?<\/script>/g, '').matchAll(/font-family:\s*([^;}]+)/g)].map((m) => m[1].trim()).filter((v) => v !== 'inherit');
+  if (new Set(ff).size > 1 && id !== 'gamasot') err.push(`글꼴이 섞임: ${[...new Set(ff)].join(' / ')} — 본문 글꼴 하나로 통일`);
   // ⑦ 메뉴 데이터·사진
   if (exists(`${d}/menu.js`)) {
     const m = read(`${d}/menu.js`);

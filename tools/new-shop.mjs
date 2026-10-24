@@ -41,6 +41,8 @@ if (kind === 'listing') {
   };
   for (const [a, b] of Object.entries(SRC)) rep(`vnd: "${a}"`, `vnd: "${b}"`);
 }
+// 글꼴 통일 (사용자 지시 2026-10-24): 가마솥의 Georgia(분류 제목 아래·둘째 언어 이름)를 빼고 본문 글꼴 하나만
+rep('font-family: Georgia, "Times New Roman", serif; ', '');
 fs.writeFileSync(path.join(dir, 'index.html'), h);
 
 // menu.js 뼈대 (가마솥과 같은 형식)
