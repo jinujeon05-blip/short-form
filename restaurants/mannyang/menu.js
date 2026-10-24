@@ -4,7 +4,7 @@
 // price: 가격(null이면 '가격 문의', 0이면 무료) / sizes: [[라벨, 가격], …] / unit / tag / spicy: true / desc / photo
 // 원본: 구글 드라이브 "QR메뉴판/만냥포차"(사진 수집기 v1.6, 사진 31장: 메뉴판 4·음식 18·기타 9) — 전부 손님이 올린 사진(가게 계정 사진 없음).
 // 가격은 사진 메뉴판 중 **사진이 들어간 새 디자인판(menu_04)** 기준. menu_01(옛 디자인으로 보임)은 일부 가격이 달라(순살치킨 180·진미채 180·번데기탕 100·설탕토마토 60·계란찜 80·떡볶이 150·백골뱅이탕/짬뽕탕 280 등) 쓰지 않았고, 거기에만 있는 '먹태 구이 200K'는 뺐다 — docs/todo.md.
-// 항목 사진은 menu_04 안의 작은 사진을 잘라 쓴 것(해상도 낮음). 냉제육·히어로 사진은 손님 사진(menu_03).
+// 항목 사진은 손님이 올린 음식 사진(food_NN) 중 메뉴판의 그 요리와 같은 것만 썼다(2026-10-24 화질 문제로 교체). 맞는 고화질 사진이 없는 5개(닭똥집·가브리살·쥐포·열빙어·번데기탕)는 사진을 뺐다. 냉제육은 menu_03, 맨 위 사진은 가게 정문 사진(etc_01).
 window.RESTAURANT = {
   brand: { ko: "만냥포차", en: "Man Nyang Pocha", branch: { ko: "박닌", en: "Bắc Ninh" } },
   phone: "0392 531 302",
@@ -121,7 +121,6 @@ window.MENU = [
    },
    {
     "price": 200000,
-    "photo": "img/dakddong.jpg",
     "name": {
      "ko": "마늘 닭똥집 볶음",
      "en": "Garlic Stir-fried Chicken Gizzards",
@@ -132,7 +131,6 @@ window.MENU = [
    },
    {
     "price": 250000,
-    "photo": "img/gabri.jpg",
     "name": {
      "ko": "통마늘 가브리살 볶음",
      "en": "Stir-fried Pork Neck with Whole Garlic",
@@ -191,7 +189,6 @@ window.MENU = [
    {
     "price": 200000,
     "spicy": true,
-    "photo": "img/jwipo.jpg",
     "name": {
      "ko": "구운 쥐포 & 야채무침",
      "en": "Grilled Filefish Jerky & Veggie Salad",
@@ -273,7 +270,6 @@ window.MENU = [
    },
    {
     "price": 200000,
-    "photo": "img/yeolbing.jpg",
     "name": {
      "ko": "알 꽉찬 열빙어 튀김",
      "en": "Fried Roe-filled Capelin",
@@ -348,7 +344,6 @@ window.MENU = [
    },
    {
     "price": 80000,
-    "photo": "img/beondegi.jpg",
     "name": {
      "ko": "번데기탕",
      "en": "Silkworm Pupae Soup",
