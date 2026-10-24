@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sushiya.qrmenuasia.com/sitemap.xml
