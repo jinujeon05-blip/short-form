@@ -3,23 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1d6f47">
-<title>오뚜기식당 하노이 메뉴 · 삼겹살 · 한우차돌 · 찌개</title>
-<meta name="description" content="오뚜기식당 OTTUGI — 삼겹살·한우차돌·육회·찌개·라면 한식 고기구이 · Ngõ 179 Đình Thôn, Từ Liêm, Hà Nội">
+<meta name="theme-color" content="#2f8f3f">
+<title>바보아저씨 하노이 메뉴 · 생돈까스 · 분식 · 김밥</title>
+<meta name="description" content="바보아저씨 Babo — 생돈까스 전문점 · 돈까스·분식·김밥·찌개·라면 · 73 P. Trần Văn Lai, Từ Liêm, Hà Nội">
 <style>
   :root {
-    --green: #1d6f47;
-    --green-d: #14502f;
-    --green-2: #0f3d25;
-    --orange: #e8661f;
+    --green: #2f8f3f;
+    --green-d: #1f6b2d;
+    --green-2: #154d20;
+    --orange: #f08a1c;
     --cream: #fff6e2;
     --paper: #fff9ec;
     --paper-2: #fdeccb;
     --ink: #2b1c12;
     --muted: #7b6552;
     --line: #ecd9b4;
-    --red: #cf2a1e;
-    --yellow: #f2c230;
+    --red: #d9461a;
+    --yellow: #ffc933;
     --teal: #2fa59b;
   }
   * { box-sizing: border-box; }
@@ -35,12 +35,12 @@
 
   /* ── 상단: 간판 사진 + 차림표의 초록 띠·빨간 글씨·색동 테두리 ── */
   header { position: relative; color: #fff; text-align: center; padding: 0 0 30px; background: var(--green); }
-  .hero { position: relative; height: 230px; background: #2a3a30 url(img/hero.jpg) center / cover no-repeat; }
+  .hero { position: relative; height: 230px; background: #2a3a30 url(img/hero.jpg) center 14% / cover no-repeat; }
   .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,30,20,.5) 0%, rgba(10,30,20,0) 38%, rgba(10,30,20,.25) 100%); }
   .langs { position: absolute; top: 12px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
-  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #fff; background: rgba(15,61,37,.7); border: 1px solid rgba(255,255,255,.4); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #fff; background: rgba(21,77,32,.72); border: 1px solid rgba(255,255,255,.4); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
   .langs button[aria-pressed="true"] { color: var(--green-2); background: var(--yellow); border-color: var(--yellow); }
-  .stripe { height: 10px; background: repeating-linear-gradient(115deg, var(--red) 0 22px, var(--cream) 22px 34px, var(--teal) 34px 56px, var(--cream) 56px 68px, var(--yellow) 68px 90px, var(--cream) 90px 102px); }
+  .stripe { height: 10px; background: repeating-linear-gradient(115deg, var(--orange) 0 22px, var(--cream) 22px 34px, var(--green) 34px 56px, var(--cream) 56px 68px, var(--yellow) 68px 90px, var(--cream) 90px 102px); }
   .board { position: relative; z-index: 1; margin: 22px auto 0; max-width: 360px; padding: 4px 16px 10px; }
   .board .band { margin: 0; font-size: 12px; font-weight: 800; letter-spacing: 5px; color: var(--yellow); padding-left: 5px; }
   .board h1 { margin: 6px 0 0; font-size: 46px; font-weight: 900; letter-spacing: 3px; padding-left: 3px; line-height: 1.1; color: var(--red); text-shadow: 3px 3px 0 #1a1a14, -1px -1px 0 #fff3dc, 1px -1px 0 #fff3dc, -1px 1px 0 #fff3dc; }
@@ -91,7 +91,7 @@
   .sub.it { font-style: italic; }
 
   /* ── 가게 정보 ── */
-  footer { margin-top: 40px; background: var(--green-d); color: #f3f8f2; padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); border-top: 10px solid transparent; border-image: repeating-linear-gradient(115deg, var(--red) 0 22px, var(--cream) 22px 34px, var(--teal) 34px 56px, var(--cream) 56px 68px, var(--yellow) 68px 90px, var(--cream) 90px 102px) 10; }
+  footer { margin-top: 40px; background: var(--green-d); color: #f3f8f2; padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); border-top: 10px solid transparent; border-image: repeating-linear-gradient(115deg, var(--orange) 0 22px, var(--cream) 22px 34px, var(--green) 34px 56px, var(--cream) 56px 68px, var(--yellow) 68px 90px, var(--cream) 90px 102px) 10; }
   .quote { text-align: center; font-size: 15px; line-height: 1.7; margin: 0 0 18px; }
   .pills { display: grid; gap: 10px; }
   .pill { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; text-align: left; color: var(--ink); text-decoration: none; background: var(--cream); border: 0; border-radius: 16px; padding: 10px 14px 10px 10px; cursor: pointer; }
@@ -113,7 +113,7 @@
 </style>
 <style id="partner-theme">
   /* 하단 파트너 배너(다산)·가게 찾기 링크 색을 이 메뉴판에 맞춘다 */
-  :root { --pt-mode: light; --pt-bg: #fff6e2; --pt-ink: #2b1c12; --pt-muted: #7b6552; --pt-line: #ecd9b4; --pt-accent: #cf2a1e; --pt-btn: #1d6f47; --pt-btn-ink: #ffffff; --pt-shadow: 0 6px 16px rgba(80,40,10,.2); }
+  :root { --pt-mode: light; --pt-bg: #fff6e2; --pt-ink: #2b1c12; --pt-muted: #7b6552; --pt-line: #ecd9b4; --pt-accent: #d9461a; --pt-btn: #2f8f3f; --pt-btn-ink: #ffffff; --pt-shadow: 0 6px 16px rgba(80,40,10,.2); }
 </style>
 
 
@@ -133,10 +133,10 @@
   <div class="stripe"></div>
   <div class="wrap">
     <div class="board">
-      <p class="band">한식 고기구이</p>
-      <h1>오뚜기식당</h1>
+      <p class="band">생돈까스 전문점</p>
+      <h1>바보아저씨</h1>
     </div>
-    <p class="en">OTTUGI · NHÀ HÀNG HÀN QUỐC</p>
+    <p class="en">BABO · NHÀ HÀNG HÀN QUỐC</p>
     <span class="branch" id="branch"></span>
     <p class="tagline" id="tagline"></p>
     <div class="chips" id="chips"></div>
@@ -174,30 +174,30 @@
 
 <script src="menu.js"></script>
 <!-- override:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
-<script src="https://qrmenuasia.com/api/override?shop=ottugi"></script>
+<script src="https://qrmenuasia.com/api/override?shop=babo"></script>
 <!-- override:end -->
 <script>
   const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
   const UI = {
-    ko: { title: "메뉴", tagline: "삼겹살 · 한우차돌 · 육회 · 찌개 · 라면", chips: ["한식 고기구이", "삼겹살", "육회 · 뭉티기"],
+    ko: { title: "메뉴", tagline: "생돈까스 · 분식 · 김밥 · 찌개 · 라면", chips: ["생돈까스 전문점", "분식", "김밥"],
       best: "BEST", new: "신메뉴", must: "추천", spicy: "🌶 매콤", ask: "가격 문의", free: "무료",
-      quote: "오뚜기식당을 찾아 주셔서 감사합니다.<br>맛있게 드세요!", copy: "복사", copied: "OK",
+      quote: "바보아저씨를 찾아 주셔서 감사합니다.<br>맛있게 드세요!", copy: "복사", copied: "OK",
       call: "전화", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND) · 메뉴·가격은 손님이 구글 지도에 올린 메뉴판 기준이며 바뀔 수 있어요" },
-    en: { title: "Menu", tagline: "Samgyeopsal · Hanwoo Chadol · Yukhoe · Stews · Ramyeon", chips: ["Korean BBQ", "Samgyeopsal", "Yukhoe · Mungtigi"],
+    en: { title: "Menu", tagline: "Pork cutlet · Street snacks · Gimbap · Stews · Ramyeon", chips: ["Fresh pork cutlet", "Korean snacks", "Gimbap"],
       best: "BEST", new: "NEW", must: "Recommended", spicy: "🌶 Spicy", ask: "Ask for price", free: "Free",
-      quote: "Thank you for visiting Ottugi.<br>Enjoy your meal!", copy: "Copy", copied: "OK",
+      quote: "Thank you for visiting Babo.<br>Enjoy your meal!", copy: "Copy", copied: "OK",
       call: "Call", map: "Address · Map", vnd: "Prices in Vietnamese đồng (VND) · Based on menu photos customers posted on Google Maps; items and prices may change" },
-    zh: { title: "菜单", tagline: "五花肉 · 韩牛牛腩 · 生拌牛肉 · 汤锅 · 拉面", chips: ["韩式烤肉", "五花肉", "生拌牛肉 · Mungtigi"],
+    zh: { title: "菜单", tagline: "炸猪排 · 韩式小吃 · 紫菜包饭 · 汤锅 · 拉面", chips: ["鲜炸猪排专门店", "韩式小吃", "紫菜包饭"],
       best: "BEST", new: "新品", must: "推荐", spicy: "🌶 微辣", ask: "价格咨询", free: "免费",
-      quote: "感谢光临오뚜기식당。<br>请慢用!", copy: "复制", copied: "OK",
+      quote: "感谢光临바보아저씨。<br>请慢用!", copy: "复制", copied: "OK",
       call: "电话", map: "地址 · 地图", vnd: "价格单位:越南盾(VND) · 菜单和价格以顾客上传至谷歌地图的菜单为准,可能会有变动" },
-    ja: { title: "メニュー", tagline: "サムギョプサル · 韓牛チャドル · ユッケ · チゲ · ラーメン", chips: ["韓国式焼肉", "サムギョプサル", "ユッケ · ムンティギ"],
+    ja: { title: "メニュー", tagline: "とんかつ · 韓国軽食 · キンパ · チゲ · ラーメン", chips: ["生とんかつ専門店", "韓国軽食", "キンパ"],
       best: "BEST", new: "新メニュー", must: "おすすめ", spicy: "🌶 ピリ辛", ask: "価格お問い合わせ", free: "無料",
-      quote: "오뚜기식당にお越しいただきありがとうございます。<br>どうぞお召し上がりください!", copy: "コピー", copied: "OK",
+      quote: "바보아저씨にお越しいただきありがとうございます。<br>どうぞお召し上がりください!", copy: "コピー", copied: "OK",
       call: "電話", map: "住所 · 地図", vnd: "価格単位:ベトナムドン(VND) · メニュー・価格はお客様がGoogleマップに投稿したメニュー表に基づいており、変更される場合があります" },
-    vi: { title: "Thực đơn", tagline: "Thịt ba chỉ · Thịt gầu bò Hàn · Yukhoe · Canh · Mì", chips: ["Thịt nướng Hàn Quốc", "Thịt ba chỉ", "Yukhoe · Mungtigi"],
+    vi: { title: "Thực đơn", tagline: "Cốt lết chiên xù · Món ăn vặt · Kimbap · Canh · Mì", chips: ["Cốt lết tươi chiên xù", "Món ăn vặt Hàn", "Kimbap"],
       best: "BEST", new: "MỚI", must: "Nên thử", spicy: "🌶 Cay", ask: "Hỏi nhân viên", free: "Miễn phí",
-      quote: "Cảm ơn quý khách đã đến Ottugi.<br>Chúc quý khách ngon miệng!", copy: "Sao chép", copied: "OK",
+      quote: "Cảm ơn quý khách đã đến Babo.<br>Chúc quý khách ngon miệng!", copy: "Sao chép", copied: "OK",
       call: "Gọi điện", map: "Địa chỉ · Bản đồ", vnd: "Đơn vị giá: đồng Việt Nam (VND) · Thực đơn và giá dựa theo thực đơn khách hàng đăng trên Google Maps, có thể thay đổi" },
   };
   const SUPPORTED = LANGS.map(([c]) => c);

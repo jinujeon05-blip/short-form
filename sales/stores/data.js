@@ -367,6 +367,11 @@ window.STORES = [
     address: "Lô 22 TT1, Khu đô thị, Từ Liêm, Hà Nội",
     type: { ko: "짜장면 · 짬뽕 · 탕수육 · 볶음밥 한국식 중화요리", vi: "Mì tương đen · Mì hải sản cay · Thịt chiên chua ngọt · Cơm chiên — món Hoa kiểu Hàn", en: "Korean-Chinese · Jjajangmyeon · Jjamppong · Tangsuyuk · Fried rice", zh: "韩式中餐 · 炸酱面 · 炒码面 · 糖醋肉 · 炒饭", ja: "韓国式中華・ジャージャー麺・チャンポン・タンスユク・チャーハン" },
     keywords: "짜장도둑 짜장 도둑 짜장도둑식당 jjajang dodook jjajangdodook jajang dodook jjajang thief 하노이 hà nội từ liêm tu liem lô 22 tt1 lo 22 tt1 khu đô thị mỹ đình my dinh nhà hàng hàn quốc món hoa kiểu hàn 한국식 중화요리 중식 중국집 짜장면 짜장 청양짜장 간짜장 유슬짜장 유니짜장 삼선쟁반짜장 짬뽕 해물짬뽕 삼선굴짬뽕 삼선쟁반짬뽕 삼선우동 삼선울면 기스면 탕수육 사천탕수육 깐풍육 깐풍기 깐쇼새우 깐풍새우 고추잡채 유산슬 팔보채 양장피 잡채 마파두부 볶음밥 짜장밥 새우볶음밥 삼선볶음밥 오징어덮밥 송이덮밥 잡탕밥 군만두 물만두 연태고량주 mì tương đen mì hải sản cay thịt chiên chua ngọt cơm chiên hà cảo 韩式中餐 炸酱面 炒码面 糖醋肉 炒饭 韓国式中華 ジャージャー麺 チャンポン タンスユク チャーハン" },
+  { id: "babo", name: "바보아저씨 Babo", sub: "생돈까스 · 분식 · 김밥 · 찌개 · 라면", url: "https://babo.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "noodle"], tags: ["photos"],
+    address: "73 P. Trần Văn Lai, Từ Liêm, Hà Nội",
+    type: { ko: "생돈까스 · 분식 · 김밥 · 찌개 · 라면 한식", vi: "Món Hàn · Cốt lết chiên xù · Món ăn vặt · Kimbap · Canh · Mì", en: "Korean food · Fresh pork cutlet · Street snacks · Gimbap · Stews", zh: "韩餐 · 鲜炸猪排 · 韩式小吃 · 紫菜包饭 · 汤锅", ja: "韓国料理・生とんかつ・軽食・キンパ・チゲ・ラーメン" },
+    keywords: "바보아저씨 바보 아저씨 babo babo restaurant 하노이 hà nội từ liêm tu liem trần văn lai tran van lai 73 trần văn lai nhà hàng babo nhà hàng hàn quốc 한식 분식 한식당 생돈까스 돈까스 돈가스 생선까스 치킨까스 치즈돈까스 함박스테이크 파마산돈까스 고치도그 정식 김밥 참치김밥 치즈김밥 떡볶이 치즈떡볶이 라볶이 쫄볶이 순대 떡순대 떡국 만둣국 떡만둣국 찜닭 김치찌개 참치김치찌개 된장찌개 부대찌개 꽁치김치찌개 닭도리탕 낙지소면 동태찌개 오뎅탕 골뱅이비빔면 두부김치 오므라이스 비빔밥 김치볶음밥 제육덮밥 낙지덮밥 불고기덮밥 오징어덮밥 뚝배기불고기 비빔국수 열무국수 콩국수 잔치국수 쫄면 모밀국수 라면 해장라면 cốt lết chiên xù kimbap tokbokki canh kimchi mì lạnh 韩餐 鲜炸猪排 紫菜包饭 韩式小吃 年糕 韓国料理 とんかつ キンパ トッポッキ" },
 ];
 
 window.SI = {

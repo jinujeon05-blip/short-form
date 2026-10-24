@@ -43,6 +43,7 @@ const SHOPS = {
   miz:          { type: 'Restaurant', cuisine: ['Japanese', 'Sushi', 'Sashimi', 'Tuna', 'Course meals'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   hwaro:        { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef', 'Pork belly', 'Self-bar'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   jjajang:      { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Noodles', 'Jjajangmyeon', 'Jjamppong'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  babo:         { type: 'Restaurant', cuisine: ['Korean', 'Pork cutlet', 'Korean snacks', 'Gimbap', 'Stews'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   mannyang:     { type: 'Restaurant', cuisine: ['Korean', 'Pocha', 'Korean bar food', 'Soups', 'Fried dishes'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   cheonan:      { type: 'HealthAndBeautyBusiness', noMenu: true, country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   seonsan:      { type: 'Restaurant', cuisine: ['Korean', 'Gopchang', 'Korean BBQ', 'Pork stew'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
