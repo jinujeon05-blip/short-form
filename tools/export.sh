@@ -15,6 +15,9 @@ name() {
     jeonbotdae) echo "전봇대" ;;
     miz) echo "미즈" ;;
     hwaro) echo "화로상회" ;;
+    jjajang) echo "짜장도둑" ;;
+    babo) echo "바보아저씨" ;;
+    dduldul) echo "둘둘분식" ;;
     mannyang) echo "만냥포차" ;;
     cheonan) echo "천안이발관" ;;
     seonsan) echo "선산곱창" ;;
