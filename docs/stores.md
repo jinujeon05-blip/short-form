@@ -68,7 +68,7 @@
 | `restaurants/cheonan` | 천안 이발관 天安理发店 Cheon An BarberShop 이발관·마사지 (66 P. Lương Thế Vinh, Kinh Bắc, Bắc Ninh, 0866 431 006) — **가게 찾기용** | `cheonan-menu` (팀 jinwoo8, 2026-10-24 배포, 가게 찾기 목록도 반영) | https://cheonan.qrmenuasia.com |
 | `restaurants/seonsan` | 선산곱창 & 돼지찌개 Seonsan Gopchang (Nhà Hàng 선산곱창, 138 Nguyễn Cao, Kinh Bắc, Bắc Ninh, 0865 438 615) — **가게 찾기용** | `seonsan-menu` (팀 jinwoo8, 2026-10-24 배포, 가게 찾기 목록도 반영) | https://seonsan.qrmenuasia.com |
 | `restaurants/seonsangukbap` | 선산국밥 Seonsan Gukbap (Nhà Hàng Sơn San, 211 Nguyễn Cao, Kinh Bắc, Bắc Ninh, 0347 942 577) 돼지국밥·순대국밥 — **가게 찾기용** (선산곱창 `seonsan`과 다른 가게) | `seonsangukbap-menu` (팀 jinwoo8, 2026-10-24 배포, 가게 찾기 목록도 반영) | https://seonsangukbap.qrmenuasia.com |
-| `restaurants/sushiya` | 스시야 Sushiya 한국식 스시·롤·사시미·점심 특선 (14 Đường Võ Cường-5, Võ Cường, Bắc Ninh, 0327 294 225) — **가게 찾기용** | `sushiya-menu` (아직 배포 전) | https://sushiya.qrmenuasia.com |
+| `restaurants/sushiya` | 스시야 Sushiya 한국식 스시·롤·사시미·점심 특선 (14 Đường Võ Cường-5, Võ Cường, Bắc Ninh, 0327 294 225) — **가게 찾기용** | `sushiya-menu` (팀 jinwoo8, 2026-10-24 배포, 가게 찾기 목록도 반영) | https://sushiya.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
