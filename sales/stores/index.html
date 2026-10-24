@@ -69,12 +69,13 @@
   .store { --sw: 104px; --sh: calc(var(--sw) * 2.026); display: grid; grid-template-columns: var(--sw) 1fr; grid-template-areas: "shot info" "btns btns"; grid-template-rows: auto auto; gap: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
   .store .shot { grid-area: shot; position: relative; width: var(--sw); height: var(--sh); align-self: start; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: #f1ebe2; }
   .store .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
-  .store .info { grid-area: info; min-width: 0; min-height: var(--sh); }
+  .store .info { grid-area: info; min-width: 0; height: var(--sh); overflow: hidden; }
   .store h2, .store .sub, .store .type, .store .addr { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
   .store h2 { -webkit-line-clamp: 2; }
   .store .sub { -webkit-line-clamp: 1; }
-  .store .type { -webkit-line-clamp: 2; }
+  .store .type { -webkit-line-clamp: 1; }
   .store .addr { -webkit-line-clamp: 2; }
+  .store .meta { max-height: 58px; overflow: hidden; }
   .store h2 { font-size: 19px; }
   .store .sub { font-size: 12.5px; color: var(--muted); margin-top: 1px; }
   .store .type { font-size: 14px; margin-top: 6px; }
@@ -101,7 +102,7 @@
 
   @media (max-width: 760px) {
     .grid { grid-template-columns: 1fr; }
-    .store { --sw: 92px; }
+    .store { --sw: 104px; }
     /* 모바일: 지역·종류 칩을 줄바꿈해 한눈에 보이게 (칸이 높아져 위에 붙이지 않음) */
     .bar { position: static; backdrop-filter: none; -webkit-backdrop-filter: none; }
     .chips { flex-wrap: wrap; overflow: visible; gap: 6px 5px; margin-top: 8px; }
