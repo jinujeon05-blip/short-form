@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hwaro.qrmenuasia.com/sitemap.xml

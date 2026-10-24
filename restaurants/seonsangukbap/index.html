@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#221a12">
+<title>선산국밥 박닌 메뉴 · 돼지국밥 · 순대국밥</title>
+<meta name="description" content="선산국밥 — 돼지국밥·순대국밥·내장국밥·수육 · 211 Nguyễn Cao, Kinh Bắc, Bắc Ninh">
+<style>
+  :root {
+    --green: #221a12;
+    --green-d: #16100a;
+    --green-2: #16100a;
+    --orange: #e0412f;
+    --cream: #f2ead9;
+    --paper: #2b2016;
+    --paper-2: #33271b;
+    --ink: #f3ede0;
+    --muted: #b5a99a;
+    --line: #4f3c2a;
+    --red: #ffd23f;
+    --yellow: #ffd23f;
+    --teal: #7a5a12;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; color: var(--ink); background: var(--paper);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.4;
+  }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── 상단: 가게 정문(노란 간판) 사진 + 간판·메뉴판의 노랑·빨강을 뚝배기색 어두운 바탕에 맞춤 ── */
+  header { position: relative; color: #fff; text-align: center; padding: 0 0 30px; background: var(--green); }
+  .hero { position: relative; height: 230px; background: #221a12 url(img/hero.jpg) center 30% / cover no-repeat; }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,8,4,.55) 0%, rgba(10,8,4,0) 38%, rgba(10,8,4,.3) 100%); }
+  .langs { position: absolute; top: 12px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #fff; background: rgba(12,12,12,.78); border: 1px solid rgba(255,210,63,.6); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: #111; background: var(--yellow); border-color: var(--yellow); }
+  /* 간판의 노랑·빨강 줄무늬 */
+  .stripe { height: 14px; background: repeating-linear-gradient(90deg, #ffd23f 0 24px, #e0412f 24px 48px); }
+  .board { position: relative; z-index: 1; margin: 22px auto 0; max-width: 360px; padding: 4px 16px 10px; }
+  .board .band { margin: 0; font-size: 12px; font-weight: 800; letter-spacing: 5px; color: var(--yellow); padding-left: 5px; }
+  .board h1 { margin: 6px 0 0; font-size: 44px; font-weight: 900; letter-spacing: 3px; padding-left: 3px; line-height: 1.1; color: var(--yellow); text-shadow: 0 2px 0 #000, 0 0 14px rgba(255,210,63,.35); }
+  .en { margin: 8px 0 0; font-size: 12.5px; font-weight: 800; letter-spacing: 1.2px; color: #e9d8b4; padding-left: 3px; }
+  .branch { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 800; color: #111; background: var(--yellow); border-radius: 999px; padding: 3px 12px; }
+  .tagline { margin: 12px 0 0; font-size: 14.5px; font-weight: 600; color: #fff; }
+  .chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .chips span { font-size: 12.5px; font-weight: 700; color: var(--cream); border: 1px solid rgba(255,210,63,.7); border-radius: 999px; padding: 4px 11px; }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; background: var(--green-d); box-shadow: 0 4px 12px rgba(0,0,0,.5); border-bottom: 1px solid #4a3818; }
+  nav .wrap { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-top: 7px; padding-bottom: 7px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: #e0d4c4; text-decoration: none; font-size: 14px; font-weight: 700; padding: 8px 12px; border-radius: 999px; white-space: nowrap; }
+  nav a.active { color: #111; background: var(--yellow); }
+
+  /* ── 메뉴 ── */
+  section { padding: 30px 0 6px; }
+  .head { text-align: center; }
+  h2 { margin: 0; display: inline-block; font-size: 26px; font-weight: 900; letter-spacing: 1px; color: var(--red); padding-bottom: 7px; border-bottom: 4px solid var(--orange); }
+  h2 small { display: block; margin-top: 3px; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; }
+  .note { margin: 14px 0 0; font-size: 13.5px; color: var(--ink); background: var(--paper-2); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 8px 12px; }
+
+  ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  li { display: flex; gap: 12px; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  .thumb { flex: none; width: 84px; height: 84px; border-radius: 50%; overflow: hidden; padding: 0; border: 3px solid #2b2016; background: var(--paper-2); box-shadow: 0 0 0 2px var(--orange), 0 3px 10px rgba(0,0,0,.5); cursor: zoom-in; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .info { flex: 1; min-width: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 3px; }
+  .tags span { font-size: 10.5px; font-weight: 800; letter-spacing: .3px; color: #111; background: var(--yellow); border-radius: 3px; padding: 1px 6px; }
+  .tags .best { background: #c0392b; color: #fff; }
+  .tags .must { background: var(--orange); color: #fff; }
+  .tags .new { background: #3b7d5a; color: #fff; }
+  .tags .hot { background: transparent; color: #ffe08a; border: 1px solid #a88a3f; }
+  .row { display: flex; align-items: baseline; gap: 8px; }
+  .row b { font-size: 17px; font-weight: 800; }
+  .row .unit { font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .row .leader { flex: 1; min-width: 10px; border-bottom: 2px dotted #6b5434; transform: translateY(-4px); }
+  .price { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--red); }
+  .price small { font-size: 11px; color: var(--muted); margin-left: 1px; }
+  .price.ask { font-size: 13px; color: var(--muted); }
+  .sizes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+  .sizes span { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--yellow); background: #33271b; border: 1px solid var(--line); border-radius: 8px; padding: 2px 8px; }
+  .sizes span i { font-style: normal; font-size: 11px; font-weight: 800; color: #111; background: var(--yellow); border-radius: 4px; padding: 0 5px; margin-right: 5px; }
+  .desc { margin-top: 4px; font-size: 13px; color: #cbbfb0; }
+  .sub { margin-top: 3px; font-size: 13px; color: var(--muted); }
+  .sub.it { font-style: italic; }
+
+  /* ── 가게 정보 ── */
+  footer { margin-top: 40px; background: #16100a; color: #eee4d2; padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); border-top: 6px solid #e0412f; }
+  .quote { text-align: center; font-size: 15px; line-height: 1.7; margin: 0 0 18px; }
+  .pills { display: grid; gap: 10px; }
+  .pill { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; text-align: left; color: #241a16; text-decoration: none; background: var(--cream); border: 0; border-radius: 16px; padding: 10px 14px 10px 10px; cursor: pointer; }
+  .pill i { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: #221a12; }
+  .pill i svg { width: 20px; height: 20px; color: var(--yellow); }
+  .pill div { flex: 1; min-width: 0; }
+  .pill small { display: block; font-size: 12px; color: #7d6a5a; font-weight: 600; }
+  .pill strong { display: block; font-size: 16px; font-weight: 800; word-break: break-word; }
+  .pill em { flex: none; font-style: normal; font-size: 12px; font-weight: 700; color: #b8301f; }
+  .vnd { text-align: center; margin: 16px 0 0; font-size: 12px; opacity: .9; }
+
+  .zoom { position: fixed; inset: 0; z-index: 30; display: none; place-items: center; padding: 16px; background: rgba(0,0,0,.94); cursor: zoom-out; }
+  .zoom.show { display: grid; }
+  .zoom figure { margin: 0; max-width: 520px; width: 100%; }
+  .zoom img { width: 100%; border-radius: 18px; display: block; background: var(--paper); }
+  .zoom figcaption { margin-top: 10px; text-align: center; font-size: 16px; font-weight: 800; color: #fff; }
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 40; background: var(--yellow); color: #111; font-size: 14px; font-weight: 700; padding: 10px 18px; border-radius: 999px; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+<style id="partner-theme">
+  /* 하단 파트너 배너(다산)·가게 찾기 링크 색을 이 메뉴판에 맞춘다 */
+  :root { --pt-mode: light; --pt-bg: #f2ead9; --pt-ink: #241a16; --pt-muted: #7d6a5a; --pt-line: #dccdb3; --pt-accent: #b8301f; --pt-btn: #221a12; --pt-btn-ink: #ffd23f; --pt-shadow: 0 6px 16px rgba(0,0,0,.45); }
+</style>
+
+
+<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
+<link rel="canonical" href="https://seonsangukbap.qrmenuasia.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="선산국밥 박닌 메뉴 · 돼지국밥 · 순대국밥">
+<meta property="og:description" content="선산국밥 — 돼지국밥·순대국밥·내장국밥·수육 · 211 Nguyễn Cao, Kinh Bắc, Bắc Ninh">
+<meta property="og:url" content="https://seonsangukbap.qrmenuasia.com/">
+<meta property="og:image" content="https://seonsangukbap.qrmenuasia.com/img/hero.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"선산국밥 Seonsan Gukbap","url":"https://seonsangukbap.qrmenuasia.com/","address":{"@type":"PostalAddress","streetAddress":"211 Nguyễn Cao, Kinh Bắc, Bắc Ninh","addressCountry":"VN"},"telephone":"0347942577","image":"https://seonsangukbap.qrmenuasia.com/img/hero.jpg","servesCuisine":["Korean","Gukbap","Pork soup","Sundae"],"hasMap":"https://www.google.com/maps/place/%EC%84%A0%EC%82%B0%EA%B5%AD%EB%B0%A5+%EC%8B%9D%EB%8B%B9/@21.1749161,106.0594283,21z/data=!4m6!3m5!1s0x31350eaa53a17433:0xceedd9d9f0fdfe53!8m2!3d21.1749161!4d106.0595892!16s%2Fg%2F11f3dfndcg","hasMenu":{"@type":"Menu","name":"선산국밥 Seonsan Gukbap menu","inLanguage":["ko","en","zh","ja","vi"],"hasMenuSection":[{"@type":"MenuSection","name":"Rice Soups (Gukbap)","hasMenuItem":[{"@type":"MenuItem","name":"Pork Rice Soup (Dwaeji Gukbap)","alternateName":["돼지국밥","Cơm canh thịt lợn","猪肉汤饭","豚肉クッパ"],"offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sundae Rice Soup (Sundae Only)","alternateName":["순대만국밥","Cơm canh dồi lợn","猪血肠汤饭","スンデのみクッパ"],"offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pork & Sundae Rice Soup","alternateName":["순대돼지국밥","Cơm canh thịt + dồi Hàn","猪肉血肠汤饭","豚肉とスンデのクッパ"],"offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Offal Rice Soup (Naejang Gukbap)","alternateName":["내장국밥","Cơm canh lòng","猪肠汤饭","ホルモンクッパ"],"offers":{"@type":"Offer","price":195000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Chicken Soup (Dakgaejang)","alternateName":["닭개장","Canh gà","鸡丝辣汤","タッケジャン"],"offers":{"@type":"Offer","price":195000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Boiled Pork Rice Soup (Suyuk Gukbap)","alternateName":["수육국밥","Cơm canh thịt lợn + ba chỉ hấp","五花肉汤饭","茹で豚クッパ"],"offers":{"@type":"Offer","price":195000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mixed Rice Soup (Seokkeo Gukbap)","alternateName":["섞어국밥","Cơm canh thập cẩm","什锦汤饭","ミックスクッパ"],"offers":{"@type":"Offer","price":205000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Ox Head Rice Soup (Someori Gukbap)","alternateName":["소머리국밥","Cơm canh thịt bò","牛头肉汤饭","ソモリクッパ(牛頭)"],"offers":{"@type":"Offer","price":205000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Seonsan Haejangguk (Beef Offal Soup)","alternateName":["선산해장국","Canh lòng bò","牛肠解酒汤","ソンサンヘジャンクッ"],"offers":{"@type":"Offer","price":205000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Boiled Meat, Hot Pot & Sides","hasMenuItem":[{"@type":"MenuItem","name":"Sundae (Korean Blood Sausage)","alternateName":["순대","Dồi lợn","猪血肠","スンデ"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Boiled Pork Belly (Suyuk)","alternateName":["수육","Ba chỉ hấp","白切五花肉","茹で豚バラ(スユク)"],"offers":{"@type":"Offer","price":330000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Assorted Steamed Organ Meats (Ampong · Osori)","alternateName":["암뽕오소리모듬","Lòng thập cẩm hấp","猪血肠和内脏拼盘","アンポン・オソリ盛り合わせ"],"offers":{"@type":"Offer","price":450000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Boiled Ox Head Slices","alternateName":["소머리수육","Thịt bò hấp","牛头肉","牛頭肉の茹で(ソモリスユク)"],"offers":{"@type":"Offer","price":850000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sulguk (Pork Soup)","alternateName":["술국","Canh thịt lợn","猪肉汤","スルグク(豚肉スープ)"],"offers":{"@type":"Offer","price":550000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Offal Hot Pot (Gopchang Jeongol)","alternateName":["곱창전골","Lẩu lòng","内脏火锅","ホルモン鍋"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Rice","hasMenuItem":[{"@type":"MenuItem","name":"Fried Rice","alternateName":["볶음밥","Cơm rang","炒饭","チャーハン"],"offers":{"@type":"Offer","price":40000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Rice","alternateName":["공기밥","Cơm trắng","米饭","ご飯"],"offers":{"@type":"Offer","price":15000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Drinks","hasMenuItem":[{"@type":"MenuItem","name":"Soft Drinks","alternateName":["음료","Nước ngọt","饮料","ソフトドリンク"],"offers":{"@type":"Offer","price":20000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beer","alternateName":["맥주","Bia","啤酒","ビール"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Vodka (Voka Men)","alternateName":["보드카 (Voka Men)","Rượu Voka Men","伏特加(Voka Men)","ウォッカ(Voka Men)"],"offers":{"@type":"Offer","price":110000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Soju","alternateName":["소주","Rượu soju","烧酒","焼酎(ソジュ)"],"offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Makgeolli","alternateName":["막걸리","Rượu gạo","马格利酒","マッコリ"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}}]}]}}</script>
+<!-- seo:end -->
+</head>
+<body>
+<header>
+  <div class="hero"><div class="langs" id="langs"></div></div>
+  <div class="stripe"></div>
+  <div class="wrap">
+    <div class="board">
+      <p class="band">돼지국밥 · 순대국밥</p>
+      <h1>선산국밥</h1>
+    </div>
+    <p class="en">SEONSAN GUKBAP · NHÀ HÀNG SƠN SAN</p>
+    <span class="branch" id="branch"></span>
+    <p class="tagline" id="tagline"></p>
+    <div class="chips" id="chips"></div>
+  </div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap" id="menu"></main>
+
+<footer>
+  <div class="wrap">
+    <p class="quote" id="quote"></p>
+    <div class="pills">
+      <button class="pill" id="wifi" type="button" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg></i>
+        <div><small id="wifiLabel"></small><strong id="wifiText"></strong></div>
+        <em id="wifiCopy"></em>
+      </button>
+      <a class="pill" id="call">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></i>
+        <div><small id="callLabel"></small><strong id="callText"></strong></div>
+      </a>
+      <a class="pill" id="map" target="_blank" rel="noopener">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></i>
+        <div><small id="mapLabel"></small><strong id="mapText"></strong></div>
+      </a>
+    </div>
+    <p class="vnd" id="foot"></p>
+  </div>
+</footer>
+
+<div class="zoom" id="zoom"><figure><img id="zoomImg" alt=""><figcaption id="zoomCap"></figcaption></figure></div>
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<!-- override:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script src="https://qrmenuasia.com/api/override?shop=seonsangukbap"></script>
+<!-- override:end -->
+<script>
+  const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
+  const UI = {
+    ko: { title: "메뉴", tagline: "돼지국밥 · 순대국밥 · 내장국밥 · 수육", chips: ["국밥","수육 · 전골","VAT 포함"],
+      best: "BEST", new: "신메뉴", must: "추천", spicy: "🌶 매콤", ask: "가격 문의", free: "무료",
+      quote: "선산국밥을 찾아 주셔서 감사합니다.<br>맛있게 드세요!", copy: "복사", copied: "OK",
+      call: "전화", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND) · 부가세(VAT) 포함 · 메뉴·가격은 손님이 구글 지도에 올린 메뉴판 기준이며 바뀔 수 있어요" },
+    en: { title: "Menu", tagline: "Pork rice soup · Sundae soup · Offal soup · Suyuk", chips: ["Rice soups","Suyuk & hot pot","VAT included"],
+      best: "BEST", new: "NEW", must: "Recommended", spicy: "🌶 Spicy", ask: "Ask for price", free: "Free",
+      quote: "Thank you for visiting Seonsan Gukbap.<br>Enjoy your meal!", copy: "Copy", copied: "OK",
+      call: "Call", map: "Address · Map", vnd: "Prices in Vietnamese đồng (VND) · VAT included · Based on menu photos customers posted on Google Maps; items and prices may change" },
+    zh: { title: "菜单", tagline: "猪肉汤饭 · 血肠汤饭 · 内脏汤饭 · 白切肉", chips: ["汤饭","白切肉 · 火锅","含增值税"],
+      best: "BEST", new: "新品", must: "推荐", spicy: "🌶 微辣", ask: "价格咨询", free: "免费",
+      quote: "感谢您光临 Seonsan Gukbap。<br>祝您用餐愉快!", copy: "复制", copied: "OK",
+      call: "电话", map: "地址 · 地图", vnd: "价格单位:越南盾(VND) · 含增值税(VAT) · 菜单和价格以顾客上传至谷歌地图的菜单为准,可能会有变动" },
+    ja: { title: "メニュー", tagline: "豚肉クッパ · スンデクッパ · ホルモンクッパ · スユク", chips: ["クッパ","スユク · 鍋","VAT込み"],
+      best: "BEST", new: "新メニュー", must: "おすすめ", spicy: "🌶 ピリ辛", ask: "価格お問い合わせ", free: "無料",
+      quote: "ソンサンクッパにお越しいただきありがとうございます。<br>どうぞごゆっくりお召し上がりください!", copy: "コピー", copied: "OK",
+      call: "電話", map: "住所 · 地図", vnd: "価格単位:ベトナムドン(VND) · 付加価値税(VAT)込み · メニュー・価格はお客様がGoogleマップに投稿したメニュー表に基づいており、変更される場合があります" },
+    vi: { title: "Thực đơn", tagline: "Cơm canh thịt lợn · Dồi lợn · Lòng · Thịt hấp", chips: ["Cơm canh","Thịt hấp · Lẩu","Đã gồm VAT"],
+      best: "BEST", new: "MỚI", must: "Nên thử", spicy: "🌶 Cay", ask: "Hỏi nhân viên", free: "Miễn phí",
+      quote: "Cảm ơn quý khách đã ghé Seonsan Gukbap.<br>Chúc quý khách ngon miệng!", copy: "Sao chép", copied: "OK",
+      call: "Gọi điện", map: "Địa chỉ · Bản đồ", vnd: "Đơn vị giá: đồng Việt Nam (VND) · Đã bao gồm VAT · Thực đơn và giá dựa theo thực đơn khách hàng đăng trên Google Maps, có thể thay đổi" },
+  };
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const storage = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  let observer;
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  const fmt = (n) => n.toLocaleString("en-US");
+  const label = (s, lang) => (typeof s === "string" ? s : s[lang] || s.en);
+
+  function render(lang) {
+    const t = UI[lang], R = window.RESTAURANT;
+    // 아랫줄: 한국어 화면 → 베트남어(직원과 소통용), 그 외 → 한국어
+    const second = lang === "ko" ? "vi" : "ko";
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand.ko} · ${t.title}`;
+
+    $("langs").innerHTML = LANGS.map(([c, l]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${l}</button>`).join("");
+    $("branch").textContent = `${R.brand.branch.ko} · ${R.brand.branch.en}`;
+    $("tagline").textContent = t.tagline;
+    $("chips").innerHTML = t.chips.map((c) => `<span>${esc(c)}</span>`).join("");
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}">
+        <div class="head"><h2>${esc(cat.name[lang])}<small>${esc(cat.name[lang === "vi" ? "en" : "vi"])}</small></h2></div>
+        ${cat.note ? `<p class="note">${esc(cat.note[lang])}</p>` : ""}
+        <ul>${cat.items.map((it) => {
+          const tags = [it.tag ? `<span class="${it.tag}">${esc(t[it.tag])}</span>` : "", it.spicy ? `<span class="hot">${esc(t.spicy)}</span>` : ""].join("");
+          const single = it.sizes ? "" : `<span class="leader"></span><span class="price ${it.price == null || it.price === 0 ? "ask" : ""}">${it.price == null ? esc(t.ask) : it.price === 0 ? esc(t.free) : `${fmt(it.price)}<small>₫</small>`}</span>`;
+          const sizes = it.sizes ? `<div class="sizes">${it.sizes.map(([s, p]) => `<span><i>${esc(label(s, lang))}</i>${p == null ? esc(t.ask) : `${fmt(p)}<small>₫</small>`}</span>`).join("")}</div>` : "";
+          return `
+          <li>
+            ${it.photo ? `<button class="thumb" type="button" data-photo="${it.photo}" data-cap="${esc(it.name[lang])}"><img src="${it.photo}" alt="${esc(it.name[lang])}" loading="lazy"></button>` : ""}
+            <div class="info">
+              ${tags.trim() ? `<div class="tags">${tags}</div>` : ""}
+              <div class="row"><b>${esc(it.name[lang])}</b>${it.unit ? `<span class="unit">${esc(label(it.unit, lang))}</span>` : ""}${single}</div>
+              ${sizes}
+              ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
+              ${it.name[second] !== it.name[lang] ? `<div class="sub ${second === "vi" ? "it" : ""}">${esc(it.name[second])}</div>` : (lang === "ko" && it.desc ? `<div class="sub it">${esc(it.desc.vi)}</div>` : "")}
+            </div>
+          </li>`; }).join("")}
+        </ul>
+      </section>`).join("");
+
+    $("quote").innerHTML = t.quote;
+    if (R.wifi) {
+      $("wifi").hidden = false;
+      $("wifiLabel").textContent = R.wifi.ssid ? `Wi-Fi · ${R.wifi.ssid}` : "Wi-Fi";
+      $("wifiText").textContent = R.wifi.password;
+      $("wifiCopy").textContent = t.copy;
+    }
+    $("callLabel").textContent = t.call;
+    $("callText").textContent = R.phone;
+    $("call").href = "tel:" + R.phone.replace(/[^\d+]/g, "");
+    $("mapLabel").textContent = t.map;
+    $("mapText").textContent = R.address;
+    $("map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.mapQuery + " " + R.address);
+    $("foot").textContent = t.vnd;
+    observeSections();
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  $("menu").addEventListener("click", (e) => {
+    const b = e.target.closest(".thumb");
+    if (!b) return;
+    $("zoomImg").src = b.dataset.photo;
+    $("zoomCap").textContent = b.dataset.cap;
+    $("zoom").classList.add("show");
+  });
+  $("zoom").addEventListener("click", () => $("zoom").classList.remove("show"));
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+  $("wifi").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(RESTAURANT.wifi.password); toast(UI[lang].copied); }
+    catch { toast(RESTAURANT.wifi.password); }
+  });
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+<script src="dasan.js"></script>
+<script src="stores-link.js"></script>
+<script src="lang-menu.js"></script>
+<script src="qr-home.js"></script>
+<!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
+<!-- analytics:end -->
+</body>
+</html>

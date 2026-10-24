@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cheonan.qrmenuasia.com/sitemap.xml
