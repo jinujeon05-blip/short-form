@@ -352,6 +352,11 @@ window.STORES = [
     address: "211 Nguyễn Cao, Kinh Bắc, Bắc Ninh",
     type: { ko: "한국식 돼지국밥 · 순대국밥 · 내장국밥 · 수육", vi: "Quán cơm canh Hàn Quốc — cơm canh thịt lợn, dồi lợn, lòng, thịt hấp", en: "Korean gukbap · Pork rice soup · Sundae soup · Suyuk", zh: "韩式汤饭 · 猪肉汤饭 · 血肠汤饭 · 白切肉", ja: "韓国式クッパ・豚肉クッパ・スンデクッパ・スユク" },
     keywords: "선산국밥 선산 국밥 선산국밥 식당 seonsan gukbap seon san gukbap sơn san son san nhà hàng sơn san nhà hàng son san 박닌 bắc ninh bac ninh kinh bắc kinh bac nguyễn cao nguyen cao 211 nguyễn cao 한식 국밥 돼지국밥 순대국밥 순대돼지국밥 내장국밥 닭개장 수육국밥 섞어국밥 소머리국밥 선산해장국 순대 수육 암뽕오소리모듬 소머리수육 술국 곱창전골 cơm canh thịt lợn cơm canh dồi lợn cơm canh lòng canh gà dồi lợn ba chỉ hấp lòng thập cẩm hấp lẩu lòng 0347942577 0347 942 577" },
+  { id: "sushiya", name: "스시야 Sushiya", sub: "초밥 · 롤 · 사시미 · 점심 특선 · 박닌", url: "https://sushiya.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["japanese"], tags: ["photos", "wifi"],
+    address: "14 Đường Võ Cường-5, Võ Cường, Bắc Ninh",
+    type: { ko: "한국식 스시 · 롤 · 사시미 · 점심 특선", vi: "Nhà hàng sushi kiểu Hàn — sushi, cuộn, sashimi, set trưa", en: "Korean-style sushi · Rolls · Sashimi · Lunch special", zh: "韩式寿司 · 卷 · 刺身 · 午餐特选", ja: "韓国式寿司・ロール・刺身・ランチ特選" },
+    keywords: "스시야 sushiya sushi ya 스시 초밥 사시미 롤 일식 한국 스시 박닌 bắc ninh bac ninh võ cường vo cuong đường võ cường 5 14 đường võ cường-5 nhà hàng sushi sushi bắc ninh 모듬초밥 특선초밥 스페셜초밥 흰살생선 연어초밥 소고기초밥 캘리포니아롤 장어롤 단품초밥 오도로 참치회 연어회 참치+연어 미니사시미 회덮밥 장어덮밥 우동 메밀 오뎅탕 김치우동 새우튀김 모듬튀김 양미리구이 꽁치구이 점심 특선 sushi tổng hợp cuộn california sashimi cá ngừ sashimi cá hồi 0327294225 0327 294 225" },
 ];
 
 window.SI = {
