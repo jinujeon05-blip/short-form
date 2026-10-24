@@ -59,7 +59,7 @@
 | `restaurants/ottugi` | 오뚜기식당 OTTUGI 한국식 고기구이 (Ngõ 179 Đ. Đình Thôn, Từ Liêm, Hà Nội, 0942 441 531) — **가게 찾기용** | `ottugi-menu` (미배포) | https://ottugi.qrmenuasia.com |
 | `restaurants/hwaro` | 화로상회 Hoa Rô BBQ 한국식 고기구이·세트·쿼이라인 (29N7 Đ. Ng Tất Tố, Võ Cường, Bắc Ninh, 0349 241 281) — **가게 찾기용** | `hwaro-menu` | https://hwaro.qrmenuasia.com |
 | `restaurants/jjajang` | 짜장도둑 JJAJANG DODOOK 한국식 중화요리·짜장면·짬뽕·탕수육 (Lô 22 TT1, Khu đô thị, Từ Liêm, Hà Nội, 0862 009 638) — **가게 찾기용** | `jjajang-menu` | https://jjajang.qrmenuasia.com |
-| `restaurants/babo` | 바보아저씨 Babo 생돈까스 전문점·분식·김밥·찌개 (73 P. Trần Văn Lai, Từ Liêm, Hà Nội, 0962 475 460) — **가게 찾기용** | `babo-menu` (미배포) | https://babo.qrmenuasia.com |
+| `restaurants/babo` | 바보아저씨 Babo 생돈까스 전문점·분식·김밥·찌개 (73 P. Trần Văn Lai, Từ Liêm, Hà Nội, 0962 475 460) — **가게 찾기용** | `babo-menu` | https://babo.qrmenuasia.com |
 | `restaurants/yeha` | 예하카페&파스타 Yeha Cafe & Pasta 카페·와플·빙수·파스타·포케·분식 (120 TT3 Khu do thi, Đ. Mỹ Đình, Song Da, Từ Liêm, Hà Nội, 0852 091 719, 08:00~22:00) — **가게 찾기용** | `yeha-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://yeha.qrmenuasia.com |
 | `restaurants/kkongsi` | 꽁시꽁시 恭喜恭喜 Gông Xi Gông Xi 한국식 중화요리·점심 특선·코스 (63 TT4, P. Đỗ Đình Thiện, KĐT Mỹ Đình - Sông Đà, Từ Liêm, Hà Nội, 0985 691 548, 2011년부터) — **가게 찾기용** | `kkongsi-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://kkongsi.qrmenuasia.com |
 | `restaurants/jeonbotdae` | 전봇대 Geon Bot Dae 한국식 소고기·삼겹살·감자탕·팔당오징어 (Tòa CT4 KĐT, 114 Đơn nguyên 3, Từ Liêm, Hà Nội, 0354 985 588) — **가게 찾기용** | `jeonbotdae-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://jeonbotdae.qrmenuasia.com |
