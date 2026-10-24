@@ -362,6 +362,11 @@ window.STORES = [
     address: "14 Đường Võ Cường-5, Võ Cường, Bắc Ninh",
     type: { ko: "한국식 스시 · 롤 · 사시미 · 점심 특선", vi: "Nhà hàng sushi kiểu Hàn — sushi, cuộn, sashimi, set trưa", en: "Korean-style sushi · Rolls · Sashimi · Lunch special", zh: "韩式寿司 · 卷 · 刺身 · 午餐特选", ja: "韓国式寿司・ロール・刺身・ランチ特選" },
     keywords: "스시야 sushiya sushi ya 스시 초밥 사시미 롤 일식 한국 스시 박닌 bắc ninh bac ninh võ cường vo cuong đường võ cường 5 14 đường võ cường-5 nhà hàng sushi sushi bắc ninh 모듬초밥 특선초밥 스페셜초밥 흰살생선 연어초밥 소고기초밥 캘리포니아롤 장어롤 단품초밥 오도로 참치회 연어회 참치+연어 미니사시미 회덮밥 장어덮밥 우동 메밀 오뎅탕 김치우동 새우튀김 모듬튀김 양미리구이 꽁치구이 점심 특선 sushi tổng hợp cuộn california sashimi cá ngừ sashimi cá hồi 0327294225 0327 294 225" },
+  { id: "jjajang", name: "짜장도둑 JJAJANG DODOOK", sub: "짜장면 · 짬뽕 · 탕수육 · 볶음밥 · 요리", url: "https://jjajang.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["chinese", "korean", "noodle"], tags: ["photos"],
+    address: "Lô 22 TT1, Khu đô thị, Từ Liêm, Hà Nội",
+    type: { ko: "짜장면 · 짬뽕 · 탕수육 · 볶음밥 한국식 중화요리", vi: "Mì tương đen · Mì hải sản cay · Thịt chiên chua ngọt · Cơm chiên — món Hoa kiểu Hàn", en: "Korean-Chinese · Jjajangmyeon · Jjamppong · Tangsuyuk · Fried rice", zh: "韩式中餐 · 炸酱面 · 炒码面 · 糖醋肉 · 炒饭", ja: "韓国式中華・ジャージャー麺・チャンポン・タンスユク・チャーハン" },
+    keywords: "짜장도둑 짜장 도둑 짜장도둑식당 jjajang dodook jjajangdodook jajang dodook jjajang thief 하노이 hà nội từ liêm tu liem lô 22 tt1 lo 22 tt1 khu đô thị mỹ đình my dinh nhà hàng hàn quốc món hoa kiểu hàn 한국식 중화요리 중식 중국집 짜장면 짜장 청양짜장 간짜장 유슬짜장 유니짜장 삼선쟁반짜장 짬뽕 해물짬뽕 삼선굴짬뽕 삼선쟁반짬뽕 삼선우동 삼선울면 기스면 탕수육 사천탕수육 깐풍육 깐풍기 깐쇼새우 깐풍새우 고추잡채 유산슬 팔보채 양장피 잡채 마파두부 볶음밥 짜장밥 새우볶음밥 삼선볶음밥 오징어덮밥 송이덮밥 잡탕밥 군만두 물만두 연태고량주 mì tương đen mì hải sản cay thịt chiên chua ngọt cơm chiên hà cảo 韩式中餐 炸酱面 炒码面 糖醋肉 炒饭 韓国式中華 ジャージャー麺 チャンポン タンスユク チャーハン" },
 ];
 
 window.SI = {
