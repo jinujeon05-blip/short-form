@@ -61,7 +61,7 @@
 | `restaurants/jjajang` | 짜장도둑 JJAJANG DODOOK 한국식 중화요리·짜장면·짬뽕·탕수육 (Lô 22 TT1, Khu đô thị, Từ Liêm, Hà Nội, 0862 009 638) — **가게 찾기용** | `jjajang-menu` | https://jjajang.qrmenuasia.com |
 | `restaurants/babo` | 바보아저씨 Babo 생돈까스 전문점·분식·김밥·찌개 (73 P. Trần Văn Lai, Từ Liêm, Hà Nội, 0962 475 460) — **가게 찾기용** | `babo-menu` | https://babo.qrmenuasia.com |
 | `restaurants/dduldul` | 둘둘분식 Haihai Tokbokki 한국 분식·떡볶이·김밥·튀김·냉면 (35 P. Đỗ Đình Thiện, Từ Liêm, Hà Nội, 0989 953 171) — **가게 찾기용** | `dduldul-menu` | https://dduldul.qrmenuasia.com |
-| `restaurants/yega` | 예가 YEGA 누룽지백숙·훈제·닭볶음탕·막국수 (The Emerald Vietnam, E3-(SH16), 1F, CT8, Từ Liêm, Hà Nội, 039 353 1840) — **가게 찾기용** | `yega-menu` (미배포) | https://yega.qrmenuasia.com |
+| `restaurants/yega` | 예가 YEGA 누룽지백숙·훈제·닭볶음탕·막국수 (The Emerald Vietnam, E3-(SH16), 1F, CT8, Từ Liêm, Hà Nội, 039 353 1840) — **가게 찾기용** | `yega-menu` | https://yega.qrmenuasia.com |
 | `restaurants/yeha` | 예하카페&파스타 Yeha Cafe & Pasta 카페·와플·빙수·파스타·포케·분식 (120 TT3 Khu do thi, Đ. Mỹ Đình, Song Da, Từ Liêm, Hà Nội, 0852 091 719, 08:00~22:00) — **가게 찾기용** | `yeha-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://yeha.qrmenuasia.com |
 | `restaurants/kkongsi` | 꽁시꽁시 恭喜恭喜 Gông Xi Gông Xi 한국식 중화요리·점심 특선·코스 (63 TT4, P. Đỗ Đình Thiện, KĐT Mỹ Đình - Sông Đà, Từ Liêm, Hà Nội, 0985 691 548, 2011년부터) — **가게 찾기용** | `kkongsi-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://kkongsi.qrmenuasia.com |
 | `restaurants/jeonbotdae` | 전봇대 Geon Bot Dae 한국식 소고기·삼겹살·감자탕·팔당오징어 (Tòa CT4 KĐT, 114 Đơn nguyên 3, Từ Liêm, Hà Nội, 0354 985 588) — **가게 찾기용** | `jeonbotdae-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://jeonbotdae.qrmenuasia.com |
