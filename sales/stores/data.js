@@ -331,6 +331,11 @@ window.STORES = [
     address: "Lô 29 - TT4, P. Trần Văn Lai, Từ Liêm, Hà Nội",
     type: { ko: "초밥 · 회 · 참치 코스 · 점심 메뉴 일식 레스토랑", vi: "Sushi · Sashimi · Set cá ngừ · Thực đơn trưa — nhà hàng Nhật", en: "Japanese restaurant · Sushi · Sashimi · Tuna courses · Lunch menu", zh: "日本料理 · 寿司 · 刺身 · 金枪鱼套餐 · 午餐菜单", ja: "日本料理・寿司・刺身・マグロコース・ランチメニュー" },
     keywords: "미즈 미즈레스토랑 미즈 레스토랑 미즈일식 미즈 일식 miz miz restaurant miz japanese restaurant 하노이 hà nội từ liêm tu liem trần văn lai tran van lai tt4 lô 29 lo 29 mỹ đình my dinh nhà hàng nhật bản nhà hàng nhật 일식 일본 음식 일식당 초밥 모둠초밥 장어초밥 새우초밥 회초밥 연어초밥 회정식 연어회정식 보리굴비 회덮밥 연어덮밥 물회 장어덮밥 알밥 튀김우동 알탕 동태탕 동태지리 새우튀김 생선까스 가오리찜 모둠회 참치 참다랑어 머리살 참치도로 오도로 울대살 돌문어숙회 참소라숙회 갑오징어회 연어회 양미리구이 고노와다 사케 일본 청주 하쿠시카 카센 막걸리 소주 화요 점심 점심 메뉴 저녁 코스 sushi sashimi tuna course toro otoro lunch menu japanese sake nhà hàng sushi sashimi cá ngừ set trưa 日本料理 寿司 刺身 金枪鱼 清酒 日本料理 寿司 刺身 マグロ 日本酒 ランチ" },
+  { id: "hwaro", name: "화로상회 Hoa Rô BBQ", sub: "소고기 · 삼겹살 · 세트 · 쿼이라인 · 점심 특선", url: "https://hwaro.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["bbq", "korean"], tags: ["photos"],
+    address: "29N7 Đ. Ng Tất Tố, Võ Cường, Bắc Ninh",
+    type: { ko: "소고기 · 삼겹살 · 세트 · 셀프바(쿼이라인) 한국식 고기구이", vi: "Thịt nướng Hàn Quốc · Thịt bò · Ba chỉ · Combo · Quầy line", en: "Korean BBQ · Beef · Pork belly · Combo sets · Self-bar", zh: "韩式烤肉 · 牛肉 · 五花肉 · 套餐 · 自助吧", ja: "韓国焼肉・牛肉・サムギョプサル・セット・セルフバー" },
+    keywords: "화로상회 화로 상회 화로상회박닌점 화로상회 박닌점 화로bbq 화로 bbq hwaro hwaro bbq hwarosanghoe hwaro sanghoe hoa rô sang huê hoa ro sang hue hoa rô bbq hoa ro bbq 박닌 bắc ninh bac ninh võ cường vo cuong ng tất tố ng tat to 29n7 nhà hàng hàn quốc 한식 고기구이 고깃집 소고기 갈비살 L.A갈비 la갈비 토시살 부채살 우삼겹 소곱창 채끝살 업진살 꽃갈비살 돼지갈비 항정살 목살 삼겹살 숙성삼겹살 숙성목살 과일간장삼겹살 매운양념삼겹살 껍데기 세트 콤보 갈비살세트 마늘갈비살세트 소고기스페셜세트 믹스세트 럭셔리세트 스페셜만찬세트 특선돼지고기세트 구운새우 오징어다리 쿼이라인 셀프바 샐러드바 순두부찌개 김치찌개 된장찌개 비빔냉면 냉면 비빔밥 계란찜 점심특선 뼈해장국 갈비탕 감자탕 냉면+고기 타이거 사이공 삿포로 진로 참이슬 처음처럼 새로 막걸리 소주 thịt nướng hàn quốc thịt bò ba chỉ combo quầy line bữa trưa đặc biệt canh xương khoai tây mì lạnh 韩式烤肉 牛肉 五花肉 套餐 自助吧 午市特餐 土豆排骨汤 韓国焼肉 牛肉 サムギョプサル セット セルフバー ランチ" },
 ];
 
 window.SI = {
