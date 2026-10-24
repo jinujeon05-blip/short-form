@@ -342,6 +342,11 @@ window.STORES = [
     address: "66 P. Lương Thế Vinh, Kinh Bắc, Bắc Ninh",
     type: { ko: "이발관 · 마사지 · 발 관리 · 염색", vi: "Tiệm cắt tóc · Massage · Chăm sóc chân · Nhuộm tóc", en: "Barbershop · Massage · Foot care · Hair coloring", zh: "理发店 · 按摩 · 足部护理 · 染发", ja: "理髪店・マッサージ・フットケア・カラー" },
     keywords: "천안 이발관 천안이발관 천안 이발소 마사지 이발 이발관 마사지 한국 이발관 박닌 cheon an barbershop cheon an barber shop cheonan barbershop barber premium barbershop 天安理发店 天安 理发店 按摩 理发 tiệm cắt tóc cắt tóc hàn quốc tiệm cắt tóc hàn quốc massage bắc ninh bac ninh kinh bắc kinh bac lương thế vinh luong the vinh 66 lương thế vinh 4핸드 4 hand massage 발각질 tẩy da chết chân 프리미엄 마사지 커트 염색 nhuộm tóc 0866431006 0866 431 006" },
+  { id: "seonsan", name: "선산곱창 & 돼지찌개", sub: "곱창전골 · 곱창구이 · 삼겹살 · 부대찌개 · 박닌", url: "https://seonsan.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["bbq", "korean"], tags: ["photos", "wifi"],
+    address: "138 Nguyễn Cao, Kinh Bắc, Bắc Ninh",
+    type: { ko: "한국식 곱창전골 · 곱창구이 · 돼지찌개 · 삼겹살", vi: "Nhà hàng Hàn Quốc — lòng lẩu, lòng nướng, canh thịt lợn, thịt ba chỉ", en: "Korean gopchang hot pot · Grilled intestines · Pork stew · Pork belly", zh: "韩式牛肠火锅 · 烤肠 · 猪肉汤 · 五花肉", ja: "韓国式ホルモン鍋・ホルモン焼き・豚肉チゲ・サムギョプサル" },
+    keywords: "선산곱창 선산 곱창 선산곱창 돼지찌개 선산곱창 & 돼지찌개 seonsan gopchang seon san gopchang sun san sunsan nhà hàng 선산곱창 il poom 일품 nhà hàng il poom 박닌 bắc ninh bac ninh kinh bắc kinh bac nguyễn cao nguyen cao 138 nguyễn cao 한식 곱창 곱창전골 곱창구이 막창 소막창 돼지막창 삼겹살 부대찌개 능이백숙 능이 백숙 왕새우소금구이 도토리묵무침 산낙지 두부김치 어묵탕 lòng lẩu lòng nướng dạ dày nướng canh thịt lợn xúc xích hầm cay gà hầm sâm tôm càng nướng muối 0865438615 0865 438 615" },
 ];
 
 window.SI = {
