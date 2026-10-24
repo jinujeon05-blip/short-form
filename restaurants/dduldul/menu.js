@@ -58,7 +58,7 @@ window.MENU = [
     name: {"ko": "면·냉면", "en": "Noodles", "zh": "面·冷面", "ja": "麺・冷麺", "vi": "Mì"},
     items: [
       {"price": 200000, "tag": "best", "photo": "img/naengmyeon.jpg", "name": {"ko": "고쌈 냉면", "en": "Gossam Naengmyeon (Cold Noodles)", "zh": "Gossam 冷面", "ja": "コッサム冷麺", "vi": "Mì lạnh Gossam (Naengmyeon)"}},
-      {"price": 220000, "spicy": true, "name": {"ko": "매운 고쌈 냉면", "en": "Spicy Gossam Naengmyeon", "zh": "辣味肉包冷面", "ja": "辛いコッサム冷麺", "vi": "Mì lạnh Gossam cay"}},
+      {"price": 220000, "spicy": true, "name": {"ko": "매운 고쌈 냉면", "en": "Spicy Gossam Naengmyeon", "zh": "辣味 Gossam 冷面", "ja": "辛いコッサム冷麺", "vi": "Mì lạnh Gossam cay"}},
       {"price": 140000, "name": {"ko": "냉면", "en": "Cold Noodles (Naengmyeon)", "zh": "冷面", "ja": "冷麺", "vi": "Mì lạnh (Naengmyeon)"}},
       {"price": 160000, "spicy": true, "name": {"ko": "매운 냉면", "en": "Spicy Cold Noodles", "zh": "辣冷面", "ja": "辛い冷麺", "vi": "Mì lạnh cay"}},
       {"price": 50000, "name": {"ko": "곱배기(면 사리 추가)", "en": "Extra Noodles (Gopbaegi)", "zh": "加量(加面)", "ja": "大盛り(麺追加)", "vi": "Thêm mì (phần lớn)"}},
