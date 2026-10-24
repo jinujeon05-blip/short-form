@@ -66,7 +66,7 @@
 | `restaurants/inyeon` | 인연식당 Nhân Duyên 하노이 원조 족발 전문점·보쌈·구이·볶음 (Lô 103 TT3, Hoàng Trọng Mậu / KĐT Mỹ Đình, Từ Liêm, Hà Nội) — **가게 찾기용** | `inyeon-menu` (팀 jinwoo8, 2026-10-23 배포, 가게 찾기 목록도 반영) | https://inyeon.qrmenuasia.com |
 | `restaurants/mannyang` | 만냥포차 Man Nyang Pocha 한국식 포차(안주·탕·튀김·전) (174 Đ. Hoàng Hoa Thám, Võ Cường, Bắc Ninh, 0392 531 302) — **가게 찾기용** | `mannyang-menu` (팀 jinwoo8, 2026-10-24 배포, 가게 찾기 목록도 반영) | https://mannyang.qrmenuasia.com |
 | `restaurants/cheonan` | 천안 이발관 天安理发店 Cheon An BarberShop 이발관·마사지 (66 P. Lương Thế Vinh, Kinh Bắc, Bắc Ninh, 0866 431 006) — **가게 찾기용** | `cheonan-menu` (팀 jinwoo8, 2026-10-24 배포, 가게 찾기 목록도 반영) | https://cheonan.qrmenuasia.com |
-| `restaurants/seonsan` | 선산곱창 & 돼지찌개 Seonsan Gopchang (Nhà Hàng 선산곱창, 138 Nguyễn Cao, Kinh Bắc, Bắc Ninh, 0865 438 615) — **가게 찾기용** | `seonsan-menu` (아직 배포 전) | https://seonsan.qrmenuasia.com |
+| `restaurants/seonsan` | 선산곱창 & 돼지찌개 Seonsan Gopchang (Nhà Hàng 선산곱창, 138 Nguyễn Cao, Kinh Bắc, Bắc Ninh, 0865 438 615) — **가게 찾기용** | `seonsan-menu` (팀 jinwoo8, 2026-10-24 배포, 가게 찾기 목록도 반영) | https://seonsan.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
