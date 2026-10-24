@@ -17,6 +17,7 @@ name() {
     mannyang) echo "만냥포차" ;;
     cheonan) echo "천안이발관" ;;
     seonsan) echo "선산곱창" ;;
+    seonsangukbap) echo "선산국밥" ;;
     namme) echo "남매식당" ;;
     inyeon) echo "인연식당" ;;
     *) echo "$1" ;;

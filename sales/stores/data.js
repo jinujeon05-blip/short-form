@@ -347,6 +347,11 @@ window.STORES = [
     address: "138 Nguyễn Cao, Kinh Bắc, Bắc Ninh",
     type: { ko: "한국식 곱창전골 · 곱창구이 · 돼지찌개 · 삼겹살", vi: "Nhà hàng Hàn Quốc — lòng lẩu, lòng nướng, canh thịt lợn, thịt ba chỉ", en: "Korean gopchang hot pot · Grilled intestines · Pork stew · Pork belly", zh: "韩式牛肠火锅 · 烤肠 · 猪肉汤 · 五花肉", ja: "韓国式ホルモン鍋・ホルモン焼き・豚肉チゲ・サムギョプサル" },
     keywords: "선산곱창 선산 곱창 선산곱창 돼지찌개 선산곱창 & 돼지찌개 seonsan gopchang seon san gopchang sun san sunsan nhà hàng 선산곱창 il poom 일품 nhà hàng il poom 박닌 bắc ninh bac ninh kinh bắc kinh bac nguyễn cao nguyen cao 138 nguyễn cao 한식 곱창 곱창전골 곱창구이 막창 소막창 돼지막창 삼겹살 부대찌개 능이백숙 능이 백숙 왕새우소금구이 도토리묵무침 산낙지 두부김치 어묵탕 lòng lẩu lòng nướng dạ dày nướng canh thịt lợn xúc xích hầm cay gà hầm sâm tôm càng nướng muối 0865438615 0865 438 615" },
+  { id: "seonsangukbap", name: "선산국밥", sub: "돼지국밥 · 순대국밥 · 내장국밥 · 수육 · 박닌", url: "https://seonsangukbap.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean"], tags: ["photos", "wifi"],
+    address: "211 Nguyễn Cao, Kinh Bắc, Bắc Ninh",
+    type: { ko: "한국식 돼지국밥 · 순대국밥 · 내장국밥 · 수육", vi: "Quán cơm canh Hàn Quốc — cơm canh thịt lợn, dồi lợn, lòng, thịt hấp", en: "Korean gukbap · Pork rice soup · Sundae soup · Suyuk", zh: "韩式汤饭 · 猪肉汤饭 · 血肠汤饭 · 白切肉", ja: "韓国式クッパ・豚肉クッパ・スンデクッパ・スユク" },
+    keywords: "선산국밥 선산 국밥 선산국밥 식당 seonsan gukbap seon san gukbap sơn san son san nhà hàng sơn san nhà hàng son san 박닌 bắc ninh bac ninh kinh bắc kinh bac nguyễn cao nguyen cao 211 nguyễn cao 한식 국밥 돼지국밥 순대국밥 순대돼지국밥 내장국밥 닭개장 수육국밥 섞어국밥 소머리국밥 선산해장국 순대 수육 암뽕오소리모듬 소머리수육 술국 곱창전골 cơm canh thịt lợn cơm canh dồi lợn cơm canh lòng canh gà dồi lợn ba chỉ hấp lòng thập cẩm hấp lẩu lòng 0347942577 0347 942 577" },
 ];
 
 window.SI = {
