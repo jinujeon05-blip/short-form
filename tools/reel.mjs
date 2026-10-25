@@ -2,7 +2,7 @@
 // 사용법: node tools/reel.mjs <가게> [사진1,사진2]   예) node tools/reel.mjs gamasot img/galbijjim.jpg,img/gejang.jpg
 // 장면: ① 테이블 QR 찍기 ② 사진 메뉴판이 열림(스크롤) ③ 5개 언어로 바뀜 ④ 음식 사진 확대 ⑤ 가게 이름·주소·QR
 // 메뉴판 화면을 프레임마다 캡처해 휴대폰 틀에 넣고 ffmpeg 로 묶는다 → restaurants/<가게>/print/reel.mp4
-// 색은 가게 partner-theme(--pt-accent, --pt-btn), 글꼴은 G마켓 산스 하나만.
+// 색은 가게 partner-theme(--pt-accent, --pt-btn), 글꼴은 tools/video-fonts 의 Gothic A1 하나만(영상 전용).
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { chromium, ROOT } from './pw.mjs';
@@ -32,7 +32,7 @@ const LANGS = [['ko', '한국어'], ['vi', 'Tiếng Việt'], ['en', 'English'],
 
 const out = `${D}/print/reel-frames`;
 fs.rmSync(out, { recursive: true, force: true }); fs.mkdirSync(out, { recursive: true });
-const font = `file://${ROOT}/public/fonts/GmarketSansTTFBold.ttf`;
+const font = `file://${ROOT}/tools/video-fonts/GothicA1-Bold.ttf`; // 영상 전용 글꼴(한·영·베), G마켓 산스는 베트남어가 없음
 const qr = fs.readFileSync(`${D}/print/qr.svg`, 'utf8');
 // 휴대폰 화면: CSS 390×696 을 1.8배로 (화면 702×1253)
 const PW = 390, PH = 696, K = 1.8;

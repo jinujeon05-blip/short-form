@@ -34,8 +34,7 @@
    - `tools/seo.mjs`의 SHOPS, 그다음 `node tools/seo.mjs`
    - `tools/export.sh`의 `name()`
    - `sales/content.js`의 `DEMOS`(SNS용, 가게 찾기용은 `hidden: true`)
-   - `node tools/reel.mjs <가게> [img/사진1.jpg,img/사진2.jpg]` — SNS 숏폼 영상 `print/reel.mp4`(세로 1080×1920, 15초, 소리 없음, 한·베 자막: QR 찍기→메뉴판→5개 언어→사진 확대→가게 이름·주소·QR). 2026-10-25 가마솥 샘플. 동의 없는 가게 찾기용 가게는 개별 영상을 만들지 않는다(사진 저작권·사장님 항의 우려). SNS 링크에는 `?utm_source=tiktok` 등을 붙여 방문 기록으로 효과를 본다.
-- `node tools/demo.mjs <가게>` → `sales/img/demo-<가게>.jpg`
+   - `node tools/demo.mjs <가게>` → `sales/img/demo-<가게>.jpg`
    - `node tools/analytics.mjs`
    - `docs/stores.md`의 표·기록
 7. **점검**:
@@ -118,6 +117,9 @@
   - 가게 이름은 `sales/content.js`의 `DEMOS`에서 가져온다.
   - QR 아래 안내는 **5개 언어 모두** 넣는다.
   - 한국 매장은 `ko`.
+- `node tools/promo.mjs` — **qrmenuasia 웹앱 홍보 영상** `sales/print/promo.mp4`(세로 1080×1920, 20초, 소리 없음, 한·베 자막: 종이 메뉴판? → 가게 찾기 → 사진 메뉴·5개 언어 → 점주용 → qrmenuasia.com·QR·소개서 상담 연락처). 가게 수는 `data.js`에서 자동. 2026-10-25.
+- **영상 글꼴 `tools/video-fonts/`(Gothic A1 Bold·ExtraBold, 한·영·베 모두 있음, OFL)는 영상(`promo.mjs`·`reel.mjs`) 전용**이다. 메뉴판·소개서·카드 등 사이트와 인쇄물에는 절대 쓰지 않는다(이미 만든 가게와 글씨가 달라짐, 사용자 지시 2026-10-25). 녹화할 때만 휴대폰 화면 속 페이지에 입힌다.
+- `node tools/reel.mjs <가게> [img/사진1.jpg,img/사진2.jpg]` — SNS 숏폼 영상 `print/reel.mp4`(세로 1080×1920, 15초, 소리 없음, 한·베 자막: QR 찍기→메뉴판→5개 언어→사진 확대→가게 이름·주소·QR). 2026-10-25 가마솥 샘플. 동의 없는 가게 찾기용 가게는 개별 영상을 만들지 않는다(사진 저작권·사장님 항의 우려). SNS 링크에는 `?utm_source=tiktok` 등을 붙여 방문 기록으로 효과를 본다.
 - `node tools/demo.mjs <가게>` — 가게 찾기·소개서 카드 사진 `sales/img/demo-<가게>.jpg`.
 - `node tools/seo.mjs` — canonical·og·JSON-LD·robots·sitemap. 메뉴·가격·주소를 바꾸거나 새 가게가 생기면 다시 돌린다.
 - `sh tools/export.sh <폴더> [가게…|sales]` — 보낼 파일을 `<상호>_<파일>`로 복사한다.
