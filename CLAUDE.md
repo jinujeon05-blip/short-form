@@ -34,7 +34,8 @@
    - `tools/seo.mjs`의 SHOPS, 그다음 `node tools/seo.mjs`
    - `tools/export.sh`의 `name()`
    - `sales/content.js`의 `DEMOS`(SNS용, 가게 찾기용은 `hidden: true`)
-   - `node tools/demo.mjs <가게>` → `sales/img/demo-<가게>.jpg`
+   - `node tools/reel.mjs <가게> [img/사진1.jpg,img/사진2.jpg]` — SNS 숏폼 영상 `print/reel.mp4`(세로 1080×1920, 15초, 소리 없음, 한·베 자막: QR 찍기→메뉴판→5개 언어→사진 확대→가게 이름·주소·QR). 2026-10-25 가마솥 샘플. 동의 없는 가게 찾기용 가게는 개별 영상을 만들지 않는다(사진 저작권·사장님 항의 우려). SNS 링크에는 `?utm_source=tiktok` 등을 붙여 방문 기록으로 효과를 본다.
+- `node tools/demo.mjs <가게>` → `sales/img/demo-<가게>.jpg`
    - `node tools/analytics.mjs`
    - `docs/stores.md`의 표·기록
 7. **점검**:
