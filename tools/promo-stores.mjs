@@ -1,6 +1,6 @@
 // 가게 찾기(qrmenuasia.com/stores) 손님용 홍보 숏폼 영상 (세로 1080×1920, 23초, 소리 없음 — 음악은 틱톡·릴스 앱에서 고른다)
 // 대상: 손님(한인·베트남인·여행자). 가게 하나가 아니라 '가게 찾기' 웹앱을 홍보한다.
-// 사용법: node tools/promo-stores.mjs [검색어, 기본 짜장]   → sales/print/promo-stores.mp4
+// 사용법: node tools/promo-stores.mjs [검색어, 기본 삼겹살]   → sales/print/promo-stores.mp4
 // 가게 수는 계속 늘어나니 영상에 숫자를 넣지 않는다(사용자 지시 2026-10-25).
 // 장면: ① 오늘 뭐 먹지? ② 가게 메뉴 미리 보기 ③ 음식 이름으로 검색 ④ 지역·종류 고르기 ⑤ 사진·가격·내 언어로(가마솥) ⑥ 주소·QR·홈 화면에 추가
 // 글꼴은 tools/video-lib.mjs 참고(영상 전용 Noto Sans KR, 중국어 화면은 안 보여 줌).
@@ -9,7 +9,7 @@ import { chromium, ROOT } from './pw.mjs';
 import { serve, prep as prepPage, ease, phoneCss, encode, fontFace, FONTS } from './video-lib.mjs';
 import { execFileSync } from 'node:child_process';
 
-const word = process.argv[2] || '짜장';
+const word = process.argv[2] || '삼겹살';
 const SALES = `${ROOT}/sales`;
 const out = `${ROOT}/sales/print/promo-stores-frames`;
 fs.rmSync(out, { recursive: true, force: true }); fs.mkdirSync(out, { recursive: true });
@@ -116,7 +116,7 @@ for (let n = 0; n < FPS * T; n++) {
     const top = await f.evaluate(() => document.getElementById('regionChips').getBoundingClientRect().top + scrollY);
     scroll = Math.max(0, top - 60) + 520 * ease((local - 2.2) / 1.2);
     tap = null;
-    for (const [at, sel] of [[0.5, '.chip[data-v="bacninh"]'], [1.4, '.chip[data-v="bbq"]']]) {
+    for (const [at, sel] of [[0.5, '.chip[data-v="hanoi"]'], [1.4, '.chip[data-v="korean"]']]) {
       if (local >= at - 0.35 && local < at + 0.15) tap = await where(sel);
       if (local >= at && !done.has(sel)) { await f.evaluate((s) => document.querySelector(s)?.click(), sel); await prep(); done.add(sel); }
     }

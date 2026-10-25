@@ -18,7 +18,7 @@ const serve = (dir, port) => new Promise((ok) => {
     if (p.endsWith('/')) p += 'index.html';
     const f = path.join(dir, p);
     if (!f.startsWith(dir) || !fs.existsSync(f)) { res.writeHead(404); return res.end(); }
-    res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' });
+    res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream', 'access-control-allow-origin': '*' }); // 글꼴은 다른 포트에서 불러오므로 CORS 필요
     fs.createReadStream(f).pipe(res);
   }).listen(port, () => ok(s));
 });

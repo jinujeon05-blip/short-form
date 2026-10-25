@@ -17,7 +17,7 @@ export const serve = (dir, port) => new Promise((ok) => {
     if (p.endsWith('/')) p += 'index.html';
     const f = path.join(dir, p);
     if (!f.startsWith(dir) || !fs.existsSync(f)) { res.writeHead(404); return res.end(); }
-    res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' });
+    res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream', 'access-control-allow-origin': '*' }); // 글꼴은 다른 포트에서 불러오므로 CORS 필요
     fs.createReadStream(f).pipe(res);
   }).listen(port, () => ok(s));
 });
@@ -29,7 +29,7 @@ export const fontFace = (fontBase) => `@font-face{font-family:V;src:url(${fontBa
 export const prep = (frame, fontBase) => frame.evaluate(async (css) => {
   if (!document.getElementById('vfont')) {
     const s = document.createElement('style'); s.id = 'vfont';
-    s.textContent = css + '*,*::before,*::after{font-family:V,"Noto Color Emoji",sans-serif!important;transition:none!important;animation:none!important;scroll-behavior:auto!important}';
+    s.textContent = css + '*,*::before,*::after{font-family:V,sans-serif!important;transition:none!important;animation:none!important;scroll-behavior:auto!important}';
     document.head.appendChild(s);
   }
   document.querySelectorAll('img').forEach((i) => { i.loading = 'eager'; });
