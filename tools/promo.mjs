@@ -2,7 +2,7 @@
 // 대상: 손님(가게 찾기) + 점주(QR 메뉴판 만들기). 가게 하나를 홍보하는 영상이 아니다.
 // 사용법: node tools/promo.mjs   → sales/print/promo.mp4
 // 장면: ① 종이 메뉴판? ② 가게 찾기(지역·종류 고르기) ③ 사진 메뉴·5개 언어(가마솥) ④ 점주용 소개서 ⑤ qrmenuasia.com·QR·상담 연락처
-// 글꼴: tools/video-fonts/Gothic A1 (한·영·베 모두 있음) — **영상 전용**. 메뉴판·소개서 사이트에는 쓰지 않는다(사용자 지시 2026-10-25).
+// 글꼴: tools/video-fonts/Noto Sans KR (한·영·베·일, 중국어 간체 일부 없음 → 중국어 화면 빼기) — **영상 전용**. 메뉴판·소개서 사이트에는 쓰지 않는다(사용자 지시 2026-10-25).
 //       녹화할 때만 휴대폰 화면 속 페이지에도 이 글꼴을 입혀 영상 전체를 한 글꼴로 맞춘다(사이트 파일은 그대로).
 import fs from 'node:fs';
 import http from 'node:http';
@@ -43,18 +43,18 @@ const FPS = 30, T = 20;
 const S = [0, 3, 8, 12, 17, 20];
 const CAP = [
   null,
-  [`가게 ${N}곳 메뉴를 한 번에`, `Xem thực đơn ${N} quán chỉ một chạm`],
+  ['여러 가게 메뉴를 한 번에', 'Xem thực đơn nhiều quán chỉ một chạm'],
   ['사진 메뉴 · 5개 언어', 'Thực đơn có ảnh · 5 ngôn ngữ'],
   ['사장님, QR 메뉴판\n만들어 드려요', 'Chủ quán: làm thực đơn QR cho quán'],
 ];
 const CAP3B = ['테이블 QR 카드 ·\n가격 직접 수정 · Zalo 주문', 'Thẻ QR · Tự sửa giá · Đặt món qua Zalo'];
-const LANGS = [['ko', '한국어'], ['vi', 'Tiếng Việt'], ['en', 'English'], ['zh', '中文'], ['ja', '日本語']];
+const LANGS = [['ko', '한국어'], ['vi', 'Tiếng Việt'], ['en', 'English'], ['ja', '日本語']]; // 중국어는 영상 글꼴에 간체가 일부 없어 뺌
 const PAGES = [null, 'http://localhost:8761/stores/?lang=ko&notrack', 'http://localhost:8762/gamasot/index.html?lang=ko&notrack', 'http://localhost:8761/?lang=ko&notrack', null];
 
 const PW = 390, PH = 696, K = 1.8;
 const stage = `<!doctype html><html><head><meta charset="utf-8"><style>
-@font-face { font-family: V; src: url(http://localhost:8763/GothicA1-Bold.ttf); font-weight: 400 700; }
-@font-face { font-family: V; src: url(http://localhost:8763/GothicA1-ExtraBold.ttf); font-weight: 800 900; }
+@font-face { font-family: V; src: url(http://localhost:8763/NotoSansKR-Bold.ttf); font-weight: 400 700; }
+@font-face { font-family: V; src: url(http://localhost:8763/NotoSansKR-Black.ttf); font-weight: 800 900; }
 * { box-sizing: border-box; margin: 0; }
 body { width: 1080px; height: 1920px; overflow: hidden; font-family: V, sans-serif; font-weight: 700; color: #fff;
   background: radial-gradient(120% 80% at 50% 0%, #f2a03d 0%, #e0452b 55%, #7a1f12 100%); }
@@ -102,7 +102,7 @@ const frame = () => p.frames().find((x) => x !== p.mainFrame());
 const prep = () => frame().evaluate(async () => {
   if (!document.getElementById('vfont')) {
     const s = document.createElement('style'); s.id = 'vfont';
-    s.textContent = `@font-face{font-family:V;src:url(http://localhost:8763/GothicA1-Bold.ttf);font-weight:100 700}@font-face{font-family:V;src:url(http://localhost:8763/GothicA1-ExtraBold.ttf);font-weight:800 900}
+    s.textContent = `@font-face{font-family:V;src:url(http://localhost:8763/NotoSansKR-Bold.ttf);font-weight:100 700}@font-face{font-family:V;src:url(http://localhost:8763/NotoSansKR-Black.ttf);font-weight:800 900}
       *,*::before,*::after{font-family:V,sans-serif!important;transition:none!important;animation:none!important;scroll-behavior:auto!important}`;
     document.head.appendChild(s);
   }
@@ -133,7 +133,7 @@ for (let n = 0; n < FPS * T; n++) {
     scroll = 900 * ease((local - 2.7) / 2.2);
   }
   if (sc === 2) {
-    const want = LANGS[Math.min(4, Math.floor(local / 0.8))][0];
+    const want = LANGS[Math.min(3, Math.floor(local / 1))][0];
     if (want !== lang) { await f.evaluate((l) => document.querySelector(`#langs button[data-lang="${l}"]`)?.click(), want); await prep(); lang = want; }
     scroll = 260 * ease(local / 1.2);
   }
@@ -157,7 +157,7 @@ for (let n = 0; n < FPS * T; n++) {
     $('badge').textContent = langName || '';
     $('foot').style.opacity = sc === 2 || sc === 4 ? 0 : 0.9;
     $('end').style.opacity = sc === 4 ? Math.min(1, local / 0.4) : 0;
-  }, { sc, local, cap: sc === 3 && local >= 2.5 ? CAP3B : CAP[sc] || null, langName: sc === 2 ? LANGS[Math.min(4, Math.floor(local / 0.8))][1] : '' });
+  }, { sc, local, cap: sc === 3 && local >= 2.5 ? CAP3B : CAP[sc] || null, langName: sc === 2 ? LANGS[Math.min(3, Math.floor(local / 1))][1] : '' });
   await p.screenshot({ path: `${out}/${String(n).padStart(4, '0')}.jpg`, type: 'jpeg', quality: 92 });
 }
 await b.close();
@@ -166,4 +166,4 @@ const mp4 = `${ROOT}/sales/print/promo.mp4`;
 execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', `${out}/%04d.jpg`, '-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo',
   '-shortest', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20', '-preset', 'medium', '-movflags', '+faststart', '-c:a', 'aac', mp4]);
 fs.rmSync(out, { recursive: true, force: true });
-console.log(mp4, `${(fs.statSync(mp4).size / 1e6).toFixed(1)}MB`, `가게 ${N}곳`);
+console.log(mp4, `${(fs.statSync(mp4).size / 1e6).toFixed(1)}MB`);

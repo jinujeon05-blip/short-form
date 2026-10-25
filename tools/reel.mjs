@@ -2,7 +2,7 @@
 // 사용법: node tools/reel.mjs <가게> [사진1,사진2]   예) node tools/reel.mjs gamasot img/galbijjim.jpg,img/gejang.jpg
 // 장면: ① 테이블 QR 찍기 ② 사진 메뉴판이 열림(스크롤) ③ 5개 언어로 바뀜 ④ 음식 사진 확대 ⑤ 가게 이름·주소·QR
 // 메뉴판 화면을 프레임마다 캡처해 휴대폰 틀에 넣고 ffmpeg 로 묶는다 → restaurants/<가게>/print/reel.mp4
-// 색은 가게 partner-theme(--pt-accent, --pt-btn), 글꼴은 tools/video-fonts 의 Gothic A1 하나만(영상 전용).
+// 색은 가게 partner-theme(--pt-accent, --pt-btn), 글꼴은 tools/video-fonts 의 Noto Sans KR 하나만(영상 전용).
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { chromium, ROOT } from './pw.mjs';
@@ -28,11 +28,11 @@ const CAP = [
   ['5개 언어로 바로 바뀌어요', 'Đổi 5 ngôn ngữ chỉ một chạm'],
   ['음식 사진도 크게 보여요', 'Xem ảnh món ăn thật rõ'],
 ];
-const LANGS = [['ko', '한국어'], ['vi', 'Tiếng Việt'], ['en', 'English'], ['zh', '中文'], ['ja', '日本語']];
+const LANGS = [['ko', '한국어'], ['vi', 'Tiếng Việt'], ['en', 'English'], ['ja', '日本語']]; // 중국어는 영상 글꼴에 간체가 일부 없어 뺌
 
 const out = `${D}/print/reel-frames`;
 fs.rmSync(out, { recursive: true, force: true }); fs.mkdirSync(out, { recursive: true });
-const font = `file://${ROOT}/tools/video-fonts/GothicA1-Bold.ttf`; // 영상 전용 글꼴(한·영·베), G마켓 산스는 베트남어가 없음
+const font = `file://${ROOT}/tools/video-fonts/NotoSansKR-Bold.ttf`; // 영상 전용 글꼴(한·영·베), G마켓 산스는 베트남어가 없음
 const qr = fs.readFileSync(`${D}/print/qr.svg`, 'utf8');
 // 휴대폰 화면: CSS 390×696 을 1.8배로 (화면 702×1253)
 const PW = 390, PH = 696, K = 1.8;
@@ -97,7 +97,7 @@ for (let n = 0; n < FPS * T; n++) {
   // 메뉴판 안쪽 상태
   let want = 'ko', scroll = 0, wantZoom = null;
   if (sc === 1) scroll = 1100 * ease((local - 0.6) / 2.6);
-  if (sc === 2) { want = LANGS[Math.min(4, Math.floor(local / 0.7))][0]; scroll = 0; }
+  if (sc === 2) { want = LANGS[Math.min(3, Math.floor(local / 0.85))][0]; scroll = 0; }
   if (sc === 3) {
     const i = local < 1.5 ? 0 : 1;
     scroll = Math.max(0, thumbY[i] - 260);
@@ -130,7 +130,7 @@ for (let n = 0; n < FPS * T; n++) {
     $('badge').textContent = langName || '';
     $('end').style.opacity = sc === 4 ? Math.min(1, local / 0.4) : 0;
     $('foot').style.opacity = sc === 4 || sc === 2 ? 0 : 0.9;
-  }, { sc, local, cap: CAP[sc] || null, langName: sc === 2 ? LANGS[Math.min(4, Math.floor(local / 0.7))][1] : '' });
+  }, { sc, local, cap: CAP[sc] || null, langName: sc === 2 ? LANGS[Math.min(3, Math.floor(local / 0.85))][1] : '' });
   await p.screenshot({ path: `${out}/${String(n).padStart(4, '0')}.jpg`, type: 'jpeg', quality: 92 });
 }
 await b.close();
