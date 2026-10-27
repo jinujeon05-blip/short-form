@@ -5,8 +5,9 @@
 // - 로봇(검색엔진 등)은 서버에서 걸러낸다. 개인정보는 저장하지 않는다(방문자는 날짜·소금을 섞은 해시값).
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SNIPPET = `<!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
 <script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
 <!-- analytics:end -->

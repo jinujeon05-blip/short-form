@@ -4,7 +4,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+import { fileURLToPath } from 'node:url';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ids = process.argv.slice(2);
 if (!ids.length) { console.error('사용법: node tools/check-standard.mjs <가게id> …'); process.exit(1); }
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
