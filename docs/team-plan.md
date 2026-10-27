@@ -42,6 +42,7 @@
    ├─ 사진팀: finder(haiku)
    ├─ 메뉴판팀: 안티그래비티 agy(제미나이 Pro, PC 전용) → 안 되면 menu-reader(sonnet)
    ├─ 검수팀: 코덱스(챗GPT 무료, PC 전용, 가격 재확인) · reviewer(sonnet)
+   ├─ 디자인팀: designer(sonnet, 2026-10-27 신규 — 간판·메뉴판을 닮게 꾸미기)
    └─ 번역팀: polisher(sonnet)
 ```
 메타 AI는 공식 무료 연결이 없어 쓰지 않는다.
