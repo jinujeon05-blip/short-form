@@ -21,7 +21,8 @@ const shared = ['dasan.js', 'dasan-logo.png', 'dasan-logo-white.png', 'stores-li
 if (kind === 'full') shared.push('order.js');
 for (const f of shared) fs.copyFileSync(path.join(ROOT, 'restaurants/_shared', f), path.join(dir, f));
 
-let h = fs.readFileSync(path.join(STD, 'index.html'), 'utf8');
+// 윈도우 PC는 git이 CRLF로 내려받으므로 LF로 맞춘 뒤 바꾼다
+let h = fs.readFileSync(path.join(STD, 'index.html'), 'utf8').replace(/\r\n/g, '\n');
 const rep = (a, b) => { if (!h.includes(a)) throw new Error(`가마솥 index.html 에서 못 찾음: ${a}`); h = h.split(a).join(b); };
 // seo 블록은 tools/seo.mjs 가 다시 만든다
 h = h.replace(/<!-- seo:start[\s\S]*?<!-- seo:end -->\n?/, '');

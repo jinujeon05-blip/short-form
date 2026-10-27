@@ -47,6 +47,8 @@ window.DEMOS = [
   // 퍼틴(정식, 2026-10-22)
   { id: "phothin", hidden: true, url: "https://phothin.qrmenuasia.com", shot: "img/demo-phothin.jpg", qr: "img/qr-phothin.svg",
     name: "퍼틴 PHỞ THÌN", type: { ko: "소고기 쌀국수 · 하노이", vi: "Phở bò truyền thống · Hà Nội", zh: "牛肉河粉 · 河内", ja: "牛肉フォー・ハノイ", en: "Beef phở · Hanoi" } },
+  { id: "jongno", hidden: true, url: "https://jongno.qrmenuasia.com", shot: "img/demo-jongno.jpg", qr: "img/qr-jongno.svg",
+    name: "종로포차 JONGRO POCHA", type: { ko: "한국식 포장마차 · 하노이", vi: "Quán nhậu kiểu Hàn · Hà Nội", zh: "韩式路边摊酒馆 · 河内", ja: "韓国式屋台酒場・ハノイ", en: "Korean pocha · Hanoi" } },
 ];
 
 window.T = {

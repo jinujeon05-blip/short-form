@@ -45,11 +45,13 @@ const SHOPS = {
   jjajang:      { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Noodles', 'Jjajangmyeon', 'Jjamppong'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   babo:         { type: 'Restaurant', cuisine: ['Korean', 'Pork cutlet', 'Korean snacks', 'Gimbap', 'Stews'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   dduldul:      { type: 'Restaurant', cuisine: ['Korean', 'Korean snacks', 'Tteokbokki', 'Gimbap', 'Naengmyeon'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  yega:         { type: 'Restaurant', cuisine: ['Korean', 'Baeksuk', 'Smoked duck', 'Spicy chicken stew', 'Makguksu'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   mannyang:     { type: 'Restaurant', cuisine: ['Korean', 'Pocha', 'Korean bar food', 'Soups', 'Fried dishes'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   cheonan:      { type: 'HealthAndBeautyBusiness', noMenu: true, country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   seonsan:      { type: 'Restaurant', cuisine: ['Korean', 'Gopchang', 'Korean BBQ', 'Pork stew'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   seonsangukbap: { type: 'Restaurant', cuisine: ['Korean', 'Gukbap', 'Pork soup', 'Sundae'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   sushiya:      { type: 'Restaurant', cuisine: ['Japanese', 'Sushi', 'Sashimi', 'Rolls'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
+  jongno:       { type: 'BarOrPub', cuisine: ['Korean', 'Pocha', 'Korean bar food', 'Skewers', 'Stews'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   jamaedang:    { type: 'Restaurant', cuisine: ['Korean', 'Korean course', 'Seafood', 'Skate', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   studioan:     { type: 'LocalBusiness', noMenu: true, country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   cheong:       { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Korean', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
@@ -95,7 +97,8 @@ function priceOf(it) {
 function block(lines) { return `<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->\n${lines.join('\n')}\n<!-- seo:end -->`; }
 
 function inject(file, html) {
-  let s = readFileSync(file, 'utf8');
+  // 윈도우 PC는 CRLF로 내려받으므로 LF로 맞춘다
+  let s = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
   s = s.replace(/\n?<!-- seo:start[\s\S]*?<!-- seo:end -->/, '');
   s = s.replace('</head>', `${html}\n</head>`);
   writeFileSync(file, s);

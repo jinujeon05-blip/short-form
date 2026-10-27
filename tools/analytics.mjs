@@ -30,7 +30,8 @@ files.push(path.join(root, 'sales/index.html'), path.join(root, 'sales/stores/in
 
 let n = 0;
 for (const f of files) {
-  let s = fs.readFileSync(f, 'utf8');
+  // 윈도우 PC는 CRLF로 내려받으므로 LF로 맞춘다(안 맞추면 기존 블록을 못 찾아 두 번 붙는다)
+  let s = fs.readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
   const re = /<!-- analytics:start[\s\S]*?<!-- analytics:end -->\n/;
   if (re.test(s)) s = s.replace(re, () => SNIPPET);
   else if (s.includes('</body>')) s = s.replace('</body>', () => SNIPPET + '</body>');

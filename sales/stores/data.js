@@ -362,6 +362,11 @@ window.STORES = [
     address: "14 Đường Võ Cường-5, Võ Cường, Bắc Ninh",
     type: { ko: "한국식 스시 · 롤 · 사시미 · 점심 특선", vi: "Nhà hàng sushi kiểu Hàn — sushi, cuộn, sashimi, set trưa", en: "Korean-style sushi · Rolls · Sashimi · Lunch special", zh: "韩式寿司 · 卷 · 刺身 · 午餐特选", ja: "韓国式寿司・ロール・刺身・ランチ特選" },
     keywords: "스시야 sushiya sushi ya 스시 초밥 사시미 롤 일식 한국 스시 박닌 bắc ninh bac ninh võ cường vo cuong đường võ cường 5 14 đường võ cường-5 nhà hàng sushi sushi bắc ninh 모듬초밥 특선초밥 스페셜초밥 흰살생선 연어초밥 소고기초밥 캘리포니아롤 장어롤 단품초밥 오도로 참치회 연어회 참치+연어 미니사시미 회덮밥 장어덮밥 우동 메밀 오뎅탕 김치우동 새우튀김 모듬튀김 양미리구이 꽁치구이 점심 특선 sushi tổng hợp cuộn california sashimi cá ngừ sashimi cá hồi 0327294225 0327 294 225" },
+  { id: "jongno", name: "종로포차 JONGRO POCHA", sub: "꼬치 · 탕 · 볶음 · 닭발 · 안주 · 딘톤", url: "https://jongno.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "bar"], tags: [],
+    address: "44 ngõ 39/70 Đình Thôn, Từ Liêm, Hà Nội",
+    type: { ko: "한국식 포장마차 · 꼬치 · 탕 · 볶음 · 술안주", vi: "Quán nhậu kiểu Hàn — xiên nướng, lẩu, món xào, đồ nhắm", en: "Korean pocha (pub) · Skewers · Stews · Stir-fries · Bar snacks", zh: "韩式路边摊酒馆 · 串烧 · 汤锅 · 炒菜 · 下酒菜", ja: "韓国式屋台酒場・串焼き・鍋・炒め物・おつまみ" },
+    keywords: "종로포차 종로 포차 종로포장마차 종로 포장마차 jongro pocha jongno pocha nhà hàng jongno pocha quán nhậu hàn quốc 하노이 hà nội từ liêm tu liem đình thôn dinh thon ngõ 39/70 đình thôn 44 mỹ đình my dinh 포차 포장마차 술집 안주 한식 닭꼬치 염통꼬치 삼겹팽이꼬치 오뎅탕 홍합탕 닭도리탕 동태탕 닭똥집 쭈꾸미볶음 낙지볶음 제육볶음 소시지야채볶음 쥐포 마른오징어 먹태 새우부추전 김치전 비빔만두 모듬튀김 순살치킨 돈까스 국물닭발 신라면 두부김치 계란말이 과일화채 콘치즈 황도 2층 룸 xiên nướng lẩu chả cá chân gà mực khô 0983920600 098 392 0600" },
   { id: "jjajang", name: "짜장도둑 JJAJANG DODOOK", sub: "짜장면 · 짬뽕 · 탕수육 · 볶음밥 · 요리", url: "https://jjajang.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["chinese", "korean", "noodle"], tags: ["photos"],
     address: "Lô 22 TT1, Khu đô thị, Từ Liêm, Hà Nội",
@@ -377,6 +382,11 @@ window.STORES = [
     address: "35 P. Đỗ Đình Thiện, Từ Liêm, Hà Nội",
     type: { ko: "떡볶이 · 김밥 · 튀김 · 순대 · 냉면 한국 분식", vi: "Món ăn vặt Hàn Quốc · Tokbokki · Kimbap · Đồ chiên · Dồi · Mì lạnh", en: "Korean snack bar · Tteokbokki · Gimbap · Fried snacks · Sundae · Naengmyeon", zh: "韩式小吃 · 辣炒年糕 · 紫菜包饭 · 炸物 · 血肠 · 冷面", ja: "韓国軽食・トッポッキ・キンパ・天ぷら・スンデ・冷麺" },
     keywords: "둘둘분식 둘둘 분식 haihai tokbokki haihai tteokbokki hai hai tokbokki dduldul dul dul bunsik 하노이 hà nội từ liêm tu liem đỗ đình thiện do dinh thien 35 đỗ đình thiện mỹ đình my dinh nhà hàng hàn quốc quán ăn vặt hàn quốc 한식 분식 분식집 떡볶이 컵떡볶이 순대 떡튀순 어묵 오뎅 소떡소떡 떡꼬치 찐만두 모둠튀김 김말이 야채튀김 고구마튀김 계란튀김 오징어튀김 고추튀김 김밥 치즈김밥 참치김밥 꼬마김밥 고쌈냉면 매운냉면 냉면 열무국수 잔치국수 해장라면 짜계치 라면사리 고기찌개 닭도리탕 우렁제육쌈밥 우렁불백쌈밥 돈까스 삼겹살비빔밥 tokbokki kimbap đồ chiên dồi mì lạnh món ăn vặt hàn quốc 韩式小吃 辣炒年糕 紫菜包饭 冷面 韓国軽食 トッポッキ キンパ 冷麺" },
+  { id: "yega", name: "예가 YEGA", sub: "누룽지닭백숙 · 닭볶음탕 · 훈제 · 막국수", url: "https://yega.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "bbq"], tags: ["photos", "wifi"],
+    address: "The Emerald Vietnam, E3-(SH16), 1 Floor, CT8, Từ Liêm, Hà Nội",
+    type: { ko: "누룽지닭백숙 · 닭볶음탕 · 훈제오리 · 막국수 한식", vi: "Món Hàn · Gà hầm cơm cháy · Gà xào cay · Vịt hun khói · Mì lạnh", en: "Korean food · Nurungji chicken soup · Spicy chicken stew · Smoked duck · Makguksu", zh: "韩餐 · 锅巴鸡肉汤 · 辣炖鸡 · 熏鸭 · 荞麦冷面", ja: "韓国料理・おこげ鶏ペクスク・タッポックンタン・燻製鴨・マッククス" },
+    keywords: "예가 yega yega restaurant 예가식당 하노이 hà nội từ liêm tu liem the emerald emerald ct8 mỹ đình my dinh nhà hàng hàn quốc 한식 백숙 누룽지백숙 누룽지닭백숙 누룽지오리백숙 엄나무닭백숙 엄나무오리백숙 능이백숙 능이닭백숙 능이오리백숙 누룽지죽 훈제오리 훈제삼겹살 수제떡갈비 진꽃살 스모크치킨 훈제소시지 모듬 새우소금구이 닭볶음탕 제육볶음 도토리묵무침 메밀전병 문어숙회 쟁반막국수 봉평막국수 들깨수제비 들깨메밀국수 평일점심특선 제육한상 훈제삼겹한상 gà hầm cơm cháy vịt hun khói gà xào cay mì lạnh 韩餐 锅巴鸡肉汤 辣炖鸡 熏鸭 荞麦冷面 韓国料理 おこげ鶏 タッポックンタン 燻製鴨 マッククス" },
 ];
 
 window.SI = {
