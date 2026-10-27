@@ -2,7 +2,7 @@
 // 버튼 글자가 MENU 가 아니면(예: 화장품 판매 SHOP) 안내 문구도 '상품 보기'로 바뀐다.
 // → restaurants/<가게>/print/sns-square.png (1080×1080, 게시물·Zalo) · sns-story.png (1080×1920, 스토리)
 // 가게 이름·종류·주소는 sales/content.js 의 DEMOS, 색은 가게 index.html 의 partner-theme 를 쓴다.
-import { chromium, ROOT } from './pw.mjs';
+import { chromium, ROOT, fileUrl } from './pw.mjs';
 import { readFileSync, existsSync, mkdirSync } from 'fs';
 import vm from 'vm';
 const [shop, lang = 'vi', label = 'MENU', nameArg] = process.argv.slice(2);
@@ -27,7 +27,7 @@ const gmarket = readFileSync(`${ROOT}/public/fonts/GmarketSansTTFBold.ttf`).toSt
 const b = await chromium.launch();
 // 1) 메뉴판 첫 화면 캡처 (휴대폰 모형 안에 넣을 그림)
 const ph = await b.newPage({ viewport: { width: 390, height: 800 }, deviceScaleFactor: 2.5 });
-await ph.goto(`file://${ROOT}/restaurants/${shop}/index.html?lang=${lang}`, { waitUntil: 'load' });
+await ph.goto(`${fileUrl(ROOT)}/restaurants/${shop}/index.html?lang=${lang}`, { waitUntil: 'load' });
 // 첫 화면에 보이는 사진·글꼴을 기다린다 (아래쪽 lazy 사진은 안 뜨므로 최대 4초)
 await ph.evaluate(() => Promise.race([new Promise((r) => setTimeout(r, 4000)), Promise.all([document.fonts.ready,
   ...[...document.images].filter((i) => i.getBoundingClientRect().top < innerHeight).map((i) => i.complete || new Promise((r) => { i.onload = i.onerror = r; }))])]));

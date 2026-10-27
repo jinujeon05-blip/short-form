@@ -5,7 +5,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+import { fileURLToPath } from 'node:url';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sandbox = { window: {} };
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'sales/stores/data.js'), 'utf8'), sandbox);
 const shops = sandbox.window.STORES.filter((s) => s.listing).map((s) => s.id);

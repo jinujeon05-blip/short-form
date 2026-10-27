@@ -5,7 +5,8 @@
 // 만든 뒤: index.html 의 색(:root, partner-theme)·UI 문구·h1, menu.js 를 가게 것으로 채우고 node tools/check-standard.mjs <가게id>.
 import fs from 'node:fs';
 import path from 'node:path';
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+import { fileURLToPath } from 'node:url';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const [id, kind, top] = process.argv.slice(2);
 if (!/^[a-z0-9]+$/.test(id || '') || !['listing', 'full'].includes(kind) || !['logo', 'sign'].includes(top)) {
   console.error('사용법: node tools/new-shop.mjs <가게id(영문 소문자)> <listing|full> <logo|sign>'); process.exit(1);

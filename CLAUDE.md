@@ -144,6 +144,7 @@
   - `tools/app-icon.mjs`(웹앱 아이콘)
   - `tools/thumb.py`(페이지 그림에서 3:4로 자르기)
   - `node tools/analytics.mjs`(방문 기록·점주 편집 블록)
+- **윈도우 PC(로컬 세션, `D:\qrmenu`, 2026-10-27)**: 도구 경로는 `tools/pw.mjs`의 `ROOT`·`fileUrl()`(fileURLToPath·pathToFileURL)로 만든다. `new URL(import.meta.url).pathname`·`` `file://${경로}` ``는 윈도우에서 깨지니 쓰지 않는다. `.sh`는 Git Bash로 돌린다.
 - **드라이브**:
   - 10MB 넘는 파일은 못 받는다.
   - 결과가 크면 하네스가 `tool-results/…download_file_content-<숫자>.txt`(JSON, base64)로 저장하니, 그 경로를 python으로 풀어 저장한다.
