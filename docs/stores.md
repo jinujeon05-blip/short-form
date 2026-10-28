@@ -81,7 +81,7 @@
 | `restaurants/biwon` | 비원 BIWON 한정식·숯불갈비 — 소고기 구이·전골·탕·냉면 (Cửa E, TTTM The Garden, The Manor, Từ Liêm, Hà Nội, 024 6282 3300) — **가게 찾기용** | `biwon-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://biwon.qrmenuasia.com |
 | `restaurants/wangdaepo` | 왕대포 꼬치구이 WANG DEA PHO 연변식 양꼬치·꼬치구이·마라·볶음요리 (미딩점, 16 P. Trần Văn Lai, Từ Liêm, Hà Nội, 032 7800 789) — **가게 찾기용** | `wangdaepo-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://wangdaepo.qrmenuasia.com |
 | `restaurants/golbaengi` | 을지로골뱅이 Euljiro Golbaengi 한국식 골뱅이 호프 — 골뱅이무침·통골뱅이탕·대왕먹태·옛날 치킨·생선구이 (Lô 25 TT4, Trần Văn Lai, Từ Liêm, Hà Nội, 098 909 2060, 15:00–02:00) — **가게 찾기용** | `golbaengi-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://golbaengi.qrmenuasia.com |
-| `restaurants/hansari` | 한사리감자탕 & 뼈구이 미딩점 HANSARI GAMJATANG 한식당 — 감자탕·뼈해장국·직화 뼈구이·뼈찜·왕만두 전골·돈까스 (30 TT4, KĐT Mỹ Đình – Sông Đà, Từ Liêm, Hà Nội, 0975 963 003, 09:00–23:00) — **가게 찾기용** | `hansari-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영) | https://hansari.qrmenuasia.com |
+| `restaurants/hansari` | 한사리감자탕 & 뼈구이 미딩점 HANSARI GAMJATANG 한식당 — 감자탕·뼈해장국·직화 뼈구이·뼈찜·왕만두 전골·돈까스 (30 TT4, KĐT Mỹ Đình – Sông Đà, Từ Liêm, Hà Nội, 0975 963 003, 09:00–23:00) — **가게 찾기용** | `hansari-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://hansari.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
