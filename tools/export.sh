@@ -28,6 +28,7 @@ name() {
     chingu) echo "친구양꼬치" ;;
     unagi) echo "우나기쇼쿠도" ;;
     choegojip) echo "최고집" ;;
+    biwon) echo "비원" ;;
     namme) echo "남매식당" ;;
     inyeon) echo "인연식당" ;;
     *) echo "$1" ;;

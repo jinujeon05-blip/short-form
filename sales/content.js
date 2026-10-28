@@ -55,6 +55,8 @@ window.DEMOS = [
     name: "우나기 쇼쿠도 UNAGI SHOKUDO", type: { ko: "일본식 장어덮밥 · 스시 · 하노이", vi: "Cơm lươn Nhật · Sushi · Hà Nội", zh: "日式鳗鱼饭 · 寿司 · 河内", ja: "うな丼・寿司・ハノイ", en: "Japanese eel rice · Sushi · Hanoi" } },
   { id: "choegojip", hidden: true, url: "https://choegojip.qrmenuasia.com", shot: "img/demo-choegojip.jpg", qr: "img/qr-choegojip.svg",
     name: "최고집 CHOE GO JIP", type: { ko: "한식 · 고기구이 · 탕 · 하노이", vi: "Món Hàn · Thịt nướng · Canh · Hà Nội", zh: "韩国料理 · 烤肉 · 汤 · 河内", ja: "韓国料理・焼肉・スープ・ハノイ", en: "Korean food · BBQ · Soups · Hanoi" } },
+  { id: "biwon", hidden: true, url: "https://biwon.qrmenuasia.com", shot: "img/demo-biwon.jpg", qr: "img/qr-biwon.svg",
+    name: "비원 BIWON", type: { ko: "한정식 · 숯불갈비 · 전골 · 하노이", vi: "Món Hàn · Sườn nướng than hoa · Lẩu · Hà Nội", zh: "韩定食 · 炭火烤排骨 · 火锅 · 河内", ja: "韓定食・炭火カルビ・鍋・ハノイ", en: "Korean food · Charcoal galbi · Hot pots · Hanoi" } },
 ];
 
 window.T = {

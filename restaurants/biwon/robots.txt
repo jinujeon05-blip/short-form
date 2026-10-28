@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://biwon.qrmenuasia.com/sitemap.xml
