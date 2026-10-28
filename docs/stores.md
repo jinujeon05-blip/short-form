@@ -78,7 +78,7 @@
 | `restaurants/chingu` | 친구 양꼬치 CHINGU 양꼬치 전문점·중화요리 (Ngõ 1 Đồng Me / 10 Trần Văn Lai, Từ Liêm, Hà Nội, 033 224 7678) — **가게 찾기용** | `chingu-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://chingu.qrmenuasia.com |
 | `restaurants/unagi` | 우나기 쇼쿠도 UNAGI SHOKUDO 일본식 장어덮밥·스시·사시미 (45 Hoàng Trọng Mậu, KĐT Mỹ Đình, Mễ Trì, Từ Liêm, Hà Nội, 036 510 9997) — **가게 찾기용** | `unagi-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://unagi.qrmenuasia.com |
 | `restaurants/choegojip` | 최고집 CHOE GO JIP 한식당 — 고기구이·소곱창·탕·전골·점심 특선 (SH-14, Tòa E3, CT8 Emerald, Từ Liêm, Hà Nội, 076 920 7949) — **가게 찾기용** | `choegojip-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://choegojip.qrmenuasia.com |
-| `restaurants/biwon` | 비원 BIWON 한정식·숯불갈비 — 소고기 구이·전골·탕·냉면 (Cửa E, TTTM The Garden, The Manor, Từ Liêm, Hà Nội, 024 6282 3300) — **가게 찾기용** | `biwon-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 전) | https://biwon.qrmenuasia.com |
+| `restaurants/biwon` | 비원 BIWON 한정식·숯불갈비 — 소고기 구이·전골·탕·냉면 (Cửa E, TTTM The Garden, The Manor, Từ Liêm, Hà Nội, 024 6282 3300) — **가게 찾기용** | `biwon-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://biwon.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
