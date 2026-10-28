@@ -24,7 +24,7 @@ import uuid
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import quote, urlparse
+from urllib.parse import parse_qs, quote, urlparse
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -661,10 +661,13 @@ PIN_PAGE = """<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="v
 form{background:#fff;padding:24px;border-radius:14px;box-shadow:0 2px 12px #0001;width:min(320px,90vw)}h1{font-size:18px;margin:0 0 6px}
 p{color:#666;font-size:13px;margin:0 0 14px}input,button{width:100%;box-sizing:border-box;font-size:18px;padding:10px;border-radius:8px}
 input{border:1px solid #ccc;margin-bottom:10px;letter-spacing:4px;text-align:center}button{border:0;background:#2563eb;color:#fff}#e{color:#c00}</style>
-<form id="f"><h1>QR메뉴 사무실</h1><p>사진 수집기와 같은 PIN을 넣어 주세요.</p><input id="pin" type="password" inputmode="numeric" autocomplete="current-password" autofocus>
-<button>열기</button><p id="e"></p></form><script>
-f.onsubmit=async e=>{e.preventDefault();const r=await fetch('/api/pin',{method:'POST',headers:{'X-Dashboard':'1','Content-Type':'application/json'},body:JSON.stringify({pin:pin.value})});
-if(r.ok)location.reload();else document.getElementById('e').textContent=(await r.json()).error||'틀렸어요.'}</script></html>"""
+<form method="post" action="/pin"><h1>QR메뉴 사무실</h1><p>사진 수집기와 같은 PIN을 넣어 주세요.</p><input name="pin" type="password" inputmode="numeric" autocomplete="current-password" autofocus>
+<button>열기</button><p id="e">{error}</p></form><script>
+// 삼성 인터넷은 홈 화면 아이콘으로 열 때 예전 PIN 화면을 다시 불러오지 않고 보여 준다 → 이미 통과했으면 바로 첫 화면으로
+function chk(){fetch('/api/jobs',{cache:'no-store'}).then(r=>{if(r.ok)location.replace('/')}).catch(()=>{})}
+chk();addEventListener('pageshow',e=>{if(e.persisted)chk()});document.addEventListener('visibilitychange',()=>{if(!document.hidden)chk()});
+</script></html>"""
+PIN_ERRORS = {"wrong": "PIN이 틀렸어요.", "blocked": "여러 번 틀려서 5분 동안 막혔어요.", "nopin": "사진 수집기 PC 화면에서 PIN을 먼저 정해 주세요."}
 
 
 class RemoteHandler(Handler):
@@ -675,12 +678,16 @@ class RemoteHandler(Handler):
         if ipaddress.ip_address(ip) not in TAILSCALE_NET:
             self.send_error(403)
             return False
-        if self.authed():
-            return True
         p = urlparse(self.path).path
+        if self.authed():
+            if self.command == "POST" and p == "/pin":  # 예전 PIN 화면에서 또 보낸 경우
+                self.go("/")
+                return False
+            return True
         if self.command == "GET" and p in ("/", "/index.html"):
-            self.html(PIN_PAGE)
-        elif self.command == "POST" and p == "/api/pin" and self.headers.get("X-Dashboard") == "1":
+            err = PIN_ERRORS.get(urlparse(self.path).query.removeprefix("e="), "")
+            self.html(PIN_PAGE.replace("{error}", err))
+        elif self.command == "POST" and p == "/pin" and self.same_origin():
             self.check_pin(ip)
         else:
             self.json({"error": "PIN을 넣어 주세요."}, 401)
@@ -691,30 +698,38 @@ class RemoteHandler(Handler):
         m = re.search(r"(?:^|;\s*)qrpin=([0-9a-f]{64})", self.headers.get("Cookie") or "")
         return bool(s.get("pin_hash") and s.get("secret") and m) and hmac.compare_digest(m.group(1), pin_token(s))
 
+    def same_origin(self):
+        # 다른 사이트에서 이 양식을 보내지 못하게 (보통 양식 전송이라 X-Dashboard 머리글을 못 씀)
+        origin = self.headers.get("Origin")
+        return origin is None or origin == "http://" + self.headers.get("Host", "")
+
     def check_pin(self, ip):
+        """보통 양식 전송 → 성공하면 쿠키를 주면서 첫 화면으로 보낸다(303).
+        fetch 응답의 쿠키 + location.reload 방식은 삼성 인터넷 홈 화면 아이콘에서 안 열렸다(2026-10-27)."""
         n, until = FAILS.get(ip, [0, 0])
         if until > time.time():
-            return self.json({"error": "여러 번 틀려서 5분 동안 막혔어요."}, 429)
+            return self.go("/?e=blocked")
         s = pin_settings()
         if not s.get("pin_hash"):
-            return self.json({"error": "사진 수집기 PC 화면에서 PIN을 먼저 정해 주세요."}, 400)
-        try:
-            pin = str(json.loads(self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 200)) or b"{}").get("pin", ""))
-        except Exception:
-            pin = ""
+            return self.go("/?e=nopin")
+        body = self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 200)).decode("utf-8", "replace")
+        pin = (parse_qs(body).get("pin") or [""])[0]
         good = hashlib.pbkdf2_hmac("sha256", pin.encode(), s["salt"].encode(), 200_000).hex()
         if not hmac.compare_digest(good, s["pin_hash"]):
             n += 1
             FAILS[ip] = [0, time.time() + 300] if n >= 5 else [n, 0]
-            return self.json({"error": "PIN이 틀렸어요."}, 403)
+            return self.go("/?e=wrong")
         FAILS.pop(ip, None)
-        body = b'{"ok": true}'
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Set-Cookie", f"qrpin={pin_token(s)}; Path=/; Max-Age=2592000; HttpOnly; SameSite=Strict")
-        self.send_header("Content-Length", str(len(body)))
+        self.go("/", f"qrpin={pin_token(s)}; Path=/; Max-Age=2592000; HttpOnly; SameSite=Lax")
+
+    def go(self, where, cookie=None):
+        self.send_response(303)
+        self.send_header("Location", where)
+        self.send_header("Cache-Control", "no-store")
+        if cookie:
+            self.send_header("Set-Cookie", cookie)
+        self.send_header("Content-Length", "0")
         self.end_headers()
-        self.wfile.write(body)
 
     def html(self, text):
         body = text.encode("utf-8")
