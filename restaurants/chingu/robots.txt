@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://chingu.qrmenuasia.com/sitemap.xml

@@ -49,6 +49,8 @@ window.DEMOS = [
     name: "퍼틴 PHỞ THÌN", type: { ko: "소고기 쌀국수 · 하노이", vi: "Phở bò truyền thống · Hà Nội", zh: "牛肉河粉 · 河内", ja: "牛肉フォー・ハノイ", en: "Beef phở · Hanoi" } },
   { id: "jongno", hidden: true, url: "https://jongno.qrmenuasia.com", shot: "img/demo-jongno.jpg", qr: "img/qr-jongno.svg",
     name: "종로포차 JONGRO POCHA", type: { ko: "한국식 포장마차 · 하노이", vi: "Quán nhậu kiểu Hàn · Hà Nội", zh: "韩式路边摊酒馆 · 河内", ja: "韓国式屋台酒場・ハノイ", en: "Korean pocha · Hanoi" } },
+  { id: "chingu", hidden: true, url: "https://chingu.qrmenuasia.com", shot: "img/demo-chingu.jpg", qr: "img/qr-chingu.svg",
+    name: "친구 양꼬치 CHINGU", type: { ko: "양꼬치 · 중화요리 · 하노이", vi: "Xiên cừu nướng · Món Trung Hoa · Hà Nội", zh: "羊肉串 · 中餐 · 河内", ja: "羊串・中華料理・ハノイ", en: "Lamb skewers · Chinese food · Hanoi" } },
 ];
 
 window.T = {
