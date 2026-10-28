@@ -31,6 +31,7 @@ name() {
     biwon) echo "비원" ;;
     wangdaepo) echo "왕대포꼬치구이" ;;
     golbaengi) echo "을지로골뱅이" ;;
+    hansari) echo "한사리감자탕" ;;
     namme) echo "남매식당" ;;
     inyeon) echo "인연식당" ;;
     *) echo "$1" ;;
