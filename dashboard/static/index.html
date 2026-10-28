@@ -3,38 +3,69 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>QR메뉴 사무실</title>
+<title>Jinwoo 에이전트</title>
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <header class="top">
-  <div class="brand"><span class="logo">QR</span><div><b>QR메뉴 사무실</b><small id="updated">불러오는 중…</small></div></div>
+  <div class="brand"><span class="logo">J</span><div><b>Jinwoo 에이전트</b><small id="updated">불러오는 중…</small></div></div>
   <div class="counts" id="counts"></div>
 </header>
 
-<section class="quota" id="quota" aria-label="할당량"></section>
-
-<main>
-  <section class="office" id="office" aria-label="사무실"></section>
-
-  <nav class="tabs" role="tablist">
-    <button role="tab" data-tab="stores" class="on">가게 현황</button>
-    <button role="tab" data-tab="todo">할 일</button>
-    <button role="tab" data-tab="visits">방문 기록</button>
-  </nav>
-  <section class="tab" id="tab-stores">
-    <div class="filters">
-      <input id="q" type="search" placeholder="가게 이름 찾기">
-      <div class="seg" id="kind">
-        <button data-k="" class="on">전체</button><button data-k="full">정식</button><button data-k="listing">가게 찾기용</button>
+<div class="layout">
+  <!-- 왼쪽: 지시하기 · 결재함 -->
+  <aside class="col left">
+    <section class="card cmd" aria-label="지시하기">
+      <h2>지시하기 <small>클로드가 이 PC에서 바로 실행</small></h2>
+      <textarea id="order-text" rows="3" placeholder="예: 바보아저씨 사진 수집기로 올렸어. 가게 찾기용으로 만들어줘"></textarea>
+      <div class="chips" id="chips"></div>
+      <div class="cmd-foot">
+        <span class="muted" id="order-note">배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.</span>
+        <button class="btn" id="order-send">보내기</button>
       </div>
-    </div>
-    <div class="cards" id="stores"></div>
-    <button class="btn ghost more" id="more" hidden></button>
-  </section>
-  <section class="tab" id="tab-todo" hidden></section>
-  <section class="tab" id="tab-visits" hidden></section>
-</main>
+    </section>
+    <section class="card" aria-label="결재함">
+      <h2>결재함 <span class="badge b-na" id="inbox-count">0</span></h2>
+      <div id="inbox"></div>
+    </section>
+  </aside>
+
+  <!-- 가운데: 한도 · 사무실 · 탭 -->
+  <main class="col center">
+    <section class="quota" id="quota" aria-label="할당량"></section>
+    <section class="office" id="office" aria-label="사무실"></section>
+
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="stores" class="on">가게 현황</button>
+      <button role="tab" data-tab="todo">할 일</button>
+      <button role="tab" data-tab="visits">방문 기록</button>
+    </nav>
+    <section class="tab" id="tab-stores">
+      <div class="filters">
+        <input id="q" type="search" placeholder="가게 이름 찾기">
+        <div class="seg" id="kind">
+          <button data-k="" class="on">전체</button><button data-k="full">정식</button><button data-k="listing">가게 찾기용</button>
+        </div>
+      </div>
+      <div class="cards" id="stores"></div>
+      <button class="btn ghost more" id="more" hidden></button>
+    </section>
+    <section class="tab" id="tab-todo" hidden></section>
+    <section class="tab" id="tab-visits" hidden></section>
+  </main>
+
+  <!-- 오른쪽: 브리핑 · 업무 기록 -->
+  <aside class="col right">
+    <section class="card brief" aria-label="오늘 브리핑">
+      <h2>오늘 브리핑 <small id="brief-at"></small></h2>
+      <ol id="brief"></ol>
+    </section>
+    <section class="card" aria-label="업무 기록">
+      <h2>업무 기록 <small>커밋 · 지시 · 점검</small></h2>
+      <ul class="feed" id="feed"></ul>
+    </section>
+  </aside>
+</div>
 
 <aside class="panel" id="panel" aria-hidden="true">
   <div class="panel-in">

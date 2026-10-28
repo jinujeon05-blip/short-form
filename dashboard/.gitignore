@@ -1,3 +1,4 @@
 out/
 __pycache__/
 static/rooms/*.png
+orders/

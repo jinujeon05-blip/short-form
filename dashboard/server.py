@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""QR메뉴 사업용 대시보드 (127.0.0.1:8899 전용).
+"""Jinwoo 에이전트 — QR메뉴 사업용 대시보드 (127.0.0.1:8899 전용).
 
 - 가짜 데이터 없음: 저장소 파일·git·CLI 기록을 요청 때마다 읽는다(짧게 캐시).
-- 바로 실행하는 것은 안전한 점검 3가지(check-standard·check-listing·shot)뿐이다.
+- 바로 실행하는 것은 안전한 점검 3가지(check-standard·check-listing·shot)와 지시창(Claude Code 실행, 아래 '지시' 참고)이다.
 - 배포·삭제·git push 기능은 없다.
 실행: python dashboard/server.py  (또는 start-dashboard.bat)
 """
@@ -529,6 +529,250 @@ def start_job(tool, shop, desk):
     return job, None
 
 
+# ---------------------------------------------------------------- 지시 → 클로드 자동 실행 (2026-10-28)
+# 대시보드 지시창에서 보낸 말을 이 PC의 Claude Code(claude -p, 창 없이)로 저장소에서 실행한다.
+# - Pro 구독 로그인으로만 돈다: API 키 환경변수는 지워서 넘긴다(추가 비용 0원).
+# - 외부 연결(MCP: Vercel·드라이브 등)은 끈다 → 배포는 여기서 할 수 없다. push·merge·reset·삭제 명령도 막는다.
+# - 한 번에 하나만. Claude 한도 90% 이상이면 받지 않는다.
+# - 결과는 결재함에 올라오고, '확정'·'답하기'는 같은 대화를 이어서(--resume) 실행한다.
+ORDERS_DIR = HERE / "orders"  # 지시 기록 (git 제외)
+ORDERS, PROCS = {}, {}
+ORDER_LOCK = threading.Lock()
+ORDER_TIMEOUT = 40 * 60
+ORDER_RULES = """이 지시는 사용자(캡틴)가 대시보드 'Jinwoo 에이전트'에서 보낸 것이다. CLAUDE.md·docs 규칙을 그대로 따른다.
+- 사용자에게 되물을 수 없다. 결정이 필요하면 거기서 멈추고, 끝 보고에 번호 보기 2~3개(추천 표시)를 쓴다. 사용자가 결재함에서 답하면 이 대화가 이어진다.
+- 이 실행에는 외부 연결(Vercel·드라이브 커넥터)이 없다. 배포·git push·main 머지·결제·외부 발송·삭제는 하지 않는다. 드라이브 사진은 동기화 폴더 G:\\내 드라이브\\QR메뉴판 에서 읽는다.
+- 배포가 필요하면 '결재: 배포'로 올리고, 확정되면 "Claude 앱에서 '배포해'라고 말해 주세요"라고 보고한다.
+- 고친 파일은 지금 브랜치에 커밋한다(push 안 함).
+- 마지막 답: 결론부터 3줄(쉬운 말). 사용자 결재·답이 필요하면 맨 끝 줄을 '결재: <무엇을 확정할지 한 줄>'로 쓴다."""
+ORDER_ALLOW = ["Read", "Edit", "Write", "Glob", "Grep", "Agent", "TodoWrite",
+               "Bash(node:*)", "Bash(python:*)", "Bash(python3:*)", "Bash(sh tools/*)", "Bash(bash _shared/*)",
+               "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git show:*)", "Bash(git add:*)", "Bash(git commit:*)",
+               "Bash(ls:*)", "Bash(cp:*)", "Bash(mkdir:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(grep:*)", "Bash(find:*)", "Bash(wc:*)",
+               "Bash(ffmpeg:*)", "Bash(magick:*)"]
+ORDER_DENY = ["Bash(git push:*)", "Bash(git merge:*)", "Bash(git reset:*)", "Bash(git checkout:*)", "Bash(git switch:*)",
+              "Bash(git rebase:*)", "Bash(git clean:*)", "Bash(rm:*)", "Bash(curl:*)", "Bash(npx vercel:*)", "Bash(vercel:*)",
+              "WebFetch", "WebSearch"]
+
+
+def claude_exe():
+    """데스크톱 앱이 받아 둔 Claude Code 실행 파일(가장 새 버전). 앱이 업데이트되면 폴더가 바뀐다."""
+    found = which("claude")
+    if found:
+        return found
+    base = Path(os.environ.get("LOCALAPPDATA", "")) / "Claude-Data"
+    exes = list(base.glob("*/claude-code/*/*/claude.exe")) if base.is_dir() else []
+    ver = lambda f: tuple(int(x) for x in re.findall(r"\d+", f.parent.parent.name)[:3])
+    return str(max(exes, key=ver)) if exes else None
+
+
+def save_order(o):
+    ORDERS_DIR.mkdir(exist_ok=True)
+    keep = {k: v for k, v in o.items() if not k.startswith("_")}
+    (ORDERS_DIR / f"{o['id']}.json").write_text(json.dumps(keep, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
+def load_orders():
+    if not ORDERS_DIR.is_dir():
+        return
+    for f in ORDERS_DIR.glob("*.json"):
+        try:
+            o = json.loads(f.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if o.get("status") == "running":  # 대시보드를 껐다 켜면 실행 중이던 것은 끊긴다
+            o["status"] = "stopped"
+            o.setdefault("turns", []).append({"by": "system", "text": "대시보드를 다시 켜서 실행이 끊겼습니다. '답하기'로 이어서 시킬 수 있어요.", "at": time.time()})
+        ORDERS[o["id"]] = o
+
+
+def step_text(block):
+    """도구 사용 한 번을 한 줄로 (진행 상황 표시용)."""
+    name, inp = block.get("name", ""), block.get("input") or {}
+    what = inp.get("description") or inp.get("file_path") or inp.get("pattern") or inp.get("command") or inp.get("prompt") or ""
+    what = str(what).replace(str(ROOT), "").replace("\\", "/").strip()
+    return f"{name} · {what[:90]}" if what else name
+
+
+def run_order(o, prompt):
+    exe = claude_exe()
+    args = [exe, "-p", "--output-format", "stream-json", "--verbose", "--permission-mode", "acceptEdits",
+            "--strict-mcp-config", "--append-system-prompt", ORDER_RULES,
+            "--add-dir", r"G:\내 드라이브\QR메뉴판",
+            "--allowedTools", *ORDER_ALLOW, "--disallowedTools", *ORDER_DENY]
+    if o.get("sessionId"):
+        args += ["--resume", o["sessionId"]]
+    env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT")}
+    log = ORDERS_DIR / f"{o['id']}.jsonl"
+    result, err = None, None
+    try:
+        p = subprocess.Popen(args, cwd=str(ROOT), stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                             env=env, creationflags=NO_WINDOW)
+        PROCS[o["id"]] = p
+        p.stdin.write(prompt.encode("utf-8"))  # 지시문은 표준 입력으로 (명령줄 따옴표·길이 문제 없음)
+        p.stdin.close()
+        killer = threading.Timer(ORDER_TIMEOUT, p.kill)
+        killer.start()
+        with open(log, "ab") as f:
+            for raw in p.stdout:
+                f.write(raw)
+                try:
+                    ev = json.loads(raw)
+                except Exception:
+                    continue
+                with ORDER_LOCK:
+                    if ev.get("session_id"):
+                        o["sessionId"] = ev["session_id"]
+                    if ev.get("type") == "assistant":
+                        for b in (ev.get("message") or {}).get("content") or []:
+                            if b.get("type") == "tool_use":
+                                o["steps"] = (o.get("steps") or [])[-29:] + [{"text": step_text(b), "at": time.time()}]
+                            elif b.get("type") == "text" and b.get("text", "").strip():
+                                o["last"] = b["text"].strip()[-400:]
+                    elif ev.get("type") == "result":
+                        result = ev
+        p.wait()
+        killer.cancel()
+    except Exception as e:
+        err = str(e)[:300]
+    with ORDER_LOCK:
+        PROCS.pop(o["id"], None)
+        if o.get("status") == "stopping":
+            o["status"], text = "stopped", "사용자가 멈췄습니다."
+        elif result and not result.get("is_error"):
+            o["status"], text = "done", (result.get("result") or "").strip()
+        else:
+            o["status"] = "fail"
+            text = (result or {}).get("result") or err or "실행이 끝났지만 결과가 없습니다(시간 초과 또는 로그인 문제). 기록: dashboard/orders/" + log.name
+            if "Not logged in" in text or "/login" in text:  # 데스크톱 앱 로그인은 앱 안에만 있어서 따로 한 번 로그인해야 한다
+                text = ("Claude Code 로그인이 필요합니다(처음 한 번만). dashboard\\claude-login.bat 을 두 번 눌러 "
+                        "'Claude account with subscription'으로 로그인한 뒤 /exit 하고, 여기서 '답하기'로 다시 보내 주세요.")
+        m = re.search(r"^\s*결재\s*[:：]\s*(.+)$", text, re.M)
+        o["approval"] = m.group(1).strip() if (m and o["status"] == "done") else None
+        o["decision"] = None
+        if result:
+            u = result.get("usage") or {}
+            o["tokens"] = (o.get("tokens") or 0) + sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens"))
+        o["turns"].append({"by": "claude", "text": text, "at": time.time()})
+        o["endedAt"] = time.time()
+        save_order(o)
+    _cache.pop("recent", None)
+    _cache.pop("stores", None)
+
+
+def order_blocked():
+    if not claude_exe():
+        return "Claude Code 실행 파일을 찾지 못함(Claude 데스크톱 앱이 설치돼 있어야 함)"
+    if any(o["status"] in ("running", "stopping") for o in ORDERS.values()):
+        return "이전 지시가 아직 실행 중이에요. 끝나거나 멈춘 뒤에 보내 주세요."
+    bars = cached("quota", 60, build_quota)["claude"]["bars"]
+    if any(b["used"] >= 90 and not b["stale"] for b in bars):
+        return "Claude 한도가 90%를 넘어 새 일을 받지 않아요(CLAUDE.md: 한도 경고면 멈춤)."
+    return None
+
+
+def start_order(text, via):
+    text = text.strip()[:2000]
+    if not text:
+        return None, "지시를 적어 주세요"
+    with ORDER_LOCK:
+        err = order_blocked()
+        if err:
+            return None, err
+        oid = datetime.now().strftime("%m%d-%H%M%S")
+        o = {"id": oid, "title": text.splitlines()[0][:60], "status": "running", "via": via, "createdAt": time.time(),
+             "turns": [{"by": "me", "text": text, "at": time.time()}], "steps": []}
+        ORDERS[oid] = o
+        save_order(o)
+    threading.Thread(target=run_order, args=(o, text), daemon=True).start()
+    return o, None
+
+
+def reply_order(oid, text, approve):
+    with ORDER_LOCK:
+        o = ORDERS.get(oid)
+        if not o:
+            return None, "없는 지시"
+        if o["status"] in ("running", "stopping"):
+            return None, "아직 실행 중이에요"
+        err = order_blocked()
+        if err:
+            return None, err
+        text = text.strip()[:2000]
+        if o["status"] == "fail" and not o.get("tokens"):
+            # 로그인 문제 등으로 한 번도 못 돈 지시 → 처음 지시를 새 대화로 다시 보낸다
+            o["sessionId"] = None
+            text = o["turns"][0]["text"] + (f"\n\n(덧붙임) {text}" if text else "")
+        elif not o.get("sessionId"):
+            return None, "이어 갈 대화가 없어요. 새 지시로 보내 주세요."
+        elif approve:
+            text = f"확정했어({o.get('approval') or '보고한 내용'}). 다음 단계 진행해." + (f" {text}" if text else "")
+        elif not text:
+            return None, "답(또는 고칠 점)을 적어 주세요"
+        o.update(status="running", decision="approved" if approve else "replied", approval=None, steps=[], last=None)
+        o["turns"].append({"by": "me", "text": text, "at": time.time(), "approve": approve})
+        save_order(o)
+    threading.Thread(target=run_order, args=(o, text), daemon=True).start()
+    return o, None
+
+
+def stop_order(oid):
+    with ORDER_LOCK:
+        o, p = ORDERS.get(oid), PROCS.get(oid)
+        if not o or not p:
+            return "실행 중이 아님"
+        o["status"] = "stopping"
+    p.kill()
+    return None
+
+
+def orders_view():
+    with ORDER_LOCK:
+        rows = sorted(ORDERS.values(), key=lambda o: -o["createdAt"])[:40]
+        return [json.loads(json.dumps({k: v for k, v in o.items() if not k.startswith("_")})) for o in rows]
+
+
+# ---------------------------------------------------------------- 브리핑·업무 기록
+def build_activity():
+    """업무 기록: 최근 커밋 + 지시 + 점검을 시간순으로."""
+    code, out = sh(["git", "log", "-40", "--format=%ct\t%h\t%s"], timeout=30)
+    items = []
+    for line in out.splitlines():
+        t, sha, msg = (line.split("\t", 2) + ["", ""])[:3]
+        if t.isdigit():
+            who = next((w for w, pat in RECENT_KEYS.items() if pat and re.search(pat, msg, re.I)), "claude")
+            items.append({"at": int(t), "who": who, "kind": "commit", "text": msg, "ref": sha})
+    for o in orders_view():
+        for tr in o["turns"]:
+            if tr["by"] == "system":
+                continue
+            items.append({"at": tr["at"], "who": "captain" if tr["by"] == "me" else "claude", "kind": "order", "ref": o["id"],
+                          "text": ("지시: " if tr["by"] == "me" else "보고: ") + tr["text"].strip().splitlines()[0][:120]})
+    with JOB_LOCK:
+        for j in JOBS.values():
+            items.append({"at": j["startedAt"], "who": j.get("desk") or "claude", "kind": "job",
+                          "text": f"{j['label']} {j.get('shop') or ''} · {({'ok': '통과', 'fail': '문제 있음'}).get(j['status'], '실행 중')}"})
+    return sorted(items, key=lambda i: -i["at"])[:50]
+
+
+def build_brief():
+    """오늘 브리핑 3줄: 어제·오늘 한 일 / 기다리는 결재 / 남은 할 일·한도. 예약 작업 없이 화면을 열 때 계산한다."""
+    since = time.time() - 36 * 3600
+    code, out = sh(["git", "log", f"--since={int(since)}", "--format=%s"], timeout=30)
+    msgs = [m for m in out.splitlines() if m.strip()]
+    shops = sorted({m.group(1).strip() for s in msgs for m in [re.search(r"새 가게 ([^(]+)\(", s)] if m})
+    line1 = f"최근 하루 반 동안 커밋 {len(msgs)}건" + (f" · 새 가게: {', '.join(shops)}" if shops else "") if msgs else "최근 하루 반 동안 커밋이 없습니다."
+    ov = orders_view()
+    wait = [o for o in ov if o["status"] == "done" and o.get("approval")]
+    run = [o for o in ov if o["status"] in ("running", "stopping")]
+    line2 = (f"결재 기다림 {len(wait)}건: {wait[0]['approval'][:40]}" if wait else "결재 기다리는 일 없음") + (f" · 실행 중 {len(run)}건" if run else "")
+    todo = sum(1 for l in read("docs/todo.md").splitlines() if re.match(r"^- \*\*", l))
+    bars = cached("quota", 60, build_quota)["claude"]["bars"]
+    worst = max((b["used"] for b in bars if not b["stale"]), default=None)
+    line3 = f"남은 할 일 {todo}건 · Claude 한도 " + (f"{worst}% 사용" if worst is not None else "확인 불가(Claude 앱 입력창 아래에서 확인)")
+    return {"lines": [line1, line2, line3], "at": datetime.now().strftime("%H:%M")}
+
+
 # ---------------------------------------------------------------- HTTP
 MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
         ".css": "text/css; charset=utf-8", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml"}
@@ -601,6 +845,12 @@ class Handler(BaseHTTPRequestHandler):
             with JOB_LOCK:
                 jobs = sorted(JOBS.values(), key=lambda j: -j["startedAt"])
                 return self.json({"jobs": [dict(j) for j in jobs]})
+        if p == "/api/orders":
+            return self.json({"orders": orders_view(), "ready": claude_exe() is not None})
+        if p == "/api/activity":
+            return self.json({"items": build_activity()})
+        if p == "/api/brief":
+            return self.json(build_brief())
         return self.send_error(404)
 
     def do_POST(self):
@@ -623,6 +873,16 @@ class Handler(BaseHTTPRequestHandler):
             if err:
                 return self.json({"error": err}, 400)
             return self.json({"job": job})
+        path = urlparse(self.path).path
+        if path in ("/api/order", "/api/order/reply", "/api/order/stop"):
+            via = "phone" if isinstance(self, RemoteHandler) else "pc"
+            if path == "/api/order":
+                o, err = start_order(str(body.get("text", "")), via)
+            elif path == "/api/order/reply":
+                o, err = reply_order(str(body.get("id", "")), str(body.get("text", "")), bool(body.get("approve")))
+            else:
+                o, err = None, stop_order(str(body.get("id", "")))
+            return self.json({"error": err} if err else {"ok": True, "id": o and o["id"]}, 400 if err else 200)
         return self.send_error(404)
 
 
@@ -657,11 +917,11 @@ def tailscale_ips():
 
 
 PIN_PAGE = """<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>QR메뉴 사무실</title><style>body{font-family:system-ui,sans-serif;background:#f3f4f6;margin:0;display:grid;place-items:center;min-height:100vh}
+<title>Jinwoo 에이전트</title><style>body{font-family:system-ui,sans-serif;background:#f3f4f6;margin:0;display:grid;place-items:center;min-height:100vh}
 form{background:#fff;padding:24px;border-radius:14px;box-shadow:0 2px 12px #0001;width:min(320px,90vw)}h1{font-size:18px;margin:0 0 6px}
 p{color:#666;font-size:13px;margin:0 0 14px}input,button{width:100%;box-sizing:border-box;font-size:18px;padding:10px;border-radius:8px}
 input{border:1px solid #ccc;margin-bottom:10px;letter-spacing:4px;text-align:center}button{border:0;background:#2563eb;color:#fff}#e{color:#c00}</style>
-<form method="post" action="/pin"><h1>QR메뉴 사무실</h1><p>사진 수집기와 같은 PIN을 넣어 주세요.</p><input name="pin" type="password" inputmode="numeric" autocomplete="current-password" autofocus>
+<form method="post" action="/pin"><h1>Jinwoo 에이전트</h1><p>사진 수집기와 같은 PIN을 넣어 주세요.</p><input name="pin" type="password" inputmode="numeric" autocomplete="current-password" autofocus>
 <button>열기</button><p id="e">{error}</p></form><script>
 // 삼성 인터넷은 홈 화면 아이콘으로 열 때 예전 PIN 화면을 다시 불러오지 않고 보여 준다 → 이미 통과했으면 바로 첫 화면으로
 function chk(){fetch('/api/jobs',{cache:'no-store'}).then(r=>{if(r.ok)location.replace('/')}).catch(()=>{})}
@@ -756,8 +1016,9 @@ def start_remote():
 
 
 if __name__ == "__main__":
+    load_orders()
     srv = ThreadingHTTPServer((HOST, PORT), Handler)
-    print(f"QR메뉴 대시보드: http://{HOST}:{PORT}  (이 PC에서만 열림, 끄려면 이 창을 닫거나 Ctrl+C)")
+    print(f"Jinwoo 에이전트(QR메뉴 대시보드): http://{HOST}:{PORT}  (이 PC에서만 열림, 끄려면 이 창을 닫거나 Ctrl+C)")
     start_remote()
     try:
         srv.serve_forever()

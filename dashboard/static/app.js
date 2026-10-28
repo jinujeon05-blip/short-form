@@ -1,8 +1,8 @@
-// QR메뉴 사무실 화면. 데이터는 모두 server.py 의 /api/* (저장소 파일·git·CLI 기록)에서 온다.
+// Jinwoo 에이전트(QR메뉴 대시보드) 화면. 데이터는 모두 server.py 의 /api/* (저장소 파일·git·CLI 기록)에서 온다.
 const $ = (s, el = document) => el.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const api = p => fetch(p, { cache: 'no-store' }).then(r => r.json());
-const S = { stores: [], todo: [], team: null, quota: null, visits: null, jobs: [], kind: '', q: '', open: null, all: false, collector: null };
+const S = { stores: [], todo: [], team: null, quota: null, visits: null, jobs: [], kind: '', q: '', open: null, all: false, collector: null, orders: [], feed: [] };
 
 // 사무실 사진 (사용자가 ChatGPT로 만듦, 2026-10-27). 좌표는 사진 크기 대비 % [x1, y1, x2, y2]
 // 폭 700px 이하에서는 세로 사진(phone)을 쓴다. 인력공급팀·선별팀은 아직 사업 전이라 '준비 중'(눌러도 실행 안 됨)
@@ -61,11 +61,12 @@ function sceneHtml(key, busy) {
     return `<button class="spot${busy.has(id) ? ' on' : ''}" style="${box}" data-id="${id}" aria-label="${M[id].name} 자리 열기">
       <span class="bubble">작업 중…</span><span class="tag">${esc(M[id].name)} <small>· ${M[id].role}</small></span></button>`;
   }).join('');
-  return `<div class="scene ${key}" style="aspect-ratio:${sc.w}/${sc.h}"><img src="${sc.img}" alt="QR메뉴 사무실">${signs}${spots}</div>`;
+  return `<div class="scene ${key}" style="aspect-ratio:${sc.w}/${sc.h}"><img src="${sc.img}" alt="Jinwoo 에이전트 사무실">${signs}${spots}</div>`;
 }
 function renderOffice() {
   const busy = new Set(S.jobs.filter(j => j.status === 'running').map(j => j.desk));
   if (S.collector?.job?.status === 'running') busy.add('finder');  // 사진 수집기가 실제로 수집 중
+  if (S.orders.some(o => o.status === 'running')) busy.add('claude');  // 지시창 지시를 실행 중
   $('#office').innerHTML = sceneHtml('pc', busy) + sceneHtml('phone', busy);
 }
 // 옆 창 얼굴: 큰 사진에서 그 사람 자리만 잘라 보여 준다
@@ -73,6 +74,116 @@ function avatar(id) {
   const sc = SCENES.pc, [x1, y1, x2, y2] = sc.spots[id], w = x2 - x1, h = y2 - y1;
   const ratio = (h * sc.h) / (w * sc.w);
   return `<div class="avatar" style="aspect-ratio:${1 / ratio};background-image:url('${sc.img}');background-size:${100 / w * 100}% auto;background-position:${x1 / (100 - w) * 100}% ${y1 / (100 - h) * 100}%"></div>`;
+}
+
+// ---------------------------------------------------------------- 지시하기 · 결재함 (server.py 의 /api/order*)
+// 지시는 이 PC의 Claude Code(claude -p)가 저장소에서 실행한다. 배포·push·삭제는 막혀 있고, 결과는 결재함에 올라온다.
+const CHIPS = [
+  ['새 가게', '<가게> 사진 수집기로 올렸어. 가게 찾기용(무동의·무료)으로 새 메뉴판 만들어줘.'],
+  ['할 일 정리', '남은 할 일(docs/todo.md) 정리하고, 내가 정해야 할 것만 번호 보기로 알려줘.'],
+  ['가격 고치기', '<가게> 메뉴 <메뉴이름> 가격을 <가격>으로 고쳐줘.'],
+  ['점검', '<가게> 배포 전 점검(check-standard·check-listing·shot)하고 문제만 3줄로 알려줘.'],
+];
+const ST = { running: ['run', 'b-warn', '실행 중'], stopping: ['run', 'b-warn', '멈추는 중'], done: ['', 'b-ok', '끝남'], fail: ['', 'b-stop', '실패'], stopped: ['', 'b-na', '멈춤'] };
+const hm = t => new Date(t * 1000).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+const day = t => new Date(t * 1000).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' });
+function orderState(o) {
+  if (o.status === 'done' && o.approval) return ['wait', 'b-warn', '결재 대기'];
+  return ST[o.status] || ['', 'b-na', o.status];
+}
+function lastText(o) { const t = [...o.turns].reverse().find(t => t.by !== 'me'); return t ? t.text : ''; }
+function renderInbox() {
+  const wait = S.orders.filter(o => o.status === 'done' && o.approval);
+  const live = S.orders.filter(o => o.status === 'running' || o.status === 'stopping');
+  const rest = S.orders.filter(o => !wait.includes(o) && !live.includes(o)).slice(0, 8);
+  $('#inbox-count').textContent = wait.length;
+  $('#inbox-count').className = 'badge ' + (wait.length ? 'b-warn' : 'b-na');
+  const item = o => {
+    const [cls, bc, bt] = orderState(o);
+    const sub = o.status === 'running' ? (o.steps?.at(-1)?.text || '시작하는 중…') : o.approval ? '결재: ' + o.approval : lastText(o).split('\n')[0];
+    return `<button class="ord ${cls}" data-order="${o.id}"><b>${esc(o.title)}</b><p>${esc(sub)}</p>
+      <span class="muted"><span class="badge ${bc}">${bt}</span>${hm(o.createdAt)}${o.via === 'phone' ? ' · 폰' : ''}</span></button>`;
+  };
+  $('#inbox').innerHTML = (wait.length || live.length || rest.length)
+    ? [...wait, ...live].map(item).join('') + (rest.length ? `<h5 class="muted" style="margin:10px 0 6px">지난 지시</h5>${rest.map(item).join('')}` : '')
+    : '<p class="muted">아직 지시가 없습니다. 위에 적어 보내면 여기로 보고가 올라옵니다.</p>';
+  const busy = live.length > 0;
+  $('#order-send').disabled = busy;
+  $('#order-note').textContent = busy ? '지시를 실행하는 중이에요. 끝나면 다음 지시를 받을 수 있어요.' : '배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.';
+}
+function renderOrderPanel(oid) {
+  const o = S.orders.find(x => x.id === oid);
+  if (!o) return;
+  const [, bc, bt] = orderState(o);
+  const running = o.status === 'running' || o.status === 'stopping';
+  const keep = $('#reply-text')?.value || '';
+  const who = t => t.by === 'me' ? (t.approve ? '캡틴 · 확정' : '캡틴') : t.by === 'claude' ? '클로드 보고' : '알림';
+  $('#panel-body').innerHTML = `<h2>${esc(o.title)}</h2>
+    <p class="muted"><span class="badge ${bc}">${bt}</span> ${day(o.createdAt)} ${hm(o.createdAt)} · ${o.via === 'phone' ? '폰에서 지시' : 'PC에서 지시'}${o.tokens ? ` · 토큰 약 ${Math.round(o.tokens / 1000)}천` : ''}</p>
+    ${o.turns.map(t => `<div class="turn ${t.by}"><span class="muted">${who(t)} · ${hm(t.at)}</span>${esc(t.text)}</div>`).join('')}
+    ${running ? `<h5>진행 상황</h5><ul class="steps">${(o.steps || []).map(s => `<li>${esc(s.text)}</li>`).join('') || '<li>시작하는 중…</li>'}</ul>
+      ${o.last ? `<div class="turn claude"><span class="muted">클로드 · 지금 하는 말</span>${esc(o.last)}</div>` : ''}
+      <button class="btn ghost" id="order-stop">멈추기</button>` : `
+      <div class="reply"><h5>${o.approval ? '결재' : '이어서 시키기'}</h5>
+      ${o.approval ? `<p><b>결재할 것:</b> ${esc(o.approval)}</p>` : ''}
+      <textarea id="reply-text" placeholder="${o.approval ? '고칠 점이 있으면 적고 [수정 요청], 없으면 [확정]' : '답(예: 가-1) 또는 다음에 시킬 일'}"></textarea>
+      <div class="act">${o.approval ? '<button class="btn approve" id="order-approve">확정</button>' : ''}
+        <button class="btn ${o.approval ? 'ghost' : ''}" id="order-reply">${o.approval ? '수정 요청' : '보내기'}</button></div>
+      <p class="muted">같은 대화를 이어서 실행합니다. 배포는 대시보드에서 하지 않습니다(확정해도 Claude 앱에서 '배포해'라고 해야 함).</p></div>`}`;
+  if ($('#reply-text')) $('#reply-text').value = keep;
+}
+async function post(path, body) {
+  return fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Dashboard': '1' }, body: JSON.stringify(body) }).then(r => r.json());
+}
+async function sendOrder() {
+  const ta = $('#order-text'), text = ta.value.trim();
+  if (!text) return toast('지시를 적어 주세요');
+  if (/<[^>]+>/.test(text)) return toast('<가게> 같은 빈칸을 채워 주세요');
+  $('#order-send').disabled = true;
+  const r = await post('/api/order', { text });
+  if (r.error) { toast(r.error); $('#order-send').disabled = false; return; }
+  ta.value = '';
+  toast('지시를 보냈습니다. 클로드가 실행을 시작해요.');
+  await loadOrders();
+  openPanel('order:' + r.id);
+}
+async function replyOrder(approve) {
+  const id = S.open.slice(6), text = $('#reply-text')?.value || '';
+  const r = await post('/api/order/reply', { id, text, approve });
+  if (r.error) return toast(r.error);
+  $('#reply-text').value = '';
+  toast(approve ? '확정했습니다. 다음 단계를 진행해요.' : '보냈습니다.');
+  loadOrders();
+}
+
+// ---------------------------------------------------------------- 브리핑 · 업무 기록
+const WHO = { captain: '캡틴', claude: '클로드', finder: 'finder', agy: '안티그래비티', 'menu-reader': 'menu-reader', codex: '코덱스', reviewer: 'reviewer', polisher: 'polisher' };
+function renderFeed() {
+  let last = '';
+  $('#feed').innerHTML = S.feed.map(i => {
+    const d = day(i.at), head = d !== last ? `<li class="day">${d}</li>` : '';
+    last = d;
+    const click = i.kind === 'order' ? ` data-order="${i.ref}" style="cursor:pointer"` : '';
+    return `${head}<li class="k-${i.kind}"${click}><time>${hm(i.at)}</time><span><span class="who">${esc(WHO[i.who] || i.who)}</span>${esc(i.text)}</span></li>`;
+  }).join('') || '<li class="muted">기록 없음</li>';
+}
+async function loadBrief() {
+  const b = await api('/api/brief');
+  $('#brief').innerHTML = b.lines.map(l => `<li>${esc(l)}</li>`).join('');
+  $('#brief-at').textContent = b.at + ' 기준';
+}
+async function loadFeed() { S.feed = (await api('/api/activity')).items; renderFeed(); }
+let ordTimer, wasRunning = false;
+async function loadOrders() {
+  const r = await api('/api/orders');
+  S.orders = r.orders;
+  const running = S.orders.some(o => o.status === 'running' || o.status === 'stopping');
+  renderInbox(); renderOffice(); renderCounts();
+  if (S.open?.startsWith('order:')) renderOrderPanel(S.open.slice(6));
+  if (wasRunning && !running) { loadFeed(); loadBrief(); toast('지시 실행이 끝났습니다. 결재함을 확인하세요.'); }
+  wasRunning = running;
+  clearTimeout(ordTimer);
+  ordTimer = setTimeout(loadOrders, running ? 2500 : 15000);
 }
 
 // ---------------------------------------------------------------- 할당량
@@ -147,7 +258,7 @@ function renderVisits() {
 function renderCounts() {
   const full = S.stores.filter(s => s.kind === 'full').length, list = S.stores.filter(s => s.kind === 'listing').length;
   const items = S.todo.length;
-  const run = S.jobs.filter(j => j.status === 'running').length;
+  const run = S.jobs.filter(j => j.status === 'running').length + S.orders.filter(o => o.status === 'running').length;
   $('#counts').innerHTML = `<span>가게 <b>${S.stores.length}</b></span><span>정식 <b>${full}</b></span><span>가게 찾기용 <b>${list}</b></span><span>할 일 <b>${items}</b>건</span><span>실행 중 <b>${run}</b></span>`;
 }
 
@@ -171,6 +282,7 @@ function teamJob(id) {
 function renderPanel() {
   const id = S.open;
   if (!id) return;
+  if (id.startsWith('order:')) return renderOrderPanel(id.slice(6));
   const m = M[id], t = S.team || {};
   const tool = m.tool ? t.tools?.[m.tool] : null;
   const recent = id === 'captain' ? [] : (t.recent?.[id] || []);
@@ -223,6 +335,18 @@ function closePanel() { S.open = null; $('#panel').classList.remove('open'); $('
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
 
 document.addEventListener('click', async e => {
+  const ord = e.target.closest('[data-order]');
+  if (ord) return openPanel('order:' + ord.dataset.order);
+  if (e.target.id === 'order-send') return sendOrder();
+  if (e.target.id === 'order-approve') return replyOrder(true);
+  if (e.target.id === 'order-reply') return replyOrder(false);
+  if (e.target.id === 'order-stop') { const r = await post('/api/order/stop', { id: S.open.slice(6) }); return toast(r.error || '멈추는 중…'); }
+  const chip = e.target.closest('#chips button');
+  if (chip) {
+    const ta = $('#order-text'); ta.value = CHIPS[chip.dataset.i][1]; ta.focus();
+    const at = ta.value.indexOf('<'); if (at >= 0) ta.setSelectionRange(at, ta.value.indexOf('>', at) + 1);
+    return;
+  }
   const spot = e.target.closest('button.spot');
   if (spot) return openPanel(spot.dataset.id);
   if (e.target.closest('#close') || e.target.id === 'dim') return closePanel();
@@ -260,6 +384,8 @@ document.addEventListener('click', async e => {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
 $('#q').addEventListener('input', e => { S.q = e.target.value; renderStores(); });
+$('#order-text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sendOrder(); });
+$('#chips').innerHTML = CHIPS.map(([t], i) => `<button data-i="${i}">${t}</button>`).join('');
 
 // ---------------------------------------------------------------- 불러오기
 let jobTimer;
@@ -286,7 +412,8 @@ async function loadAll() {
   const [st, td, tm, qt] = await Promise.all([api('/api/stores'), api('/api/todo'), api('/api/team'), api('/api/quota')]);
   S.stores = st.stores; S.todo = td.groups; S.team = tm; S.quota = qt;
   renderQuota(); renderStores(); renderTodo(); renderCounts();
-  await loadJobs();
+  await Promise.all([loadJobs(), loadOrders()]);
+  loadBrief(); loadFeed();
   $('#updated').textContent = `저장소 기준 · ${new Date().toLocaleTimeString('ko-KR')} 새로 읽음`;
   loadCollector();
   S.visits = await api('/api/visits'); renderVisits();
@@ -294,3 +421,4 @@ async function loadAll() {
 renderOffice();
 loadAll();
 setInterval(() => api('/api/quota').then(q => { S.quota = q; renderQuota(); }), 60000);
+setInterval(() => { loadFeed(); loadBrief(); }, 120000);
