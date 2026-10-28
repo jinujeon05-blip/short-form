@@ -80,7 +80,7 @@
 | `restaurants/choegojip` | 최고집 CHOE GO JIP 한식당 — 고기구이·소곱창·탕·전골·점심 특선 (SH-14, Tòa E3, CT8 Emerald, Từ Liêm, Hà Nội, 076 920 7949) — **가게 찾기용** | `choegojip-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://choegojip.qrmenuasia.com |
 | `restaurants/biwon` | 비원 BIWON 한정식·숯불갈비 — 소고기 구이·전골·탕·냉면 (Cửa E, TTTM The Garden, The Manor, Từ Liêm, Hà Nội, 024 6282 3300) — **가게 찾기용** | `biwon-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://biwon.qrmenuasia.com |
 | `restaurants/wangdaepo` | 왕대포 꼬치구이 WANG DEA PHO 연변식 양꼬치·꼬치구이·마라·볶음요리 (미딩점, 16 P. Trần Văn Lai, Từ Liêm, Hà Nội, 032 7800 789) — **가게 찾기용** | `wangdaepo-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://wangdaepo.qrmenuasia.com |
-| `restaurants/golbaengi` | 을지로골뱅이 Euljiro Golbaengi 한국식 골뱅이 호프 — 골뱅이무침·통골뱅이탕·대왕먹태·옛날 치킨·생선구이 (Lô 25 TT4, Trần Văn Lai, Từ Liêm, Hà Nội, 098 909 2060, 15:00–02:00) — **가게 찾기용** | `golbaengi-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영) | https://golbaengi.qrmenuasia.com |
+| `restaurants/golbaengi` | 을지로골뱅이 Euljiro Golbaengi 한국식 골뱅이 호프 — 골뱅이무침·통골뱅이탕·대왕먹태·옛날 치킨·생선구이 (Lô 25 TT4, Trần Văn Lai, Từ Liêm, Hà Nội, 098 909 2060, 15:00–02:00) — **가게 찾기용** | `golbaengi-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://golbaengi.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
