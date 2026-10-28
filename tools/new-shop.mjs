@@ -50,7 +50,7 @@ fs.writeFileSync(path.join(dir, 'index.html'), h);
 // menu.js 뼈대 (가마솥과 같은 형식)
 fs.writeFileSync(path.join(dir, 'menu.js'), `// TODO 가게 이름 메뉴 데이터 — 출처(메뉴판 사진·날짜)를 적는다
 // price: 한 가지 가격 / sizes: [["S", 가격], ["L", 가격]] / price: null = 시가
-// tag: "must"(Must Try) · "best"(BEST) · "special"(스페셜) / spicy: true = 매운 표시 / photo: "img/<이름>.jpg"(640px 정사각형 고화질만)
+// tag: "must"(Must Try) · "best"(BEST) · "special"(스페셜) / spicy: true = 매운 표시 / photo: "img/<이름>.jpg"(640×480, 4:3으로 꽉 차게 자른 고화질만 — 정사각형이면 양옆 흰 여백)
 // 메뉴판 사진끼리 가격이 다르면 높은 쪽 (다른 사실은 docs/todo.md 에)
 window.RESTAURANT = {
   brand: { ko: "TODO", en: "TODO" },
