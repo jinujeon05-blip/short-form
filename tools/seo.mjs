@@ -56,6 +56,7 @@ const SHOPS = {
   unagi:        { type: 'Restaurant', cuisine: ['Japanese', 'Unagi', 'Sushi', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/logo.png' },
   choegojip:    { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Gopchang', 'Korean soups'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   biwon:        { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Galbi', 'Korean hot pot'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  wangdaepo:    { type: 'Restaurant', cuisine: ['Chinese', 'Lamb skewers', 'Korean-Chinese', 'Mala'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   jamaedang:    { type: 'Restaurant', cuisine: ['Korean', 'Korean course', 'Seafood', 'Skate', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   studioan:     { type: 'LocalBusiness', noMenu: true, country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   cheong:       { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Korean', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },

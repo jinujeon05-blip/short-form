@@ -57,6 +57,8 @@ window.DEMOS = [
     name: "최고집 CHOE GO JIP", type: { ko: "한식 · 고기구이 · 탕 · 하노이", vi: "Món Hàn · Thịt nướng · Canh · Hà Nội", zh: "韩国料理 · 烤肉 · 汤 · 河内", ja: "韓国料理・焼肉・スープ・ハノイ", en: "Korean food · BBQ · Soups · Hanoi" } },
   { id: "biwon", hidden: true, url: "https://biwon.qrmenuasia.com", shot: "img/demo-biwon.jpg", qr: "img/qr-biwon.svg",
     name: "비원 BIWON", type: { ko: "한정식 · 숯불갈비 · 전골 · 하노이", vi: "Món Hàn · Sườn nướng than hoa · Lẩu · Hà Nội", zh: "韩定食 · 炭火烤排骨 · 火锅 · 河内", ja: "韓定食・炭火カルビ・鍋・ハノイ", en: "Korean food · Charcoal galbi · Hot pots · Hanoi" } },
+  { id: "wangdaepo", hidden: true, url: "https://wangdaepo.qrmenuasia.com", shot: "img/demo-wangdaepo.jpg", qr: "img/qr-wangdaepo.svg",
+    name: "왕대포 꼬치구이 WANG DEA PHO", type: { ko: "양꼬치 · 꼬치구이 · 마라 · 하노이", vi: "Xiên cừu nướng · Món cay tê · Hà Nội", zh: "羊肉串 · 烧烤 · 麻辣 · 河内", ja: "ラム串・串焼き・麻辣・ハノイ", en: "Lamb skewers · BBQ skewers · Mala · Hanoi" } },
 ];
 
 window.T = {
