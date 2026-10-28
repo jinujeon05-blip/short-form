@@ -2,7 +2,7 @@
 // 출처: 구글 지도에 손님이 올린 메뉴판 사진 21장(2026-10-28 수집, 올린 날짜 모름). 중국어·베트남어 이름은 메뉴판 그대로
 // 메뉴판에 없는 번호(04·05, 14~21, 24·25, 50~53)는 사진이 없어 넣지 않음. 11 갈매기살꼬치는 최근 메뉴판에 스티커로 가려져 뺌
 // price: 한 가지 가격 / sizes: [["S", 가격], ["L", 가격]] / price: null = 시가
-// tag: "must"(Must Try) · "best"(BEST) · "special"(스페셜) / spicy: true = 매운 표시 / photo: "img/<이름>.jpg"(640px 정사각형 고화질만)
+// tag: "must"(Must Try) · "best"(BEST) · "special"(스페셜) / spicy: true = 매운 표시 / photo: "img/<이름>.jpg"(640×480, 4:3으로 꽉 차게)
 // 메뉴판 사진끼리 가격이 다르면 높은 쪽 (다른 사실은 docs/todo.md 에)
 window.RESTAURANT = {
   brand: { ko: "친구 양꼬치", en: "CHINGU" },

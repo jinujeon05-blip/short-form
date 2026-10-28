@@ -162,6 +162,7 @@
   - `node tools/analytics.mjs`(방문 기록·점주 편집 블록)
 - **윈도우 PC(로컬 세션, `D:\qrmenu`, 2026-10-27)**: 도구 경로는 `tools/pw.mjs`의 `ROOT`·`fileUrl()`(fileURLToPath·pathToFileURL)로 만든다. `new URL(import.meta.url).pathname`·`` `file://${경로}` ``는 윈도우에서 깨지니 쓰지 않는다. `.sh`는 Git Bash로 돌린다.
 - **드라이브**:
+  - **PC 로컬 세션은 드라이브가 동기화돼 있다**(`G:\내 드라이브\QR메뉴판\<가게>\`, 2026-10-28 확인). zip을 받지 말고 거기서 사진·`store_info.json`·`클로드_안내.md`를 스크래치로 바로 복사한다(다운로드 토큰 0, 작은 간판 사진도 바로 받음).
   - 10MB 넘는 파일은 못 받는다.
   - 결과가 크면 하네스가 `tool-results/…download_file_content-<숫자>.txt`(JSON, base64)로 저장하니, 그 경로를 python으로 풀어 저장한다.
   - 약 45KB 이하 파일은 대화로 들어와 저장할 수 없으니, 사용자에게 채팅 첨부를 부탁한다.

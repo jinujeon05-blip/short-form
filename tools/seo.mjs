@@ -53,6 +53,7 @@ const SHOPS = {
   sushiya:      { type: 'Restaurant', cuisine: ['Japanese', 'Sushi', 'Sashimi', 'Rolls'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   jongno:       { type: 'BarOrPub', cuisine: ['Korean', 'Pocha', 'Korean bar food', 'Skewers', 'Stews'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   chingu:       { type: 'Restaurant', cuisine: ['Chinese', 'Lamb skewers', 'Korean-Chinese', 'Mala'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  unagi:        { type: 'Restaurant', cuisine: ['Japanese', 'Unagi', 'Sushi', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/logo.png' },
   jamaedang:    { type: 'Restaurant', cuisine: ['Korean', 'Korean course', 'Seafood', 'Skate', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   studioan:     { type: 'LocalBusiness', noMenu: true, country: 'VN', currency: 'VND', og: 'img/hero.jpg' },
   cheong:       { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Korean', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/hero.jpg' },

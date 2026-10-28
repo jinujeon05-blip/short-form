@@ -51,6 +51,8 @@ window.DEMOS = [
     name: "종로포차 JONGRO POCHA", type: { ko: "한국식 포장마차 · 하노이", vi: "Quán nhậu kiểu Hàn · Hà Nội", zh: "韩式路边摊酒馆 · 河内", ja: "韓国式屋台酒場・ハノイ", en: "Korean pocha · Hanoi" } },
   { id: "chingu", hidden: true, url: "https://chingu.qrmenuasia.com", shot: "img/demo-chingu.jpg", qr: "img/qr-chingu.svg",
     name: "친구 양꼬치 CHINGU", type: { ko: "양꼬치 · 중화요리 · 하노이", vi: "Xiên cừu nướng · Món Trung Hoa · Hà Nội", zh: "羊肉串 · 中餐 · 河内", ja: "羊串・中華料理・ハノイ", en: "Lamb skewers · Chinese food · Hanoi" } },
+  { id: "unagi", hidden: true, url: "https://unagi.qrmenuasia.com", shot: "img/demo-unagi.jpg", qr: "img/qr-unagi.svg",
+    name: "우나기 쇼쿠도 UNAGI SHOKUDO", type: { ko: "일본식 장어덮밥 · 스시 · 하노이", vi: "Cơm lươn Nhật · Sushi · Hà Nội", zh: "日式鳗鱼饭 · 寿司 · 河内", ja: "うな丼・寿司・ハノイ", en: "Japanese eel rice · Sushi · Hanoi" } },
 ];
 
 window.T = {
