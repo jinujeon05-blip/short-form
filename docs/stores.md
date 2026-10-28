@@ -75,7 +75,7 @@
 | `restaurants/seonsangukbap` | 선산국밥 Seonsan Gukbap (Nhà Hàng Sơn San, 211 Nguyễn Cao, Kinh Bắc, Bắc Ninh, 0347 942 577) 돼지국밥·순대국밥 — **가게 찾기용** (선산곱창 `seonsan`과 다른 가게) | `seonsangukbap-menu` (팀 jinwoo8, 2026-10-24 배포, 가게 찾기 목록도 반영) | https://seonsangukbap.qrmenuasia.com |
 | `restaurants/sushiya` | 스시야 Sushiya 한국식 스시·롤·사시미·점심 특선 (14 Đường Võ Cường-5, Võ Cường, Bắc Ninh, 0327 294 225) — **가게 찾기용** | `sushiya-menu` (팀 jinwoo8, 2026-10-24 배포, 가게 찾기 목록도 반영) | https://sushiya.qrmenuasia.com |
 | `restaurants/jongno` | 종로포차 JONGRO POCHA 한국식 포장마차 (44 ngõ 39/70 Đình Thôn, Từ Liêm, Hà Nội, 098 392 0600) — **가게 찾기용** | `jongno-menu` (팀 jinwoo8, 2026-10-27 배포, 가게 찾기 목록도 반영) | https://jongno.qrmenuasia.com |
-| `restaurants/chingu` | 친구 양꼬치 CHINGU 양꼬치 전문점·중화요리 (Ngõ 1 Đồng Me / 10 Trần Văn Lai, Từ Liêm, Hà Nội, 033 224 7678) — **가게 찾기용** | `chingu-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — 브랜치 chingu-listing, main 머지 전) | https://chingu.qrmenuasia.com |
+| `restaurants/chingu` | 친구 양꼬치 CHINGU 양꼬치 전문점·중화요리 (Ngõ 1 Đồng Me / 10 Trần Văn Lai, Từ Liêm, Hà Nội, 033 224 7678) — **가게 찾기용** | `chingu-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://chingu.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
