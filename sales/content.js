@@ -53,6 +53,8 @@ window.DEMOS = [
     name: "친구 양꼬치 CHINGU", type: { ko: "양꼬치 · 중화요리 · 하노이", vi: "Xiên cừu nướng · Món Trung Hoa · Hà Nội", zh: "羊肉串 · 中餐 · 河内", ja: "羊串・中華料理・ハノイ", en: "Lamb skewers · Chinese food · Hanoi" } },
   { id: "unagi", hidden: true, url: "https://unagi.qrmenuasia.com", shot: "img/demo-unagi.jpg", qr: "img/qr-unagi.svg",
     name: "우나기 쇼쿠도 UNAGI SHOKUDO", type: { ko: "일본식 장어덮밥 · 스시 · 하노이", vi: "Cơm lươn Nhật · Sushi · Hà Nội", zh: "日式鳗鱼饭 · 寿司 · 河内", ja: "うな丼・寿司・ハノイ", en: "Japanese eel rice · Sushi · Hanoi" } },
+  { id: "choegojip", hidden: true, url: "https://choegojip.qrmenuasia.com", shot: "img/demo-choegojip.jpg", qr: "img/qr-choegojip.svg",
+    name: "최고집 CHOE GO JIP", type: { ko: "한식 · 고기구이 · 탕 · 하노이", vi: "Món Hàn · Thịt nướng · Canh · Hà Nội", zh: "韩国料理 · 烤肉 · 汤 · 河内", ja: "韓国料理・焼肉・スープ・ハノイ", en: "Korean food · BBQ · Soups · Hanoi" } },
 ];
 
 window.T = {
