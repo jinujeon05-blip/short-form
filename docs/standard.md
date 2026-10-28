@@ -34,6 +34,7 @@
 8. **가게 정보** `footer`:
    - 인사 문구 `quote`
    - 와이파이(있을 때만)
+   - **영업시간**(새 가게는 항상, 사용자 지시 2026-10-28) — 전화 칸 위, 전화·주소와 같은 `.pill` 모양에 시계 아이콘. 누르는 동작 없음
    - 전화 · 주소·지도
    - **가격 단위 줄**(가게 찾기용은 끝에 '구글 지도에 올린 메뉴판 기준…' 5개 언어)
 9. **다산 파트너 배너**(`dasan.js`, 색은 `partner-theme`) → **가게 더 보기**(`stores-link.js`).
@@ -54,7 +55,9 @@
 - **이미 완성된 가게**(가마솥 포함)는 그대로 둔다(사용자 지시 2026-10-24).
 
 ## 데이터 (`menu.js`, 형식은 가마솥과 같음)
-- `RESTAURANT`: `brand{ko,en}`·`phone`·`address`·`wifi`(없으면 null).
+- `RESTAURANT`: `brand{ko,en}`·`phone`·`address`·`wifi`(없으면 null)·`hours`.
+  - `hours`: 시간만 있으면 문자열 `"10:30 – 22:00"`. 쉬는 날·브레이크 타임처럼 글이 있으면 5개 언어 `{ko,en,zh,ja,vi}`. 칸 이름은 `UI`의 `hours`(영업시간 / Opening hours / 营业时间 / 営業時間 / Giờ mở cửa). 값은 구글 지도(`store_info.json`의 `hours`)이고, 메뉴판·간판 시간과 다르면 `docs/todo.md`에 적는다.
+  - 2026-10-28 이전 가게(가마솥 포함)에는 넣지 않는다. 을지로골뱅이가 첫 가게이니, 거기서 만든 모양을 다음 가게부터 그대로 쓴다.
 - `MENU`: 분류 `{id, name{5개 언어}, note?, tip?, items}`.
   - 메뉴는 `{name{5개 언어}, desc?, price | sizes, tag?, spicy?, photo?, unit?}`.
 - 메뉴판 사진끼리 가격이 다르면 **높은 쪽**을 쓰고, 그 사실을 `docs/todo.md`에 적는다.
