@@ -99,8 +99,9 @@
 - **비용**: 돈은 주로 배포(Build CPU)에서 든다. 고칠 것을 모아 한 번에 배포한다. 사주 사이트 `myeongwol`은 main만 빌드한다(Ignored Build Step).
 - **"main 머지해줘"**:
   1. 다른 세션의 열린 PR·브랜치와 충돌이 없는지 확인한다.
-  2. 작업 브랜치로 PR을 만들어 squash 머지한다.
-  3. 작업 브랜치를 `origin/main`으로 리셋하고 `--force-with-lease`로 푸시한다.
+  2. squash 머지한다. **PC 로컬 세션은 `gh`가 없으니 PR 없이**(사용자 결정 2026-10-28): `git checkout -B merge-tmp origin/main` → `git merge --squash <작업 브랜치>` → 커밋 제목 끝에 `(<브랜치> squash)` → `git push origin HEAD:main`. 클라우드 세션은 PR을 만들어 squash 머지해도 된다.
+  3. 작업 브랜치를 `origin/main`으로 리셋한다(원격에 있으면 `--force-with-lease`로 푸시). `merge-tmp`는 지운다.
+  4. 보고에 "main이 바뀌면 `myeongwol`이 다시 빌드됨(평소 일)"을 한 줄 적는다.
 
 ## 4. 사용자 선호·보고
 - **묻는 방식(사용자 지시 2026-10-27, 가장 자주 어김)**: 결정이 필요하면 **바로 하지 말고 먼저 2~3가지를 번호 보기로 묻는다**(추천 하나 표시, "가-1, 나-2"처럼 답하게). 결론부터 3줄, 어려운 말은 괄호로 쉽게. 큰 작업은 시작 전에 무엇을 할지·무엇을 바꿀지 한 줄씩 보여 주고 답을 기다린다.
