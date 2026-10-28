@@ -76,7 +76,7 @@
 | `restaurants/sushiya` | 스시야 Sushiya 한국식 스시·롤·사시미·점심 특선 (14 Đường Võ Cường-5, Võ Cường, Bắc Ninh, 0327 294 225) — **가게 찾기용** | `sushiya-menu` (팀 jinwoo8, 2026-10-24 배포, 가게 찾기 목록도 반영) | https://sushiya.qrmenuasia.com |
 | `restaurants/jongno` | 종로포차 JONGRO POCHA 한국식 포장마차 (44 ngõ 39/70 Đình Thôn, Từ Liêm, Hà Nội, 098 392 0600) — **가게 찾기용** | `jongno-menu` (팀 jinwoo8, 2026-10-27 배포, 가게 찾기 목록도 반영) | https://jongno.qrmenuasia.com |
 | `restaurants/chingu` | 친구 양꼬치 CHINGU 양꼬치 전문점·중화요리 (Ngõ 1 Đồng Me / 10 Trần Văn Lai, Từ Liêm, Hà Nội, 033 224 7678) — **가게 찾기용** | `chingu-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://chingu.qrmenuasia.com |
-| `restaurants/unagi` | 우나기 쇼쿠도 UNAGI SHOKUDO 일본식 장어덮밥·스시·사시미 (45 Hoàng Trọng Mậu, KĐT Mỹ Đình, Mễ Trì, Từ Liêm, Hà Nội, 036 510 9997) — **가게 찾기용** | `unagi-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — 브랜치 unagi-listing, main 머지 전) | https://unagi.qrmenuasia.com |
+| `restaurants/unagi` | 우나기 쇼쿠도 UNAGI SHOKUDO 일본식 장어덮밥·스시·사시미 (45 Hoàng Trọng Mậu, KĐT Mỹ Đình, Mễ Trì, Từ Liêm, Hà Nội, 036 510 9997) — **가게 찾기용** | `unagi-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://unagi.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
