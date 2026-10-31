@@ -96,8 +96,10 @@
 | `restaurants/dusyef` | 두셰프의 돈가스&마우 Two Chefs Tonkatsu & Mau 돈가스·롤·우동·치킨 (B004 The Manor, Từ Liêm, Hà Nội, 033 549 1733, 10:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://dusyef.qrmenuasia.com |
 | `restaurants/uimyeonok` | 우이며녹 미딩점 UI MYEO NOK 칼국수·파전 (C005 The Manor, Mỹ Đình, Từ Liêm, Hà Nội, 024 3880 0010, 11:00–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://uimyeonok.qrmenuasia.com |
 | `restaurants/texasbbq` | CTQ 텍사스 BBQ 미딩점 CTQ TEXAS BBQ 훈제 바비큐·사파 연어·콤보 세트 (Tòa nhà CT1, KĐT Mỹ Đình, Xuân Phương, Hà Nội, 096 232 2111, 10:30–14:00·16:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://texasbbq.qrmenuasia.com |
-| `restaurants/hoolala` | 훌랄라치킨 HOOLALA 치킨 펍·바베큐 치킨·피자·파스타·맥주 (Block B 005, The Manor, Từ Liêm, Hà Nội, 0355 738 102, 11:00–24:00 해석) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://hoolala.qrmenuasia.com |
+| `restaurants/hoolala` | 훌랄라치킨 HOOLALA 치킨 펍·바베큐 치킨·피자·파스타·맥주 (Block B 005, The Manor, Từ Liêm, Hà Nội, 0355 738 102, 11:00–24:00 해석) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://hoolala.qrmenuasia.com |
+
 | `restaurants/gaonjae` | 가온재 GAONJAE 프리미엄 한식·점심특선·솥밥·백합·소갈비찜·냉면·코스 (D, The Manor, Từ Liêm, Hà Nội, 052 306 7979, 11:00–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 owner-panel) | https://gaonjae.qrmenuasia.com |
+| `restaurants/palgakdo` | 팔각도 하노이 PALGAKDO 숯불 닭갈비·닭 특수부위·보쌈세트·점심특선 (123-TT3 P. Trần Văn Lai, Mỹ Đình, Hà Nội, 0866600906, 10:30–24:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 owner-panel) | https://palgakdo.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
@@ -230,3 +232,9 @@
 - 가격 충돌: 뼈해장국 190/200·사골우거지해장국 200/190(menu_19 ↔ menu_17 서로 바뀜) → 둘 다 200K. 주안상은 menu_22(950K)와 홍보판 menu_23 구성 표기가 조금 다름(점주 확인 권장).
 - 일부러 뺀 것: '너와 포차 메뉴 240K'(menu_03·07), 피자&파스타 198K·숯불구이 안주 220K(menu_08)는 개별 가격 없이 페이지 하나에 가격 한 개만 있어 뺐고, 치킨(menu_05)은 너와 포차 쪽 메뉴라 뺐다. 사장님 확인 전엔 넣지 않는다.
 - 메뉴판 모든 쪽 하단 'VAT 별도(음식 8%·주류 10%)' 문구는 화면에 안 넣음(표준 문구 밖).
+
+## 팔각도 하노이(palgakdo, 하노이 미딩, 가게 찾기용) — 2026-10-31
+- 수집기 사진 68장(메뉴판 20·음식 33·매장 1·기타 14). 로고 없음 → 간판 store_01(세로 사진)을 16:9로 잘라 맨 위(`img/sign.jpg`). 요리 사진 6장(숯불 닭갈비 food_07·감자 닭볶음탕 f04·철판볶음밥 f02·콘치즈 f06·삼겹살 f28·순두부찌개 f24), 4:3 꽉 차게.
+- 메뉴 읽기: 안티그래비티 2회 실패(계획 승인 대기로 멈춤) → menu-reader 3명(20장) → 안티그래비티 Sonnet 대조(가격 차이·빠진 메뉴 없음). 메뉴 56개(10분류).
+- 영업시간: 구글 지도 원문 '오전 10:30~오전 12:00' → 자정으로 보고 '10:30 – 24:00'(점주 확인 권장). 점심특선 시간은 메뉴판마다 11:00~15:00(menu_01·07·11)과 11:00~16:00(menu_06)이 달라 15:00 기준 + 안내문에 16:00 병기.
+- 일부러 뺀 것: 사이공 병맥주·타이거 캔(가격 없음), 닭 부위 안내도(menu_14), 하단 'VAT 별도' 문구(표준 문구 밖). 가브리살 보쌈세트는 소·중 크기별 가격(770K/920K). 점심특선 일부는 정가(취소선)를 설명에 병기.

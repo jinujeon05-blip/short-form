@@ -47,6 +47,7 @@ name() {
     texasbbq) echo "CTQ 텍사스 BBQ" ;;
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;
+    palgakdo) echo "팔각도하노이" ;;
     tojeong) echo "토정삼계탕" ;;
     hansari) echo "한사리감자탕" ;;
     gardenia) echo "가드니아돈까스" ;;
