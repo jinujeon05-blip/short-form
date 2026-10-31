@@ -96,7 +96,8 @@
 | `restaurants/dusyef` | 두셰프의 돈가스&마우 Two Chefs Tonkatsu & Mau 돈가스·롤·우동·치킨 (B004 The Manor, Từ Liêm, Hà Nội, 033 549 1733, 10:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://dusyef.qrmenuasia.com |
 | `restaurants/uimyeonok` | 우이며녹 미딩점 UI MYEO NOK 칼국수·파전 (C005 The Manor, Mỹ Đình, Từ Liêm, Hà Nội, 024 3880 0010, 11:00–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://uimyeonok.qrmenuasia.com |
 | `restaurants/texasbbq` | CTQ 텍사스 BBQ 미딩점 CTQ TEXAS BBQ 훈제 바비큐·사파 연어·콤보 세트 (Tòa nhà CT1, KĐT Mỹ Đình, Xuân Phương, Hà Nội, 096 232 2111, 10:30–14:00·16:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://texasbbq.qrmenuasia.com |
-| `restaurants/hoolala` | 훌랄라치킨 HOOLALA 치킨 펍·바베큐 치킨·피자·파스타·맥주 (Block B 005, The Manor, Từ Liêm, Hà Nội, 0355 738 102, 11:00–24:00 해석) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://hoolala.qrmenuasia.com |
+| `restaurants/hoolala` | 훌랄라치킨 HOOLALA 치킨 펍·바베큐 치킨·피자·파스타·맥주 (Block B 005, The Manor, Từ Liêm, Hà Nội, 0355 738 102, 11:00–24:00 해석) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://hoolala.qrmenuasia.com |
+| `restaurants/gaonjae` | 가온재 GAONJAE 프리미엄 한식·점심특선·솥밥·백합·소갈비찜·냉면·코스 (D, The Manor, Từ Liêm, Hà Nội, 052 306 7979, 11:00–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 owner-panel) | https://gaonjae.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
@@ -222,3 +223,10 @@
 - 수집기 사진 71장(메뉴판 30·음식 36·매장 1). 진짜 메뉴판은 menu_01·04·05·06 4장뿐(나머지 menu_*는 음식 사진). 로고 없음 → 간판 `store_01`을 16:9로 잘라 맨 위(`img/sign.jpg`). 요리 사진 6장(후라이드 food_21·눈꽃치즈 food_17·망고샐러드 food_12·고르곤졸라 food_36·감자튀김 menu_22·게살 파스타 food_15) 640×480.
 - 메뉴 읽기: 안티그래비티 → 안티그래비티 Sonnet 대조(가격·빠진 메뉴 없음) → reviewer(번역 3건·🌶 표시 반영). 메뉴 84개(13분류).
 - 같은 메뉴 가격 차이: 그롤쉬 110K/120K·요펜 슈퍼두파 110K/120K → 120K.
+
+## 가온재(gaonjae, 하노이 The Manor, 가게 찾기용) — 2026-10-31
+- 수집기 사진 79장(메뉴판 25·음식 44·매장 10). 로고 카드(store_10)는 기울고 거칠며 도장이 '너와'라 안 쓰고 간판 store_09를 16:9로 잘라 맨 위(`img/sign.jpg`). 요리 사진 5장(기본정식 food_34·솥밥 food_10·소갈비찜 food_22·물냉면 food_33·들기름 막국수 store_07).
+- 메뉴 읽기: 안티그래비티 2회 실패(계획서만 냄) → menu-reader 3명(25장) → 안티그래비티 Sonnet 대조(뼈해장국·사골우거지 가격 충돌만 지적) → reviewer(가격 오류 없음). 메뉴 86개(10분류).
+- 가격 충돌: 뼈해장국 190/200·사골우거지해장국 200/190(menu_19 ↔ menu_17 서로 바뀜) → 둘 다 200K. 주안상은 menu_22(950K)와 홍보판 menu_23 구성 표기가 조금 다름(점주 확인 권장).
+- 일부러 뺀 것: '너와 포차 메뉴 240K'(menu_03·07), 피자&파스타 198K·숯불구이 안주 220K(menu_08)는 개별 가격 없이 페이지 하나에 가격 한 개만 있어 뺐고, 치킨(menu_05)은 너와 포차 쪽 메뉴라 뺐다. 사장님 확인 전엔 넣지 않는다.
+- 메뉴판 모든 쪽 하단 'VAT 별도(음식 8%·주류 10%)' 문구는 화면에 안 넣음(표준 문구 밖).

@@ -83,6 +83,8 @@ window.DEMOS = [
     name: "우이며녹 UI MYEO NOK", type: { ko: "칼국수 · 한식 · 하노이", vi: "Mì cắt Hàn Quốc · Hà Nội", zh: "刀削面 · 韩国料理 · 河内", ja: "カルグクス・韓国料理・ハノイ", en: "Kalguksu · Korean · Hanoi" } },
   { id: "texasbbq", hidden: true, url: "https://texasbbq.qrmenuasia.com", shot: "img/demo-texasbbq.jpg", qr: "img/qr-texasbbq.svg",
     name: "CTQ 텍사스 BBQ CTQ TEXAS BBQ", type: { ko: "텍사스 훈제 바비큐 · 하노이", vi: "BBQ xông khói Texas · Hà Nội", zh: "德州烟熏烧烤 · 河内", ja: "テキサススモークBBQ・ハノイ", en: "Texas smoked BBQ · Hanoi" } },
+  { id: "gaonjae", hidden: true, url: "https://gaonjae.qrmenuasia.com", shot: "img/demo-gaonjae.jpg", qr: "img/qr-gaonjae.svg",
+    name: "가온재 GAONJAE", type: { ko: "프리미엄 한식 · 솥밥 · 백합 · 하노이", vi: "Nhà hàng Hàn cao cấp · Cơm niêu · Ngao · Hà Nội", zh: "高端韩餐 · 石锅饭 · 蛤蜊 · 河内", ja: "プレミアム韓食・釜飯・ハマグリ・ハノイ", en: "Premium Korean · Pot rice · Clams · Hanoi" } },
   { id: "hoolala", hidden: true, url: "https://hoolala.qrmenuasia.com", shot: "img/demo-hoolala.jpg", qr: "img/qr-hoolala.svg",
     name: "훌랄라치킨 HOOLALA", type: { ko: "치킨 펍 · 바베큐 치킨 · 하노이", vi: "Quán gà & bia · Gà nướng · Hà Nội", zh: "炸鸡酒吧 · 炭烤鸡 · 河内", ja: "チキンパブ・BBQチキン・ハノイ", en: "Chicken pub · BBQ chicken · Hanoi" } },
   { id: "gumigwan", hidden: true, url: "https://gumigwan.qrmenuasia.com", shot: "img/demo-gumigwan.jpg", qr: "img/qr-gumigwan.svg",
