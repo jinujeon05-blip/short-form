@@ -19,6 +19,8 @@
       <h2>지시하기 <small>비서실장이 이 PC에서 바로 실행</small></h2>
       <textarea id="order-text" rows="3" placeholder="예: 바보아저씨 사진 수집기로 올렸어. 가게 찾기용으로 만들어줘"></textarea>
       <div class="chips" id="chips"></div>
+      <div class="when"><select id="order-when" aria-label="언제 실행"><option value="">지금 실행</option><option value="reset">한도 풀리면 실행</option><option value="time">시각 정해서 실행</option></select>
+        <input type="datetime-local" id="order-at" hidden><small class="muted" id="order-hint"></small></div>
       <div class="cmd-foot">
         <span class="muted" id="order-note">배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.</span>
         <button class="btn" id="order-send">보내기</button>
@@ -37,6 +39,7 @@
 
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="stores" class="on">가게 현황</button>
+      <button role="tab" data-tab="talk">팀 대화<span class="live" id="talk-live"></span></button>
       <button role="tab" data-tab="todo">할 일</button>
       <button role="tab" data-tab="visits">방문 기록</button>
     </nav>
@@ -49,6 +52,10 @@
       </div>
       <div class="cards" id="stores"></div>
       <button class="btn ghost more" id="more" hidden></button>
+    </section>
+    <section class="tab" id="tab-talk" hidden>
+      <div class="talk-head"><select id="talk-pick" aria-label="볼 지시 고르기"></select><small class="muted" id="talk-note"></small></div>
+      <div class="talk" id="tab-talk-box"></div>
     </section>
     <section class="tab" id="tab-todo" hidden></section>
     <section class="tab" id="tab-visits" hidden></section>

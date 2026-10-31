@@ -105,7 +105,7 @@ const CHIPS = [
   ['가격 고치기', '<가게> 메뉴 <메뉴이름> 가격을 <가격>으로 고쳐줘.'],
   ['점검', '<가게> 배포 전 점검(check-standard·check-listing·shot)하고 문제만 3줄로 알려줘.'],
 ];
-const ST = { running: ['run', 'b-warn', '실행 중'], stopping: ['run', 'b-warn', '멈추는 중'], done: ['', 'b-ok', '끝남'], fail: ['', 'b-stop', '실패'], stopped: ['', 'b-na', '멈춤'] };
+const ST = { running: ['run', 'b-warn', '실행 중'], stopping: ['run', 'b-warn', '멈추는 중'], done: ['', 'b-ok', '끝남'], fail: ['', 'b-stop', '실패'], stopped: ['', 'b-na', '멈춤'], scheduled: ['sched', 'b-na', '예약'] };
 const hm = t => new Date(t * 1000).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
 const day = t => new Date(t * 1000).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' });
 function orderState(o) {
@@ -118,23 +118,45 @@ function lastText(o) { const t = [...o.turns].reverse().find(t => t.by !== 'me')
 function renderInbox() {
   const wait = S.orders.filter(o => o.status === 'done' && (o.approval || (o.deploy?.length && o.deployState !== 'done')));
   const live = S.orders.filter(o => o.status === 'running' || o.status === 'stopping');
-  const rest = S.orders.filter(o => !wait.includes(o) && !live.includes(o)).slice(0, 8);
+  const sched = S.orders.filter(o => o.status === 'scheduled').sort((a, b) => a.runAt - b.runAt);
+  const rest = S.orders.filter(o => !wait.includes(o) && !live.includes(o) && !sched.includes(o)).slice(0, 8);
   $('#inbox-count').textContent = wait.length;
   $('#inbox-count').className = 'badge ' + (wait.length ? 'b-warn' : 'b-na');
   const item = o => {
     const [cls, bc, bt] = orderState(o);
     const st = o.steps?.at(-1), now = st ? `${WHO[st.who] || '비서실장'} · ${st.text}` : '시작하는 중…';
     const sub = o.deployState === 'running' ? (o.deployLog?.at(-1) || '배포 시작…') : o.status === 'running' ? now
+      : o.status === 'scheduled' ? `${day(o.runAt)} ${hm(o.runAt)} 시작 예정 · ${o.runWhy || ''}${o.waitWhy ? ' · 기다리는 중' : ''}`
       : o.deploy?.length && !o.deployState ? '배포 확정 기다림: ' + o.deploy.join(', ') : o.approval ? '결재: ' + o.approval : lastText(o).split('\n')[0];
     return `<button class="ord ${cls}" data-order="${o.id}"><b>${esc(o.title)}</b><p>${esc(sub)}</p>
       <span class="muted"><span class="badge ${bc}">${bt}</span>${hm(o.createdAt)}${o.via === 'phone' ? ' · 폰' : ''}</span></button>`;
   };
-  $('#inbox').innerHTML = (wait.length || live.length || rest.length)
-    ? [...wait, ...live].map(item).join('') + (rest.length ? `<h5 class="muted" style="margin:10px 0 6px">지난 지시</h5>${rest.map(item).join('')}` : '')
+  $('#inbox').innerHTML = (wait.length || live.length || sched.length || rest.length)
+    ? [...wait, ...live, ...sched].map(item).join('') + (rest.length ? `<h5 class="muted" style="margin:10px 0 6px">지난 지시</h5>${rest.map(item).join('')}` : '')
     : '<p class="muted">아직 지시가 없습니다. 위에 적어 보내면 여기로 보고가 올라옵니다.</p>';
   const busy = live.length > 0;
-  $('#order-send').disabled = busy;
-  $('#order-note').textContent = busy ? '지시를 실행하는 중이에요. 끝나면 다음 지시를 받을 수 있어요.' : '배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.';
+  $('#order-note').textContent = busy ? '지시를 실행하는 중이에요. 지금 보내기는 끝난 뒤에, 예약은 바로 됩니다.' : '배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.';
+}
+// 언제 실행할지(2026-11-01, 캡틴 결정 '가-1·가-2'): 지금 / 한도 풀리면 / 시각 정해서. p = 'order'(지시창) 또는 'reply'(옆 창)
+const whenHtml = p => `<div class="when"><select id="${p}-when" aria-label="언제 실행"><option value="">지금 실행</option><option value="reset">한도 풀리면 실행</option><option value="time">시각 정해서 실행</option></select>
+  <input type="datetime-local" id="${p}-at" hidden><small class="muted" id="${p}-hint"></small></div>`;
+const localInput = d => new Date(d.getTime() - d.getTimezoneOffset() * 60e3).toISOString().slice(0, 16);
+function whenValue(p) {
+  const w = $(`#${p}-when`)?.value || '';
+  if (w !== 'time') return { when: w || null };
+  const v = $(`#${p}-at`).value;
+  return v ? { when: Math.round(new Date(v).getTime() / 1000) } : { error: '시작할 시각을 골라 주세요' };
+}
+async function whenHint(p) {
+  const w = $(`#${p}-when`).value, at = $(`#${p}-at`), hint = $(`#${p}-hint`);
+  at.hidden = w !== 'time';
+  if (w === 'time' && !at.value) { const d = new Date(Date.now() + 3600e3); d.setMinutes(0, 0, 0); at.value = localInput(d); }
+  if (p === 'order') $('#order-send').textContent = w ? '예약하기' : '보내기';
+  hint.textContent = w ? '대시보드 검은 창이 켜져 있고 PC가 잠들지 않아야 시작돼요.' : '';
+  if (w === 'reset') {
+    const r = await api('/api/order/when');
+    hint.textContent = r.at ? `예상 시작: ${day(r.at)} ${hm(r.at)} (${r.why}) · 대시보드가 켜져 있어야 해요.` : r.error;
+  }
 }
 function renderOrderPanel(oid) {
   const o = S.orders.find(x => x.id === oid);
@@ -146,24 +168,38 @@ function renderOrderPanel(oid) {
     : o.deployState === 'done' ? '' : `<div class="reply"><h5>배포</h5><p><b>배포할 가게:</b> ${o.deploy.map(s => `${esc(s)}.qrmenuasia.com`).join(', ')}</p>
       ${S.vercel ? `<button class="btn approve" id="deploy-go">배포 확정</button>` : '<p class="muted">Vercel 토큰이 아직 없어 배포 버튼이 꺼져 있어요(docs/dashboard.md \'Vercel 토큰 넣기\').</p>'}
       <p class="muted">작업 브랜치를 깃허브에 올리고(main 아님) 그 커밋으로 배포합니다. 가게 찾기용이면 가게 찾기 목록(qrmenu-intro)도 같이 배포해요. 배포 1번마다 Vercel 빌드 비용이 조금 듭니다.</p></div>`) : '';
-  const keep = $('#reply-text')?.value || '';
+  const keep = $('#reply-text')?.value || '', keepWhen = $('#reply-when')?.value || '', keepAt = $('#reply-at')?.value || '';
+  const oldTalk = $('#panel-talk');  // 대화 칸은 새로 그리지 않고 옮겨 붙인다(펼친 글·스크롤 유지)
+  const sched = o.status === 'scheduled';
   const who = t => t.by === 'me' ? (t.approve ? '캡틴 · 확정' : '캡틴') : t.by === 'claude' ? '비서실장 보고' : '알림';
   $('#panel-body').innerHTML = `<h2>${esc(o.title)}</h2>
     <p class="muted"><span class="badge ${bc}">${bt}</span> ${day(o.createdAt)} ${hm(o.createdAt)} · ${o.via === 'phone' ? '폰에서 지시' : 'PC에서 지시'}${o.tokens ? ` · 토큰 약 ${o.tokens >= 10000 ? Math.round(o.tokens / 10000) + '만' : Math.round(o.tokens / 1000) + '천'}${o.tokensVersion === 2 ? '(다시 읽은 것 포함)' : '(옛 기록: 다시 읽은 것 빠짐)'}` : ''}</p>
     ${o.sessionId ? `<p class="muted">창 없이 실행돼서 Claude 앱 세션 목록에는 안 보여요. 대화 전체는 ${local() ? '<button class="btn ghost" id="order-open">PC에서 대화 열기</button>' : 'PC 대시보드의 [PC에서 대화 열기]'}로 봅니다.</p>` : ''}
     ${(o.images || []).length ? `<h5>폰 화면 캡처 (로고·간판 확인)</h5><div class="shots">${o.images.map(f => `<a href="/out/${encodeURIComponent(f)}" target="_blank" rel="noopener"><img src="/out/${encodeURIComponent(f)}?t=${Math.round(o.endedAt || 0)}" alt="${esc(f)}"></a>`).join('')}</div>` : ''}
     ${o.turns.map(t => `<div class="turn ${t.by}"><span class="muted">${who(t)} · ${hm(t.at)}</span>${esc(t.text)}</div>`).join('')}
-    ${running ? `<h5>진행 상황</h5><ul class="steps">${(o.steps || []).map(s => `<li><b class="who-${esc(s.who || 'claude')}">${esc(WHO[s.who] || s.who || '비서실장')}</b> ${esc(s.text)}</li>`).join('') || '<li>시작하는 중…</li>'}</ul>
+    ${sched ? '' : `<h5>팀 대화 <small class="muted">비서실장·담당이 주고받은 말 (누르면 펼침)</small></h5><div class="talk" id="panel-talk"></div>`}
+    ${sched ? `<div class="reply"><h5>예약</h5><p><b>${day(o.runAt)} ${hm(o.runAt)}</b>에 시작합니다 (${esc(o.runWhy || '')}).</p>
+      ${o.waitWhy ? `<p class="muted">기다리는 이유: ${esc(o.waitWhy)}</p>` : ''}
+      <p class="muted">대시보드 검은 창이 켜져 있고 PC가 잠들지 않아야 시작돼요. 그 시각에 다른 지시가 실행 중이면 끝난 뒤에 시작해요.</p>
+      <button class="btn ghost" id="order-stop">예약 취소</button></div>`
+    : running ? `<h5>진행 상황</h5><ul class="steps">${(o.steps || []).map(s => `<li><b class="who-${esc(s.who || 'claude')}">${esc(WHO[s.who] || s.who || '비서실장')}</b> ${esc(s.text)}</li>`).join('') || '<li>시작하는 중…</li>'}</ul>
       ${o.last ? `<div class="turn claude"><span class="muted">비서실장 · 지금 하는 말</span>${esc(o.last)}</div>` : ''}
       <button class="btn ghost" id="order-stop">멈추기</button>` : `
       <div class="reply"><h5>${o.approval ? '결재' : '이어서 시키기'}</h5>
       ${o.approval ? `<p><b>결재할 것:</b> ${esc(o.approval)}</p>` : ''}
       <textarea id="reply-text" placeholder="${o.approval ? '고칠 점이 있으면 적고 [수정 요청], 없으면 [확정]' : '답(예: 가-1) 또는 다음에 시킬 일'}"></textarea>
+      ${whenHtml('reply')}
       <div class="act">${o.approval ? '<button class="btn approve" id="order-approve">확정</button>' : ''}
         <button class="btn ${o.approval ? 'ghost' : ''}" id="order-reply">${o.approval ? '수정 요청' : '보내기'}</button></div>
       <p class="muted">같은 대화를 이어서 실행합니다. 배포는 아래 [배포 확정] 버튼으로만 합니다.</p></div>`}`;
   if (dep) $('#panel-body').insertAdjacentHTML('beforeend', dep);
-  if ($('#reply-text')) $('#reply-text').value = keep;
+  if ($('#reply-text')) {
+    $('#reply-text').value = keep;
+    $('#reply-when').value = keepWhen; $('#reply-at').value = keepAt; $('#reply-at').hidden = keepWhen !== 'time';
+  }
+  const ph = $('#panel-talk');
+  if (ph && oldTalk && oldTalk.dataset.oid === oid) ph.replaceWith(oldTalk);
+  refreshTalks();
 }
 const local = () => ['127.0.0.1', 'localhost'].includes(location.hostname);
 async function post(path, body) {
@@ -173,25 +209,94 @@ async function sendOrder() {
   const ta = $('#order-text'), text = ta.value.trim();
   if (!text) return toast('지시를 적어 주세요');
   if (/<[^>]+>/.test(text)) return toast('<가게> 같은 빈칸을 채워 주세요');
+  const w = whenValue('order');
+  if (w.error) return toast(w.error);
   $('#order-send').disabled = true;
-  const r = await post('/api/order', { text });
-  if (r.error) { toast(r.error); $('#order-send').disabled = false; return; }
+  const r = await post('/api/order', { text, when: w.when });
+  $('#order-send').disabled = false;
+  if (r.error) return toast(r.error);
   ta.value = '';
-  toast('지시를 보냈습니다. 비서실장이 실행을 시작해요.');
+  toast(w.when ? '예약했습니다. 그때 비서실장이 시작해요.' : '지시를 보냈습니다. 비서실장이 실행을 시작해요.');
+  $('#order-when').value = ''; whenHint('order');
   await loadOrders();
   openPanel('order:' + r.id);
 }
 async function replyOrder(approve) {
   const id = S.open.slice(6), text = $('#reply-text')?.value || '';
-  const r = await post('/api/order/reply', { id, text, approve });
+  const w = whenValue('reply');
+  if (w.error) return toast(w.error);
+  const r = await post('/api/order/reply', { id, text, approve, when: w.when });
   if (r.error) return toast(r.error);
-  $('#reply-text').value = '';
-  toast(approve ? '확정했습니다. 다음 단계를 진행해요.' : '보냈습니다.');
+  $('#reply-text').value = ''; $('#reply-when').value = '';
+  toast(w.when ? '예약했습니다. 그때 이어서 실행해요.' : approve ? '확정했습니다. 다음 단계를 진행해요.' : '보냈습니다.');
   loadOrders();
 }
 
 // ---------------------------------------------------------------- 브리핑 · 업무 기록
 const WHO = { captain: '캡틴', claude: '비서실장', designer: 'designer', finder: '시각 정보 비서', agy: '메뉴 검사관', 'menu-reader': '자료 해석 비서', codex: '운영 감찰관', reviewer: '데이터 감사관', polisher: '수석 번역관' };
+// ---------------------------------------------------------------- 팀 대화 (2026-11-01, 캡틴 결정 '나-2'·'다-1')
+// server.py 가 실행 기록에서 뽑은 '누가 누구에게 무엇을'(/api/talk). 새로 생긴 말만 받아 아래에 붙인다.
+const KIND = { ask: '지시', say: '말', report: '보고', meet: '회의' };
+const talkReq = {};
+S.talks = {}; S.talkApprox = {};
+function msgHtml(t) {
+  const to = t.to ? `<span class="to">→ ${esc(WHO[t.to] || t.to)}</span>` : '';
+  const long = t.text.length > 280 || t.text.split('\n').length > 6;
+  return `<div class="msg k-${t.kind} w-${esc(t.who)}${long ? ' long' : ''}"><div class="mh"><b class="who-${esc(t.who)}">${esc(WHO[t.who] || t.who)}</b>${to}<span class="kind">${KIND[t.kind] || ''}</span><time>${hm(t.at)}</time></div><div class="mb">${esc(t.text)}</div></div>`;
+}
+async function fetchTalk(id) {
+  const have = S.talks[id], o = S.orders.find(x => x.id === id);
+  const from = have?.length ? have.at(-1).i + 1 : 0;
+  const live = o && (o.status === 'running' || o.status === 'stopping');
+  if (have && !live && (o?.talkLast ?? -1) < from) return;  // 새 말 없음
+  const r = await api(`/api/talk?id=${encodeURIComponent(id)}&from=${from}`);
+  S.talks[id] = (S.talks[id] || []).concat(r.items || []);
+  S.talkApprox[id] = r.approx;
+}
+const loadTalk = id => talkReq[id] ||= fetchTalk(id).catch(() => {}).finally(() => delete talkReq[id]);
+function paintTalk(box, id) {
+  const items = S.talks[id] || [];
+  if (box.dataset.oid !== id) { box.dataset.oid = id; box.dataset.n = '0'; box.innerHTML = ''; }
+  const n = +box.dataset.n;
+  if (!items.length) {
+    box.innerHTML = '<p class="muted empty">아직 대화가 없습니다. 지시가 실행되면 비서실장과 담당이 주고받는 말이 여기에 실시간으로 올라옵니다.</p>';
+    return;
+  }
+  if (items.length <= n) return;
+  const stick = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+  if (!n) box.innerHTML = '';
+  box.insertAdjacentHTML('beforeend', items.slice(n).map(msgHtml).join(''));
+  box.dataset.n = String(items.length);
+  if (stick || !n) box.scrollTop = box.scrollHeight;
+}
+// 탭에서 볼 지시: 캡틴이 고른 것 → 실행 중인 것 → 가장 최근 것
+function talkFocus() {
+  if (S.talkSel && S.orders.some(o => o.id === S.talkSel)) return S.talkSel;
+  return (S.orders.find(o => o.status === 'running' || o.status === 'stopping') || S.orders.find(o => o.status !== 'scheduled'))?.id;
+}
+function renderTalkPick(fid) {
+  const list = S.orders.filter(o => o.status !== 'scheduled').slice(0, 15);
+  const key = list.map(o => o.id + o.status).join() + fid;
+  const sel = $('#talk-pick');
+  if (sel.dataset.key !== key) {
+    sel.innerHTML = list.map(o => `<option value="${o.id}"${o.id === fid ? ' selected' : ''}>${hm(o.createdAt)} · ${esc(o.title)}${o.status === 'running' ? ' (실행 중)' : ''}</option>`).join('');
+    sel.dataset.key = key;
+  }
+}
+async function refreshTalks() {
+  const tabOn = !$('#tab-talk').hidden;
+  const pid = S.open?.startsWith('order:') ? S.open.slice(6) : null;
+  const fid = talkFocus();
+  if (tabOn) renderTalkPick(fid);
+  await Promise.all([tabOn && fid, pid].filter(Boolean).map(loadTalk));
+  if (tabOn && fid) {
+    paintTalk($('#tab-talk-box'), fid);
+    const o = S.orders.find(x => x.id === fid);
+    $('#talk-note').textContent = (o?.status === 'running' ? '실시간 · ' : '') + (S.talkApprox[fid] ? '옛 기록에서 되살림(시각은 대략) · ' : '')
+      + `기록 파일: dashboard/orders/${fid}-대화.md`;
+  }
+  if (pid && $('#panel-talk')) paintTalk($('#panel-talk'), pid);
+}
 function renderFeed() {
   let last = '';
   $('#feed').innerHTML = S.feed.map(i => {
@@ -213,7 +318,8 @@ async function loadOrders() {
   S.orders = r.orders; S.vercel = r.vercel;
   const running = S.orders.some(o => o.status === 'running' || o.status === 'stopping' || o.deployState === 'running');
   renderInbox(); renderOffice(); renderCounts();
-  if (S.open?.startsWith('order:')) renderOrderPanel(S.open.slice(6));
+  if (S.open?.startsWith('order:')) renderOrderPanel(S.open.slice(6)); else refreshTalks();
+  $('#talk-live').textContent = S.orders.some(o => o.status === 'running') ? '●' : '';
   if (wasRunning && !running) { loadFeed(); loadBrief(); toast('지시 실행이 끝났습니다. 결재함을 확인하세요.'); }
   wasRunning = running;
   clearTimeout(ordTimer);
@@ -416,6 +522,8 @@ function closePanel() { S.open = null; $('#panel').classList.remove('open'); $('
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
 
 document.addEventListener('click', async e => {
+  const msg = e.target.closest('.msg.long');  // 긴 말은 눌러서 펼치기·접기 (글자를 고르는 중이면 그대로)
+  if (msg && !getSelection().toString()) return msg.classList.toggle('open');
   const ord = e.target.closest('[data-order]');
   if (ord) {
     const o = S.orders.find(x => x.id === ord.dataset.order);
@@ -448,6 +556,7 @@ document.addEventListener('click', async e => {
   if (tab) {
     document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b === tab));
     document.querySelectorAll('.tab').forEach(s => { s.hidden = s.id !== 'tab-' + tab.dataset.tab; });
+    if (tab.dataset.tab === 'talk') refreshTalks();
     return;
   }
   const k = e.target.closest('#kind button');
@@ -479,6 +588,11 @@ document.addEventListener('click', async e => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
 $('#q').addEventListener('input', e => { S.q = e.target.value; renderStores(); });
 $('#order-text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sendOrder(); });
+document.addEventListener('change', e => {
+  const m = e.target.id.match(/^(order|reply)-when$/);
+  if (m) return whenHint(m[1]);
+  if (e.target.id === 'talk-pick') { S.talkSel = e.target.value; refreshTalks(); }
+});
 $('#chips').innerHTML = CHIPS.map(([t], i) => `<button data-i="${i}">${t}</button>`).join('');
 
 // ---------------------------------------------------------------- 불러오기
