@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://subyeon.qrmenuasia.com/sitemap.xml

@@ -8,9 +8,9 @@
     ko: {
       loading: '불러오는 중…', save: '저장하고 손님 화면에 반영', saving: '저장하는 중…(번역 포함, 잠시 걸려요)', saved: '저장했어요. 손님 화면에는 1분 안에 반영돼요.',
       dirty: '저장하지 않은 변경이 있어요', clean: '저장된 상태', history: '이전 버전', reset: '처음 메뉴로 되돌리기', srcLang: '내가 입력하는 언어',
-      srcHelp: '한국어와 베트남어 두 칸에 직접 써 주세요. 영어·중국어·일본어는 자동 번역을 시도하고, 안 되면 입력한 글자가 그대로 보여요.', info: '가게 정보', phone: '전화번호', address: '주소', wifi: '와이파이', ssid: '이름', pw: '비밀번호',
+      srcHelp: '한국어와 베트남어 두 칸에 직접 써 주세요. 영어·중국어·일본어는 자동 번역을 시도하고, 안 되면 입력한 글자가 그대로 보여요.', info: '가게 정보', hours: '영업시간', hoursPh: '예: 11:00 – 22:00', phone: '전화번호', address: '주소', wifi: '와이파이', ssid: '이름', pw: '비밀번호',
       cats: '메뉴 분류', addCat: '+ 분류 추가', addItem: '+ 메뉴 추가', catName: '분류 이름', note: '안내 문구(선택)', name: '메뉴 이름', price: '가격(₫ 또는 ₩)', priceAsk: '비우면 "가격 문의"',
-      desc: '설명(선택)', spicy: '매운 메뉴', tag: '표시', tagNone: '없음', tagBest: 'BEST', tagNew: '신메뉴', tagSpecial: '추천', photo: '사진', photoAdd: '사진 올리기', photoDel: '사진 지우기',
+      desc: '설명(선택)', spicy: '매운 메뉴', soldOut: '품절', tag: '표시', tagNone: '없음', tagBest: 'BEST', tagNew: '신메뉴', tagSpecial: '추천', photo: '사진', photoAdd: '사진 올리기', photoDel: '사진 지우기',
       other: '다른 언어로 보이는 글자', auto: '자동 번역', todo: '번역 대기', emptyAuto: '(저장하면 자동 번역)', del: '삭제', up: '▲', down: '▼', sizes: '여러 가격',
       confirmDel: '정말 삭제할까요?', confirmReset: '고친 내용을 모두 지우고 처음 메뉴로 되돌릴까요? (이전 버전 기록은 남아요)', confirmRestore: '이 버전으로 되돌릴까요?', restore: '이 버전으로',
       noHist: '아직 저장 기록이 없어요', upErr: '사진을 올리지 못했어요', upBig: '사진이 너무 커요', authErr: '로그인이 풀렸어요. 다시 로그인해 주세요.', blocked: '로그인 시도가 너무 많아 잠시 막혔어요. 한 시간 뒤 다시 해 주세요.',
@@ -20,9 +20,9 @@
     vi: {
       loading: 'Đang tải…', save: 'Lưu và hiển thị cho khách', saving: 'Đang lưu (có dịch tự động, hơi lâu)…', saved: 'Đã lưu. Khách sẽ thấy trong vòng 1 phút.',
       dirty: 'Có thay đổi chưa lưu', clean: 'Đã lưu', history: 'Phiên bản cũ', reset: 'Khôi phục menu ban đầu', srcLang: 'Ngôn ngữ tôi nhập',
-      srcHelp: 'Vui lòng tự nhập vào hai ô tiếng Hàn và tiếng Việt. Tiếng Anh, Trung, Nhật sẽ thử dịch tự động; nếu không được, khách sẽ thấy chữ bạn đã nhập.', info: 'Thông tin quán', phone: 'Số điện thoại', address: 'Địa chỉ', wifi: 'Wi-Fi', ssid: 'Tên', pw: 'Mật khẩu',
+      srcHelp: 'Vui lòng tự nhập vào hai ô tiếng Hàn và tiếng Việt. Tiếng Anh, Trung, Nhật sẽ thử dịch tự động; nếu không được, khách sẽ thấy chữ bạn đã nhập.', info: 'Thông tin quán', hours: 'Giờ mở cửa', hoursPh: 'VD: 11:00 – 22:00', phone: 'Số điện thoại', address: 'Địa chỉ', wifi: 'Wi-Fi', ssid: 'Tên', pw: 'Mật khẩu',
       cats: 'Nhóm món', addCat: '+ Thêm nhóm', addItem: '+ Thêm món', catName: 'Tên nhóm', note: 'Ghi chú (không bắt buộc)', name: 'Tên món', price: 'Giá (₫ hoặc ₩)', priceAsk: 'Để trống = "Hỏi giá"',
-      desc: 'Mô tả (không bắt buộc)', spicy: 'Món cay', tag: 'Nhãn', tagNone: 'Không', tagBest: 'BEST', tagNew: 'Món mới', tagSpecial: 'Đề xuất', photo: 'Ảnh', photoAdd: 'Tải ảnh lên', photoDel: 'Xóa ảnh',
+      desc: 'Mô tả (không bắt buộc)', spicy: 'Món cay', soldOut: 'Hết món', tag: 'Nhãn', tagNone: 'Không', tagBest: 'BEST', tagNew: 'Món mới', tagSpecial: 'Đề xuất', photo: 'Ảnh', photoAdd: 'Tải ảnh lên', photoDel: 'Xóa ảnh',
       other: 'Chữ hiển thị ở ngôn ngữ khác', auto: 'dịch tự động', todo: 'chờ dịch', emptyAuto: '(sẽ tự dịch khi lưu)', del: 'Xóa', up: '▲', down: '▼', sizes: 'Nhiều mức giá',
       confirmDel: 'Bạn chắc chắn muốn xóa?', confirmReset: 'Xóa mọi chỉnh sửa và quay về menu ban đầu? (Lịch sử phiên bản vẫn còn)', confirmRestore: 'Khôi phục phiên bản này?', restore: 'Dùng phiên bản này',
       noHist: 'Chưa có lịch sử lưu', upErr: 'Không tải được ảnh', upBig: 'Ảnh quá lớn', authErr: 'Phiên đăng nhập đã hết. Vui lòng đăng nhập lại.', blocked: 'Đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 1 giờ.',
@@ -129,6 +129,7 @@
           ${it.sizes ? '' : `<div style="max-width:170px"><label>${T.price}</label><input data-k="price" type="number" inputmode="numeric" value="${it.price ?? ''}" placeholder="${T.priceAsk}"></div>`}
         </div>${sizes}
         <div class="tools">
+          <label class="btn sm" style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" data-k="soldOut" style="width:auto;margin:0"${it.soldOut ? ' checked' : ''}> ${T.soldOut}</label>
           <button class="btn sm" data-a="photo">${T.photoAdd}</button>${it.photo ? `<button class="btn sm" data-a="photodel">${T.photoDel}</button>` : ''}
           <button class="btn sm" data-a="up">${T.up}</button><button class="btn sm" data-a="down">${T.down}</button><button class="btn sm danger" data-a="del">${T.del}</button>
         </div>
@@ -168,6 +169,7 @@
         ${msg ? `<div class="msg ${msg.ok ? 'ok' : ''}">${esc(msg.text)}</div>` : ''}
         <div class="box"><div class="small">${T.srcHelp}</div></div>
         <div class="box"><b>${T.info}</b>
+          ${typeof D.info.hours === 'string' ? `<div class="row"><div><label>${T.hours}</label><input data-i="hours" value="${esc(D.info.hours)}" placeholder="${esc(T.hoursPh)}"></div></div>` : ''}
           <div class="row"><div><label>${T.phone}</label><input data-i="phone" value="${esc(D.info.phone)}"></div><div><label>${T.address}</label><input data-i="address" value="${esc(D.info.address)}"></div></div>
           <div class="row"><div><label>${T.wifi} · ${T.ssid}</label><input data-i="ssid" value="${esc(D.info.wifi && D.info.wifi.ssid)}"></div><div><label>${T.wifi} · ${T.pw}</label><input data-i="wpw" value="${esc(D.info.wifi && D.info.wifi.password)}"></div></div>
         </div>
@@ -182,7 +184,7 @@
       const t = e.target, k = t.dataset.k, lg = t.dataset.l, box = t.closest('.item, .cat'), item = t.closest('.item');
       if (t.dataset.i) {
         const f = t.dataset.i;
-        if (f === 'phone' || f === 'address') D.info[f] = t.value;
+        if (f === 'hours' || f === 'phone' || f === 'address') D.info[f] = t.value;
         else { D.info.wifi = D.info.wifi || { ssid: '', password: '' }; D.info.wifi[f === 'ssid' ? 'ssid' : 'password'] = t.value; }
         return touch();
       }
@@ -195,6 +197,7 @@
         else if (k === 'desc') { it.desc = it.desc || {}; editSrc(it.desc, lg, t.value); }
         else if (k === 'tag') it.tag = t.value || undefined;
         else if (k === 'spicy') it.spicy = t.checked || undefined;
+        else if (k === 'soldOut') { if (t.checked) it.soldOut = true; else delete it.soldOut; }
         else if (t.dataset.ol) editOther(it.name, t.dataset.ol, t.value);
         else if (t.dataset.size !== undefined) it.sizes[+t.dataset.size][1] = Number(t.value) || 0;
       } else if (k === 'cname') editSrc(c.name, lg, t.value);
@@ -260,7 +263,7 @@
       root.textContent = T.loading;
       try {
         const j = await api(`/api/menu?action=load&shop=${opts.shop}`);
-        D = { menu: j.menu || [], info: { phone: j.info?.phone ?? '', address: j.info?.address ?? '', wifi: j.info?.wifi ?? null }, srcLang: j.srcLang || 'vi', updatedAt: j.updatedAt, source: j.source };
+        D = { menu: j.menu || [], info: { hours: j.info?.hours, phone: j.info?.phone ?? '', address: j.info?.address ?? '', wifi: j.info?.wifi ?? null }, srcLang: j.srcLang || 'vi', updatedAt: j.updatedAt, source: j.source };
         dirty = false; msg = null; paint();
       } catch (er) { root.textContent = ''; setMsg(er.message === 'auth' ? T.authErr : er.message === 'blocked' ? T.blocked : T.fail); root.innerHTML = `<div class="msg">${esc(msg.text)}</div>`; }
     }

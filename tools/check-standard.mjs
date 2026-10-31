@@ -90,18 +90,23 @@ for (const id of ids) {
     try { vm.runInNewContext(m, sbx); } catch (e) { err.push('menu.js 실행 오류: ' + e.message); }
     const R = sbx.window.RESTAURANT || {}, MENU = sbx.window.MENU || [];
     for (const k of ['phone', 'address']) if (!R[k]) warn.push(`RESTAURANT.${k} 비어 있음`);
-    let n = 0;
+    // 영업시간 칸 (가게 찾기용은 항상, 2026-10-28 새 가게부터)
+    if (listing && !(R.hours && h.includes('id="hours"'))) warn.push('영업시간 칸 없음 — menu.js 의 RESTAURANT.hours 와 index.html 의 id="hours" 칸 (new-shop.mjs 가 만들어 줌)');
+    let n = 0, photos = 0;
     for (const cat of MENU) for (const it of cat.items || []) {
       n++;
       for (const l of ['ko', 'en', 'zh', 'ja', 'vi']) if (!it.name?.[l]) err.push(`메뉴 "${it.name?.ko}" ${l} 이름 없음`);
       if (it.price === undefined && !it.sizes) err.push(`메뉴 "${it.name?.ko}" 가격 없음 (시가는 price: null)`);
       if (it.photo) {
+        photos++;
         const f = path.join(ROOT, d, it.photo);
         if (!fs.existsSync(f)) err.push(`사진 없음: ${it.photo}`);
         else { const z = size(f); if (z && Math.max(...z) < 360) warn.push(`작은 사진 ${it.photo} ${z.join("×")} — 메뉴판 속 그림을 잘라 쓴 것 아닌가 (긴 변 640px 정도 고화질만)`); }
       }
     }
     if (!n) err.push('메뉴가 없음');
+    // 요리 사진 최소 4장 (사용자 지시 2026-10-30, 쓸 만한 음식 사진이 4장 미만이면 있는 것 전부)
+    if (photos < 4) warn.push(`요리 사진 ${photos}장 — 최소 4장. 애매한 사진은 메뉴판과 대조해 채운다 (음식 사진이 정말 4장 미만이면 docs/todo.md 에 적기)`);
   } else err.push('menu.js 없음');
   // ⑧ 등록
   if (!store) err.push('sales/stores/data.js 에 없음');

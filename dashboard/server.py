@@ -19,6 +19,7 @@ import ssl
 import subprocess
 import threading
 import time
+import urllib.error
 import urllib.request
 import uuid
 from datetime import datetime, timezone
@@ -34,6 +35,23 @@ HOST, PORT = "127.0.0.1", 8899
 HOME = Path.home()
 SHOP_RE = re.compile(r"^[a-z0-9]+$")
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+
+
+# 사용자가 직접 넣는 비밀값(Windows 사용자 환경변수). 서버를 켠 뒤에 넣어도 읽히게 레지스트리(HKCU\Environment)를
+# 그때그때 직접 읽는다(2026-10-30: 탐색기가 옛 환경을 갖고 있어 다시 켜도 QRMENU_ADMIN_KEY 가 안 읽힌 건). 저장·출력하지 않는다.
+SECRET_ENV = ("QRMENU_ADMIN_KEY", "VERCEL_TOKEN", "JINWOO_HR_EMAIL", "JINWOO_HR_PASSWORD", "JINWOO_HR_URL", "JINWOO_HR_KEY")
+
+
+def user_env(name):
+    try:
+        import winreg
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Environment") as k:
+            v = str(winreg.QueryValueEx(k, name)[0]).strip()
+            if v:
+                return v
+    except (ImportError, OSError):
+        pass
+    return (os.environ.get(name) or "").strip() or None
 
 
 def sh(args, timeout=60, cwd=ROOT):
@@ -216,7 +234,7 @@ def build_team():
             roles[m.group(1)] = {"model": m.group(2).strip(), "job": m.group(3).strip()}
     bullets = [re.sub(r"\*\*", "", l[2:]).strip() for l in sec.splitlines() if l.startswith("- ")]
     agy_note = next((b for b in bullets if "안티그래비티" in b), "")
-    codex_note = next((b for b in bullets if "코덱스" in b), "")
+    codex_note = next((b for b in bullets if "운영 감찰관" in b), "")
     lead = re.search(r"메인은 ([^.]+)\.", sec)
 
     def ver(cmd):
@@ -244,7 +262,7 @@ RECENT_KEYS = {
     "finder": r"finder|사진 고르|모음 이미지",
     "agy": r"agy|안티그래비티",
     "menu-reader": r"menu-reader|메뉴 읽기|메뉴판 읽",
-    "codex": r"codex|코덱스",
+    "codex": r"codex|코덱스|운영 감찰관|재대조",
     "reviewer": r"reviewer|검토|점검",
     "polisher": r"polisher|번역",
 }
@@ -264,7 +282,7 @@ def build_recent():
 
 # ---------------------------------------------------------------- ④ 방문 기록
 def build_visits():
-    key = os.environ.get("QRMENU_ADMIN_KEY")
+    key = user_env("QRMENU_ADMIN_KEY")
     how = ("방문 수는 qrmenuasia.com 의 /api/stats(관리자 비밀번호 필요)에서만 나온다. "
            "연결하려면 이 PC 사용자 환경변수 QRMENU_ADMIN_KEY 에 관리자 비밀번호를 직접 넣고 대시보드를 다시 켠다. "
            "지금은 https://qrmenuasia.com/admin → 방문 현황에서 본다.")
@@ -278,6 +296,174 @@ def build_visits():
         return {"status": "ok", "days": 30, "generatedAt": data.get("generatedAt"), "shops": shops}
     except Exception as e:
         return {"status": "연결 필요", "how": how, "error": str(e)[:200]}
+
+
+# ---------------------------------------------------------------- 인력 앱(jinwoo-hr) 읽기 전용
+# - 계정: 사용자가 jinwoo-hr '사용자 관리'에서 직접 만든 대시보드 전용 현장관리자 계정(2026-10-29 결정 가-1).
+#   이메일·비밀번호는 사용자가 직접 넣은 Windows 사용자 환경변수 JINWOO_HR_EMAIL·JINWOO_HR_PASSWORD (저장·출력하지 않음).
+# - Supabase 주소·공개(publishable) 키는 jinwoo-hr 공개 화면 파일에서 읽는다(JINWOO_HR_URL·JINWOO_HR_KEY 가 있으면 그것).
+# - 로그인(토큰 받기) 말고는 GET 만 한다. insert/update/delete 를 보내는 코드는 없다.
+# - 화면에는 거래처·제품 이름까지, AI(비서실장)에게는 숫자 합계만(out/hr.json) 넘긴다. 근로자 이름·연락처는 읽지도 않는다.
+HR_SITE = "https://jinwoo-hr.vercel.app"
+HR_AI_FILE = OUT / "hr.json"
+HR_HOW = ("인력 앱을 읽으려면 대시보드 전용 현장관리자 계정이 필요해요. jinwoo-hr '사용자 관리'에서 계정을 만들고(권한: 현장관리자, 담당 거래처는 지정하지 않음), "
+          "Windows 사용자 환경변수 JINWOO_HR_EMAIL·JINWOO_HR_PASSWORD 에 직접 넣은 뒤 대시보드를 다시 켜 주세요(docs/dashboard.md '인력 앱 계정 넣기').")
+_hr_auth = {}
+
+
+def hr_config():
+    url, key = user_env("JINWOO_HR_URL"), user_env("JINWOO_HR_KEY")
+    if url and key:
+        return url.rstrip("/"), key
+
+    def scrape():
+        with urllib.request.urlopen(HR_SITE + "/", timeout=15) as r:
+            html = r.read().decode("utf-8", "replace")
+        for js in re.findall(r'src="(/assets/[^"]+\.js)"', html):
+            with urllib.request.urlopen(HR_SITE + js, timeout=20) as r:
+                code = r.read().decode("utf-8", "replace")
+            u = re.search(r"https://[a-z0-9]+\.supabase\.co", code)
+            k = re.search(r"sb_publishable_[A-Za-z0-9_-]{10,}", code)
+            if u and k:
+                return u.group(0), k.group(0)
+        raise RuntimeError("인력 앱 화면 파일에서 Supabase 주소를 못 찾음")
+    return cached("hr_config", 24 * 3600, scrape)
+
+
+def hr_token(url, key):
+    if _hr_auth.get("token") and time.time() < _hr_auth.get("until", 0):
+        return _hr_auth["token"]
+    body = json.dumps({"email": user_env("JINWOO_HR_EMAIL"), "password": user_env("JINWOO_HR_PASSWORD")}).encode()
+    req = urllib.request.Request(url + "/auth/v1/token?grant_type=password", data=body, method="POST",
+                                 headers={"apikey": key, "Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as r:
+            d = json.loads(r.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        raise RuntimeError("로그인 실패(이메일·비밀번호 확인)" if e.code in (400, 401) else f"로그인 실패 {e.code}")
+    _hr_auth.update(token=d["access_token"], until=time.time() + int(d.get("expires_in", 3600)) - 120)
+    return _hr_auth["token"]
+
+
+def hr_get(url, key, token, table, query):
+    """읽기만(GET). 1000줄씩 끝까지."""
+    rows, off = [], 0
+    while True:
+        req = urllib.request.Request(f"{url}/rest/v1/{table}?{query}&limit=1000&offset={off}",
+                                     headers={"apikey": key, "Authorization": "Bearer " + token})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            part = json.loads(r.read().decode("utf-8"))
+        rows += part
+        if len(part) < 1000:
+            return rows
+        off += 1000
+
+
+def build_hr():
+    if not (user_env("JINWOO_HR_EMAIL") and user_env("JINWOO_HR_PASSWORD")):
+        return {"status": "연결 필요", "how": HR_HOW}
+    try:
+        url, key = hr_config()
+        token = hr_token(url, key)
+    except Exception as e:
+        _hr_auth.clear()
+        return {"status": "연결 필요", "how": HR_HOW, "error": str(e)[:200]}
+    vn = datetime.now(timezone.utc).timestamp() + 7 * 3600  # 베트남 시간 기준 날짜
+    today = datetime.fromtimestamp(vn, timezone.utc).strftime("%Y-%m-%d")
+    days = [datetime.fromtimestamp(vn - i * 86400, timezone.utc).strftime("%Y-%m-%d") for i in (2, 1, 0)]  # 그저께·어제·오늘
+    m0 = today[:8] + "01"
+    errors = []
+
+    def get(table, query):
+        try:
+            return hr_get(url, key, token, table, query)
+        except Exception as e:
+            errors.append(f"{table}: " + (f"{e.code}" if hasattr(e, "code") else str(e)[:80]))
+            return None
+    names = {c["id"]: c["name"] for c in get("client_labels", "select=id,name") or []}
+    entries = get("daily_entries", f"select=client_id,entry_date,shift,headcount&entry_date=gte.{min(m0, days[0])}&entry_date=lte.{today}") or []
+    plans = get("headcount_plans", f"select=client_id,plan_date,shift,headcount&plan_date=gte.{m0}&plan_date=lte.{today[:8]}31")
+    prods = {p["id"]: p["name"] for p in get("sorting_products", "select=id,name") or []}
+    sorts = get("sorting_records", f"select=product_id,record_date,inspected,defect_counts&record_date=gte.{m0}&record_date=lte.{today}") or []
+
+    num = lambda v: float(v or 0)
+    per = {}
+
+    def c(cid):
+        return per.setdefault(cid, {"name": names.get(cid, "?"), "today": 0, "todayPlan": 0, "month": 0, "monthPlan": 0,
+                                    "days": {d: {"day": 0, "night": 0} for d in days}})
+    t = {"day": 0, "night": 0}
+    month = 0
+    for e in entries:
+        h = num(e["headcount"])
+        if e["entry_date"] in days:
+            dd = c(e["client_id"])["days"][e["entry_date"]]
+            dd[e["shift"]] = dd.get(e["shift"], 0) + h
+        if e["entry_date"] < m0:  # 월초에는 지난달 어제·그저께도 읽는다(3일 표용)
+            continue
+        month += h
+        c(e["client_id"])["month"] += h
+        if e["entry_date"] == today:
+            t[e["shift"]] = t.get(e["shift"], 0) + h
+            c(e["client_id"])["today"] += h
+    plan_today = plan_to_date = plan_month = 0
+    for p in plans or []:
+        h = num(p["headcount"])
+        plan_month += h
+        if p["plan_date"] <= today:
+            plan_to_date += h
+            c(p["client_id"])["monthPlan"] += h
+        if p["plan_date"] == today:
+            plan_today += h
+            c(p["client_id"])["todayPlan"] += h
+    srt = {"todayInspected": 0, "todayDefects": 0, "monthInspected": 0, "monthDefects": 0}
+    byprod = {}
+    for r in sorts:
+        ins = num(r["inspected"])
+        dfc = sum(num(v) for v in (r.get("defect_counts") or {}).values())
+        srt["monthInspected"] += ins
+        srt["monthDefects"] += dfc
+        if r["record_date"] == today:
+            srt["todayInspected"] += ins
+            srt["todayDefects"] += dfc
+        b = byprod.setdefault(r["product_id"], {"name": prods.get(r["product_id"], "?"), "inspected": 0, "defects": 0})
+        b["inspected"] += ins
+        b["defects"] += dfc
+    rate = lambda d, i: round(d / i * 100, 2) if i else None
+    srt["todayRate"] = rate(srt["todayDefects"], srt["todayInspected"])
+    srt["monthRate"] = rate(srt["monthDefects"], srt["monthInspected"])
+    srt["products"] = sorted(({**b, "rate": rate(b["defects"], b["inspected"])} for b in byprod.values()), key=lambda b: -b["inspected"])[:12]
+    res = {"status": "ok", "date": today, "days": days, "at": datetime.now().strftime("%H:%M"), "errors": errors,
+           "today": {"day": t["day"], "night": t["night"], "total": t["day"] + t["night"], "plan": plan_today if plans is not None else None},
+           "month": {"actual": month, "planToDate": plan_to_date if plans is not None else None, "planMonth": plan_month if plans is not None else None,
+                     "pct": round(month / plan_to_date * 100) if plans and plan_to_date else None},
+           "clients": sorted(per.values(), key=lambda x: (-x["today"], -sum(v["day"] + v["night"] for v in x["days"].values()), -x["month"])),
+           "sorting": srt,
+           # 오늘 주간·야간 보고(daily_entries 한 줄이라도 있으면 보고함). 표를 못 읽었으면 None → 사무실에 표시 안 함
+           "report": None if any(x.startswith("daily_entries") for x in errors) else
+                     {s: any(e["entry_date"] == today and e["shift"] == s for e in entries) for s in ("day", "night")}}
+    # AI(비서실장)용: 숫자 합계만, 이름 없음
+    try:
+        OUT.mkdir(exist_ok=True)
+        HR_AI_FILE.write_text(json.dumps({"date": today, "at": res["at"], "today": res["today"], "month": res["month"],
+                                          "clients": len(per), "sorting": {k: v for k, v in srt.items() if k != "products"}},
+                                         ensure_ascii=False, indent=1), encoding="utf-8")
+    except OSError:
+        pass
+    return res
+
+
+def hr_line():
+    h = cached("hr", 120, build_hr)
+    if h["status"] != "ok":
+        return "인력: 연결 필요(인력공급팀 자리를 눌러 안내 보기)"
+    n = lambda v: f"{v:g}"
+    s = f"인력: 오늘 투입 {n(h['today']['total'])}명(주 {n(h['today']['day'])}·야 {n(h['today']['night'])})"
+    if h["month"]["pct"] is not None:
+        s += f" · 이번 달 계획 대비 {h['month']['pct']}%"
+    if h["sorting"]["monthRate"] is not None:
+        s += f" · 선별 불량률 {h['sorting']['monthRate']}%"
+    return s
 
 
 # ---------------------------------------------------------------- ⑤ 할당량
@@ -352,12 +538,19 @@ CLAUDE_USAGE = HOME / ".claude" / "qrmenu-usage.json"  # dashboard/claude-usage.
 def claude_quota(now):
     """Claude Code 상태줄 입력의 rate_limits(5시간·주간)를 claude-usage.mjs 가 파일로 남긴 것을 읽는다."""
     q = {"name": "Claude", "status": "확인 불가", "bars": [],
-         "how": "상태줄 설정은 걸려 있지만 데스크톱 앱(Code 탭)은 상태줄을 돌리지 않아 기록이 안 생긴다. "
+         "how": "대시보드에서 지시를 한 번 실행하면 그때의 5시간·주간 %가 기록된다(Claude 앱의 플랜 사용량과 같은 값). "
+                "데스크톱 앱(Code 탭)은 상태줄을 돌리지 않아 따로 기록이 안 생긴다. "
                 "터미널에서 claude 를 열어 한 번 대화하면 그때의 5시간·주간 %가 기록된다. "
                 "그 전에는 Claude 앱 입력창 아래 사용량 표시나 claude.ai → 설정 → 사용량에서 본다."}
+    d, src = None, "~/.claude/qrmenu-usage.json"
     try:
         d = json.loads(CLAUDE_USAGE.read_text(encoding="utf-8"))
     except Exception:
+        pass
+    ev = latest_order_limits()
+    if ev and (not d or ev["mtime"] > CLAUDE_USAGE.stat().st_mtime):
+        d, src = ev["data"], "대시보드 지시 실행 기록"
+    if not d:
         return q
     for key, label in (("five_hour", "5시간"), ("seven_day", "주간")):
         w = (d.get("rate_limits") or {}).get(key)
@@ -367,9 +560,31 @@ def claude_quota(now):
         q["bars"].append({"label": label, "used": round(float(w.get("used_percentage", 0)), 1), "resetsAt": reset,
                           "resetIn": max(0, int(reset - now)) if reset else None, "stale": bool(reset and reset < now)})
     if q["bars"]:
-        q.update(status="ok", recordedAt=d.get("at"), source="~/.claude/qrmenu-usage.json",
-                 note="Claude Code를 쓸 때만 새로 기록됨")
+        q.update(status="ok", recordedAt=d.get("at"), source=src,
+                 note="대시보드 지시를 실행할 때마다 새로 기록됨(Claude 앱의 플랜 사용량과 같은 값)")
     return q
+
+
+def latest_order_limits():
+    """가장 최근 지시 기록(orders/*.jsonl)의 마지막 rate_limit_event → claude_quota 가 읽는 모양으로."""
+    files = sorted(ORDERS_DIR.glob("*.jsonl"), key=lambda f: f.stat().st_mtime, reverse=True)[:5] if ORDERS_DIR.is_dir() else []
+    for f in files:
+        try:
+            lines = f.read_text(encoding="utf-8", errors="replace").splitlines()
+        except Exception:
+            continue
+        for line in reversed(lines):
+            if '"rate_limit_event"' not in line:
+                continue
+            try:
+                w = json.loads(line)["rate_limit_info"]["unifiedWindows"]
+            except Exception:
+                continue
+            mt = f.stat().st_mtime
+            rl = {k: {"used_percentage": round(float(v.get("utilization", 0)) * 100, 1), "resets_at": v.get("resetsAt")}
+                  for k, v in w.items() if k in ("five_hour", "seven_day")}
+            return {"mtime": mt, "data": {"rate_limits": rl, "at": datetime.fromtimestamp(mt, timezone.utc).isoformat()}}
+    return None
 
 
 def gemini_quota(now):
@@ -529,7 +744,7 @@ def start_job(tool, shop, desk):
     return job, None
 
 
-# ---------------------------------------------------------------- 지시 → 클로드 자동 실행 (2026-10-28)
+# ---------------------------------------------------------------- 지시 → 비서실장(Claude Code) 자동 실행 (2026-10-28)
 # 대시보드 지시창에서 보낸 말을 이 PC의 Claude Code(claude -p, 창 없이)로 저장소에서 실행한다.
 # - Pro 구독 로그인으로만 돈다: API 키 환경변수는 지워서 넘긴다(추가 비용 0원).
 # - 외부 연결(MCP: Vercel·드라이브 등)은 끈다 → 배포는 여기서 할 수 없다. push·merge·reset·삭제 명령도 막는다.
@@ -539,19 +754,30 @@ ORDERS_DIR = HERE / "orders"  # 지시 기록 (git 제외)
 ORDERS, PROCS = {}, {}
 ORDER_LOCK = threading.Lock()
 ORDER_TIMEOUT = 40 * 60
+CODEX_POSIX = "/" + str(Path(os.environ.get("APPDATA", "")) / "npm" / "codex").replace(":", "").replace("\\", "/")
+CODEX_POSIX = CODEX_POSIX[0] + CODEX_POSIX[1].lower() + CODEX_POSIX[2:]  # /c/Users/.../npm/codex
+
+
 ORDER_RULES = """이 지시는 사용자(캡틴)가 대시보드 'Jinwoo 에이전트'에서 보낸 것이다. CLAUDE.md·docs 규칙을 그대로 따른다.
 - 사용자에게 되물을 수 없다. 결정이 필요하면 거기서 멈추고, 끝 보고에 번호 보기 2~3개(추천 표시)를 쓴다. 사용자가 결재함에서 답하면 이 대화가 이어진다.
 - 이 실행에는 외부 연결(Vercel·드라이브 커넥터)이 없다. 배포·git push·main 머지·결제·외부 발송·삭제는 하지 않는다. 드라이브 사진은 동기화 폴더 G:\\내 드라이브\\QR메뉴판 에서 읽는다.
-- 배포가 필요하면 '결재: 배포'로 올리고, 확정되면 "Claude 앱에서 '배포해'라고 말해 주세요"라고 보고한다.
-- 고친 파일은 지금 브랜치에 커밋한다(push 안 함).
-- 마지막 답: 결론부터 3줄(쉬운 말). 사용자 결재·답이 필요하면 맨 끝 줄을 '결재: <무엇을 확정할지 한 줄>'로 쓴다."""
+- 너는 배포하지 않는다. 가게가 점검(check-standard·check-listing·shot·reviewer)을 통과하고 커밋까지 끝나 배포만 남았으면, 결재 줄 대신 맨 끝 줄을 '배포준비: <가게id>'(여러 곳이면 쉼표)로 쓴다. 캡틴이 결재함에서 [배포 확정]을 누르면 대시보드가 직접 배포한다.
+- 너는 '비서실장'(지휘)이다. 일은 CLAUDE.md 5장 순서대로 담당에게 맡긴다: 사진 고르기·모음 이미지 = finder, 메뉴판 읽기 = 안티그래비티(`agy -p`, 계획 모드) → 안 되면 menu-reader, 가격 재확인 = 운영 감찰관(안티그래비티 안 Claude Sonnet, 아래 명령) → 2번 실패하면 reviewer, 꾸미기 = designer, 번역 = polisher, 마지막 점검 = reviewer. 직접 하지 않는다.
+- 담당이 막히지 않게(2026-10-29 토정삼계탕 건): finder 의 모음 이미지는 `python tools/photos.py sheet <사진폴더> .scratch/<가게>/sheet.jpg` 한 줄로(파일 쓰기 명령 `cat >` 금지). 안티그래비티는 먼저 `python tools/photos.py shrink <사진폴더> .scratch/<가게>/menus`로 줄인 뒤 `cd .scratch/<가게>/menus && agy --mode plan -p "menu_01.jpg … menu_05.jpg …"`처럼 **한 번에 5장 이하**. 가격·빠진 메뉴 재대조(2026-10-30 사용자 결정 '다-1')는 같은 줄인 사진 폴더에서 `cd .scratch/<가게>/menus && agy --mode plan --model claude-sonnet-5-5-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … menu_05.jpg 를 열어 아래 표와 대조해줘. 가격이 다른 것·빠진 메뉴만 짧게. 못 열면 '사진 못 봄'. <표>"`(5장 이하씩). "명령 도구는 쓰지 말고 파일 보기 도구로만"을 빼면 막힌다. 코덱스·GPT-OSS는 쓰지 않는다. 화면 꾸미기(index.html 스타일)는 designer 가 하고 비서실장은 직접 고치지 않는다. 담당이 실패하면 2번까지 다시 맡기고, 그래도 안 되면 보고에 이유를 쓴다.
+- 비서실장이 이미지를 직접 보는 것은 메뉴판·모음 이미지·최종 화면, 모두 3~4번까지다.
+- 마지막 보고 끝에 '담당별 사용' 표(담당 | 한 일 | 토큰)와 이미지 직접 본 횟수를 붙인다. 빠진 담당이 있으면 이유를 쓴다.
+- 고친 파일은 지금 브랜치에 커밋한다(push 안 함). seo·analytics 도구가 내 가게 밖(다른 가게 sitemap 날짜 등)을 바꿨으면 커밋하지 말고 `git restore -- <그 파일들>`로 되돌려 작업 폴더를 깨끗하게 둔다.
+- 가게를 만들거나 고쳤으면 끝에 `node tools/shot.mjs <가게id> ko dashboard/out`으로 폰 화면 캡처를 만들고(맨 위 로고·간판 사진이 보이는지 직접 확인), 보고에 '캡처: <가게id>-ko.png' 줄을 쓴다. 캡틴은 결재함에서 이 캡처를 본다. 백그라운드 실행·sleep 대기는 쓰지 않는다(창 없는 실행이라 마지막 보고가 덮인다).
+- 인력 현황(인력공급·선별) 질문은 dashboard/out/hr.json(대시보드 /api/hr 요약, 숫자만)을 읽어 보고한다. 인력 앱(jinwoo-hr)·Supabase에 직접 접속하거나 그 데이터를 고치지 않는다. 파일이 없으면 '인력 앱 연결 필요'라고 쓴다.
+- 마지막 답: 결론부터 3줄(쉬운 말). 이 대화에서 이어 할 결정이 있을 때만 맨 끝 줄을 '결재: <무엇을 확정할지 한 줄>'로 쓴다. 결재할 것이 없으면 결재 줄을 쓰지 않는다."""
+ORDER_RULES = ORDER_RULES.replace("CODEX_PATH", CODEX_POSIX)
 ORDER_ALLOW = ["Read", "Edit", "Write", "Glob", "Grep", "Agent", "TodoWrite",
                "Bash(node:*)", "Bash(python:*)", "Bash(python3:*)", "Bash(sh tools/*)", "Bash(bash _shared/*)",
-               "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git show:*)", "Bash(git add:*)", "Bash(git commit:*)",
+               "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git show:*)", "Bash(git add:*)", "Bash(git commit:*)", "Bash(git restore:*)",
                "Bash(ls:*)", "Bash(cp:*)", "Bash(mkdir:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(grep:*)", "Bash(find:*)", "Bash(wc:*)",
-               "Bash(ffmpeg:*)", "Bash(magick:*)"]
+               "Bash(ffmpeg:*)", "Bash(magick:*)", "Bash(agy:*)", "Bash(codex exec:*)", "Bash(codex.cmd exec:*)", f"Bash({CODEX_POSIX} exec:*)", "Bash(cd:*)", "Bash(rm sales/img/qr-*.json)", "Bash(rm -f sales/img/qr-*.json)"]
 ORDER_DENY = ["Bash(git push:*)", "Bash(git merge:*)", "Bash(git reset:*)", "Bash(git checkout:*)", "Bash(git switch:*)",
-              "Bash(git rebase:*)", "Bash(git clean:*)", "Bash(rm:*)", "Bash(curl:*)", "Bash(npx vercel:*)", "Bash(vercel:*)",
+              "Bash(git rebase:*)", "Bash(git clean:*)", "Bash(rm -rf:*)", "Bash(rm -r:*)", "Bash(git branch -D:*)", "Bash(curl:*)", "Bash(npx vercel:*)", "Bash(vercel:*)",
               "WebFetch", "WebSearch"]
 
 
@@ -594,17 +820,45 @@ def step_text(block):
     return f"{name} · {what[:90]}" if what else name
 
 
+# 일하는 담당 알아보기: Agent 도구의 subagent_type, 또는 비서실장이 돌린 agy·codex 명령 → 사무실 자리 id
+DESK_OF = {"finder": "finder", "menu-reader": "menu-reader", "reviewer": "reviewer", "polisher": "polisher", "designer": "designer"}
+
+
+def desk_of(block):
+    name, inp = block.get("name"), block.get("input") or {}
+    if name in ("Agent", "Task"):
+        return DESK_OF.get(inp.get("subagent_type") or "", None)
+    if name == "Bash":
+        cmd = str(inp.get("command") or "")
+        if re.search(r"(^|[\s;&|/])agy(\.exe)?\s", cmd):
+            # 안티그래비티 안 Claude 모델 = 운영 감찰관(가격 재대조, 2026-10-30), 나머지 = 메뉴 검사관(메뉴판 읽기)
+            return "codex" if re.search(r"--model[ =]claude-", cmd) else "agy"
+        if re.search(r"(^|[\s;&|/])codex(\.cmd)?\s+exec", cmd):
+            return "codex"
+    return None
+
+
 def run_order(o, prompt):
+    try:
+        cached("hr", 120, build_hr)  # 비서실장이 읽을 out/hr.json 을 새로 만든다
+    except Exception:
+        pass
     exe = claude_exe()
-    args = [exe, "-p", "--output-format", "stream-json", "--verbose", "--permission-mode", "acceptEdits",
+    args = [exe, "-p", "--output-format", "stream-json", "--verbose", "--permission-mode", "auto",
             "--strict-mcp-config", "--append-system-prompt", ORDER_RULES,
             "--add-dir", r"G:\내 드라이브\QR메뉴판",
             "--allowedTools", *ORDER_ALLOW, "--disallowedTools", *ORDER_DENY]
     if o.get("sessionId"):
         args += ["--resume", o["sessionId"]]
-    env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT")}
+    env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT", *SECRET_ENV)}  # 비밀값은 AI에게 안 넘김
+    # 코덱스(npm 설치)·안티그래비티 폴더를 PATH 앞에 붙인다: 창 없는 실행의 셸에서 'codex: command not found'가 났다(2026-10-29)
+    extra = [str(Path(os.environ.get("APPDATA", "")) / "npm"), str(Path(os.environ.get("LOCALAPPDATA", "")) / "agy" / "bin")]
+    env.update(PYTHONUTF8="1", PYTHONIOENCODING="utf-8")  # 한글 경로·출력에서 python 도구가 죽지 않게
+    env["PATH"] = os.pathsep.join([d for d in extra if Path(d).is_dir()] + [env.get("PATH", "")])
     log = ORDERS_DIR / f"{o['id']}.jsonl"
     result, err = None, None
+    owners = {}  # 도구 호출 id → 그 일을 하는 담당 (담당 안에서 부른 도구도 그 담당 몫)
+    o["active"] = []
     try:
         p = subprocess.Popen(args, cwd=str(ROOT), stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                              env=env, creationflags=NO_WINDOW)
@@ -623,20 +877,33 @@ def run_order(o, prompt):
                 with ORDER_LOCK:
                     if ev.get("session_id"):
                         o["sessionId"] = ev["session_id"]
+                    parent = owners.get(ev.get("parent_tool_use_id"))
                     if ev.get("type") == "assistant":
                         for b in (ev.get("message") or {}).get("content") or []:
                             if b.get("type") == "tool_use":
-                                o["steps"] = (o.get("steps") or [])[-29:] + [{"text": step_text(b), "at": time.time()}]
+                                who = desk_of(b) if not parent else None
+                                if who:
+                                    owners[b.get("id")] = who
+                                o["steps"] = (o.get("steps") or [])[-29:] + [{"text": step_text(b), "who": who or parent or "claude", "at": time.time()}]
                             elif b.get("type") == "text" and b.get("text", "").strip():
                                 o["last"] = b["text"].strip()[-400:]
+                    elif ev.get("type") == "user" and not parent:
+                        content = (ev.get("message") or {}).get("content")
+                        for b in content if isinstance(content, list) else []:
+                            if b.get("type") == "tool_result":
+                                owners.pop(b.get("tool_use_id"), None)
                     elif ev.get("type") == "result":
                         result = ev
+                    o["active"] = sorted(set(owners.values()))
+                    # 이 지시에서 일한 자리(끝나면 녹색 '작업 완료'로 남는다, 2026-10-30)
+                    o["worked"] = sorted(set(o.get("worked") or ["claude"]) | set(owners.values()))
         p.wait()
         killer.cancel()
     except Exception as e:
         err = str(e)[:300]
     with ORDER_LOCK:
         PROCS.pop(o["id"], None)
+        o["active"] = []
         if o.get("status") == "stopping":
             o["status"], text = "stopped", "사용자가 멈췄습니다."
         elif result and not result.get("is_error"):
@@ -648,11 +915,20 @@ def run_order(o, prompt):
                 text = ("Claude Code 로그인이 필요합니다(처음 한 번만). dashboard\\claude-login.bat 을 두 번 눌러 "
                         "'Claude account with subscription'으로 로그인한 뒤 /exit 하고, 여기서 '답하기'로 다시 보내 주세요.")
         m = re.search(r"^\s*결재\s*[:：]\s*(.+)$", text, re.M)
-        o["approval"] = m.group(1).strip() if (m and o["status"] == "done") else None
+        # '결재: 없음(…)'은 결재가 아니다 (2026-10-28 확정이 되풀이된 건)
+        o["approval"] = m.group(1).strip() if (m and o["status"] == "done" and not re.match(r"(없음|없습니다|해당 없음)", m.group(1).strip())) else None
         o["decision"] = None
+        o["seenAt"] = None  # 새 보고 → 캡틴이 결재함에서 다시 열어 볼 때까지 '작업 완료' 표시
+        # 캡처: 보고의 '캡처: <파일>.png' 줄 → 결재함에 그림으로 보여 준다(dashboard/out 안 파일만)
+        shots = [Path(x).name for x in re.findall(r"^\s*캡처\s*[:：]\s*`?([^\s`]+\.png)", text, re.M)]
+        o["images"] = sorted(set((o.get("images") or []) + [f for f in shots if (OUT / f).is_file()]))
+        d = re.search(r"^\s*배포\s*준비\s*[:：]\s*(.+)$", text, re.M)
+        o["deploy"] = [x for x in re.findall(r"[a-z0-9]+", d.group(1)) if (ROOT / "restaurants" / x / "index.html").exists()] if (d and o["status"] == "done") else None
+        o["deployState"] = None
         if result:
             u = result.get("usage") or {}
-            o["tokens"] = (o.get("tokens") or 0) + sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens"))
+            o["tokens"] = (o.get("tokens") or 0) + sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
+            o["tokensVersion"] = 2  # 2026-10-28부터 다시 읽은 것(cache read)까지 센다. 그 전 기록은 적게 나옴
         o["turns"].append({"by": "claude", "text": text, "at": time.time()})
         o["endedAt"] = time.time()
         save_order(o)
@@ -716,6 +992,18 @@ def reply_order(oid, text, approve):
     return o, None
 
 
+def seen_order(oid):
+    """캡틴이 결재함에서 끝난 지시를 열어 봄 → 배포 없는 지시는 사무실 '작업 완료' 표시가 사라진다(폰·PC 같이)."""
+    with ORDER_LOCK:
+        o = ORDERS.get(oid)
+        if not o:
+            return "없는 지시"
+        if o["status"] == "done" and not o.get("seenAt"):
+            o["seenAt"] = time.time()
+            save_order(o)
+    return None
+
+
 def stop_order(oid):
     with ORDER_LOCK:
         o, p = ORDERS.get(oid), PROCS.get(oid)
@@ -726,10 +1014,181 @@ def stop_order(oid):
     return None
 
 
+def open_order_terminal(oid):
+    """PC에서 그 지시의 대화를 Claude Code 창(터미널)으로 연다. 창 없는 실행이라 Claude 앱 목록에는 안 보이기 때문."""
+    with ORDER_LOCK:
+        o = ORDERS.get(oid)
+        if not o or not o.get("sessionId"):
+            return "열 대화가 없어요"
+        if o["status"] in ("running", "stopping"):
+            return "실행 중에는 열 수 없어요. 끝난 뒤에 열어 주세요."
+        sid = o["sessionId"]
+    if not re.fullmatch(r"[0-9a-f-]{36}", sid):
+        return "대화 ID가 이상해요"
+    exe = claude_exe()
+    if not exe:
+        return "Claude Code 실행 파일을 찾지 못함"
+    subprocess.Popen(["cmd.exe", "/c", "start", "Claude Code", exe, "--resume", sid], cwd=str(ROOT), shell=False)
+    return None
+
+
 def orders_view():
     with ORDER_LOCK:
         rows = sorted(ORDERS.values(), key=lambda o: -o["createdAt"])[:40]
         return [json.loads(json.dumps({k: v for k, v in o.items() if not k.startswith("_")})) for o in rows]
+
+
+# ---------------------------------------------------------------- 배포 확정 → Vercel (2026-10-28, 사용자 결정 '다-1')
+# 캡틴이 결재함에서 [배포 확정]을 누를 때만 돈다. AI(claude -p)는 토큰을 보지도 쓰지도 않는다 — 이 서버가 직접 한다.
+# - 토큰: 사용자가 직접 넣은 Windows 사용자 환경변수 VERCEL_TOKEN (저장·출력하지 않음). 넣은 뒤 대시보드를 다시 켜야 읽힌다.
+# - 순서(CLAUDE.md 3장): 작업 브랜치만 push(main 금지) → main 포함 확인 → 가게 배포(gitSource) → 새 가게면 로그인 보호·도메인
+#   → 가게 찾기용이면 qrmenu-intro 도 같은 커밋으로(직전 배포 커밋이 내 브랜치에 들어 있을 때만) → 사이트맵 주소 수 확인.
+# - 결제·요금제·도메인 구매 API 는 부르지 않는다.
+VERCEL_TEAM = "team_0rG2nNozGYqyREs926yHTVBs"  # jinwoo8
+GIT_ORG, GIT_REPO = "jinujeon05-blip", "short-form"
+DEPLOYS = {}  # 주문 id → 진행 상태
+
+
+def vercel_token():
+    return user_env("VERCEL_TOKEN") or ""
+
+
+def vapi(method, path, body=None):
+    sep = "&" if "?" in path else "?"
+    req = urllib.request.Request(f"https://api.vercel.com{path}{sep}teamId={VERCEL_TEAM}", method=method,
+                                 data=json.dumps(body).encode() if body is not None else None,
+                                 headers={"Authorization": "Bearer " + vercel_token(), "Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return r.status, json.loads(r.read().decode("utf-8") or "{}")
+    except urllib.error.HTTPError as e:
+        try:
+            return e.code, json.loads(e.read().decode("utf-8") or "{}")
+        except Exception:
+            return e.code, {}
+
+
+def deploy_one(project, root, branch, sha, new_ok, log):
+    """프로젝트 하나를 gitSource 로 production 배포하고 READY 까지 기다린다."""
+    code, prj = vapi("GET", f"/v9/projects/{project}")
+    is_new = code == 404
+    if not is_new:  # 같은 커밋이 이미 배포돼 있으면 다시 빌드하지 않는다(다시 누를 때 비용 아낌)
+        c2, lst = vapi("GET", f"/v6/deployments?projectId={project}&target=production&limit=1")
+        last = (lst.get("deployments") or [{}])[0]
+        prev = (last.get("meta") or {}).get("githubCommitSha")
+        same = prev == sha or (prev and sh(["git", "diff", "--quiet", prev, sha, "--", root])[0] == 0)
+        if same and (last.get("readyState") or last.get("state")) == "READY":
+            log(f"{project}: 배포된 것과 {root} 내용이 같아 건너뜀")
+            return False
+    if is_new and not new_ok:
+        raise RuntimeError(f"{project} 프로젝트가 없어요")
+    body = {"name": project, "project": project, "target": "production",
+            "gitSource": {"type": "github", "org": GIT_ORG, "repo": GIT_REPO, "ref": branch, "sha": sha}}
+    if is_new:
+        body["projectSettings"] = {"rootDirectory": root, "framework": None, "buildCommand": None,
+                                   "outputDirectory": None, "installCommand": None, "devCommand": None}
+    log(f"{project}: 배포 시작" + (" (새 프로젝트)" if is_new else ""))
+    code, d = vapi("POST", "/v13/deployments", body)
+    if code >= 300:
+        raise RuntimeError(f"{project} 배포 요청 실패: {(d.get('error') or {}).get('message', code)}")
+    did = d["id"]
+    for _ in range(120):  # 최대 10분
+        time.sleep(5)
+        code, d = vapi("GET", f"/v13/deployments/{did}")
+        st = d.get("readyState") or d.get("status")
+        if st in ("READY", "ERROR", "CANCELED"):
+            break
+    if st != "READY":
+        raise RuntimeError(f"{project} 배포 {st or '시간 초과'} (Vercel 화면에서 기록 확인)")
+    log(f"{project}: 배포 완료")
+    if is_new:
+        vapi("PATCH", f"/v9/projects/{project}", {"ssoProtection": {"deploymentType": "prod_deployment_urls_and_all_previews"}})
+    return is_new
+
+
+def run_deploy(o, shops):
+    def log(t):
+        with ORDER_LOCK:
+            o["deployLog"] = (o.get("deployLog") or []) + [t]
+    try:
+        code, branch = sh(["git", "branch", "--show-current"])
+        branch = branch.strip()
+        if not branch or branch == "main":
+            raise RuntimeError("main 브랜치에서는 배포하지 않아요(작업 브랜치에서만)")
+        # 배포는 push 한 커밋으로 하므로, 배포할 가게 폴더와 sales 에 커밋 안 한 수정이 없으면 된다.
+        # (seo 도구가 다른 가게 sitemap 날짜를 바꿔 둔 것은 배포와 상관없다 — 2026-10-29 바삭치킨 건)
+        code, dirty = sh(["git", "status", "--porcelain", "--untracked-files=no", "--", "sales", *[f"restaurants/{s}" for s in shops]])
+        if dirty.strip():
+            raise RuntimeError("배포할 가게·가게 찾기 파일에 커밋 안 한 수정이 있어요: " + " ".join(l[3:] for l in dirty.splitlines()[:5]))
+        sh(["git", "fetch", "origin", "main"], timeout=120)
+        code, _ = sh(["git", "merge-base", "--is-ancestor", "origin/main", "HEAD"])
+        if code != 0:
+            raise RuntimeError("이 브랜치에 최신 main이 없어요. 비서실장에게 'origin/main 합쳐줘'를 먼저 시켜 주세요.")
+        code, out = sh(["git", "push", "origin", f"HEAD:refs/heads/{branch}"], timeout=180)
+        if code != 0:
+            raise RuntimeError("깃허브에 올리기(push) 실패: " + out.strip()[-200:])
+        sha = sh(["git", "rev-parse", "HEAD"])[1].strip()
+        log(f"깃허브에 올림: {branch} {sha[:7]}")
+        listing = False
+        for shop in shops:
+            deploy_one(f"{shop}-menu", f"restaurants/{shop}", branch, sha, True, log)
+            # 새 프로젝트가 아니어도 도메인이 없으면 붙인다(프로젝트만 먼저 생기고 도메인이 빠진 경우 — 2026-10-31 구이구이 404 건)
+            code, _ = vapi("GET", f"/v9/projects/{shop}-menu/domains/{shop}.qrmenuasia.com")
+            if code == 404:
+                code, d = vapi("POST", f"/v10/projects/{shop}-menu/domains", {"name": f"{shop}.qrmenuasia.com"})
+                log(f"도메인 {shop}.qrmenuasia.com " + ("연결" if code < 300 else f"연결 실패({(d.get('error') or {}).get('message', code)})"))
+            listing = listing or f"id: '{shop}'" in read("sales/stores/data.js") or f'id: "{shop}"' in read("sales/stores/data.js")
+        if listing:
+            # 가게 찾기·사이트맵: 직전 production 배포 커밋이 내 브랜치에 들어 있어야 다른 가게가 빠지지 않는다
+            code, lst = vapi("GET", "/v6/deployments?projectId=qrmenu-intro&target=production&limit=1")
+            prev = ((lst.get("deployments") or [{}])[0].get("meta") or {}).get("githubCommitSha")
+            # squash 머지를 쓰면 커밋이 이어지지 않으므로(2026-10-28 한사리 c0b58a2 건) 가게 목록으로 비교한다:
+            # 직전 배포의 가게가 모두 지금 목록에 있어야 한다
+            if prev and sh(["git", "merge-base", "--is-ancestor", prev, "HEAD"])[0] != 0:
+                sh(["git", "fetch", "origin", prev], timeout=120)
+                code, old = sh(["git", "show", f"{prev}:sales/stores/data.js"])
+                ids = lambda t: set(re.findall(r"^\s*\{ id: [\"']([a-z0-9]+)", t, re.M))
+                if code != 0:
+                    raise RuntimeError(f"qrmenu-intro 직전 배포({prev[:7]})의 가게 목록을 읽지 못해 멈췄어요.")
+                missing = ids(old) - ids(read("sales/stores/data.js"))
+                if missing:
+                    raise RuntimeError(f"qrmenu-intro 직전 배포({prev[:7]})에 있던 가게가 이 브랜치에 없어요: {', '.join(sorted(missing))}. 먼저 합쳐야 해요.")
+                log(f"qrmenu-intro 직전 배포({prev[:7]})의 가게는 모두 들어 있음")
+            deploy_one("qrmenu-intro", "sales", branch, sha, False, log)
+            try:
+                with urllib.request.urlopen("https://qrmenuasia.com/sitemap.xml", timeout=30) as r:
+                    n = r.read().decode("utf-8").count("<loc>")
+                stores = len(re.findall(r"^\s*\{ id:", read("sales/stores/data.js"), re.M))
+                log(f"사이트맵 주소 {n}개 (가게 {stores}곳 + 2 = {stores + 2}개여야 함)" + (" ✔" if n == stores + 2 else " ✘ 확인 필요"))
+            except Exception as e:
+                log(f"사이트맵 확인 실패: {e}")
+        with ORDER_LOCK:
+            o["deployState"] = "done"
+            o["turns"].append({"by": "system", "text": "배포 완료: " + ", ".join(f"https://{s}.qrmenuasia.com" for s in shops)
+                               + "\n" + "\n".join(o.get("deployLog") or []), "at": time.time()})
+    except Exception as e:
+        with ORDER_LOCK:
+            o["deployState"] = "fail"
+            o["turns"].append({"by": "system", "text": "배포 멈춤: " + str(e)[:300] + "\n" + "\n".join(o.get("deployLog") or []), "at": time.time()})
+    with ORDER_LOCK:
+        save_order(o)
+    _cache.pop("stores", None)
+
+
+def start_deploy(oid):
+    if not vercel_token():
+        return "Vercel 토큰이 없어요. 대시보드 안내대로 VERCEL_TOKEN 을 넣고 대시보드를 다시 켜 주세요."
+    with ORDER_LOCK:
+        o = ORDERS.get(oid)
+        if not o or not o.get("deploy"):
+            return "배포할 가게가 없는 지시예요"
+        if o["status"] in ("running", "stopping") or any(x.get("deployState") == "running" for x in ORDERS.values()):
+            return "실행 중인 일이 끝난 뒤에 눌러 주세요"
+        o.update(deployState="running", deployLog=[])
+        o["turns"].append({"by": "me", "text": "배포 확정: " + ", ".join(o["deploy"]), "at": time.time(), "approve": True})
+        save_order(o)
+    threading.Thread(target=run_deploy, args=(o, list(o["deploy"])), daemon=True).start()
+    return None
 
 
 # ---------------------------------------------------------------- 브리핑·업무 기록
@@ -740,7 +1199,7 @@ def build_activity():
     for line in out.splitlines():
         t, sha, msg = (line.split("\t", 2) + ["", ""])[:3]
         if t.isdigit():
-            who = next((w for w, pat in RECENT_KEYS.items() if pat and re.search(pat, msg, re.I)), "claude")
+            who = "claude"  # 커밋은 비서실장이 한다(설명 글자로 담당을 짐작하면 틀림)
             items.append({"at": int(t), "who": who, "kind": "commit", "text": msg, "ref": sha})
     for o in orders_view():
         for tr in o["turns"]:
@@ -770,7 +1229,11 @@ def build_brief():
     bars = cached("quota", 60, build_quota)["claude"]["bars"]
     worst = max((b["used"] for b in bars if not b["stale"]), default=None)
     line3 = f"남은 할 일 {todo}건 · Claude 한도 " + (f"{worst}% 사용" if worst is not None else "확인 불가(Claude 앱 입력창 아래에서 확인)")
-    return {"lines": [line1, line2, line3], "at": datetime.now().strftime("%H:%M")}
+    try:
+        line4 = hr_line()
+    except Exception:
+        line4 = "인력: 읽기 실패(잠시 뒤 새로고침)"
+    return {"lines": [line1, line2, line3, line4], "at": datetime.now().strftime("%H:%M")}
 
 
 # ---------------------------------------------------------------- HTTP
@@ -846,9 +1309,11 @@ class Handler(BaseHTTPRequestHandler):
                 jobs = sorted(JOBS.values(), key=lambda j: -j["startedAt"])
                 return self.json({"jobs": [dict(j) for j in jobs]})
         if p == "/api/orders":
-            return self.json({"orders": orders_view(), "ready": claude_exe() is not None})
+            return self.json({"orders": orders_view(), "ready": claude_exe() is not None, "vercel": bool(vercel_token())})
         if p == "/api/activity":
             return self.json({"items": build_activity()})
+        if p == "/api/hr":
+            return self.json(cached("hr", 120, build_hr))
         if p == "/api/brief":
             return self.json(build_brief())
         return self.send_error(404)
@@ -874,6 +1339,17 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json({"error": err}, 400)
             return self.json({"job": job})
         path = urlparse(self.path).path
+        if path == "/api/deploy":
+            err = start_deploy(str(body.get("id", "")))
+            return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
+        if path == "/api/order/seen":
+            err = seen_order(str(body.get("id", "")))
+            return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
+        if path == "/api/order/open":
+            if isinstance(self, RemoteHandler):
+                return self.json({"error": "대화 창은 PC에서만 열 수 있어요"}, 400)
+            err = open_order_terminal(str(body.get("id", "")))
+            return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
         if path in ("/api/order", "/api/order/reply", "/api/order/stop"):
             via = "phone" if isinstance(self, RemoteHandler) else "pc"
             if path == "/api/order":

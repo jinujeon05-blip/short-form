@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1b1410">
+<title>CTQ 텍사스 BBQ 메뉴 · CTQ TEXAS BBQ 미딩점</title>
+<meta name="description" content="CTQ 텍사스 BBQ 미딩점 · CTQ TEXAS BBQ · Tiệm thịt hun khói kiểu Texas — Mỹ Đình, Hà Nội">
+<style>
+  :root {
+    --paper: #1b1410;
+    --paper-2: #2a1f18;
+    --band: #3b271b;
+    --band-2: #f2c230;
+    --ink: #f3e8d6;
+    --muted: #b5a38b;
+    --line: #3a2d24;
+    --rust: #b8452a;
+    --gold: #f2c230;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; color: var(--ink); background: var(--paper);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.4;
+  }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── 상단 ── */
+  header { position: relative; overflow: hidden; text-align: center; padding: 12px 0 30px; background: linear-gradient(180deg, #2a1c13, var(--paper)); border-bottom: 3px solid var(--rust); }
+  header::after { content: ""; position: absolute; left: 0; right: 0; bottom: 9px; height: 6px; background: radial-gradient(circle, var(--gold) 2px, transparent 2.5px) 0 0 / 22px 6px repeat-x; opacity: .7; pointer-events: none; }
+  .langs { position: relative; z-index: 1; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: rgba(0,0,0,.35); border: 1px solid #5a4333; border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: #1b1410; background: var(--band); border-color: var(--band); }
+  .logo { display: block; width: 132px; height: auto; margin: 26px auto 0; }
+  .logo.sign { width: 100%; max-width: 440px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 4px; border: 2px solid #5a4333; box-shadow: 0 0 22px rgba(242,194,48,.25); margin-top: 18px; }
+  h1 { margin: 6px 0 0; font-size: 36px; font-weight: 900; letter-spacing: 3px; line-height: 1; }
+  .en { margin: 6px 0 0; font-size: 15px; font-weight: 700; letter-spacing: 3px; color: var(--gold); }
+  .tagline { margin: 12px 0 0; font-size: 14.5px; font-weight: 600; color: var(--muted); }
+  .chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 14px; position: relative; z-index: 1; }
+  .chips span { font-size: 12.5px; font-weight: 700; color: var(--gold); background: var(--paper-2); border: 1px solid #5a4333; border-radius: 4px; padding: 4px 11px; }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; background: var(--band); box-shadow: 0 4px 12px rgba(0,0,0,.5); border-bottom: 1px solid #5a4333; }
+  nav .wrap { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-top: 7px; padding-bottom: 7px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: #dccdb5; text-decoration: none; font-size: 14px; font-weight: 700; padding: 8px 12px; border-radius: 999px; white-space: nowrap; }
+  nav a.active { color: #1b1410; background: var(--gold); }
+
+  /* ── 메뉴 ── */
+  section { padding: 30px 0 6px; }
+  .head { display: flex; align-items: center; gap: 12px; }
+  .head::before, .head::after { content: ""; flex: 1; height: 3px; border-top: 1px solid var(--rust); border-bottom: 1px solid var(--rust); }
+  h2 { margin: 0; font-size: 25px; font-weight: 900; letter-spacing: 1px; color: var(--gold); text-align: center; }
+  h2 small { display: block; margin-top: 3px; font-size: 14px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
+  .note { margin: 12px 0 0; font-size: 13.5px; color: var(--ink); background: var(--paper-2); border-left: 3px solid var(--rust); border-radius: 0 6px 6px 0; padding: 8px 12px; }
+  .tip { margin: 14px 0 0; font-size: 13.5px; color: var(--ink); background: var(--paper-2); border: 1px dashed #7a5a3f; border-radius: 6px; padding: 10px 12px; }
+  .tip b { color: var(--gold); margin-right: 4px; }
+
+  ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  li { display: flex; gap: 12px; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  .thumb { flex: none; width: 96px; height: 72px; border-radius: 4px; overflow: hidden; padding: 0; border: 1px solid #5a4333; background: var(--paper); cursor: zoom-in; }
+  .thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .info { flex: 1; min-width: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 3px; }
+  .tags span { font-size: 10.5px; font-weight: 800; letter-spacing: .3px; color: #fff; background: var(--rust); border-radius: 3px; padding: 1px 6px; }
+  .tags .best { background: var(--gold); color: #1b1410; }
+  .tags .special { background: #8a5a2b; }
+  .tags .hot { background: transparent; color: #ff8a6b; border: 1px solid #b8452a; }
+  .row { display: flex; align-items: baseline; gap: 8px; }
+  .row b { font-size: 17px; font-weight: 800; }
+  .row .unit { font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .row .leader { flex: 1; min-width: 10px; border-bottom: 2px dotted #6b513c; transform: translateY(-4px); }
+  .price { font-size: 16px; font-weight: 800; color: var(--gold); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .price small { font-size: 11px; color: var(--muted); margin-left: 1px; }
+  .sizes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+  .sizes span { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; background: var(--paper-2); color: var(--gold); border: 1px solid #5a4333; border-radius: 4px; padding: 2px 8px; }
+  .sizes span i { font-style: normal; font-size: 11px; font-weight: 800; color: #fff; background: var(--rust); border-radius: 3px; padding: 0 4px; margin-right: 5px; }
+  .desc { margin-top: 4px; font-size: 13px; color: #cdbca3; }
+  .sub { margin-top: 3px; font-size: 13px; color: var(--muted); }
+  .sub.it { font-style: italic; }
+
+  /* ── 가게 정보 ── */
+  footer { margin-top: 40px; background: var(--band); border-top: 3px solid var(--rust); color: #f3e8d6; padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); }
+  .quote { text-align: center; font-size: 15px; line-height: 1.7; margin: 0 0 18px; }
+  .quote small { display: block; margin-top: 4px; font-size: 12.5px; opacity: .8; }
+  .pills { display: grid; gap: 10px; }
+  .pill { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; text-align: left; color: var(--ink); text-decoration: none; background: var(--paper); border: 1px solid #5a4333; border-radius: 6px; padding: 10px 14px 10px 10px; cursor: pointer; }
+  .pill i { flex: none; width: 40px; height: 40px; border-radius: 6px; display: grid; place-items: center; background: var(--rust); }
+  .pill i svg { width: 20px; height: 20px; color: #fff; }
+  .pill div { flex: 1; min-width: 0; }
+  .pill small { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .pill strong { display: block; font-size: 16px; font-weight: 800; word-break: break-word; }
+  .pill em { flex: none; font-style: normal; font-size: 12px; font-weight: 700; color: var(--gold); }
+  .vnd { text-align: center; margin: 16px 0 0; font-size: 12px; opacity: .8; }
+
+  .zoom { position: fixed; inset: 0; z-index: 30; display: none; place-items: center; padding: 16px; background: rgba(10,6,4,.92); cursor: zoom-out; }
+  .zoom.show { display: grid; }
+  .zoom figure { margin: 0; max-width: 560px; width: 100%; }
+  .zoom img { width: 100%; border-radius: 16px; display: block; background: var(--paper); }
+  .zoom figcaption { margin-top: 10px; text-align: center; font-size: 16px; font-weight: 800; color: #fff; }
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 40; background: var(--gold); color: #1b1410; font-size: 14px; font-weight: 700; padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+<style id="partner-theme">
+  /* 하단 파트너 배너(다산·JS welink) 색을 이 메뉴판에 맞춘다 */
+  :root { --pt-mode: dark; --pt-bg: #2a1f18; --pt-ink: #f3e8d6; --pt-muted: #b5a38b; --pt-line: #3a2d24; --pt-accent: #f2c230; --pt-btn: #b8452a; --pt-btn-ink: #fff; --pt-shadow: 0 6px 16px rgba(0,0,0,.5); }
+</style>
+<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
+<link rel="canonical" href="https://texasbbq.qrmenuasia.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CTQ 텍사스 BBQ 메뉴 · CTQ TEXAS BBQ 미딩점">
+<meta property="og:description" content="CTQ 텍사스 BBQ 미딩점 · CTQ TEXAS BBQ · Tiệm thịt hun khói kiểu Texas — Mỹ Đình, Hà Nội">
+<meta property="og:url" content="https://texasbbq.qrmenuasia.com/">
+<meta property="og:image" content="https://texasbbq.qrmenuasia.com/img/sign.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"CTQ 텍사스 BBQ 미딩점 CTQ TEXAS BBQ","url":"https://texasbbq.qrmenuasia.com/","address":{"@type":"PostalAddress","streetAddress":"Tòa nhà CT1 (giao Trần Văn Lai – Vũ Quỳnh), KĐT Mỹ Đình, Xuân Phương, Hà Nội","addressCountry":"VN"},"telephone":"0962322111","image":"https://texasbbq.qrmenuasia.com/img/sign.jpg","servesCuisine":["American","Texas BBQ","Smoked meat","Barbecue"],"hasMenu":{"@type":"Menu","name":"CTQ 텍사스 BBQ 미딩점 CTQ TEXAS BBQ menu","inLanguage":["ko","en","zh","ja","vi"],"hasMenuSection":[{"@type":"MenuSection","name":"Smoked Pork","hasMenuItem":[{"@type":"MenuItem","name":"6-Hour Smoked Pork Ribs","alternateName":["6시간 훈제 돼지갈비","Sườn heo 6H","6小时烟熏猪肋排","6時間スモーク豚スペアリブ"],"offers":{"@type":"Offer","price":299000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"6-Hour Smoked Premium Pork Shoulder","alternateName":["6시간 훈제 프리미엄 돼지 어깨살","Vai heo đầu rồng 6H","6小时烟熏优质猪肩肉","6時間スモーク プレミアム豚肩肉"],"offers":{"@type":"Offer","price":199000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"6-Hour Smoked Pork Belly Rolls","alternateName":["6시간 훈제 삼겹살 롤","Ba chỉ cuốn 6H","6小时烟熏五花肉卷","6時間スモーク豚バラロール"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"4-Hour Smoked Pork Cheeks","alternateName":["4시간 훈제 돼지 볼살","Má heo 4H","4小时烟熏猪颊肉","4時間スモーク豚ほほ肉"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Smoked Beef","hasMenuItem":[{"@type":"MenuItem","name":"8-Hour Smoked Tex-Mex Beef Belly","alternateName":["8시간 훈제 텍스멕스 우삼겹","Ba chỉ bò Texmex 8H","8小时烟熏德墨风味牛腩","8時間スモーク テクスメクス風牛バラ"],"offers":{"@type":"Offer","price":299000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"10-Hour Smoked Beef Brisket / Shoulder","alternateName":["10시간 훈제 소 양지·어깨살","Ức/vai bò 10H","10小时烟熏牛胸肉/牛肩肉","10時間スモーク 牛ブリスケット/肩肉"],"offers":{"@type":"Offer","price":680000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"12-Hour Smoked Premium AAA Beef Ribs","alternateName":["12시간 훈제 프리미엄 AAA 소갈비","Sườn bò AAA cao cấp 12H","12小时烟熏优质AAA牛肋排","12時間スモーク プレミアムAAA牛カルビ"],"offers":{"@type":"Offer","price":980000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Smoked Sapa Salmon","hasMenuItem":[{"@type":"MenuItem","name":"8-Hour Low & Slow Smoked Sapa Salmon","alternateName":["8시간 저온 훈제 사파 연어","Cá hồi Sapa chín chậm 8H","8小时低温慢熏沙坝三文鱼","8時間低温スモーク サパサーモン"],"offers":{"@type":"Offer","price":850000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"The Best Texas BBQ","hasMenuItem":[{"@type":"MenuItem","name":"Beef Brisket / Shoulder + Texas Sausage","alternateName":["소 양지·어깨살 + 텍사스 소시지","Ức/vai bò 10H + xúc xích Texas","牛胸肉/牛肩肉 + 德州香肠","牛ブリスケット/肩肉 + テキサスソーセージ"],"offers":{"@type":"Offer","price":680000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Premium AAA Beef Ribs + Texas Sausage","alternateName":["프리미엄 AAA 소갈비 + 텍사스 소시지","Sườn bò AAA + xúc xích Texas","优质AAA牛肋排 + 德州香肠","プレミアムAAA牛カルビ + テキサスソーセージ"],"offers":{"@type":"Offer","price":980000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Combo Sets","hasMenuItem":[{"@type":"MenuItem","name":"Texas A (2–3 people)","alternateName":["텍사스 A (2~3인)","Texas A (2–3 người)","德州A套餐(2~3人)","テキサスA(2〜3人前)"],"offers":{"@type":"Offer","price":499000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Texas B (2–3 people)","alternateName":["텍사스 B (2~3인)","Texas B (2–3 người)","德州B套餐(2~3人)","テキサスB(2〜3人前)"],"offers":{"@type":"Offer","price":499000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Texas C (2–3 people)","alternateName":["텍사스 C (2~3인)","Texas C (2–3 người)","德州C套餐(2~3人)","テキサスC(2〜3人前)"],"offers":{"@type":"Offer","price":599000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Texas D (2–3 people)","alternateName":["텍사스 D (2~3인)","Texas D (2–3 người)","德州D套餐(2~3人)","テキサスD(2〜3人前)"],"offers":{"@type":"Offer","price":799000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Texas Combo: Ribs, Chicken & Sides (2–3 people)","alternateName":["텍사스 콤보 (등갈비·치킨·사이드, 2~3인)","Combo Texas: sườn, gà & món phụ (2–3 người)","德州组合(肋排·鸡肉·配菜,2~3人)","テキサスコンボ(スペアリブ・チキン・サイド、2〜3人前)"],"offers":{"@type":"Offer","price":699000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cowboy A (5–6 people)","alternateName":["카우보이 A (5~6인)","Cowboy A (5–6 người)","牛仔A套餐(5~6人)","カウボーイA(5〜6人前)"],"offers":{"@type":"Offer","price":699000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cowboy B (5–6 people)","alternateName":["카우보이 B (5~6인)","Cowboy B (5–6 người)","牛仔B套餐(5~6人)","カウボーイB(5〜6人前)"],"offers":{"@type":"Offer","price":699000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cowboy C (5–6 people)","alternateName":["카우보이 C (5~6인)","Cowboy C (5–6 người)","牛仔C套餐(5~6人)","カウボーイC(5〜6人前)"],"offers":{"@type":"Offer","price":799000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cowboy D (5–6 people)","alternateName":["카우보이 D (5~6인)","Cowboy D (5–6 người)","牛仔D套餐(5~6人)","カウボーイD(5〜6人前)"],"offers":{"@type":"Offer","price":1115000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Party & Premium Sets","hasMenuItem":[{"@type":"MenuItem","name":"Texas BBQ Luxury (1kg Tomahawk)","alternateName":["텍사스 BBQ 럭셔리 (토마호크 1kg)","Texas BBQ Luxury (Tomahawk 1kg)","德州BBQ奢华套餐(战斧牛排1kg)","テキサスBBQ ラグジュアリー(トマホーク1kg)"],"offers":{"@type":"Offer","price":2800000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cowboy Party Platter 6B","alternateName":["카우보이 파티 플래터 6B (6인)","Mâm tiệc thịt nướng Cao Bồi 6B","牛仔派对拼盘6B(6人)","カウボーイ パーティープラッター6B(6人前)"],"offers":{"@type":"Offer","price":3090000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cowboy Party Platter 8A","alternateName":["카우보이 파티 플래터 8A (8인)","Mâm tiệc thịt nướng Cao Bồi 8A","牛仔派对拼盘8A(8人)","カウボーイ パーティープラッター8A(8人前)"],"offers":{"@type":"Offer","price":3290000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Smoked Bites","hasMenuItem":[{"@type":"MenuItem","name":"Smoked Chicken Wings","alternateName":["훈제 치킨 윙","Cánh gà xông khói","烟熏鸡翅","スモークチキンウィング"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bacon-Wrapped Peppers","alternateName":["베이컨 고추말이","Ớt cuộn bacon","培根辣椒卷","ベーコン巻きペッパー"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fried Chicken with 3 Sauces","alternateName":["3가지 소스 치킨","Gà chiên tam vị","三味酱炸鸡","3種ソースのフライドチキン"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Texas Smoked Sausage","alternateName":["텍사스 훈제 소시지","Xúc xích khói Texas","德州烟熏香肠","テキサススモークソーセージ"],"offers":{"@type":"Offer","price":99000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Smoked Pork with Weaver Ants","alternateName":["황개미 훈제 돼지고기","Heo xông khói kiến vàng","黄猄蚁烟熏猪肉","ツムギアリ入りスモーク豚肉"],"offers":{"@type":"Offer","price":99000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Skillets, Stews & Pasta","hasMenuItem":[{"@type":"MenuItem","name":"Mac & Cheese Skillet with Smoked Bacon","alternateName":["훈제 베이컨 맥앤치즈 철판","Chảo mac cheese thịt xông khói","烟熏培根芝士通心粉铁板","スモークベーコンのマカロニチーズ鉄板"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cheese Chicken Skillet","alternateName":["치즈 치킨 철판","Chảo gà phô mai","芝士鸡肉铁板","チーズチキン鉄板"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pork & Vegetable Pie","alternateName":["돼지고기 야채 파이","Bánh pie heo rau củ","猪肉蔬菜派","豚肉と野菜のパイ"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Special Cajun Beef Stew","alternateName":["스페셜 케이준 소고기 스튜","Bò hầm Cajun đặc biệt","特制卡津牛肉炖菜","スペシャル ケイジャンビーフシチュー"],"offers":{"@type":"Offer","price":235000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Special Salted Egg Beef Stew","alternateName":["스페셜 염란(솔티드 에그) 소고기 스튜","Bò hầm trứng muối đặc biệt","特制咸蛋牛肉炖菜","スペシャル 塩卵ビーフシチュー"],"offers":{"@type":"Offer","price":235000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spaghetti Bolognese","alternateName":["볼로네제 스파게티","Mỳ Ý bò băm","肉酱意大利面","ボロネーゼスパゲッティ"],"offers":{"@type":"Offer","price":120000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Creamy Spaghetti (Carbonara)","alternateName":["크림 스파게티 (까르보나라)","Mỳ Ý sốt kem","奶油意大利面(卡邦尼)","クリームスパゲッティ(カルボナーラ)"],"offers":{"@type":"Offer","price":120000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Salads & Sides","hasMenuItem":[{"@type":"MenuItem","name":"Ganbo Seaweed Salad","alternateName":["간보 해초 샐러드","Salad rong biển Ganbo","Ganbo海藻沙拉","Ganbo海藻サラダ"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Celtuce Stem Salad","alternateName":["궁채 나물 무침","Nộm rau tiến vua","凉拌贡菜","貢菜（ステムレタス）のナムル和え"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cowboy Cold Creamy Potato","alternateName":["카우보이 콜드 크림 감자","Khoai kem lạnh Cowboy","牛仔冷奶油土豆","カウボーイ 冷製クリームポテト"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lotus Stem Salad","alternateName":["연줄기 샐러드","Salad ngó sen","莲茎沙拉","蓮の茎サラダ"],"offers":{"@type":"Offer","price":168000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cole Slaw","alternateName":["양배추 코울슬로","Salad bắp cải","卷心菜凉拌沙拉","キャベツのコールスロー"],"offers":{"@type":"Offer","price":129000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Green Garden Chicken Breast Salad","alternateName":["그린 가든 닭가슴살 샐러드","Salad vườn xanh ức gà","田园鸡胸肉沙拉","グリーンガーデン 鶏むね肉サラダ"],"offers":{"@type":"Offer","price":129000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cowboy Garden Salad","alternateName":["카우보이 가든 샐러드","Salad vườn Cao Bồi","牛仔田园沙拉","カウボーイ ガーデンサラダ"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Healthy Cole Slaw Salad","alternateName":["헬시 코울슬로 샐러드","Salad bắp cải healthy","健康卷心菜沙拉","ヘルシーコールスローサラダ"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Healthy Lettuce Salad","alternateName":["헬시 양상추 샐러드","Salad xà lách healthy","健康生菜沙拉","ヘルシーレタスサラダ"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sweet Potato Fries","alternateName":["고구마튀김","Khoai lang chiên","炸红薯条","さつまいもフライ"],"offers":{"@type":"Offer","price":68000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"French Fries","alternateName":["감자튀김","Khoai tây chiên","炸薯条","フライドポテト"],"offers":{"@type":"Offer","price":68000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cajun Fried Mushrooms","alternateName":["케이준 버섯튀김","Nấm chiên Cajun","卡津炸蘑菇","ケイジャン風マッシュルームフライ"],"offers":{"@type":"Offer","price":68000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Classic Nachos","alternateName":["클래식 나초","Nachos classic","经典玉米片","クラシックナチョス"],"offers":{"@type":"Offer","price":68000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bread Set","alternateName":["빵 세트","Set bánh mì","面包套餐","パンセット"],"offers":{"@type":"Offer","price":68000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Drinks & Beer","hasMenuItem":[{"@type":"MenuItem","name":"Craft Beer Pale / Sky","alternateName":["수제 맥주 페일 / 스카이","Bia thủ công Pale / Sky","精酿啤酒 淡色/天空","クラフトビール ペール/スカイ"],"offers":{"@type":"Offer","price":45000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Craft Black Beer","alternateName":["수제 흑맥주 (블랙)","Bia thủ công Black","精酿黑啤","クラフト黒ビール(ブラック)"],"offers":{"@type":"Offer","price":48000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sapporo Draft Beer","alternateName":["삿포로 생맥주","Bia tươi Sapporo","札幌生啤","サッポロ生ビール"],"offers":{"@type":"Offer","price":68000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sapporo Draft Beer Tower","alternateName":["삿포로 생맥주 타워","Tháp bia tươi Sapporo","札幌生啤塔","サッポロ生ビールタワー"],"offers":{"@type":"Offer","price":499000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Hanoi / Saigon Beer","alternateName":["하노이 / 사이공 맥주","Bia Hà Nội / Sài Gòn","河内/西贡啤酒","ハノイ/サイゴンビール"],"offers":{"@type":"Offer","price":20000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Soju","alternateName":["소주","Rượu Soju","烧酒","焼酎(ソジュ)"],"offers":{"@type":"Offer","price":120000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Seasonal Fruit Tea (1L)","alternateName":["계절 과일차 (1리터)","Trà hoa quả theo mùa (1 lít)","时令水果茶(1升)","季節のフルーツティー(1リットル)"],"offers":{"@type":"Offer","price":89000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Coca-Cola / Zero","alternateName":["코카콜라 / 콜라 제로","Coca-Cola / Coca 0 calo","可口可乐/零度可乐","コカ・コーラ/コーラゼロ"],"offers":{"@type":"Offer","price":15000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Water","alternateName":["생수","Nước lọc","矿泉水","ミネラルウォーター"],"offers":{"@type":"Offer","price":10000,"priceCurrency":"VND"}}]}]}}</script>
+<!-- seo:end -->
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="langs" id="langs"></div>
+    <img class="logo sign" src="img/sign.jpg" alt="">
+    <h1>CTQ 텍사스 <span style="color:var(--gold)">BBQ</span></h1>
+    <p class="en">CTQ TEXAS BBQ · 미딩점</p>
+    <p class="tagline" id="tagline"></p>
+    <div class="chips" id="chips"></div>
+  </div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap" id="menu"></main>
+
+<footer>
+  <div class="wrap">
+    <p class="quote" id="quote"></p>
+    <div class="pills">
+      <button class="pill" id="wifi" type="button" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg></i>
+        <div><small id="wifiLabel"></small><strong id="wifiText"></strong></div>
+        <em id="wifiCopy"></em>
+      </button>
+      <div class="pill" id="hours" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></i>
+        <div><small id="hoursLabel"></small><strong id="hoursText"></strong></div>
+      </div>
+      <a class="pill" id="call">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></i>
+        <div><small id="callLabel"></small><strong id="callText"></strong></div>
+      </a>
+      <a class="pill" id="map" target="_blank" rel="noopener">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></i>
+        <div><small id="mapLabel"></small><strong id="mapText"></strong></div>
+      </a>
+    </div>
+    <p class="vnd" id="foot"></p>
+  </div>
+</footer>
+
+<div class="zoom" id="zoom"><figure><img id="zoomImg" alt=""><figcaption id="zoomCap"></figcaption></figure></div>
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<!-- override:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script src="https://qrmenuasia.com/api/override?shop=texasbbq"></script>
+<!-- override:end -->
+<script>
+  const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
+  const UI = {
+    ko: { title: "메뉴", tagline: "6~12시간 저온 훈제 텍사스 바비큐", chips: ["훈제 바비큐", "사파 연어", "단체 세트"],
+      must: "Must Try", best: "BEST", special: "스페셜", spicy: "🌶 매콤", tip: "TIP", market: "시가",
+      quote: "연기 향 가득한 텍사스 바비큐,<br>좋은 사람들과 함께 즐거운 시간 보내세요.<small>– CTQ 텍사스 BBQ –</small>",
+      copy: "복사", copied: "비밀번호를 복사했어요", hours: "영업시간", call: "전화 · 예약", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND) · 메뉴·가격은 구글 지도에 올린 메뉴판 기준이며 바뀔 수 있어요" },
+    en: { title: "Menu", tagline: "Texas BBQ slow-smoked for 6–12 hours", chips: ["Smoked BBQ", "Sapa salmon", "Group sets"],
+      must: "Must Try", best: "BEST", special: "Special", spicy: "🌶 Spicy", tip: "TIP", market: "Market price",
+      quote: "Smoky Texas barbecue,<br>best enjoyed with good company.<small>– CTQ Texas BBQ –</small>",
+      copy: "Copy", copied: "Password copied", hours: "Opening hours", call: "Call · Reservations", map: "Address · Map", vnd: "Prices in Vietnamese đồng (VND) · Menu and prices are based on the menu posted on Google Maps and may change" },
+    zh: { title: "菜单", tagline: "低温熏制6~12小时的德州烧烤", chips: ["熏制烧烤", "沙坝三文鱼", "团体套餐"],
+      must: "必吃", best: "人气", special: "特色", spicy: "🌶 辣", tip: "小贴士", market: "时价",
+      quote: "烟熏香气十足的德州烧烤，<br>与好友共度愉快时光。<small>– CTQ TEXAS BBQ –</small>",
+      copy: "复制", copied: "密码已复制", hours: "营业时间", call: "电话 · 预订", map: "地址 · 地图", vnd: "价格单位：越南盾（VND）· 菜单和价格以谷歌地图上发布的菜单为准，可能会有变动" },
+    ja: { title: "メニュー", tagline: "6〜12時間じっくり低温燻製のテキサスBBQ", chips: ["燻製BBQ", "サパ産サーモン", "団体セット"],
+      must: "Must Try", best: "BEST", special: "スペシャル", spicy: "🌶 辛口", tip: "TIP", market: "時価",
+      quote: "スモークの香りたっぷりのテキサスBBQ、<br>大切な人と楽しいひとときを。<small>– CTQ TEXAS BBQ –</small>",
+      copy: "コピー", copied: "パスワードをコピーしました", hours: "営業時間", call: "電話・ご予約", map: "住所・地図", vnd: "価格はベトナムドン（VND）です・メニューと価格はGoogleマップに掲載されたメニュー表に基づいており、変更される場合があります" },
+    vi: { title: "Thực đơn", tagline: "BBQ Texas hun khói lạnh 6–12 giờ", chips: ["BBQ hun khói", "Cá hồi Sa Pa", "Set nhóm"],
+      must: "Must Try", best: "BEST", special: "Đặc biệt", spicy: "🌶 Cay", tip: "TIP", market: "Liên hệ",
+      quote: "BBQ kiểu Texas thơm khói,<br>chúc quý khách có bữa ăn vui vẻ.<small>– CTQ TEXAS BBQ –</small>",
+      copy: "Sao chép", copied: "Đã sao chép mật khẩu", hours: "Giờ mở cửa", call: "Gọi điện · Đặt bàn", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND · Thực đơn và giá theo menu đăng trên Google Maps, có thể thay đổi" },
+  };
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const storage = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  let observer;
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  const fmt = (n) => n.toLocaleString("en-US");
+
+  function priceHtml(it, t) {
+    if (it.sizes) return `<div class="sizes">${it.sizes.map(([s, p]) => `<span><i>${s}</i>${fmt(p)}<small>₫</small></span>`).join("")}</div>`;
+    return "";
+  }
+
+  function render(lang) {
+    const t = UI[lang], R = window.RESTAURANT;
+    // 아랫줄: 한국어 화면 → 베트남어(직원용), 그 외 → 한국어
+    const second = lang === "ko" ? "vi" : "ko";
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand.ko} ${R.brand.en} · ${t.title}`;
+
+    $("langs").innerHTML = LANGS.map(([c, label]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+    $("tagline").textContent = t.tagline;
+    $("chips").innerHTML = t.chips.map((c) => `<span>${esc(c)}</span>`).join("");
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}">
+        <div class="head"><h2>${esc(cat.name[lang])}${lang !== "vi" ? `<small>${esc(cat.name.vi)}</small>` : `<small>${esc(cat.name.ko)}</small>`}</h2></div>
+        ${cat.note ? `<p class="note">${esc(cat.note[lang])}</p>` : ""}
+        <ul>${cat.items.map((it) => {
+          const tags = [it.tag ? `<span class="${it.tag}">${esc(t[it.tag])}</span>` : "", it.spicy ? `<span class="hot">${esc(t.spicy)}</span>` : ""].join("");
+          const single = it.sizes ? "" : `<span class="leader"></span><span class="price">${it.price == null ? esc(t.market) : `${fmt(it.price)}<small>₫</small>`}</span>`;
+          return `
+          <li>
+            ${it.photo ? `<button class="thumb" type="button" data-photo="${it.photo}" data-cap="${esc(it.name[lang])}"><img src="${it.photo}" alt="${esc(it.name[lang])}" loading="lazy"></button>` : ""}
+            <div class="info">
+              ${tags.trim() ? `<div class="tags">${tags}</div>` : ""}
+              <div class="row"><b>${esc(it.name[lang])}</b>${it.unit ? `<span class="unit">${esc(it.unit)}</span>` : ""}${single}</div>
+              ${priceHtml(it, t)}
+              ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
+              <div class="sub ${second === "vi" ? "it" : ""}">${esc(it.name[second])}</div>
+            </div>
+          </li>`; }).join("")}
+        </ul>
+        ${cat.tip ? `<p class="tip"><b>${esc(t.tip)}</b>${esc(cat.tip[lang])}</p>` : ""}
+      </section>`).join("");
+
+    $("quote").innerHTML = t.quote;
+    if (R.wifi) {
+      $("wifi").hidden = false;
+      $("wifiLabel").textContent = `Wi-Fi · ${R.wifi.ssid}`;
+      $("wifiText").textContent = R.wifi.password;
+      $("wifiCopy").textContent = t.copy;
+    }
+    if (R.hours) {
+      $("hours").hidden = false;
+      $("hoursLabel").textContent = t.hours;
+      $("hoursText").textContent = typeof R.hours === "string" ? R.hours : R.hours[lang];
+    }
+    $("callLabel").textContent = t.call;
+    $("callText").textContent = R.phone;
+    $("call").href = "tel:" + R.phone.replace(/[^\d+]/g, "");
+    $("mapLabel").textContent = t.map;
+    $("mapText").textContent = R.address;
+    $("map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.brand.en + " " + R.address);
+    $("foot").textContent = t.vnd;
+    observeSections();
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  $("menu").addEventListener("click", (e) => {
+    const b = e.target.closest(".thumb");
+    if (!b) return;
+    $("zoomImg").src = b.dataset.photo;
+    $("zoomCap").textContent = b.dataset.cap;
+    $("zoom").classList.add("show");
+  });
+  $("zoom").addEventListener("click", () => $("zoom").classList.remove("show"));
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+  $("wifi").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(RESTAURANT.wifi.password); toast(UI[lang].copied); }
+    catch { toast(RESTAURANT.wifi.password); }
+  });
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+<script src="dasan.js"></script>
+<script src="stores-link.js"></script>
+<script src="lang-menu.js"></script>
+<script src="qr-home.js"></script>
+<!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
+<!-- analytics:end -->
+</body>
+</html>

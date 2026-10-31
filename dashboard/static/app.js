@@ -5,18 +5,17 @@ const api = p => fetch(p, { cache: 'no-store' }).then(r => r.json());
 const S = { stores: [], todo: [], team: null, quota: null, visits: null, jobs: [], kind: '', q: '', open: null, all: false, collector: null, orders: [], feed: [] };
 
 // 사무실 사진 (사용자가 ChatGPT로 만듦, 2026-10-27). 좌표는 사진 크기 대비 % [x1, y1, x2, y2]
-// 폭 700px 이하에서는 세로 사진(phone)을 쓴다. 인력공급팀·선별팀은 아직 사업 전이라 '준비 중'(눌러도 실행 안 됨)
-const SOON = { staffing: '인력공급팀', sorting: '선별팀' };
+// 폭 700px 이하에서는 세로 사진(phone)을 쓴다. 인력공급팀·선별팀은 인력 앱(jinwoo-hr)을 읽기만 한다(/api/hr, 2026-10-29)
 const SCENES = {
   pc: { img: '/static/rooms/office.jpg', w: 1673, h: 940,
-    signs: [[10, 33, 32, 39, '사진팀'], [36, 33, 61, 39, '메뉴판팀'], [66, 33, 89, 39, '검수팀'],
-      [7.5, 59.5, 31, 65, '번역팀'], [37, 59.5, 62.5, 65, '인력공급팀 · 준비 중'], [68, 59.5, 92, 65, '선별팀 · 준비 중']],
+    signs: [[10, 33, 32, 39, '미디어 관제실'], [36, 33, 61, 39, '디지털 메뉴 통제실'], [66, 33, 89, 39, '감사실'],
+      [7.5, 59.5, 31, 65, '통번역 통제실'], [37, 59.5, 62.5, 65, '인력 공급팀'], [68, 59.5, 92, 65, '선별팀']],
     spots: { captain: [45, 2, 55, 14.5], claude: [45.5, 15.5, 53, 26], finder: [15, 40, 27, 54],
       agy: [38, 40, 46, 54], 'menu-reader': [52, 40, 60, 54], codex: [67.5, 40, 76, 54], reviewer: [80, 40, 88, 54],
       polisher: [14, 66, 24, 82], staffing: [47, 65, 57, 82], sorting: [74, 64, 83, 80] } },
   phone: { img: '/static/rooms/office-phone.jpg', w: 940, h: 1672,
-    signs: [[31, 15, 69, 18.5, '비서실'], [9, 30, 47, 33.3, '사진팀'], [52, 30, 91, 33.3, '메뉴판팀'],
-      [5.5, 49, 46.5, 52.3, '검수팀'], [53, 49, 94, 52.3, '번역팀'], [5, 70.5, 46.5, 74, '인력공급팀 · 준비 중'], [52.5, 70.5, 94, 74, '선별팀 · 준비 중']],
+    signs: [[31, 15, 69, 18.5, '비서실'], [9, 30, 47, 33.3, '미디어 관제실'], [52, 30, 91, 33.3, '디지털 메뉴 통제실'],
+      [5.5, 49, 46.5, 52.3, '감사실'], [53, 49, 94, 52.3, '통번역 통제실'], [5, 70.5, 46.5, 74, '인력 공급팀'], [52.5, 70.5, 94, 74, '선별팀']],
     spots: { captain: [43, 4, 57, 10], claude: [42, 17, 55, 24], finder: [17, 34, 32, 42],
       agy: [55, 34, 70, 42], 'menu-reader': [72, 34, 86, 42], codex: [7, 53, 25, 61], reviewer: [27, 53, 43, 61],
       polisher: [64, 53, 80, 62], staffing: [16, 75, 32, 84], sorting: [62, 74, 78, 84] } },
@@ -24,14 +23,17 @@ const SCENES = {
 const ALL_CHECKS = ['check-standard', 'check-listing', 'shot'];
 const M = {
   captain: { name: '캡틴', role: '결재' },
-  claude: { name: '클로드', role: '지휘', quota: 'claude', safe: ALL_CHECKS },
-  finder: { name: 'finder', role: '사진 고르기', quota: 'claude', safe: ['shot'] },
-  agy: { name: '안티그래비티', role: '메뉴판 읽기', quota: 'gemini', tool: 'agy' },
-  'menu-reader': { name: 'menu-reader', role: '메뉴판 읽기', quota: 'claude' },
-  codex: { name: '코덱스', role: '두 번째 검토', quota: 'codex', tool: 'codex' },
-  reviewer: { name: 'reviewer', role: '마지막 점검', quota: 'claude', safe: ALL_CHECKS },
-  polisher: { name: 'polisher', role: '번역·글', quota: 'claude' },
+  claude: { name: '비서실장', role: '지휘', quota: 'claude', safe: ALL_CHECKS },
+  finder: { name: '시각 정보 비서', role: '사진 고르기', quota: 'claude', safe: ['shot'] },
+  agy: { name: '메뉴 검사관', role: '메뉴판 읽기', quota: 'gemini', tool: 'agy' },
+  'menu-reader': { name: '자료 해석 비서', role: '메뉴판 읽기', quota: 'claude' },
+  codex: { name: '운영 감찰관', role: '두 번째 검토', quota: 'gemini', tool: 'agy' },  // 2026-10-30: 코덱스 대신 안티그래비티 안 Claude Sonnet
+  reviewer: { name: '데이터 감사관', role: '마지막 점검', quota: 'claude', safe: ALL_CHECKS },
+  polisher: { name: '수석 번역관', role: '번역·글', quota: 'claude' },
+  staffing: { name: '인력 공급팀', role: '인력 현황', hr: true },
+  sorting: { name: '선별팀', role: '선별 실적', hr: true },
 };
+const AKA = { finder: 'finder', agy: '안티그래비티(agy)', 'menu-reader': 'menu-reader', codex: '안티그래비티 Claude Sonnet', reviewer: 'reviewer', polisher: 'polisher' };
 const CHECK_LABEL = { 'check-standard': '가마솥 표준 점검', 'check-listing': '가게 찾기용 전체 점검', shot: '휴대폰 화면 캡처' };
 
 // 직원마다 Claude 에 붙여 넣을 문장 (실행하지 않고 복사만)
@@ -41,33 +43,52 @@ const PROMPTS = {
     s => `${s} 사진 수집기로 올렸어. 가게 찾기용(무동의·무료)으로 새 메뉴판 만들어줘.`,
     s => `${s} 남은 할 일(docs/todo.md) 정리하고 사장님께 물어볼 것만 짧게 알려줘.`,
   ],
-  finder: [s => `finder 담당에게: 드라이브 QR메뉴판/${s} 사진 목록과 모음 이미지를 만들고, 메뉴 이름과 확실히 맞는 요리 사진 4~6장을 골라줘.`],
+  finder: [s => `finder 담당에게: 드라이브 QR메뉴판/${s} 사진 목록과 모음 이미지를 만들고, 메뉴 이름과 맞는 요리 사진 4~6장(최소 4장, 애매하면 메뉴판 사진과 대조해 채우기)을 골라줘.`],
   agy: [s => `${s} 메뉴판 사진을 안티그래비티(agy -p, 계획 모드)로 읽어서 분류|메뉴이름|가격 표를 받고, 메뉴판과 대조해줘.`],
   'menu-reader': [s => `menu-reader 담당에게 ${s} 메뉴판 사진을 읽혀서 메뉴·가격 표(한국어 이름·원문·가격·분류·근거 사진)를 만들어줘.`],
-  codex: [s => `${s} 메뉴·가격 표를 코덱스(codex exec --sandbox read-only)로 메뉴판 사진과 한 번 더 대조해줘. 가격·빠진 메뉴만 짧게.`],
+  codex: [s => `${s} 메뉴·가격 표를 운영 감찰관(안티그래비티 안 Claude Sonnet, agy --model claude-sonnet-5-5-medium)으로 메뉴판 사진과 한 번 더 대조해줘. 가격·빠진 메뉴만 짧게.`],
   reviewer: [s => `reviewer 담당에게 ${s} 배포 전 마지막 점검을 맡겨줘(예쁨·가게 느낌 → 번역 → 메뉴·가격). 배포는 하지 마.`],
   polisher: [s => `polisher 담당에게 ${s} 메뉴 5개 언어(ko·vi·en·zh·ja) 번역 초안을 맡겨줘.`],
 };
 
 // ---------------------------------------------------------------- 사무실
 const pct = v => v + '%';
-function sceneHtml(key, busy) {
+function sceneHtml(key, busy, done, marks) {
   const sc = SCENES[key];
   const signs = sc.signs.map(([x1, y1, x2, y2, t]) =>
     `<span class="sign" style="left:${pct(x1)};top:${pct(y1)};width:${pct(x2 - x1)};height:${pct(y2 - y1)}">${t}</span>`).join('');
   const spots = Object.entries(sc.spots).map(([id, [x1, y1, x2, y2]]) => {
     const box = `left:${pct(x1)};top:${pct(y1)};width:${pct(x2 - x1)};height:${pct(y2 - y1)}`;
-    if (SOON[id]) return `<div class="spot soon" style="${box}" title="${SOON[id]} · 준비 중" aria-disabled="true"><span class="tag">${SOON[id]} <small>· 준비 중</small></span></div>`;
-    return `<button class="spot${busy.has(id) ? ' on' : ''}" style="${box}" data-id="${id}" aria-label="${M[id].name} 자리 열기">
-      <span class="bubble">작업 중…</span><span class="tag">${esc(M[id].name)} <small>· ${M[id].role}</small></span></button>`;
+    const cls = busy.has(id) ? ' on' : done.has(id) ? ' done' : '';
+    const mk = marks[id]?.length ? `<span class="marks">${marks[id].map(([c, t]) => `<span class="${c}">${t}</span>`).join('')}</span>` : '';
+    return `<button class="spot${cls}" style="${box}" data-id="${id}" aria-label="${M[id].name} 자리 열기">
+      ${mk}<span class="tag"><b>${esc(M[id].name)}</b>${cls === ' on' ? '<em class="st">작업 중…</em>' : cls === ' done' ? '<em class="st">✔ 작업 완료</em>' : `<small>${M[id].role}</small>`}</span></button>`;
   }).join('');
   return `<div class="scene ${key}" style="aspect-ratio:${sc.w}/${sc.h}"><img src="${sc.img}" alt="Jinwoo 에이전트 사무실">${signs}${spots}</div>`;
+}
+// 자리 3단계(2026-10-30, 사용자 결정 '가-1'): 작업 중(파란 빛) → 끝나면 녹색 '작업 완료'
+// → 배포할 가게가 있는 지시는 배포 완료되면, 배포 없는 지시는 캡틴이 결재함에서 열어 보면(서버 seenAt) 사라진다
+const cleared = o => o.deploy?.length ? o.deployState === 'done' : !!o.seenAt;
+// 인력 공급팀: 오늘 daily_entries 주간·야간 보고(나-1). 9시·21시(베트남 시간)가 지나도 없으면 빨간 표시. 연결 안 되면 표시 안 함
+function hrMarks() {
+  const r = S.hr?.status === 'ok' && S.hr.report;
+  if (!r) return [];
+  const h = new Date(Date.now() + 7 * 3600e3).getUTCHours(), out = [];
+  if (r.day) out.push(['ok', '주간 보고 완료 ✔']); else if (h >= 9) out.push(['no', '주간 보고 없음']);
+  if (r.night) out.push(['ok', '야간 보고 완료 ✔']); else if (h >= 21) out.push(['no', '야간 보고 없음']);
+  return out;
 }
 function renderOffice() {
   const busy = new Set(S.jobs.filter(j => j.status === 'running').map(j => j.desk));
   if (S.collector?.job?.status === 'running') busy.add('finder');  // 사진 수집기가 실제로 수집 중
-  if (S.orders.some(o => o.status === 'running')) busy.add('claude');  // 지시창 지시를 실행 중
-  $('#office').innerHTML = sceneHtml('pc', busy) + sceneHtml('phone', busy);
+  for (const o of S.orders.filter(o => o.status === 'running')) {  // 지시 실행 중: 비서실장 + 지금 일하는 담당 자리
+    busy.add('claude');
+    (o.active || []).forEach(d => busy.add(d));
+  }
+  const done = new Set();
+  for (const o of S.orders.filter(o => o.status === 'done' && !cleared(o))) (o.worked || []).forEach(d => done.add(d));
+  const marks = { staffing: hrMarks() };
+  $('#office').innerHTML = sceneHtml('pc', busy, done, marks) + sceneHtml('phone', busy, done, marks);
 }
 // 옆 창 얼굴: 큰 사진에서 그 사람 자리만 잘라 보여 준다
 function avatar(id) {
@@ -88,19 +109,23 @@ const ST = { running: ['run', 'b-warn', '실행 중'], stopping: ['run', 'b-warn
 const hm = t => new Date(t * 1000).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
 const day = t => new Date(t * 1000).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' });
 function orderState(o) {
+  if (o.deployState === 'running') return ['run', 'b-warn', '배포 중'];
+  if (o.status === 'done' && o.deploy?.length && !o.deployState) return ['wait', 'b-warn', '배포 대기'];
   if (o.status === 'done' && o.approval) return ['wait', 'b-warn', '결재 대기'];
   return ST[o.status] || ['', 'b-na', o.status];
 }
 function lastText(o) { const t = [...o.turns].reverse().find(t => t.by !== 'me'); return t ? t.text : ''; }
 function renderInbox() {
-  const wait = S.orders.filter(o => o.status === 'done' && o.approval);
+  const wait = S.orders.filter(o => o.status === 'done' && (o.approval || (o.deploy?.length && o.deployState !== 'done')));
   const live = S.orders.filter(o => o.status === 'running' || o.status === 'stopping');
   const rest = S.orders.filter(o => !wait.includes(o) && !live.includes(o)).slice(0, 8);
   $('#inbox-count').textContent = wait.length;
   $('#inbox-count').className = 'badge ' + (wait.length ? 'b-warn' : 'b-na');
   const item = o => {
     const [cls, bc, bt] = orderState(o);
-    const sub = o.status === 'running' ? (o.steps?.at(-1)?.text || '시작하는 중…') : o.approval ? '결재: ' + o.approval : lastText(o).split('\n')[0];
+    const st = o.steps?.at(-1), now = st ? `${WHO[st.who] || '비서실장'} · ${st.text}` : '시작하는 중…';
+    const sub = o.deployState === 'running' ? (o.deployLog?.at(-1) || '배포 시작…') : o.status === 'running' ? now
+      : o.deploy?.length && !o.deployState ? '배포 확정 기다림: ' + o.deploy.join(', ') : o.approval ? '결재: ' + o.approval : lastText(o).split('\n')[0];
     return `<button class="ord ${cls}" data-order="${o.id}"><b>${esc(o.title)}</b><p>${esc(sub)}</p>
       <span class="muted"><span class="badge ${bc}">${bt}</span>${hm(o.createdAt)}${o.via === 'phone' ? ' · 폰' : ''}</span></button>`;
   };
@@ -116,22 +141,31 @@ function renderOrderPanel(oid) {
   if (!o) return;
   const [, bc, bt] = orderState(o);
   const running = o.status === 'running' || o.status === 'stopping';
+  const dep = o.deploy?.length ? (o.deployState === 'running'
+    ? `<h5>배포 진행</h5><ul class="steps">${(o.deployLog || []).map(s => `<li>${esc(s)}</li>`).join('') || '<li>시작하는 중…</li>'}</ul>`
+    : o.deployState === 'done' ? '' : `<div class="reply"><h5>배포</h5><p><b>배포할 가게:</b> ${o.deploy.map(s => `${esc(s)}.qrmenuasia.com`).join(', ')}</p>
+      ${S.vercel ? `<button class="btn approve" id="deploy-go">배포 확정</button>` : '<p class="muted">Vercel 토큰이 아직 없어 배포 버튼이 꺼져 있어요(docs/dashboard.md \'Vercel 토큰 넣기\').</p>'}
+      <p class="muted">작업 브랜치를 깃허브에 올리고(main 아님) 그 커밋으로 배포합니다. 가게 찾기용이면 가게 찾기 목록(qrmenu-intro)도 같이 배포해요. 배포 1번마다 Vercel 빌드 비용이 조금 듭니다.</p></div>`) : '';
   const keep = $('#reply-text')?.value || '';
-  const who = t => t.by === 'me' ? (t.approve ? '캡틴 · 확정' : '캡틴') : t.by === 'claude' ? '클로드 보고' : '알림';
+  const who = t => t.by === 'me' ? (t.approve ? '캡틴 · 확정' : '캡틴') : t.by === 'claude' ? '비서실장 보고' : '알림';
   $('#panel-body').innerHTML = `<h2>${esc(o.title)}</h2>
-    <p class="muted"><span class="badge ${bc}">${bt}</span> ${day(o.createdAt)} ${hm(o.createdAt)} · ${o.via === 'phone' ? '폰에서 지시' : 'PC에서 지시'}${o.tokens ? ` · 토큰 약 ${Math.round(o.tokens / 1000)}천` : ''}</p>
+    <p class="muted"><span class="badge ${bc}">${bt}</span> ${day(o.createdAt)} ${hm(o.createdAt)} · ${o.via === 'phone' ? '폰에서 지시' : 'PC에서 지시'}${o.tokens ? ` · 토큰 약 ${o.tokens >= 10000 ? Math.round(o.tokens / 10000) + '만' : Math.round(o.tokens / 1000) + '천'}${o.tokensVersion === 2 ? '(다시 읽은 것 포함)' : '(옛 기록: 다시 읽은 것 빠짐)'}` : ''}</p>
+    ${o.sessionId ? `<p class="muted">창 없이 실행돼서 Claude 앱 세션 목록에는 안 보여요. 대화 전체는 ${local() ? '<button class="btn ghost" id="order-open">PC에서 대화 열기</button>' : 'PC 대시보드의 [PC에서 대화 열기]'}로 봅니다.</p>` : ''}
+    ${(o.images || []).length ? `<h5>폰 화면 캡처 (로고·간판 확인)</h5><div class="shots">${o.images.map(f => `<a href="/out/${encodeURIComponent(f)}" target="_blank" rel="noopener"><img src="/out/${encodeURIComponent(f)}?t=${Math.round(o.endedAt || 0)}" alt="${esc(f)}"></a>`).join('')}</div>` : ''}
     ${o.turns.map(t => `<div class="turn ${t.by}"><span class="muted">${who(t)} · ${hm(t.at)}</span>${esc(t.text)}</div>`).join('')}
-    ${running ? `<h5>진행 상황</h5><ul class="steps">${(o.steps || []).map(s => `<li>${esc(s.text)}</li>`).join('') || '<li>시작하는 중…</li>'}</ul>
-      ${o.last ? `<div class="turn claude"><span class="muted">클로드 · 지금 하는 말</span>${esc(o.last)}</div>` : ''}
+    ${running ? `<h5>진행 상황</h5><ul class="steps">${(o.steps || []).map(s => `<li><b class="who-${esc(s.who || 'claude')}">${esc(WHO[s.who] || s.who || '비서실장')}</b> ${esc(s.text)}</li>`).join('') || '<li>시작하는 중…</li>'}</ul>
+      ${o.last ? `<div class="turn claude"><span class="muted">비서실장 · 지금 하는 말</span>${esc(o.last)}</div>` : ''}
       <button class="btn ghost" id="order-stop">멈추기</button>` : `
       <div class="reply"><h5>${o.approval ? '결재' : '이어서 시키기'}</h5>
       ${o.approval ? `<p><b>결재할 것:</b> ${esc(o.approval)}</p>` : ''}
       <textarea id="reply-text" placeholder="${o.approval ? '고칠 점이 있으면 적고 [수정 요청], 없으면 [확정]' : '답(예: 가-1) 또는 다음에 시킬 일'}"></textarea>
       <div class="act">${o.approval ? '<button class="btn approve" id="order-approve">확정</button>' : ''}
         <button class="btn ${o.approval ? 'ghost' : ''}" id="order-reply">${o.approval ? '수정 요청' : '보내기'}</button></div>
-      <p class="muted">같은 대화를 이어서 실행합니다. 배포는 대시보드에서 하지 않습니다(확정해도 Claude 앱에서 '배포해'라고 해야 함).</p></div>`}`;
+      <p class="muted">같은 대화를 이어서 실행합니다. 배포는 아래 [배포 확정] 버튼으로만 합니다.</p></div>`}`;
+  if (dep) $('#panel-body').insertAdjacentHTML('beforeend', dep);
   if ($('#reply-text')) $('#reply-text').value = keep;
 }
+const local = () => ['127.0.0.1', 'localhost'].includes(location.hostname);
 async function post(path, body) {
   return fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Dashboard': '1' }, body: JSON.stringify(body) }).then(r => r.json());
 }
@@ -143,7 +177,7 @@ async function sendOrder() {
   const r = await post('/api/order', { text });
   if (r.error) { toast(r.error); $('#order-send').disabled = false; return; }
   ta.value = '';
-  toast('지시를 보냈습니다. 클로드가 실행을 시작해요.');
+  toast('지시를 보냈습니다. 비서실장이 실행을 시작해요.');
   await loadOrders();
   openPanel('order:' + r.id);
 }
@@ -157,7 +191,7 @@ async function replyOrder(approve) {
 }
 
 // ---------------------------------------------------------------- 브리핑 · 업무 기록
-const WHO = { captain: '캡틴', claude: '클로드', finder: 'finder', agy: '안티그래비티', 'menu-reader': 'menu-reader', codex: '코덱스', reviewer: 'reviewer', polisher: 'polisher' };
+const WHO = { captain: '캡틴', claude: '비서실장', designer: 'designer', finder: '시각 정보 비서', agy: '메뉴 검사관', 'menu-reader': '자료 해석 비서', codex: '운영 감찰관', reviewer: '데이터 감사관', polisher: '수석 번역관' };
 function renderFeed() {
   let last = '';
   $('#feed').innerHTML = S.feed.map(i => {
@@ -176,8 +210,8 @@ async function loadFeed() { S.feed = (await api('/api/activity')).items; renderF
 let ordTimer, wasRunning = false;
 async function loadOrders() {
   const r = await api('/api/orders');
-  S.orders = r.orders;
-  const running = S.orders.some(o => o.status === 'running' || o.status === 'stopping');
+  S.orders = r.orders; S.vercel = r.vercel;
+  const running = S.orders.some(o => o.status === 'running' || o.status === 'stopping' || o.deployState === 'running');
   renderInbox(); renderOffice(); renderCounts();
   if (S.open?.startsWith('order:')) renderOrderPanel(S.open.slice(6));
   if (wasRunning && !running) { loadFeed(); loadBrief(); toast('지시 실행이 끝났습니다. 결재함을 확인하세요.'); }
@@ -204,6 +238,7 @@ function quotaCard(key) {
   const title = key === 'codex' ? 'ChatGPT (Codex)' : q.name;
   if (q.status !== 'ok') {
     return `<div class="q na"><h3><i class="dot"></i>${esc(title)}<span class="badge b-na">확인 불가</span></h3>
+      <div class="row"><span class="chip">기록 없음</span><div class="track"><div class="fill" style="width:0"></div></div><b>-</b><span class="rst">아래 '확인하는 법'</span></div>
       <details><summary>확인하는 법</summary>${esc(q.how)}</details></div>`;
   }
   const worst = Math.max(...q.bars.map(b => b.used));
@@ -259,7 +294,7 @@ function renderCounts() {
   const full = S.stores.filter(s => s.kind === 'full').length, list = S.stores.filter(s => s.kind === 'listing').length;
   const items = S.todo.length;
   const run = S.jobs.filter(j => j.status === 'running').length + S.orders.filter(o => o.status === 'running').length;
-  $('#counts').innerHTML = `<span>가게 <b>${S.stores.length}</b></span><span>정식 <b>${full}</b></span><span>가게 찾기용 <b>${list}</b></span><span>할 일 <b>${items}</b>건</span><span>실행 중 <b>${run}</b></span>`;
+  $('#counts').innerHTML = `<span>가게 <b>${S.stores.length}</b></span><span>정식 <b>${full}</b></span><span>가게 찾기용 <b>${list}</b></span><span class="go" data-go="todo" role="button" tabindex="0" title="할 일 탭 열기">할 일 <b>${items}</b>건 ›</span><span>실행 중 <b>${run}</b></span>`;
 }
 
 // ---------------------------------------------------------------- 옆 창
@@ -284,12 +319,13 @@ function renderPanel() {
   if (!id) return;
   if (id.startsWith('order:')) return renderOrderPanel(id.slice(6));
   const m = M[id], t = S.team || {};
+  if (m.hr) return renderHrPanel(id);
   const tool = m.tool ? t.tools?.[m.tool] : null;
   const recent = id === 'captain' ? [] : (t.recent?.[id] || []);
   const jobs = S.jobs.filter(j => j.desk === id).slice(0, 4);
   const sel = `<select class="shop">${shopOptions()}</select>`;
   $('#panel-body').innerHTML = `
-    <div class="who">${avatar(id)}<div><h2>${esc(m.name)}</h2><span class="muted">${m.role}</span></div></div>
+    <div class="who">${avatar(id)}<div><h2>${esc(m.name)}</h2><span class="muted">${m.role}${AKA[id] ? ' · ' + AKA[id] : ''}</span></div></div>
     ${tool ? `<p>${tool.installed ? `<span class="badge b-ok">설치됨</span> <code>${esc(tool.version)}</code>` : '<span class="badge b-stop">설치 안 됨</span>'} <span class="muted">(${m.tool} --version)</span></p>` : ''}
     ${id === 'finder' ? collectorHtml() : ''}
     <h5>맡은 일 · CLAUDE.md 5장</h5><p>${esc(teamJob(id).replace(/\*\*|`/g, ''))}</p>
@@ -314,6 +350,51 @@ function renderPanel() {
     shopSel.onchange = fill; fill();
   }
 }
+// 인력공급팀·선별팀: 인력 앱 요약(읽기 전용). 일 시키기 없음
+const n0 = v => v == null ? '–' : Number(v).toLocaleString('ko-KR', { maximumFractionDigits: 1 });
+const rt = v => v == null ? '–' : v + '%';
+function renderHrPanel(id) {
+  const h = S.hr, m = M[id];
+  const head = `<div class="who">${avatar(id)}<div><h2>${esc(m.name)}</h2><span class="muted">${m.role} · 인력 앱 읽기 전용</span></div></div>`;
+  const foot = `<p class="muted">인력 앱(jinwoo-hr)을 읽기만 합니다. 입력·수정은 인력 앱에서 하세요.
+    <a href="https://jinwoo-hr.vercel.app" target="_blank" rel="noopener">인력 앱 열기</a></p>`;
+  if (!h) { $('#panel-body').innerHTML = head + '<p class="muted">불러오는 중…</p>'; return; }
+  if (h.status !== 'ok') {
+    $('#panel-body').innerHTML = head + `<p><span class="badge b-na">연결 필요</span></p><p>${esc(h.how)}</p>
+      ${h.error ? `<p class="muted">마지막 시도 오류: ${esc(h.error)}</p>` : ''}` + foot;
+    return;
+  }
+  const errs = h.errors.length ? `<p class="muted">못 읽은 표: ${esc(h.errors.join(', '))}</p>` : '';
+  const when = `<p class="muted">베트남 날짜 ${esc(h.date)} · ${esc(h.at)} 읽음(2분마다 새로)</p>`;
+  let body;
+  if (id === 'staffing') {
+    const T = h.today, Mo = h.month;
+    body = `<div class="hr-kpi"><div><small>오늘 투입</small><b>${n0(T.total)}명</b><span>주 ${n0(T.day)} · 야 ${n0(T.night)}</span></div>
+      <div><small>오늘 계획</small><b>${n0(T.plan)}명</b><span>${T.plan ? '대비 ' + Math.round(T.total / T.plan * 100) + '%' : '계획 없음'}</span></div>
+      <div><small>이번 달 계획 대비</small><b>${Mo.pct == null ? '–' : Mo.pct + '%'}</b><span>실적 ${n0(Mo.actual)} / 계획 ${n0(Mo.planToDate)}(오늘까지)</span></div></div>
+      <h5>거래처별 · 최근 3일 (인원 = 일일 투입 합계)</h5>
+      ${h.clients.length ? `<table class="hr-days"><thead><tr><th>거래처</th>${h.days.map((d, i) => `<th>${['그저께', '어제', '오늘'][i]}<small>${d.slice(5).replace('-', '/')}</small></th>`).join('')}<th>이번 달<small>실적 / 계획</small></th></tr></thead><tbody>
+        ${h.clients.map(c => `<tr><td>${esc(c.name)}</td>${h.days.map((d, i) => { const v = c.days[d];
+          return `<td><b>${n0(v.day + v.night)}</b><small>주 ${n0(v.day)} · 야 ${n0(v.night)}</small>${i === 2 && c.todayPlan ? `<small>계획 ${n0(c.todayPlan)}</small>` : ''}</td>`; }).join('')}
+          <td><b>${n0(c.month)}</b><small>계획 ${n0(c.monthPlan)}</small></td></tr>`).join('')}</tbody></table>`
+        : '<p class="muted">최근 기록 없음</p>'}`;
+  } else {
+    const s = h.sorting;
+    body = `<div class="hr-kpi"><div><small>오늘 검사</small><b>${n0(s.todayInspected)}</b><span>불량 ${n0(s.todayDefects)} · ${rt(s.todayRate)}</span></div>
+      <div><small>이번 달 검사</small><b>${n0(s.monthInspected)}</b><span>불량 ${n0(s.monthDefects)}</span></div>
+      <div><small>이번 달 불량률</small><b>${rt(s.monthRate)}</b><span>불량 ÷ 검사</span></div></div>
+      <h5>제품별 · 이번 달 (검사 많은 순 12개)</h5>
+      ${s.products.length ? `<table><thead><tr><th>제품</th><th>검사</th><th>불량</th><th>불량률</th></tr></thead><tbody>
+        ${s.products.map(p => `<tr><td>${esc(p.name)}</td><td>${n0(p.inspected)}</td><td>${n0(p.defects)}</td><td>${rt(p.rate)}</td></tr>`).join('')}</tbody></table>`
+        : '<p class="muted">이번 달 기록 없음</p>'}`;
+  }
+  $('#panel-body').innerHTML = head + when + body + errs + foot;
+}
+async function loadHr() {
+  try { S.hr = await api('/api/hr'); } catch { S.hr = null; }
+  renderOffice();
+  if (M[S.open]?.hr) renderPanel();
+}
 function collectorHtml() {
   const c = S.collector;
   if (!c) return '';
@@ -336,10 +417,21 @@ function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.ad
 
 document.addEventListener('click', async e => {
   const ord = e.target.closest('[data-order]');
-  if (ord) return openPanel('order:' + ord.dataset.order);
+  if (ord) {
+    const o = S.orders.find(x => x.id === ord.dataset.order);
+    if (o?.status === 'done' && !o.seenAt) post('/api/order/seen', { id: o.id }).then(() => { o.seenAt = Date.now() / 1000; renderOffice(); });
+    return openPanel('order:' + ord.dataset.order);
+  }
   if (e.target.id === 'order-send') return sendOrder();
   if (e.target.id === 'order-approve') return replyOrder(true);
   if (e.target.id === 'order-reply') return replyOrder(false);
+  if (e.target.id === 'deploy-go') {
+    if (!confirm('정말 배포할까요? 손님이 보는 사이트가 바뀝니다.')) return;
+    e.target.disabled = true;
+    const r = await post('/api/deploy', { id: S.open.slice(6) });
+    toast(r.error || '배포를 시작했습니다.'); return loadOrders();
+  }
+  if (e.target.id === 'order-open') { const r = await post('/api/order/open', { id: S.open.slice(6) }); return toast(r.error || 'Claude Code 창을 열었습니다(새 창).'); }
   if (e.target.id === 'order-stop') { const r = await post('/api/order/stop', { id: S.open.slice(6) }); return toast(r.error || '멈추는 중…'); }
   const chip = e.target.closest('#chips button');
   if (chip) {
@@ -350,7 +442,9 @@ document.addEventListener('click', async e => {
   const spot = e.target.closest('button.spot');
   if (spot) return openPanel(spot.dataset.id);
   if (e.target.closest('#close') || e.target.id === 'dim') return closePanel();
-  const tab = e.target.closest('.tabs button');
+  const go = e.target.closest('[data-go]');  // 위쪽 '할 일 N건' → 아래 할 일 탭 (2026-10-30, 사용자 결정 '가-1')
+  const tab = go ? $(`.tabs button[data-tab="${go.dataset.go}"]`) : e.target.closest('.tabs button');
+  if (go) tab.scrollIntoView({ behavior: 'smooth', block: 'start' });
   if (tab) {
     document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b === tab));
     document.querySelectorAll('.tab').forEach(s => { s.hidden = s.id !== 'tab-' + tab.dataset.tab; });
@@ -416,9 +510,10 @@ async function loadAll() {
   loadBrief(); loadFeed();
   $('#updated').textContent = `저장소 기준 · ${new Date().toLocaleTimeString('ko-KR')} 새로 읽음`;
   loadCollector();
+  loadHr();
   S.visits = await api('/api/visits'); renderVisits();
 }
 renderOffice();
 loadAll();
 setInterval(() => api('/api/quota').then(q => { S.quota = q; renderQuota(); }), 60000);
-setInterval(() => { loadFeed(); loadBrief(); }, 120000);
+setInterval(() => { loadFeed(); loadBrief(); loadHr(); }, 120000);

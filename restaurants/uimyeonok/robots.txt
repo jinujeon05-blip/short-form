@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://uimyeonok.qrmenuasia.com/sitemap.xml

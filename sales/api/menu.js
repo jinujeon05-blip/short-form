@@ -21,6 +21,8 @@ module.exports = async (req, res) => {
       const cur = await S.getJson(`menu/${shop}.json`);
       if (cur) {
         if (!cur.v) { try { const d = await M.loadDefault(shop); cur.menu = M.restoreFromDefault(cur.menu, d.menu); cur.repaired = true; } catch {} }
+        if (cur.info && cur.info.hours === undefined) { try { const d = await M.loadDefault(shop); if (d.info.hours !== undefined) cur.info.hours = d.info.hours; } catch {} } // 영업시간 칸이 생기기 전 저장본
+
         return res.json({ source: 'custom', ...cur });
       }
       const d = await M.loadDefault(shop);

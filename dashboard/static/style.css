@@ -20,6 +20,7 @@ a { color: var(--blue); text-decoration: none; }
 .counts { display: flex; gap: 8px; flex-wrap: wrap; }
 .counts span { background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; font-size: 12px; color: var(--sub); }
 .counts b { color: var(--text); }
+.counts .go { cursor: pointer; } .counts .go:hover { border-color: var(--blue); color: var(--blue); }
 
 /* 할당량 (줄마다 이름표 · 막대 · % · 초기화까지) */
 .quota { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
@@ -85,8 +86,13 @@ a { color: var(--blue); text-decoration: none; }
 .steps { list-style: none; padding: 0; margin: 6px 0; font-size: 12px; color: var(--sub); max-height: 220px; overflow-y: auto; }
 .steps li { padding: 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .steps li:last-child { color: var(--blue); }
+.steps li b { font-weight: 700; color: var(--text); margin-right: 4px; }
+.steps li b.who-reviewer, .steps li b.who-codex { color: #7a3fd0; } .steps li b.who-finder { color: var(--green); }
+.steps li b.who-agy, .steps li b.who-menu-reader { color: #d1443f; } .steps li b.who-polisher { color: var(--blue); } .steps li b.who-designer { color: #c46a00; }
 .reply textarea { width: 100%; min-height: 64px; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; margin: 6px 0; }
 .approve { background: var(--green); border-color: var(--green); }
+.shots { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.shots img { width: 170px; height: 340px; object-fit: cover; object-position: top; border: 1px solid var(--line); border-radius: 12px; display: block; }
 
 /* 사무실 (사진 위에 간판 글자·누르는 자리를 % 좌표로 올림) */
 .office { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: #fff; box-shadow: 0 8px 28px rgba(20,30,50,.08); }
@@ -97,20 +103,33 @@ a { color: var(--blue); text-decoration: none; }
   text-shadow: 0 1px 2px rgba(0,0,0,.25); pointer-events: none; white-space: nowrap; }
 .spot { position: absolute; background: none; border: 0; padding: 0; border-radius: 14px; cursor: pointer; transition: box-shadow .15s, background .15s; }
 .spot:hover, .spot:focus-visible { background: rgba(47,111,236,.12); box-shadow: 0 0 0 2px rgba(47,111,236,.6); outline: none; }
-.spot .tag { position: absolute; left: 50%; top: 100%; transform: translate(-50%, 4px); background: rgba(255,255,255,.94);
-  border: 1px solid var(--line); border-radius: 6px; padding: 0 .6em; font-size: max(11px, .85cqw); white-space: nowrap; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
-.tag small { color: var(--sub); }
-.spot.soon { cursor: default; }
-.spot.soon .tag { opacity: 0; transition: opacity .15s; }
-.spot.soon:hover { background: rgba(255,255,255,.35); box-shadow: 0 0 0 2px rgba(150,160,175,.7); }
-.spot.soon:hover .tag { opacity: 1; }
-.bubble { position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, -4px); background: #fff; color: var(--blue);
-  border: 1px solid var(--blue); border-radius: 99px; padding: 0 .7em; font-size: max(11px, .85cqw); white-space: nowrap; opacity: 0; }
+/* 이름표 (2026-10-28 다듬음): 어두운 유리 알약 + 굵은 이름 + 작은 맡은 일 */
+.spot .tag { position: absolute; left: 50%; top: 100%; transform: translate(-50%, -12%); display: inline-flex; align-items: center; gap: .45em;
+  background: rgba(22, 30, 48, .82); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); color: #fff;
+  border: 1px solid rgba(255,255,255,.18); border-radius: 12px; padding: .2em .8em .22em; font-size: max(12.5px, 1.15cqw); line-height: 1.15; flex-direction: column; gap: 0;
+  white-space: nowrap; box-shadow: 0 4px 14px rgba(10, 18, 35, .28); letter-spacing: -.01em; transition: transform .15s, background .15s; }
+/* 캡틴 이름표는 아래에 두면 비서실장 얼굴을 가려서 책상 오른쪽 옆에 둔다 */
+.spot[data-id="captain"] .tag { left: 100%; top: 62%; transform: translate(6px, -50%); }
+.spot[data-id="captain"]:hover .tag, .spot[data-id="captain"]:focus-visible .tag { transform: translate(4px, -50%); }
+.tag b { font-weight: 700; }
+.tag small { font-size: .74em; font-weight: 500; color: #cfdaff; }
+.spot:hover .tag, .spot:focus-visible .tag { background: rgba(47, 111, 236, .92); transform: translate(-50%, calc(-12% - 2px)); }
+.spot:hover .tag small { color: #e3ebff; }
 .spot.on { box-shadow: 0 0 0 3px #4da3ff, 0 0 28px 8px rgba(77,163,255,.75); background: rgba(143,208,255,.18); animation: glow 1.4s ease-in-out infinite; }
-.spot.on .bubble { opacity: 1; }
-.spot.on .tag { border-color: var(--blue); color: var(--blue); }
+.spot.on .tag, .spot.on:hover .tag { background: rgba(47, 111, 236, .95); border-color: #9cc4ff; }
 @keyframes glow { 50% { box-shadow: 0 0 0 3px #4da3ff, 0 0 12px 2px rgba(77,163,255,.4); } }
 @media (prefers-reduced-motion: reduce) { .spot.on { animation: none; } }
+/* 일이 끝난 자리: 녹색 테두리 + 이름표 아래 줄 '✔ 작업 완료' (말풍선은 간판과 겹쳐서 이름표 안에 씀) */
+.spot.done { box-shadow: 0 0 0 3px #2fb36b, 0 0 18px 4px rgba(47,179,107,.55); background: rgba(120,220,160,.16); }
+.spot.done .tag, .spot.done:hover .tag { background: rgba(31, 138, 80, .95); border-color: #8fe0b3; }
+/* 작업 중·작업 완료는 말풍선 대신 이름표 아래 줄에 (말풍선은 위 간판과 겹쳤음, 2026-10-30) */
+.spot.on .tag .st { color: #fff; }
+.tag .st { font-style: normal; font-size: .74em; font-weight: 700; color: #e6ffef; line-height: 1.1; }
+/* 인력 공급팀 보고 표시: 자리 오른쪽에 세로로 (위쪽 부서 간판을 가리지 않게) */
+.marks { position: absolute; left: 100%; top: 4%; display: flex; flex-direction: column; gap: 3px; margin-left: 4px; pointer-events: none; }
+.marks span { border-radius: 99px; padding: .05em .65em; font-size: max(11px, .85cqw); font-weight: 700; white-space: nowrap; background: #fff; }
+.marks .ok { color: #1f8a50; border: 1px solid #2fb36b; }
+.marks .no { color: #fff; background: #d93636; border: 1px solid #b52222; }
 .avatar { width: 72px; border-radius: 12px; background-repeat: no-repeat; flex: none; border: 1px solid var(--line); }
 
 /* 탭 */
@@ -196,4 +215,19 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
   .scene.pc { display: none; }
   .scene.phone { display: block; }
   .sign { font-size: 3.6cqw; }
+}
+/* 인력공급팀·선별팀 옆 창 숫자 칸 */
+.hr-kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+.hr-kpi div { background: #f4f6f9; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 2px; }
+.hr-kpi small, .hr-kpi span { font-size: 11px; color: var(--sub); }
+.hr-kpi b { font-size: 20px; }
+.hr-days th small, .hr-days td small { display: block; font-size: 11px; color: var(--sub); font-weight: 400; white-space: nowrap; }
+.hr-days td b { font-size: 15px; }
+/* 폰 사진: 붙어 앉은 두 쌍은 이름표가 겹쳐서 오른쪽 사람 이름표를 한 줄 아래로 */
+@media (max-width: 700px) {
+  .scene.phone .spot .tag { font-size: 11px; padding: .25em .6em; }
+  /* 붙어 앉은 두 쌍은 왼쪽 사람 이름표를 책상 위로 올려 엇갈리게 */
+  .scene.phone .spot[data-id="agy"] .tag, .scene.phone .spot[data-id="codex"] .tag { transform: translate(-50%, -110%); }
+  /* 폰은 맡은 일 줄을 숨겨서 '✔ 작업 완료' 줄만큼 이름표가 높아진다 → 오른쪽 사람은 아래로 붙여 위 이름표와 안 닿게 */
+  .scene.phone .spot:is(.done, .on):not([data-id="agy"]):not([data-id="codex"]) .tag { transform: translate(-50%, 0); }
 }

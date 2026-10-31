@@ -44,7 +44,9 @@ for (const f of files) {
     else if (s.includes(tag)) s = s.replace(tag, () => tag + overrideBlock(shop));
     else console.log('menu.js 태그 없음:', f);
   }
+  // 내용이 같으면 쓰지 않는다(안 바뀐 가게 파일까지 수정됨으로 잡히던 문제, 2026-10-30)
+  if (fs.readFileSync(f, 'utf8').replace(/\r\n/g, '\n') === s) continue;
   fs.writeFileSync(f, s);
   n++;
 }
-console.log(`${n}개 페이지에 방문 기록 코드 반영`);
+console.log(`${n}개 페이지에 방문 기록 코드 반영(나머지는 이미 최신)`);

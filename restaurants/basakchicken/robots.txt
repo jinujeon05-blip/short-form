@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://basakchicken.qrmenuasia.com/sitemap.xml

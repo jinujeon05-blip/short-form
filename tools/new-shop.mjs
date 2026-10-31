@@ -43,6 +43,20 @@ if (kind === 'listing') {
   };
   for (const [a, b] of Object.entries(SRC)) rep(`vnd: "${a}"`, `vnd: "${b}"`);
 }
+// 영업시간 칸 (사용자 지시 2026-10-28: 새 가게는 항상). 전화 칸 위에 같은 모양, menu.js 의 RESTAURANT.hours 가 있으면 보인다
+rep('      <a class="pill" id="call">', `      <div class="pill" id="hours" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></i>
+        <div><small id="hoursLabel"></small><strong id="hoursText"></strong></div>
+      </div>
+      <a class="pill" id="call">`);
+const HOURS = { '비밀번호를 복사했어요': '영업시간', 'Password copied': 'Opening hours', '密码已复制': '营业时间', 'パスワードをコピーしました': '営業時間', 'Đã sao chép mật khẩu': 'Giờ mở cửa' };
+for (const [a, b] of Object.entries(HOURS)) rep(`copied: "${a}", call:`, `copied: "${a}", hours: "${b}", call:`);
+rep('    $("callLabel").textContent = t.call;', `    if (R.hours) {
+      $("hours").hidden = false;
+      $("hoursLabel").textContent = t.hours;
+      $("hoursText").textContent = typeof R.hours === "string" ? R.hours : R.hours[lang];
+    }
+    $("callLabel").textContent = t.call;`);
 // 글꼴 통일 (사용자 지시 2026-10-24): 가마솥의 Georgia(분류 제목 아래·둘째 언어 이름)를 빼고 본문 글꼴 하나만
 rep('font-family: Georgia, "Times New Roman", serif; ', '');
 fs.writeFileSync(path.join(dir, 'index.html'), h);
@@ -57,6 +71,7 @@ window.RESTAURANT = {
   phone: "TODO",
   address: "TODO",
   wifi: null,
+  hours: "TODO", // store_info.json 의 hours. 시간만이면 "11:00 – 22:00", 쉬는 날 등 글이 있으면 { ko, en, zh, ja, vi }
 };
 ${kind === 'full' ? '\n// 장바구니·주문서 (_shared/order.js). staff = 주문서 언어, zalo = 주문 받을 Zalo 번호\nwindow.ORDER = { staff: "vi", currency: "₫", zalo: null };\n' : ''}
 window.MENU = [

@@ -41,7 +41,7 @@
 └─ 비서실: 클로드 메인(지휘·제작·보고)
    ├─ 사진팀: finder(haiku)
    ├─ 메뉴판팀: 안티그래비티 agy(제미나이 Pro, PC 전용) → 안 되면 menu-reader(sonnet)
-   ├─ 검수팀: 코덱스(챗GPT 무료, PC 전용, 가격 재확인) · reviewer(sonnet)
+   ├─ 검수팀: 운영 감찰관 = 안티그래비티 안 Claude Sonnet(PC 전용, 가격 재확인, 2026-10-30 코덱스 대신) · reviewer(sonnet)
    ├─ 디자인팀: designer(sonnet, 2026-10-27 신규 — 간판·메뉴판을 닮게 꾸미기)
    └─ 번역팀: polisher(sonnet)
 ```

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nangmanjip.qrmenuasia.com/sitemap.xml

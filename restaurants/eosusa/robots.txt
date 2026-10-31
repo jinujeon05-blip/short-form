@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://eosusa.qrmenuasia.com/sitemap.xml

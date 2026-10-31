@@ -80,8 +80,23 @@
 | `restaurants/choegojip` | 최고집 CHOE GO JIP 한식당 — 고기구이·소곱창·탕·전골·점심 특선 (SH-14, Tòa E3, CT8 Emerald, Từ Liêm, Hà Nội, 076 920 7949) — **가게 찾기용** | `choegojip-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://choegojip.qrmenuasia.com |
 | `restaurants/biwon` | 비원 BIWON 한정식·숯불갈비 — 소고기 구이·전골·탕·냉면 (Cửa E, TTTM The Garden, The Manor, Từ Liêm, Hà Nội, 024 6282 3300) — **가게 찾기용** | `biwon-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://biwon.qrmenuasia.com |
 | `restaurants/wangdaepo` | 왕대포 꼬치구이 WANG DEA PHO 연변식 양꼬치·꼬치구이·마라·볶음요리 (미딩점, 16 P. Trần Văn Lai, Từ Liêm, Hà Nội, 032 7800 789) — **가게 찾기용** | `wangdaepo-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://wangdaepo.qrmenuasia.com |
+| `restaurants/tojeong` | 토정삼계탕 TOJEONG SAMGYETANG 삼계탕·갈비탕·닭요리·냉면·전기구이통닭 (P. Đỗ Đình Thiện/54 Đ. Mỹ Đình, Từ Liêm, Hà Nội, 024 3201 8066, 09:00–22:00) — **가게 찾기용**, 사진 4장(+간판), 2026-10-29 제작 | (미배포 — 사용자 '배포해' 대기) | https://tojeong.qrmenuasia.com |
+| `restaurants/basakchicken` | 바삭 치킨 BARSAK 치킨·탕·떡볶이·안주 호프 (CT9 Sudico, 4 Đ. Đình Thôn, Từ Liêm, Hà Nội, 098 137 5666, 15:00–01:00) — **가게 찾기용**, 82개 메뉴, 사진 6장, 2026-10-29 제작 | (미배포 — 사용자 '배포해' 대기) | https://basakchicken.qrmenuasia.com |
 | `restaurants/golbaengi` | 을지로골뱅이 Euljiro Golbaengi 한국식 골뱅이 호프 — 골뱅이무침·통골뱅이탕·대왕먹태·옛날 치킨·생선구이 (Lô 25 TT4, Trần Văn Lai, Từ Liêm, Hà Nội, 098 909 2060, 15:00–02:00) — **가게 찾기용** | `golbaengi-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://golbaengi.qrmenuasia.com |
+| `restaurants/gardenia` | 가드니아 GARDENIA 한식당 — 돈까스·분식·김밥·치킨 (Kiốt số 8B, CT5, KĐT Mỹ Đình – Sông Đà, Nam Từ Liêm, Hà Nội, 0836054989, 영업시간 미확인) — **가게 찾기용** | 미배포 (2026-10-28 제작, 브랜치 dashboard-agent) | https://gardenia.qrmenuasia.com |
 | `restaurants/hansari` | 한사리감자탕 & 뼈구이 미딩점 HANSARI GAMJATANG 한식당 — 감자탕·뼈해장국·직화 뼈구이·뼈찜·왕만두 전골·돈까스 (30 TT4, KĐT Mỹ Đình – Sông Đà, Từ Liêm, Hà Nội, 0975 963 003, 09:00–23:00) — **가게 찾기용** | `hansari-menu` (팀 jinwoo8, 2026-10-28 배포, 가게 찾기 목록도 반영 — main 머지 완료 2026-10-28) | https://hansari.qrmenuasia.com |
+| `restaurants/jijigo` | 지지GO JIJI GO 한식·한국식 중화요리·전 (272 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh, 0376294869, 영업 9:00~22:00) — **가게 찾기용** | 미배포 (2026-10-30 제작, 브랜치 dashboard-agent) | https://jijigo.qrmenuasia.com |
+| `restaurants/nangmanjip` | 낭만집 NANGMANJIP 한식 주점 (34 Đường Võ Cường-6, Võ Cường, Bắc Ninh, 086 577 7600, 영업시간 미상) — **가게 찾기용** | 미배포 (2026-10-30 제작, 브랜치 dashboard-agent) | https://nangmanjip.qrmenuasia.com |
+| `restaurants/eosusa` | 어수사 OSUSA 한식 횟집 (37 Lý Nhân Tông, Võ Cường, Bắc Ninh, 038 345 3723, 영업시간 미상) — **가게 찾기용** | 미배포 (2026-10-30 제작, 브랜치 dashboard-agent) | https://eosusa.qrmenuasia.com |
+| `restaurants/butumak` | 부뚜막 BUTOOMAC 한식 고깃집 (290 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh, 038 383 4885, 11:00–24:00 추정) — **가게 찾기용** | 미배포 (2026-10-30 제작, 브랜치 dashboard-agent) | https://butumak.qrmenuasia.com |
+| `restaurants/seoseo` | 서서갈비 SEOSEO GALBI 백년식당 한식 고깃집 (9 Đ. Hoàng Hoa Thám, Võ Cường, Bắc Ninh, 0777 386 760, 11:00–22:00) — **가게 찾기용** | 미배포 (2026-10-30 제작, 브랜치 dashboard-agent) | https://seoseo.qrmenuasia.com |
+| `restaurants/subyeon` | 수변돼지국밥 박닌점 SUBYEON (상호는 사용자 지정 '박닌점', 하노이에 본점. 간판은 수변최고 돼지국밥; 298 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh, 0347 472 336, 09:30–14:00·16:30–22:00) — **가게 찾기용** | 미배포 (2026-10-30 제작, 브랜치 dashboard-agent) | https://subyeon.qrmenuasia.com |
+| `restaurants/dalrae` | 달래네 NHÀ HÀNG ĐAL LÊ 한식 다슬기·민물매운탕·닭한마리 (128 Nguyễn Cao, Kinh Bắc, Bắc Ninh, 035 437 3286, 10:00–22:00(금요일 기준)) — **가게 찾기용** | 미배포 (2026-10-30 제작, 브랜치 dashboard-agent) | https://dalrae.qrmenuasia.com |
+| `restaurants/guigui` | 구이구이 Gui92 한국 전통 숯불 바비큐 (Viglacere ngã 6, Lý Thái Tổ, Võ Cường, Bắc Ninh, 022 2654 9292, 영업시간 지도에 없음) — **가게 찾기용** | 배포됨 (2026-10-31, e14cc8a, 도메인은 2026-10-31에 뒤늦게 연결) | https://guigui.qrmenuasia.com |
+| `restaurants/dusyef` | 두셰프의 돈가스&마우 Two Chefs Tonkatsu & Mau 돈가스·롤·우동·치킨 (B004 The Manor, Từ Liêm, Hà Nội, 033 549 1733, 10:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://dusyef.qrmenuasia.com |
+| `restaurants/uimyeonok` | 우이며녹 미딩점 UI MYEO NOK 칼국수·파전 (C005 The Manor, Mỹ Đình, Từ Liêm, Hà Nội, 024 3880 0010, 11:00–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://uimyeonok.qrmenuasia.com |
+| `restaurants/texasbbq` | CTQ 텍사스 BBQ 미딩점 CTQ TEXAS BBQ 훈제 바비큐·사파 연어·콤보 세트 (Tòa nhà CT1, KĐT Mỹ Đình, Xuân Phương, Hà Nội, 096 232 2111, 10:30–14:00·16:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://texasbbq.qrmenuasia.com |
+| `restaurants/hoolala` | 훌랄라치킨 HOOLALA 치킨 펍·바베큐 치킨·피자·파스타·맥주 (Block B 005, The Manor, Từ Liêm, Hà Nội, 0355 738 102, 11:00–24:00 해석) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://hoolala.qrmenuasia.com |
 
 
 ## 가게별 제작 기록
@@ -187,3 +202,23 @@
 - 왕대포 꼬치구이(WANG DEA PHO)는 **가게 찾기용**(2026-10-28, PC 로컬 세션). 사진 수집기 34장(메뉴판 14·음식 16·매장 4, 모두 손님 사진 → 하단 줄 "손님이 구글 지도에 올린"). 드라이브 동기화 폴더에서 바로 복사(다운로드 0). 로고는 명함(menu_14)에만 작게 있어 밤 간판 `store_04`를 16:9로(위쪽 글자가 잘리지 않게 맨 위부터). **메뉴판이 세 판**(양꼬치 190k·220k·250k) → 같은 메뉴는 높은 쪽, 새 판(지도 '메뉴' 탭 menu_01~04)에 없는 구이·볶음은 옛 판에서. menu_14 명함은 가격 없음 → 무침·주식류 뺌. 메뉴 읽기: 안티그래비티 2명(한 번에 성공) → 코덱스 대조(menu_11 볶음류를 엉뚱하게 읽음 → 메인이 menu_11 직접 보고 agy 쪽이 맞음 확인, menu_08·13도 직접). 요리 사진 4장(양꼬치 food_14·삼겹살 꼬치 food_05 왼쪽·꿔바로우 food_02·마파두부 food_10) 640×480. 메뉴 68개(8분류). 모음 이미지는 메인이 직접 만듦(finder 안 부름, 파이썬 몇 줄이라).
 - 을지로골뱅이(Euljiro Golbaengi)는 **가게 찾기용**(2026-10-28, PC 로컬 세션). 사진 수집기 35장(메뉴판 16·음식 19, 가게 계정 사진 4장 섞임 — 메뉴판 사진은 모두 손님 → 하단 줄 "손님이 구글 지도에 올린"). 드라이브 동기화 폴더에서 바로 복사(다운로드 0). 수집기 메모대로 **메뉴판 속 로고**(소라 그림+을지로 골뱅이, menu_08)를 잘라 `img/logo.png`(크라프트 바탕). **메뉴판이 세 판**: 전체 판(menu_01·06·13·16, 골뱅이 500k, 생선구이·simple·주류 가격 있음)·벽 판(menu_02·07, 480k)·작은 판(menu_08, 600k, 포사리·골뱅이사리). 같은 메뉴는 높은 쪽. menu_10·11·15는 통조림 쇼핑 화면·회사 소개(메뉴 아님), menu_05·12는 가게 정면·실내. 타이거 활새우 소금구이는 입간판(menu_13). 메뉴 읽기: 안티그래비티 2명(한 번에 성공) → 코덱스 대조(소주를 50K로 잘못 읽음 → 메인이 menu_06 아래쪽을 직접 보고 150K 확인). 요리 사진 5장(을지로골뱅이 food_02·통골뱅이탕 food_03·타이거 새우 food_01·대왕먹태 food_15·옛날 치킨 food_07) 640×480. 메뉴 38개(6분류). 모음 이미지는 메인이 직접. 꾸미기 designer(메뉴판 크림 바탕+빨강 제목+초록 가격+두 줄 선, 머리는 로고와 같은 크라프트 톤), 번역 polisher. **영업시간 칸 첫 적용**(전화 위 `.pill`, `RESTAURANT.hours`). `seo.mjs`를 돌리면 최고집·우나기 index.html의 JSON-LD 한 줄이 바뀜(그 가게 menu.js와 SEO 블록이 어긋나 있음) → 내 가게 밖이라 되돌림.
 - 한사리감자탕 & 뼈구이 미딩점(HANSARI GAMJATANG)은 **가게 찾기용**(2026-10-28, PC 로컬 세션). 사진 수집기 37장(메뉴판 18·음식 17·매장 1·기타 1). 드라이브 동기화 폴더에서 바로 복사(다운로드 0). 로고 파일 없음(메뉴판·냅킨 속 작은 로고뿐) → 간판 사진 `store_01`을 16:9로 잘라 맨 위(`img/sign.jpg`). **메뉴판이 두 판**: 옛 판(가게 계정 사진 menu_02·05 요리, menu_07·01 식사, 부가세 표기 없음)과 새 판(손님 사진 menu_09 요리·menu_10 식사, "모든 음식 부가세(VAT) 포함", 5만~15만 동 더 비쌈) → 전부 새 판 기준(높은 쪽), 옛 판에만 있는 제주돔베고기·콩나물 우거지탕 추가·카스/테라는 뺌. menu_03·04·06·11·12·13·14는 베트남어·중국어 판, menu_15는 리뷰 이벤트, menu_16·17은 정면·입간판, menu_18은 냅킨. 메뉴 읽기: 안티그래비티 2명(요리·식사, 한 번에 성공) → 코덱스 대조 "이상 없음". 요리 사진 5장(한사리 감자탕 food_05·왕만두 전골 food_01·뼈해장국 food_17·등심 돈까스 food_15·직화 뼈구이 food_12 아래쪽) 640×480. 메뉴 38개(6분류). 영업시간 09:00–23:00(수집기 값, 메뉴판·간판엔 시간 없음). 하단 줄 "손님이 구글 지도에 올린"(새 판이 손님 사진).
+
+- 지지GO(JIJI GO)는 **가게 찾기용**(2026-10-30, 대시보드 지시). 사진 수집기 29장(메뉴판 10·음식 14·기타 1·화면 캡처 4, 매장 0, 모두 손님 사진). 간판 사진이 없어 모둠전 사진을 맨 위 그림으로 임시 사용(캡틴 선택). 요리 사진 5장(삼선짬뽕·차돌박이짬뽕·모둠전·새우볶음밥·탕수육, 10-30 보충). 상세는 `docs/todo.md`.
+- 낭만집(nangmanjip)은 **가게 찾기용**(2026-10-30, 대시보드 지시). 사진 수집기 26장(메뉴판 3·음식 13·매장 2·기타 8). 맨 위 그림은 간판·네온 사진(store_02). 요리 사진 4장(홍어삼합·겉절이보쌈·감자전·두부김치). 영업시간 15:00–22:10(구글 지도, 10-30 추가). 상세는 `docs/todo.md`.
+- 어수사(eosusa)는 **가게 찾기용**(2026-10-30, 대시보드 지시). 사진 수집기 55장(메뉴판 16·음식 26·매장 2·기타 7). 맨 위 그림은 간판 사진(store_02, OSUSA). 요리 사진 4장(모듬회·참치회·모듬튀김·매운탕). 메뉴판은 안티그래비티로 읽고 reviewer가 재대조. 와인색+금색 일식 횟집 느낌(designer). 영업시간 10:00–23:30·일 22:00(구글 지도, 10-30 추가). 상세는 `docs/todo.md`.
+- 부뚜막(butumak)은 **가게 찾기용**(2026-10-30, 대시보드 지시). 사진 수집기 58장(메뉴판 34·음식 20·매장 4). 맨 위 그림은 간판 사진(store_01). 요리 사진 4장(해물파전·홍어삼합·매운치즈 쪽갈비·반반쪽갈비, 10-30 보충). 메뉴판은 안티그래비티 5묶음 → reviewer 대조(구판·신판 혼재, 신판 기준). 상세는 `docs/todo.md`.
+- 서서갈비(seoseo)는 **가게 찾기용**(2026-10-30, 대시보드 지시). 수집기 34장(메뉴판 16·음식 13·매장 1, 메뉴판 분류 중 진짜 메뉴판은 5장). 맨 위 그림은 야간 간판 사진(menu_10을 16:9로 자름). 요리 사진 4장(돼지왕갈비=food_11, 비빔냉면=food_09, 양념게장=food_04, 김치한근탕=food_08, 10-30 보충). 메뉴는 안티그래비티→운영 감찰관(Sonnet) 재대조 통과. 상세는 `docs/todo.md`.
+
+## 우이며녹(uimyeonok, 하노이 The Manor 미딩점, 가게 찾기용) — 2026-10-31
+- 메뉴판 사진 5장(menu_01·04·05·06·12)뿐, 나머지 menu_*는 음식 사진. 가격은 모두 VAT 별도·사진끼리 다른 값 없음(안티그래비티 + 운영 감찰관 Sonnet 대조 일치). 낙지 샤브샤브는 2미(menu_12 손글씨는 1~2미).
+- 차돌·얼큰해물 칼국수는 1인 가격·2인분부터 주문. 로고 없음 → 맨 위 그림은 간판 사진(store_20). 요리 사진 6장(차돌·백합칼국수·해물 전골·파전·만두튀김·계란죽)은 사진만 보고 메뉴와 맞춘 것이라 확인 필요.
+
+## CTQ 텍사스 BBQ 미딩점(texasbbq, 가게 찾기용) — 2026-10-31
+- 수집기 사진 85장(메뉴판 26·음식 27·매장 15·디버그 4). 로고 없음 → 간판 `store_17`을 16:9로 잘라 맨 위(`img/sign.jpg`). 요리 사진 5장(돼지갈비 food_27·양지 세트 food_01·연어 food_21·해초샐러드 food_09·콤보 food_03) 640×480.
+- 메뉴 읽기: 안티그래비티 5묶음(메뉴판 책자 여러 판이 섞임) → 안티그래비티 Sonnet 재대조 5묶음 '가격 다른 것·빠진 것 없음' → reviewer가 빠진 헬시 코울슬로 80K 1건 지적, 반영. 메뉴 57개(10분류). 세트 번호(THE BEST 4.1~4.3)가 판마다 달라 내용으로 이름 붙임.
+- 같은 메뉴 가격 차이: 맥앤치즈·치즈치킨 철판 165K(menu_20) vs 168K(menu_10) → 168K, 코울슬로 129K(menu_16) vs 헬시 코울슬로 80K(menu_17)는 이름이 달라 따로. 영업시간은 수집기 값(메뉴판·간판엔 시간 없음).
+
+## 훌랄라치킨(hoolala, 하노이 The Manor, 가게 찾기용) — 2026-10-31
+- 수집기 사진 71장(메뉴판 30·음식 36·매장 1). 진짜 메뉴판은 menu_01·04·05·06 4장뿐(나머지 menu_*는 음식 사진). 로고 없음 → 간판 `store_01`을 16:9로 잘라 맨 위(`img/sign.jpg`). 요리 사진 6장(후라이드 food_21·눈꽃치즈 food_17·망고샐러드 food_12·고르곤졸라 food_36·감자튀김 menu_22·게살 파스타 food_15) 640×480.
+- 메뉴 읽기: 안티그래비티 → 안티그래비티 Sonnet 대조(가격·빠진 메뉴 없음) → reviewer(번역 3건·🌶 표시 반영). 메뉴 84개(13분류).
+- 같은 메뉴 가격 차이: 그롤쉬 110K/120K·요펜 슈퍼두파 110K/120K → 120K.
