@@ -53,4 +53,5 @@
 ## 메뉴 게임 (2026-10-31, `sales/stores/game.html`)
 - 가게 찾기 맨 위 '🎮 오늘 뭐 먹지? 메뉴 게임' 버튼 → 음식 이상형 월드컵(16강) · 오늘 뭐 먹지 룰렛(매운 것만 칩). 5개 언어, 지역 칩.
 - 데이터는 `node tools/game-data.mjs`가 만든 `sales/stores/game-data.js`(가게당 사진 메뉴 6개, 태그 메뉴 먼저). **새 가게를 등록하거나 메뉴 사진을 바꾸면 다시 돌린다.** 사진은 각 가게 배포 주소에서 불러오므로 배포 안 된 사진은 다른 메뉴로 자동 대체된다.
+- **배포**: 2026-10-31 `qrmenu-intro`(커밋 0187465) — https://qrmenuasia.com/stores/game.html 실제 주소 확인. 방문 기록은 `tools/analytics.mjs` 목록에 game.html 추가.
 - 페이지는 안티그래비티(`agy --mode accept-edits -p`, 파일 쓰기 시험 합격)가 설계서대로 만들었고, 메인은 화면 확인·작은 수정만 했다.
