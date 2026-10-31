@@ -49,3 +49,8 @@
 - Ăn Vội: `restaurants/anvoi/print/huong-dan-su-dung.pdf` (베트남어 사용설명서·주문 처리 순서, A4 2쪽, 원본 `huong-dan.html`, 화면 캡처 `print/img/g*.jpg`). 다른 가게도 같은 형식으로 만든다.
 - 가마솥: `restaurants/gamasot/print/guide-gamasot.pdf` (한국어 활용 가이드북, A4 3쪽: 손님 화면·기능별 좋은 점·상황별 활용·링크 문구·수정 방법, 원본 `guide.html`, 캡처 `print/img/g*.jpg`).
 - Ăn Vội 메뉴판에는 장바구니 + Zalo 주문 기능이 있다 (주문서는 항상 베트남어로 작성).
+
+## 메뉴 게임 (2026-10-31, `sales/stores/game.html`)
+- 가게 찾기 맨 위 '🎮 오늘 뭐 먹지? 메뉴 게임' 버튼 → 음식 이상형 월드컵(16강) · 오늘 뭐 먹지 룰렛(매운 것만 칩). 5개 언어, 지역 칩.
+- 데이터는 `node tools/game-data.mjs`가 만든 `sales/stores/game-data.js`(가게당 사진 메뉴 6개, 태그 메뉴 먼저). **새 가게를 등록하거나 메뉴 사진을 바꾸면 다시 돌린다.** 사진은 각 가게 배포 주소에서 불러오므로 배포 안 된 사진은 다른 메뉴로 자동 대체된다.
+- 페이지는 안티그래비티(`agy --mode accept-edits -p`, 파일 쓰기 시험 합격)가 설계서대로 만들었고, 메인은 화면 확인·작은 수정만 했다.

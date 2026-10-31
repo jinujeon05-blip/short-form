@@ -1,0 +1,1139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16130f">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<title>메뉴 게임 · Trò chơi chọn món</title>
+<meta name="description" content="메뉴 게임 · Trò chơi chọn món — 음식 이상형 월드컵, 오늘 뭐 먹지? 룰렛으로 오늘의 메뉴를 골라보세요.">
+<link rel="canonical" href="https://qrmenuasia.com/stores/game.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="메뉴 게임 · Trò chơi chọn món">
+<meta property="og:description" content="음식 이상형 월드컵 · 오늘 뭐 먹지? 룰렛 — Trò chơi chọn món ăn hôm nay">
+<meta property="og:url" content="https://qrmenuasia.com/stores/game.html">
+<style>
+  :root {
+    --ink: #16130f; --ink-2: #2a251f; --paper: #faf7f2; --card: #fff; --line: #e9e2d7;
+    --muted: #6f675d; --accent: #e0452b; --accent-2: #f2a03d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; background: var(--paper); color: var(--ink); }
+  body {
+    line-height: 1.45; -webkit-font-smoothing: antialiased;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "PingFang SC", "Noto Sans SC", sans-serif;
+  }
+  :lang(ko) h1, :lang(ko) h2, :lang(ko) h3, :lang(ko) p { word-break: keep-all; }
+  h1, h2, h3, p { margin: 0; }
+  button, a { font: inherit; -webkit-tap-highlight-color: transparent; }
+
+  /* 맨 위 어두운 띠 */
+  .topbar {
+    background: var(--ink); color: #fff; padding: 12px 14px;
+    border-bottom: 1px solid #2b241d;
+  }
+  .topbar-inner {
+    max-width: 520px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px 10px; flex-wrap: wrap;
+  }
+  .topbar-head {
+    display: flex; align-items: center; gap: 10px; min-width: 0;
+  }
+  .back-stores {
+    color: #d8cfc3; text-decoration: none; font-size: 13.5px; font-weight: 700;
+    padding: 5px 10px; border-radius: 999px; border: 1px solid #473e34; white-space: nowrap;
+    transition: background .15s, color .15s;
+  }
+  .back-stores:hover { background: #2a251f; color: #fff; }
+  .top-title {
+    font-size: 16.5px; font-weight: 900; letter-spacing: -.3px; color: #fff; white-space: nowrap;
+  }
+  .langs {
+    display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; margin-left: auto;
+  }
+  .langs button {
+    font-size: 12px; font-weight: 600; color: #d8cfc3; background: transparent;
+    border: 1px solid #5a4f43; border-radius: 999px; padding: 4px 10px; cursor: pointer;
+  }
+  .langs button[aria-pressed="true"] {
+    color: var(--ink); background: #fff; border-color: #fff;
+  }
+
+  /* 본문 공통 */
+  .wrap {
+    max-width: 520px; margin: 0 auto; padding: 16px 14px 40px; width: 100%;
+  }
+  [hidden] { display: none !important; }
+
+  /* 칩 */
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
+  }
+  .chip {
+    font-size: 13.5px; font-weight: 700; color: var(--ink-2); background: var(--card);
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; cursor: pointer;
+    white-space: nowrap; transition: background .15s, color .15s, border-color .15s;
+  }
+  .chip[aria-pressed="true"] {
+    color: #fff; background: var(--ink); border-color: var(--ink);
+  }
+
+  /* 첫 화면: 게임 고르기 카드 2장 */
+  .game-cards { display: grid; gap: 12px; }
+  .game-pick {
+    width: 100%; text-align: left; display: flex; align-items: center; gap: 14px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+    padding: 18px 16px; cursor: pointer; color: var(--ink);
+    box-shadow: 0 3px 10px rgba(22,19,15,.04);
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+  .game-pick:hover { border-color: #d4c8b8; box-shadow: 0 6px 18px rgba(22,19,15,.08); }
+  .game-pick:active { transform: scale(.985); }
+  .game-icon {
+    flex: none; width: 54px; height: 54px; border-radius: 16px;
+    background: linear-gradient(135deg, #fff3eb, #ffe4cf);
+    border: 1px solid #f5d5be;
+    display: grid; place-items: center; font-size: 28px;
+  }
+  .game-info { flex: 1; min-width: 0; }
+  .game-info h2 { font-size: 18px; font-weight: 900; letter-spacing: -.3px; }
+  .game-info p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .game-arrow {
+    flex: none; width: 32px; height: 32px; border-radius: 50%;
+    background: #f5efe6; color: var(--ink-2); display: grid; place-items: center;
+    font-weight: 800; font-size: 15px;
+  }
+
+  /* 게임 상단 보조 막대 */
+  .sub-nav {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .link-back {
+    background: transparent; border: 0; padding: 4px 2px; color: var(--muted);
+    font-size: 13.5px; font-weight: 700; cursor: pointer;
+  }
+  .link-back:hover { color: var(--ink); }
+
+  /* 공통 사진 영역 (항상 4:3) */
+  .photo {
+    position: relative; width: 100%; aspect-ratio: 4 / 3;
+    background: #e9e3da; overflow: hidden;
+  }
+  .photo img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+  .photo .fallback {
+    position: absolute; inset: 0; display: none; place-items: center;
+    background: #e5dfd6; font-size: 42px; color: var(--muted);
+  }
+  .photo.broken img { display: none; }
+  .photo.broken .fallback { display: grid; }
+
+  .spicy { margin-left: 3px; font-size: .92em; }
+
+  /* 버튼 공통 */
+  .btn-stack { display: grid; gap: 8px; margin-top: 14px; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    min-height: 46px; padding: 11px 16px; border-radius: 13px; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink-2); font-size: 15px; font-weight: 800;
+    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center;
+    justify-content: center; gap: 6px; flex: 1; text-align: center;
+    transition: transform .12s ease, opacity .15s ease;
+  }
+  .btn:active { transform: scale(.985); }
+  .btn.primary {
+    border: 0; color: #fff;
+    background: linear-gradient(135deg, var(--accent), #f0662f);
+    box-shadow: 0 5px 14px rgba(224,69,43,.26);
+  }
+  .btn.dark {
+    border: 0; color: #fff; background: var(--ink);
+  }
+  .btn:disabled { opacity: .65; cursor: default; transform: none; }
+
+  /* 게임 1: 이상형 월드컵 */
+  .wc-progress-row {
+    display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px;
+  }
+  .wc-stage { font-size: 15px; font-weight: 900; color: var(--ink); }
+  .wc-track {
+    height: 4px; width: 100%; background: var(--line); border-radius: 999px;
+    overflow: hidden; margin-bottom: 12px;
+  }
+  .wc-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 999px; transition: width .25s ease;
+  }
+  .wc-arena {
+    max-width: 420px; margin: 0 auto; position: relative;
+    display: flex; flex-direction: column;
+  }
+  /* 폰에서도 두 카드가 한 화면에 들어오게 사진 높이를 화면 높이에 맞춤 */
+  .wc-card .photo { aspect-ratio: auto; height: min(calc(min(100vw, 420px) * .75), calc((100svh - 360px) / 2)); min-height: 150px; }
+  .wc-card {
+    width: 100%; text-align: left; padding: 0; border: 2px solid var(--line);
+    border-radius: 18px; overflow: hidden; background: var(--card); color: var(--ink);
+    cursor: pointer; box-shadow: 0 3px 10px rgba(22,19,15,.05);
+    transition: transform .36s cubic-bezier(.2,.8,.2,1), opacity .36s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .wc-card:hover { border-color: #d2c5b4; }
+  .wc-card.picked {
+    transform: scale(1.035); border-color: var(--accent);
+    box-shadow: 0 10px 26px rgba(224,69,43,.25); z-index: 2;
+  }
+  .wc-card.dimmed {
+    opacity: .22; transform: scale(.96);
+  }
+  .wc-body {
+    padding: 10px 14px 12px; display: flex; align-items: baseline;
+    justify-content: space-between; gap: 10px;
+  }
+  .wc-main { min-width: 0; flex: 1; }
+  .wc-name {
+    font-size: 16.5px; font-weight: 800; line-height: 1.25;
+    overflow: hidden; text-overflow: ellipsis; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  }
+  .wc-store {
+    font-size: 12.5px; color: var(--muted); margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .wc-price {
+    flex: none; font-size: 14px; font-weight: 800; color: var(--accent); white-space: nowrap;
+  }
+  .vs-badge {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--ink); color: #fff; border: 3px solid var(--paper);
+    display: grid; place-items: center; font-size: 12.5px; font-weight: 900;
+    margin: -11px auto; position: relative; z-index: 3; pointer-events: none;
+    letter-spacing: -.3px;
+  }
+
+  /* 월드컵 우승 화면 + CSS 색종이 */
+  .win-box {
+    position: relative; overflow: hidden; background: var(--card);
+    border: 1px solid var(--line); border-radius: 22px; padding: 20px 16px 18px;
+    box-shadow: 0 8px 24px rgba(22,19,15,.07);
+  }
+  .win-badge {
+    text-align: center; font-size: 20px; font-weight: 900; margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .win-photo {
+    border-radius: 15px; overflow: hidden; border: 1px solid var(--line);
+  }
+  .win-meta { text-align: center; margin-top: 14px; }
+  .win-name { font-size: 21px; font-weight: 900; line-height: 1.25; }
+  .win-store { font-size: 14px; color: var(--muted); margin-top: 4px; font-weight: 600; }
+  .win-price {
+    display: inline-block; margin-top: 6px; padding: 3px 11px; border-radius: 999px;
+    background: #fff1ec; color: var(--accent); font-size: 15px; font-weight: 800;
+  }
+  .runner-up {
+    margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line);
+    font-size: 12.5px; color: var(--muted); text-align: center;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .runner-up b { color: var(--ink-2); font-weight: 700; }
+
+  .confetti {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  }
+  .confetti i {
+    position: absolute; top: -14px; width: 8px; height: 13px; border-radius: 2px;
+    opacity: 0; animation: confetti-fall 2.4s ease-out forwards;
+  }
+  .confetti i:nth-child(1)  { left: 7%;  background: var(--accent);   animation-delay: .02s; }
+  .confetti i:nth-child(2)  { left: 15%; background: var(--accent-2); animation-delay: .18s; width: 7px; height: 7px; border-radius: 50%; }
+  .confetti i:nth-child(3)  { left: 24%; background: #2fb36d;         animation-delay: .08s; }
+  .confetti i:nth-child(4)  { left: 33%; background: #3b82f6;         animation-delay: .28s; }
+  .confetti i:nth-child(5)  { left: 42%; background: var(--accent);   animation-delay: .12s; }
+  .confetti i:nth-child(6)  { left: 51%; background: var(--accent-2); animation-delay: .04s; }
+  .confetti i:nth-child(7)  { left: 60%; background: #e85d9e;         animation-delay: .22s; width: 7px; height: 7px; border-radius: 50%; }
+  .confetti i:nth-child(8)  { left: 69%; background: #2fb36d;         animation-delay: .14s; }
+  .confetti i:nth-child(9)  { left: 78%; background: var(--accent);   animation-delay: .26s; }
+  .confetti i:nth-child(10) { left: 86%; background: #3b82f6;         animation-delay: .06s; }
+  .confetti i:nth-child(11) { left: 93%; background: var(--accent-2); animation-delay: .20s; }
+  .confetti i:nth-child(12) { left: 19%; background: #e85d9e;         animation-delay: .34s; }
+  @keyframes confetti-fall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: .95; }
+    80%  { opacity: .85; }
+    100% { transform: translateY(290px) rotate(420deg); opacity: 0; }
+  }
+
+  /* 게임 2: 룰렛 */
+  .rl-card {
+    background: var(--card); border: 2px solid var(--line); border-radius: 22px;
+    overflow: hidden; box-shadow: 0 6px 20px rgba(22,19,15,.06);
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .rl-card.tick .rl-body {
+    animation: slot-tick .09s ease-out;
+  }
+  .rl-card.sparkle {
+    animation: border-sparkle .9s ease-out forwards;
+  }
+  @keyframes slot-tick {
+    0%   { transform: translateY(-4px); opacity: .72; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes border-sparkle {
+    0%   { border-color: var(--accent-2); box-shadow: 0 0 0 0 rgba(242,160,61,.65), 0 8px 24px rgba(224,69,43,.25); }
+    45%  { border-color: var(--accent);   box-shadow: 0 0 0 7px rgba(242,160,61,.25), 0 10px 28px rgba(224,69,43,.32); }
+    75%  { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(224,69,43,.18), 0 8px 22px rgba(224,69,43,.2); }
+    100% { border-color: var(--accent);   box-shadow: 0 6px 20px rgba(224,69,43,.16); }
+  }
+  .rl-body { padding: 16px 16px 18px; text-align: center; }
+  .rl-name { font-size: 20px; font-weight: 900; line-height: 1.25; }
+  .rl-store { font-size: 14px; color: var(--muted); margin-top: 4px; font-weight: 600; }
+  .rl-price {
+    display: inline-block; margin-top: 7px; padding: 3px 11px; border-radius: 999px;
+    background: #f5efe6; color: var(--ink-2); font-size: 14.5px; font-weight: 800;
+  }
+  .spin-btn {
+    width: 100%; min-height: 54px; font-size: 18px; font-weight: 900; border-radius: 16px;
+  }
+
+  /* 안내 상자 */
+  .empty-box {
+    text-align: center; background: var(--card); border: 1px solid var(--line);
+    border-radius: 18px; padding: 36px 16px; color: var(--muted);
+  }
+  .empty-box p { font-size: 15px; font-weight: 600; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-head">
+      <a class="back-stores" href="/stores/" id="backStores">← 가게 찾기</a>
+      <h1 class="top-title" id="topTitle">메뉴 게임</h1>
+    </div>
+    <div class="langs" id="langs"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 첫 화면 -->
+  <section id="viewHome">
+    <div class="chips" id="regionChips"></div>
+    <div class="game-cards">
+      <button type="button" class="game-pick" id="pickWc">
+        <span class="game-icon" aria-hidden="true">🏆</span>
+        <span class="game-info">
+          <h2 id="wcCardTitle">음식 이상형 월드컵</h2>
+          <p id="wcCardDesc">두 메뉴 중 더 먹고 싶은 쪽을 골라 우승 메뉴를 찾아요</p>
+        </span>
+        <span class="game-arrow" aria-hidden="true">→</span>
+      </button>
+      <button type="button" class="game-pick" id="pickRl">
+        <span class="game-icon" aria-hidden="true">🎰</span>
+        <span class="game-info">
+          <h2 id="rlCardTitle">오늘 뭐 먹지? 룰렛</h2>
+          <p id="rlCardDesc">버튼 한 번에 오늘의 메뉴를 뽑아요</p>
+        </span>
+        <span class="game-arrow" aria-hidden="true">→</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- 게임 1: 이상형 월드컵 -->
+  <section id="viewWc" hidden>
+    <div class="sub-nav">
+      <button type="button" class="link-back" id="wcBackHome"></button>
+    </div>
+    <div id="wcPlay">
+      <div class="wc-progress-row">
+        <span class="wc-stage" id="wcStage"></span>
+      </div>
+      <div class="wc-track"><div class="wc-fill" id="wcFill"></div></div>
+      <div class="wc-arena" id="wcArena">
+        <button type="button" class="wc-card" id="wcCard0" data-idx="0">
+          <div class="photo" id="wcPhoto0"><img id="wcImg0" alt=""><div class="fallback" aria-hidden="true">🍽</div></div>
+          <div class="wc-body">
+            <div class="wc-main">
+              <div class="wc-name" id="wcName0"></div>
+              <div class="wc-store" id="wcStore0"></div>
+            </div>
+            <div class="wc-price" id="wcPrice0"></div>
+          </div>
+        </button>
+        <div class="vs-badge" aria-hidden="true">VS</div>
+        <button type="button" class="wc-card" id="wcCard1" data-idx="1">
+          <div class="photo" id="wcPhoto1"><img id="wcImg1" alt=""><div class="fallback" aria-hidden="true">🍽</div></div>
+          <div class="wc-body">
+            <div class="wc-main">
+              <div class="wc-name" id="wcName1"></div>
+              <div class="wc-store" id="wcStore1"></div>
+            </div>
+            <div class="wc-price" id="wcPrice1"></div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div id="wcWin" hidden>
+      <div class="win-box">
+        <div class="confetti" id="wcConfetti" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="win-badge" id="winHeading"></div>
+        <div class="photo win-photo" id="winPhoto"><img id="winImg" alt=""><div class="fallback" aria-hidden="true">🍽</div></div>
+        <div class="win-meta">
+          <div class="win-name" id="winName"></div>
+          <div class="win-store" id="winStore"></div>
+          <div class="win-price" id="winPrice"></div>
+        </div>
+        <div class="runner-up" id="winRunner"></div>
+        <div class="btn-stack">
+          <a class="btn primary" id="winStoreLink" href="/stores/"></a>
+          <div class="btn-row">
+            <button type="button" class="btn dark" id="winReplay"></button>
+            <button type="button" class="btn" id="winToHome"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="wcEmpty" class="empty-box" hidden>
+      <p id="wcEmptyMsg"></p>
+      <button type="button" class="btn" id="wcEmptyBack"></button>
+    </div>
+  </section>
+
+  <!-- 게임 2: 룰렛 -->
+  <section id="viewRl" hidden>
+    <div class="sub-nav">
+      <button type="button" class="link-back" id="rlBackHome"></button>
+      <button type="button" class="chip" id="spicyChip" aria-pressed="false"></button>
+    </div>
+
+    <div id="rlMain">
+      <div class="rl-card" id="rlCard">
+        <div class="photo" id="rlPhoto"><img id="rlImg" alt=""><div class="fallback" aria-hidden="true">🍽</div></div>
+        <div class="rl-body">
+          <div class="rl-name" id="rlName"></div>
+          <div class="rl-store" id="rlStore"></div>
+          <div class="rl-price" id="rlPrice"></div>
+        </div>
+      </div>
+
+      <div class="btn-stack" id="rlSpinWrap">
+        <button type="button" class="btn primary spin-btn" id="rlSpinBtn"></button>
+      </div>
+
+      <div class="btn-stack" id="rlDoneWrap" hidden>
+        <a class="btn primary" id="rlStoreLink" href="/stores/"></a>
+        <button type="button" class="btn dark" id="rlAgainBtn"></button>
+      </div>
+    </div>
+
+    <div id="rlEmpty" class="empty-box" hidden>
+      <p id="rlEmptyMsg"></p>
+    </div>
+  </section>
+</main>
+
+<script src="/stores/game-data.js"></script>
+<script>
+(function () {
+  const LANGS = [["ko", "한국어"], ["vi", "Tiếng Việt"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"]];
+  const SUPPORTED = LANGS.map(([c]) => c);
+
+  const T = {
+    ko: {
+      pageTitle: "메뉴 게임 · Trò chơi chọn món",
+      topTitle: "메뉴 게임",
+      backStores: "← 가게 찾기",
+      all: "전체",
+      market: "시가",
+      wcTitle: "음식 이상형 월드컵",
+      wcDesc: "두 메뉴 중 더 먹고 싶은 쪽을 골라 우승 메뉴를 찾아요",
+      rlTitle: "오늘 뭐 먹지? 룰렛",
+      rlDesc: "버튼 한 번에 오늘의 메뉴를 뽑아요",
+      r16: "16강",
+      r8: "8강",
+      r4: "4강",
+      r2: "결승",
+      winTitle: "오늘의 우승 메뉴!",
+      runnerUp: "결승 진출",
+      viewMenu: "이 가게 메뉴판 보기",
+      replay: "다시 하기",
+      toHome: "게임 고르기로",
+      backToHome: "← 게임 고르기로",
+      spicyOnly: "🌶 매운 것만",
+      spin: "돌리기!",
+      spinning: "뽑는 중...",
+      oneMore: "한 번 더",
+      noDishes: "조건에 맞는 메뉴가 없어요"
+    },
+    vi: {
+      pageTitle: "Trò chơi chọn món · 메뉴 게임",
+      topTitle: "Trò chơi chọn món",
+      backStores: "← Tìm quán",
+      all: "Tất cả",
+      market: "Giá thời vụ",
+      wcTitle: "World Cup món ngon",
+      wcDesc: "Chọn món bạn muốn ăn hơn giữa hai món để tìm ra món vô địch",
+      rlTitle: "Hôm nay ăn gì? Vòng quay",
+      rlDesc: "Bấm một lần để chọn ngay món ăn hôm nay",
+      r16: "Vòng 16",
+      r8: "Tứ kết",
+      r4: "Bán kết",
+      r2: "Chung kết",
+      winTitle: "Món vô địch hôm nay!",
+      runnerUp: "Vào chung kết",
+      viewMenu: "Xem thực đơn quán này",
+      replay: "Chơi lại",
+      toHome: "Về chọn trò chơi",
+      backToHome: "← Về chọn trò chơi",
+      spicyOnly: "🌶 Chỉ món cay",
+      spin: "Quay!",
+      spinning: "Đang quay...",
+      oneMore: "Thêm lần nữa",
+      noDishes: "Không có món nào phù hợp"
+    },
+    en: {
+      pageTitle: "Menu Games · 메뉴 게임",
+      topTitle: "Menu Games",
+      backStores: "← Find Stores",
+      all: "All",
+      market: "Market price",
+      wcTitle: "Food World Cup",
+      wcDesc: "Pick the dish you crave more out of two to crown your winner",
+      rlTitle: "What to Eat? Roulette",
+      rlDesc: "Draw today's dish with a single tap",
+      r16: "Round of 16",
+      r8: "Quarterfinals",
+      r4: "Semifinals",
+      r2: "Final",
+      winTitle: "Today's Winning Dish!",
+      runnerUp: "Finalist",
+      viewMenu: "View Store Menu",
+      replay: "Play Again",
+      toHome: "Back to Games",
+      backToHome: "← Back to Games",
+      spicyOnly: "🌶 Spicy only",
+      spin: "Spin!",
+      spinning: "Spinning...",
+      oneMore: "One More Time",
+      noDishes: "No matching dishes available"
+    },
+    zh: {
+      pageTitle: "菜单小游戏 · 메뉴 게임",
+      topTitle: "菜单小游戏",
+      backStores: "← 查找店铺",
+      all: "全部",
+      market: "时价",
+      wcTitle: "美食理想型世界杯",
+      wcDesc: "二选一挑出更想吃的菜品，找出今日冠军菜单",
+      rlTitle: "今天吃什么？转盘",
+      rlDesc: "一键抽出今天的推荐菜品",
+      r16: "16强",
+      r8: "8强",
+      r4: "4强",
+      r2: "决赛",
+      winTitle: "今日冠军菜单！",
+      runnerUp: "决赛入围",
+      viewMenu: "查看这家店菜单",
+      replay: "再来一局",
+      toHome: "返回选择游戏",
+      backToHome: "← 返回选择游戏",
+      spicyOnly: "🌶 只看辣菜",
+      spin: "转起来！",
+      spinning: "抽取中...",
+      oneMore: "再来一次",
+      noDishes: "没有符合条件的菜品"
+    },
+    ja: {
+      pageTitle: "メニューゲーム · 메뉴 게임",
+      topTitle: "メニューゲーム",
+      backStores: "← お店を探す",
+      all: "すべて",
+      market: "時価",
+      wcTitle: "グルメ理想ワールドカップ",
+      wcDesc: "2つのメニューから食べたい方を選んで優勝メニューを見つけよう",
+      rlTitle: "今日なに食べる？ルーレット",
+      rlDesc: "ボタンひとつで今日のメニューを引き当てよう",
+      r16: "ベスト16",
+      r8: "ベスト8",
+      r4: "準決勝",
+      r2: "決勝",
+      winTitle: "今日の優勝メニュー！",
+      runnerUp: "決勝進出",
+      viewMenu: "このお店のメニューを見る",
+      replay: "もう一度",
+      toHome: "ゲーム選択へ",
+      backToHome: "← ゲーム選択へ",
+      spicyOnly: "🌶 辛いものだけ",
+      spin: "まわす！",
+      spinning: "抽選中...",
+      oneMore: "もう一回",
+      noDishes: "条件に合うメニューがありません"
+    }
+  };
+
+  const REGION_NAMES = {
+    bacninh: { ko: "박닌", vi: "Bắc Ninh", en: "Bac Ninh", zh: "北宁", ja: "バクニン" },
+    hanoi: { ko: "하노이", vi: "Hà Nội", en: "Hanoi", zh: "河内", ja: "ハノイ" },
+    quangngai: { ko: "꽝응아이", vi: "Quảng Ngãi", en: "Quang Ngai", zh: "广义", ja: "クアンガイ" },
+    korea: { ko: "한국", vi: "Hàn Quốc", en: "Korea", zh: "韩国", ja: "韓国" },
+    online: { ko: "온라인 주문", vi: "Đặt online", en: "Online", zh: "线上订购", ja: "オンライン" }
+  };
+  const REGION_ORDER = ["bacninh", "hanoi", "quangngai", "korea", "online"];
+
+  const STORES = window.GAME_STORES || {};
+  const ALL_DISHES = (window.GAME_DISHES || []).filter((d) => d && STORES[d.s]);
+  const badImgs = new Set();
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function saveLang(code) {
+    try { localStorage.setItem("sales-lang", code); } catch (e) {}
+  }
+  function loadLang() {
+    try { return localStorage.getItem("sales-lang"); } catch (e) { return null; }
+  }
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = loadLang();
+    if (SUPPORTED.includes(saved)) return saved;
+    const navs = navigator.languages || [navigator.language];
+    for (let i = 0; i < navs.length; i++) {
+      const code = String(navs[i] || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "ko";
+  }
+
+  let lang = detectLang();
+  let view = "home"; // "home" | "wc" | "rl"
+  let selectedRegion = "";
+  let timerId = null;
+
+  // 존재하는 region 목록 (전체 + GAME_STORES 에 있는 region 만)
+  const rawRegions = Array.from(new Set(Object.values(STORES).map((s) => s && s.region).filter(Boolean)));
+  const regions = [
+    ...REGION_ORDER.filter((r) => rawRegions.includes(r)),
+    ...rawRegions.filter((r) => !REGION_ORDER.includes(r))
+  ];
+
+  function clearPendingTimer() {
+    if (timerId !== null) {
+      clearTimeout(timerId);
+      timerId = null;
+    }
+  }
+
+  function dishName(d) {
+    if (!d || !d.n) return "";
+    return d.n[lang] || d.n.en || d.n.ko || "";
+  }
+
+  function dishNameHtml(d) {
+    return esc(dishName(d)) + (d && d.sp ? '<span class="spicy" aria-hidden="true">🌶</span>' : "");
+  }
+
+  function formatPrice(d) {
+    if (!d || d.p === null || d.p === undefined) return T[lang].market;
+    const st = STORES[d.s];
+    const cur = (st && st.cur) || "₫";
+    const sep = cur === "₫" ? "." : ",";
+    const num = String(Math.round(Number(d.p))).replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+    return num + cur;
+  }
+
+  function storeMenuUrl(storeId) {
+    const st = STORES[storeId];
+    if (!st || !st.url) return "/stores/";
+    return st.url.replace(/\/$/, "") + "/?lang=" + encodeURIComponent(lang);
+  }
+
+  function regionLabel(r) {
+    if (!r) return T[lang].all;
+    const dict = REGION_NAMES[r];
+    return dict ? (dict[lang] || dict.en || r) : r;
+  }
+
+  function getPool(onlySpicy) {
+    const base = ALL_DISHES.filter((d) => {
+      if (selectedRegion && STORES[d.s].region !== selectedRegion) return false;
+      if (onlySpicy && !d.sp) return false;
+      return true;
+    });
+    const good = base.filter((d) => d.img && !badImgs.has(d.img));
+    return good.length >= 2 ? good : base;
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  function preload(dishes) {
+    for (let i = 0; i < dishes.length; i++) {
+      const d = dishes[i];
+      if (d && d.img && !badImgs.has(d.img)) {
+        const im = new Image();
+        im.onerror = function () { badImgs.add(d.img); };
+        im.src = d.img;
+      }
+    }
+  }
+
+  function setPhoto(photoEl, imgEl, dish, onFail) {
+    photoEl.dataset.img = (dish && dish.img) || "";
+    if (!dish || !dish.img || badImgs.has(dish.img)) {
+      photoEl.classList.add("broken");
+      imgEl.removeAttribute("src");
+      imgEl.alt = dish ? dishName(dish) : "";
+      return;
+    }
+    photoEl.classList.remove("broken");
+    imgEl.alt = dishName(dish);
+    imgEl.onerror = function () {
+      if (photoEl.dataset.img !== dish.img) return;
+      badImgs.add(dish.img);
+      if (onFail && onFail()) return;
+      photoEl.classList.add("broken");
+    };
+    if (imgEl.getAttribute("src") !== dish.img) {
+      imgEl.src = dish.img;
+    }
+  }
+
+  /* ==================== 게임 1: 이상형 월드컵 ==================== */
+  const wc = {
+    round: [],
+    nextRound: [],
+    matchIdx: 0,
+    used: new Set(),
+    storeCounts: {},
+    winner: null,
+    runnerUp: null,
+    busy: false,
+    empty: false
+  };
+
+  function startWorldCup() {
+    clearPendingTimer();
+    view = "wc";
+    const pool = shuffle(getPool(false));
+    const counts = {};
+    const picked = [];
+    for (let i = 0; i < pool.length; i++) {
+      const d = pool[i];
+      if ((counts[d.s] || 0) >= 2) continue;
+      counts[d.s] = (counts[d.s] || 0) + 1;
+      picked.push(d);
+      if (picked.length === 16) break;
+    }
+
+    let size = 0;
+    if (picked.length >= 16) size = 16;
+    else if (picked.length >= 8) size = 8;
+    else if (picked.length >= 4) size = 4;
+    else if (picked.length >= 2) size = 2;
+
+    if (size < 2) {
+      wc.empty = true;
+      wc.winner = null;
+      wc.busy = false;
+      render();
+      return;
+    }
+
+    const bracket = picked.slice(0, size);
+    const activeCounts = {};
+    for (let i = 0; i < bracket.length; i++) {
+      const s = bracket[i].s;
+      activeCounts[s] = (activeCounts[s] || 0) + 1;
+    }
+
+    wc.empty = false;
+    wc.round = bracket;
+    wc.nextRound = [];
+    wc.matchIdx = 0;
+    wc.used = new Set(bracket);
+    wc.storeCounts = activeCounts;
+    wc.winner = null;
+    wc.runnerUp = null;
+    wc.busy = false;
+
+    preload(bracket.slice(0, 6));
+    render();
+  }
+
+  function trySwapWcDish(slotOffset) {
+    if (view !== "wc" || wc.busy || wc.winner) return false;
+    const idxInRound = wc.matchIdx * 2 + slotOffset;
+    const oldDish = wc.round[idxInRound];
+    if (!oldDish) return false;
+    const candidates = shuffle(getPool(false));
+    for (let i = 0; i < candidates.length; i++) {
+      const cand = candidates[i];
+      if (wc.used.has(cand) || !cand.img || badImgs.has(cand.img)) continue;
+      const curCount = (wc.storeCounts[cand.s] || 0) - (cand.s === oldDish.s ? 1 : 0);
+      if (curCount >= 2) continue;
+      wc.storeCounts[oldDish.s] = Math.max(0, (wc.storeCounts[oldDish.s] || 1) - 1);
+      wc.storeCounts[cand.s] = (wc.storeCounts[cand.s] || 0) + 1;
+      wc.used.add(cand);
+      wc.round[idxInRound] = cand;
+      renderWcMatch();
+      return true;
+    }
+    return false;
+  }
+
+  function roundLabel(len, matchIdx) {
+    const t = T[lang];
+    const total = len / 2;
+    if (len === 16) return t.r16 + " " + (matchIdx + 1) + "/" + total;
+    if (len === 8) return t.r8 + " " + (matchIdx + 1) + "/" + total;
+    if (len === 4) return t.r4 + " " + (matchIdx + 1) + "/" + total;
+    return t.r2;
+  }
+
+  function renderWcMatch() {
+    const d0 = wc.round[wc.matchIdx * 2];
+    const d1 = wc.round[wc.matchIdx * 2 + 1];
+    if (!d0 || !d1) return;
+
+    const total = wc.round.length / 2;
+    $("wcStage").textContent = roundLabel(wc.round.length, wc.matchIdx);
+    $("wcFill").style.width = (((wc.matchIdx + 1) / total) * 100).toFixed(1) + "%";
+
+    const c0 = $("wcCard0");
+    const c1 = $("wcCard1");
+    c0.classList.remove("picked", "dimmed");
+    c1.classList.remove("picked", "dimmed");
+
+    setPhoto($("wcPhoto0"), $("wcImg0"), d0, function () { return trySwapWcDish(0); });
+    $("wcName0").innerHTML = dishNameHtml(d0);
+    $("wcStore0").textContent = STORES[d0.s].name;
+    $("wcPrice0").textContent = formatPrice(d0);
+
+    setPhoto($("wcPhoto1"), $("wcImg1"), d1, function () { return trySwapWcDish(1); });
+    $("wcName1").innerHTML = dishNameHtml(d1);
+    $("wcStore1").textContent = STORES[d1.s].name;
+    $("wcPrice1").textContent = formatPrice(d1);
+
+    // 다음 대결 사진 미리 불러오기
+    const nextIdx = (wc.matchIdx + 1) * 2;
+    if (nextIdx + 1 < wc.round.length) {
+      preload([wc.round[nextIdx], wc.round[nextIdx + 1]]);
+    }
+  }
+
+  function renderWcWin() {
+    const t = T[lang];
+    const w = wc.winner;
+    if (!w) return;
+    $("winHeading").textContent = "🏆 " + t.winTitle;
+    setPhoto($("winPhoto"), $("winImg"), w, null);
+    $("winName").innerHTML = dishNameHtml(w);
+    $("winStore").textContent = STORES[w.s].name;
+    $("winPrice").textContent = formatPrice(w);
+    $("winStoreLink").href = storeMenuUrl(w.s);
+    $("winStoreLink").textContent = t.viewMenu;
+    $("winReplay").textContent = t.replay;
+    $("winToHome").textContent = t.toHome;
+
+    if (wc.runnerUp) {
+      $("winRunner").hidden = false;
+      $("winRunner").innerHTML = esc(t.runnerUp) + ": <b>" + dishNameHtml(wc.runnerUp) + "</b> · " + esc(STORES[wc.runnerUp.s].name);
+    } else {
+      $("winRunner").hidden = true;
+    }
+  }
+
+  function pickWcCard(slot) {
+    if (view !== "wc" || wc.busy || wc.winner || wc.empty) return;
+    const d0 = wc.round[wc.matchIdx * 2];
+    const d1 = wc.round[wc.matchIdx * 2 + 1];
+    if (!d0 || !d1) return;
+
+    wc.busy = true;
+    const chosen = slot === 0 ? d0 : d1;
+    const other = slot === 0 ? d1 : d0;
+
+    $("wcCard0").classList.add(slot === 0 ? "picked" : "dimmed");
+    $("wcCard1").classList.add(slot === 1 ? "picked" : "dimmed");
+
+    timerId = setTimeout(function () {
+      timerId = null;
+      wc.nextRound.push(chosen);
+      const total = wc.round.length / 2;
+      if (wc.matchIdx + 1 < total) {
+        wc.matchIdx++;
+        wc.busy = false;
+        renderWcMatch();
+      } else if (wc.nextRound.length === 1) {
+        wc.winner = chosen;
+        wc.runnerUp = other;
+        wc.busy = false;
+        // 색종이 애니메이션 재생
+        const cf = $("wcConfetti");
+        const clone = cf.cloneNode(true);
+        cf.parentNode.replaceChild(clone, cf);
+        render();
+      } else {
+        wc.round = wc.nextRound;
+        wc.nextRound = [];
+        wc.matchIdx = 0;
+        wc.busy = false;
+        preload(wc.round.slice(0, 4));
+        renderWcMatch();
+      }
+    }, 400);
+  }
+
+  /* ==================== 게임 2: 룰렛 ==================== */
+  const rl = {
+    spicyOnly: false,
+    spinning: false,
+    done: false,
+    current: null
+  };
+
+  function initRoulette(keepSpicy) {
+    clearPendingTimer();
+    view = "rl";
+    if (!keepSpicy) rl.spicyOnly = false;
+    rl.spinning = false;
+    rl.done = false;
+    $("rlCard").classList.remove("sparkle", "tick");
+
+    const pool = getPool(rl.spicyOnly);
+    if (!pool.length) {
+      rl.current = null;
+      render();
+      return;
+    }
+    rl.current = pool[Math.floor(Math.random() * pool.length)];
+    preload(shuffle(pool).slice(0, 16));
+    render();
+  }
+
+  function renderRlCard() {
+    const d = rl.current;
+    if (!d) return;
+    setPhoto($("rlPhoto"), $("rlImg"), d, function () {
+      if (rl.spinning) return false;
+      const pool = getPool(rl.spicyOnly).filter((x) => x !== d && x.img && !badImgs.has(x.img));
+      if (!pool.length) return false;
+      rl.current = pool[Math.floor(Math.random() * pool.length)];
+      renderRlCard();
+      if (rl.done) $("rlStoreLink").href = storeMenuUrl(rl.current.s);
+      return true;
+    });
+    $("rlName").innerHTML = dishNameHtml(d);
+    $("rlStore").textContent = STORES[d.s].name;
+    $("rlPrice").textContent = formatPrice(d);
+    $("rlStoreLink").href = storeMenuUrl(d.s);
+  }
+
+  function spinRoulette() {
+    if (rl.spinning) return;
+    const pool = getPool(rl.spicyOnly);
+    if (!pool.length) return;
+
+    clearPendingTimer();
+    rl.spinning = true;
+    rl.done = false;
+
+    const card = $("rlCard");
+    card.classList.remove("sparkle", "tick");
+
+    // 합계 약 2.5초(2500ms) 동안 빠르게 바뀌다가 점점 느려짐
+    const delays = [50, 55, 62, 70, 80, 92, 106, 124, 145, 170, 200, 236, 278, 332, 500];
+    const seq = [];
+    let prev = rl.current;
+    for (let i = 0; i < delays.length; i++) {
+      let pick = pool[Math.floor(Math.random() * pool.length)];
+      if (pool.length > 1) {
+        let guard = 0;
+        while (pick === prev && guard++ < 8) {
+          pick = pool[Math.floor(Math.random() * pool.length)];
+        }
+      }
+      seq.push(pick);
+      prev = pick;
+    }
+    preload(seq);
+    renderRlControls();
+
+    let step = 0;
+    function tick() {
+      rl.current = seq[step];
+      renderRlCard();
+      card.classList.remove("tick");
+      void card.offsetWidth;
+      card.classList.add("tick");
+
+      step++;
+      if (step < delays.length) {
+        timerId = setTimeout(tick, delays[step]);
+      } else {
+        timerId = null;
+        rl.spinning = false;
+        rl.done = true;
+        card.classList.remove("tick");
+        void card.offsetWidth;
+        card.classList.add("sparkle");
+        renderRlControls();
+      }
+    }
+    timerId = setTimeout(tick, delays[0]);
+  }
+
+  function renderRlControls() {
+    const t = T[lang];
+    $("spicyChip").textContent = t.spicyOnly;
+    $("spicyChip").setAttribute("aria-pressed", String(rl.spicyOnly));
+    $("spicyChip").disabled = rl.spinning;
+
+    if (!rl.current) {
+      $("rlMain").hidden = true;
+      $("rlEmpty").hidden = false;
+      $("rlEmptyMsg").textContent = t.noDishes;
+      return;
+    }
+    $("rlMain").hidden = false;
+    $("rlEmpty").hidden = true;
+
+    if (rl.done && !rl.spinning) {
+      $("rlSpinWrap").hidden = true;
+      $("rlDoneWrap").hidden = false;
+      $("rlStoreLink").href = storeMenuUrl(rl.current.s);
+      $("rlStoreLink").textContent = t.viewMenu;
+      $("rlAgainBtn").textContent = t.oneMore;
+    } else {
+      $("rlSpinWrap").hidden = false;
+      $("rlDoneWrap").hidden = true;
+      $("rlSpinBtn").disabled = rl.spinning;
+      $("rlSpinBtn").textContent = rl.spinning ? t.spinning : t.spin;
+    }
+  }
+
+  /* ==================== 전체 화면 그리기 ==================== */
+  function renderRegions() {
+    const allKeys = ["", ...regions];
+    $("regionChips").innerHTML = allKeys.map((r) => (
+      `<button type="button" class="chip" data-region="${esc(r)}" aria-pressed="${selectedRegion === r}">${esc(regionLabel(r))}</button>`
+    )).join("");
+  }
+
+  function render() {
+    const t = T[lang];
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = t.pageTitle;
+
+    $("backStores").textContent = t.backStores;
+    $("topTitle").textContent = t.topTitle;
+    $("langs").innerHTML = LANGS.map(([c, label]) => (
+      `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`
+    )).join("");
+
+    $("wcCardTitle").textContent = t.wcTitle;
+    $("wcCardDesc").textContent = t.wcDesc;
+    $("rlCardTitle").textContent = t.rlTitle;
+    $("rlCardDesc").textContent = t.rlDesc;
+
+    $("wcBackHome").textContent = t.backToHome;
+    $("rlBackHome").textContent = t.backToHome;
+
+    $("viewHome").hidden = view !== "home";
+    $("viewWc").hidden = view !== "wc";
+    $("viewRl").hidden = view !== "rl";
+
+    if (view === "home") {
+      renderRegions();
+    } else if (view === "wc") {
+      if (wc.empty) {
+        $("wcPlay").hidden = true;
+        $("wcWin").hidden = true;
+        $("wcEmpty").hidden = false;
+        $("wcEmptyMsg").textContent = t.noDishes;
+        $("wcEmptyBack").textContent = t.toHome;
+      } else if (wc.winner) {
+        $("wcPlay").hidden = true;
+        $("wcWin").hidden = false;
+        $("wcEmpty").hidden = true;
+        renderWcWin();
+      } else {
+        $("wcPlay").hidden = false;
+        $("wcWin").hidden = true;
+        $("wcEmpty").hidden = true;
+        renderWcMatch();
+      }
+    } else if (view === "rl") {
+      renderRlControls();
+      if (rl.current) renderRlCard();
+    }
+  }
+
+  function goHome() {
+    clearPendingTimer();
+    wc.busy = false;
+    rl.spinning = false;
+    view = "home";
+    render();
+  }
+
+  /* ==================== 이벤트 연결 ==================== */
+  $("langs").addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-lang]");
+    if (!btn) return;
+    const c = btn.dataset.lang;
+    if (!SUPPORTED.includes(c) || c === lang) return;
+    lang = c;
+    saveLang(c);
+    render();
+  });
+
+  $("regionChips").addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-region]");
+    if (!btn) return;
+    const r = btn.dataset.region || "";
+    selectedRegion = selectedRegion === r ? "" : r;
+    renderRegions();
+  });
+
+  $("pickWc").addEventListener("click", startWorldCup);
+  $("pickRl").addEventListener("click", function () { initRoulette(false); });
+
+  $("wcCard0").addEventListener("click", function () { pickWcCard(0); });
+  $("wcCard1").addEventListener("click", function () { pickWcCard(1); });
+  $("wcBackHome").addEventListener("click", goHome);
+  $("winReplay").addEventListener("click", startWorldCup);
+  $("winToHome").addEventListener("click", goHome);
+  $("wcEmptyBack").addEventListener("click", goHome);
+
+  $("rlBackHome").addEventListener("click", goHome);
+  $("spicyChip").addEventListener("click", function () {
+    if (rl.spinning) return;
+    rl.spicyOnly = !rl.spicyOnly;
+    initRoulette(true);
+  });
+  $("rlSpinBtn").addEventListener("click", spinRoulette);
+  $("rlAgainBtn").addEventListener("click", spinRoulette);
+
+  render();
+})();
+</script>
+</body>
+</html>
