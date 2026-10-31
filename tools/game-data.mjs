@@ -4,6 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
+import { execFileSync } from "node:child_process";
 import { ROOT } from "./pw.mjs";
 
 const load = (file) => {
@@ -12,10 +13,21 @@ const load = (file) => {
   return ctx.window;
 };
 
+// 음식점만(호텔·사진관·마사지·미용 제외), 흐린 사진(메뉴판에서 오려 낸 것 등)은 뺀다
+const FOOD = ["bbq", "korean", "chicken", "noodle", "cafe", "western", "seafood", "chinese", "japanese", "bar"];
+const MIN_SHARP = 1100; // tools/sharpness.py 점수, 2026-10-31 사진 모음으로 눈으로 보고 정함(중간값 약 2000)
+
 const { STORES } = load(path.join(ROOT, "sales/stores/data.js"));
+const food = STORES.filter((s) => (s.cats || []).some((c) => FOOD.includes(c)));
+const photos = food.flatMap((s) => {
+  const dir = path.join(ROOT, "restaurants", s.id);
+  if (!fs.existsSync(path.join(dir, "menu.js"))) return [];
+  return fs.readdirSync(path.join(dir, "img")).filter((f) => f.endsWith(".jpg")).map((f) => path.join(dir, "img", f));
+});
+const sharp = JSON.parse(execFileSync("python", [path.join(ROOT, "tools/sharpness.py")], { input: photos.join("\n"), maxBuffer: 1 << 24 }).toString());
 const stores = {};
 const dishes = [];
-for (const s of STORES) {
+for (const s of food) {
   const dir = path.join(ROOT, "restaurants", s.id);
   if (!fs.existsSync(path.join(dir, "menu.js"))) continue;
   const w = load(path.join(dir, "menu.js"));
@@ -23,7 +35,7 @@ for (const s of STORES) {
   const picked = [];
   for (const cat of w.MENU || []) {
     for (const it of cat.items || []) {
-      if (!it.photo || !it.name || !fs.existsSync(path.join(dir, it.photo))) continue;
+      if (!it.photo || !it.name || !((sharp[path.join(dir, it.photo)] ?? -1) >= MIN_SHARP)) continue;
       const prices = it.sizes ? it.sizes.map((x) => x[1]) : [it.price];
       const p = prices.filter((x) => typeof x === "number");
       picked.push({ s: s.id, n: it.name, p: p.length ? Math.min(...p) : null, sp: !!it.spicy, img: `${s.url}/${it.photo}`, t: it.tag ? 0 : 1 });

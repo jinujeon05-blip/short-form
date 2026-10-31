@@ -76,11 +76,16 @@
   .chip {
     font-size: 13.5px; font-weight: 700; color: var(--ink-2); background: var(--card);
     border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; cursor: pointer;
-    white-space: nowrap; transition: background .15s, color .15s, border-color .15s;
+    white-space: nowrap; transition: background .15s, color .15s, border-color .15s, opacity .15s;
   }
   .chip[aria-pressed="true"] {
     color: #fff; background: var(--ink); border-color: var(--ink);
   }
+  .chip:disabled { opacity: .55; cursor: default; }
+  .chip-count {
+    font-size: 11.5px; font-weight: 600; opacity: .68; margin-left: 3px;
+  }
+  .chip[aria-pressed="true"] .chip-count { opacity: .82; }
 
   /* 첫 화면: 게임 고르기 카드 2장 */
   .game-cards { display: grid; gap: 12px; }
@@ -159,6 +164,20 @@
   .btn:disabled { opacity: .65; cursor: default; transform: none; }
 
   /* 게임 1: 이상형 월드컵 */
+  .wc-intro-box {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 24px 16px 20px; box-shadow: 0 6px 20px rgba(22,19,15,.06);
+  }
+  .wc-intro-title {
+    font-size: 21px; font-weight: 900; letter-spacing: -.3px; text-align: center;
+    color: var(--ink);
+  }
+  .wc-intro-desc {
+    margin-top: 6px; font-size: 14px; color: var(--muted); text-align: center;
+  }
+  .wc-intro-box .chips {
+    justify-content: center; margin: 18px 0 20px;
+  }
   .wc-progress-row {
     display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px;
   }
@@ -307,6 +326,13 @@
     border-radius: 18px; padding: 36px 16px; color: var(--muted);
   }
   .empty-box p { font-size: 15px; font-weight: 600; margin-bottom: 14px; }
+
+  /* 하단 공통 안내 문구 */
+  .notice-foot {
+    margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line);
+    font-size: 12px; line-height: 1.55; color: var(--muted); text-align: center;
+    overflow-wrap: break-word;
+  }
 </style>
 </head>
 <body>
@@ -323,7 +349,6 @@
 <main class="wrap">
   <!-- 첫 화면 -->
   <section id="viewHome">
-    <div class="chips" id="regionChips"></div>
     <div class="game-cards">
       <button type="button" class="game-pick" id="pickWc">
         <span class="game-icon" aria-hidden="true">🏆</span>
@@ -349,7 +374,13 @@
     <div class="sub-nav">
       <button type="button" class="link-back" id="wcBackHome"></button>
     </div>
-    <div id="wcPlay">
+    <div id="wcIntro" class="wc-intro-box">
+      <h2 class="wc-intro-title" id="wcIntroTitle"></h2>
+      <p class="wc-intro-desc" id="wcIntroDesc"></p>
+      <div class="chips" id="wcRegionChips"></div>
+      <button type="button" class="btn primary spin-btn" id="wcStartBtn"></button>
+    </div>
+    <div id="wcPlay" hidden>
       <div class="wc-progress-row">
         <span class="wc-stage" id="wcStage"></span>
       </div>
@@ -414,6 +445,7 @@
       <button type="button" class="link-back" id="rlBackHome"></button>
       <button type="button" class="chip" id="spicyChip" aria-pressed="false"></button>
     </div>
+    <div class="chips" id="rlRegionChips"></div>
 
     <div id="rlMain">
       <div class="rl-card" id="rlCard">
@@ -439,6 +471,8 @@
       <p id="rlEmptyMsg"></p>
     </div>
   </section>
+
+  <p class="notice-foot" id="noticeFoot"></p>
 </main>
 
 <script src="/stores/game-data.js"></script>
@@ -472,7 +506,9 @@
       spin: "돌리기!",
       spinning: "뽑는 중...",
       oneMore: "한 번 더",
-      noDishes: "조건에 맞는 메뉴가 없어요"
+      noDishes: "조건에 맞는 메뉴가 없어요",
+      startGame: "시작하기",
+      notice: "ℹ️ 메뉴 이름·사진·가격은 구글 지도에 올라온 메뉴판과 사진을 바탕으로 만들었어요. 사진이 실제 음식과 다르거나 가격이 바뀌었을 수 있으니, 주문 전에 가게에서 꼭 확인해 주세요."
     },
     vi: {
       pageTitle: "Trò chơi chọn món · 메뉴 게임",
@@ -498,7 +534,9 @@
       spin: "Quay!",
       spinning: "Đang quay...",
       oneMore: "Thêm lần nữa",
-      noDishes: "Không có món nào phù hợp"
+      noDishes: "Không có món nào phù hợp",
+      startGame: "Bắt đầu",
+      notice: "ℹ️ Tên món, hình ảnh và giá cả được tổng hợp từ thực đơn và ảnh trên Google Maps. Hình ảnh có thể khác với món thực tế hoặc giá có thể đã thay đổi, vui lòng kiểm tra lại tại quán trước khi gọi món."
     },
     en: {
       pageTitle: "Menu Games · 메뉴 게임",
@@ -524,7 +562,9 @@
       spin: "Spin!",
       spinning: "Spinning...",
       oneMore: "One More Time",
-      noDishes: "No matching dishes available"
+      noDishes: "No matching dishes available",
+      startGame: "Start",
+      notice: "ℹ️ Dish names, photos, and prices are based on menus and photos posted on Google Maps. Photos may differ from the actual dish or prices may have changed, so please check with the restaurant before ordering."
     },
     zh: {
       pageTitle: "菜单小游戏 · 메뉴 게임",
@@ -550,7 +590,9 @@
       spin: "转起来！",
       spinning: "抽取中...",
       oneMore: "再来一次",
-      noDishes: "没有符合条件的菜品"
+      noDishes: "没有符合条件的菜品",
+      startGame: "开始",
+      notice: "ℹ️ 菜品名称、图片和价格均整理自 Google 地图上的菜单与照片。图片可能与实际菜品有所不同，价格也可能已有变动，点餐前请务必向店内确认。"
     },
     ja: {
       pageTitle: "メニューゲーム · 메뉴 게임",
@@ -576,7 +618,9 @@
       spin: "まわす！",
       spinning: "抽選中...",
       oneMore: "もう一回",
-      noDishes: "条件に合うメニューがありません"
+      noDishes: "条件に合うメニューがありません",
+      startGame: "スタート",
+      notice: "ℹ️ メニュー名・写真・価格はGoogleマップに掲載されたメニュー表や写真をもとに作成しています。写真が実際の料理と異なったり価格が変更されている場合がありますので、ご注文前にお店でご確認ください。"
     }
   };
 
@@ -615,9 +659,15 @@
     return "ko";
   }
 
+  function saveRegion(r) {
+    try { localStorage.setItem("game-region", r); } catch (e) {}
+  }
+  function loadRegion() {
+    try { return localStorage.getItem("game-region") || ""; } catch (e) { return ""; }
+  }
+
   let lang = detectLang();
   let view = "home"; // "home" | "wc" | "rl"
-  let selectedRegion = "";
   let timerId = null;
 
   // 존재하는 region 목록 (전체 + GAME_STORES 에 있는 region 만)
@@ -626,6 +676,15 @@
     ...REGION_ORDER.filter((r) => rawRegions.includes(r)),
     ...rawRegions.filter((r) => !REGION_ORDER.includes(r))
   ];
+  const regionCounts = { "": ALL_DISHES.length };
+  for (let i = 0; i < regions.length; i++) regionCounts[regions[i]] = 0;
+  for (let i = 0; i < ALL_DISHES.length; i++) {
+    const reg = STORES[ALL_DISHES[i].s].region;
+    if (reg) regionCounts[reg] = (regionCounts[reg] || 0) + 1;
+  }
+
+  const savedRegion = loadRegion();
+  let selectedRegion = regions.includes(savedRegion) ? savedRegion : "";
 
   function clearPendingTimer() {
     if (timerId !== null) {
@@ -717,6 +776,7 @@
 
   /* ==================== 게임 1: 이상형 월드컵 ==================== */
   const wc = {
+    phase: "intro", // "intro" | "play" | "win" | "empty"
     round: [],
     nextRound: [],
     matchIdx: 0,
@@ -728,18 +788,37 @@
     empty: false
   };
 
+  function openWorldCupIntro() {
+    clearPendingTimer();
+    view = "wc";
+    wc.phase = "intro";
+    wc.busy = false;
+    wc.winner = null;
+    wc.runnerUp = null;
+    wc.empty = false;
+    render();
+  }
+
   function startWorldCup() {
     clearPendingTimer();
     view = "wc";
     const pool = shuffle(getPool(false));
     const counts = {};
     const picked = [];
-    for (let i = 0; i < pool.length; i++) {
+    for (let i = 0; i < pool.length && picked.length < 16; i++) {
       const d = pool[i];
       if ((counts[d.s] || 0) >= 2) continue;
       counts[d.s] = (counts[d.s] || 0) + 1;
       picked.push(d);
-      if (picked.length === 16) break;
+    }
+    if (picked.length < 16 && picked.length < pool.length) {
+      const pickedSet = new Set(picked);
+      for (let i = 0; i < pool.length && picked.length < 16; i++) {
+        if (!pickedSet.has(pool[i])) {
+          picked.push(pool[i]);
+          pickedSet.add(pool[i]);
+        }
+      }
     }
 
     let size = 0;
@@ -749,6 +828,7 @@
     else if (picked.length >= 2) size = 2;
 
     if (size < 2) {
+      wc.phase = "empty";
       wc.empty = true;
       wc.winner = null;
       wc.busy = false;
@@ -763,6 +843,7 @@
       activeCounts[s] = (activeCounts[s] || 0) + 1;
     }
 
+    wc.phase = "play";
     wc.empty = false;
     wc.round = bracket;
     wc.nextRound = [];
@@ -778,24 +859,36 @@
   }
 
   function trySwapWcDish(slotOffset) {
-    if (view !== "wc" || wc.busy || wc.winner) return false;
+    if (view !== "wc" || wc.phase !== "play" || wc.busy || wc.winner) return false;
     const idxInRound = wc.matchIdx * 2 + slotOffset;
     const oldDish = wc.round[idxInRound];
     if (!oldDish) return false;
     const candidates = shuffle(getPool(false));
+    let pick = null;
     for (let i = 0; i < candidates.length; i++) {
       const cand = candidates[i];
       if (wc.used.has(cand) || !cand.img || badImgs.has(cand.img)) continue;
       const curCount = (wc.storeCounts[cand.s] || 0) - (cand.s === oldDish.s ? 1 : 0);
       if (curCount >= 2) continue;
-      wc.storeCounts[oldDish.s] = Math.max(0, (wc.storeCounts[oldDish.s] || 1) - 1);
-      wc.storeCounts[cand.s] = (wc.storeCounts[cand.s] || 0) + 1;
-      wc.used.add(cand);
-      wc.round[idxInRound] = cand;
-      renderWcMatch();
-      return true;
+      pick = cand;
+      break;
     }
-    return false;
+    if (!pick) {
+      for (let i = 0; i < candidates.length; i++) {
+        const cand = candidates[i];
+        if (!wc.used.has(cand) && cand.img && !badImgs.has(cand.img)) {
+          pick = cand;
+          break;
+        }
+      }
+    }
+    if (!pick) return false;
+    wc.storeCounts[oldDish.s] = Math.max(0, (wc.storeCounts[oldDish.s] || 1) - 1);
+    wc.storeCounts[pick.s] = (wc.storeCounts[pick.s] || 0) + 1;
+    wc.used.add(pick);
+    wc.round[idxInRound] = pick;
+    renderWcMatch();
+    return true;
   }
 
   function roundLabel(len, matchIdx) {
@@ -861,7 +954,7 @@
   }
 
   function pickWcCard(slot) {
-    if (view !== "wc" || wc.busy || wc.winner || wc.empty) return;
+    if (view !== "wc" || wc.phase !== "play" || wc.busy || wc.winner || wc.empty) return;
     const d0 = wc.round[wc.matchIdx * 2];
     const d1 = wc.round[wc.matchIdx * 2 + 1];
     if (!d0 || !d1) return;
@@ -882,6 +975,7 @@
         wc.busy = false;
         renderWcMatch();
       } else if (wc.nextRound.length === 1) {
+        wc.phase = "win";
         wc.winner = chosen;
         wc.runnerUp = other;
         wc.busy = false;
@@ -958,8 +1052,8 @@
     const card = $("rlCard");
     card.classList.remove("sparkle", "tick");
 
-    // 합계 약 2.5초(2500ms) 동안 빠르게 바뀌다가 점점 느려짐
-    const delays = [50, 55, 62, 70, 80, 92, 106, 124, 145, 170, 200, 236, 278, 332, 500];
+    // 합계 약 4초(4000ms) 동안 빠르게 바뀌다가 점점 느려짐
+    const delays = [50, 53, 57, 62, 68, 75, 84, 94, 106, 120, 136, 154, 175, 200, 228, 260, 298, 342, 398, 460, 580];
     const seq = [];
     let prev = rl.current;
     for (let i = 0; i < delays.length; i++) {
@@ -1005,6 +1099,7 @@
     $("spicyChip").textContent = t.spicyOnly;
     $("spicyChip").setAttribute("aria-pressed", String(rl.spicyOnly));
     $("spicyChip").disabled = rl.spinning;
+    renderRegionChips($("rlRegionChips"), false, rl.spinning);
 
     if (!rl.current) {
       $("rlMain").hidden = true;
@@ -1030,11 +1125,13 @@
   }
 
   /* ==================== 전체 화면 그리기 ==================== */
-  function renderRegions() {
+  function renderRegionChips(container, withCount, disabled) {
     const allKeys = ["", ...regions];
-    $("regionChips").innerHTML = allKeys.map((r) => (
-      `<button type="button" class="chip" data-region="${esc(r)}" aria-pressed="${selectedRegion === r}">${esc(regionLabel(r))}</button>`
-    )).join("");
+    container.innerHTML = allKeys.map((r) => {
+      const countHtml = withCount ? ` <span class="chip-count">${regionCounts[r] || 0}</span>` : "";
+      const disAttr = disabled ? " disabled" : "";
+      return `<button type="button" class="chip" data-region="${esc(r)}" aria-pressed="${selectedRegion === r}"${disAttr}>${esc(regionLabel(r))}${countHtml}</button>`;
+    }).join("");
   }
 
   function render() {
@@ -1055,29 +1152,29 @@
 
     $("wcBackHome").textContent = t.backToHome;
     $("rlBackHome").textContent = t.backToHome;
+    $("noticeFoot").textContent = t.notice;
 
     $("viewHome").hidden = view !== "home";
     $("viewWc").hidden = view !== "wc";
     $("viewRl").hidden = view !== "rl";
 
-    if (view === "home") {
-      renderRegions();
-    } else if (view === "wc") {
-      if (wc.empty) {
-        $("wcPlay").hidden = true;
-        $("wcWin").hidden = true;
-        $("wcEmpty").hidden = false;
+    if (view === "wc") {
+      $("wcIntro").hidden = wc.phase !== "intro";
+      $("wcPlay").hidden = wc.phase !== "play";
+      $("wcWin").hidden = wc.phase !== "win";
+      $("wcEmpty").hidden = wc.phase !== "empty";
+
+      if (wc.phase === "intro") {
+        $("wcIntroTitle").textContent = "🏆 " + t.wcTitle;
+        $("wcIntroDesc").textContent = t.wcDesc;
+        $("wcStartBtn").textContent = t.startGame;
+        renderRegionChips($("wcRegionChips"), true, false);
+      } else if (wc.phase === "empty") {
         $("wcEmptyMsg").textContent = t.noDishes;
         $("wcEmptyBack").textContent = t.toHome;
-      } else if (wc.winner) {
-        $("wcPlay").hidden = true;
-        $("wcWin").hidden = false;
-        $("wcEmpty").hidden = true;
+      } else if (wc.phase === "win") {
         renderWcWin();
       } else {
-        $("wcPlay").hidden = false;
-        $("wcWin").hidden = true;
-        $("wcEmpty").hidden = true;
         renderWcMatch();
       }
     } else if (view === "rl") {
@@ -1105,17 +1202,31 @@
     render();
   });
 
-  $("regionChips").addEventListener("click", function (e) {
+  $("wcRegionChips").addEventListener("click", function (e) {
     const btn = e.target.closest("button[data-region]");
     if (!btn) return;
     const r = btn.dataset.region || "";
-    selectedRegion = selectedRegion === r ? "" : r;
-    renderRegions();
+    if (selectedRegion === r) return;
+    selectedRegion = r;
+    saveRegion(selectedRegion);
+    renderRegionChips($("wcRegionChips"), true, false);
   });
 
-  $("pickWc").addEventListener("click", startWorldCup);
+  $("rlRegionChips").addEventListener("click", function (e) {
+    if (rl.spinning) return;
+    const btn = e.target.closest("button[data-region]");
+    if (!btn) return;
+    const r = btn.dataset.region || "";
+    if (selectedRegion === r) return;
+    selectedRegion = r;
+    saveRegion(selectedRegion);
+    initRoulette(true);
+  });
+
+  $("pickWc").addEventListener("click", openWorldCupIntro);
   $("pickRl").addEventListener("click", function () { initRoulette(false); });
 
+  $("wcStartBtn").addEventListener("click", startWorldCup);
   $("wcCard0").addEventListener("click", function () { pickWcCard(0); });
   $("wcCard1").addEventListener("click", function () { pickWcCard(1); });
   $("wcBackHome").addEventListener("click", goHome);
