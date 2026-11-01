@@ -50,6 +50,7 @@ name() {
     palgakdo) echo "팔각도하노이" ;;
     galbiroman) echo "갈비로만" ;;
     hwajeong) echo "화정족발" ;;
+    warawara) echo "와라와라" ;;
     tojeong) echo "토정삼계탕" ;;
     hansari) echo "한사리감자탕" ;;
     gardenia) echo "가드니아돈까스" ;;
