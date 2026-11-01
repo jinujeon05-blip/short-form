@@ -85,6 +85,8 @@ window.DEMOS = [
     name: "CTQ 텍사스 BBQ CTQ TEXAS BBQ", type: { ko: "텍사스 훈제 바비큐 · 하노이", vi: "BBQ xông khói Texas · Hà Nội", zh: "德州烟熏烧烤 · 河内", ja: "テキサススモークBBQ・ハノイ", en: "Texas smoked BBQ · Hanoi" } },
   { id: "gaonjae", hidden: true, url: "https://gaonjae.qrmenuasia.com", shot: "img/demo-gaonjae.jpg", qr: "img/qr-gaonjae.svg",
     name: "가온재 GAONJAE", type: { ko: "프리미엄 한식 · 솥밥 · 백합 · 하노이", vi: "Nhà hàng Hàn cao cấp · Cơm niêu · Ngao · Hà Nội", zh: "高端韩餐 · 石锅饭 · 蛤蜊 · 河内", ja: "プレミアム韓食・釜飯・ハマグリ・ハノイ", en: "Premium Korean · Pot rice · Clams · Hanoi" } },
+  { id: "galbiroman", hidden: true, url: "https://galbiroman.qrmenuasia.com", shot: "img/demo-galbiroman.jpg", qr: "img/qr-galbiroman.svg",
+    name: "갈비로만 GALBI ROMAN", type: { ko: "한식 고기구이 · 무한리필 뷔페 · 하노이", vi: "Thịt nướng Hàn Quốc · Buffet · Hà Nội", zh: "韩式烤肉 · 自助 · 河内", ja: "韓国焼肉・ビュッフェ・ハノイ", en: "Korean BBQ · Buffet · Hanoi" } },
   { id: "palgakdo", hidden: true, url: "https://palgakdo.qrmenuasia.com", shot: "img/demo-palgakdo.jpg", qr: "img/qr-palgakdo.svg",
     name: "팔각도 하노이 PALGAKDO", type: { ko: "숯불 닭갈비 · 닭 특수부위 · 하노이", vi: "Gà nướng than hoa Hàn Quốc · Hà Nội", zh: "炭烤鸡排 · 鸡特殊部位 · 河内", ja: "炭火タッカルビ・鶏の希少部位・ハノイ", en: "Charcoal chicken galbi · Special cuts · Hanoi" } },
   { id: "hoolala", hidden: true, url: "https://hoolala.qrmenuasia.com", shot: "img/demo-hoolala.jpg", qr: "img/qr-hoolala.svg",

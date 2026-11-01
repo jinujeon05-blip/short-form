@@ -48,6 +48,7 @@ name() {
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;
     palgakdo) echo "팔각도하노이" ;;
+    galbiroman) echo "갈비로만" ;;
     tojeong) echo "토정삼계탕" ;;
     hansari) echo "한사리감자탕" ;;
     gardenia) echo "가드니아돈까스" ;;
