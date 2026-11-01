@@ -53,4 +53,5 @@
 - VidoGrid: 무료(FREE TRIAL, 크레딧 0)는 API 키를 못 만든다("Credits Required"). 연결 불가.
 - 구글 Gemini API: 이미지(Nano Banana 계열)·영상 모델 모두 무료 등급 "Not available"(ai.google.dev 요금표). 비용 0원 원칙상 안 씀.
 - **안티그래비티 agy는 무료로 이미지 생성 가능(합격)**: `agy --mode accept-edits -p "...이미지 생성 도구로..."` → 하위 담당 `image-generator`의 `generate_image`가 1200×896 jpg 생성. 파일은 `C:\Users\sia66\.gemini\antigravity-cli\brain\<대화id>\`에 저장되니 거기서 복사한다(작업 폴더로 바로 저장 못 함). 제미나이 Pro 한도를 씀.
-- 주의: AI로 만든 음식 사진을 실제 가게 메뉴 사진처럼 넣지 않는다(SNS 배경·장식용만). 영상 생성은 미시험.
+- 주의: AI로 만든 음식 사진을 실제 가게 메뉴 사진처럼 넣지 않는다(SNS 배경·장식용만).
+- 영상 생성(2026-11-01 시험): **agy에는 영상 생성 도구가 없다**(답: 영상 생성 도구 없음, 가진 것은 image-generator뿐). 무료로 영상을 만들려면 사진·생성 이미지를 PC에서 이어 붙이는 방식(스킬 `naver-clip-hook-video`, ffmpeg)을 쓴다.
