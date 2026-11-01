@@ -55,3 +55,4 @@
 - **안티그래비티 agy는 무료로 이미지 생성 가능(합격)**: `agy --mode accept-edits -p "...이미지 생성 도구로..."` → 하위 담당 `image-generator`의 `generate_image`가 1200×896 jpg 생성. 파일은 `C:\Users\sia66\.gemini\antigravity-cli\brain\<대화id>\`에 저장되니 거기서 복사한다(작업 폴더로 바로 저장 못 함). 제미나이 Pro 한도를 씀.
 - 주의: AI로 만든 음식 사진을 실제 가게 메뉴 사진처럼 넣지 않는다(SNS 배경·장식용만).
 - 영상 생성(2026-11-01 시험): **agy에는 영상 생성 도구가 없다**(답: 영상 생성 도구 없음, 가진 것은 image-generator뿐). 무료로 영상을 만들려면 사진·생성 이미지를 PC에서 이어 붙이는 방식(스킬 `naver-clip-hook-video`, ffmpeg)을 쓴다.
+- 모션 그래픽 영상(2026-11-01, 사용자 합격 "이대로 좋아"): HTML 애니메이션 → Playwright로 60fps 900장 캡처 → ffmpeg로 합침. 배경음·효과음은 파이썬(numpy·scipy)으로 직접 합성(외부 음원 0원·저작권 걱정 없음). 사진은 정식 가게 약 70%. 원본·스크립트는 `.scratch/video/src/`(index.html·render.mjs·audio.py, git 밖). 결과 `.scratch/video/QR메뉴판_가게찾기_15초.mp4`.
