@@ -102,7 +102,7 @@
 | `restaurants/palgakdo` | 팔각도 하노이 PALGAKDO 숯불 닭갈비·닭 특수부위·보쌈세트·점심특선 (123-TT3 P. Trần Văn Lai, Mỹ Đình, Hà Nội, 0866600906, 10:30–24:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 owner-panel) | https://palgakdo.qrmenuasia.com |
 | `restaurants/galbiroman` | 갈비로만 GALBI ROMAN 한식 고기구이·무한리필 뷔페·점심특선·냉면 (20 P. Trần Văn Lai, Từ Liêm, Hà Nội, 0963013989, 10:30–23:00) — **가게 찾기용** | 미배포 (2026-11-01 제작, 브랜치 owner-panel) | https://galbiroman.qrmenuasia.com |
 | `restaurants/hwajeong` | 화정족발 미딩본점 HWA JUNG 족발·보쌈·전골·식사·중식요리 (Lô 66 TT4, Từ Liêm, Hà Nội, 0352174600, 10:00–23:00) — **가게 찾기용** | 미배포 (2026-11-01 제작) |
-| `restaurants/warawara` | 와라와라 WARA WARA 참치·회·막회·초밥·일식/한식 안주·식사 (Số 42 TT4, KĐT Mỹ Đình - Sông Đà, Từ Liêm, Hà Nội, 0357321215, 09:30–23:00) — **가게 찾기용** | 미배포 (2026-11-01 제작) |
+| `restaurants/warawara` | 와라와라 WARA WARA 참치·회·막회·초밥·일식/한식 안주·식사 (Số 42 TT4, KĐT Mỹ Đình - Sông Đà, Từ Liêm, Hà Nội, 0357321215, 09:30–23:00) — **가게 찾기용** | https://warawara.qrmenuasia.com (2026-11-01 배포) |
 
 
 ## 가게별 제작 기록
