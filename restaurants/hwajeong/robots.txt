@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hwajeong.qrmenuasia.com/sitemap.xml
