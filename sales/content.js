@@ -91,6 +91,8 @@ window.DEMOS = [
     name: "화정족발 HWA JUNG", type: { ko: "족발 · 보쌈 전문 한식당 · 하노이", vi: "Chân giò · Ba chỉ hầm Hàn Quốc · Hà Nội", zh: "韩式猪蹄·菜包肉 · 河内", ja: "チョッパル・ポッサム・ハノイ", en: "Korean jokbal & bossam · Hanoi" } },
   { id: "warawara", hidden: true, url: "https://warawara.qrmenuasia.com", shot: "img/demo-warawara.jpg", qr: "img/qr-warawara.svg",
     name: "와라와라 WARA WARA", type: { ko: "참치 · 회 · 해산물 한식·일식 횟집 · 하노이", vi: "Cá ngừ · Gỏi cá · Hải sản Hàn – Nhật · Hà Nội", zh: "金枪鱼·生鱼片·海鲜 韩日料理 · 河内", ja: "マグロ・刺身・海鮮の韓国和食店・ハノイ", en: "Korean-Japanese tuna, sashimi & seafood · Hanoi" } },
+  { id: "doncook", hidden: true, url: "https://doncook.qrmenuasia.com", shot: "img/demo-doncook.jpg", qr: "img/qr-doncook.svg",
+    name: "돈쿡 박닌점 DONCOOK", type: { ko: "숙성고기 · 양평해장국 · 전골 · 박닌", vi: "Lẩu nướng Hàn Quốc · Thịt ủ chín · Bắc Ninh", zh: "熟成肉烧烤·杨平解酒汤·火锅 · 北宁", ja: "熟成肉の焼肉・ヘジャンクッ・鍋・バクニン", en: "Aged-meat BBQ, haejang-guk & hot pots · Bac Ninh" } },
   { id: "palgakdo", hidden: true, url: "https://palgakdo.qrmenuasia.com", shot: "img/demo-palgakdo.jpg", qr: "img/qr-palgakdo.svg",
     name: "팔각도 하노이 PALGAKDO", type: { ko: "숯불 닭갈비 · 닭 특수부위 · 하노이", vi: "Gà nướng than hoa Hàn Quốc · Hà Nội", zh: "炭烤鸡排 · 鸡特殊部位 · 河内", ja: "炭火タッカルビ・鶏の希少部位・ハノイ", en: "Charcoal chicken galbi · Special cuts · Hanoi" } },
   { id: "hoolala", hidden: true, url: "https://hoolala.qrmenuasia.com", shot: "img/demo-hoolala.jpg", qr: "img/qr-hoolala.svg",
