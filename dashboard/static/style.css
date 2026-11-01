@@ -205,6 +205,7 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
   .quota .src { display: none; }
   .top { padding: 10px 16px; }
   .counts span:nth-child(n+4) { display: none; }
+  .counts span.sched { display: inline-block; }  /* 예약은 폰에서도 보이게(2026-11-01) */
   .spot .tag small { display: none; }
   .cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .sc .bd { padding: 8px; }
@@ -270,3 +271,5 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
 .msg.w-reviewer, .msg.w-codex { border-left-color: #7a3fd0; } .msg.w-polisher { border-left-color: var(--blue); } .msg.w-designer { border-left-color: #c46a00; }
 .msg .mh b.who-claude { color: #6a4cf0; } .msg .mh b.who-finder { color: var(--green); } .msg .mh b.who-agy, .msg .mh b.who-menu-reader { color: #d1443f; }
 .msg .mh b.who-reviewer, .msg .mh b.who-codex { color: #7a3fd0; } .msg .mh b.who-polisher, .msg .mh b.who-captain { color: var(--blue); } .msg .mh b.who-designer { color: #c46a00; }
+.send-err { margin: 6px 0 0; font-size: 12px; line-height: 1.4; color: #c62828; font-weight: 600; }
+.send-err:empty { display: none; }

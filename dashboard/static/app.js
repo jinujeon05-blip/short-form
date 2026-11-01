@@ -131,9 +131,12 @@ function renderInbox() {
     return `<button class="ord ${cls}" data-order="${o.id}"><b>${esc(o.title)}</b><p>${esc(sub)}</p>
       <span class="muted"><span class="badge ${bc}">${bt}</span>${hm(o.createdAt)}${o.via === 'phone' ? ' · 폰' : ''}</span></button>`;
   };
-  $('#inbox').innerHTML = (wait.length || live.length || sched.length || rest.length)
-    ? [...wait, ...live, ...sched].map(item).join('') + (rest.length ? `<h5 class="muted" style="margin:10px 0 6px">지난 지시</h5>${rest.map(item).join('')}` : '')
-    : '<p class="muted">아직 지시가 없습니다. 위에 적어 보내면 여기로 보고가 올라옵니다.</p>';
+  // 예약 칸은 0건이어도 둔다: 예약이 들어갔는지 여기서 바로 확인(2026-11-01 캡틴 결정 '가-1')
+  const schedBox = `<h5 class="muted" style="margin:0 0 6px">예약 ${sched.length}건</h5>`
+    + (sched.length ? sched.map(item).join('') : '<p class="muted" style="margin:0 0 10px;font-size:12px">예약 없음 — 예약하기를 누르면 여기에 시작 시각과 함께 보여요.</p>');
+  $('#inbox').innerHTML = schedBox + ((wait.length || live.length || rest.length)
+    ? [...wait, ...live].map(item).join('') + (rest.length ? `<h5 class="muted" style="margin:10px 0 6px">지난 지시</h5>${rest.map(item).join('')}` : '')
+    : '<p class="muted">아직 지시가 없습니다. 위에 적어 보내면 여기로 보고가 올라옵니다.</p>');
   const busy = live.length > 0;
   $('#order-note').textContent = busy ? '지시를 실행하는 중이에요. 지금 보내기는 끝난 뒤에, 예약은 바로 됩니다.' : '배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.';
 }
@@ -191,6 +194,7 @@ function renderOrderPanel(oid) {
       ${whenHtml('reply')}
       <div class="act">${o.approval ? '<button class="btn approve" id="order-approve">확정</button>' : ''}
         <button class="btn ${o.approval ? 'ghost' : ''}" id="order-reply">${o.approval ? '수정 요청' : '보내기'}</button></div>
+      <p class="send-err" id="reply-err" role="alert"></p>
       <p class="muted">같은 대화를 이어서 실행합니다. 배포는 아래 [배포 확정] 버튼으로만 합니다.</p></div>`}`;
   if (dep) $('#panel-body').insertAdjacentHTML('beforeend', dep);
   if ($('#reply-text')) {
@@ -205,16 +209,23 @@ const local = () => ['127.0.0.1', 'localhost'].includes(location.hostname);
 async function post(path, body) {
   return fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Dashboard': '1' }, body: JSON.stringify(body) }).then(r => r.json());
 }
+// 보내기·예약이 안 된 이유는 알림(1.8초)만으로는 놓친다(2026-11-01 9:22 예약 건) → 버튼 아래에 남겨 둔다
+function sendErr(p, msg) {
+  const el = $(`#${p}-err`);
+  if (el) el.textContent = msg ? '안 됐어요: ' + msg : '';
+  if (msg) toast(msg);
+}
 async function sendOrder() {
   const ta = $('#order-text'), text = ta.value.trim();
-  if (!text) return toast('지시를 적어 주세요');
-  if (/<[^>]+>/.test(text)) return toast('<가게> 같은 빈칸을 채워 주세요');
+  if (!text) return sendErr('order', '지시를 적어 주세요');
+  if (/<[^>]+>/.test(text)) return sendErr('order', '<가게> 같은 빈칸을 채워 주세요');
   const w = whenValue('order');
-  if (w.error) return toast(w.error);
+  if (w.error) return sendErr('order', w.error);
   $('#order-send').disabled = true;
-  const r = await post('/api/order', { text, when: w.when });
+  const r = await post('/api/order', { text, when: w.when }).catch(() => ({ error: '대시보드 서버에 닿지 않았어요(검은 창이 꺼졌는지 확인)' }));
   $('#order-send').disabled = false;
-  if (r.error) return toast(r.error);
+  if (r.error) return sendErr('order', r.error);
+  sendErr('order', '');
   ta.value = '';
   toast(w.when ? '예약했습니다. 그때 비서실장이 시작해요.' : '지시를 보냈습니다. 비서실장이 실행을 시작해요.');
   $('#order-when').value = ''; whenHint('order');
@@ -224,9 +235,9 @@ async function sendOrder() {
 async function replyOrder(approve) {
   const id = S.open.slice(6), text = $('#reply-text')?.value || '';
   const w = whenValue('reply');
-  if (w.error) return toast(w.error);
-  const r = await post('/api/order/reply', { id, text, approve, when: w.when });
-  if (r.error) return toast(r.error);
+  if (w.error) return sendErr('reply', w.error);
+  const r = await post('/api/order/reply', { id, text, approve, when: w.when }).catch(() => ({ error: '대시보드 서버에 닿지 않았어요(검은 창이 꺼졌는지 확인)' }));
+  if (r.error) return sendErr('reply', r.error);
   $('#reply-text').value = ''; $('#reply-when').value = '';
   toast(w.when ? '예약했습니다. 그때 이어서 실행해요.' : approve ? '확정했습니다. 다음 단계를 진행해요.' : '보냈습니다.');
   loadOrders();
@@ -400,7 +411,9 @@ function renderCounts() {
   const full = S.stores.filter(s => s.kind === 'full').length, list = S.stores.filter(s => s.kind === 'listing').length;
   const items = S.todo.length;
   const run = S.jobs.filter(j => j.status === 'running').length + S.orders.filter(o => o.status === 'running').length;
-  $('#counts').innerHTML = `<span>가게 <b>${S.stores.length}</b></span><span>정식 <b>${full}</b></span><span>가게 찾기용 <b>${list}</b></span><span class="go" data-go="todo" role="button" tabindex="0" title="할 일 탭 열기">할 일 <b>${items}</b>건 ›</span><span>실행 중 <b>${run}</b></span>`;
+  const sched = S.orders.filter(o => o.status === 'scheduled').sort((a, b) => a.runAt - b.runAt);
+  const schedHtml = sched.length ? `<span class="go sched" data-order="${sched[0].id}" role="button" tabindex="0" title="다음 예약 열기">예약 <b>${sched.length}</b>건 (다음 ${day(sched[0].runAt)} ${hm(sched[0].runAt)}) ›</span>` : '<span class="sched">예약 <b>0</b></span>';
+  $('#counts').innerHTML = `<span>가게 <b>${S.stores.length}</b></span><span>정식 <b>${full}</b></span><span>가게 찾기용 <b>${list}</b></span><span class="go" data-go="todo" role="button" tabindex="0" title="할 일 탭 열기">할 일 <b>${items}</b>건 ›</span><span>실행 중 <b>${run}</b></span>${schedHtml}`;
 }
 
 // ---------------------------------------------------------------- 옆 창
@@ -588,7 +601,10 @@ document.addEventListener('click', async e => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
 $('#q').addEventListener('input', e => { S.q = e.target.value; renderStores(); });
 $('#order-text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sendOrder(); });
+$('#order-text').addEventListener('input', () => sendErr('order', ''));
 document.addEventListener('change', e => {
+  const k = e.target.id.match(/^(order|reply)-(when|at)$/);
+  if (k) sendErr(k[1], '');
   const m = e.target.id.match(/^(order|reply)-when$/);
   if (m) return whenHint(m[1]);
   if (e.target.id === 'talk-pick') { S.talkSel = e.target.value; refreshTalks(); }
