@@ -95,6 +95,7 @@
 | `restaurants/guigui` | 구이구이 Gui92 한국 전통 숯불 바비큐 (Viglacere ngã 6, Lý Thái Tổ, Võ Cường, Bắc Ninh, 022 2654 9292, 영업시간 지도에 없음) — **가게 찾기용** | 배포됨 (2026-10-31, e14cc8a, 도메인은 2026-10-31에 뒤늦게 연결) | https://guigui.qrmenuasia.com |
 | `restaurants/dusyef` | 두셰프의 돈가스&마우 Two Chefs Tonkatsu & Mau 돈가스·롤·우동·치킨 (B004 The Manor, Từ Liêm, Hà Nội, 033 549 1733, 10:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://dusyef.qrmenuasia.com |
 | `restaurants/uimyeonok` | 우이며녹 미딩점 UI MYEO NOK 칼국수·파전 (C005 The Manor, Mỹ Đình, Từ Liêm, Hà Nội, 024 3880 0010, 11:00–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://uimyeonok.qrmenuasia.com |
+| `restaurants/seoulbrothers` | 서울 브라더스 SEOUL BROTHERS 한식 주점(치킨·안주·파스타·국물요리·생맥주) (C2-S02 D'capitale, 119 Trần Duy Hưng, Yên Hòa, Hà Nội, 0987 962 453, 11:00–24:00) — **가게 찾기용**, 메뉴 사진 6장·간판 사진 | 제작 완료·배포 대기 (2026-11-03) | https://seoulbrothers.qrmenuasia.com |
 | `restaurants/texasbbq` | CTQ 텍사스 BBQ 미딩점 CTQ TEXAS BBQ 훈제 바비큐·사파 연어·콤보 세트 (Tòa nhà CT1, KĐT Mỹ Đình, Xuân Phương, Hà Nội, 096 232 2111, 10:30–14:00·16:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://texasbbq.qrmenuasia.com |
 | `restaurants/hoolala` | 훌랄라치킨 HOOLALA 치킨 펍·바베큐 치킨·피자·파스타·맥주 (Block B 005, The Manor, Từ Liêm, Hà Nội, 0355 738 102, 11:00–24:00 해석) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://hoolala.qrmenuasia.com |
 

@@ -538,6 +538,11 @@ window.STORES = [
     address: "The Emerald Vietnam, E3-(SH16), 1 Floor, CT8, Từ Liêm, Hà Nội",
     type: { ko: "누룽지닭백숙 · 닭볶음탕 · 훈제오리 · 막국수 한식", vi: "Món Hàn · Gà hầm cơm cháy · Gà xào cay · Vịt hun khói · Mì lạnh", en: "Korean food · Nurungji chicken soup · Spicy chicken stew · Smoked duck · Makguksu", zh: "韩餐 · 锅巴鸡肉汤 · 辣炖鸡 · 熏鸭 · 荞麦冷面", ja: "韓国料理・おこげ鶏ペクスク・タッポックンタン・燻製鴨・マッククス" },
     keywords: "예가 yega yega restaurant 예가식당 하노이 hà nội từ liêm tu liem the emerald emerald ct8 mỹ đình my dinh nhà hàng hàn quốc 한식 백숙 누룽지백숙 누룽지닭백숙 누룽지오리백숙 엄나무닭백숙 엄나무오리백숙 능이백숙 능이닭백숙 능이오리백숙 누룽지죽 훈제오리 훈제삼겹살 수제떡갈비 진꽃살 스모크치킨 훈제소시지 모듬 새우소금구이 닭볶음탕 제육볶음 도토리묵무침 메밀전병 문어숙회 쟁반막국수 봉평막국수 들깨수제비 들깨메밀국수 평일점심특선 제육한상 훈제삼겹한상 gà hầm cơm cháy vịt hun khói gà xào cay mì lạnh 韩餐 锅巴鸡肉汤 辣炖鸡 熏鸭 荞麦冷面 韓国料理 おこげ鶏 タッポックンタン 燻製鴨 マッククス" },
+  { id: "seoulbrothers", name: "서울 브라더스 SEOUL BROTHERS", sub: "순살치킨 · 삼겹구이 · 떡볶이 · 파스타 · 피자 · 국물요리 · 안주 · 생맥주", url: "https://seoulbrothers.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "bar", "chicken"], tags: ["photos"],
+    address: "C2-S02, D'capitale, 119 Trần Duy Hưng, Yên Hòa, Hà Nội",
+    type: { ko: "한식 주점 · 치킨 · 안주 · 생맥주", vi: "Quán nhậu Hàn Quốc · Gà rán · Đồ nhắm · Bia tươi", en: "Korean pub · Fried chicken · Anju · Draft beer", zh: "韩式酒馆 · 炸鸡 · 下酒菜 · 鲜啤", ja: "韓国居酒屋・チキン・おつまみ・生ビール" },
+    keywords: "서울 브라더스 서울브라더스 seoul brothers seoulbrothers 하노이 hà nội trần duy hưng d capitale dcapitale yên hòa cầu giấy 한식 주점 술집 호프 순살마늘간장치킨 순살매콤양념치킨 치킨난반 후라이드치킨 새우튀김 새우강정 똥집튀김 삼겹구이 제육볶음 우삼겹숙주볶음 직화닭불고기 두부김치제육 마파두부 가지튀김 닭발 떡볶이 로제떡볶이 꼬치어묵 쫄뱅이 골뱅이물회 감바스 경양식돈까스 돈까스 들기름파스타 파스타 고르곤졸라피자 피자 감자전 해물부추전 골뱅이전 오징어숙회 오징어튀김 토마토해장스튜 어묵탕 칼우동 라제비 해장라면 먹태 노가리 건어물 나초 계란토스트 주먹밥 생맥주 삿포로 소주 참이슬 하이볼 quán nhậu hàn quốc gà rán đồ nhắm bia tươi korean pub fried chicken anju 韩式酒馆 炸鸡 下酒菜 韓国居酒屋 チキン" },
 ];
 
 window.SI = {

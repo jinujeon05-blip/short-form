@@ -109,6 +109,8 @@ window.DEMOS = [
     name: "한사리감자탕 HANSARI GAMJATANG", type: { ko: "감자탕 · 뼈해장국 · 직화 뼈구이 · 하노이", vi: "Lẩu khoai tây xương · Canh xương · Sườn nướng · Hà Nội", zh: "土豆排骨汤 · 骨头解酒汤 · 烤骨头 · 河内", ja: "カムジャタン・ヘジャンクク・骨付き豚焼き・ハノイ", en: "Pork bone stew · Hangover soup · Grilled bones · Hanoi" } },
   { id: "gardenia", hidden: true, url: "https://gardenia.qrmenuasia.com", shot: "img/demo-gardenia.jpg", qr: "img/qr-gardenia.svg",
     name: "가드니아 GARDENIA", type: { ko: "돈까스 · 김밥 · 떡볶이 · 분식 · 하노이", vi: "Thịt chiên xù · Kimbap · Bánh gạo cay · Hà Nội", zh: "炸猪排 · 紫菜包饭 · 辣炒年糕 · 河内", ja: "とんかつ・キンパ・トッポッキ・ハノイ", en: "Pork cutlet · Kimbap · Tteokbokki · Hanoi" } },
+  { id: "seoulbrothers", hidden: true, url: "https://seoulbrothers.qrmenuasia.com", shot: "img/demo-seoulbrothers.jpg", qr: "img/qr-seoulbrothers.svg",
+    name: "서울 브라더스 SEOUL BROTHERS", type: { ko: "한식 주점 · 치킨 · 안주 · 하노이", vi: "Quán nhậu Hàn Quốc · Gà rán · Hà Nội", zh: "韩式酒馆 · 炸鸡 · 河内", ja: "韓国居酒屋・チキン・ハノイ", en: "Korean pub · Fried chicken · Hanoi" } },
 ];
 
 window.T = {
