@@ -20,7 +20,7 @@
       <textarea id="order-text" rows="3" placeholder="예: 바보아저씨 사진 수집기로 올렸어. 가게 찾기용으로 만들어줘"></textarea>
       <div class="chips" id="chips"></div>
       <div class="when"><select id="order-when" aria-label="언제 실행"><option value="">지금 실행</option><option value="reset">한도 풀리면 실행</option><option value="time">시각 정해서 실행</option></select>
-        <input type="datetime-local" id="order-at" hidden><small class="muted" id="order-hint"></small></div>
+        <input type="datetime-local" id="order-at" hidden><label class="argon" title="메뉴판 읽기를 제미나이 4 Argon으로(정식 가게는 체크 안 해도 자동)"><input type="checkbox" id="order-argon"> Argon 사용</label><small class="muted" id="order-hint"></small></div>
       <div class="cmd-foot">
         <span class="muted" id="order-note">배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.</span>
         <button class="btn" id="order-send">보내기</button>

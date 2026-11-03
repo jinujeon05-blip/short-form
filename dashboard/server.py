@@ -763,7 +763,7 @@ ORDER_RULES = """이 지시는 사용자(캡틴)가 대시보드 'Jinwoo 에이�
 - 이 실행에는 외부 연결(Vercel·드라이브 커넥터)이 없다. 배포·git push·main 머지·결제·외부 발송·삭제는 하지 않는다. 드라이브 사진은 동기화 폴더 G:\\내 드라이브\\QR메뉴판 에서 읽는다.
 - 너는 배포하지 않는다. 가게가 점검(check-standard·check-listing·shot·reviewer)을 통과하고 커밋까지 끝나 배포만 남았으면, 결재 줄 대신 맨 끝 줄을 '배포준비: <가게id>'(여러 곳이면 쉼표)로 쓴다. 캡틴이 결재함에서 [배포 확정]을 누르면 대시보드가 직접 배포한다.
 - 너는 '비서실장'(지휘)이다. 일은 CLAUDE.md 5장 순서대로 담당에게 맡긴다: 사진 고르기·모음 이미지 = finder, 메뉴판 읽기 = 안티그래비티(`agy -p`, 계획 모드) → 안 되면 menu-reader, 가격 재확인 = 운영 감찰관(안티그래비티 안 Claude Sonnet, 아래 명령) → 2번 실패하면 reviewer, 꾸미기 = designer, 번역 = polisher, 마지막 점검 = reviewer. 직접 하지 않는다.
-- 담당이 막히지 않게(2026-10-29 토정삼계탕 건): finder 의 모음 이미지는 `python tools/photos.py sheet <사진폴더> .scratch/<가게>/sheet.jpg` 한 줄로(파일 쓰기 명령 `cat >` 금지). 안티그래비티는 먼저 `python tools/photos.py shrink <사진폴더> .scratch/<가게>/menus`로 줄인 뒤 `cd .scratch/<가게>/menus && agy --mode plan -p "menu_01.jpg … menu_05.jpg …"`처럼 **한 번에 5장 이하**. 가격·빠진 메뉴 재대조(2026-10-30 사용자 결정 '다-1')는 같은 줄인 사진 폴더에서 `cd .scratch/<가게>/menus && agy --mode plan --model claude-sonnet-5-5-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … menu_05.jpg 를 열어 아래 표와 대조해줘. 가격이 다른 것·빠진 메뉴만 짧게. 못 열면 '사진 못 봄'. <표>"`(5장 이하씩). "명령 도구는 쓰지 말고 파일 보기 도구로만"을 빼면 막힌다. 코덱스·GPT-OSS는 쓰지 않는다. 제미나이 4 Argon(`--model gemini-4-argon-medium`)은 예비다 — 기본 제미나이·Claude 한도가 다 찼을 때만 메뉴판 읽기에 쓴다(2026-11-02 사용자 결정 '가-2'). 화면 꾸미기(index.html 스타일)는 designer 가 하고 비서실장은 직접 고치지 않는다. 담당이 실패하면 2번까지 다시 맡기고, 그래도 안 되면 보고에 이유를 쓴다.
+- 담당이 막히지 않게(2026-10-29 토정삼계탕 건): finder 의 모음 이미지는 `python tools/photos.py sheet <사진폴더> .scratch/<가게>/sheet.jpg` 한 줄로(파일 쓰기 명령 `cat >` 금지). 안티그래비티는 먼저 `python tools/photos.py shrink <사진폴더> .scratch/<가게>/menus`로 줄인 뒤 `cd .scratch/<가게>/menus && agy --mode plan -p "menu_01.jpg … menu_05.jpg …"`처럼 **한 번에 5장 이하**. 가격·빠진 메뉴 재대조(2026-10-30 사용자 결정 '다-1')는 같은 줄인 사진 폴더에서 `cd .scratch/<가게>/menus && agy --mode plan --model claude-sonnet-5-5-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … menu_05.jpg 를 열어 아래 표와 대조해줘. 가격이 다른 것·빠진 메뉴만 짧게. 못 열면 '사진 못 봄'. <표>"`(5장 이하씩). "명령 도구는 쓰지 말고 파일 보기 도구로만"을 빼면 막힌다. 코덱스·GPT-OSS는 쓰지 않는다. 제미나이 4 Argon(2026-11-03 캡틴 결정 '가-1'): **정식(계약) 가게**의 메뉴판 읽기는 항상 Argon으로 한다 — `agy --mode plan --model gemini-4-argon-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … 를 열어 …"`(5장 이하씩). 가게 찾기용은 캡틴이 [Argon 사용]을 체크했을 때(아래 'Argon 사용' 줄이 있을 때)나 지시문에 'Argon'이라고 썼을 때만 쓰고, 그 밖에는 기본 제미나이·Claude 한도가 다 찼을 때만 예비로 쓴다. Argon이 2번 실패하면 기본 agy → menu-reader 순서로 넘긴다. 가격 재대조(운영 감찰관)는 그대로 Claude Sonnet. 화면 꾸미기(index.html 스타일)는 designer 가 하고 비서실장은 직접 고치지 않는다. 담당이 실패하면 2번까지 다시 맡기고, 그래도 안 되면 보고에 이유를 쓴다.
 - 비서실장이 이미지를 직접 보는 것은 메뉴판·모음 이미지·최종 화면, 모두 3~4번까지다.
 - 마지막 보고 끝에 '담당별 사용' 표(담당 | 한 일 | 토큰)와 이미지 직접 본 횟수를 붙인다. 빠진 담당이 있으면 이유를 쓴다.
 - 고친 파일은 지금 브랜치에 커밋한다(push 안 함). seo·analytics 도구가 내 가게 밖(다른 가게 sitemap 날짜 등)을 바꿨으면 커밋하지 말고 `git restore -- <그 파일들>`로 되돌려 작업 폴더를 깨끗하게 둔다.
@@ -773,6 +773,8 @@ ORDER_RULES = """이 지시는 사용자(캡틴)가 대시보드 'Jinwoo 에이�
 - 회의(2026-11-01 캡틴 결정 '나-2', 필요할 때만): 담당끼리 의견이 다르거나(감사관 지적 ↔ designer 의도, 메뉴 검사관 표 ↔ 운영 감찰관 대조가 다름, 사진이 어느 메뉴인지 애매 등) 비서실장 혼자 정하기 어려울 때만 연다. 관련 담당에게 Agent 설명(description)을 '회의: <주제>'로 시작해 의견을 3줄 이내로 받고, 한쪽 의견을 다른 쪽에 보여 주고 한 번만 답을 받은 뒤 비서실장이 정한다. 회의는 지시 하나에 2번까지. 문제가 없으면 회의하지 않는다(사용량 아끼기). 회의를 했으면 보고에 '회의: <주제> → <결론>' 한 줄.
 - 마지막 답: 결론부터 3줄(쉬운 말). 이 대화에서 이어 할 결정이 있을 때만 맨 끝 줄을 '결재: <무엇을 확정할지 한 줄>'로 쓴다. 결재할 것이 없으면 결재 줄을 쓰지 않는다."""
 ORDER_RULES = ORDER_RULES.replace("CODEX_PATH", CODEX_POSIX)
+# 지시창 [Argon 사용] 체크(2026-11-03 '가-1'): 이 지시의 메뉴판 읽기를 가게 종류와 상관없이 Argon으로
+ARGON_RULE = "\n- Argon 사용: 캡틴이 이 지시에 [Argon 사용]을 체크했다. 가게 종류와 상관없이 메뉴판 읽기는 `--model gemini-4-argon-medium`으로 한다(실패 시 위 순서대로 넘김). 보고의 담당별 사용 표에 'Argon'을 쓴다."
 ORDER_ALLOW = ["Read", "Edit", "Write", "Glob", "Grep", "Agent", "TodoWrite",
                "Bash(node:*)", "Bash(python:*)", "Bash(python3:*)", "Bash(sh tools/*)", "Bash(bash _shared/*)",
                "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git show:*)", "Bash(git add:*)", "Bash(git commit:*)", "Bash(git restore:*)",
@@ -996,7 +998,7 @@ def run_order(o, prompt):
         pass
     exe = claude_exe()
     args = [exe, "-p", "--output-format", "stream-json", "--verbose", "--permission-mode", "auto",
-            "--strict-mcp-config", "--append-system-prompt", ORDER_RULES,
+            "--strict-mcp-config", "--append-system-prompt", ORDER_RULES + (ARGON_RULE if o.get("argon") else ""),
             "--add-dir", r"G:\내 드라이브\QR메뉴판",
             "--allowedTools", *ORDER_ALLOW, "--disallowedTools", *ORDER_DENY]
     if o.get("sessionId"):
@@ -1178,7 +1180,7 @@ def scheduler():
             print("예약 확인 오류:", e)
 
 
-def start_order(text, via, when=None):
+def start_order(text, via, when=None, argon=False):
     text = text.strip()[:2000]
     if not text:
         return None, "지시를 적어 주세요"
@@ -1191,7 +1193,7 @@ def start_order(text, via, when=None):
             n += 1
             oid = datetime.now().strftime("%m%d-%H%M%S") + f"-{n}"
         o = {"id": oid, "title": text.splitlines()[0][:60], "status": "running", "via": via, "createdAt": time.time(),
-             "turns": [{"by": "me", "text": text, "at": time.time()}], "steps": []}
+             "turns": [{"by": "me", "text": text, "at": time.time()}], "steps": [], "argon": bool(argon)}
         if when:
             err = schedule(o, text, when)
             if err:
@@ -1616,7 +1618,7 @@ class Handler(BaseHTTPRequestHandler):
             via = "phone" if isinstance(self, RemoteHandler) else "pc"
             when = body.get("when") or None  # 예약: 'reset'(한도 풀리면) 또는 초 단위 시각
             if path == "/api/order":
-                o, err = start_order(str(body.get("text", "")), via, when)
+                o, err = start_order(str(body.get("text", "")), via, when, bool(body.get("argon")))
             elif path == "/api/order/reply":
                 o, err = reply_order(str(body.get("id", "")), str(body.get("text", "")), bool(body.get("approve")), when)
             else:

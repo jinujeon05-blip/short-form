@@ -236,6 +236,7 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
 /* 예약 실행 (2026-11-01, '가-1·가-2') */
 .when { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 4px 0 8px; }
 .when select, .when input { border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; font: inherit; font-size: 12px; background: #fff; max-width: 100%; }
+.when .argon { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer; }  /* Argon 사용 체크(2026-11-03) */
 .when small { flex-basis: 100%; font-size: 11px; line-height: 1.4; }
 .when small:empty { display: none; }
 .ord.sched { border-style: dashed; border-color: #b8c2d3; background: #fafbfd; }
