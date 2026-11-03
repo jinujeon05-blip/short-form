@@ -27,7 +27,7 @@ const M = {
   finder: { name: '시각 정보 비서', role: '사진 고르기', quota: 'claude', safe: ['shot'] },
   agy: { name: '메뉴 검사관', role: '메뉴판 읽기', quota: 'gemini', tool: 'agy' },
   'menu-reader': { name: '자료 해석 비서', role: '메뉴판 읽기', quota: 'claude' },
-  codex: { name: '운영 감찰관', role: '두 번째 검토', quota: 'gemini', tool: 'agy' },  // 2026-10-30: 코덱스 대신 안티그래비티 안 Claude Sonnet
+  codex: { name: '운영 감찰관', role: '두 번째 검토', quota: 'agy', tool: 'agy' },  // 2026-10-30: 코덱스 대신 안티그래비티 안 Claude Sonnet
   reviewer: { name: '데이터 감사관', role: '마지막 점검', quota: 'claude', safe: ALL_CHECKS },
   polisher: { name: '수석 번역관', role: '번역·글', quota: 'claude' },
   staffing: { name: '인력 공급팀', role: '인력 현황', hr: true },
@@ -352,7 +352,7 @@ function ago(iso) {
 function quotaCard(key) {
   const q = S.quota?.[key];
   if (!q) return '';
-  const title = key === 'codex' ? 'ChatGPT (Codex)' : q.name;
+  const title = q.name;
   if (q.status !== 'ok') {
     return `<div class="q na"><h3><i class="dot"></i>${esc(title)}<span class="badge b-na">확인 불가</span></h3>
       <div class="row"><span class="chip">기록 없음</span><div class="track"><div class="fill" style="width:0"></div></div><b>-</b><span class="rst">아래 '확인하는 법'</span></div>
@@ -366,7 +366,7 @@ function quotaCard(key) {
       <b>${b.used}% 사용</b><span class="rst">${b.stale ? '기록 뒤 초기화됨' : '초기화까지 ' + dur(b.resetIn)}</span></div>`; }).join('')}
     <div class="src" title="${esc(q.source)}">출처: ${esc(q.source)}${q.note ? ' · ' + esc(q.note) : ''}</div></div>`;
 }
-function renderQuota() { $('#quota').innerHTML = ['claude', 'codex', 'gemini'].map(quotaCard).join(''); }
+function renderQuota() { $('#quota').innerHTML = ['claude', 'gemini', 'agy'].map(quotaCard).join(''); }
 
 // ---------------------------------------------------------------- 탭
 // 할 일 수 = docs/todo.md 의 '- **…**' 줄 수 (한 줄 안의 문장 수가 아님)

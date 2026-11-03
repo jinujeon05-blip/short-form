@@ -467,67 +467,21 @@ def hr_line():
 
 
 # ---------------------------------------------------------------- ⑤ 할당량
-def latest_codex_limits():
-    base = HOME / ".codex" / "sessions"
-    if not base.is_dir():
-        return None
-    files = sorted(base.rglob("rollout-*.jsonl"), key=lambda f: f.stat().st_mtime, reverse=True)[:10]
-    for f in files:
-        try:
-            lines = f.read_text(encoding="utf-8", errors="replace").splitlines()
-        except Exception:
-            continue
-        for line in reversed(lines):
-            if '"rate_limits"' not in line:
-                continue
-            try:
-                obj = json.loads(line)
-            except Exception:
-                continue
-            rl = obj.get("payload", {}).get("rate_limits") or obj.get("rate_limits")
-            if not rl:
-                continue
-            return {"limits": rl, "at": obj.get("timestamp"), "file": str(f.relative_to(HOME))}
-    return None
-
-
-def window_name(minutes):
-    if not minutes:
-        return "한도"
-    if minutes <= 300:
-        return "5시간"
-    if minutes <= 10080:
-        return "주간"
-    return f"{round(minutes / 1440)}일"
-
-
 def build_quota():
+    # 칸 3개(2026-11-03 캡틴 지시): Claude · Gemini(Flash·Pro) · 안티그래비티(Claude·GPT·Argon). ChatGPT(Codex) 칸은 지움(코덱스는 2026-10-30부터 안 씀)
     now = time.time()
-    codex = {"name": "Codex", "status": "확인 불가", "bars": [],
-             "how": "코덱스를 한 번 쓰면 ~/.codex/sessions 기록에 사용량이 남는다."}
-    got = latest_codex_limits()
-    if got:
-        rl = got["limits"]
-        for k in ("primary", "secondary"):
-            w = rl.get(k)
-            if not w:
-                continue
-            reset = w.get("resets_at")
-            codex["bars"].append({
-                "label": window_name(w.get("window_minutes")),
-                "used": round(float(w.get("used_percent", 0)), 1),
-                "resetsAt": reset,
-                "resetIn": max(0, int(reset - now)) if reset else None,
-                "stale": bool(reset and reset < now),
-            })
-        codex.update(status="ok" if codex["bars"] else "확인 불가", plan=rl.get("plan_type"),
-                     recordedAt=got["at"], source="~/.codex/sessions 기록", note="코덱스를 쓸 때만 새로 기록됨")
-        if not codex["bars"]:
-            codex["how"] = "기록에 한도 창이 없다. 코덱스 앱 /status 로 확인한다."
+    g = gemini_quota(now)
+    flash = [b for b in g["bars"] if b["label"].startswith("Gemini") and not b.get("spare")]
+    rest = sorted([b for b in g["bars"] if b not in flash], key=lambda b: bool(b.get("spare")))  # 예비(Argon)는 맨 아래
+    gem = dict(g, name="Gemini (Flash·Pro)", bars=[dict(b, label=b["label"].replace("Gemini(Flash·Pro) ", "")) for b in flash])
+    agy = dict(g, name="안티그래비티 (Claude·GPT·Argon)", bars=rest)
+    for q in (gem, agy):
+        if g["status"] == "ok" and not q["bars"]:
+            q.update(status="확인 불가", how="안티그래비티 앱에서 이 묶음의 한도가 오지 않았다. 앱 설정의 모델 사용량 화면에서 본다.")
     return {
         "claude": claude_quota(now),
-        "codex": codex,
-        "gemini": gemini_quota(now),
+        "gemini": gem,
+        "agy": agy,
         "checkedAt": datetime.now().strftime("%H:%M:%S"),
     }
 
@@ -664,7 +618,7 @@ def gemini_quota(now):
         left = g["reset"] - now if g["reset"] else None
         win = "5시간" if left is not None and left <= 5 * 3600 + 600 else "주간" if left is not None and left <= 7 * 86400 + 3600 else "한도"
         q["bars"].append({"label": f"{fam} {win}", "used": round(g["used"], 1), "resetsAt": g["reset"],
-                          "resetIn": max(0, int(left)) if left is not None else None, "stale": False})
+                          "resetIn": max(0, int(left)) if left is not None else None, "stale": False, "spare": "Argon" in fam})
     q["bars"].sort(key=lambda b: (not b["label"].startswith("Gemini"), b["label"]))
     if q["bars"]:
         q.update(status="ok", plan=plan, recordedAt=datetime.now(timezone.utc).isoformat(),
@@ -1138,7 +1092,7 @@ def order_blocked():
 # 없으면 Claude 5시간 초기화 때(+1분). 대시보드 서버가 켜져 있어야 시작한다(꺼져 있던 동안 지난 예약은 켜질 때 시작).
 def next_reset():
     q, now = cached("quota", 60, build_quota), time.time()
-    bars = [("Claude " + b["label"], b) for b in q["claude"]["bars"]] + [(b["label"], b) for b in q["gemini"]["bars"] if b["label"].startswith("Gemini") and not b.get("spare")]
+    bars = [("Claude " + b["label"], b) for b in q["claude"]["bars"]] + [(b["label"] if b["label"].startswith("Gemini") else "Gemini(Flash·Pro) " + b["label"], b) for b in q["gemini"]["bars"] if not b.get("spare")]
     hot = [(n, b["resetsAt"]) for n, b in bars if b["used"] >= 90 and b.get("resetsAt") and b["resetsAt"] > now]
     if not hot:
         hot = [("Claude 5시간", b["resetsAt"]) for b in q["claude"]["bars"] if b["label"] == "5시간" and b.get("resetsAt") and b["resetsAt"] > now]
