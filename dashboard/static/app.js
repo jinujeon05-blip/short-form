@@ -358,10 +358,10 @@ function quotaCard(key) {
       <div class="row"><span class="chip">기록 없음</span><div class="track"><div class="fill" style="width:0"></div></div><b>-</b><span class="rst">아래 '확인하는 법'</span></div>
       <details><summary>확인하는 법</summary>${esc(q.how)}</details></div>`;
   }
-  const worst = Math.max(...q.bars.map(b => b.used));
+  const worst = Math.max(0, ...q.bars.filter(b => !b.spare).map(b => b.used));  // 예비(Argon)는 카드 경고에서 뺌(2026-11-03 '라-1')
   const [lvl, bc, bt] = level(worst);
   return `<div class="q ${lvl}"><h3><i class="dot"></i>${esc(title)}${q.plan ? ` <small class="muted">${esc(q.plan)}</small>` : ''}<span class="badge ${bc}">${bt}</span><span class="when">${ago(q.recordedAt)}</span></h3>
-    ${q.bars.map(b => { const [lv] = level(b.used); return `<div class="row ${lv}"><span class="chip">${esc(b.label)}</span>
+    ${q.bars.map(b => { const [lv] = level(b.used); return `<div class="row ${lv}"><span class="chip">${esc(b.label)}${b.spare ? ' · 예비' : ''}</span>
       <div class="track"><div class="fill" style="width:${Math.max(1, Math.min(100, b.used))}%"></div></div>
       <b>${b.used}% 사용</b><span class="rst">${b.stale ? '기록 뒤 초기화됨' : '초기화까지 ' + dur(b.resetIn)}</span></div>`; }).join('')}
     <div class="src" title="${esc(q.source)}">출처: ${esc(q.source)}${q.note ? ' · ' + esc(q.note) : ''}</div></div>`;

@@ -609,22 +609,45 @@ def gemini_quota(now):
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE  # 자기 PC 안의 자체 서명 인증서
-    data = None
-    for port in [p.strip() for p in ports.splitlines() if p.strip().isdigit()]:
-        try:
-            req = urllib.request.Request(
-                f"https://127.0.0.1:{port}/exa.language_server_pb.LanguageServerService/GetUserStatus",
-                data=json.dumps({"metadata": {"ideName": "antigravity", "extensionName": "antigravity"}}).encode(),
-                headers={"Content-Type": "application/json", "Connect-Protocol-Version": "1",
-                         "X-Codeium-Csrf-Token": tok.group(1)})
-            with urllib.request.urlopen(req, timeout=5, context=ctx) as r:
-                data = json.loads(r.read().decode("utf-8")).get("userStatus")
-            break
-        except Exception:
-            continue
+    def ask(method):
+        for port in [p.strip() for p in ports.splitlines() if p.strip().isdigit()]:
+            try:
+                req = urllib.request.Request(
+                    f"https://127.0.0.1:{port}/exa.language_server_pb.LanguageServerService/{method}",
+                    data=json.dumps({"metadata": {"ideName": "antigravity", "extensionName": "antigravity"}}).encode(),
+                    headers={"Content-Type": "application/json", "Connect-Protocol-Version": "1",
+                             "X-Codeium-Csrf-Token": tok.group(1)})
+                with urllib.request.urlopen(req, timeout=5, context=ctx) as r:
+                    return json.loads(r.read().decode("utf-8"))
+            except Exception:
+                continue
+        return None
+    data = (ask("GetUserStatus") or {}).get("userStatus")
     if not data:
         return q
-    groups = {}
+    plan = ((data.get("planStatus") or {}).get("planInfo") or {}).get("planName")
+    # 앱 설정 '모델 사용량' 화면과 같은 값(2026-11-03): 묶음마다 5시간·주간이 따로 온다.
+    # GetUserStatus 의 모델별 값은 '가장 가까운 초기화' 한 칸뿐이라 주간을 못 보고, Argon 주간을 '5시간'으로 잘못 붙였다.
+    fams = {"Gemini Models": "Gemini(Flash·Pro)", "Claude and GPT models": "Claude·GPT"}  # 카드 제목이 안티그래비티라 짧게(긴 이름은 칸에서 잘려 5시간·주간이 안 보였다)
+    wins = {"5h": "5시간", "weekly": "주간"}
+    for g in ((ask("RetrieveUserQuotaSummary") or {}).get("response") or {}).get("groups", []):
+        name = g.get("displayName") or ""
+        spare = "Argon" in name  # 예비 모델(2026-11-03 캡틴 결정 '라-1'): 카드 경고·'한도 풀리면' 계산에서 뺀다
+        for b in g.get("buckets", []):
+            if "remainingFraction" not in b:
+                continue
+            try:
+                reset = datetime.fromisoformat(b["resetTime"].replace("Z", "+00:00")).timestamp()
+            except Exception:
+                reset = None
+            q["bars"].append({"label": f"{fams.get(name, name)} {wins.get(b.get('window'), b.get('window') or '한도')}",
+                              "used": round((1 - float(b["remainingFraction"])) * 100, 1), "resetsAt": reset,
+                              "resetIn": max(0, int(reset - now)) if reset else None, "stale": False, "spare": spare})
+    if q["bars"]:
+        q.update(status="ok", plan=plan, recordedAt=datetime.now(timezone.utc).isoformat(),
+                 source="안티그래비티 앱(로컬, 설정의 모델 사용량과 같은 값)", note="앱이 켜져 있을 때 1분마다 새로 읽음")
+        return q
+    groups = {}  # 요약을 못 읽은 옛 앱일 때만: 모델별 한 칸
     for c in (data.get("cascadeModelConfigData") or {}).get("clientModelConfigs", []):
         qi, label = c.get("quotaInfo") or {}, c.get("label") or ""
         if "remainingFraction" not in qi:
@@ -643,7 +666,6 @@ def gemini_quota(now):
         q["bars"].append({"label": f"{fam} {win}", "used": round(g["used"], 1), "resetsAt": g["reset"],
                           "resetIn": max(0, int(left)) if left is not None else None, "stale": False})
     q["bars"].sort(key=lambda b: (not b["label"].startswith("Gemini"), b["label"]))
-    plan = ((data.get("planStatus") or {}).get("planInfo") or {}).get("planName")
     if q["bars"]:
         q.update(status="ok", plan=plan, recordedAt=datetime.now(timezone.utc).isoformat(),
                  source="안티그래비티 앱(로컬)", note="앱이 켜져 있을 때 1분마다 새로 읽음")
@@ -1116,7 +1138,7 @@ def order_blocked():
 # 없으면 Claude 5시간 초기화 때(+1분). 대시보드 서버가 켜져 있어야 시작한다(꺼져 있던 동안 지난 예약은 켜질 때 시작).
 def next_reset():
     q, now = cached("quota", 60, build_quota), time.time()
-    bars = [("Claude " + b["label"], b) for b in q["claude"]["bars"]] + [(b["label"], b) for b in q["gemini"]["bars"] if b["label"].startswith("Gemini")]
+    bars = [("Claude " + b["label"], b) for b in q["claude"]["bars"]] + [(b["label"], b) for b in q["gemini"]["bars"] if b["label"].startswith("Gemini") and not b.get("spare")]
     hot = [(n, b["resetsAt"]) for n, b in bars if b["used"] >= 90 and b.get("resetsAt") and b["resetsAt"] > now]
     if not hot:
         hot = [("Claude 5시간", b["resetsAt"]) for b in q["claude"]["bars"] if b["label"] == "5시간" and b.get("resetsAt") and b["resetsAt"] > now]
