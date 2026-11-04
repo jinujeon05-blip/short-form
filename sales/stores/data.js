@@ -548,6 +548,11 @@ window.STORES = [
     address: "M4-02 Hoàng Trọng Mậu, Nam Từ Liêm, Hà Nội",
     type: { ko: "한식 횟집 · 활어회 · 해산물 · 탕 · 찜", vi: "Nhà hàng hải sản Hàn Quốc · Sashimi · Lẩu · Hấp", en: "Korean sashimi & seafood · Stews · Steamed dishes", zh: "韩式生鱼片 · 海鲜 · 汤 · 蒸菜", ja: "韓国式刺身・海鮮・鍋・蒸し料理" },
     keywords: "바보랑 바보랑회센터 회센터 수산물 baborang hải sản 하노이 hà nội hoàng trọng mậu nam từ liêm 횟집 활어회 모듬회 참치 참다랑어 광어 병어 흑돔 다금바리 연어 랍스터 킹크랩 크레이피쉬 전복 낙지탕탕이 해산물 연포탕 해물탕 해물찜 꽃게찜 우럭 보리굴비 간장게장 새우장 물회 회덮밥 초밥 전복죽 소주 막걸리 nhà hàng hải sản hàn quốc sashimi korean seafood sashimi lobster abalone" },
+  { id: "taebaeksan", name: "태백산 TAEBAEKSAN", sub: "돼지·소고기 구이 · 일품 요리 · 냉면 · 찌개 · 소주·와인", url: "https://taebaeksan.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
+    address: "Tòa Nhà CT5, Kiot SH16, DN6, SH17, Số 6 Trần Văn Lai, Mỹ Đình Sông Đà, Từ Liêm, Hà Nội",
+    type: { ko: "한식 고깃집 · 소·돼지 구이 · 냉면 · 찌개", vi: "Quán nướng Hàn Quốc · Thịt bò & thịt lợn · Mì lạnh · Canh", en: "Korean BBQ · Beef & pork · Cold noodles · Stews", zh: "韩式烤肉 · 牛肉猪肉 · 冷面 · 汤锅", ja: "韓国式焼肉・牛豚・冷麺・チゲ" },
+    keywords: "태백산 taebaeksan 고깃집 한식 구이 삼겹살 항정살 갈매기살 소고기 와규 갈비 육회 장어구이 냉면 물냉면 비빔냉면 갈비탕 소갈비찜 양념게장 주꾸미볶음 돌솥밥 김치찌개 안동소주 화요 막걸리 하이볼 와인 하노이 hà nội mỹ đình sông đà từ liêm trần văn lai quán nướng hàn quốc thịt nướng korean bbq" },
 ];
 
 window.SI = {

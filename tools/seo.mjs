@@ -71,6 +71,7 @@ const SHOPS = {
   dusyef:       { type: 'Restaurant', cuisine: ['Korean', 'Tonkatsu', 'Udon', 'Fried chicken'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   uimyeonok:    { type: 'Restaurant', cuisine: ['Korean', 'Kalguksu', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   baborang: { type: 'Restaurant', cuisine: ['Korean', 'Seafood', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  taebaeksan: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Grill'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   seoulbrothers: { type: 'Restaurant', cuisine: ['Korean', 'Korean pub', 'Fried chicken', 'Anju'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   texasbbq:     { type: 'Restaurant', cuisine: ['American', 'Texas BBQ', 'Smoked meat', 'Barbecue'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   gaonjae:      { type: 'Restaurant', cuisine: ['Korean', 'Seafood', 'Hot pot', 'Korean set meals'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },

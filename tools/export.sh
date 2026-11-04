@@ -46,6 +46,7 @@ name() {
     uimyeonok) echo "우이며녹" ;;
     seoulbrothers) echo "서울브라더스" ;;
     baborang) echo "바보랑회센터" ;;
+    taebaeksan) echo "태백산" ;;
     texasbbq) echo "CTQ 텍사스 BBQ" ;;
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;

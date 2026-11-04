@@ -97,6 +97,7 @@
 | `restaurants/uimyeonok` | 우이며녹 미딩점 UI MYEO NOK 칼국수·파전 (C005 The Manor, Mỹ Đình, Từ Liêm, Hà Nội, 024 3880 0010, 11:00–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://uimyeonok.qrmenuasia.com |
 | `restaurants/seoulbrothers` | 서울 브라더스 SEOUL BROTHERS 한식 주점(치킨·안주·파스타·국물요리·생맥주) (C2-S02 D'capitale, 119 Trần Duy Hưng, Yên Hòa, Hà Nội, 0987 962 453, 11:00–24:00) — **가게 찾기용**, 메뉴 사진 6장·간판 사진 | 제작 완료·배포 대기 (2026-11-03) | https://seoulbrothers.qrmenuasia.com |
 | `restaurants/baborang` | 바보랑 회 센터 BABORANG 한식 횟집·해산물(활어회·한상차림·랍스터·전복·탕·찜·식사·주류) (M4-02 Hoàng Trọng Mậu, Nam Từ Liêm, Hà Nội, 0889 451 687, 10:00–14:00·17:00–22:00) — **가게 찾기용**, 메뉴 124개·사진 5장·간판 사진 | 제작 완료(2026-11-04), 배포 전 |
+| `restaurants/taebaeksan` | 태백산 TAEBAEKSAN 한식 고깃집(소·돼지 구이·일품·냉면·찌개·술·와인) (Tòa Nhà CT5, Số 6 Trần Văn Lai, Mỹ Đình Sông Đà, Từ Liêm, Hà Nội, 0969 993 384, 10:30–24:00) — **가게 찾기용**, 메뉴 69개·사진 6장·간판. 베트남어 판 메뉴판 기준(옛 한글 판 전용 메뉴 뺌), 상세 docs/todo.md |
 | `restaurants/texasbbq` | CTQ 텍사스 BBQ 미딩점 CTQ TEXAS BBQ 훈제 바비큐·사파 연어·콤보 세트 (Tòa nhà CT1, KĐT Mỹ Đình, Xuân Phương, Hà Nội, 096 232 2111, 10:30–14:00·16:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://texasbbq.qrmenuasia.com |
 | `restaurants/hoolala` | 훌랄라치킨 HOOLALA 치킨 펍·바베큐 치킨·피자·파스타·맥주 (Block B 005, The Manor, Từ Liêm, Hà Nội, 0355 738 102, 11:00–24:00 해석) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://hoolala.qrmenuasia.com |
 
