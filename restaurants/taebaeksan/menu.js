@@ -30,7 +30,7 @@ window.MENU = [
       }),
       it(750000, null, "태백 특선 소고기 모둠", "Taebaek Special Assorted Beef (Taebaek Teuksseon Sogogi Modum)", "太白特选牛肉拼盘", "テベク特選牛肉盛り合わせ", "Thịt Bò Tổng Hợp Taebaek Đặc Biệt", {
         tag: "special",
-        desc: T("A5 와규·안창살·진갈비살 · 160g", "A5 wagyu, outside skirt, prime rib finger · 160g", "A5和牛·安昌肉·上等肋条肉 · 160g", "A5和牛・アンチャン（ハラミ）・ジンカルビ · 160g", "Wagyu A5, diềm thăn bò, sườn non · 160g"),
+        desc: T("A5 와규·안창살·진갈비살 · 160g", "A5 wagyu, outside skirt, prime rib finger · 160g", "A5和牛·裙肉·上等肋条肉 · 160g", "A5和牛・アンチャンサル・ジンカルビ · 160g", "Wagyu A5, diềm thăn bò, sườn non · 160g"),
       }),
       it(850000, null, "와규 모둠", "Wagyu Assortment (Wagyu Modum)", "和牛拼盘", "和牛盛り合わせ", "Thịt Bò Wagyu Tổng Hợp", {
         desc: T("미야자키 A5 · 160g", "Miyazaki A5 · 160g", "宫崎A5 · 160g", "宮崎A5 · 160g", "Miyazaki A5 · 160g"),
@@ -38,7 +38,7 @@ window.MENU = [
       it(650000, null, "꽃갈비살", "Boneless Short Rib (Kkotgalbisal)", "花排骨肉", "骨なし花カルビ（コッカルビサル）", "Thịt Sườn Non Rút Xương", {
         desc: T("160g", "160g", "160g", "160g", "160g"),
       }),
-      it(550000, null, "안창살", "Outside Skirt (Anchangsal)", "安昌肉", "アンチャンサル（ハラミ）", "Thịt Diềm Thăn Bò", {
+      it(550000, null, "안창살", "Outside Skirt (Anchangsal)", "裙肉", "アンチャンサル", "Thịt Diềm Thăn Bò", {
         desc: T("160g", "160g", "160g", "160g", "160g"),
       }),
       it(750000, null, "양념 소갈비", "Marinated Beef Short Rib (Yangnyeom Sogalbi)", "腌制牛排骨", "味付け牛カルビ", "Thịt Sườn Bò Ướp Sốt", {
@@ -50,7 +50,7 @@ window.MENU = [
       it(480000, null, "양념 소갈비살", "Marinated Beef Rib Meat (Yangnyeom Sogalbisal)", "腌制牛肋肉", "味付け牛カルビ肉", "Dẻ Sườn Bò Ướp Sốt", {
         desc: T("200g", "200g", "200g", "200g", "200g"),
       }),
-      it(350000, null, "토시살", "Skirt Meat (Tosisal)", "横膈膜肉", "トシ（ハラミ）", "Thịt Dải Bò", {
+      it(350000, null, "토시살", "Skirt Meat (Tosisal)", "横膈膜肉", "トシ（ハラミ類）", "Thịt Dải Bò", {
         desc: T("160g", "160g", "160g", "160g", "160g"),
       }),
       it(350000, null, "육회", "Beef Tartare (Yukhoe)", "生拌牛肉", "ユッケ", "Gỏi Bò Sống"),
@@ -93,13 +93,6 @@ window.MENU = [
   {
     id: "dish",
     name: T("일품 요리", "Specialty Dishes", "招牌料理", "一品料理", "ĐỒ CHÍN"),
-    note: T(
-      "점심(10:30~14:00)에 주문하면 영양돌솥밥 2개가 포함돼요 (주꾸미·대구·갈비찜, 2인분)",
-      "Orders at lunch (10:30–14:00) include 2 nutritious stone-pot rice bowls (webfoot octopus, cod, braised short ribs; 2 servings)",
-      "午餐时段（10:30~14:00）点餐含2份营养石锅饭（小章鱼·鳕鱼·炖排骨，2人份）",
-      "ランチ（10:30〜14:00）のご注文には栄養釜飯が2つ付きます（イイダコ・タラ・カルビチム、2人前）",
-      "Gọi món trong giờ trưa 10:30–14:00 được kèm 2 cơm thố trộn hạt (bạch tuộc nhỏ, cá tuyết, sườn bò hầm; 2 suất)"
-    ),
     items: [
       it(450000, "jjukkumi", "주꾸미볶음", "Stir-fried Webfoot Octopus (Jjukkumi Bokkeum)", "辣炒小章鱼", "イイダコ炒め（ジュクミポックム）", "Bạch Tuộc Nhỏ Xào Cay", {
         spicy: true,
@@ -112,7 +105,7 @@ window.MENU = [
         spicy: true,
         desc: T("반 접시 / 한 접시", "Half plate / full plate", "半份 / 一份", "半皿 / 1皿", "Nửa đĩa / một đĩa"),
       }),
-      it(250000, null, "더덕구이", "Grilled Deodeok Root (Deodeok-gui)", "烤沙参", "トドク焼き（デオドクグイ）", "Cây Deodeok Nướng"),
+      it(250000, null, "더덕구이", "Grilled Deodeok Root (Deodeok-gui)", "烤沙参", "トドク焼き", "Cây Deodeok Nướng"),
       it(150000, null, "잡채", "Japchae (Stir-fried Glass Noodles)", "杂菜（炒粉丝）", "チャプチェ（春雨炒め）", "Miến Xào Thập Cẩm"),
     ],
   },
