@@ -794,7 +794,7 @@ def load_orders():
 
 def step_text(block):
     """도구 사용 한 번을 한 줄로 (진행 상황 표시용)."""
-    name, inp = block.get("name", ""), block.get("input") or {}
+    name, inp = block.get("name", ""), (block.get("input") if isinstance(block.get("input"), dict) else {})
     what = inp.get("description") or inp.get("file_path") or inp.get("pattern") or inp.get("command") or inp.get("prompt") or ""
     what = str(what).replace(str(ROOT), "").replace("\\", "/").strip()
     return f"{name} · {what[:90]}" if what else name
@@ -805,7 +805,7 @@ DESK_OF = {"finder": "finder", "menu-reader": "menu-reader", "reviewer": "review
 
 
 def desk_of(block):
-    name, inp = block.get("name"), block.get("input") or {}
+    name, inp = block.get("name"), (block.get("input") if isinstance(block.get("input"), dict) else {})
     if name in ("Agent", "Task"):
         return DESK_OF.get(inp.get("subagent_type") or "", None)
     if name == "Bash":
@@ -826,6 +826,14 @@ TALK_MAX = 600
 TALK_NAME = {"captain": "캡틴", "claude": "비서실장", "finder": "시각 정보 비서", "agy": "메뉴 검사관", "menu-reader": "자료 해석 비서",
              "codex": "운영 감찰관", "reviewer": "데이터 감사관", "polisher": "수석 번역관", "designer": "designer"}
 TALK_KIND = {"ask": "지시", "say": "말", "report": "보고", "meet": "회의"}
+
+
+def ev_blocks(ev):
+    """실행 기록 한 줄의 message.content 블록(dict)만. message 가 글자로 오는 줄(permission_denied 등)도 있어서
+    .get 을 바로 부르면 실행 전체가 죽었다(2026-11-04 태백산 'str' object has no attribute 'get' 건)."""
+    msg = ev.get("message") if isinstance(ev, dict) else None
+    content = msg.get("content") if isinstance(msg, dict) else None
+    return [b for b in content if isinstance(b, dict)] if isinstance(content, list) else []
 
 
 def text_of(content):
@@ -869,16 +877,22 @@ class Talk:
             self.add(who, "claude", kind, text or "일을 마쳤습니다(보고 글은 실행 기록에 남지 않음).")
 
     def feed(self, ev):
+        if not isinstance(ev, dict):
+            return
         ptid = ev.get("parent_tool_use_id")
-        content = (ev.get("message") or {}).get("content")
-        blocks = content if isinstance(content, list) else []
-        if ev.get("type") == "assistant":
+        blocks = ev_blocks(ev)
+        if ev.get("type") == "system" and ev.get("subtype") == "permission_denied":
+            # 금지 목록·자동 판단에 걸려 거절된 명령: 실패가 아니라 '막힘'으로 한 줄 남긴다(비서실장은 다른 방법으로 계속한다)
+            who = self.by.get(ev.get("tool_use_id")) or "claude"
+            msg = ev.get("message") if isinstance(ev.get("message"), str) else ""
+            self.add(who, None, "say", f"⛔ 막힘: {ev.get('tool_name') or '도구'} 명령이 거절됐습니다. {msg[:200]}")
+        elif ev.get("type") == "assistant":
             speaker = self.by.get(ptid) if ptid else "claude"
             for b in blocks:
                 if b.get("type") == "text" and speaker:
                     self.add(speaker, None, "say", b.get("text"))
                 elif b.get("type") == "tool_use" and not ptid:
-                    name, inp = b.get("name"), b.get("input") or {}
+                    name, inp = b.get("name"), (b.get("input") if isinstance(b.get("input"), dict) else {})
                     if name in ("Agent", "Task"):
                         d = DESK_OF.get(inp.get("subagent_type") or "") or inp.get("subagent_type") or "agent"
                         meet = str(inp.get("description") or "").startswith("회의")
@@ -929,12 +943,17 @@ def talk_backfill(o):
                 ev = json.loads(line)
             except Exception:
                 continue
+            if not isinstance(ev, dict):
+                continue
             if ev.get("type") == "system" and ev.get("subtype") == "init":
                 k += 1  # 실행 한 번(처음 지시·답하기·확정)마다 init 이 하나
                 if k < len(mine):
                     tk.at = mine[k]["at"]
                     tk.add("captain", "claude", "ask", mine[k]["text"])
-            tk.feed(ev)
+            try:
+                tk.feed(ev)
+            except Exception:
+                pass  # 한 줄이 이상해도 나머지 대화는 되살린다(2026-11-04)
     o["talkFrom"] = "log"
 
 
@@ -965,6 +984,30 @@ def talk_view(oid, frm):
             write_talk_md(o)
         return {"items": [dict(t) for t in o.get("talk") or [] if t["i"] >= frm], "approx": o.get("talkFrom") == "log",
                 "file": f"dashboard/orders/{o['id']}-대화.md" if o.get("talk") else None}
+
+
+def show_event(o, ev, owners, talk):
+    """실행 기록 한 줄 → 진행 단계(o['steps'])·일하는 담당·팀 대화. ORDER_LOCK 안에서 부른다."""
+    if ev.get("session_id"):
+        o["sessionId"] = ev["session_id"]
+    parent = owners.get(ev.get("parent_tool_use_id"))
+    if ev.get("type") == "assistant":
+        for b in ev_blocks(ev):
+            if b.get("type") == "tool_use":
+                who = desk_of(b) if not parent else None
+                if who:
+                    owners[b.get("id")] = who
+                o["steps"] = (o.get("steps") or [])[-29:] + [{"text": step_text(b), "who": who or parent or "claude", "at": time.time()}]
+            elif b.get("type") == "text" and str(b.get("text") or "").strip():
+                o["last"] = str(b["text"]).strip()[-400:]
+    elif ev.get("type") == "user" and not parent:
+        for b in ev_blocks(ev):
+            if b.get("type") == "tool_result":
+                owners.pop(b.get("tool_use_id"), None)
+    talk.feed(ev)
+    o["active"] = sorted(set(owners.values()))
+    # 이 지시에서 일한 자리(끝나면 녹색 '작업 완료'로 남는다, 2026-10-30)
+    o["worked"] = sorted(set(o.get("worked") or ["claude"]) | set(owners.values()))
 
 
 def run_order(o, prompt):
@@ -1008,33 +1051,20 @@ def run_order(o, prompt):
                     ev = json.loads(raw)
                 except Exception:
                     continue
+                if not isinstance(ev, dict):
+                    continue
                 with ORDER_LOCK:
-                    if ev.get("session_id"):
-                        o["sessionId"] = ev["session_id"]
-                    parent = owners.get(ev.get("parent_tool_use_id"))
-                    if ev.get("type") == "assistant":
-                        for b in (ev.get("message") or {}).get("content") or []:
-                            if b.get("type") == "tool_use":
-                                who = desk_of(b) if not parent else None
-                                if who:
-                                    owners[b.get("id")] = who
-                                o["steps"] = (o.get("steps") or [])[-29:] + [{"text": step_text(b), "who": who or parent or "claude", "at": time.time()}]
-                            elif b.get("type") == "text" and b.get("text", "").strip():
-                                o["last"] = b["text"].strip()[-400:]
-                    elif ev.get("type") == "user" and not parent:
-                        content = (ev.get("message") or {}).get("content")
-                        for b in content if isinstance(content, list) else []:
-                            if b.get("type") == "tool_result":
-                                owners.pop(b.get("tool_use_id"), None)
-                    elif ev.get("type") == "result":
+                    if ev.get("type") == "result":
                         result = ev
                         # 담당이 백그라운드로 일하면 한 실행에 result 가 여러 번 온다 → 모두 더한다(마지막 것만 세면 0으로 나왔다, 2026-11-01)
-                        u = ev.get("usage") or {}
+                        u = ev.get("usage") if isinstance(ev.get("usage"), dict) else {}
                         used += sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
-                    talk.feed(ev)
-                    o["active"] = sorted(set(owners.values()))
-                    # 이 지시에서 일한 자리(끝나면 녹색 '작업 완료'로 남는다, 2026-10-30)
-                    o["worked"] = sorted(set(o.get("worked") or ["claude"]) | set(owners.values()))
+                    # 화면 표시(진행 단계·팀 대화)는 한 줄 해석이 틀려도 그 줄만 건너뛴다.
+                    # 여기서 죽으면 비서실장은 아직 일하는데 지시가 '실패'가 됐다(2026-11-04 태백산 'str' object has no attribute 'get' 건)
+                    try:
+                        show_event(o, ev, owners, talk)
+                    except Exception as e:
+                        print("실행 기록 한 줄 건너뜀:", o["id"], ev.get("type"), ev.get("subtype"), repr(e)[:200])
         p.wait()
         killer.cancel()
     except Exception as e:
