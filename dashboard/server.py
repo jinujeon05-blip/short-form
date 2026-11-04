@@ -1284,19 +1284,35 @@ def vercel_token():
     return user_env("VERCEL_TOKEN") or ""
 
 
-def vapi(method, path, body=None):
+def vapi(method, path, body=None, tries=3):
+    """Vercel API 호출. 인터넷이 잠깐 끊기면(WinError 10060 등) 몇 초 쉬고 tries 번까지 다시 묻는다
+    (2026-11-04 바보랑 건: 한 번 끊김에 배포는 됐는데 '배포 멈춤'이 뜸). 그래도 안 되면 OSError 를 그대로 올린다."""
     sep = "&" if "?" in path else "?"
-    req = urllib.request.Request(f"https://api.vercel.com{path}{sep}teamId={VERCEL_TEAM}", method=method,
-                                 data=json.dumps(body).encode() if body is not None else None,
-                                 headers={"Authorization": "Bearer " + vercel_token(), "Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=60) as r:
-            return r.status, json.loads(r.read().decode("utf-8") or "{}")
-    except urllib.error.HTTPError as e:
+    for i in range(tries):
+        req = urllib.request.Request(f"https://api.vercel.com{path}{sep}teamId={VERCEL_TEAM}", method=method,
+                                     data=json.dumps(body).encode() if body is not None else None,
+                                     headers={"Authorization": "Bearer " + vercel_token(), "Content-Type": "application/json"})
         try:
-            return e.code, json.loads(e.read().decode("utf-8") or "{}")
-        except Exception:
-            return e.code, {}
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return r.status, json.loads(r.read().decode("utf-8") or "{}")
+        except urllib.error.HTTPError as e:
+            try:
+                return e.code, json.loads(e.read().decode("utf-8") or "{}")
+            except Exception:
+                return e.code, {}
+        except OSError:  # URLError·시간 초과·연결 끊김(HTTP 응답이 아예 없음)
+            if i == tries - 1:
+                raise
+            time.sleep(5 * (i + 1))
+
+
+def find_deploy(project, sha, since_ms):
+    """배포 요청 중에 연결이 끊겼을 때: 그 요청이 실제로 Vercel 에 닿아 배포가 생겼는지 찾는다(중복 배포·비용 방지)."""
+    code, lst = vapi("GET", f"/v6/deployments?projectId={project}&target=production&limit=5&since={since_ms}")
+    for d in lst.get("deployments") or []:
+        if (d.get("meta") or {}).get("githubCommitSha") == sha:
+            return d.get("uid") or d.get("id")
+    return None
 
 
 def deploy_one(project, root, branch, sha, new_ok, log):
@@ -1319,13 +1335,36 @@ def deploy_one(project, root, branch, sha, new_ok, log):
         body["projectSettings"] = {"rootDirectory": root, "framework": None, "buildCommand": None,
                                    "outputDirectory": None, "installCommand": None, "devCommand": None}
     log(f"{project}: 배포 시작" + (" (새 프로젝트)" if is_new else ""))
-    code, d = vapi("POST", "/v13/deployments", body)
-    if code >= 300:
-        raise RuntimeError(f"{project} 배포 요청 실패: {(d.get('error') or {}).get('message', code)}")
-    did = d["id"]
-    for _ in range(120):  # 최대 10분
+    did = None
+    since = int(time.time() * 1000) - 60000
+    for attempt in range(2):  # 배포 요청은 자동 반복하지 않는다 — 끊기면 먼저 실제로 생겼는지 보고, 없을 때만 한 번 더
+        try:
+            code, d = vapi("POST", "/v13/deployments", body, tries=1)
+        except OSError as e:
+            time.sleep(10)
+            did = find_deploy(project, sha, since)
+            if did:
+                log(f"{project}: 연결이 잠깐 끊겼지만 배포는 시작돼 있음")
+                break
+            if attempt == 1:
+                raise RuntimeError(f"{project} 배포 요청 중 연결 끊김(두 번): {e}")
+            log(f"{project}: 연결이 끊겨 배포 요청을 한 번 더 보냄")
+            continue
+        if code >= 300:
+            raise RuntimeError(f"{project} 배포 요청 실패: {(d.get('error') or {}).get('message', code)}")
+        did = d["id"]
+        break
+    st, fails = None, 0
+    for _ in range(120):  # 최대 10분. 확인 중 끊김은 6번(약 3분) 연속일 때만 멈춘다
         time.sleep(5)
-        code, d = vapi("GET", f"/v13/deployments/{did}")
+        try:
+            code, d = vapi("GET", f"/v13/deployments/{did}")
+        except OSError as e:
+            fails += 1
+            if fails >= 6:
+                raise RuntimeError(f"{project} 배포 확인 중 인터넷 연결이 계속 끊김: {e} (Vercel 화면에서 결과 확인)")
+            continue
+        fails = 0
         st = d.get("readyState") or d.get("status")
         if st in ("READY", "ERROR", "CANCELED"):
             break
