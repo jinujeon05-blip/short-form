@@ -543,6 +543,11 @@ window.STORES = [
     address: "C2-S02, D'capitale, 119 Trần Duy Hưng, Yên Hòa, Hà Nội",
     type: { ko: "한식 주점 · 치킨 · 안주 · 생맥주", vi: "Quán nhậu Hàn Quốc · Gà rán · Đồ nhắm · Bia tươi", en: "Korean pub · Fried chicken · Anju · Draft beer", zh: "韩式酒馆 · 炸鸡 · 下酒菜 · 鲜啤", ja: "韓国居酒屋・チキン・おつまみ・生ビール" },
     keywords: "서울 브라더스 서울브라더스 seoul brothers seoulbrothers 하노이 hà nội trần duy hưng d capitale dcapitale yên hòa cầu giấy 한식 주점 술집 호프 순살마늘간장치킨 순살매콤양념치킨 치킨난반 후라이드치킨 새우튀김 새우강정 똥집튀김 삼겹구이 제육볶음 우삼겹숙주볶음 직화닭불고기 두부김치제육 마파두부 가지튀김 닭발 떡볶이 로제떡볶이 꼬치어묵 쫄뱅이 골뱅이물회 감바스 경양식돈까스 돈까스 들기름파스타 파스타 고르곤졸라피자 피자 감자전 해물부추전 골뱅이전 오징어숙회 오징어튀김 토마토해장스튜 어묵탕 칼우동 라제비 해장라면 먹태 노가리 건어물 나초 계란토스트 주먹밥 생맥주 삿포로 소주 참이슬 하이볼 quán nhậu hàn quốc gà rán đồ nhắm bia tươi korean pub fried chicken anju 韩式酒馆 炸鸡 下酒菜 韓国居酒屋 チキン" },
+  { id: "baborang", name: "바보랑 회 센터 BABORANG", sub: "활어회 · 한상차림 · 랍스터 · 전복 · 탕 · 찜 · 식사 · 소주", url: "https://baborang.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["seafood", "korean"], tags: ["photos"],
+    address: "M4-02 Hoàng Trọng Mậu, Nam Từ Liêm, Hà Nội",
+    type: { ko: "한식 횟집 · 활어회 · 해산물 · 탕 · 찜", vi: "Nhà hàng hải sản Hàn Quốc · Sashimi · Lẩu · Hấp", en: "Korean sashimi & seafood · Stews · Steamed dishes", zh: "韩式生鱼片 · 海鲜 · 汤 · 蒸菜", ja: "韓国式刺身・海鮮・鍋・蒸し料理" },
+    keywords: "바보랑 바보랑회센터 회센터 수산물 baborang hải sản 하노이 hà nội hoàng trọng mậu nam từ liêm 횟집 활어회 모듬회 참치 참다랑어 광어 병어 흑돔 다금바리 연어 랍스터 킹크랩 크레이피쉬 전복 낙지탕탕이 해산물 연포탕 해물탕 해물찜 꽃게찜 우럭 보리굴비 간장게장 새우장 물회 회덮밥 초밥 전복죽 소주 막걸리 nhà hàng hải sản hàn quốc sashimi korean seafood sashimi lobster abalone" },
 ];
 
 window.SI = {

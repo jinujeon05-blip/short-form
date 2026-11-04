@@ -111,6 +111,8 @@ window.DEMOS = [
     name: "가드니아 GARDENIA", type: { ko: "돈까스 · 김밥 · 떡볶이 · 분식 · 하노이", vi: "Thịt chiên xù · Kimbap · Bánh gạo cay · Hà Nội", zh: "炸猪排 · 紫菜包饭 · 辣炒年糕 · 河内", ja: "とんかつ・キンパ・トッポッキ・ハノイ", en: "Pork cutlet · Kimbap · Tteokbokki · Hanoi" } },
   { id: "seoulbrothers", hidden: true, url: "https://seoulbrothers.qrmenuasia.com", shot: "img/demo-seoulbrothers.jpg", qr: "img/qr-seoulbrothers.svg",
     name: "서울 브라더스 SEOUL BROTHERS", type: { ko: "한식 주점 · 치킨 · 안주 · 하노이", vi: "Quán nhậu Hàn Quốc · Gà rán · Hà Nội", zh: "韩式酒馆 · 炸鸡 · 河内", ja: "韓国居酒屋・チキン・ハノイ", en: "Korean pub · Fried chicken · Hanoi" } },
+  { id: "baborang", hidden: true, url: "https://baborang.qrmenuasia.com", shot: "img/demo-baborang.jpg", qr: "img/qr-baborang.svg",
+    name: "바보랑 회 센터 BABORANG", type: { ko: "한식 횟집 · 해산물 · 하노이", vi: "Hải sản & sashimi Hàn Quốc · Hà Nội", zh: "韩式生鱼片 · 海鲜 · 河内", ja: "韓国式刺身・海鮮・ハノイ", en: "Korean sashimi & seafood · Hanoi" } },
 ];
 
 window.T = {
