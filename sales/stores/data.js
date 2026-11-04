@@ -553,6 +553,12 @@ window.STORES = [
     address: "Tòa Nhà CT5, Kiot SH16, DN6, SH17, Số 6 Trần Văn Lai, Mỹ Đình Sông Đà, Từ Liêm, Hà Nội",
     type: { ko: "한식 고깃집 · 소·돼지 구이 · 냉면 · 찌개", vi: "Quán nướng Hàn Quốc · Thịt bò & thịt lợn · Mì lạnh · Canh", en: "Korean BBQ · Beef & pork · Cold noodles · Stews", zh: "韩式烤肉 · 牛肉猪肉 · 冷面 · 汤锅", ja: "韓国式焼肉・牛豚・冷麺・チゲ" },
     keywords: "태백산 taebaeksan 고깃집 한식 구이 삼겹살 항정살 갈매기살 소고기 와규 갈비 육회 장어구이 냉면 물냉면 비빔냉면 갈비탕 소갈비찜 양념게장 주꾸미볶음 돌솥밥 김치찌개 안동소주 화요 막걸리 하이볼 와인 하노이 hà nội mỹ đình sông đà từ liêm trần văn lai quán nướng hàn quốc thịt nướng korean bbq" },
+  { id: "bulhyang", name: "불향 BUL HYANG", sub: "쭈꾸미 직화볶음 · 연포탕 · 코다리조림 · 돈가스 · 소주", url: "https://bulhyang.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean"], tags: ["photos"],
+    address: "CT4, Từ Liêm, Hà Nội",
+    type: { ko: "한식 · 쭈꾸미 직화볶음 · 연포탕 · 코다리조림", vi: "Món Hàn Quốc · Bạch tuộc xào cay · Canh bạch tuộc · Cá minh thái kho", en: "Korean · Spicy stir-fried baby octopus · Octopus soup · Braised pollack", zh: "韩餐 · 辣炒小章鱼 · 章鱼汤 · 炖明太鱼", ja: "韓国料理・ジュクミ炒め・ナクチ鍋・コダリ煮付け" },
+    keywords: "불향 bulhyang bul hyang 한식 쭈꾸미 주꾸미 쭈삼 쭈꾸미삼겹살 직화볶음 낙지 연포탕 샤브샤브 코다리조림 닭발 무뼈닭발 낙지호롱이 산낙지 보리굴비 돈가스 파전 계란찜 소주 막걸리 하노이 hà nội từ liêm bạch tuộc xào cay quán hàn quốc"
+  }
 ];
 
 window.SI = {

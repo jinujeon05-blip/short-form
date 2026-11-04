@@ -115,6 +115,8 @@ window.DEMOS = [
     name: "바보랑 회 센터 BABORANG", type: { ko: "한식 횟집 · 해산물 · 하노이", vi: "Hải sản & sashimi Hàn Quốc · Hà Nội", zh: "韩式生鱼片 · 海鲜 · 河内", ja: "韓国式刺身・海鮮・ハノイ", en: "Korean sashimi & seafood · Hanoi" } },
   { id: "taebaeksan", hidden: true, url: "https://taebaeksan.qrmenuasia.com", shot: "img/demo-taebaeksan.jpg", qr: "img/qr-taebaeksan.svg",
     name: "태백산 TAEBAEKSAN", type: { ko: "한식 고깃집 · 하노이", vi: "Quán nướng Hàn Quốc · Hà Nội", zh: "韩式烤肉 · 河内", ja: "韓国式焼肉・ハノイ", en: "Korean BBQ · Hanoi" } },
+  { id: "bulhyang", hidden: true, url: "https://bulhyang.qrmenuasia.com", shot: "img/demo-bulhyang.jpg", qr: "img/qr-bulhyang.svg",
+    name: "불향 BUL HYANG", type: { ko: "한식 · 쭈꾸미 직화볶음 · 하노이", vi: "Món Hàn Quốc · Bạch tuộc xào cay · Hà Nội", zh: "韩餐 · 辣炒章鱼 · 河内", ja: "韓国料理・ジュクミ炒め・ハノイ", en: "Korean · Spicy stir-fried octopus · Hanoi" } },
 ];
 
 window.T = {
