@@ -49,14 +49,24 @@ for (const s of food) {
 
 // 가게 간판 룰렛용: 음식점마다 그 가게 메뉴판 맨 위 그림(로고·간판, 없으면 hero) + 종류 한 줄·주소(가게 찾기 목록 그대로)
 const SIGN_FIRST = /^img\/(logo|wordmark|sign|front|store)/;
+// 맨 위 그림이 간판이 아니라 음식·실내 사진인 가게(2026-11-05 모음 이미지로 봄) → 간판 사진을 구하기 전까지 이름 카드로
+const NOT_SIGN = new Set(["joseon", "madang", "cheong", "miz", "dada", "jijigo"]);
+// 간판 룰렛에서 뺄 종류(사용자 지시 2026-11-05: 식당 룰렛에 커피숍은 빼기)
+const SIGN_SKIP_CATS = ["cafe"];
 const signs = [];
 for (const s of food) {
+  if ((s.cats || []).some((c) => SIGN_SKIP_CATS.includes(c))) continue;
   let html = "";
   try { html = fs.readFileSync(path.join(ROOT, "restaurants", s.id, "index.html"), "utf8"); } catch { continue; }
   const refs = [...html.matchAll(/(?:src="|url\()(?:\.\/)?(img\/[^"')]+\.(?:png|jpe?g|webp))/g)].map((m) => m[1]);
-  const img = refs.find((r) => SIGN_FIRST.test(r)) || refs.find((r) => r === "img/hero.jpg") || "";
-  signs.push({ id: s.id, name: s.name, url: s.url, region: s.region, cats: (s.cats || []).filter((c) => FOOD.includes(c)), type: s.type || null, addr: s.address || "", img: img ? `${s.url}/${img}` : "", logo: /\.png$/.test(img) });
+  const img = NOT_SIGN.has(s.id) ? "" : refs.find((r) => SIGN_FIRST.test(r)) || refs.find((r) => r === "img/hero.jpg") || "";
+  signs.push({ id: s.id, name: s.name, url: s.url, region: s.region, cats: (s.cats || []).filter((c) => FOOD.includes(c) && !SIGN_SKIP_CATS.includes(c)), type: s.type || null, addr: s.address || "", img: img ? `${s.url}/${img}` : "", logo: /\.png$/.test(img), _file: img ? path.join(ROOT, "restaurants", s.id, img) : "" });
 }
+// 투명 배경에 밝은 글씨인 로고(흰 글씨 등)는 흰 바탕에서 안 보이므로 어두운 바탕 표시(dark)
+const pngs = signs.filter((x) => x.logo).map((x) => x._file);
+const LIGHT_PY = "import sys,json\nfrom PIL import Image\nout={}\nfor p in sys.stdin.read().split('\\n'):\n  if not p: continue\n  im=Image.open(p).convert('RGBA').resize((80,50));d=list(im.getdata())\n  px=[(r,g,b) for r,g,b,a in d if a>128];tr=sum(1 for *_,a in d if a<=128)/len(d)\n  L=sum(0.299*r+0.587*g+0.114*b for r,g,b in px)/max(1,len(px))\n  out[p]=tr>0.3 and L>190\nprint(json.dumps(out))";
+const light = JSON.parse(execFileSync("python", ["-W", "ignore", "-c", LIGHT_PY], { input: pngs.join("\n") }).toString());
+for (const x of signs) { if (light[x._file]) x.dark = true; delete x._file; }
 const { CATS } = load(path.join(ROOT, "sales/stores/data.js"));
 const cats = Object.fromEntries(FOOD.filter((c) => CATS[c]).map((c) => [c, CATS[c]]));
 
