@@ -47,7 +47,20 @@ for (const s of food) {
   if (picked.length) stores[s.id] = { name: s.name, url: s.url, region: s.region, cur };
 }
 
-const out = `// 자동 생성 — node tools/game-data.mjs (직접 고치지 않음)\nwindow.GAME_STORES = ${JSON.stringify(stores)};\nwindow.GAME_DISHES = ${JSON.stringify(dishes)};\n`;
+// 가게 간판 룰렛용: 음식점마다 그 가게 메뉴판 맨 위 그림(로고·간판, 없으면 hero) + 종류 한 줄·주소(가게 찾기 목록 그대로)
+const SIGN_FIRST = /^img\/(logo|wordmark|sign|front|store)/;
+const signs = [];
+for (const s of food) {
+  let html = "";
+  try { html = fs.readFileSync(path.join(ROOT, "restaurants", s.id, "index.html"), "utf8"); } catch { continue; }
+  const refs = [...html.matchAll(/(?:src="|url\()(?:\.\/)?(img\/[^"')]+\.(?:png|jpe?g|webp))/g)].map((m) => m[1]);
+  const img = refs.find((r) => SIGN_FIRST.test(r)) || refs.find((r) => r === "img/hero.jpg") || "";
+  signs.push({ id: s.id, name: s.name, url: s.url, region: s.region, cats: (s.cats || []).filter((c) => FOOD.includes(c)), type: s.type || null, addr: s.address || "", img: img ? `${s.url}/${img}` : "", logo: /\.png$/.test(img) });
+}
+const { CATS } = load(path.join(ROOT, "sales/stores/data.js"));
+const cats = Object.fromEntries(FOOD.filter((c) => CATS[c]).map((c) => [c, CATS[c]]));
+
+const out = `// 자동 생성 — node tools/game-data.mjs (직접 고치지 않음)\nwindow.GAME_STORES = ${JSON.stringify(stores)};\nwindow.GAME_DISHES = ${JSON.stringify(dishes)};\nwindow.GAME_SIGNS = ${JSON.stringify(signs)};\nwindow.GAME_CATS = ${JSON.stringify(cats)};\n`;
 const file = path.join(ROOT, "sales/stores/game-data.js");
 if (!fs.existsSync(file) || fs.readFileSync(file, "utf8") !== out) fs.writeFileSync(file, out);
-console.log(`가게 ${Object.keys(stores).length}곳, 사진 메뉴 ${dishes.length}개`);
+console.log(`가게 ${Object.keys(stores).length}곳, 사진 메뉴 ${dishes.length}개, 간판 룰렛 ${signs.length}곳(그림 없음 ${signs.filter((x) => !x.img).length})`);

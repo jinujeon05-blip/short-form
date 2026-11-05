@@ -10,11 +10,11 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <title>메뉴 게임 · Trò chơi chọn món</title>
-<meta name="description" content="메뉴 게임 · Trò chơi chọn món — 음식 이상형 월드컵, 오늘 뭐 먹지? 룰렛으로 오늘의 메뉴를 골라보세요.">
+<meta name="description" content="메뉴 게임 · Trò chơi chọn món — 음식 이상형 월드컵, 오늘 뭐 먹지? 룰렛, 간판 룰렛, 사다리타기로 오늘의 메뉴와 가게를 골라보세요.">
 <link rel="canonical" href="https://qrmenuasia.com/stores/game.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="메뉴 게임 · Trò chơi chọn món">
-<meta property="og:description" content="음식 이상형 월드컵 · 오늘 뭐 먹지? 룰렛 — Trò chơi chọn món ăn hôm nay">
+<meta property="og:description" content="음식 이상형 월드컵 · 오늘 뭐 먹지? 룰렛 · 간판 룰렛 · 사다리타기 — Trò chơi chọn món ăn hôm nay">
 <meta property="og:url" content="https://qrmenuasia.com/stores/game.html">
 <style>
   :root {
@@ -320,6 +320,93 @@
     width: 100%; min-height: 54px; font-size: 18px; font-weight: 900; border-radius: 16px;
   }
 
+  /* 게임 3: 가게 간판 룰렛 (슬롯머신처럼 위아래로 넘어감) */
+  .sr-filters .chips { margin-bottom: 8px; }
+  .sr-count { font-size: 13px; color: var(--muted); font-weight: 700; margin: 2px 0 10px; }
+  .sr-window {
+    position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden;
+    border-radius: 20px; background: #1d1915; border: 2px solid var(--line);
+    box-shadow: 0 6px 20px rgba(22,19,15,.08);
+  }
+  .sr-window.sparkle { animation: border-sparkle .9s ease-out forwards; }
+  .sr-window::before, .sr-window::after {
+    content: ""; position: absolute; left: 0; right: 0; height: 16%; z-index: 2; pointer-events: none;
+  }
+  .sr-window::before { top: 0; background: linear-gradient(rgba(0,0,0,.16), transparent); }
+  .sr-window::after { bottom: 0; background: linear-gradient(transparent, rgba(0,0,0,.16)); }
+  .sr-reel { position: absolute; inset: 0; will-change: transform; }
+  .sr-cell { position: absolute; left: 0; right: 0; height: 100%; overflow: hidden; background: #1d1915; }
+  .sr-cell img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sr-cell.logo { background: #fff; }
+  .sr-cell.logo img { object-fit: contain; padding: 8% 10%; }
+  .sr-cell .sr-noimg {
+    position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; text-align: center;
+    background: linear-gradient(135deg, #2a251f, #4a3426); color: #fff;
+    font-size: 24px; font-weight: 900; letter-spacing: -.3px; line-height: 1.25;
+  }
+  .sr-cell.broken img { display: none; }
+  .sr-cell.broken .sr-noimg { display: grid !important; }
+  .sr-info {
+    margin-top: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+    padding: 16px 16px 14px; text-align: center;
+  }
+  .sr-name { font-size: 21px; font-weight: 900; line-height: 1.25; letter-spacing: -.3px; overflow-wrap: anywhere; }
+  .sr-type { margin-top: 5px; font-size: 14.5px; font-weight: 700; color: var(--ink-2); }
+  .sr-addr { margin-top: 6px; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+  .sr-tags { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
+  .sr-tags span {
+    font-size: 12.5px; font-weight: 700; color: var(--ink-2); background: #f5efe6;
+    border-radius: 999px; padding: 3px 10px;
+  }
+  .sr-info.wait .sr-name { color: var(--muted); font-size: 17px; }
+
+  /* 게임 4: 사다리타기 */
+  .ld-box {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 18px 14px 16px; box-shadow: 0 6px 20px rgba(22,19,15,.06);
+  }
+  .ld-title { font-size: 20px; font-weight: 900; text-align: center; letter-spacing: -.3px; }
+  .ld-desc { margin-top: 5px; font-size: 13.5px; color: var(--muted); text-align: center; }
+  .ld-count {
+    display: flex; align-items: center; justify-content: center; gap: 14px; margin: 16px 0 12px;
+  }
+  .ld-count b { font-size: 15px; }
+  .ld-count output { font-size: 22px; font-weight: 900; min-width: 28px; text-align: center; }
+  .ld-step {
+    width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: #f5efe6;
+    font-size: 20px; font-weight: 900; color: var(--ink); cursor: pointer;
+  }
+  .ld-step:disabled { opacity: .4; cursor: default; }
+  .ld-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ld-col h3 { font-size: 13.5px; font-weight: 800; color: var(--muted); margin-bottom: 6px; }
+  .ld-col input {
+    width: 100%; min-width: 0; font: inherit; font-size: 15px; padding: 9px 10px; margin-bottom: 6px;
+    border: 1px solid var(--line); border-radius: 11px; background: var(--paper); color: var(--ink);
+  }
+  .ld-col input:focus { outline: 2px solid var(--accent-2); outline-offset: 0; border-color: transparent; }
+  .ld-board { position: relative; }
+  .ld-row { display: grid; gap: 4px; }
+  .ld-name, .ld-res {
+    min-width: 0; border-radius: 10px; padding: 7px 2px; text-align: center;
+    font-size: 12.5px; font-weight: 800; line-height: 1.2;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .ld-name {
+    border: 2px solid var(--pc, var(--line)); background: var(--card); color: var(--ink); cursor: pointer;
+  }
+  .ld-name.done { background: var(--pc); color: #fff; }
+  .ld-name:disabled { cursor: default; }
+  .ld-res { border: 1px dashed var(--line); background: #f5efe6; color: var(--muted); }
+  .ld-res.shown { border-style: solid; border-color: var(--pc); background: var(--pc); color: #fff; }
+  .ld-svg { display: block; width: 100%; height: 280px; margin: 4px 0; }
+  .ld-hint { text-align: center; font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+  .ld-sum { margin-top: 12px; display: grid; gap: 5px; }
+  .ld-sum div {
+    display: flex; justify-content: space-between; gap: 10px; padding: 7px 12px; border-radius: 11px;
+    background: #f5efe6; font-size: 14px; font-weight: 700;
+  }
+  .ld-sum b { color: var(--pc); overflow-wrap: anywhere; text-align: right; }
+
   /* 안내 상자 */
   .empty-box {
     text-align: center; background: var(--card); border: 1px solid var(--line);
@@ -363,6 +450,22 @@
         <span class="game-info">
           <h2 id="rlCardTitle">오늘 뭐 먹지? 룰렛</h2>
           <p id="rlCardDesc">버튼 한 번에 오늘의 메뉴를 뽑아요</p>
+        </span>
+        <span class="game-arrow" aria-hidden="true">→</span>
+      </button>
+      <button type="button" class="game-pick" id="pickSr">
+        <span class="game-icon" aria-hidden="true">🏪</span>
+        <span class="game-info">
+          <h2 id="srCardTitle">어느 가게 갈까? 간판 룰렛</h2>
+          <p id="srCardDesc"></p>
+        </span>
+        <span class="game-arrow" aria-hidden="true">→</span>
+      </button>
+      <button type="button" class="game-pick" id="pickLd">
+        <span class="game-icon" aria-hidden="true">🎯</span>
+        <span class="game-info">
+          <h2 id="ldCardTitle">사다리타기</h2>
+          <p id="ldCardDesc"></p>
         </span>
         <span class="game-arrow" aria-hidden="true">→</span>
       </button>
@@ -469,6 +572,74 @@
 
     <div id="rlEmpty" class="empty-box" hidden>
       <p id="rlEmptyMsg"></p>
+    </div>
+  </section>
+
+  <!-- 게임 3: 가게 간판 룰렛 -->
+  <section id="viewSr" hidden>
+    <div class="sub-nav">
+      <button type="button" class="link-back" id="srBackHome"></button>
+    </div>
+    <div class="sr-filters">
+      <div class="chips" id="srRegionChips"></div>
+      <div class="chips" id="srCatChips"></div>
+    </div>
+    <p class="sr-count" id="srCount"></p>
+    <div id="srMain">
+      <div class="sr-window" id="srWindow"><div class="sr-reel" id="srReel"></div></div>
+      <div class="sr-info" id="srInfo">
+        <div class="sr-name" id="srName"></div>
+        <div class="sr-type" id="srType"></div>
+        <div class="sr-addr" id="srAddr"></div>
+        <div class="sr-tags" id="srTags"></div>
+      </div>
+      <div class="btn-stack" id="srSpinWrap">
+        <button type="button" class="btn primary spin-btn" id="srSpinBtn"></button>
+      </div>
+      <div class="btn-stack" id="srDoneWrap" hidden>
+        <a class="btn primary" id="srStoreLink" href="/stores/"></a>
+        <button type="button" class="btn dark" id="srAgainBtn"></button>
+      </div>
+    </div>
+    <div id="srEmpty" class="empty-box" hidden>
+      <p id="srEmptyMsg"></p>
+    </div>
+  </section>
+
+  <!-- 게임 4: 사다리타기 -->
+  <section id="viewLd" hidden>
+    <div class="sub-nav">
+      <button type="button" class="link-back" id="ldBackHome"></button>
+    </div>
+    <div class="ld-box" id="ldSetup">
+      <h2 class="ld-title" id="ldSetupTitle"></h2>
+      <p class="ld-desc" id="ldSetupDesc"></p>
+      <div class="ld-count">
+        <button type="button" class="ld-step" id="ldMinus" aria-label="-">−</button>
+        <b id="ldCountLabel"></b><output id="ldCount"></output>
+        <button type="button" class="ld-step" id="ldPlus" aria-label="+">+</button>
+      </div>
+      <div class="ld-cols">
+        <div class="ld-col"><h3 id="ldPlayersLabel"></h3><div id="ldNameInputs"></div></div>
+        <div class="ld-col"><h3 id="ldResultsLabel"></h3><div id="ldResInputs"></div></div>
+      </div>
+      <div class="btn-stack"><button type="button" class="btn primary spin-btn" id="ldMakeBtn"></button></div>
+    </div>
+    <div class="ld-box" id="ldPlay" hidden>
+      <div class="ld-board">
+        <div class="ld-row" id="ldNames"></div>
+        <svg class="ld-svg" id="ldSvg" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <div class="ld-row" id="ldResults"></div>
+      </div>
+      <p class="ld-hint" id="ldHint"></p>
+      <div class="ld-sum" id="ldSum"></div>
+      <div class="btn-stack">
+        <button type="button" class="btn primary" id="ldRevealBtn"></button>
+        <div class="btn-row">
+          <button type="button" class="btn dark" id="ldShuffleBtn"></button>
+          <button type="button" class="btn" id="ldEditBtn"></button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -623,6 +794,51 @@
       notice: "ℹ️ メニュー名・写真・価格はGoogleマップに掲載されたメニュー表や写真をもとに作成しています。写真が実際の料理と異なったり価格が変更されている場合がありますので、ご注文前にお店でご確認ください。"
     }
   };
+
+  // 게임 3(간판 룰렛)·게임 4(사다리타기) 문구
+  const T_MORE = {
+    ko: {
+      srTitle: "어느 가게 갈까? 간판 룰렛", srDesc: "지역·종류를 고르고 돌리면 갈 가게를 골라 줘요",
+      srCount: "후보 {n}곳", srSpin: "가게 뽑기!", srWait: "버튼을 누르면 간판이 돌아가요", noStores: "조건에 맞는 가게가 없어요",
+      ldTitle: "사다리타기", ldDesc: "누가 계산할까? 이름을 넣고 사다리를 타요",
+      ldCount: "인원", ldPlayers: "참가자", ldResults: "결과", ldMake: "사다리 만들기",
+      ldHint: "이름을 누르면 사다리를 타요", ldReveal: "모두 공개", ldShuffle: "다시 섞기", ldEdit: "설정 바꾸기",
+      ldWin: "당첨 🎯", ldPass: "통과", ldPlayer: "{n}번"
+    },
+    vi: {
+      srTitle: "Đi quán nào? Vòng quay biển hiệu", srDesc: "Chọn khu vực, loại món rồi quay để chọn quán",
+      srCount: "{n} quán", srSpin: "Quay chọn quán!", srWait: "Bấm nút để quay biển hiệu", noStores: "Không có quán nào phù hợp",
+      ldTitle: "Trò chơi bậc thang", ldDesc: "Ai trả tiền? Nhập tên rồi dò theo bậc thang",
+      ldCount: "Số người", ldPlayers: "Người chơi", ldResults: "Kết quả", ldMake: "Tạo bậc thang",
+      ldHint: "Bấm vào tên để dò bậc thang", ldReveal: "Xem tất cả", ldShuffle: "Xáo lại", ldEdit: "Đổi cài đặt",
+      ldWin: "Trúng 🎯", ldPass: "Thoát", ldPlayer: "Người {n}"
+    },
+    en: {
+      srTitle: "Which Place? Sign Roulette", srDesc: "Pick an area and food type, then spin for a restaurant",
+      srCount: "{n} places", srSpin: "Spin for a place!", srWait: "Tap the button to spin the signs", noStores: "No matching places",
+      ldTitle: "Ladder Game", ldDesc: "Who pays? Enter names and follow the ladder",
+      ldCount: "Players", ldPlayers: "Players", ldResults: "Results", ldMake: "Make the ladder",
+      ldHint: "Tap a name to follow the ladder", ldReveal: "Reveal all", ldShuffle: "Shuffle", ldEdit: "Edit setup",
+      ldWin: "Winner 🎯", ldPass: "Safe", ldPlayer: "P{n}"
+    },
+    zh: {
+      srTitle: "去哪家？招牌转盘", srDesc: "选好地区和类型，转一下帮你选店",
+      srCount: "{n} 家", srSpin: "抽一家！", srWait: "按下按钮，招牌开始转动", noStores: "没有符合条件的店铺",
+      ldTitle: "爬梯子", ldDesc: "谁来买单？输入名字顺着梯子走",
+      ldCount: "人数", ldPlayers: "参加者", ldResults: "结果", ldMake: "生成梯子",
+      ldHint: "点名字开始爬梯子", ldReveal: "全部公开", ldShuffle: "重新打乱", ldEdit: "修改设置",
+      ldWin: "中奖 🎯", ldPass: "安全", ldPlayer: "{n}号"
+    },
+    ja: {
+      srTitle: "どのお店？看板ルーレット", srDesc: "エリアとジャンルを選んで回すとお店が決まります",
+      srCount: "{n}店", srSpin: "お店を引く！", srWait: "ボタンを押すと看板が回ります", noStores: "条件に合うお店がありません",
+      ldTitle: "あみだくじ", ldDesc: "誰が払う？名前を入れてあみだくじ",
+      ldCount: "人数", ldPlayers: "参加者", ldResults: "結果", ldMake: "あみだを作る",
+      ldHint: "名前を押すとたどります", ldReveal: "全部見る", ldShuffle: "作り直す", ldEdit: "設定を変える",
+      ldWin: "当たり 🎯", ldPass: "セーフ", ldPlayer: "{n}番"
+    }
+  };
+  for (const k in T_MORE) Object.assign(T[k], T_MORE[k]);
 
   const REGION_NAMES = {
     bacninh: { ko: "박닌", vi: "Bắc Ninh", en: "Bac Ninh", zh: "北宁", ja: "バクニン" },
@@ -1124,6 +1340,288 @@
     }
   }
 
+  /* ==================== 게임 3: 가게 간판 룰렛 ==================== */
+  const SIGNS = window.GAME_SIGNS || [];
+  const CATS = window.GAME_CATS || {};
+  const srRegions = [
+    ...REGION_ORDER.filter((r) => SIGNS.some((s) => s.region === r)),
+    ...Array.from(new Set(SIGNS.map((s) => s.region))).filter((r) => r && !REGION_ORDER.includes(r))
+  ];
+  const sr = { cat: "", spinning: false, done: false, current: null };
+  const L = (obj) => (obj ? (obj[lang] || obj.en || obj.ko || "") : "");
+
+  function srRegion() { return srRegions.includes(selectedRegion) ? selectedRegion : ""; }
+  function srBase() { const r = srRegion(); return SIGNS.filter((s) => !r || s.region === r); }
+  function srPool() { const b = srBase(); return sr.cat ? b.filter((s) => s.cats.includes(sr.cat)) : b; }
+  function srUrl(s) { return s.url.replace(/\/$/, "") + "/?lang=" + encodeURIComponent(lang); }
+
+  function srCellHtml(s, i) {
+    const img = s.img ? `<img src="${esc(s.img)}" alt="" onerror="this.parentNode.classList.add('broken')">` : "";
+    return `<div class="sr-cell${s.logo ? " logo" : ""}${img ? "" : " broken"}" style="top:${i * 100}%">${img}<div class="sr-noimg" style="display:none">${esc(s.name)}</div></div>`;
+  }
+  function srSetReel(list, at, anim) {
+    const reel = $("srReel");
+    reel.style.transition = "none";
+    reel.style.transform = "translateY(0)";
+    reel.innerHTML = list.map(srCellHtml).join("");
+    if (!anim) return;
+    void reel.offsetHeight;
+    reel.style.transition = "transform 4s cubic-bezier(.12,.62,.1,1)";
+    reel.style.transform = `translateY(-${at * 100}%)`;
+  }
+
+  function initSr() {
+    clearPendingTimer();
+    view = "sr";
+    sr.spinning = false;
+    sr.done = false;
+    $("srWindow").classList.remove("sparkle");
+    const pool = srPool();
+    if (!pool.some((s) => s === sr.current)) sr.current = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+    if (sr.current) srSetReel([sr.current], 0, false);
+    render();
+  }
+
+  function spinSr() {
+    const pool = srPool();
+    if (sr.spinning || !pool.length) return;
+    clearPendingTimer();
+    sr.spinning = true;
+    sr.done = false;
+    $("srWindow").classList.remove("sparkle");
+    // 사진은 10장까지만 불러오고(폰 데이터 절약) 그 안에서 돌려 보여 준다. 뽑히는 가게는 후보 전체에서 고름.
+    const winner = pool[Math.floor(Math.random() * pool.length)];
+    const sample = [winner, ...shuffle(pool.filter((s) => s !== winner)).slice(0, 9)];
+    const seq = [sr.current || winner];
+    for (let i = 0; i < 24; i++) {
+      let p = sample[Math.floor(Math.random() * sample.length)];
+      for (let g = 0; sample.length > 1 && p === seq[seq.length - 1] && g < 8; g++) p = sample[Math.floor(Math.random() * sample.length)];
+      seq.push(p);
+    }
+    if (sample.length > 1 && seq[seq.length - 1] === winner) seq[seq.length - 1] = sample[1];
+    seq.push(winner);
+    srSetReel(seq, seq.length - 1, true);
+    renderSr();
+    timerId = setTimeout(function () {
+      timerId = null;
+      sr.current = winner;
+      sr.spinning = false;
+      sr.done = true;
+      srSetReel([winner], 0, false);
+      const w = $("srWindow");
+      w.classList.remove("sparkle");
+      void w.offsetWidth;
+      w.classList.add("sparkle");
+      renderSr();
+    }, 4100);
+  }
+
+  function renderSr() {
+    const t = T[lang];
+    const base = srBase();
+    const reg = srRegion();
+    $("srRegionChips").innerHTML = ["", ...srRegions].map((r) => {
+      const n = r ? SIGNS.filter((s) => s.region === r).length : SIGNS.length;
+      return `<button type="button" class="chip" data-region="${esc(r)}" aria-pressed="${reg === r}"${sr.spinning ? " disabled" : ""}>${esc(regionLabel(r))} <span class="chip-count">${n}</span></button>`;
+    }).join("");
+    const cats = Object.keys(CATS).filter((c) => base.some((s) => s.cats.includes(c)));
+    if (sr.cat && !cats.includes(sr.cat)) sr.cat = "";
+    $("srCatChips").innerHTML = ["", ...cats].map((c) => {
+      const n = c ? base.filter((s) => s.cats.includes(c)).length : base.length;
+      const label = c ? CATS[c].icon + " " + L(CATS[c]) : t.all;
+      return `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${sr.cat === c}"${sr.spinning ? " disabled" : ""}>${esc(label)} <span class="chip-count">${n}</span></button>`;
+    }).join("");
+
+    const pool = srPool();
+    $("srCount").textContent = t.srCount.replace("{n}", pool.length);
+    $("srMain").hidden = !pool.length;
+    $("srEmpty").hidden = !!pool.length;
+    $("srEmptyMsg").textContent = t.noStores;
+    if (!pool.length) return;
+
+    const s = sr.current;
+    const show = sr.done && !sr.spinning && s;
+    $("srInfo").classList.toggle("wait", !show);
+    $("srName").textContent = show ? s.name : (sr.spinning ? t.spinning : t.srWait);
+    $("srType").textContent = show ? L(s.type) : "";
+    $("srAddr").textContent = show ? "📍 " + regionLabel(s.region) + (s.addr ? " · " + s.addr : "") : "";
+    $("srTags").innerHTML = show ? s.cats.filter((c) => CATS[c]).map((c) => `<span>${esc(CATS[c].icon + " " + L(CATS[c]))}</span>`).join("") : "";
+    $("srType").hidden = $("srAddr").hidden = $("srTags").hidden = !show;
+
+    $("srSpinWrap").hidden = !!show;
+    $("srDoneWrap").hidden = !show;
+    $("srSpinBtn").disabled = sr.spinning;
+    $("srSpinBtn").textContent = sr.spinning ? t.spinning : t.srSpin;
+    if (show) {
+      $("srStoreLink").href = srUrl(s);
+      $("srStoreLink").textContent = t.viewMenu;
+      $("srAgainBtn").textContent = t.oneMore;
+    }
+  }
+
+  /* ==================== 게임 4: 사다리타기 ==================== */
+  const LD_COLORS = ["#e0452b", "#2f7de1", "#2a9d63", "#d48a12", "#8b5cf6", "#d9468a", "#0f97a8", "#7a6450"];
+  const LD_LEVELS = 10, LD_H = 280, LD_GAP = 4;
+  const ld = { n: 4, names: [], res: [], rungs: [], ends: [], shown: new Set(), running: new Set(), timers: [], phase: "setup" };
+  try {
+    const saved = JSON.parse(localStorage.getItem("game-ladder") || "null");
+    if (saved && saved.n >= 2 && saved.n <= 8) { ld.n = saved.n; ld.names = saved.names || []; ld.res = saved.res || []; }
+  } catch (e) {}
+  function ldSave() {
+    try { localStorage.setItem("game-ladder", JSON.stringify({ n: ld.n, names: ld.names.slice(0, ld.n), res: ld.res.slice(0, ld.n) })); } catch (e) {}
+  }
+  function ldDefName(i) { return T[lang].ldPlayer.replace("{n}", i + 1); }
+  function ldDefRes(i) { return i === 0 ? T[lang].ldWin : T[lang].ldPass; }
+  function ldName(i) { return String(ld.names[i] || "").trim() || ldDefName(i); }
+  function ldRes(i) { return String(ld.res[i] || "").trim() || ldDefRes(i); }
+  function ldClearTimers() { ld.timers.forEach(clearTimeout); ld.timers = []; ld.running.clear(); }
+
+  function makeLadder() {
+    ldClearTimers();
+    const n = ld.n;
+    const r = [];
+    for (let l = 0; l < LD_LEVELS; l++) {
+      r.push([]);
+      for (let i = 0; i < n - 1; i++) r[l][i] = !(i > 0 && r[l][i - 1]) && Math.random() < 0.42;
+    }
+    // 이웃한 두 줄 사이에 가로줄이 하나도 없으면 하나 넣는다(결과가 너무 뻔해지지 않게)
+    for (let i = 0; i < n - 1; i++) {
+      if (r.some((row) => row[i])) continue;
+      const free = [];
+      for (let l = 0; l < LD_LEVELS; l++) if (!(i > 0 && r[l][i - 1]) && !r[l][i + 1]) free.push(l);
+      if (free.length) r[free[Math.floor(Math.random() * free.length)]][i] = true;
+    }
+    ld.rungs = r;
+    ld.ends = [];
+    for (let s = 0; s < n; s++) {
+      let c = s;
+      for (let l = 0; l < LD_LEVELS; l++) {
+        if (r[l][c]) c++;
+        else if (c > 0 && r[l][c - 1]) c--;
+      }
+      ld.ends[s] = c;
+    }
+    ld.shown = new Set();
+    ld.phase = "play";
+    ldSave();
+    render();
+  }
+
+  function ldGeom() {
+    const W = Math.max(200, $("ldSvg").clientWidth || 320);
+    const colW = (W - (ld.n - 1) * LD_GAP) / ld.n;
+    return { W, x: (i) => i * (colW + LD_GAP) + colW / 2, y: (l) => 16 + l * ((LD_H - 32) / (LD_LEVELS - 1)) };
+  }
+  function ldPoints(s, g) {
+    let c = s;
+    const pts = [[g.x(c), 0]];
+    for (let l = 0; l < LD_LEVELS; l++) {
+      const y = g.y(l);
+      if (ld.rungs[l][c]) { pts.push([g.x(c), y], [g.x(c + 1), y]); c++; }
+      else if (c > 0 && ld.rungs[l][c - 1]) { pts.push([g.x(c), y], [g.x(c - 1), y]); c--; }
+    }
+    pts.push([g.x(c), LD_H]);
+    return pts;
+  }
+  function ldPolyline(s, g) {
+    const pts = ldPoints(s, g);
+    let len = 0;
+    for (let i = 1; i < pts.length; i++) len += Math.abs(pts[i][0] - pts[i - 1][0]) + Math.abs(pts[i][1] - pts[i - 1][1]);
+    return { len, html: `<polyline data-p="${s}" points="${pts.map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="${LD_COLORS[s]}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>` };
+  }
+  function drawLadder() {
+    const g = ldGeom();
+    const svg = $("ldSvg");
+    svg.setAttribute("viewBox", `0 0 ${g.W} ${LD_H}`);
+    let h = "";
+    for (let i = 0; i < ld.n; i++) h += `<line x1="${g.x(i)}" y1="0" x2="${g.x(i)}" y2="${LD_H}" stroke="#d9cfc2" stroke-width="4" stroke-linecap="round"/>`;
+    for (let l = 0; l < LD_LEVELS; l++) for (let i = 0; i < ld.n - 1; i++) {
+      if (ld.rungs[l][i]) h += `<line x1="${g.x(i)}" y1="${g.y(l)}" x2="${g.x(i + 1)}" y2="${g.y(l)}" stroke="#d9cfc2" stroke-width="4" stroke-linecap="round"/>`;
+    }
+    for (let s = 0; s < ld.n; s++) if (ld.shown.has(s) || ld.running.has(s)) h += ldPolyline(s, g).html;
+    svg.innerHTML = h;
+  }
+
+  function ldRun(s) {
+    if (ld.shown.has(s) || ld.running.has(s)) return;
+    ld.running.add(s);
+    const g = ldGeom();
+    const p = ldPolyline(s, g);
+    $("ldSvg").insertAdjacentHTML("beforeend", p.html);
+    const el = $("ldSvg").querySelector(`polyline[data-p="${s}"]`);
+    const dur = Math.round(Math.min(2600, Math.max(1200, p.len * 2.2)));
+    el.style.strokeDasharray = p.len;
+    el.style.strokeDashoffset = p.len;
+    void el.getBoundingClientRect();
+    el.style.transition = `stroke-dashoffset ${dur}ms linear`;
+    el.style.strokeDashoffset = 0;
+    renderLdRows();
+    ld.timers.push(setTimeout(function () {
+      ld.running.delete(s);
+      ld.shown.add(s);
+      renderLdRows();
+    }, dur + 50));
+  }
+
+  function renderLdRows() {
+    const t = T[lang];
+    const cols = `repeat(${ld.n}, minmax(0, 1fr))`;
+    $("ldNames").style.gridTemplateColumns = cols;
+    $("ldResults").style.gridTemplateColumns = cols;
+    let nh = "";
+    for (let s = 0; s < ld.n; s++) {
+      const busy = ld.shown.has(s) || ld.running.has(s);
+      nh += `<button type="button" class="ld-name${ld.shown.has(s) ? " done" : ""}" data-p="${s}" style="--pc:${LD_COLORS[s]}"${busy ? " disabled" : ""} title="${esc(ldName(s))}">${esc(ldName(s))}</button>`;
+    }
+    $("ldNames").innerHTML = nh;
+    const owner = [];
+    ld.ends.forEach((c, s) => { owner[c] = s; });
+    let rh = "";
+    for (let c = 0; c < ld.n; c++) {
+      const s = owner[c];
+      const shown = ld.shown.has(s);
+      rh += `<div class="ld-res${shown ? " shown" : ""}" style="--pc:${LD_COLORS[s]}" title="${shown ? esc(ldRes(c)) : ""}">${shown ? esc(ldRes(c)) : "?"}</div>`;
+    }
+    $("ldResults").innerHTML = rh;
+    const all = ld.shown.size === ld.n;
+    $("ldHint").hidden = all;
+    $("ldHint").textContent = t.ldHint;
+    $("ldRevealBtn").hidden = all;
+    $("ldRevealBtn").textContent = t.ldReveal;
+    $("ldShuffleBtn").textContent = t.ldShuffle;
+    $("ldEditBtn").textContent = t.ldEdit;
+    $("ldSum").innerHTML = all ? Array.from({ length: ld.n }, (_, s) => (
+      `<div style="--pc:${LD_COLORS[s]}"><span>${esc(ldName(s))}</span><b>${esc(ldRes(ld.ends[s]))}</b></div>`
+    )).join("") : "";
+  }
+
+  function renderLd() {
+    const t = T[lang];
+    $("ldSetup").hidden = ld.phase !== "setup";
+    $("ldPlay").hidden = ld.phase !== "play";
+    if (ld.phase === "setup") {
+      $("ldSetupTitle").textContent = "🎯 " + t.ldTitle;
+      $("ldSetupDesc").textContent = t.ldDesc;
+      $("ldCountLabel").textContent = t.ldCount;
+      $("ldCount").textContent = ld.n;
+      $("ldMinus").disabled = ld.n <= 2;
+      $("ldPlus").disabled = ld.n >= 8;
+      $("ldPlayersLabel").textContent = t.ldPlayers;
+      $("ldResultsLabel").textContent = t.ldResults;
+      $("ldMakeBtn").textContent = t.ldMake;
+      let a = "", b = "";
+      for (let i = 0; i < ld.n; i++) {
+        a += `<input type="text" data-k="names" data-i="${i}" maxlength="10" value="${esc(ld.names[i] || "")}" placeholder="${esc(ldDefName(i))}" aria-label="${esc(t.ldPlayers + " " + (i + 1))}">`;
+        b += `<input type="text" data-k="res" data-i="${i}" maxlength="10" value="${esc(ld.res[i] || "")}" placeholder="${esc(ldDefRes(i))}" aria-label="${esc(t.ldResults + " " + (i + 1))}">`;
+      }
+      $("ldNameInputs").innerHTML = a;
+      $("ldResInputs").innerHTML = b;
+    } else {
+      drawLadder();
+      renderLdRows();
+    }
+  }
+
   /* ==================== 전체 화면 그리기 ==================== */
   function renderRegionChips(container, withCount, disabled) {
     const allKeys = ["", ...regions];
@@ -1149,14 +1647,24 @@
     $("wcCardDesc").textContent = t.wcDesc;
     $("rlCardTitle").textContent = t.rlTitle;
     $("rlCardDesc").textContent = t.rlDesc;
+    $("srCardTitle").textContent = t.srTitle;
+    $("srCardDesc").textContent = t.srDesc;
+    $("ldCardTitle").textContent = t.ldTitle;
+    $("ldCardDesc").textContent = t.ldDesc;
 
     $("wcBackHome").textContent = t.backToHome;
     $("rlBackHome").textContent = t.backToHome;
+    $("srBackHome").textContent = t.backToHome;
+    $("ldBackHome").textContent = t.backToHome;
     $("noticeFoot").textContent = t.notice;
 
     $("viewHome").hidden = view !== "home";
     $("viewWc").hidden = view !== "wc";
     $("viewRl").hidden = view !== "rl";
+    $("viewSr").hidden = view !== "sr";
+    $("viewLd").hidden = view !== "ld";
+    if (view === "sr") renderSr();
+    if (view === "ld") renderLd();
 
     if (view === "wc") {
       $("wcIntro").hidden = wc.phase !== "intro";
@@ -1187,6 +1695,8 @@
     clearPendingTimer();
     wc.busy = false;
     rl.spinning = false;
+    sr.spinning = false;
+    ldClearTimers();
     view = "home";
     render();
   }
@@ -1242,6 +1752,55 @@
   });
   $("rlSpinBtn").addEventListener("click", spinRoulette);
   $("rlAgainBtn").addEventListener("click", spinRoulette);
+
+  // 게임 3: 간판 룰렛
+  $("pickSr").addEventListener("click", initSr);
+  $("srBackHome").addEventListener("click", goHome);
+  $("srSpinBtn").addEventListener("click", spinSr);
+  $("srAgainBtn").addEventListener("click", spinSr);
+  $("srRegionChips").addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-region]");
+    if (!btn || sr.spinning) return;
+    selectedRegion = btn.dataset.region || "";
+    saveRegion(selectedRegion);
+    initSr();
+  });
+  $("srCatChips").addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-cat]");
+    if (!btn || sr.spinning) return;
+    sr.cat = btn.dataset.cat || "";
+    initSr();
+  });
+
+  // 게임 4: 사다리타기
+  $("pickLd").addEventListener("click", function () { clearPendingTimer(); view = "ld"; ld.phase = "setup"; ldClearTimers(); render(); });
+  $("ldBackHome").addEventListener("click", goHome);
+  $("ldMinus").addEventListener("click", function () { if (ld.n > 2) { ld.n--; ldSave(); renderLd(); } });
+  $("ldPlus").addEventListener("click", function () { if (ld.n < 8) { ld.n++; ldSave(); renderLd(); } });
+  $("viewLd").addEventListener("input", function (e) {
+    const k = e.target.dataset && e.target.dataset.k;
+    if (k !== "names" && k !== "res") return;
+    ld[k][Number(e.target.dataset.i)] = e.target.value;
+    ldSave();
+  });
+  $("ldMakeBtn").addEventListener("click", makeLadder);
+  $("ldNames").addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-p]");
+    if (btn) ldRun(Number(btn.dataset.p));
+  });
+  $("ldRevealBtn").addEventListener("click", function () {
+    ldClearTimers();
+    for (let s = 0; s < ld.n; s++) ld.shown.add(s);
+    drawLadder();
+    renderLdRows();
+  });
+  $("ldShuffleBtn").addEventListener("click", makeLadder);
+  $("ldEditBtn").addEventListener("click", function () { ldClearTimers(); ld.phase = "setup"; render(); });
+  let ldResizeT = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(ldResizeT);
+    ldResizeT = setTimeout(function () { if (view === "ld" && ld.phase === "play") drawLadder(); }, 120);
+  });
 
   render();
 })();
