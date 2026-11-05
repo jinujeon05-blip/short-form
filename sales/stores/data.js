@@ -588,6 +588,12 @@ window.STORES = [
     address: "44N4 Đường Võ Cường 6, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%A0%9C%EC%A3%BC%EB%8F%84+%EC%98%A4%EB%A7%88%EC%B9%B4%EC%84%B8/@21.1723461,106.0570066,21z",
     type: { ko: "한식 오마카세 · 숙성회 · 스시", vi: "Omakase Hàn Quốc · Cá sống · Sushi", en: "Korean omakase · Aged sashimi · Sushi", zh: "韩式无菜单料理 · 熟成刺身 · 寿司", ja: "韓国式おまかせ・熟成刺身・寿司" },
     keywords: "제주도 오마카세 제주도오마카세 jeju omakase 오마카세 숙성회 모둠회 참치회 스시 모둠스시 해산물 모둠한상 문어숙회 생선간장조림 전복 뿔소라 한식 일식 횟집 박닌 bắc ninh nhà hàng hàn quốc omakase sushi sashimi cá sống 제주도 ( omakase) võ cường"
+  },
+  { id: "chachacha", name: "차차차 박닌점 CHA CHA CHA", sub: "소고기 구이 · 삼겹살 · 곱창·대창 · 감자탕 · 낙곱새", url: "https://chachacha.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean"], tags: ["photos"],
+    address: "7 Đ. Lê Thái Tổ, Bò Sơn, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%B0%A8%EC%B0%A8%EC%B0%A8+%EB%B0%95%EB%A6%B0%EC%A0%90+chachacha+b%E1%BA%AFc+ninh/@21.1686909,106.0561061,19z",
+    type: { ko: "한식 고깃집 · 소고기 · 삼겹살 · 곱창·대창", vi: "Quán nướng Hàn Quốc · Thịt bò · Ba chỉ · Lòng bò", en: "Korean BBQ · Beef · Pork belly · Beef intestines", zh: "韩式烤肉 · 牛肉 · 五花肉 · 牛肠", ja: "韓国式焼肉・牛肉・サムギョプサル・ホルモン" },
+    keywords: "차차차 차차차박닌점 cha cha cha chachacha 고깃집 한식 소고기 삼겹살 항정살 갈비살 치마살 안창살 살치살 차돌박이 마장동 황제 주물럭 곱창 대창 소곱창 소대창 육회 감자탕 낙곱새 염소전골 훈제오리 냉면 소주 맥주 박닌 bắc ninh nhà hàng hàn quốc quán nướng thịt bò ba chỉ lòng bò võ cường lê thái tổ"
   }
 ];
 window.SI = {

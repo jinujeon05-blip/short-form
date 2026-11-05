@@ -127,6 +127,8 @@ window.DEMOS = [
     name: "용갈비 YONG GALBI", type: { ko: "한식 갈비 · 돼지갈비 무한리필 · 박닌", vi: "Quán nướng Hàn Quốc · Sườn rồng không giới hạn · Bắc Ninh", zh: "韩式烤肉 · 排骨无限畅吃 · 北宁", ja: "韓国式焼肉・カルビ食べ放題・バクニン", en: "Korean BBQ · Unlimited galbi · Bac Ninh" } },
   { id: "jejuomakase", hidden: true, url: "https://jejuomakase.qrmenuasia.com", shot: "img/demo-jejuomakase.jpg", qr: "img/qr-jejuomakase.svg",
     name: "제주도 오마카세 JEJU OMAKASE", type: { ko: "한식 오마카세 · 숙성회 · 스시 · 박닌", vi: "Omakase Hàn Quốc · Cá sống · Sushi · Bắc Ninh", zh: "韩式无菜单料理 · 熟成刺身 · 寿司 · 北宁", ja: "韓国式おまかせ・熟成刺身・寿司・バクニン", en: "Korean omakase · Aged sashimi · Sushi · Bac Ninh" } },
+  { id: "chachacha", hidden: true, url: "https://chachacha.qrmenuasia.com", shot: "img/demo-chachacha.jpg", qr: "img/qr-chachacha.svg",
+    name: "차차차 박닌점 CHA CHA CHA", type: { ko: "한식 고깃집 · 소고기 · 삼겹살 · 곱창 · 박닌", vi: "Quán nướng Hàn Quốc · Thịt bò · Ba chỉ · Lòng bò · Bắc Ninh", zh: "韩式烤肉 · 牛肉 · 五花肉 · 牛肠 · 北宁", ja: "韓国式焼肉・牛肉・サムギョプサル・ホルモン・バクニン", en: "Korean BBQ · Beef · Pork belly · Beef intestines · Bac Ninh" } },
 ];
 
 window.T = {

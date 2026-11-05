@@ -104,6 +104,7 @@
 | `restaurants/hyundaigalbi` | 현대갈비 Hyundai Galbi 한식 소갈비·장어·함흥냉면·점심특선·세트·주류 (SH05.ĐN2, SH06.ĐN2, kiot 03 toà CT4, Mỹ Đình Sông Đà, Từ Liêm, Hà Nội, 0969 607 177, 11:30–14:00 / 17:00–22:00) — **가게 찾기용**, 메뉴 약 80개·사진 5장·간판. 상세 docs/todo.md | 제작 완료(2026-11-05), 배포 전 |
 | `restaurants/yonggalbi` | 용갈비 Yong Galbi BBQ 돼지 양념갈비 무한리필(1인 280,000)·구이 6종(항정살·돼지생갈비·생삼겹·목살·차돌박이·소갈비살) (09 Đ. Lý Đạo Thành, P. Kinh Bắc, Bắc Ninh, 0369 991 912, 11:30–14:00 / 16:30–21:00) — **가게 찾기용**, 메뉴 7개·사진 3장·간판. 상세 docs/todo.md | 제작 완료(2026-11-05), 배포 전 |
 | `restaurants/jejuomakase` | 제주도 오마카세 Jeju Omakase 오마카세(750,000·스페셜 1,150,000)·회·식사·해산물 요리·단품 (44N4 Đường Võ Cường 6, Võ Cường, Bắc Ninh, 0359 296 520, 10:00–14:00 / 16:00–23:00) — **가게 찾기용**, 메뉴 23개·사진 5장·글자 로고(직접 제작, 간판·로고 사진 없음). 상세 docs/todo.md | 제작 완료(2026-11-05), 배포 전 |
+| `restaurants/chachacha` | 차차차 박닌점 Cha Cha Cha Bắc Ninh 한식 고깃집(소고기·돼지고기 구이·곱창대창·감자탕·낙곱새·주류) (7 Đ. Lê Thái Tổ, Bò Sơn, Võ Cường, Bắc Ninh, 0329 200 082, 08:30–21:30) — **가게 찾기용**, 메뉴 81개·사진 4장·간판. 상세 docs/todo.md | 제작 완료(2026-11-05), 배포 전 |
 | `restaurants/texasbbq` | CTQ 텍사스 BBQ 미딩점 CTQ TEXAS BBQ 훈제 바비큐·사파 연어·콤보 세트 (Tòa nhà CT1, KĐT Mỹ Đình, Xuân Phương, Hà Nội, 096 232 2111, 10:30–14:00·16:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://texasbbq.qrmenuasia.com |
 | `restaurants/hoolala` | 훌랄라치킨 HOOLALA 치킨 펍·바베큐 치킨·피자·파스타·맥주 (Block B 005, The Manor, Từ Liêm, Hà Nội, 0355 738 102, 11:00–24:00 해석) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://hoolala.qrmenuasia.com |
 

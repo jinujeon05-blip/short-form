@@ -53,6 +53,7 @@ name() {
     hyundaigalbi) echo "현대갈비" ;;
     yonggalbi) echo "용갈비" ;;
     jejuomakase) echo "제주도오마카세" ;;
+    chachacha) echo "차차차박닌점" ;;
     texasbbq) echo "CTQ 텍사스 BBQ" ;;
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;
