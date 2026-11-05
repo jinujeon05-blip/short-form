@@ -1,5 +1,35 @@
 # 도구 상세 (2026-10-24 CLAUDE.md 정리 전 원문 — 요약은 CLAUDE.md 7장)
 
+## 도구 요약 (2026-11-05 CLAUDE.md 7장에서 옮김 — 도구를 쓰기 전에 읽음, 아래 원문보다 이쪽이 최신)
+- **새 가게**:
+  - `node tools/new-shop.mjs <가게> <listing|full> <logo|sign>` — 가마솥 표준 복사(영업시간 칸 포함, 2026-10-30)
+  - `node tools/check-standard.mjs <가게>` — 가마솥 표준 점검
+  - `node tools/check-listing.mjs` — 가게 찾기용 전체 점검(하단 문구·다산·가게 더 보기·방문 기록)
+- `node tools/shot.mjs <가게> [ko,vi] [폴더]` — 휴대폰 화면 캡처, JS 오류·못 불러온 파일 확인. shot·demo·sns는 `pw.mjs`의 `serve()`(로컬 서버)로 연다 — 파일 주소(file://)로 열면 QR MENU 아이콘이 빠지는 헛경보가 난다(2026-10-30).
+- **QR**:
+  - `node tools/qr.cjs <URL> <출력.svg> [L|M|Q|H]`로 만든다.
+  - `python3 tools/qr-check.py <qr.json>`으로 해독해 확인한다. 버전 3만 되니 안 되면 `M`으로 다시 만든다. 확인 후 `.json`은 지운다.
+- **QR 카드**: `node tools/card.mjs <가게>` — `print/table-card.html` → png·A6 PDF(+A4x4).
+  - 넘친 요소도 알려 준다.
+  - 카드는 `restaurants/<가게>/print/`에 두고, 폰트는 `public/fonts`(잘난체·G마켓 산스)를 쓴다.
+- **SNS 이미지**: `node tools/sns.mjs <가게> [vi|ko] [버튼 글자] [가게 이름]` — 정사각형·스토리.
+  - 가게 이름은 `sales/content.js`의 `DEMOS`에서 가져온다.
+  - QR 아래 안내는 **5개 언어 모두** 넣는다.
+  - 한국 매장은 `ko`.
+- `node tools/demo.mjs <가게>` — 가게 찾기·소개서 카드 사진 `sales/img/demo-<가게>.jpg`.
+- `node tools/seo.mjs` — canonical·og·JSON-LD·robots·sitemap. 메뉴·가격·주소를 바꾸거나 새 가게가 생기면 다시 돌린다. seo·analytics는 **내용이 바뀐 파일만** 쓴다(사이트맵 날짜도 바뀐 가게만, 2026-10-30) — 돌린 뒤 다른 가게가 바뀌어 있으면 그 가게 `menu.js`를 고치고 seo를 안 돌린 것이니 같이 커밋한다.
+- `sh tools/export.sh <폴더> [가게…|sales]` — 보낼 파일을 `<상호>_<파일>`로 복사한다.
+- `node tools/sales-pdf.mjs` — 소개서 PDF 5개 언어. 각각 2쪽인지 확인하고, `.demos`는 7칸이다.
+- 기타: `tools/pdf.mjs`(HTML→PDF), `tools/mockup.mjs`(포장재 시안), `tools/app-icon.mjs`(웹앱 아이콘), `tools/thumb.py`(페이지 그림에서 3:4로 자르기), `node tools/analytics.mjs`(방문 기록·점주 편집 블록)
+- **윈도우 PC(로컬 세션, `D:\qrmenu`, 2026-10-27)**: 도구 경로는 `tools/pw.mjs`의 `ROOT`·`fileUrl()`(fileURLToPath·pathToFileURL)로 만든다. `new URL(import.meta.url).pathname`·`` `file://${경로}` ``는 윈도우에서 깨지니 쓰지 않는다. `.sh`는 Git Bash로 돌린다.
+- **드라이브**:
+  - **PC 로컬 세션은 드라이브가 동기화돼 있다**(`G:\내 드라이브\QR메뉴판\<가게>\`, 2026-10-28 확인). zip을 받지 말고 거기서 사진·`store_info.json`·`클로드_안내.md`를 스크래치로 바로 복사한다(다운로드 토큰 0, 작은 간판 사진도 바로 받음).
+  - 10MB 넘는 파일은 못 받는다.
+  - 결과가 크면 하네스가 `tool-results/…download_file_content-<숫자>.txt`(JSON, base64)로 저장하니, 그 경로를 python으로 풀어 저장한다.
+  - 약 45KB 이하 파일은 대화로 들어와 저장할 수 없으니, 사용자에게 채팅 첨부를 부탁한다.
+  - WebP는 PIL로 jpg로 바꾼다.
+
+
 ## 배포·Vercel 공통
 - **도메인 `qrmenuasia.com`** (2026-10-18 Vercel에서 구매, 7개 가게·소개서 프로젝트에 연결 완료, 팀 jinwoo8, 자동 갱신 켜짐, 등록자 JEON JIN WOO). 가게별 하위 주소 `<가게>.qrmenuasia.com`, 소개서·가게 찾기는 `qrmenuasia.com`. 기존 `*.vercel.app` 주소도 계속 열리므로 이미 인쇄한 QR은 그대로 둔다. 새로 인쇄하는 QR·카드·SNS·포장재부터 새 주소로.
 - Vercel 팀 기본값이 "모든 배포 로그인 보호"라서, 새 프로젝트마다 Deployment Protection을 `prod_deployment_urls_and_all_previews`로 바꿔야 손님이 로그인 없이 열 수 있다.

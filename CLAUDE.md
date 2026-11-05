@@ -1,4 +1,4 @@
-# 음식점 QR 메뉴판 저장소 — 규칙 (2026-10-24 정리)
+# 음식점 QR 메뉴판 저장소 — 규칙 (2026-10-24 정리, 2026-11-05 상세는 docs/로 옮김)
 
 > 사용자와의 대화·보고는 **항상 한국어**로 한다.
 > **AI 팀 기획서(30문항 답·조직도·일하는 방식)는 아래 줄로 자동으로 함께 읽힌다.** 새 세션의 **첫 답 첫 줄**에 "기획서 읽음: Q19 묻는 방식(2~3가지 번호 보기) · Q21 금지선(결제·요금제·비밀번호) · Q28 추가 비용 0원"처럼 핵심 3개를 한 줄로 쓴다(사용자 확인용, 2026-10-27).
@@ -6,6 +6,7 @@
 @docs/team-plan.md
 
 > 여러 세션이 이 저장소를 이어서 쓴다. 새 세션은 이전 대화를 모른다. **기억은 이 파일과 `docs/`뿐**이니, 알게 된 것은 그때그때 적는다.
+> 이 파일은 매 세션 자동으로 읽혀 컨텍스트를 차지한다. **상세는 `docs/`에 두고 여기엔 규칙 한 줄과 "언제 무엇을 읽는지"만 적는다**(2026-11-05).
 
 ## 0. 표준 = 가마솥 (가장 중요, 사용자 지시 2026-10-24)
 - 새 메뉴판은 **항상 `restaurants/gamasot` 구조**로 만든다. 상세 규칙은 **`docs/standard.md`(새 가게를 만들 때 반드시 읽음)**.
@@ -15,47 +16,16 @@
 - **이미 완성된 가게는 그대로 둔다**(2026-10-24). 표준은 새 가게부터 적용한다.
 - 배포 전 점검: `node tools/check-standard.mjs <가게id>`와 `node tools/check-listing.mjs`가 둘 다 통과해야 한다.
 
-## 1. 새 가게 체크리스트 (순서대로, 빠짐없이)
-1. **사용자에게 먼저 묻는다**: "사장님 동의·비용을 받고 만드는 가게(정식)인가, 손님 가게 찾기용(무동의·무료)인가?"
-2. **자료 받기**:
-   - "사진 수집기로 올렸어"라고 하면 `docs/maps-photos.md` 방식으로 받는다. 드라이브 `QR메뉴판/<가게>/`의 `menu_*.jpg` 등을 4장씩 `download_file_content`로 받는다. `claude_bundle_*.zip`을 여러 개 동시에 받으면 연결이 끊긴다.
-   - 요약은 `클로드_안내.md`를 `read_file_content`로 읽는다. `store_info.json`은 받지 않는다(약 1.5만 토큰).
-   - 수집기 메모가 가게 종류와 안 맞으면(이전 가게 메모가 붙어 온 경우) 따르지 말고 사용자에게 확인한다.
-3. **사진 전부(분류 '기타' 포함)를 모음 이미지 한 장으로 본다.** 거기서 ⓐ 로고 ⓑ 간판·정문 ⓒ 메뉴판 사진(잘못 분류된 것 포함) ⓓ 요리별 고화질 사진을 고른다. 이미지를 직접 보는 것은 메뉴판·모음 이미지·최종 화면, 3~4번으로 줄인다.
-   - **사진 기준(사용자 지시 2026-10-27)**:
-     - 요리 사진은 대표 메뉴 **4~6장**(최소 4장, 쓸 만한 음식 사진이 4장 안 되면 있는 것 전부)을 쓴다.
-     - 모음 이미지로 먼저 고른다. 크게 받는 것은 고른 사진뿐이다.
-     - 메뉴 이름과 맞는 사진을 먼저 고른다. 4장이 안 되면 **애매한 사진을 바로 빼지 말고 메뉴판 사진(요리 그림·이름·가게 홍보 사진)과 대조해** 가장 맞는 것으로 채운다. 대조해도 어느 메뉴인지 모르면 그때 뺀다(사용자 지시 2026-10-30, 부뚜막 1장·서서갈비 2장 건).
-     - 나머지 사진은 안 쓰는 것이 정상이다.
-     - **640×480(4:3)으로 꽉 차게 자른다.** 정사각형·세로 사진을 그대로 넣으면 메뉴 칸 양옆에 흰 여백이 생긴다(사용자 지시 2026-10-28).
-   - 메뉴판 읽기(메뉴·가격 표)는 **menu-reader 담당**에게 맡긴다. 메인은 표와 메뉴판을 대조만 한다.
-4. **제작**: `new-shop.mjs` → 색·문구·`menu.js` 채우기.
-   - 같은 메뉴의 가격이 사진마다 다르면 **높은 쪽**을 쓰고, 그 사실을 `docs/todo.md`에 적는다.
-   - 메뉴판 속 작은 그림은 잘라 쓰지 않는다.
-   - `price == null`(시가)을 처리한다.
-5. **종류별 내용**:
-   - **정식**: 장바구니·주문서(Zalo), 다산 배너, 테이블 QR 카드, SNS 이미지, 점주 자료.
-   - **가게 찾기용**:
-     - 메뉴 보기만. Zalo·장바구니·주문서는 넣지 않는다.
-     - 다산 배너는 **항상** 넣는다.
-     - 언어 선택, 가게 더 보기, 검색 등록, 가게 찾기 목록(`sales/stores/data.js`에 `listing: true`)을 넣는다.
-     - **영업시간을 항상 넣는다**(사용자 지시 2026-10-28, 새 가게부터 — 이미 만든 가게는 그대로). 아래 가게 정보의 전화·주소 칸 **위에 같은 모양 칸**(🕒)으로 넣는다. 값은 `store_info.json`의 `hours`(비어 있거나 '모름'이면 구글 지도 링크를 열어 직접 확인 — 2026-10-30 낭만집·어수사는 지도에 있었음), 메뉴판·간판에 다른 시간이 있으면 대조하고 다르면 `docs/todo.md`에 적는다. 상세는 `docs/standard.md`.
-     - 하단 '가격 단위' 줄 끝에 5개 언어로 " · 메뉴·가격은 구글 지도에 올린 메뉴판 기준이며 바뀔 수 있어요"를 붙인다. 올린 쪽이 가게 계정이면 '가게가 구글 지도에 올린', 손님이면 '손님이 구글 지도에 올린'으로 고쳐 써도 된다. 출처가 다르면 같은 줄에서 맞게 고친다.
-6. **등록**:
-   - `_shared/sync-lang.sh`·`sync-dasan.sh`·`sync-stores.sh`의 SHOPS
-   - `tools/seo.mjs`의 SHOPS, 그다음 `node tools/seo.mjs`
-   - `tools/export.sh`의 `name()`
-   - `sales/content.js`의 `DEMOS`(SNS용, 가게 찾기용은 `hidden: true`)
-   - `node tools/demo.mjs <가게>` → `sales/img/demo-<가게>.jpg`
-   - `node tools/analytics.mjs`
-   - `docs/stores.md`의 표·기록
-7. **점검**:
-   - `node tools/check-standard.mjs <가게>`, `node tools/check-listing.mjs`, `node tools/shot.mjs <가게>`
-   - **reviewer 담당**에게 맡긴다: 가격·전화·주소 오타, 빠진 메뉴, 깨진 사진, 글꼴 섞임, 배너 색, **가마솥 표준에 없는 요소**, main 포함 여부.
-8. **사용자가 "배포해"라고 한 뒤에만** 배포한다(3장).
-   - 가게 찾기용은 사진을 받은 뒤 **배포 직전까지 묻지 않고** 끝낸다(2026-10-27). 색·사진·분류 순서도 묻지 않고 정한다(1번 '정식인가, 가게 찾기용인가?'만 묻는다).
-   - 끝나면 **폰 화면 캡처 1장과 3줄 보고**만 보낸다. 사용자의 하루 확인 시간은 5~10분이다.
-9. **보고**: 만든 PDF·이미지는 상호를 붙여 보내고(`sh tools/export.sh <스크래치폴더> <가게…>`), 사용량을 보고한다(4장).
+## 1. 새 가게 체크리스트 — **새 가게를 만들 땐 반드시 `docs/new-shop.md`를 처음부터 끝까지 읽고 따른다**
+1. 사용자에게 먼저 묻는다: "정식(사장님 동의·비용)인가, 가게 찾기용(무동의·무료)인가?" — 가게 찾기용은 이것만 묻고 배포 직전까지 혼자 끝낸다.
+2. 자료 받기(드라이브 `QR메뉴판/<가게>/`, PC는 `G:\내 드라이브\` 동기화 폴더에서 복사).
+3. 사진 전부를 모음 이미지로 보고 고른다. 요리 사진 4~6장, **640×480(4:3) 꽉 차게**.
+4. 제작: `new-shop.mjs` → `menu.js`(가격이 다르면 높은 쪽 + `docs/todo.md`, 시가 `price == null`).
+5. 종류별 내용(가게 찾기용: 메뉴 보기만·다산 배너·영업시간 🕒·하단 출처 문구 5개 언어).
+6. 등록(sync 스크립트·seo·export·DEMOS·demo·analytics·`docs/stores.md`).
+7. 점검(check-standard·check-listing·shot → reviewer).
+8. 사용자가 "배포해"라고 한 뒤에만 배포. 끝나면 폰 캡처 1장 + 3줄 보고.
+9. 보고: PDF·이미지는 상호를 붙여 보내고 사용량 보고.
 
 ## 2. 절대 규칙 (실수에서 나온 것 — 사건 상세는 `docs/mistakes.md`)
 - **같은 종류의 문제가 두 번 나오면 하나씩 고치지 말고 구조(원인)를 고친다.** 대시보드 비서실장은 자동 판단 모드(`--permission-mode auto`)+금지 목록이다 — 허락 목록 방식으로 되돌리지 않는다(2026-10-29 두 번 일 건).
@@ -85,59 +55,40 @@
 - **이미 있는 화면·기능을 바꾸거나 지우기 전에, 무엇을 없애는지 목록으로 먼저 보여 주고 답을 기다린다.** 지시문과 지금 상태가 다르면 "이미 있는 ○○를 바꿀까요?"를 번호 보기로 묻는다. 작업 전에 그 기능의 문서(`docs/dashboard.md` 등)와 git log를 먼저 읽는다(2026-10-27 대시보드 사무실 사진 건).
 - 다른 기기(폰 등)에서 쓸 기능은 PC에서 확인 가능한 것(새 코드로 재시작·포트 충돌·방화벽·연결)을 **전부** 확인하고 보고한다. 못 본 부분은 '미확인'이라고 맨 앞에 쓴다(2026-10-27 대시보드 폰 접속 건).
 - PC(윈도우)에서 여러 가게를 고치는 도구(seo·analytics·sync)를 돌린 뒤엔 `git diff --ignore-cr-at-eol --stat`으로 **내 가게 밖 변경이 없는지** 보고 커밋한다(2026-10-27 종로포차 CRLF 건).
+- **CLAUDE.md에는 상세를 쌓지 않는다.** 새 규칙은 한 줄로 쓰고, 명령·순서·설명은 `docs/`의 해당 파일에 적는다(2026-11-05 시작 컨텍스트 과다 건).
 
-## 3. 배포 (`docs/mistakes.md` 2026-10-22 장수천 건 참고)
-- **배포 직전**: `git fetch origin main` 후 `git merge-base --is-ancestor origin/main HEAD`로 확인한다. main이 들어 있지 않으면 `git merge origin/main`을 먼저 한다.
-- **`qrmenu-intro`(소개서·가게 찾기·사이트맵, rootDirectory `sales`) 배포 전**:
-  1. `git fetch origin`
-  2. 모든 원격 브랜치의 가게 수를 비교한다: `for b in $(git branch -r | grep -v HEAD); do echo "$b $(git show $b:sales/stores/data.js | grep -c '^  { id:')"; done`
-  3. `list_deployments`로 직전 배포의 브랜치·커밋을 본다. 거기에 내 브랜치에 없는 가게가 있으면 먼저 합친다.
-  4. 배포 뒤 `https://qrmenuasia.com/sitemap.xml`의 주소 수가 가게 수+2인지 확인한다.
-- **방법**: 커밋·푸시 후 Vercel MCP `create_deployment`에 `gitSource`(github, org `jinujeon05-blip`, repo `short-form`, 브랜치·커밋 sha)와 `projectSettings.rootDirectory: "restaurants/<가게>"`를 넘긴다.
-- **새 가게 첫 배포**:
-  1. `name`·`project`를 `<가게>-menu`로, `target: "production"`, `projectSettings`(framework 등 null)를 주면 프로젝트도 같이 생긴다.
-  2. `update_project`로 `ssoProtection.deploymentType: "prod_deployment_urls_and_all_previews"`로 바꾼다(팀 기본값이 로그인 보호라서).
-  3. `add_project_domain`으로 `<가게>.qrmenuasia.com`을 붙인다.
-  4. 목록이 바뀌었으면 `qrmenu-intro`도 같은 커밋으로 배포한다.
-- **도메인 `qrmenuasia.com`**:
-  - 2026-10-18 Vercel에서 구매했다. 팀 jinwoo8, 자동 갱신, 등록자 JEON JIN WOO.
-  - 가게는 `<가게>.qrmenuasia.com`, 소개서·가게 찾기는 `qrmenuasia.com`.
-  - 옛 `*.vercel.app` 주소도 계속 열린다. 이미 인쇄한 QR은 그대로 두고, 새로 인쇄하는 것부터 새 주소를 쓴다.
-- **비용**: 돈은 주로 배포(Build CPU)에서 든다. 고칠 것을 모아 한 번에 배포한다. 사주 사이트 `myeongwol`은 main만 빌드한다(Ignored Build Step).
-- **"main 머지해줘"**:
-  1. 다른 세션의 열린 PR·브랜치와 충돌이 없는지 확인한다.
-  2. squash 머지한다. **PC 로컬 세션은 `gh`가 없으니 PR 없이**(사용자 결정 2026-10-28): `git checkout -B merge-tmp origin/main` → `git merge --squash <작업 브랜치>` → 커밋 제목 끝에 `(<브랜치> squash)` → `git push origin HEAD:main`. 클라우드 세션은 PR을 만들어 squash 머지해도 된다.
-  3. 작업 브랜치를 `origin/main`으로 리셋한다(원격에 있으면 `--force-with-lease`로 푸시). `merge-tmp`는 지운다.
-  4. 보고에 "main이 바뀌면 `myeongwol`이 다시 빌드됨(평소 일)"을 한 줄 적는다.
+## 3. 배포 — **배포·main 머지 직전에 반드시 `docs/deploy.md`를 읽고 그 순서대로 한다**
+- 사용자가 "배포해"라고 한 뒤에만 한다. 배포 직전 `git fetch origin main` → main이 브랜치에 들어 있는지 확인(없으면 먼저 merge). 뒤처진 브랜치로 배포하면 다른 세션 작업이 사이트에서 사라진다(2026-10-22 장수천 건).
+- `qrmenu-intro`(가게 찾기·사이트맵) 배포 전엔 원격 브랜치 가게 수 비교·직전 배포 확인, 배포 뒤 sitemap 주소 수 확인.
+- 새 가게 첫 배포는 프로젝트 생성 → 로그인 보호 해제 → `<가게>.qrmenuasia.com` 도메인 붙이기까지 한다.
+- 돈은 주로 배포(Build CPU)에서 든다. 고칠 것을 모아 한 번에 배포한다.
 
 ## 4. 사용자 선호·보고
 - **묻는 방식(사용자 지시 2026-10-27, 가장 자주 어김)**: 결정이 필요하면 **바로 하지 말고 먼저 2~3가지를 번호 보기로 묻는다**(추천 하나 표시, "가-1, 나-2"처럼 답하게). 결론부터 3줄, 어려운 말은 괄호로 쉽게. 큰 작업은 시작 전에 무엇을 할지·무엇을 바꿀지 한 줄씩 보여 주고 답을 기다린다.
 - **대화**: 한국어로 한다. 이전 대화는 모르는 게 정상이다. "아까 그거"라고 하면 이 파일·`docs/`·git log·노션 메모리에서 찾는다.
 - **파일 보내기**: 만든 PDF(QR 카드·소개서 등)는 항상 보낸다. 파일 이름 앞에 **상호**를 붙인다(`숯꾸이_table-card-A6.pdf`). 저장소 원본 이름은 그대로 둔다.
-- **기록**: 알게 된 것은 바로 기록한다. 사장님 답·새 가게는 `docs/stores.md`·`docs/todo.md`, 공통 규칙은 이 파일에 적는다. 해결된 할 일은 `docs/todo.md`에서 지운다.
+- **기록**: 알게 된 것은 바로 기록한다. 사장님 답·새 가게는 `docs/stores.md`·`docs/todo.md`, 공통 규칙은 이 파일에 한 줄로 적는다. 해결된 할 일은 `docs/todo.md`에서 지운다.
 - **세션 길이**: 컨텍스트가 70%를 넘으면 새 세션을 권한다.
 - **매 응답 끝**: '총 사용량'과 '사용 토큰 수'를 쓴다. 담당 토큰은 완료 알림의 subagent_tokens를 합산한다. 메인 토큰은 추정이라고 밝힌다. 세션 안에서는 요금제 %를 볼 수 없다.
 - **가게 하나를 끝낼 때마다**: 담당별 토큰, 이미지를 본 횟수, 재시작·한도 중단 여부, 크게 든 원인을 짧게 보고한다.
 - 사용자가 "실수한 내용은 기억해 두고 모든 새 세션에서 같은 실수를 하지 마라"고 했다(2026-10-24). 새 실수는 `docs/mistakes.md`에 적고, **규칙 한 줄로 2장에 추가**한다.
+- **커넥터**: Figma·Fish Audio·Gmail·Claude Docs는 시작 컨텍스트를 줄이려고 껐다(2026-11-05). 필요하면 사용자에게 묻고 켠다.
 
 ## 5. 담당(AI 에이전트) — "담당", "담당별로"라고 하면 이것
-`.claude/agents/`에 5명이 있다(2026-10-27 개편, designer 추가). 메인은 지휘·판단·사용자 대화를 맡는다. 무엇을 맡길지 다시 묻지 말고 이 표대로 나눈다.
+`.claude/agents/`에 5명이 있다. 메인은 지휘·판단·사용자 대화를 맡는다. 무엇을 맡길지 다시 묻지 말고 이 표대로 나눈다. **agy·Argon·감찰관·이미지 생성 명령은 쓰기 전에 `docs/team-test.md` 맨 위 '담당별 명령 모음'을 읽는다.**
 
 | 담당 | 모델 | 맡는 일 |
 |---|---|---|
 | **finder** | haiku | 드라이브·사진 목록, 모음 이미지 만들기와 사진 4~6장 고르기, 파일·문구 찾기, 가게별 남은 할 일 모으기 |
 | **menu-reader** | sonnet | 메뉴판 사진 → 메뉴·가격 표(한국어 이름·원문·가격·분류·근거 사진). 모르는 글자는 지어내지 않고 `?`로 남긴다 |
 | **polisher** | sonnet | 메뉴 5개 언어 번역 초안, 소개서·점주 자료·카드 문구, 보고·기록 정리 |
-| **designer** | sonnet | 새 가게 화면을 그 가게 간판·메뉴판을 닮게 꾸미기(색·장식·제목 모양, `index.html` 스타일만). 가마솥은 구조만 따르고 모양은 따르지 않는다. 캡처를 직접 보고 비교 |
+| **designer** | sonnet | 새 가게 화면을 그 가게 간판·메뉴판을 닮게 꾸미기(색·장식·제목 모양, `index.html` 스타일만). 캡처를 직접 보고 비교 |
 | **reviewer** | sonnet (정식 가게는 `model: "opus"`) | 완성본·배포 전 마지막 점검. 보는 순서: 예쁨·가게 느낌 → 번역 → 메뉴·가격. 가격 오류는 배포를 막는다. 직접 고치지 않는다 |
 
-- 순서: finder(사진 고르기) → menu-reader(메뉴 표) → 메인이 `new-shop.mjs`·`menu.js` → **designer(꾸미기)** → polisher(번역) → reviewer → 메인이 고치고 보고. 메인은 화면을 직접 꾸미지 않는다(2026-10-27 종로포차 건).
-- 메뉴판 사진이 여러 장이면 menu-reader를 사진 묶음별로 2~3명 나눠 부른다.
-- **PC 로컬 세션(`D:\qrmenu`)에서는 메뉴판 읽기를 먼저 안티그래비티(제미나이 Pro)에 맡긴다**(2026-10-27 시험 합격, 클로드 한도 절약): `agy -p`를 계획 모드(파일 수정 불가)로 돌려 사진 → `분류|메뉴이름|가격` 표를 받고, 메인은 메뉴판과 대조만 한다. agy가 멈추거나 틀리면 2회 뒤 menu-reader로 넘긴다. 클라우드 세션에는 agy가 없으니 menu-reader를 쓴다. 상세는 `docs/team-test.md`.
-- **제미나이 4 Argon**(사용자 결정 2026-11-02 '가-2' → 2026-11-03 '가-1'): **정식(계약) 가게의 메뉴판 읽기는 항상 Argon.** 가게 찾기용은 캡틴이 대시보드 지시창 [Argon 사용]을 체크했거나 "Argon으로"라고 말했을 때만 쓰고, 그 밖엔 기본 제미나이·Claude 한도가 다 찼을 때만 예비로 메뉴판 읽기에 `agy --mode plan --model gemini-4-argon-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 …"`로 쓴다(따로 주간 한도, 시험 합격 — `docs/team-test.md`).
-- **사진 준비 도구**(2026-10-29): 모음 이미지 `python tools/photos.py sheet <폴더> <출력.jpg>`(finder), 안티그래비티용 축소 `python tools/photos.py shrink <폴더> <출력폴더>`. **agy에는 줄인 사진을 한 번에 5장 이하로** 넘긴다(10장·큰 사진은 400 오류·명령 거절로 실패, 토정삼계탕 건).
-- **두 번째 검토자(운영 감찰관) = 안티그래비티 안의 Claude Sonnet**(사용자 결정 2026-10-30 '다-1', PC 로컬 세션·대시보드 지시 모두): agy가 만든 메뉴·가격 표를 메뉴판 사진과 한 번 더 대조시킨다(가격·빠진 메뉴만). Claude Pro 한도가 아니라 안티그래비티 한도를 쓴다. 명령: `cd .scratch/<가게>/menus && agy --mode plan --model claude-sonnet-5-5-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … menu_05.jpg 를 열어 아래 표와 대조해줘. 가격이 다른 것·빠진 메뉴만 짧게. 못 열면 '사진 못 봄'. <표>"`. **"명령 도구는 쓰지 말고 파일 보기 도구로만"을 꼭 넣는다**(안 넣으면 사진을 명령으로 열려다 막힘). 한 번에 5장 이하. GPT-OSS는 사진을 못 봐서 안 쓴다. 코덱스는 더 쓰지 않는다(대시보드에서 세 번 실패). 실패하면 2회 뒤 reviewer가 재대조한다. 시험 기록은 `docs/team-test.md`.
-- **이미지 생성 = 안티그래비티 agy**(사용자 결정 2026-11-01, 무료): `agy --mode accept-edits -p "…이미지 생성 도구로…"` → `C:\Users\sia66\.gemini\antigravity-cli\brain\<대화id>\`에서 복사한다. AI 음식 사진은 메뉴 사진으로 쓰지 않는다(SNS·장식용). 영상은 agy로 못 만든다 — 사용자가 다른 LLM 연결을 알아보는 중. 상세 `docs/team-test.md`.
+- 순서: finder(사진 고르기) → 메뉴판 읽기 → 메인이 `new-shop.mjs`·`menu.js` → **designer(꾸미기)** → polisher(번역) → reviewer → 메인이 고치고 보고. 메인은 화면을 직접 꾸미지 않는다(2026-10-27 종로포차 건).
+- **메뉴판 읽기**: PC 로컬 세션은 안티그래비티 `agy`(제미나이 Pro)가 먼저, 정식 가게는 항상 **제미나이 4 Argon**, 2회 실패하면 menu-reader. 클라우드 세션은 menu-reader.
+- **두 번째 검토(운영 감찰관)** = agy 안의 Claude Sonnet으로 가격·빠진 메뉴 재대조. agy 명령엔 **"명령 도구는 쓰지 말고 파일 보기 도구로만"**을 꼭 넣고, 사진은 줄여서 **한 번에 5장 이하**. 코덱스·GPT-OSS는 안 쓴다.
+- **이미지 생성** = agy(무료). AI 음식 사진은 메뉴 사진으로 쓰지 않는다.
 - 사용자의 요금제는 클로드 Pro다(주간 한도로 정식 가게 약 10곳). opus는 정식 가게 마지막 검토에만 쓴다.
 - 작은 일은 맡기지 않는다. 담당은 이 대화를 모르니 가게 이름·파일 경로·원하는 결과를 구체적으로 적는다.
 
@@ -147,50 +98,12 @@
 - QR은 그 가게 주소를 가리킨다.
 - `src/`·`saju/`·`rpg-demo/`·`server/`는 예전 숏폼 프로젝트 산출물이다.
 
-## 7. 도구 (`tools/`, 저장소 루트에서 실행)
-- **새 가게**:
-  - `node tools/new-shop.mjs <가게> <listing|full> <logo|sign>` — 가마솥 표준 복사(영업시간 칸 포함, 2026-10-30)
-  - `node tools/check-standard.mjs <가게>` — 가마솥 표준 점검
-  - `node tools/check-listing.mjs` — 가게 찾기용 전체 점검(하단 문구·다산·가게 더 보기·방문 기록)
-- `node tools/shot.mjs <가게> [ko,vi] [폴더]` — 휴대폰 화면 캡처, JS 오류·못 불러온 파일 확인. shot·demo·sns는 `pw.mjs`의 `serve()`(로컬 서버)로 연다 — 파일 주소(file://)로 열면 QR MENU 아이콘이 빠지는 헛경보가 난다(2026-10-30).
-- **QR**:
-  - `node tools/qr.cjs <URL> <출력.svg> [L|M|Q|H]`로 만든다.
-  - `python3 tools/qr-check.py <qr.json>`으로 해독해 확인한다. 버전 3만 되니 안 되면 `M`으로 다시 만든다. 확인 후 `.json`은 지운다.
-- **QR 카드**: `node tools/card.mjs <가게>` — `print/table-card.html` → png·A6 PDF(+A4x4).
-  - 넘친 요소도 알려 준다.
-  - 카드는 `restaurants/<가게>/print/`에 두고, 폰트는 `public/fonts`(잘난체·G마켓 산스)를 쓴다.
-- **SNS 이미지**: `node tools/sns.mjs <가게> [vi|ko] [버튼 글자] [가게 이름]` — 정사각형·스토리.
-  - 가게 이름은 `sales/content.js`의 `DEMOS`에서 가져온다.
-  - QR 아래 안내는 **5개 언어 모두** 넣는다.
-  - 한국 매장은 `ko`.
-- `node tools/demo.mjs <가게>` — 가게 찾기·소개서 카드 사진 `sales/img/demo-<가게>.jpg`.
-- `node tools/seo.mjs` — canonical·og·JSON-LD·robots·sitemap. 메뉴·가격·주소를 바꾸거나 새 가게가 생기면 다시 돌린다. seo·analytics는 **내용이 바뀐 파일만** 쓴다(사이트맵 날짜도 바뀐 가게만, 2026-10-30) — 돌린 뒤 다른 가게가 바뀌어 있으면 그 가게 `menu.js`를 고치고 seo를 안 돌린 것이니 같이 커밋한다.
-- `sh tools/export.sh <폴더> [가게…|sales]` — 보낼 파일을 `<상호>_<파일>`로 복사한다.
-- `node tools/sales-pdf.mjs` — 소개서 PDF 5개 언어. 각각 2쪽인지 확인하고, `.demos`는 7칸이다.
-- 기타:
-  - `tools/pdf.mjs`(HTML→PDF)
-  - `tools/mockup.mjs`(포장재 시안)
-  - `tools/app-icon.mjs`(웹앱 아이콘)
-  - `tools/thumb.py`(페이지 그림에서 3:4로 자르기)
-  - `node tools/analytics.mjs`(방문 기록·점주 편집 블록)
-- **윈도우 PC(로컬 세션, `D:\qrmenu`, 2026-10-27)**: 도구 경로는 `tools/pw.mjs`의 `ROOT`·`fileUrl()`(fileURLToPath·pathToFileURL)로 만든다. `new URL(import.meta.url).pathname`·`` `file://${경로}` ``는 윈도우에서 깨지니 쓰지 않는다. `.sh`는 Git Bash로 돌린다.
-- **드라이브**:
-  - **PC 로컬 세션은 드라이브가 동기화돼 있다**(`G:\내 드라이브\QR메뉴판\<가게>\`, 2026-10-28 확인). zip을 받지 말고 거기서 사진·`store_info.json`·`클로드_안내.md`를 스크래치로 바로 복사한다(다운로드 토큰 0, 작은 간판 사진도 바로 받음).
-  - 10MB 넘는 파일은 못 받는다.
-  - 결과가 크면 하네스가 `tool-results/…download_file_content-<숫자>.txt`(JSON, base64)로 저장하니, 그 경로를 python으로 풀어 저장한다.
-  - 약 45KB 이하 파일은 대화로 들어와 저장할 수 없으니, 사용자에게 채팅 첨부를 부탁한다.
-  - WebP는 PIL로 jpg로 바꾼다.
+## 7. 도구 (`tools/`, 저장소 루트에서 실행) — **도구 사용법·드라이브·윈도우 주의점은 `docs/tools.md` 맨 위 '도구 요약'을 읽는다**
+- 새 가게: `new-shop.mjs` · 점검 `check-standard.mjs <가게>`·`check-listing.mjs` · 캡처 `shot.mjs <가게>`
+- QR `qr.cjs`+`qr-check.py` · 카드 `card.mjs` · SNS `sns.mjs` · 카드 사진 `demo.mjs` · 검색 `seo.mjs` · 보내기 `export.sh` · 소개서 `sales-pdf.mjs`
+- 윈도우에서 경로는 `tools/pw.mjs`의 `ROOT`·`fileUrl()`로 만든다. `.sh`는 Git Bash로 돌린다.
 
 ## 8. 상세 기록 (`docs/`, 필요할 때만 읽음)
-- `docs/team-plan.md` — **AI 팀 기획서(30문항 인터뷰 답·조직도·일하는 방식). 사용자가 '개발지시서·조직도·기획서'라고 하면 이것. 팀·대시보드·운영 방식 일을 하기 전에 읽음**
-- `docs/standard.md` — **가마솥 표준(새 가게마다 읽음)**
-- `docs/tools.md` — 배포·도구 상세 원문(정리 전)
-- `docs/mistakes.md` — 실수 사건 상세
-- `docs/stores.md` — 가게 목록 표·가게별 제작 기록. `grep -n "가게이름"`으로 필요한 부분만 읽는다.
-- `docs/todo.md` — 남은 할 일. 사용자가 말한 가게 줄만 읽는다.
-- `docs/seo.md` — 도메인·검색 등록
-- `docs/maps-photos.md` — 사진 수집기
-- `docs/admin-system.md` — 방문 기록·관리 화면·점주 편집 API
-- `docs/qr-home.md` — QR MENU 버튼. 홈 화면 지구본 배지는 다시 시도하지 않는다.
-- `docs/shared-features.md` — 언어 선택·장바구니·다산 배너·소개서·가게 찾기·점주 자료
-- `docs/dashboard.md` — 사업용 대시보드 **'Jinwoo 에이전트'**(`dashboard/`, 127.0.0.1:8899) 사용법·할당량 출처·지시창 자동 실행(`claude -p`)
+- `team-plan.md` 기획서(30문항·조직도, 팀·대시보드 일 전에 읽음) · `standard.md` 가마솥 표준(새 가게마다) · `new-shop.md` 새 가게 체크리스트 상세 · `deploy.md` 배포·머지 순서
+- `tools.md` 도구 상세 · `team-test.md` 담당 명령·시험 기록 · `mistakes.md` 실수 사건 · `stores.md` 가게 목록·기록(`grep -n "가게이름"`) · `todo.md` 남은 할 일(말한 가게 줄만)
+- `seo.md` 도메인·검색 · `maps-photos.md` 사진 수집기 · `admin-system.md` 방문 기록·점주 편집 · `qr-home.md` QR MENU 버튼(지구본 배지 재시도 안 함) · `shared-features.md` 공통 기능 · `dashboard.md` 대시보드 'Jinwoo 에이전트'(127.0.0.1:8899)
