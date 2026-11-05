@@ -123,6 +123,8 @@ window.DEMOS = [
     name: "끝돈 THE LAST PIG", type: { ko: "한식 고깃집 · 숙성 돼지고기 · 소고기 · 하노이", vi: "Quán nướng Hàn Quốc · Thịt heo ủ · Thịt bò · Hà Nội", zh: "韩式烤肉 · 熟成猪肉 · 牛肉 · 河内", ja: "韓国式焼肉・熟成豚肉・牛肉・ハノイ", en: "Korean BBQ · Aged pork · Beef · Hanoi" } },
   { id: "hyundaigalbi", hidden: true, url: "https://hyundaigalbi.qrmenuasia.com", shot: "img/demo-hyundaigalbi.jpg", qr: "img/qr-hyundaigalbi.svg",
     name: "현대갈비 HYUNDAI GALBI", type: { ko: "한식 소갈비 · 장어 · 함흥냉면 · 하노이", vi: "Quán Hàn Quốc · Sườn bò · Cá chình · Mì lạnh Hamheung · Hà Nội", zh: "韩式牛排骨 · 鳗鱼 · 咸兴冷面 · 河内", ja: "韓国式牛カルビ・うなぎ・咸興冷麺・ハノイ", en: "Korean beef galbi · Eel · Hamheung cold noodles · Hanoi" } },
+  { id: "yonggalbi", hidden: true, url: "https://yonggalbi.qrmenuasia.com", shot: "img/demo-yonggalbi.jpg", qr: "img/qr-yonggalbi.svg",
+    name: "용갈비 YONG GALBI", type: { ko: "한식 갈비 · 돼지갈비 무한리필 · 박닌", vi: "Quán nướng Hàn Quốc · Sườn rồng không giới hạn · Bắc Ninh", zh: "韩式烤肉 · 排骨无限畅吃 · 北宁", ja: "韓国式焼肉・カルビ食べ放題・バクニン", en: "Korean BBQ · Unlimited galbi · Bac Ninh" } },
 ];
 
 window.T = {

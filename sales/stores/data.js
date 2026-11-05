@@ -576,9 +576,14 @@ window.STORES = [
     address: "SH05.ĐN2, SH06.ĐN2, kiot 03 toà CT4, Mỹ Đình Sông Đà, Từ Liêm, Hà Nội",
     type: { ko: "한식 소갈비 · 장어 · 함흥냉면", vi: "Quán Hàn Quốc · Sườn bò · Cá chình · Mì lạnh Hamheung", en: "Korean beef galbi · Eel · Hamheung cold noodles", zh: "韩式牛排骨 · 鳗鱼 · 咸兴冷面", ja: "韓国式牛カルビ・うなぎ・咸興冷麺" },
     keywords: "현대갈비 hyundai galbi 갈비 소갈비 양념갈비 생갈비 왕갈비 안창살 우설 장어구이 장어탕 육회 충무김밥 함흥냉면 물냉면 비빔냉면 코다리냉면 육회비빔밥 갈비탕 순두부찌개 김치찌개 점심특선 한식 고깃집 하노이 미딩 mỹ đình sông đà từ liêm hà nội quán nướng hàn quốc sườn bò"
+  },
+  { id: "yonggalbi", name: "용갈비 YONG GALBI", sub: "돼지 양념갈비 무한리필 · 생삼겹 · 소갈비살", url: "https://yonggalbi.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean"], tags: ["photos"],
+    address: "09 Đ. Lý Đạo Thành, P. Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/%EB%B0%95%EB%8B%8C+%EC%9A%A9%EA%B0%88%EB%B9%84+Yong+Galbi+B+B+Q/@21.1750995,106.0579799,17z",
+    type: { ko: "한식 갈비 · 고기구이 · 돼지갈비 무한리필", vi: "Quán nướng Hàn Quốc · Sườn rồng không giới hạn · Thịt nướng", en: "Korean BBQ · Unlimited marinated pork galbi", zh: "韩式烤肉 · 腌制排骨无限畅吃", ja: "韓国式焼肉・味付け豚カルビ食べ放題" },
+    keywords: "용갈비 yong galbi 갈비 돼지갈비 양념갈비 무한리필 무제한 항정살 생삼겹살 목살 차돌박이 소갈비살 한식 고깃집 박닌 bắc ninh quán nướng hàn quốc sườn rồng không giới hạn thịt nướng lý đạo thành kinh bắc"
   }
 ];
-
 window.SI = {
   ko: {
     title: "QR 메뉴판 가게 찾기",

@@ -102,6 +102,7 @@
 | `restaurants/matchandeul` | 맛찬들 왕소금구이 MATCHANDEUL 한식 고깃집(숙성 삼겹살·양념구이·냉면·콩국수·찌개·전골·점심특선·주류) (CT4 Tòa Nhà Sông Đà, Đ. Mễ Trì, Từ Liêm, Hà Nội, 0879 927 736, 11:00–22:00 목요일 기준) — **가게 찾기용**, 메뉴 약 45개·사진 4장·간판. 상세 docs/todo.md | 제작 완료(2026-11-05), 배포 전 |
 | `restaurants/kkeutdon` | 끝돈 THE LAST PIG BBQ 한식 고깃집(숙성 돼지고기·소고기 '끝소'·점심특선 콤보·찌개·전골·주류) (CT4, Căn SH8.ĐN2, Sông Đà - Q, Từ Liêm, Hà Nội, 0777 599 292, 11:00–22:00) — **가게 찾기용**, 메뉴 44개·사진 5장·간판. 상세 docs/todo.md | 제작 완료(2026-11-05), 배포 전 |
 | `restaurants/hyundaigalbi` | 현대갈비 Hyundai Galbi 한식 소갈비·장어·함흥냉면·점심특선·세트·주류 (SH05.ĐN2, SH06.ĐN2, kiot 03 toà CT4, Mỹ Đình Sông Đà, Từ Liêm, Hà Nội, 0969 607 177, 11:30–14:00 / 17:00–22:00) — **가게 찾기용**, 메뉴 약 80개·사진 5장·간판. 상세 docs/todo.md | 제작 완료(2026-11-05), 배포 전 |
+| `restaurants/yonggalbi` | 용갈비 Yong Galbi BBQ 돼지 양념갈비 무한리필(1인 280,000)·구이 6종(항정살·돼지생갈비·생삼겹·목살·차돌박이·소갈비살) (09 Đ. Lý Đạo Thành, P. Kinh Bắc, Bắc Ninh, 0369 991 912, 11:30–14:00 / 16:30–21:00) — **가게 찾기용**, 메뉴 7개·사진 3장·간판. 상세 docs/todo.md | 제작 완료(2026-11-05), 배포 전 |
 | `restaurants/texasbbq` | CTQ 텍사스 BBQ 미딩점 CTQ TEXAS BBQ 훈제 바비큐·사파 연어·콤보 세트 (Tòa nhà CT1, KĐT Mỹ Đình, Xuân Phương, Hà Nội, 096 232 2111, 10:30–14:00·16:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://texasbbq.qrmenuasia.com |
 | `restaurants/hoolala` | 훌랄라치킨 HOOLALA 치킨 펍·바베큐 치킨·피자·파스타·맥주 (Block B 005, The Manor, Từ Liêm, Hà Nội, 0355 738 102, 11:00–24:00 해석) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://hoolala.qrmenuasia.com |
 
