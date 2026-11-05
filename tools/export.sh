@@ -50,6 +50,7 @@ name() {
     bulhyang) echo "불향" ;;
     matchandeul) echo "맛찬들" ;;
     kkeutdon) echo "끝돈" ;;
+    hyundaigalbi) echo "현대갈비" ;;
     texasbbq) echo "CTQ 텍사스 BBQ" ;;
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;

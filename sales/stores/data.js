@@ -570,6 +570,12 @@ window.STORES = [
     address: "CT4, Căn SH8.ĐN2, Sông Đà - Q, Từ Liêm, Hà Nội",
     type: { ko: "한식 고깃집 · 숙성 삼겹살 · 소고기 · 전골", vi: "Quán nướng Hàn Quốc · Ba chỉ ủ · Thịt bò · Lẩu", en: "Korean BBQ · Aged pork belly · Beef · Hot pots", zh: "韩式烤肉 · 熟成五花肉 · 牛肉 · 火锅", ja: "韓国式焼肉・熟成サムギョプサル・牛肉・チョンゴル" },
     keywords: "끝돈 kkeutdon the last pig 끝소 the last beef 고깃집 한식 숙성삼겹살 삼겹살 꽃목살 가브리 꼬들살 항정살 양념돼지갈비 소고기 갈비살 안창살 살치살 와규 소한마리 소고기케익 점심특선 콤보 된장찌개 김치찌개 김치말이국수 전골 소곱창 짜그리 소주 맥주 하노이 hà nội sông đà từ liêm quán nướng hàn quốc thịt ba chỉ"
+  },
+  { id: "hyundaigalbi", name: "현대갈비 HYUNDAI GALBI", sub: "소갈비 · 장어 · 함흥냉면 · 점심특선", url: "https://hyundaigalbi.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean"], tags: ["photos"],
+    address: "SH05.ĐN2, SH06.ĐN2, kiot 03 toà CT4, Mỹ Đình Sông Đà, Từ Liêm, Hà Nội",
+    type: { ko: "한식 소갈비 · 장어 · 함흥냉면", vi: "Quán Hàn Quốc · Sườn bò · Cá chình · Mì lạnh Hamheung", en: "Korean beef galbi · Eel · Hamheung cold noodles", zh: "韩式牛排骨 · 鳗鱼 · 咸兴冷面", ja: "韓国式牛カルビ・うなぎ・咸興冷麺" },
+    keywords: "현대갈비 hyundai galbi 갈비 소갈비 양념갈비 생갈비 왕갈비 안창살 우설 장어구이 장어탕 육회 충무김밥 함흥냉면 물냉면 비빔냉면 코다리냉면 육회비빔밥 갈비탕 순두부찌개 김치찌개 점심특선 한식 고깃집 하노이 미딩 mỹ đình sông đà từ liêm hà nội quán nướng hàn quốc sườn bò"
   }
 ];
 

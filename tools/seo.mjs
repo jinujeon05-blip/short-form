@@ -75,6 +75,7 @@ const SHOPS = {
   bulhyang: { type: 'Restaurant', cuisine: ['Korean', 'Spicy stir-fried octopus', 'Korean pub'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   matchandeul: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Pork belly', 'Cold noodles'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   kkeutdon: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Pork belly', 'Beef'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  hyundaigalbi: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Beef galbi', 'Cold noodles'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   seoulbrothers: { type: 'Restaurant', cuisine: ['Korean', 'Korean pub', 'Fried chicken', 'Anju'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   texasbbq:     { type: 'Restaurant', cuisine: ['American', 'Texas BBQ', 'Smoked meat', 'Barbecue'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   gaonjae:      { type: 'Restaurant', cuisine: ['Korean', 'Seafood', 'Hot pot', 'Korean set meals'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
