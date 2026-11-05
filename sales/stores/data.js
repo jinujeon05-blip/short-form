@@ -558,6 +558,12 @@ window.STORES = [
     address: "CT4, Từ Liêm, Hà Nội",
     type: { ko: "한식 · 쭈꾸미 직화볶음 · 연포탕 · 코다리조림", vi: "Món Hàn Quốc · Bạch tuộc xào cay · Canh bạch tuộc · Cá minh thái kho", en: "Korean · Spicy stir-fried baby octopus · Octopus soup · Braised pollack", zh: "韩餐 · 辣炒小章鱼 · 章鱼汤 · 炖明太鱼", ja: "韓国料理・ジュクミ炒め・ナクチ鍋・コダリ煮付け" },
     keywords: "불향 bulhyang bul hyang 한식 쭈꾸미 주꾸미 쭈삼 쭈꾸미삼겹살 직화볶음 낙지 연포탕 샤브샤브 코다리조림 닭발 무뼈닭발 낙지호롱이 산낙지 보리굴비 돈가스 파전 계란찜 소주 막걸리 하노이 hà nội từ liêm bạch tuộc xào cay quán hàn quốc"
+  },
+  { id: "matchandeul", name: "맛찬들 MATCHANDEUL", sub: "숙성 삼겹살 · 왕소금구이 · 냉면 · 콩국수 · 점심특선", url: "https://matchandeul.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean"], tags: ["photos"],
+    address: "CT4 Tòa Nhà Sông Đà, Đ. Mễ Trì, Từ Liêm, Hà Nội",
+    type: { ko: "한식 고깃집 · 숙성 삼겹살 · 왕소금구이 · 냉면", vi: "Quán nướng Hàn Quốc · Ba chỉ ủ · Mì lạnh · Canh", en: "Korean BBQ · Aged pork belly · Cold noodles · Stews", zh: "韩式烤肉 · 熟成五花肉 · 冷面 · 汤锅", ja: "韓国式焼肉・熟成サムギョプサル・冷麺・チゲ" },
+    keywords: "맛찬들 matchandeul 맛찬들왕소금구이 왕소금구이 고깃집 한식 숙성삼겹살 삼겹살 목살 항정살 꽃살 LA갈비 양념구이 구워먹는치즈 버섯 냉면 물냉면 비빔냉면 콩국수 김치찌개 된장찌개 청국장 갈비탕 전골 점심특선 돌솥비빔밥 파전 소주 막걸리 하노이 hà nội mỹ đình sông đà từ liêm quán nướng hàn quốc thịt ba chỉ"
   }
 ];
 

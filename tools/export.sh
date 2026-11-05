@@ -48,6 +48,7 @@ name() {
     baborang) echo "바보랑회센터" ;;
     taebaeksan) echo "태백산" ;;
     bulhyang) echo "불향" ;;
+    matchandeul) echo "맛찬들" ;;
     texasbbq) echo "CTQ 텍사스 BBQ" ;;
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;
