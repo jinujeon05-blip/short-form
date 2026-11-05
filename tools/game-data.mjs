@@ -59,6 +59,11 @@ for (const s of food) {
   let html = "";
   try { html = fs.readFileSync(path.join(ROOT, "restaurants", s.id, "index.html"), "utf8"); } catch { continue; }
   const refs = [...html.matchAll(/(?:src="|url\()(?:\.\/)?(img\/[^"')]+\.(?:png|jpe?g|webp))/g)].map((m) => m[1]);
+  // 드라이브에서 따로 고른 간판 사진(sales/stores/signs/<id>.jpg, qrmenuasia.com/stores/signs/)이 있으면 그것을 먼저 쓴다
+  if (fs.existsSync(path.join(ROOT, "sales/stores/signs", `${s.id}.jpg`))) {
+    signs.push({ id: s.id, name: s.name, url: s.url, region: s.region, cats: (s.cats || []).filter((c) => FOOD.includes(c) && !SIGN_SKIP_CATS.includes(c)), type: s.type || null, addr: s.address || "", img: `/stores/signs/${s.id}.jpg`, logo: false, _file: "" });
+    continue;
+  }
   const img = NOT_SIGN.has(s.id) ? "" : refs.find((r) => SIGN_FIRST.test(r)) || refs.find((r) => r === "img/hero.jpg") || "";
   signs.push({ id: s.id, name: s.name, url: s.url, region: s.region, cats: (s.cats || []).filter((c) => FOOD.includes(c) && !SIGN_SKIP_CATS.includes(c)), type: s.type || null, addr: s.address || "", img: img ? `${s.url}/${img}` : "", logo: /\.png$/.test(img), _file: img ? path.join(ROOT, "restaurants", s.id, img) : "" });
 }
