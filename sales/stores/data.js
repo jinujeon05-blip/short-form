@@ -582,6 +582,12 @@ window.STORES = [
     address: "09 Đ. Lý Đạo Thành, P. Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/%EB%B0%95%EB%8B%8C+%EC%9A%A9%EA%B0%88%EB%B9%84+Yong+Galbi+B+B+Q/@21.1750995,106.0579799,17z",
     type: { ko: "한식 갈비 · 고기구이 · 돼지갈비 무한리필", vi: "Quán nướng Hàn Quốc · Sườn rồng không giới hạn · Thịt nướng", en: "Korean BBQ · Unlimited marinated pork galbi", zh: "韩式烤肉 · 腌制排骨无限畅吃", ja: "韓国式焼肉・味付け豚カルビ食べ放題" },
     keywords: "용갈비 yong galbi 갈비 돼지갈비 양념갈비 무한리필 무제한 항정살 생삼겹살 목살 차돌박이 소갈비살 한식 고깃집 박닌 bắc ninh quán nướng hàn quốc sườn rồng không giới hạn thịt nướng lý đạo thành kinh bắc"
+  },
+  { id: "jejuomakase", name: "제주도 오마카세 JEJU OMAKASE", sub: "오마카세 · 숙성회 · 스시 · 해산물 한상", url: "https://jejuomakase.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean", "japanese"], tags: ["photos"],
+    address: "44N4 Đường Võ Cường 6, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%A0%9C%EC%A3%BC%EB%8F%84+%EC%98%A4%EB%A7%88%EC%B9%B4%EC%84%B8/@21.1723461,106.0570066,21z",
+    type: { ko: "한식 오마카세 · 숙성회 · 스시", vi: "Omakase Hàn Quốc · Cá sống · Sushi", en: "Korean omakase · Aged sashimi · Sushi", zh: "韩式无菜单料理 · 熟成刺身 · 寿司", ja: "韓国式おまかせ・熟成刺身・寿司" },
+    keywords: "제주도 오마카세 제주도오마카세 jeju omakase 오마카세 숙성회 모둠회 참치회 스시 모둠스시 해산물 모둠한상 문어숙회 생선간장조림 전복 뿔소라 한식 일식 횟집 박닌 bắc ninh nhà hàng hàn quốc omakase sushi sashimi cá sống 제주도 ( omakase) võ cường"
   }
 ];
 window.SI = {

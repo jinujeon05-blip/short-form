@@ -125,6 +125,8 @@ window.DEMOS = [
     name: "현대갈비 HYUNDAI GALBI", type: { ko: "한식 소갈비 · 장어 · 함흥냉면 · 하노이", vi: "Quán Hàn Quốc · Sườn bò · Cá chình · Mì lạnh Hamheung · Hà Nội", zh: "韩式牛排骨 · 鳗鱼 · 咸兴冷面 · 河内", ja: "韓国式牛カルビ・うなぎ・咸興冷麺・ハノイ", en: "Korean beef galbi · Eel · Hamheung cold noodles · Hanoi" } },
   { id: "yonggalbi", hidden: true, url: "https://yonggalbi.qrmenuasia.com", shot: "img/demo-yonggalbi.jpg", qr: "img/qr-yonggalbi.svg",
     name: "용갈비 YONG GALBI", type: { ko: "한식 갈비 · 돼지갈비 무한리필 · 박닌", vi: "Quán nướng Hàn Quốc · Sườn rồng không giới hạn · Bắc Ninh", zh: "韩式烤肉 · 排骨无限畅吃 · 北宁", ja: "韓国式焼肉・カルビ食べ放題・バクニン", en: "Korean BBQ · Unlimited galbi · Bac Ninh" } },
+  { id: "jejuomakase", hidden: true, url: "https://jejuomakase.qrmenuasia.com", shot: "img/demo-jejuomakase.jpg", qr: "img/qr-jejuomakase.svg",
+    name: "제주도 오마카세 JEJU OMAKASE", type: { ko: "한식 오마카세 · 숙성회 · 스시 · 박닌", vi: "Omakase Hàn Quốc · Cá sống · Sushi · Bắc Ninh", zh: "韩式无菜单料理 · 熟成刺身 · 寿司 · 北宁", ja: "韓国式おまかせ・熟成刺身・寿司・バクニン", en: "Korean omakase · Aged sashimi · Sushi · Bac Ninh" } },
 ];
 
 window.T = {
