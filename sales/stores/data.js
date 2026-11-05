@@ -564,6 +564,12 @@ window.STORES = [
     address: "CT4 Tòa Nhà Sông Đà, Đ. Mễ Trì, Từ Liêm, Hà Nội",
     type: { ko: "한식 고깃집 · 숙성 삼겹살 · 왕소금구이 · 냉면", vi: "Quán nướng Hàn Quốc · Ba chỉ ủ · Mì lạnh · Canh", en: "Korean BBQ · Aged pork belly · Cold noodles · Stews", zh: "韩式烤肉 · 熟成五花肉 · 冷面 · 汤锅", ja: "韓国式焼肉・熟成サムギョプサル・冷麺・チゲ" },
     keywords: "맛찬들 matchandeul 맛찬들왕소금구이 왕소금구이 고깃집 한식 숙성삼겹살 삼겹살 목살 항정살 꽃살 LA갈비 양념구이 구워먹는치즈 버섯 냉면 물냉면 비빔냉면 콩국수 김치찌개 된장찌개 청국장 갈비탕 전골 점심특선 돌솥비빔밥 파전 소주 막걸리 하노이 hà nội mỹ đình sông đà từ liêm quán nướng hàn quốc thịt ba chỉ"
+  },
+  { id: "kkeutdon", name: "끝돈 THE LAST PIG", sub: "숙성 삼겹살 · 소고기 · 점심특선 콤보 · 소고기 케익", url: "https://kkeutdon.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean"], tags: ["photos"],
+    address: "CT4, Căn SH8.ĐN2, Sông Đà - Q, Từ Liêm, Hà Nội",
+    type: { ko: "한식 고깃집 · 숙성 삼겹살 · 소고기 · 전골", vi: "Quán nướng Hàn Quốc · Ba chỉ ủ · Thịt bò · Lẩu", en: "Korean BBQ · Aged pork belly · Beef · Hot pots", zh: "韩式烤肉 · 熟成五花肉 · 牛肉 · 火锅", ja: "韓国式焼肉・熟成サムギョプサル・牛肉・チョンゴル" },
+    keywords: "끝돈 kkeutdon the last pig 끝소 the last beef 고깃집 한식 숙성삼겹살 삼겹살 꽃목살 가브리 꼬들살 항정살 양념돼지갈비 소고기 갈비살 안창살 살치살 와규 소한마리 소고기케익 점심특선 콤보 된장찌개 김치찌개 김치말이국수 전골 소곱창 짜그리 소주 맥주 하노이 hà nội sông đà từ liêm quán nướng hàn quốc thịt ba chỉ"
   }
 ];
 

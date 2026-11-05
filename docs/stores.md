@@ -100,6 +100,7 @@
 | `restaurants/taebaeksan` | 태백산 TAEBAEKSAN 한식 고깃집(소·돼지 구이·일품·냉면·찌개·술·와인) (Tòa Nhà CT5, Số 6 Trần Văn Lai, Mỹ Đình Sông Đà, Từ Liêm, Hà Nội, 0969 993 384, 10:30–24:00) — **가게 찾기용**, 메뉴 69개·사진 6장·간판. 베트남어 판 메뉴판 기준(옛 한글 판 전용 메뉴 뺌), 상세 docs/todo.md |
 | `restaurants/bulhyang` | 불향 BUL HYANG 한식(쭈꾸미·삼겹살 직화볶음·연포탕·코다리조림·특선·사이드·주류) (CT4, Từ Liêm, Hà Nội, 0968 499 957, 11:00–23:00) — **가게 찾기용**, 메뉴 40여 개·사진 6장·간판. 상세 docs/todo.md | 제작 완료(2026-11-04), 배포 전 |
 | `restaurants/matchandeul` | 맛찬들 왕소금구이 MATCHANDEUL 한식 고깃집(숙성 삼겹살·양념구이·냉면·콩국수·찌개·전골·점심특선·주류) (CT4 Tòa Nhà Sông Đà, Đ. Mễ Trì, Từ Liêm, Hà Nội, 0879 927 736, 11:00–22:00 목요일 기준) — **가게 찾기용**, 메뉴 약 45개·사진 4장·간판. 상세 docs/todo.md | 제작 완료(2026-11-05), 배포 전 |
+| `restaurants/kkeutdon` | 끝돈 THE LAST PIG BBQ 한식 고깃집(숙성 돼지고기·소고기 '끝소'·점심특선 콤보·찌개·전골·주류) (CT4, Căn SH8.ĐN2, Sông Đà - Q, Từ Liêm, Hà Nội, 0777 599 292, 11:00–22:00) — **가게 찾기용**, 메뉴 44개·사진 5장·간판. 상세 docs/todo.md | 제작 완료(2026-11-05), 배포 전 |
 | `restaurants/texasbbq` | CTQ 텍사스 BBQ 미딩점 CTQ TEXAS BBQ 훈제 바비큐·사파 연어·콤보 세트 (Tòa nhà CT1, KĐT Mỹ Đình, Xuân Phương, Hà Nội, 096 232 2111, 10:30–14:00·16:30–22:00) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://texasbbq.qrmenuasia.com |
 | `restaurants/hoolala` | 훌랄라치킨 HOOLALA 치킨 펍·바베큐 치킨·피자·파스타·맥주 (Block B 005, The Manor, Từ Liêm, Hà Nội, 0355 738 102, 11:00–24:00 해석) — **가게 찾기용** | 미배포 (2026-10-31 제작, 브랜치 dashboard-agent) | https://hoolala.qrmenuasia.com |
 

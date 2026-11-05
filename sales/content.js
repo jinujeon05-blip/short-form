@@ -119,6 +119,8 @@ window.DEMOS = [
     name: "불향 BUL HYANG", type: { ko: "한식 · 쭈꾸미 직화볶음 · 하노이", vi: "Món Hàn Quốc · Bạch tuộc xào cay · Hà Nội", zh: "韩餐 · 辣炒章鱼 · 河内", ja: "韓国料理・ジュクミ炒め・ハノイ", en: "Korean · Spicy stir-fried octopus · Hanoi" } },
   { id: "matchandeul", hidden: true, url: "https://matchandeul.qrmenuasia.com", shot: "img/demo-matchandeul.jpg", qr: "img/qr-matchandeul.svg",
     name: "맛찬들 MATCHANDEUL", type: { ko: "한식 고깃집 · 숙성 삼겹살 · 냉면 · 하노이", vi: "Quán nướng Hàn Quốc · Ba chỉ ủ · Mì lạnh · Hà Nội", zh: "韩式烤肉 · 熟成五花肉 · 冷面 · 河内", ja: "韓国式焼肉・熟成サムギョプサル・冷麺・ハノイ", en: "Korean BBQ · Aged pork belly · Cold noodles · Hanoi" } },
+  { id: "kkeutdon", hidden: true, url: "https://kkeutdon.qrmenuasia.com", shot: "img/demo-kkeutdon.jpg", qr: "img/qr-kkeutdon.svg",
+    name: "끝돈 THE LAST PIG", type: { ko: "한식 고깃집 · 숙성 돼지고기 · 소고기 · 하노이", vi: "Quán nướng Hàn Quốc · Thịt heo ủ · Thịt bò · Hà Nội", zh: "韩式烤肉 · 熟成猪肉 · 牛肉 · 河内", ja: "韓国式焼肉・熟成豚肉・牛肉・ハノイ", en: "Korean BBQ · Aged pork · Beef · Hanoi" } },
 ];
 
 window.T = {
