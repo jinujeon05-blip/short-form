@@ -606,6 +606,12 @@ window.STORES = [
     address: "122 Nguyễn Cao, Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/sigol+jib+(+%EC%8B%9C%EA%B3%A8%EC%A7%91+)/@21.1752172,106.0596401,17z",
     type: { ko: "한식 · 고기구이 · 시골 밥상 · 볶음 · 찜 · 전골", vi: "Món Hàn · Thịt nướng · Cơm quê · Xào · Hầm · Lẩu", en: "Korean · BBQ · Country-style set meal · Stir-fries · Braises · Hot pot", zh: "韩餐 · 烤肉 · 乡村套餐 · 炒菜 · 炖菜 · 火锅", ja: "韓国料理・焼肉・田舎定食・炒め物・煮込み・鍋" },
     keywords: "시골집 시골집식당 sigol jib sigoljib 한식 고깃집 고기구이 연탄불 오겹살 목살 항정살 냉동삼겹살 돈마호크 모듬구이 등갈비 LA갈비찜 등갈비김치찜 닭볶음탕 묵은지 닭볶음탕 닭목살구이 곱창전골 소곱창 꼼장어 주꾸미볶음 오징어볶음 오삼불고기 한치불고기 갈치조림 조기구이 조기조림 병어조림 꼬막무침 동태전 해물파전 문어숙회 아롱사태 보쌈 한치보쌈 이모카세 삼계탕 소내장탕 시골밥상정식 밥상 소불고기 물갈비 소주 맥주 박닌 bắc ninh nhà hàng hàn quốc thịt nướng sườn lẩu lòng bò cá hố kho cá lanh nướng bạch tuộc xào mực xào 韩餐 烤肉 韩式料理 炖排骨 火锅 乡村套餐 韓国料理 焼肉 鍋 korean restaurant korean bbq charcoal grill galbi pork belly hot pot"
+  },
+  { id: "tete", name: "떼떼분식 TÊ TÊ", sub: "떡볶이 · 김밥 · 튀김 · 덮밥 · 면 · 순대 · 치킨", url: "https://tete.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean", "noodle"], tags: ["photos"],
+    address: "124 Nguyễn Cao, Bắc Ninh", map: "https://www.google.com/maps/place/%EB%96%BC%EB%96%BC%EB%B6%84%EC%8B%9D+-+T%C3%AA+T%C3%AA+Kimbap+%26+Tokkbokki+B%E1%BA%AFc+Ninh/@21.1752012,106.0595332,17z",
+    type: { ko: "한국 분식 · 떡볶이 · 김밥 · 튀김 · 덮밥 · 면 · 순대 · 치킨", vi: "Món ăn vặt Hàn Quốc · Tokbokki · Kimbap · Đồ chiên · Cơm · Mì · Dồi · Gà chiên", en: "Korean snacks · Tteokbokki · Kimbap · Fried snacks · Rice bowls · Noodles · Sundae · Fried chicken", zh: "韩式小吃 · 辣炒年糕 · 紫菜包饭 · 炸物 · 盖饭 · 面 · 血肠 · 炸鸡", ja: "韓国軽食・トッポッキ・キンパ・揚げ物・丼・麺・スンデ・チキン" },
+    keywords: "떼떼분식 떼떼 tê tê tete te te 분식 한국 분식집 떡볶이 로제떡볶이 마라떡볶이 짜장떡볶이 치즈떡볶이 닭볶음 닭볶이 김밥 참치김밥 우엉김밥 스팸김밥 꼬마김밥 키토김밥 충무김밥 김밥도시락 유부초밥 덮밥 치킨마요 비빔밥 돈가스 짜장면 쫄면 비빔국수 라면 냉면 물냉면 비빔냉면 냉모밀 메밀국수 순대 내장 튀김 모듬튀김 어묵 어묵탕 순살치킨 뿌링클 샐러드 소떡소떡 떡꼬치 박닌 bắc ninh quán ăn hàn quốc tokbokki kimbap bánh gạo cay cơm cuộn món ăn vặt hàn quốc mì lạnh dồi gà chiên 韩式小吃 辣炒年糕 紫菜包饭 冷面 韓国軽食 トッポッキ キンパ 冷麺 korean snack bar tteokbokki rose tokbokki kimbap fried chicken corn dog cold noodles"
   }
 ];
 window.SI = {

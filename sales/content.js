@@ -133,6 +133,8 @@ window.DEMOS = [
     name: "은아수 EUN-A-SU", type: { ko: "한식 · 간장게장 · 양념게장 · 찌개 · 박닌", vi: "Món Hàn · Ghẹ ngâm tương · Ghẹ sốt cay · Canh · Bắc Ninh", zh: "韩餐 · 酱蟹 · 辣拌蟹 · 汤锅 · 北宁", ja: "韓国料理・カンジャンケジャン・ヤンニョムケジャン・チゲ・バクニン", en: "Korean · Soy-marinated crab · Spicy crab · Stews · Bac Ninh" } },
   { id: "sigoljib", hidden: true, url: "https://sigoljib.qrmenuasia.com", shot: "img/demo-sigoljib.jpg", qr: "img/qr-sigoljib.svg",
     name: "시골집 SIGOL JIB", type: { ko: "한식 · 고기구이 · 시골 밥상 · 박닌", vi: "Món Hàn · Thịt nướng · Cơm quê · Bắc Ninh", zh: "韩餐 · 烤肉 · 乡村套餐 · 北宁", ja: "韓国料理・焼肉・田舎定食・バクニン", en: "Korean · BBQ · Country-style set meal · Bac Ninh" } },
+  { id: "tete", hidden: true, url: "https://tete.qrmenuasia.com", shot: "img/demo-tete.jpg", qr: "img/qr-tete.svg",
+    name: "떼떼분식 TÊ TÊ", type: { ko: "분식 · 떡볶이 · 김밥 · 박닌", vi: "Món ăn vặt Hàn · Tokbokki · Kimbap · Bắc Ninh", zh: "韩式小吃 · 辣炒年糕 · 紫菜包饭 · 北宁", ja: "韓国軽食・トッポッキ・キンパ・バクニン", en: "Korean snacks · Tteokbokki · Kimbap · Bac Ninh" } },
 ];
 
 window.T = {
