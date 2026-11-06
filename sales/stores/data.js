@@ -618,6 +618,12 @@ window.STORES = [
     address: "223 Nguyễn Cao, Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/Suwon+Th%E1%BB%8Bt+N%C6%B0%E1%BB%9Bng+Than+Hoa/@21.1747797,106.0592754,17z",
     type: { ko: "양고기 숯불구이 · 양다리 · 양갈비 · 양꼬치 · 중화요리", vi: "Cừu nướng than · Đùi cừu · Sườn cừu · Cừu xiên · Món Hoa", en: "Charcoal-grilled lamb · Lamb leg · Lamb ribs · Skewers · Chinese dishes", zh: "炭火烤羊肉 · 羊腿 · 羊排 · 羊肉串 · 中餐", ja: "羊肉の炭火焼き・羊もも肉・骨付きラム・羊串・中華料理" },
     keywords: "수원 양갈비 구이 수원양갈비구이 수원 suwon 양고기 양갈비 양다리 양꼬치 숯불구이 슬라이스 양다리 경장육슬 꿔바로우 향라새우 향라가지 유포건두부 냉면 온면 칭다오 연태고량주 막걸리 소주 박닌 bắc ninh đùi cừu nướng thịt cừu nướng than hoa sườn cừu cừu xiên thịt nướng quán nướng hàn quốc 羊腿 羊排 羊肉串 烤羊肉 锅包肉 京酱肉丝 韩餐 羊肉 焼肉 ラム 羊串 骨付きラム korean restaurant lamb bbq lamb leg lamb ribs lamb skewers charcoal grill"
+  },
+  { id: "suwonhanoi", name: "수원성 하노이 SUWONSUNG", sub: "소고기 · 돼지고기 구이 · 냉면 · 점심특선", url: "https://suwonhanoi.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "bbq"], tags: ["photos"],
+    address: "TT4 P. Trần Văn Lai, Khu đô thị Mễ Trì Hạ, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EC%88%98%EC%9B%90%EC%84%B1+%ED%95%98%EB%85%B8%EC%9D%B4+%ED%95%9C%EC%8B%9D%EB%8B%B9+Suwonsung/@21.0173961,105.7785108,21z",
+    type: { ko: "한식 고기구이 · 소고기 · 돼지고기 · 냉면 · 점심특선", vi: "Thịt nướng Hàn Quốc · Thịt bò · Thịt lợn · Miến lạnh · Món trưa", en: "Korean BBQ · Beef · Pork · Cold noodles · Lunch specials", zh: "韩式烤肉 · 牛肉 · 猪肉 · 冷面 · 午餐特选", ja: "韓国焼肉・牛肉・豚肉・冷麺・ランチ特選" },
+    keywords: "수원성 하노이 수원성하노이 suwonsung suwonsung hanoi 한식 고기구이 소고기 돼지고기 삼겹살 항정살 갈비살 양념왕갈비 육회 냉면 물냉면 비빔냉면 점심특선 순두부 술국 장어 하노이 미찌 mễ trì từ liêm hà nội nhà hàng hàn quốc thịt nướng hàn quốc thịt bò thịt lợn miến lạnh 韩式烤肉 牛肉 猪肉 冷面 韓国焼肉 冷麺 korean bbq beef pork naengmyeon"
   }
 ];
 window.SI = {

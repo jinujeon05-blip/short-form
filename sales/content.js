@@ -137,6 +137,8 @@ window.DEMOS = [
     name: "떼떼분식 TÊ TÊ", type: { ko: "분식 · 떡볶이 · 김밥 · 박닌", vi: "Món ăn vặt Hàn · Tokbokki · Kimbap · Bắc Ninh", zh: "韩式小吃 · 辣炒年糕 · 紫菜包饭 · 北宁", ja: "韓国軽食・トッポッキ・キンパ・バクニン", en: "Korean snacks · Tteokbokki · Kimbap · Bac Ninh" } },
   { id: "suwonyang", hidden: true, url: "https://suwonyang.qrmenuasia.com", shot: "img/demo-suwonyang.jpg", qr: "img/qr-suwonyang.svg",
     name: "수원 양갈비 구이 SUWON", type: { ko: "양다리 · 양갈비 · 양꼬치 · 박닌", vi: "Đùi cừu · Sườn cừu · Cừu xiên nướng · Bắc Ninh", zh: "羊腿 · 羊排 · 羊肉串 · 北宁", ja: "羊もも肉・骨付きラム・羊串・バクニン", en: "Lamb leg · Lamb ribs · Skewers · Bac Ninh" } },
+  { id: "suwonhanoi", hidden: true, url: "https://suwonhanoi.qrmenuasia.com", shot: "img/demo-suwonhanoi.jpg", qr: "img/qr-suwonhanoi.svg",
+    name: "수원성 하노이 SUWONSUNG", type: { ko: "소고기 · 돼지고기 구이 · 냉면 · 하노이", vi: "Thịt bò · Thịt lợn nướng · Miến lạnh · Hà Nội", zh: "烤牛肉 · 烤猪肉 · 冷面 · 河内", ja: "牛・豚の焼肉・冷麺・ハノイ", en: "Beef & pork BBQ · Cold noodles · Hanoi" } },
 ];
 
 window.T = {

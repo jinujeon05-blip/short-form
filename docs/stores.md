@@ -279,3 +279,4 @@
 | `restaurants/sigoljib` | 시골집 Sigol Jib 한식 고기구이(연탄불 구이·시골 밥상 정식·볶음·찜·전골·이모카세 칠판 메뉴) (122 Nguyễn Cao, Kinh Bắc, Bắc Ninh, 035 555 4636, 11:00–21:00 휴식 14–16) — **가게 찾기용**, 메뉴 49개·사진 6장·간판. 상세 docs/todo.md | 제작 완료(2026-11-06), 배포 전 |
 | `restaurants/tete` | 떼떼분식 Tê Tê Kimbap & Tokkbokki 한국 분식(떡볶이·김밥·튀김·덮밥·면·순대·치킨) (124 Nguyễn Cao, Bắc Ninh, 0961198949, 10:00–22:00) — **가게 찾기용**, 메뉴 95개·사진 5장·메뉴판에서 잘라 쓴 로고(간판 사진 없음). 높은 가격판 기준. 상세 `docs/todo.md` |
 | `restaurants/suwonyang` | 수원 양갈비 구이 SUWON Đùi Cừu Nướng 양다리·양갈비·양꼬치·중화요리 (223 Nguyễn Cao, Kinh Bắc, Bắc Ninh, 0922931212, 11:00–14:00·16:00–23:00) — **가게 찾기용**, 메뉴 약 50개·사진 4장·간판 대신 금색 양 로고(캡틴 지시). 높은 가격판 기준. 상세 `docs/todo.md` |
+| `restaurants/suwonhanoi` | 수원성 하노이 한식당 Suwonsung Hanoi 소고기·돼지고기 구이·냉면·점심특선 (TT4 P. Trần Văn Lai, Mễ Trì Hạ, Từ Liêm, Hà Nội, 02436647888, 10:00–22:00) — **가게 찾기용**(2026-11-06), 메뉴 약 60개·사진 5장·**간판 대신 메뉴 표지의 붓글씨 로고(캡틴 지시)**. 시푸차 수원성(`suwonseong`)과 다른 지점. 상세 `docs/todo.md` |
