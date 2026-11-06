@@ -131,6 +131,8 @@ window.DEMOS = [
     name: "차차차 박닌점 CHA CHA CHA", type: { ko: "한식 고깃집 · 소고기 · 삼겹살 · 곱창 · 박닌", vi: "Quán nướng Hàn Quốc · Thịt bò · Ba chỉ · Lòng bò · Bắc Ninh", zh: "韩式烤肉 · 牛肉 · 五花肉 · 牛肠 · 北宁", ja: "韓国式焼肉・牛肉・サムギョプサル・ホルモン・バクニン", en: "Korean BBQ · Beef · Pork belly · Beef intestines · Bac Ninh" } },
   { id: "eunasu", hidden: true, url: "https://eunasu.qrmenuasia.com", shot: "img/demo-eunasu.jpg", qr: "img/qr-eunasu.svg",
     name: "은아수 EUN-A-SU", type: { ko: "한식 · 간장게장 · 양념게장 · 찌개 · 박닌", vi: "Món Hàn · Ghẹ ngâm tương · Ghẹ sốt cay · Canh · Bắc Ninh", zh: "韩餐 · 酱蟹 · 辣拌蟹 · 汤锅 · 北宁", ja: "韓国料理・カンジャンケジャン・ヤンニョムケジャン・チゲ・バクニン", en: "Korean · Soy-marinated crab · Spicy crab · Stews · Bac Ninh" } },
+  { id: "sigoljib", hidden: true, url: "https://sigoljib.qrmenuasia.com", shot: "img/demo-sigoljib.jpg", qr: "img/qr-sigoljib.svg",
+    name: "시골집 SIGOL JIB", type: { ko: "한식 · 고기구이 · 시골 밥상 · 박닌", vi: "Món Hàn · Thịt nướng · Cơm quê · Bắc Ninh", zh: "韩餐 · 烤肉 · 乡村套餐 · 北宁", ja: "韓国料理・焼肉・田舎定食・バクニン", en: "Korean · BBQ · Country-style set meal · Bac Ninh" } },
 ];
 
 window.T = {

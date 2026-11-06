@@ -78,6 +78,7 @@ const SHOPS = {
   hyundaigalbi: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Beef galbi', 'Cold noodles'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   jejuomakase: { type: 'Restaurant', cuisine: ['Korean', 'Omakase', 'Sashimi', 'Sushi'], country: 'VN', currency: 'VND', og: 'img/logo.png' },
   eunasu: { type: 'Restaurant', cuisine: ['Korean', 'Ganjang gejang', 'Marinated crab', 'Stew'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  sigoljib: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Charcoal grill', 'Stew'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   chachacha: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Beef', 'Pork belly'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   yonggalbi: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Galbi', 'Unlimited galbi'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   seoulbrothers: { type: 'Restaurant', cuisine: ['Korean', 'Korean pub', 'Fried chicken', 'Anju'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },

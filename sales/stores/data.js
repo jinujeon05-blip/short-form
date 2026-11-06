@@ -600,6 +600,12 @@ window.STORES = [
     address: "130 Nguyễn Cao, Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%9D%80%EC%95%84%EC%88%98/@21.1750097,106.0592728,17z",
     type: { ko: "한식 · 간장게장 · 양념게장 · 찌개 · 해장국", vi: "Món Hàn · Ghẹ ngâm tương · Ghẹ sốt cay · Canh", en: "Korean · Soy-marinated crab · Spicy crab · Stews", zh: "韩餐 · 酱蟹 · 辣拌蟹 · 汤锅", ja: "韓国料理・カンジャンケジャン・ヤンニョムケジャン・チゲ" },
     keywords: "은아수 eunasu eun a su 한식 간장게장 양념게장 알배기 암게 숫게 정식 게국지 꽃게탕 갈비탕 김치찌개 된장찌개 양평해장국 콩나물해장국 부대찌개 제육덮밥 두루치기 LA갈비찜 소곱창전골 샤브샤브 새우튀김 오뎅탕 냉동삼겹살 해물파전 소주 맥주 박닌 bắc ninh nhà hàng hàn quốc ghẹ ngâm nước tương ghẹ sốt cay kinh bắc nguyễn cao"
+  },
+  { id: "sigoljib", name: "시골집 SIGOL JIB", sub: "연탄불 구이 · 시골 밥상 정식 · 볶음 · 찜 · 전골", url: "https://sigoljib.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean"], tags: ["photos"],
+    address: "122 Nguyễn Cao, Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/sigol+jib+(+%EC%8B%9C%EA%B3%A8%EC%A7%91+)/@21.1752172,106.0596401,17z",
+    type: { ko: "한식 · 고기구이 · 시골 밥상 · 볶음 · 찜 · 전골", vi: "Món Hàn · Thịt nướng · Cơm quê · Xào · Hầm · Lẩu", en: "Korean · BBQ · Country-style set meal · Stir-fries · Braises · Hot pot", zh: "韩餐 · 烤肉 · 乡村套餐 · 炒菜 · 炖菜 · 火锅", ja: "韓国料理・焼肉・田舎定食・炒め物・煮込み・鍋" },
+    keywords: "시골집 시골집식당 sigol jib sigoljib 한식 고깃집 고기구이 연탄불 오겹살 목살 항정살 냉동삼겹살 돈마호크 모듬구이 등갈비 LA갈비찜 등갈비김치찜 닭볶음탕 묵은지 닭볶음탕 닭목살구이 곱창전골 소곱창 꼼장어 주꾸미볶음 오징어볶음 오삼불고기 한치불고기 갈치조림 조기구이 조기조림 병어조림 꼬막무침 동태전 해물파전 문어숙회 아롱사태 보쌈 한치보쌈 이모카세 삼계탕 소내장탕 시골밥상정식 밥상 소불고기 물갈비 소주 맥주 박닌 bắc ninh nhà hàng hàn quốc thịt nướng sườn lẩu lòng bò cá hố kho cá lanh nướng bạch tuộc xào mực xào 韩餐 烤肉 韩式料理 炖排骨 火锅 乡村套餐 韓国料理 焼肉 鍋 korean restaurant korean bbq charcoal grill galbi pork belly hot pot"
   }
 ];
 window.SI = {
