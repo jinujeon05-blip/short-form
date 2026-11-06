@@ -54,6 +54,7 @@ name() {
     yonggalbi) echo "용갈비" ;;
     jejuomakase) echo "제주도오마카세" ;;
     chachacha) echo "차차차박닌점" ;;
+    eunasu) echo "은아수" ;;
     texasbbq) echo "CTQ 텍사스 BBQ" ;;
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;

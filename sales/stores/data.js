@@ -594,6 +594,12 @@ window.STORES = [
     address: "7 Đ. Lê Thái Tổ, Bò Sơn, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%B0%A8%EC%B0%A8%EC%B0%A8+%EB%B0%95%EB%A6%B0%EC%A0%90+chachacha+b%E1%BA%AFc+ninh/@21.1686909,106.0561061,19z",
     type: { ko: "한식 고깃집 · 소고기 · 삼겹살 · 곱창·대창", vi: "Quán nướng Hàn Quốc · Thịt bò · Ba chỉ · Lòng bò", en: "Korean BBQ · Beef · Pork belly · Beef intestines", zh: "韩式烤肉 · 牛肉 · 五花肉 · 牛肠", ja: "韓国式焼肉・牛肉・サムギョプサル・ホルモン" },
     keywords: "차차차 차차차박닌점 cha cha cha chachacha 고깃집 한식 소고기 삼겹살 항정살 갈비살 치마살 안창살 살치살 차돌박이 마장동 황제 주물럭 곱창 대창 소곱창 소대창 육회 감자탕 낙곱새 염소전골 훈제오리 냉면 소주 맥주 박닌 bắc ninh nhà hàng hàn quốc quán nướng thịt bò ba chỉ lòng bò võ cường lê thái tổ"
+  },
+  { id: "eunasu", name: "은아수 EUN-A-SU", sub: "간장게장 · 양념게장 · 찌개 · 해장국 · 안주", url: "https://eunasu.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean"], tags: ["photos"],
+    address: "130 Nguyễn Cao, Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%9D%80%EC%95%84%EC%88%98/@21.1750097,106.0592728,17z",
+    type: { ko: "한식 · 간장게장 · 양념게장 · 찌개 · 해장국", vi: "Món Hàn · Ghẹ ngâm tương · Ghẹ sốt cay · Canh", en: "Korean · Soy-marinated crab · Spicy crab · Stews", zh: "韩餐 · 酱蟹 · 辣拌蟹 · 汤锅", ja: "韓国料理・カンジャンケジャン・ヤンニョムケジャン・チゲ" },
+    keywords: "은아수 eunasu eun a su 한식 간장게장 양념게장 알배기 암게 숫게 정식 게국지 꽃게탕 갈비탕 김치찌개 된장찌개 양평해장국 콩나물해장국 부대찌개 제육덮밥 두루치기 LA갈비찜 소곱창전골 샤브샤브 새우튀김 오뎅탕 냉동삼겹살 해물파전 소주 맥주 박닌 bắc ninh nhà hàng hàn quốc ghẹ ngâm nước tương ghẹ sốt cay kinh bắc nguyễn cao"
   }
 ];
 window.SI = {

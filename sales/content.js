@@ -129,6 +129,8 @@ window.DEMOS = [
     name: "제주도 오마카세 JEJU OMAKASE", type: { ko: "한식 오마카세 · 숙성회 · 스시 · 박닌", vi: "Omakase Hàn Quốc · Cá sống · Sushi · Bắc Ninh", zh: "韩式无菜单料理 · 熟成刺身 · 寿司 · 北宁", ja: "韓国式おまかせ・熟成刺身・寿司・バクニン", en: "Korean omakase · Aged sashimi · Sushi · Bac Ninh" } },
   { id: "chachacha", hidden: true, url: "https://chachacha.qrmenuasia.com", shot: "img/demo-chachacha.jpg", qr: "img/qr-chachacha.svg",
     name: "차차차 박닌점 CHA CHA CHA", type: { ko: "한식 고깃집 · 소고기 · 삼겹살 · 곱창 · 박닌", vi: "Quán nướng Hàn Quốc · Thịt bò · Ba chỉ · Lòng bò · Bắc Ninh", zh: "韩式烤肉 · 牛肉 · 五花肉 · 牛肠 · 北宁", ja: "韓国式焼肉・牛肉・サムギョプサル・ホルモン・バクニン", en: "Korean BBQ · Beef · Pork belly · Beef intestines · Bac Ninh" } },
+  { id: "eunasu", hidden: true, url: "https://eunasu.qrmenuasia.com", shot: "img/demo-eunasu.jpg", qr: "img/qr-eunasu.svg",
+    name: "은아수 EUN-A-SU", type: { ko: "한식 · 간장게장 · 양념게장 · 찌개 · 박닌", vi: "Món Hàn · Ghẹ ngâm tương · Ghẹ sốt cay · Canh · Bắc Ninh", zh: "韩餐 · 酱蟹 · 辣拌蟹 · 汤锅 · 北宁", ja: "韓国料理・カンジャンケジャン・ヤンニョムケジャン・チゲ・バクニン", en: "Korean · Soy-marinated crab · Spicy crab · Stews · Bac Ninh" } },
 ];
 
 window.T = {
