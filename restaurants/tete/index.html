@@ -30,13 +30,14 @@
   .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
 
   /* ── 상단 ── */
-  header { position: relative; overflow: hidden; text-align: center; padding: 12px 0 22px; }
+  header { position: relative; overflow: hidden; text-align: center; padding: 12px 0 38px; }
+  header::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 22px; background: radial-gradient(circle at 14px 0, var(--band) 12px, transparent 13px) 0 6px / 28px 16px repeat-x, radial-gradient(circle at 14px 0, #fff 5px, transparent 6px) 0 12px / 28px 16px repeat-x, linear-gradient(var(--band), var(--band)) 0 0 / 100% 6px no-repeat; }
   .corner { display: none; }
   .langs { position: relative; z-index: 1; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
   .langs button { font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: rgba(255,255,255,.6); border: 1px solid #1c1917; border-radius: 999px; padding: 5px 11px; cursor: pointer; }
   .langs button[aria-pressed="true"] { color: #fff; background: var(--ink); border-color: var(--ink); }
   .logo { display: block; width: 250px; max-width: 78%; height: auto; margin: 18px auto 0; }
-  h1 { margin: 8px 0 0; font-size: 22px; font-weight: 800; letter-spacing: 4px; line-height: 1; color: var(--ink); }
+  h1 { margin: 6px 0 0; font-size: 12.5px; font-weight: 700; letter-spacing: 3px; line-height: 1; color: var(--muted); opacity: .75; }
   .en { margin: 6px 0 0; font-size: 13px; font-weight: 700; letter-spacing: 3px; color: var(--band); }
   .tagline { margin: 12px 0 0; font-size: 14.5px; font-weight: 600; color: var(--muted); }
   .chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 14px; position: relative; z-index: 1; }
@@ -51,17 +52,15 @@
 
   /* ── 메뉴 ── */
   section { padding: 30px 0 6px; }
-  .head { display: flex; align-items: center; gap: 12px; }
-  .head::before, .head::after { content: ""; flex: 1; height: 1px; background: var(--ink); }
-  h2 { margin: 0; font-size: 27px; font-weight: 900; letter-spacing: 0; text-align: center; color: var(--band); }
-  h2 small { display: block; margin-top: 3px; font-size: 14px; font-weight: 700; letter-spacing: 0; color: var(--ink); }
+  .head { display: flex; align-items: center; justify-content: center; }
+  h2 { margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 0; text-align: center; color: #fff; background: var(--band); border-radius: 16px; padding: 7px 26px 8px; box-shadow: 0 3px 0 var(--band-2); }
+  h2 small { display: block; margin-top: 3px; font-size: 13.5px; font-weight: 700; letter-spacing: 0; color: #ffe9d6; }
   .note { margin: 12px 0 0; font-size: 13.5px; color: var(--band-2); font-weight: 700; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; }
   .tip { margin: 14px 0 0; font-size: 13.5px; color: var(--ink); background: #fff; border: 1px solid var(--band); border-radius: 12px; padding: 10px 12px; }
   .tip b { color: var(--rust); margin-right: 4px; }
 
   ul { list-style: none; margin: 8px 0 0; padding: 0; }
-  li { display: flex; gap: 12px; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
-  li:last-child { border-bottom: 0; }
+  li { display: flex; gap: 12px; align-items: center; padding: 11px 12px; margin-top: 10px; background: #fff; border: 1px solid var(--line); border-radius: 14px; }
   .thumb { flex: none; width: 96px; height: 72px; border-radius: 12px; overflow: hidden; padding: 0; border: 1px solid var(--line); background: var(--paper); cursor: zoom-in; }
   .thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
   .info { flex: 1; min-width: 0; }
