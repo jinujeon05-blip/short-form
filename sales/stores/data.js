@@ -612,6 +612,12 @@ window.STORES = [
     address: "124 Nguyễn Cao, Bắc Ninh", map: "https://www.google.com/maps/place/%EB%96%BC%EB%96%BC%EB%B6%84%EC%8B%9D+-+T%C3%AA+T%C3%AA+Kimbap+%26+Tokkbokki+B%E1%BA%AFc+Ninh/@21.1752012,106.0595332,17z",
     type: { ko: "한국 분식 · 떡볶이 · 김밥 · 튀김 · 덮밥 · 면 · 순대 · 치킨", vi: "Món ăn vặt Hàn Quốc · Tokbokki · Kimbap · Đồ chiên · Cơm · Mì · Dồi · Gà chiên", en: "Korean snacks · Tteokbokki · Kimbap · Fried snacks · Rice bowls · Noodles · Sundae · Fried chicken", zh: "韩式小吃 · 辣炒年糕 · 紫菜包饭 · 炸物 · 盖饭 · 面 · 血肠 · 炸鸡", ja: "韓国軽食・トッポッキ・キンパ・揚げ物・丼・麺・スンデ・チキン" },
     keywords: "떼떼분식 떼떼 tê tê tete te te 분식 한국 분식집 떡볶이 로제떡볶이 마라떡볶이 짜장떡볶이 치즈떡볶이 닭볶음 닭볶이 김밥 참치김밥 우엉김밥 스팸김밥 꼬마김밥 키토김밥 충무김밥 김밥도시락 유부초밥 덮밥 치킨마요 비빔밥 돈가스 짜장면 쫄면 비빔국수 라면 냉면 물냉면 비빔냉면 냉모밀 메밀국수 순대 내장 튀김 모듬튀김 어묵 어묵탕 순살치킨 뿌링클 샐러드 소떡소떡 떡꼬치 박닌 bắc ninh quán ăn hàn quốc tokbokki kimbap bánh gạo cay cơm cuộn món ăn vặt hàn quốc mì lạnh dồi gà chiên 韩式小吃 辣炒年糕 紫菜包饭 冷面 韓国軽食 トッポッキ キンパ 冷麺 korean snack bar tteokbokki rose tokbokki kimbap fried chicken corn dog cold noodles"
+  },
+  { id: "suwonyang", name: "수원 양갈비 구이 SUWON", sub: "양다리 · 양갈비 · 양꼬치 · 중화요리 · 점심 세트", url: "https://suwonyang.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean", "chinese"], tags: ["photos"],
+    address: "223 Nguyễn Cao, Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/Suwon+Th%E1%BB%8Bt+N%C6%B0%E1%BB%9Bng+Than+Hoa/@21.1747797,106.0592754,17z",
+    type: { ko: "양고기 숯불구이 · 양다리 · 양갈비 · 양꼬치 · 중화요리", vi: "Cừu nướng than · Đùi cừu · Sườn cừu · Cừu xiên · Món Hoa", en: "Charcoal-grilled lamb · Lamb leg · Lamb ribs · Skewers · Chinese dishes", zh: "炭火烤羊肉 · 羊腿 · 羊排 · 羊肉串 · 中餐", ja: "羊肉の炭火焼き・羊もも肉・骨付きラム・羊串・中華料理" },
+    keywords: "수원 양갈비 구이 수원양갈비구이 수원 suwon 양고기 양갈비 양다리 양꼬치 숯불구이 슬라이스 양다리 경장육슬 꿔바로우 향라새우 향라가지 유포건두부 냉면 온면 칭다오 연태고량주 막걸리 소주 박닌 bắc ninh đùi cừu nướng thịt cừu nướng than hoa sườn cừu cừu xiên thịt nướng quán nướng hàn quốc 羊腿 羊排 羊肉串 烤羊肉 锅包肉 京酱肉丝 韩餐 羊肉 焼肉 ラム 羊串 骨付きラム korean restaurant lamb bbq lamb leg lamb ribs lamb skewers charcoal grill"
   }
 ];
 window.SI = {
