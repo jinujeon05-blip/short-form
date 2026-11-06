@@ -36,6 +36,8 @@
   /* ── 상단: 간판 사진 + 차림표의 초록 띠·빨간 글씨·색동 테두리 ── */
   header { position: relative; color: #fff; text-align: center; padding: 0 0 30px; background: var(--green); }
   .hero { position: relative; height: 230px; background: #2a3a30 url(img/hero.jpg) center 30% / cover no-repeat; }
+  /* PC 폭: 간판 사진이 잘리지 않게 */
+  @media (min-width: 600px) { .hero { max-width: 720px; height: 400px; margin: 0 auto; } }
   .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,30,20,.5) 0%, rgba(10,30,20,0) 38%, rgba(10,30,20,.25) 100%); }
   .langs { position: absolute; top: 12px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
   .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #fff; background: rgba(28,20,16,.72); border: 1px solid rgba(255,255,255,.4); border-radius: 999px; padding: 5px 11px; cursor: pointer; }

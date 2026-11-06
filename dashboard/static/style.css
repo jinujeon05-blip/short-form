@@ -205,6 +205,7 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
   .quota .src { display: none; }
   .top { padding: 10px 16px; }
   .counts span:nth-child(n+4) { display: none; }
+  .counts span.sched { display: inline-block; }  /* 예약은 폰에서도 보이게(2026-11-01) */
   .spot .tag small { display: none; }
   .cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .sc .bd { padding: 8px; }
@@ -231,3 +232,45 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
   /* 폰은 맡은 일 줄을 숨겨서 '✔ 작업 완료' 줄만큼 이름표가 높아진다 → 오른쪽 사람은 아래로 붙여 위 이름표와 안 닿게 */
   .scene.phone .spot:is(.done, .on):not([data-id="agy"]):not([data-id="codex"]) .tag { transform: translate(-50%, 0); }
 }
+
+/* 예약 실행 (2026-11-01, '가-1·가-2') */
+.when { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 4px 0 8px; }
+.when select, .when input { border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; font: inherit; font-size: 12px; background: #fff; max-width: 100%; }
+.when .argon { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer; }  /* Argon 사용 체크(2026-11-03) */
+.when small { flex-basis: 100%; font-size: 11px; line-height: 1.4; }
+.when small:empty { display: none; }
+.ord.sched { border-style: dashed; border-color: #b8c2d3; background: #fafbfd; }
+
+/* 팀 대화 (2026-11-01, '나-2'·'다-1') */
+.tabs .live { color: var(--blue); font-size: 10px; margin-left: 3px; vertical-align: 2px; }
+.talk-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+.talk-head select { border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; font: inherit; font-size: 13px; max-width: 100%; min-width: 0; }
+.talk-head small { font-size: 11px; }
+.talk { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px; max-height: 62vh; overflow-y: auto; }
+.panel .talk { max-height: 46vh; }
+.talk .empty { margin: 4px; font-size: 13px; }
+.msg { border-radius: 10px; padding: 7px 10px; margin: 6px 0; background: #f6f7fa; border-left: 3px solid #c3cad6; font-size: 13px; }
+.msg .mh { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: baseline; font-size: 12px; margin-bottom: 3px; }
+.msg .mh .to { color: var(--sub); }
+.msg .mh .kind { font-size: 11px; border-radius: 99px; padding: 0 7px; background: #e9edf3; color: var(--sub); }
+.msg .mh time { margin-left: auto; color: var(--sub); font-size: 11px; }
+.msg .mb { white-space: pre-wrap; word-break: break-word; line-height: 1.5; }
+.msg.long .mb { max-height: 7.6em; overflow: hidden; position: relative; cursor: pointer; }
+.msg.long .mb::after { content: '눌러서 더 보기'; position: absolute; right: 0; bottom: 0; padding: 0 6px 0 30px; font-size: 11px; color: var(--blue);
+  background: linear-gradient(90deg, transparent, #f6f7fa 30%); }
+.msg.long.open .mb { max-height: none; }
+.msg.long.open .mb::after { content: none; }
+.msg.k-ask { background: #f3f7ff; }
+.msg.k-report { background: #f2faf5; }
+.msg.k-meet { background: #fff7ec; border-left-color: var(--orange); }
+.msg.k-meet .mh .kind { background: #ffe2bd; color: #8a4b00; }
+.msg.k-ask .mb::after { background: linear-gradient(90deg, transparent, #f3f7ff 30%); }
+.msg.k-report .mb::after { background: linear-gradient(90deg, transparent, #f2faf5 30%); }
+.msg.k-meet .mb::after { background: linear-gradient(90deg, transparent, #fff7ec 30%); }
+.msg.w-captain { border-left-color: #2f6fec; } .msg.w-claude { border-left-color: #6a4cf0; }
+.msg.w-finder { border-left-color: var(--green); } .msg.w-agy, .msg.w-menu-reader { border-left-color: #d1443f; }
+.msg.w-reviewer, .msg.w-codex { border-left-color: #7a3fd0; } .msg.w-polisher { border-left-color: var(--blue); } .msg.w-designer { border-left-color: #c46a00; }
+.msg .mh b.who-claude { color: #6a4cf0; } .msg .mh b.who-finder { color: var(--green); } .msg .mh b.who-agy, .msg .mh b.who-menu-reader { color: #d1443f; }
+.msg .mh b.who-reviewer, .msg .mh b.who-codex { color: #7a3fd0; } .msg .mh b.who-polisher, .msg .mh b.who-captain { color: var(--blue); } .msg .mh b.who-designer { color: #c46a00; }
+.send-err { margin: 6px 0 0; font-size: 12px; line-height: 1.4; color: #c62828; font-weight: 600; }
+.send-err:empty { display: none; }

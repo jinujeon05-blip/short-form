@@ -467,67 +467,21 @@ def hr_line():
 
 
 # ---------------------------------------------------------------- ⑤ 할당량
-def latest_codex_limits():
-    base = HOME / ".codex" / "sessions"
-    if not base.is_dir():
-        return None
-    files = sorted(base.rglob("rollout-*.jsonl"), key=lambda f: f.stat().st_mtime, reverse=True)[:10]
-    for f in files:
-        try:
-            lines = f.read_text(encoding="utf-8", errors="replace").splitlines()
-        except Exception:
-            continue
-        for line in reversed(lines):
-            if '"rate_limits"' not in line:
-                continue
-            try:
-                obj = json.loads(line)
-            except Exception:
-                continue
-            rl = obj.get("payload", {}).get("rate_limits") or obj.get("rate_limits")
-            if not rl:
-                continue
-            return {"limits": rl, "at": obj.get("timestamp"), "file": str(f.relative_to(HOME))}
-    return None
-
-
-def window_name(minutes):
-    if not minutes:
-        return "한도"
-    if minutes <= 300:
-        return "5시간"
-    if minutes <= 10080:
-        return "주간"
-    return f"{round(minutes / 1440)}일"
-
-
 def build_quota():
+    # 칸 3개(2026-11-03 캡틴 지시): Claude · Gemini(Flash·Pro) · 안티그래비티(Claude·GPT·Argon). ChatGPT(Codex) 칸은 지움(코덱스는 2026-10-30부터 안 씀)
     now = time.time()
-    codex = {"name": "Codex", "status": "확인 불가", "bars": [],
-             "how": "코덱스를 한 번 쓰면 ~/.codex/sessions 기록에 사용량이 남는다."}
-    got = latest_codex_limits()
-    if got:
-        rl = got["limits"]
-        for k in ("primary", "secondary"):
-            w = rl.get(k)
-            if not w:
-                continue
-            reset = w.get("resets_at")
-            codex["bars"].append({
-                "label": window_name(w.get("window_minutes")),
-                "used": round(float(w.get("used_percent", 0)), 1),
-                "resetsAt": reset,
-                "resetIn": max(0, int(reset - now)) if reset else None,
-                "stale": bool(reset and reset < now),
-            })
-        codex.update(status="ok" if codex["bars"] else "확인 불가", plan=rl.get("plan_type"),
-                     recordedAt=got["at"], source="~/.codex/sessions 기록", note="코덱스를 쓸 때만 새로 기록됨")
-        if not codex["bars"]:
-            codex["how"] = "기록에 한도 창이 없다. 코덱스 앱 /status 로 확인한다."
+    g = gemini_quota(now)
+    flash = [b for b in g["bars"] if b["label"].startswith("Gemini") and not b.get("spare")]
+    rest = sorted([b for b in g["bars"] if b not in flash], key=lambda b: bool(b.get("spare")))  # 예비(Argon)는 맨 아래
+    gem = dict(g, name="Gemini (Flash·Pro)", bars=[dict(b, label=b["label"].replace("Gemini(Flash·Pro) ", "")) for b in flash])
+    agy = dict(g, name="안티그래비티 (Claude·GPT·Argon)", bars=rest)
+    for q in (gem, agy):
+        if g["status"] == "ok" and not q["bars"]:
+            q.update(status="확인 불가", how="안티그래비티 앱에서 이 묶음의 한도가 오지 않았다. 앱 설정의 모델 사용량 화면에서 본다.")
     return {
         "claude": claude_quota(now),
-        "codex": codex,
-        "gemini": gemini_quota(now),
+        "gemini": gem,
+        "agy": agy,
         "checkedAt": datetime.now().strftime("%H:%M:%S"),
     }
 
@@ -609,22 +563,45 @@ def gemini_quota(now):
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE  # 자기 PC 안의 자체 서명 인증서
-    data = None
-    for port in [p.strip() for p in ports.splitlines() if p.strip().isdigit()]:
-        try:
-            req = urllib.request.Request(
-                f"https://127.0.0.1:{port}/exa.language_server_pb.LanguageServerService/GetUserStatus",
-                data=json.dumps({"metadata": {"ideName": "antigravity", "extensionName": "antigravity"}}).encode(),
-                headers={"Content-Type": "application/json", "Connect-Protocol-Version": "1",
-                         "X-Codeium-Csrf-Token": tok.group(1)})
-            with urllib.request.urlopen(req, timeout=5, context=ctx) as r:
-                data = json.loads(r.read().decode("utf-8")).get("userStatus")
-            break
-        except Exception:
-            continue
+    def ask(method):
+        for port in [p.strip() for p in ports.splitlines() if p.strip().isdigit()]:
+            try:
+                req = urllib.request.Request(
+                    f"https://127.0.0.1:{port}/exa.language_server_pb.LanguageServerService/{method}",
+                    data=json.dumps({"metadata": {"ideName": "antigravity", "extensionName": "antigravity"}}).encode(),
+                    headers={"Content-Type": "application/json", "Connect-Protocol-Version": "1",
+                             "X-Codeium-Csrf-Token": tok.group(1)})
+                with urllib.request.urlopen(req, timeout=5, context=ctx) as r:
+                    return json.loads(r.read().decode("utf-8"))
+            except Exception:
+                continue
+        return None
+    data = (ask("GetUserStatus") or {}).get("userStatus")
     if not data:
         return q
-    groups = {}
+    plan = ((data.get("planStatus") or {}).get("planInfo") or {}).get("planName")
+    # 앱 설정 '모델 사용량' 화면과 같은 값(2026-11-03): 묶음마다 5시간·주간이 따로 온다.
+    # GetUserStatus 의 모델별 값은 '가장 가까운 초기화' 한 칸뿐이라 주간을 못 보고, Argon 주간을 '5시간'으로 잘못 붙였다.
+    fams = {"Gemini Models": "Gemini(Flash·Pro)", "Claude and GPT models": "Claude·GPT"}  # 카드 제목이 안티그래비티라 짧게(긴 이름은 칸에서 잘려 5시간·주간이 안 보였다)
+    wins = {"5h": "5시간", "weekly": "주간"}
+    for g in ((ask("RetrieveUserQuotaSummary") or {}).get("response") or {}).get("groups", []):
+        name = g.get("displayName") or ""
+        spare = "Argon" in name  # 예비 모델(2026-11-03 캡틴 결정 '라-1'): 카드 경고·'한도 풀리면' 계산에서 뺀다
+        for b in g.get("buckets", []):
+            if "remainingFraction" not in b:
+                continue
+            try:
+                reset = datetime.fromisoformat(b["resetTime"].replace("Z", "+00:00")).timestamp()
+            except Exception:
+                reset = None
+            q["bars"].append({"label": f"{fams.get(name, name)} {wins.get(b.get('window'), b.get('window') or '한도')}",
+                              "used": round((1 - float(b["remainingFraction"])) * 100, 1), "resetsAt": reset,
+                              "resetIn": max(0, int(reset - now)) if reset else None, "stale": False, "spare": spare})
+    if q["bars"]:
+        q.update(status="ok", plan=plan, recordedAt=datetime.now(timezone.utc).isoformat(),
+                 source="안티그래비티 앱(로컬, 설정의 모델 사용량과 같은 값)", note="앱이 켜져 있을 때 1분마다 새로 읽음")
+        return q
+    groups = {}  # 요약을 못 읽은 옛 앱일 때만: 모델별 한 칸
     for c in (data.get("cascadeModelConfigData") or {}).get("clientModelConfigs", []):
         qi, label = c.get("quotaInfo") or {}, c.get("label") or ""
         if "remainingFraction" not in qi:
@@ -641,9 +618,8 @@ def gemini_quota(now):
         left = g["reset"] - now if g["reset"] else None
         win = "5시간" if left is not None and left <= 5 * 3600 + 600 else "주간" if left is not None and left <= 7 * 86400 + 3600 else "한도"
         q["bars"].append({"label": f"{fam} {win}", "used": round(g["used"], 1), "resetsAt": g["reset"],
-                          "resetIn": max(0, int(left)) if left is not None else None, "stale": False})
+                          "resetIn": max(0, int(left)) if left is not None else None, "stale": False, "spare": "Argon" in fam})
     q["bars"].sort(key=lambda b: (not b["label"].startswith("Gemini"), b["label"]))
-    plan = ((data.get("planStatus") or {}).get("planInfo") or {}).get("planName")
     if q["bars"]:
         q.update(status="ok", plan=plan, recordedAt=datetime.now(timezone.utc).isoformat(),
                  source="안티그래비티 앱(로컬)", note="앱이 켜져 있을 때 1분마다 새로 읽음")
@@ -763,14 +739,18 @@ ORDER_RULES = """이 지시는 사용자(캡틴)가 대시보드 'Jinwoo 에이�
 - 이 실행에는 외부 연결(Vercel·드라이브 커넥터)이 없다. 배포·git push·main 머지·결제·외부 발송·삭제는 하지 않는다. 드라이브 사진은 동기화 폴더 G:\\내 드라이브\\QR메뉴판 에서 읽는다.
 - 너는 배포하지 않는다. 가게가 점검(check-standard·check-listing·shot·reviewer)을 통과하고 커밋까지 끝나 배포만 남았으면, 결재 줄 대신 맨 끝 줄을 '배포준비: <가게id>'(여러 곳이면 쉼표)로 쓴다. 캡틴이 결재함에서 [배포 확정]을 누르면 대시보드가 직접 배포한다.
 - 너는 '비서실장'(지휘)이다. 일은 CLAUDE.md 5장 순서대로 담당에게 맡긴다: 사진 고르기·모음 이미지 = finder, 메뉴판 읽기 = 안티그래비티(`agy -p`, 계획 모드) → 안 되면 menu-reader, 가격 재확인 = 운영 감찰관(안티그래비티 안 Claude Sonnet, 아래 명령) → 2번 실패하면 reviewer, 꾸미기 = designer, 번역 = polisher, 마지막 점검 = reviewer. 직접 하지 않는다.
-- 담당이 막히지 않게(2026-10-29 토정삼계탕 건): finder 의 모음 이미지는 `python tools/photos.py sheet <사진폴더> .scratch/<가게>/sheet.jpg` 한 줄로(파일 쓰기 명령 `cat >` 금지). 안티그래비티는 먼저 `python tools/photos.py shrink <사진폴더> .scratch/<가게>/menus`로 줄인 뒤 `cd .scratch/<가게>/menus && agy --mode plan -p "menu_01.jpg … menu_05.jpg …"`처럼 **한 번에 5장 이하**. 가격·빠진 메뉴 재대조(2026-10-30 사용자 결정 '다-1')는 같은 줄인 사진 폴더에서 `cd .scratch/<가게>/menus && agy --mode plan --model claude-sonnet-5-5-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … menu_05.jpg 를 열어 아래 표와 대조해줘. 가격이 다른 것·빠진 메뉴만 짧게. 못 열면 '사진 못 봄'. <표>"`(5장 이하씩). "명령 도구는 쓰지 말고 파일 보기 도구로만"을 빼면 막힌다. 코덱스·GPT-OSS는 쓰지 않는다. 화면 꾸미기(index.html 스타일)는 designer 가 하고 비서실장은 직접 고치지 않는다. 담당이 실패하면 2번까지 다시 맡기고, 그래도 안 되면 보고에 이유를 쓴다.
+- 담당이 막히지 않게(2026-10-29 토정삼계탕 건): finder 의 모음 이미지는 `python tools/photos.py sheet <사진폴더> .scratch/<가게>/sheet.jpg` 한 줄로(파일 쓰기 명령 `cat >` 금지). 안티그래비티는 먼저 `python tools/photos.py shrink <사진폴더> .scratch/<가게>/menus`로 줄인 뒤 `cd .scratch/<가게>/menus && agy --mode plan -p "menu_01.jpg … menu_05.jpg …"`처럼 **한 번에 5장 이하**. 가격·빠진 메뉴 재대조(2026-10-30 사용자 결정 '다-1')는 같은 줄인 사진 폴더에서 `cd .scratch/<가게>/menus && agy --mode plan --model claude-sonnet-5-5-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … menu_05.jpg 를 열어 아래 표와 대조해줘. 가격이 다른 것·빠진 메뉴만 짧게. 못 열면 '사진 못 봄'. <표>"`(5장 이하씩). "명령 도구는 쓰지 말고 파일 보기 도구로만"을 빼면 막힌다. 코덱스·GPT-OSS는 쓰지 않는다. 제미나이 4 Argon(2026-11-03 캡틴 결정 '가-1'): **정식(계약) 가게**의 메뉴판 읽기는 항상 Argon으로 한다 — `agy --mode plan --model gemini-4-argon-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … 를 열어 …"`(5장 이하씩). 가게 찾기용은 캡틴이 [Argon 사용]을 체크했을 때(아래 'Argon 사용' 줄이 있을 때)나 지시문에 'Argon'이라고 썼을 때만 쓰고, 그 밖에는 기본 제미나이·Claude 한도가 다 찼을 때만 예비로 쓴다. Argon이 2번 실패하면 기본 agy → menu-reader 순서로 넘긴다. 가격 재대조(운영 감찰관)는 그대로 Claude Sonnet. 화면 꾸미기(index.html 스타일)는 designer 가 하고 비서실장은 직접 고치지 않는다. 담당이 실패하면 2번까지 다시 맡기고, 그래도 안 되면 보고에 이유를 쓴다.
 - 비서실장이 이미지를 직접 보는 것은 메뉴판·모음 이미지·최종 화면, 모두 3~4번까지다.
 - 마지막 보고 끝에 '담당별 사용' 표(담당 | 한 일 | 토큰)와 이미지 직접 본 횟수를 붙인다. 빠진 담당이 있으면 이유를 쓴다.
 - 고친 파일은 지금 브랜치에 커밋한다(push 안 함). seo·analytics 도구가 내 가게 밖(다른 가게 sitemap 날짜 등)을 바꿨으면 커밋하지 말고 `git restore -- <그 파일들>`로 되돌려 작업 폴더를 깨끗하게 둔다.
 - 가게를 만들거나 고쳤으면 끝에 `node tools/shot.mjs <가게id> ko dashboard/out`으로 폰 화면 캡처를 만들고(맨 위 로고·간판 사진이 보이는지 직접 확인), 보고에 '캡처: <가게id>-ko.png' 줄을 쓴다. 캡틴은 결재함에서 이 캡처를 본다. 백그라운드 실행·sleep 대기는 쓰지 않는다(창 없는 실행이라 마지막 보고가 덮인다).
 - 인력 현황(인력공급·선별) 질문은 dashboard/out/hr.json(대시보드 /api/hr 요약, 숫자만)을 읽어 보고한다. 인력 앱(jinwoo-hr)·Supabase에 직접 접속하거나 그 데이터를 고치지 않는다. 파일이 없으면 '인력 앱 연결 필요'라고 쓴다.
+- 말하는 방식(2026-11-01): 캡틴이 대시보드 '팀 대화'에서 비서실장·담당이 주고받는 말을 실시간으로 읽는다. 도구 사이에 하는 말, 담당에게 주는 지시, 담당 보고는 모두 한국어로 쉽게 쓴다. 담당에게 맡기기 전에 '누구에게 무엇을 왜' 한 줄을 먼저 말한다. 담당 지시문 끝에는 '중간 말과 보고는 한국어로', agy 지시문에는 '답은 한국어로'를 붙인다.
+- 회의(2026-11-01 캡틴 결정 '나-2', 필요할 때만): 담당끼리 의견이 다르거나(감사관 지적 ↔ designer 의도, 메뉴 검사관 표 ↔ 운영 감찰관 대조가 다름, 사진이 어느 메뉴인지 애매 등) 비서실장 혼자 정하기 어려울 때만 연다. 관련 담당에게 Agent 설명(description)을 '회의: <주제>'로 시작해 의견을 3줄 이내로 받고, 한쪽 의견을 다른 쪽에 보여 주고 한 번만 답을 받은 뒤 비서실장이 정한다. 회의는 지시 하나에 2번까지. 문제가 없으면 회의하지 않는다(사용량 아끼기). 회의를 했으면 보고에 '회의: <주제> → <결론>' 한 줄.
 - 마지막 답: 결론부터 3줄(쉬운 말). 이 대화에서 이어 할 결정이 있을 때만 맨 끝 줄을 '결재: <무엇을 확정할지 한 줄>'로 쓴다. 결재할 것이 없으면 결재 줄을 쓰지 않는다."""
 ORDER_RULES = ORDER_RULES.replace("CODEX_PATH", CODEX_POSIX)
+# 지시창 [Argon 사용] 체크(2026-11-03 '가-1'): 이 지시의 메뉴판 읽기를 가게 종류와 상관없이 Argon으로
+ARGON_RULE = "\n- Argon 사용: 캡틴이 이 지시에 [Argon 사용]을 체크했다. 가게 종류와 상관없이 메뉴판 읽기는 `--model gemini-4-argon-medium`으로 한다(실패 시 위 순서대로 넘김). 보고의 담당별 사용 표에 'Argon'을 쓴다."
 ORDER_ALLOW = ["Read", "Edit", "Write", "Glob", "Grep", "Agent", "TodoWrite",
                "Bash(node:*)", "Bash(python:*)", "Bash(python3:*)", "Bash(sh tools/*)", "Bash(bash _shared/*)",
                "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git show:*)", "Bash(git add:*)", "Bash(git commit:*)", "Bash(git restore:*)",
@@ -814,7 +794,7 @@ def load_orders():
 
 def step_text(block):
     """도구 사용 한 번을 한 줄로 (진행 상황 표시용)."""
-    name, inp = block.get("name", ""), block.get("input") or {}
+    name, inp = block.get("name", ""), (block.get("input") if isinstance(block.get("input"), dict) else {})
     what = inp.get("description") or inp.get("file_path") or inp.get("pattern") or inp.get("command") or inp.get("prompt") or ""
     what = str(what).replace(str(ROOT), "").replace("\\", "/").strip()
     return f"{name} · {what[:90]}" if what else name
@@ -825,7 +805,7 @@ DESK_OF = {"finder": "finder", "menu-reader": "menu-reader", "reviewer": "review
 
 
 def desk_of(block):
-    name, inp = block.get("name"), block.get("input") or {}
+    name, inp = block.get("name"), (block.get("input") if isinstance(block.get("input"), dict) else {})
     if name in ("Agent", "Task"):
         return DESK_OF.get(inp.get("subagent_type") or "", None)
     if name == "Bash":
@@ -838,6 +818,198 @@ def desk_of(block):
     return None
 
 
+# ---------------------------------------------------------------- 팀 대화 (2026-11-01, 캡틴 결정 '나-2'·'다-1')
+# 실행 기록(stream-json)에서 '누가 누구에게 무엇을' 말했는지만 뽑는다: 비서실장 → 담당 지시(Agent prompt·agy -p),
+# 담당이 일하며 한 말, 담당 보고(tool_result), 비서실장 말. 추가 토큰 없이 이미 받는 기록만 쓴다.
+# 화면 '팀 대화' 탭·결재함 옆 창에 실시간으로 보이고, 지시마다 orders/<id>-대화.md 로 남는다(git 제외).
+TALK_MAX = 600
+TALK_NAME = {"captain": "캡틴", "claude": "비서실장", "finder": "시각 정보 비서", "agy": "메뉴 검사관", "menu-reader": "자료 해석 비서",
+             "codex": "운영 감찰관", "reviewer": "데이터 감사관", "polisher": "수석 번역관", "designer": "designer"}
+TALK_KIND = {"ask": "지시", "say": "말", "report": "보고", "meet": "회의"}
+
+
+def ev_blocks(ev):
+    """실행 기록 한 줄의 message.content 블록(dict)만. message 가 글자로 오는 줄(permission_denied 등)도 있어서
+    .get 을 바로 부르면 실행 전체가 죽었다(2026-11-04 태백산 'str' object has no attribute 'get' 건)."""
+    msg = ev.get("message") if isinstance(ev, dict) else None
+    content = msg.get("content") if isinstance(msg, dict) else None
+    return [b for b in content if isinstance(b, dict)] if isinstance(content, list) else []
+
+
+def text_of(content):
+    if isinstance(content, str):
+        return content
+    return "\n".join(str(b.get("text") or "") for b in content or [] if isinstance(b, dict) and b.get("type") == "text")
+
+
+def talk_clean(text):
+    # 담당 보고 끝에 붙는 실행 정보(agentId·<usage>)는 대화가 아니라서 뺀다
+    return re.sub(r"<usage>.*?</usage>|^agentId:.*$", "", str(text or ""), flags=re.S | re.M).strip()[:3000]
+
+
+def agy_prompt(cmd):
+    m = re.search(r'\s-p\s+"(.*)"', cmd, re.S) or re.search(r"\s-p\s+'(.*)'", cmd, re.S)
+    return m.group(1) if m else cmd
+
+
+class Talk:
+    """실행 기록 한 줄(ev)씩 받아 o['talk']에 대화를 쌓는다. at 을 주면(옛 기록 되살리기) 그 시각을 쓴다."""
+
+    def __init__(self, o, at=None):
+        self.o, self.at, self.by, self.meet, self.agents = o, at, {}, set(), set()  # by: 도구 호출 id → 그 일을 받은 담당
+        o.setdefault("talk", [])
+
+    def add(self, who, to, kind, text):
+        text = talk_clean(text)
+        if not text:
+            return
+        t = self.o["talk"]
+        t.append({"i": t[-1]["i"] + 1 if t else 0, "who": who, "to": to, "kind": kind, "text": text, "at": self.at or time.time()})
+        del t[:-TALK_MAX]
+
+    def report(self, tid, text):
+        """담당 일이 끝남: 마지막 말과 같으면 그 말을 '보고'로 바꾸고, 다르면(또는 처음이면) 보고를 새로 남긴다."""
+        who, kind = self.by.pop(tid), "meet" if tid in self.meet else "report"
+        last = next((t for t in reversed(self.o["talk"][-30:]) if t["who"] == who), None)
+        if last and last["kind"] == "say" and (text is None or last["text"] == talk_clean(text)):
+            last.update(kind=kind, to="claude")
+        else:
+            self.add(who, "claude", kind, text or "일을 마쳤습니다(보고 글은 실행 기록에 남지 않음).")
+
+    def feed(self, ev):
+        if not isinstance(ev, dict):
+            return
+        ptid = ev.get("parent_tool_use_id")
+        blocks = ev_blocks(ev)
+        if ev.get("type") == "system" and ev.get("subtype") == "permission_denied":
+            # 금지 목록·자동 판단에 걸려 거절된 명령: 실패가 아니라 '막힘'으로 한 줄 남긴다(비서실장은 다른 방법으로 계속한다)
+            who = self.by.get(ev.get("tool_use_id")) or "claude"
+            msg = ev.get("message") if isinstance(ev.get("message"), str) else ""
+            self.add(who, None, "say", f"⛔ 막힘: {ev.get('tool_name') or '도구'} 명령이 거절됐습니다. {msg[:200]}")
+        elif ev.get("type") == "assistant":
+            speaker = self.by.get(ptid) if ptid else "claude"
+            for b in blocks:
+                if b.get("type") == "text" and speaker:
+                    self.add(speaker, None, "say", b.get("text"))
+                elif b.get("type") == "tool_use" and not ptid:
+                    name, inp = b.get("name"), (b.get("input") if isinstance(b.get("input"), dict) else {})
+                    if name in ("Agent", "Task"):
+                        d = DESK_OF.get(inp.get("subagent_type") or "") or inp.get("subagent_type") or "agent"
+                        meet = str(inp.get("description") or "").startswith("회의")
+                        self.by[b.get("id")] = d
+                        self.agents.add(b.get("id"))
+                        if meet:
+                            self.meet.add(b.get("id"))
+                        self.add("claude", d, "meet" if meet else "ask", inp.get("prompt"))
+                    elif name == "Bash" and desk_of(b) in ("agy", "codex"):
+                        d = desk_of(b)
+                        self.by[b.get("id")] = d
+                        self.add("claude", d, "ask", agy_prompt(str(inp.get("command") or "")))
+        elif ev.get("type") == "user" and not ptid:
+            for b in blocks:
+                tid = b.get("tool_use_id")
+                if b.get("type") == "tool_result" and tid in self.by:
+                    text = text_of(b.get("content"))
+                    if text.startswith("Async agent launched"):
+                        continue  # 백그라운드 담당: 일하며 하는 말이 계속 오고, 끝나면 task_notification 이 온다
+                    self.report(tid, text)
+        elif ev.get("type") == "system" and ev.get("subtype") == "task_notification" and ev.get("tool_use_id") in self.by:
+            # 백그라운드 담당 끝: 보고 글은 handback_report.text 에 온다. 백그라운드 명령(agy)은 뒤에 오는 tool_result 를 기다린다
+            hb, tid = ev.get("handback_report"), ev["tool_use_id"]
+            text = hb.get("text") if isinstance(hb, dict) else None
+            if text or tid in self.agents:
+                self.report(tid, text)
+        elif ev.get("type") == "result" and ev.get("result"):
+            r = talk_clean(ev["result"])
+            for t in reversed(self.o["talk"][-5:]):
+                if t["who"] == "claude" and t["kind"] == "say" and t["text"] == r:
+                    t.update(kind="report", to="captain")  # 비서실장의 마지막 말 = 캡틴에게 하는 보고
+                    break
+            else:
+                self.add("claude", "captain", "report", r)
+
+
+def talk_backfill(o):
+    """대화 기록 기능 전(2026-11-01 전) 지시: orders/<id>.jsonl 을 다시 읽어 대화를 만든다. 시각은 캡틴이 보낸 시각(대략)."""
+    log = ORDERS_DIR / f"{o['id']}.jsonl"
+    o["talk"] = []
+    if not log.is_file():
+        return
+    mine = [t for t in o.get("turns") or [] if t.get("by") == "me"]
+    tk, k = Talk(o, at=o.get("createdAt")), -1
+    with open(log, encoding="utf-8", errors="replace") as f:
+        for line in f:
+            try:
+                ev = json.loads(line)
+            except Exception:
+                continue
+            if not isinstance(ev, dict):
+                continue
+            if ev.get("type") == "system" and ev.get("subtype") == "init":
+                k += 1  # 실행 한 번(처음 지시·답하기·확정)마다 init 이 하나
+                if k < len(mine):
+                    tk.at = mine[k]["at"]
+                    tk.add("captain", "claude", "ask", mine[k]["text"])
+            try:
+                tk.feed(ev)
+            except Exception:
+                pass  # 한 줄이 이상해도 나머지 대화는 되살린다(2026-11-04)
+    o["talkFrom"] = "log"
+
+
+def write_talk_md(o):
+    """다-1: 지시마다 읽기 쉬운 대화 기록 파일 (dashboard/orders/<id>-대화.md, git 제외)."""
+    st = lambda t: datetime.fromtimestamp(t).strftime("%m-%d %H:%M:%S")
+    lines = [f"# {o['title']} — 팀 대화 기록", "",
+             f"- 지시 {o['id']} · {datetime.fromtimestamp(o['createdAt']).strftime('%Y-%m-%d %H:%M')} · {'폰' if o.get('via') == 'phone' else 'PC'}에서 지시"
+             + (" · 시각은 대략(옛 기록에서 되살림)" if o.get("talkFrom") == "log" else ""), ""]
+    for t in o.get("talk") or []:
+        to = f" → {TALK_NAME.get(t['to'], t['to'])}" if t.get("to") else ""
+        lines += [f"## {st(t['at'])} {TALK_NAME.get(t['who'], t['who'])}{to} ({TALK_KIND.get(t['kind'], t['kind'])})", "", t["text"], ""]
+    try:
+        ORDERS_DIR.mkdir(exist_ok=True)
+        (ORDERS_DIR / f"{o['id']}-대화.md").write_text("\n".join(lines), encoding="utf-8")
+    except Exception as e:
+        print("대화 기록 저장 실패:", e)
+
+
+def talk_view(oid, frm):
+    with ORDER_LOCK:
+        o = ORDERS.get(oid)
+        if not o:
+            return {"items": []}
+        if "talk" not in o and o.get("status") not in ("running", "stopping", "scheduled"):
+            talk_backfill(o)
+            save_order(o)
+            write_talk_md(o)
+        return {"items": [dict(t) for t in o.get("talk") or [] if t["i"] >= frm], "approx": o.get("talkFrom") == "log",
+                "file": f"dashboard/orders/{o['id']}-대화.md" if o.get("talk") else None}
+
+
+def show_event(o, ev, owners, talk):
+    """실행 기록 한 줄 → 진행 단계(o['steps'])·일하는 담당·팀 대화. ORDER_LOCK 안에서 부른다."""
+    if ev.get("session_id"):
+        o["sessionId"] = ev["session_id"]
+    parent = owners.get(ev.get("parent_tool_use_id"))
+    if ev.get("type") == "assistant":
+        for b in ev_blocks(ev):
+            if b.get("type") == "tool_use":
+                who = desk_of(b) if not parent else None
+                if who:
+                    owners[b.get("id")] = who
+                o["steps"] = (o.get("steps") or [])[-29:] + [{"text": step_text(b), "who": who or parent or "claude", "at": time.time()}]
+            elif b.get("type") == "text" and str(b.get("text") or "").strip():
+                o["last"] = str(b["text"]).strip()[-400:]
+    elif ev.get("type") == "user" and not parent:
+        for b in ev_blocks(ev):
+            if b.get("type") == "tool_result":
+                owners.pop(b.get("tool_use_id"), None)
+    talk.feed(ev)
+    o["active"] = sorted(set(owners.values()))
+    # 이 지시에서 일한 자리(끝나면 녹색 '작업 완료'로 남는다, 2026-10-30)
+    o["worked"] = sorted(set(o.get("worked") or ["claude"]) | set(owners.values()))
+
+
 def run_order(o, prompt):
     try:
         cached("hr", 120, build_hr)  # 비서실장이 읽을 out/hr.json 을 새로 만든다
@@ -845,7 +1017,7 @@ def run_order(o, prompt):
         pass
     exe = claude_exe()
     args = [exe, "-p", "--output-format", "stream-json", "--verbose", "--permission-mode", "auto",
-            "--strict-mcp-config", "--append-system-prompt", ORDER_RULES,
+            "--strict-mcp-config", "--append-system-prompt", ORDER_RULES + (ARGON_RULE if o.get("argon") else ""),
             "--add-dir", r"G:\내 드라이브\QR메뉴판",
             "--allowedTools", *ORDER_ALLOW, "--disallowedTools", *ORDER_DENY]
     if o.get("sessionId"):
@@ -856,9 +1028,14 @@ def run_order(o, prompt):
     env.update(PYTHONUTF8="1", PYTHONIOENCODING="utf-8")  # 한글 경로·출력에서 python 도구가 죽지 않게
     env["PATH"] = os.pathsep.join([d for d in extra if Path(d).is_dir()] + [env.get("PATH", "")])
     log = ORDERS_DIR / f"{o['id']}.jsonl"
-    result, err = None, None
+    result, err, used = None, None, 0
     owners = {}  # 도구 호출 id → 그 일을 하는 담당 (담당 안에서 부른 도구도 그 담당 몫)
     o["active"] = []
+    with ORDER_LOCK:
+        if "talk" not in o and o.get("sessionId"):
+            talk_backfill(o)  # 기능 전 지시를 '답하기'로 이어 가면 앞 대화부터 채운다
+        talk = Talk(o)
+        talk.add("captain", "claude", "ask", prompt)
     try:
         p = subprocess.Popen(args, cwd=str(ROOT), stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                              env=env, creationflags=NO_WINDOW)
@@ -874,29 +1051,20 @@ def run_order(o, prompt):
                     ev = json.loads(raw)
                 except Exception:
                     continue
+                if not isinstance(ev, dict):
+                    continue
                 with ORDER_LOCK:
-                    if ev.get("session_id"):
-                        o["sessionId"] = ev["session_id"]
-                    parent = owners.get(ev.get("parent_tool_use_id"))
-                    if ev.get("type") == "assistant":
-                        for b in (ev.get("message") or {}).get("content") or []:
-                            if b.get("type") == "tool_use":
-                                who = desk_of(b) if not parent else None
-                                if who:
-                                    owners[b.get("id")] = who
-                                o["steps"] = (o.get("steps") or [])[-29:] + [{"text": step_text(b), "who": who or parent or "claude", "at": time.time()}]
-                            elif b.get("type") == "text" and b.get("text", "").strip():
-                                o["last"] = b["text"].strip()[-400:]
-                    elif ev.get("type") == "user" and not parent:
-                        content = (ev.get("message") or {}).get("content")
-                        for b in content if isinstance(content, list) else []:
-                            if b.get("type") == "tool_result":
-                                owners.pop(b.get("tool_use_id"), None)
-                    elif ev.get("type") == "result":
+                    if ev.get("type") == "result":
                         result = ev
-                    o["active"] = sorted(set(owners.values()))
-                    # 이 지시에서 일한 자리(끝나면 녹색 '작업 완료'로 남는다, 2026-10-30)
-                    o["worked"] = sorted(set(o.get("worked") or ["claude"]) | set(owners.values()))
+                        # 담당이 백그라운드로 일하면 한 실행에 result 가 여러 번 온다 → 모두 더한다(마지막 것만 세면 0으로 나왔다, 2026-11-01)
+                        u = ev.get("usage") if isinstance(ev.get("usage"), dict) else {}
+                        used += sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
+                    # 화면 표시(진행 단계·팀 대화)는 한 줄 해석이 틀려도 그 줄만 건너뛴다.
+                    # 여기서 죽으면 비서실장은 아직 일하는데 지시가 '실패'가 됐다(2026-11-04 태백산 'str' object has no attribute 'get' 건)
+                    try:
+                        show_event(o, ev, owners, talk)
+                    except Exception as e:
+                        print("실행 기록 한 줄 건너뜀:", o["id"], ev.get("type"), ev.get("subtype"), repr(e)[:200])
         p.wait()
         killer.cancel()
     except Exception as e:
@@ -926,12 +1094,14 @@ def run_order(o, prompt):
         o["deploy"] = [x for x in re.findall(r"[a-z0-9]+", d.group(1)) if (ROOT / "restaurants" / x / "index.html").exists()] if (d and o["status"] == "done") else None
         o["deployState"] = None
         if result:
-            u = result.get("usage") or {}
-            o["tokens"] = (o.get("tokens") or 0) + sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
+            o["tokens"] = (o.get("tokens") or 0) + used
             o["tokensVersion"] = 2  # 2026-10-28부터 다시 읽은 것(cache read)까지 센다. 그 전 기록은 적게 나옴
         o["turns"].append({"by": "claude", "text": text, "at": time.time()})
+        if o["status"] != "done" and (not o["talk"] or o["talk"][-1]["text"] != talk_clean(text)):
+            talk.add("claude", "captain", "report", text)  # 실패·멈춤 이유도 대화에 남긴다
         o["endedAt"] = time.time()
         save_order(o)
+        write_talk_md(o)
     _cache.pop("recent", None)
     _cache.pop("stores", None)
 
@@ -947,31 +1117,108 @@ def order_blocked():
     return None
 
 
-def start_order(text, via):
+# ---------------------------------------------------------------- 예약 실행 (2026-11-01, 캡틴 결정 '가-1·가-2')
+# 캡틴이 지시창에서 직접 고른 예약만 돈다(AI가 스스로 예약을 만들지 않음). '한도 풀리면' = 90% 넘은 한도가 초기화되는 때,
+# 없으면 Claude 5시간 초기화 때(+1분). 대시보드 서버가 켜져 있어야 시작한다(꺼져 있던 동안 지난 예약은 켜질 때 시작).
+def next_reset():
+    q, now = cached("quota", 60, build_quota), time.time()
+    bars = [("Claude " + b["label"], b) for b in q["claude"]["bars"]] + [(b["label"] if b["label"].startswith("Gemini") else "Gemini(Flash·Pro) " + b["label"], b) for b in q["gemini"]["bars"] if not b.get("spare")]
+    hot = [(n, b["resetsAt"]) for n, b in bars if b["used"] >= 90 and b.get("resetsAt") and b["resetsAt"] > now]
+    if not hot:
+        hot = [("Claude 5시간", b["resetsAt"]) for b in q["claude"]["bars"] if b["label"] == "5시간" and b.get("resetsAt") and b["resetsAt"] > now]
+    if not hot and any(b["label"] == "5시간" for b in q["claude"]["bars"]):
+        return None, ("마지막 기록으로는 Claude 5시간 한도가 이미 초기화됐어요(그 뒤 Claude 앱에서 쓴 양은 대시보드가 몰라요). "
+                      "지금 보내거나 '시각 정해서 실행'을 써 주세요.")
+    if not hot:
+        return None, "Claude 한도 초기화 시각을 몰라요(기록 없음). '시각 정해서 실행'으로 골라 주세요."
+    name, at = max(hot, key=lambda x: x[1])
+    return at + 60, f"{name} 초기화 뒤"
+
+
+def when_to_run(when):
+    """(시작 시각, 이유) 또는 (None, 오류). when = 'reset' 또는 초 단위 시각."""
+    if when == "reset":
+        return next_reset()
+    try:
+        at = float(when)
+    except (TypeError, ValueError):
+        return None, "예약 시각이 이상해요"
+    if at < time.time() + 60:
+        return None, "지금보다 1분 이상 뒤 시각을 골라 주세요"
+    if at > time.time() + 8 * 86400:
+        return None, "예약은 8일 안쪽만 돼요"
+    return at, "캡틴이 정한 시각"
+
+
+def schedule(o, text, when):
+    at, why = when_to_run(when)
+    if at is None:
+        return why
+    o.update(status="scheduled", runAt=at, runWhy=why, pending=text, waitWhy=None)
+    return None
+
+
+def scheduler():
+    """20초마다: 시각이 된 예약을 하나씩 시작한다. 앞 지시가 실행 중이거나 한도가 막혀 있으면 기다린다."""
+    while True:
+        time.sleep(20)
+        try:
+            due = None
+            with ORDER_LOCK:
+                now = time.time()
+                ready = sorted((o for o in ORDERS.values() if o["status"] == "scheduled" and o.get("runAt", 0) <= now), key=lambda o: o["runAt"])
+                if ready:
+                    err = order_blocked()
+                    if err:
+                        for o in ready:
+                            o["waitWhy"] = err
+                    else:
+                        due = ready[0]
+                        late = now - due["runAt"]
+                        if late > 600:
+                            due["turns"].append({"by": "system", "text": f"예약 시각보다 {int(late // 60)}분 늦게 시작했어요(대시보드가 꺼져 있었거나 앞 지시가 실행 중이었음).", "at": now})
+                        text = due.pop("pending", None) or due["turns"][0]["text"]
+                        due.update(status="running", waitWhy=None, startedAt=now, steps=[], last=None)
+                        save_order(due)
+            if due:
+                threading.Thread(target=run_order, args=(due, text), daemon=True).start()
+        except Exception as e:
+            print("예약 확인 오류:", e)
+
+
+def start_order(text, via, when=None, argon=False):
     text = text.strip()[:2000]
     if not text:
         return None, "지시를 적어 주세요"
     with ORDER_LOCK:
-        err = order_blocked()
+        err = order_blocked() if not when else (None if claude_exe() else "Claude Code 실행 파일을 찾지 못함")
         if err:
             return None, err
-        oid = datetime.now().strftime("%m%d-%H%M%S")
+        oid, n = datetime.now().strftime("%m%d-%H%M%S"), 1
+        while oid in ORDERS:  # 같은 초에 두 번 보내면 번호가 겹쳐 앞 지시가 덮였다(2026-11-01)
+            n += 1
+            oid = datetime.now().strftime("%m%d-%H%M%S") + f"-{n}"
         o = {"id": oid, "title": text.splitlines()[0][:60], "status": "running", "via": via, "createdAt": time.time(),
-             "turns": [{"by": "me", "text": text, "at": time.time()}], "steps": []}
+             "turns": [{"by": "me", "text": text, "at": time.time()}], "steps": [], "argon": bool(argon)}
+        if when:
+            err = schedule(o, text, when)
+            if err:
+                return None, err
         ORDERS[oid] = o
         save_order(o)
-    threading.Thread(target=run_order, args=(o, text), daemon=True).start()
+    if not when:
+        threading.Thread(target=run_order, args=(o, text), daemon=True).start()
     return o, None
 
 
-def reply_order(oid, text, approve):
+def reply_order(oid, text, approve, when=None):
     with ORDER_LOCK:
         o = ORDERS.get(oid)
         if not o:
             return None, "없는 지시"
-        if o["status"] in ("running", "stopping"):
-            return None, "아직 실행 중이에요"
-        err = order_blocked()
+        if o["status"] in ("running", "stopping", "scheduled"):
+            return None, "아직 실행 중이거나 예약된 지시예요"
+        err = order_blocked() if not when else None
         if err:
             return None, err
         text = text.strip()[:2000]
@@ -985,10 +1232,17 @@ def reply_order(oid, text, approve):
             text = f"확정했어({o.get('approval') or '보고한 내용'}). 다음 단계 진행해." + (f" {text}" if text else "")
         elif not text:
             return None, "답(또는 고칠 점)을 적어 주세요"
-        o.update(status="running", decision="approved" if approve else "replied", approval=None, steps=[], last=None)
+        if when:
+            err = schedule(o, text, when)
+            if err:
+                return None, err
+        else:
+            o["status"] = "running"
+        o.update(decision="approved" if approve else "replied", approval=None, steps=[], last=None)
         o["turns"].append({"by": "me", "text": text, "at": time.time(), "approve": approve})
         save_order(o)
-    threading.Thread(target=run_order, args=(o, text), daemon=True).start()
+    if not when:
+        threading.Thread(target=run_order, args=(o, text), daemon=True).start()
     return o, None
 
 
@@ -1007,6 +1261,11 @@ def seen_order(oid):
 def stop_order(oid):
     with ORDER_LOCK:
         o, p = ORDERS.get(oid), PROCS.get(oid)
+        if o and o["status"] == "scheduled":  # 예약 취소
+            o.update(status="stopped", pending=None, waitWhy=None)
+            o["turns"].append({"by": "system", "text": "캡틴이 예약을 취소했어요.", "at": time.time()})
+            save_order(o)
+            return None
         if not o or not p:
             return "실행 중이 아님"
         o["status"] = "stopping"
@@ -1035,7 +1294,9 @@ def open_order_terminal(oid):
 def orders_view():
     with ORDER_LOCK:
         rows = sorted(ORDERS.values(), key=lambda o: -o["createdAt"])[:40]
-        return [json.loads(json.dumps({k: v for k, v in o.items() if not k.startswith("_")})) for o in rows]
+        # 대화(talk)는 길어서 빼고 마지막 번호만 보낸다 → 화면이 /api/talk 로 새것만 받아 간다
+        return [json.loads(json.dumps({**{k: v for k, v in o.items() if not k.startswith("_") and k not in ("talk", "pending")},
+                                       "talkLast": o["talk"][-1]["i"] if o.get("talk") else None})) for o in rows]
 
 
 # ---------------------------------------------------------------- 배포 확정 → Vercel (2026-10-28, 사용자 결정 '다-1')
@@ -1053,19 +1314,35 @@ def vercel_token():
     return user_env("VERCEL_TOKEN") or ""
 
 
-def vapi(method, path, body=None):
+def vapi(method, path, body=None, tries=3):
+    """Vercel API 호출. 인터넷이 잠깐 끊기면(WinError 10060 등) 몇 초 쉬고 tries 번까지 다시 묻는다
+    (2026-11-04 바보랑 건: 한 번 끊김에 배포는 됐는데 '배포 멈춤'이 뜸). 그래도 안 되면 OSError 를 그대로 올린다."""
     sep = "&" if "?" in path else "?"
-    req = urllib.request.Request(f"https://api.vercel.com{path}{sep}teamId={VERCEL_TEAM}", method=method,
-                                 data=json.dumps(body).encode() if body is not None else None,
-                                 headers={"Authorization": "Bearer " + vercel_token(), "Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(req, timeout=60) as r:
-            return r.status, json.loads(r.read().decode("utf-8") or "{}")
-    except urllib.error.HTTPError as e:
+    for i in range(tries):
+        req = urllib.request.Request(f"https://api.vercel.com{path}{sep}teamId={VERCEL_TEAM}", method=method,
+                                     data=json.dumps(body).encode() if body is not None else None,
+                                     headers={"Authorization": "Bearer " + vercel_token(), "Content-Type": "application/json"})
         try:
-            return e.code, json.loads(e.read().decode("utf-8") or "{}")
-        except Exception:
-            return e.code, {}
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return r.status, json.loads(r.read().decode("utf-8") or "{}")
+        except urllib.error.HTTPError as e:
+            try:
+                return e.code, json.loads(e.read().decode("utf-8") or "{}")
+            except Exception:
+                return e.code, {}
+        except OSError:  # URLError·시간 초과·연결 끊김(HTTP 응답이 아예 없음)
+            if i == tries - 1:
+                raise
+            time.sleep(5 * (i + 1))
+
+
+def find_deploy(project, sha, since_ms):
+    """배포 요청 중에 연결이 끊겼을 때: 그 요청이 실제로 Vercel 에 닿아 배포가 생겼는지 찾는다(중복 배포·비용 방지)."""
+    code, lst = vapi("GET", f"/v6/deployments?projectId={project}&target=production&limit=5&since={since_ms}")
+    for d in lst.get("deployments") or []:
+        if (d.get("meta") or {}).get("githubCommitSha") == sha:
+            return d.get("uid") or d.get("id")
+    return None
 
 
 def deploy_one(project, root, branch, sha, new_ok, log):
@@ -1088,13 +1365,36 @@ def deploy_one(project, root, branch, sha, new_ok, log):
         body["projectSettings"] = {"rootDirectory": root, "framework": None, "buildCommand": None,
                                    "outputDirectory": None, "installCommand": None, "devCommand": None}
     log(f"{project}: 배포 시작" + (" (새 프로젝트)" if is_new else ""))
-    code, d = vapi("POST", "/v13/deployments", body)
-    if code >= 300:
-        raise RuntimeError(f"{project} 배포 요청 실패: {(d.get('error') or {}).get('message', code)}")
-    did = d["id"]
-    for _ in range(120):  # 최대 10분
+    did = None
+    since = int(time.time() * 1000) - 60000
+    for attempt in range(2):  # 배포 요청은 자동 반복하지 않는다 — 끊기면 먼저 실제로 생겼는지 보고, 없을 때만 한 번 더
+        try:
+            code, d = vapi("POST", "/v13/deployments", body, tries=1)
+        except OSError as e:
+            time.sleep(10)
+            did = find_deploy(project, sha, since)
+            if did:
+                log(f"{project}: 연결이 잠깐 끊겼지만 배포는 시작돼 있음")
+                break
+            if attempt == 1:
+                raise RuntimeError(f"{project} 배포 요청 중 연결 끊김(두 번): {e}")
+            log(f"{project}: 연결이 끊겨 배포 요청을 한 번 더 보냄")
+            continue
+        if code >= 300:
+            raise RuntimeError(f"{project} 배포 요청 실패: {(d.get('error') or {}).get('message', code)}")
+        did = d["id"]
+        break
+    st, fails = None, 0
+    for _ in range(120):  # 최대 10분. 확인 중 끊김은 6번(약 3분) 연속일 때만 멈춘다
         time.sleep(5)
-        code, d = vapi("GET", f"/v13/deployments/{did}")
+        try:
+            code, d = vapi("GET", f"/v13/deployments/{did}")
+        except OSError as e:
+            fails += 1
+            if fails >= 6:
+                raise RuntimeError(f"{project} 배포 확인 중 인터넷 연결이 계속 끊김: {e} (Vercel 화면에서 결과 확인)")
+            continue
+        fails = 0
         st = d.get("readyState") or d.get("status")
         if st in ("READY", "ERROR", "CANCELED"):
             break
@@ -1224,7 +1524,9 @@ def build_brief():
     ov = orders_view()
     wait = [o for o in ov if o["status"] == "done" and o.get("approval")]
     run = [o for o in ov if o["status"] in ("running", "stopping")]
-    line2 = (f"결재 기다림 {len(wait)}건: {wait[0]['approval'][:40]}" if wait else "결재 기다리는 일 없음") + (f" · 실행 중 {len(run)}건" if run else "")
+    sched = sorted((o for o in ov if o["status"] == "scheduled"), key=lambda o: o["runAt"])
+    line2 = (f"결재 기다림 {len(wait)}건: {wait[0]['approval'][:40]}" if wait else "결재 기다리는 일 없음") + (f" · 실행 중 {len(run)}건" if run else "") \
+        + (f" · 예약 {len(sched)}건(다음 {datetime.fromtimestamp(sched[0]['runAt']).strftime('%H:%M')})" if sched else "")
     todo = sum(1 for l in read("docs/todo.md").splitlines() if re.match(r"^- \*\*", l))
     bars = cached("quota", 60, build_quota)["claude"]["bars"]
     worst = max((b["used"] for b in bars if not b["stale"]), default=None)
@@ -1310,6 +1612,13 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json({"jobs": [dict(j) for j in jobs]})
         if p == "/api/orders":
             return self.json({"orders": orders_view(), "ready": claude_exe() is not None, "vercel": bool(vercel_token())})
+        if p == "/api/talk":
+            qs = parse_qs(u.query)
+            frm = (qs.get("from") or ["0"])[0]
+            return self.json(talk_view((qs.get("id") or [""])[0], int(frm) if frm.isdigit() else 0))
+        if p == "/api/order/when":
+            at, why = next_reset()
+            return self.json({"at": at, "why": why} if at else {"error": why})
         if p == "/api/activity":
             return self.json({"items": build_activity()})
         if p == "/api/hr":
@@ -1352,10 +1661,11 @@ class Handler(BaseHTTPRequestHandler):
             return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
         if path in ("/api/order", "/api/order/reply", "/api/order/stop"):
             via = "phone" if isinstance(self, RemoteHandler) else "pc"
+            when = body.get("when") or None  # 예약: 'reset'(한도 풀리면) 또는 초 단위 시각
             if path == "/api/order":
-                o, err = start_order(str(body.get("text", "")), via)
+                o, err = start_order(str(body.get("text", "")), via, when, bool(body.get("argon")))
             elif path == "/api/order/reply":
-                o, err = reply_order(str(body.get("id", "")), str(body.get("text", "")), bool(body.get("approve")))
+                o, err = reply_order(str(body.get("id", "")), str(body.get("text", "")), bool(body.get("approve")), when)
             else:
                 o, err = None, stop_order(str(body.get("id", "")))
             return self.json({"error": err} if err else {"ok": True, "id": o and o["id"]}, 400 if err else 200)
@@ -1493,6 +1803,7 @@ def start_remote():
 
 if __name__ == "__main__":
     load_orders()
+    threading.Thread(target=scheduler, daemon=True).start()
     srv = ThreadingHTTPServer((HOST, PORT), Handler)
     print(f"Jinwoo 에이전트(QR메뉴 대시보드): http://{HOST}:{PORT}  (이 PC에서만 열림, 끄려면 이 창을 닫거나 Ctrl+C)")
     start_remote()

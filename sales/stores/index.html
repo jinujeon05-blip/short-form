@@ -110,6 +110,8 @@
   .install { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; font: inherit; font-size: 15px; font-weight: 800; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: 0; border-radius: 999px; padding: 11px 18px; cursor: pointer; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
   .install svg { width: 18px; height: 18px; }
   .install[hidden] { display: none; }
+  /* 메뉴 게임 버튼 (game.html) */
+  .game-btn { display: inline-flex; align-items: center; gap: 6px; margin: 18px 8px 0 0; font-size: 15px; font-weight: 800; color: var(--ink); background: #fff; border-radius: 999px; padding: 11px 18px; text-decoration: none; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
   .ins-back { position: fixed; inset: 0; z-index: 40; display: none; align-items: flex-end; justify-content: center; background: rgba(20,14,10,.6); }
   .ins-back.show { display: flex; }
   .ins-box { width: 100%; max-width: 480px; background: #fff; color: var(--ink); border-radius: 20px 20px 0 0; padding: 22px 20px calc(22px + env(safe-area-inset-bottom)); }
@@ -128,6 +130,7 @@
     </div>
     <h1 data-t="heading">QR 메뉴판으로 만나는 가게</h1>
     <p data-t="sub">5개 언어 메뉴판이 있는 식당과 가게를 찾아보세요.</p>
+    <a class="game-btn" id="gameBtn" href="/stores/game.html">🎮 오늘 뭐 먹지? 메뉴 게임</a>
     <button class="install" id="install" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 19h14"/></svg><span id="installText"></span></button>
   </div>
 </header>
@@ -290,6 +293,8 @@
     $("q").placeholder = t.search;
     $("q").value = state.q;
     $("home").href = $("ownerBtn").href = `/?lang=${lang}`;
+    $("gameBtn").href = `/stores/game.html?lang=${lang}`;
+    $("gameBtn").textContent = { ko: "🎮 오늘 뭐 먹지? 메뉴 게임", vi: "🎮 Hôm nay ăn gì? Trò chơi chọn món", en: "🎮 What to eat today? Menu game", zh: "🎮 今天吃什么？选菜游戏", ja: "🎮 今日なに食べる？メニューゲーム" }[lang];
     $("q").setAttribute("aria-label", t.search);
     $("clear").setAttribute("aria-label", t.clear);
     $("langs").innerHTML = LANGS.map(([c, label]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tete.qrmenuasia.com/sitemap.xml

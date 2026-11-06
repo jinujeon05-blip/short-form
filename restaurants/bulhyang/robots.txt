@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://bulhyang.qrmenuasia.com/sitemap.xml

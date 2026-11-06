@@ -36,6 +36,8 @@
   /* ── 상단: 가게 정문(간판) 사진 + 메뉴판의 복숭아색·붉은 글씨를 숯불 느낌 어두운 바탕에 맞춤 ── */
   header { position: relative; color: #fff; text-align: center; padding: 0 0 30px; background: var(--green); }
   .hero { position: relative; height: 230px; background: #1a1411 url(img/hero.jpg) center 30% / cover no-repeat; }
+  /* PC 폭: 간판 사진이 잘리지 않게 */
+  @media (min-width: 600px) { .hero { max-width: 720px; height: auto; aspect-ratio: 1200 / 600; margin: 0 auto; background-position: center; } }
   .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,8,4,.55) 0%, rgba(10,8,4,0) 38%, rgba(10,8,4,.3) 100%); }
   .langs { position: absolute; top: 12px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
   .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #fff; background: rgba(12,12,12,.78); border: 1px solid rgba(255,180,84,.6); border-radius: 999px; padding: 5px 11px; cursor: pointer; }

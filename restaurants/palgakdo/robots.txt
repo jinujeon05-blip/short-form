@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://palgakdo.qrmenuasia.com/sitemap.xml
