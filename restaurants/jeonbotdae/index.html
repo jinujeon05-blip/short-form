@@ -36,6 +36,8 @@
   /* ── 상단: 한옥풍 간판 사진 + 메뉴판의 검정 나무결 바탕·금색 글씨 ── */
   header { position: relative; color: #fff; text-align: center; padding: 0 0 30px; background: var(--green); }
   .hero { position: relative; height: 230px; background: #2a1f12 url(img/hero.jpg) center / cover no-repeat; }
+  /* PC 폭: 간판 사진이 잘리지 않게 */
+  @media (min-width: 600px) { .hero { max-width: 720px; height: auto; aspect-ratio: 1600 / 900; margin: 0 auto; background-position: center; } }
   .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,8,4,.55) 0%, rgba(10,8,4,0) 38%, rgba(10,8,4,.3) 100%); }
   .langs { position: absolute; top: 12px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
   .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #fff; background: rgba(12,12,12,.78); border: 1px solid rgba(227,182,72,.6); border-radius: 999px; padding: 5px 11px; cursor: pointer; }

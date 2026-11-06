@@ -33,6 +33,8 @@
   /* ── 상단: 간판 사진 + 차콜 + 간판의 금색 글씨·메뉴판의 노란 글씨 ── */
   header { position: relative; color: #fff; text-align: center; padding: 0 0 40px; background: var(--green); }
   .hero { position: relative; height: 230px; background: #14161a url(img/hero.jpg) center / cover no-repeat; }
+  /* PC 폭: 간판 사진이 잘리지 않게 */
+  @media (min-width: 600px) { .hero { max-width: 720px; height: auto; aspect-ratio: 1076 / 451; margin: 0 auto; background-position: center; } }
   .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(18,20,31,.55) 0%, rgba(6,16,36,0) 38%, rgba(12,26,51,.55) 78%, var(--green) 100%); }
   .langs { position: absolute; top: 12px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
   .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #f3ece6; background: rgba(18,20,31,.55); border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 5px 11px; cursor: pointer; }

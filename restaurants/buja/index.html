@@ -34,6 +34,8 @@
   /* ── 상단: 간판 사진 + 간판의 검정·빨강·크림 ── */
   header { position: relative; text-align: center; padding: 0 0 34px; background: #ece6dc; color: var(--black); }
   .hero { position: relative; height: 230px; background: #1b1816 url(img/hero.jpg) center / cover no-repeat; }
+  /* PC 폭: 간판 사진이 잘리지 않게 */
+  @media (min-width: 600px) { .hero { max-width: 720px; height: auto; aspect-ratio: 1200 / 709; margin: 0 auto; background-position: center; } }
   .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(27,24,22,.5) 0%, rgba(27,24,22,0) 35%, rgba(27,24,22,0) 85%, rgba(27,24,22,.35) 100%); }
   .langs { position: absolute; top: 12px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
   .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #fff; background: rgba(27,24,22,.6); border: 1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 5px 11px; cursor: pointer; }

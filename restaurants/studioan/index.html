@@ -30,6 +30,8 @@
   /* 상단: 스튜디오 사진 + 로고 */
   header { position: relative; text-align: center; padding-bottom: 22px; background: var(--card); border-bottom: 1px solid var(--line); }
   .hero { position: relative; height: 230px; background: #ddd url(img/hero.jpg) center / cover no-repeat; }
+  /* PC 폭: 간판 사진이 잘리지 않게 */
+  @media (min-width: 600px) { .hero { max-width: 720px; height: auto; aspect-ratio: 1400 / 681; margin: 0 auto; background-position: center; } }
   .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,0) 70%, rgba(255,255,255,.55) 100%); }
   .langs { position: absolute; top: 12px; left: 0; right: 0; z-index: 2; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
   .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #fff; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.4); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
