@@ -624,7 +624,13 @@ window.STORES = [
     address: "TT4 P. Trần Văn Lai, Khu đô thị Mễ Trì Hạ, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EC%88%98%EC%9B%90%EC%84%B1+%ED%95%98%EB%85%B8%EC%9D%B4+%ED%95%9C%EC%8B%9D%EB%8B%B9+Suwonsung/@21.0173961,105.7785108,21z",
     type: { ko: "한식 고기구이 · 소고기 · 돼지고기 · 냉면 · 점심특선", vi: "Thịt nướng Hàn Quốc · Thịt bò · Thịt lợn · Miến lạnh · Món trưa", en: "Korean BBQ · Beef · Pork · Cold noodles · Lunch specials", zh: "韩式烤肉 · 牛肉 · 猪肉 · 冷面 · 午餐特选", ja: "韓国焼肉・牛肉・豚肉・冷麺・ランチ特選" },
     keywords: "수원성 하노이 수원성하노이 suwonsung suwonsung hanoi 한식 고기구이 소고기 돼지고기 삼겹살 항정살 갈비살 양념왕갈비 육회 냉면 물냉면 비빔냉면 점심특선 순두부 술국 장어 하노이 미찌 mễ trì từ liêm hà nội nhà hàng hàn quốc thịt nướng hàn quốc thịt bò thịt lợn miến lạnh 韩式烤肉 牛肉 猪肉 冷面 韓国焼肉 冷麺 korean bbq beef pork naengmyeon"
-  }
+  },
+  { id: "samwonjeong", name: "삼원정 SAMWONJUNG", sub: "한식 BBQ · 양념갈비 · 육회 · 연포탕 · 점심 반상", url: "https://samwonjeong.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "bbq"], tags: ["photos"],
+    address: "Lô 08-TT4-KĐT Mỹ Đình – Mễ Trì, Đường Trần Văn Lai, Phường Mỹ Đình 1, Quận Nam Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EC%82%BC%EC%9B%90%EC%A0%95/@21.0170835,105.7779678,21z",
+    type: { ko: "한식 BBQ · 양념갈비 · 육회 · 연포탕 · 점심 반상 · 와인", vi: "BBQ Hàn Quốc · Sườn bò tẩm ướp · Gỏi bò · Lẩu bạch tuộc · Set trưa", en: "Korean BBQ · Marinated galbi · Beef tartare · Octopus hotpot · Lunch sets", zh: "韩式烤肉 · 腌制牛排 · 生拌牛肉 · 章鱼锅 · 午市套餐", ja: "韓国BBQ・味付けカルビ・ユッケ・ナクチ鍋・ランチ定食" },
+    keywords: "삼원정 samwonjung samwonjeong 삼원정 하노이 한식 소갈비 양념갈비 고기구이 육회 연포탕 낙지볶음 갈비탕 해물파전 점심 반상 갈비찜 간장게장 와인 콜키지 미딩 mỹ đình nam từ liêm hà nội nhà hàng hàn quốc sườn bò thịt nướng hàn quốc lẩu bạch tuộc 韩式烤肉 腌制牛排 牛肉 章鱼锅 韓国焼肉 カルビ ユッケ korean bbq galbi beef tartare octopus hotpot my dinh"
+  },
 ];
 window.SI = {
   ko: {

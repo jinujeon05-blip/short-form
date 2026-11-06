@@ -59,6 +59,7 @@ name() {
     tete) echo "떼떼분식" ;;
     suwonyang) echo "수원양갈비구이" ;;
     suwonhanoi) echo "수원성하노이" ;;
+    samwonjeong) echo "삼원정" ;;
     texasbbq) echo "CTQ 텍사스 BBQ" ;;
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;
