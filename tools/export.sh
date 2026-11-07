@@ -61,6 +61,7 @@ name() {
     suwonhanoi) echo "수원성하노이" ;;
     samwonjeong) echo "삼원정" ;;
     donori) echo "돈오리" ;;
+    doya) echo "도야짬뽕" ;;
     texasbbq) echo "CTQ 텍사스 BBQ" ;;
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;

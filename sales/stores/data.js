@@ -637,6 +637,12 @@ window.STORES = [
     type: { ko: "한식 고기구이 · 눈꽃삼겹살 · 오리 BBQ · 능이백숙 · 점심 세트", vi: "Thịt nướng Hàn Quốc · Ba chỉ heo hoa tuyết · Vịt BBQ · Vịt hầm nấm · Set trưa", en: "Korean BBQ · Snowflake pork belly · Duck BBQ · Duck mushroom soup · Lunch sets", zh: "韩式烤肉 · 雪花五花肉 · 烤鸭 · 炖鸭汤 · 午市套餐", ja: "韓国焼肉・雪花サムギョプサル・鴨BBQ・鴨の水炊き・ランチセット" },
     keywords: "돈오리 donori 하노이 한식 고기구이 눈꽃삼겹살 삼겹살 목살 항정살 오리 오리고기 오리주물럭 오리로스 훈제오리 보쌈 능이백숙 냉면 막국수 점심 세트 소주 đình thôn mỹ đình từ liêm nam từ liêm hà nội nhà hàng hàn quốc thịt nướng hàn quốc ba chỉ heo vịt nướng vịt xào cay vịt xông khói 韩式烤肉 五花肉 烤鸭 韓国焼肉 サムギョプサル 鴨"
   },
+  { id: "doya", name: "도야짬뽕 DOYA JJAMBBONG", sub: "짬뽕 · 짜장 · 탕수육 · 양장피 · 콤보 세트", url: "https://doya.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["chinese", "korean", "noodle"], tags: ["photos"],
+    address: "18 ngách 39/70 Đ. Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/nha+hang+doya+jjambbong(%EB%8F%84%EC%95%BC%EC%A7%AC%EB%BD%95)/@21.0175783,105.7776054,19z",
+    type: { ko: "한국식 중식 · 짬뽕 · 짜장 · 탕수육 · 양장피 · 술안주 세트", vi: "Món Hoa kiểu Hàn · Mì Jjambbong · Mì tương đen · Thịt chua ngọt · Set đồ nhắm", en: "Korean-Chinese · Jjambbong · Jjajang · Sweet & sour pork · Yangjangpi · Snack sets", zh: "韩式中餐 · 炒码面 · 炸酱面 · 糖醋肉 · 两张皮 · 下酒菜套餐", ja: "韓国式中華・チャンポン・ジャージャー麺・酢豚・ヤンジャンピ・おつまみセット" },
+    keywords: "도야짬뽕 도야 짬뽕 doya doya jjambbong jjamppong 하노이 중국집 중식 중화요리 한국식 중화요리 짬뽕 소고기짬뽕 해물짬뽕 백짬뽕 크림짬뽕 마라짬뽕 순두부짬뽕 수제비짬뽕 냉짬뽕 쟁반짬뽕 콩국수 짜장면 짜장 간짜장 쟁반짜장 탕수육 유린기 깐풍기 크림새우 칠리새우 깐풍새우 고추잡채 꽃빵 누룽지탕 짬뽕탕 양장피 볶음밥 잡채밥 군만두 물만두 떡볶이 김밥 고량주 소주 đình thôn mỹ đình từ liêm nam từ liêm hà nội nhà hàng hàn quốc mì jjambbong mì cay hải sản mì tương đen thịt chua ngọt tôm sốt kem tôm sốt chilli há cảo korean chinese black bean noodles spicy seafood noodle soup sweet and sour pork 炒码面 炸酱面 糖醋肉 韩式中餐 チャンポン ジャージャー麺 酢豚 韓国式中華"
+  },
 ];
 window.SI = {
   ko: {

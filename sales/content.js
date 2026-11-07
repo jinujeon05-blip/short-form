@@ -143,6 +143,8 @@ window.DEMOS = [
     name: "삼원정 SAMWONJUNG", type: { ko: "한식 BBQ · 양념갈비 · 육회 · 연포탕 · 하노이", vi: "BBQ Hàn Quốc · Sườn bò tẩm ướp · Lẩu bạch tuộc · Hà Nội", zh: "韩式烤肉 · 腌制牛排 · 生拌牛肉 · 章鱼锅 · 河内", ja: "韓国BBQ・味付けカルビ・ユッケ・ナクチ鍋・ハノイ", en: "Korean BBQ · Marinated galbi · Beef tartare · Octopus hotpot · Hanoi" } },
   { id: "donori", hidden: true, url: "https://donori.qrmenuasia.com", shot: "img/demo-donori.jpg", qr: "img/qr-donori.svg",
     name: "돈오리 DONORI", type: { ko: "한식 고기구이 · 눈꽃삼겹살 · 오리 BBQ · 하노이", vi: "Thịt nướng Hàn Quốc · Ba chỉ heo hoa tuyết · Vịt BBQ · Hà Nội", zh: "韩式烤肉 · 雪花五花肉 · 烤鸭 · 河内", ja: "韓国焼肉・雪花サムギョプサル・鴨BBQ・ハノイ", en: "Korean BBQ · Snowflake pork belly · Duck BBQ · Hanoi" } },
+  { id: "doya", hidden: true, url: "https://doya.qrmenuasia.com", shot: "img/demo-doya.jpg", qr: "img/qr-doya.svg",
+    name: "도야짬뽕 DOYA JJAMBBONG", type: { ko: "한국식 중식 · 짬뽕 · 짜장 · 탕수육 · 하노이", vi: "Món Hoa kiểu Hàn · Mì Jjambbong · Mì tương đen · Thịt chua ngọt · Hà Nội", zh: "韩式中餐 · 炒码面 · 炸酱面 · 糖醋肉 · 河内", ja: "韓国式中華・チャンポン・ジャージャー麺・酢豚・ハノイ", en: "Korean-Chinese · Jjambbong · Jjajang · Sweet & sour pork · Hanoi" } },
 ];
 
 window.T = {
