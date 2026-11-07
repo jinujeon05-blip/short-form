@@ -63,6 +63,7 @@ name() {
     donori) echo "돈오리" ;;
     doya) echo "도야짬뽕" ;;
     andong) echo "안동곱창" ;;
+    yukdaejang) echo "육대장" ;;
     texasbbq) echo "CTQ 텍사스 BBQ" ;;
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;

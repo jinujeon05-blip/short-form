@@ -649,6 +649,12 @@ window.STORES = [
     type: { ko: "한식 곱창 · 막창 · 소고기·뒷고기 구이 · 갈비찜 · 뼈해장국 · 국밥", vi: "Lòng bò nướng · Thịt bò, thịt heo nướng · Sườn bò hầm · Canh xương heo · Canh cơm", en: "Korean gopchang · Makchang · Beef & pork BBQ · Braised short ribs · Pork bone soup · Gukbap", zh: "韩式烤牛肠 · 烤牛肉猪肉 · 炖牛排 · 猪骨汤 · 汤饭", ja: "コプチャン・マクチャン・焼肉・カルビチム・ヘジャンクク・クッパ" },
     keywords: "안동곱창 안동 곱창 andong andong gopchang andong hanu gopchang 하노이 곱창 소곱창 한우곱창 대창 막창 양깃머리 특양 염통 곱창모듬 곱창전골 곱창구이 갈비살 안창살 살치살 차돌박이 뒷고기 항정살 가브리살 꽃삼겹 갈비찜 매운갈비찜 감자탕 뼈전골 뼈해장국 해장국 국밥 소고기국밥 내장국밥 순두부찌개 김치찌개 된장찌개 육회비빔밥 냉면 물냉면 비빔냉면 계란찜 양밥 볶음밥 안동소주 소주 đình thôn mỹ đình nam từ liêm hà nội nhà hàng hàn quốc lòng bò nướng lòng non lòng già thịt nướng hàn quốc canh xương heo mì lạnh korean beef intestine bbq gopchang makchang galbi jjim 韩式烤牛肠 牛小肠 烤肉 コプチャン ホルモン 焼肉"
   },
+  { id: "yukdaejang", name: "육대장 Yuk Dae Jang", sub: "옛날전통육개장 · 육칼면 · 한방보쌈 · 부대전골 · 만두", url: "https://yukdaejang.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "noodle"], tags: ["photos"],
+    address: "Lô 9 TT4, KĐT Mỹ Đình Sông Đà, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EC%9C%A1%EB%8C%80%EC%9E%A5+%ED%95%98%EB%85%B8%EC%9D%B4+%EC%A7%80%EC%A0%90/@21.0170522,105.777923,17z",
+    type: { ko: "한식 육개장 · 설렁탕 · 갈비탕 · 냉면 · 보쌈 · 전골 · 만두 · 곱창", vi: "Canh bò cay YukGaeJang · Canh xương bò · Canh sườn bò · Mì lạnh · Thịt heo hầm · Lẩu · Há cảo · Lòng bò nướng", en: "Korean yukgaejang · Seolleongtang · Galbitang · Naengmyeon · Bossam · Hot pot · Dumplings · Gopchang", zh: "韩式辣牛肉汤 · 牛骨汤 · 排骨汤 · 冷面 · 菜包肉 · 火锅 · 饺子 · 烤牛肠", ja: "ユッケジャン・ソルロンタン・カルビタン・冷麺・ポッサム・鍋・餃子・コプチャン" },
+    keywords: "육대장 옛날전통육개장 육개장 yuk dae jang yukdaejang yukgaejang 하노이 육개장 미딩 송다 육칼면 생육칼면 꼬막육개장 순두부육개장 해물순두부육개장 갈비탕 설렁탕 황태설렁탕 사골떡만두국 떡만두국 냉면 양지냉면 물냉면 비빔냉면 한방보쌈 간장보쌈 보쌈 보쌈무침 양지무침 꼬막무침 육개장전골 부대전골 부대찌개 모듬수육전골 수육 갈비찜 대장갈비찜 만두 갈비만두 김치만두 왕만두 곱창 대창 막창 특양 염통 삼겹살 우삼겹 mỹ đình sông đà từ liêm hà nội nhà hàng hàn quốc canh bò cay lẩu thập cẩm thịt heo hầm há cảo mì lạnh korean spicy beef soup bossam budae jjigae dumplings 韩式辣牛肉汤 辣牛肉汤 ユッケジャン 육개장 맛집"
+  },
 ];
 window.SI = {
   ko: {
