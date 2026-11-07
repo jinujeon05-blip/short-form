@@ -4,6 +4,8 @@ import { localJdn, ymdFromJdn } from '../engine/astro';
 import { cycleBranch, cycleStem, yearCycle } from '../engine/ganzhi';
 import { ANIMAL_SLUGS, YearFortune, yearFortune, yearRanking } from '../engine/yearly';
 import { YEARLY } from '../content/yearly';
+import { YEARLY_DEPTH } from '../content/depthYearly';
+import { Depth } from '../components/Depth';
 import { HAZARD } from '../content/hazard';
 import { Lang, useI18n } from '../i18n';
 import { Link, RoutePath, hrefFor, navigate } from '../router';
@@ -178,6 +180,8 @@ export function YearlyZodiacPage({ year, zodiac }: { year: number; zodiac: numbe
         </div>
         <Link className="btn btn-gold" to="/saju">{t.hero.ctaSaju} →</Link>
       </div>
+
+      <Depth text={YEARLY_DEPTH[ANIMAL_SLUGS[zodiac]]?.[lang]} />
 
       <h2 className="article-h">{y.others}</h2>
       <div className="other-zodiacs">

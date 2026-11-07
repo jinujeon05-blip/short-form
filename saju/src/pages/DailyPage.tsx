@@ -5,6 +5,8 @@ import { zodiacOfYear } from '../engine/almanac';
 import { DailyDetail, dailyDetail, dailyRanking, todayJdn } from '../engine/daily';
 import { ANIMAL_SLUGS, FORTUNE_YEARS } from '../engine/yearly';
 import { DAILY } from '../content/daily';
+import { DAILY_DEPTH } from '../content/depthDaily';
+import { Depth } from '../components/Depth';
 import { Lang, useI18n } from '../i18n';
 import { Dict } from '../i18n/ko';
 import { Link, RoutePath, hrefFor, navigate } from '../router';
@@ -202,6 +204,8 @@ export function DailyZodiacPage({ zodiac, query }: { zodiac: number; query: stri
           <Link key={y} className="btn btn-ghost" to={fortunePath(y, zodiac)}>{x.yearlyCta} →</Link>
         ))}
       </div>
+
+      <Depth text={DAILY_DEPTH[ANIMAL_SLUGS[zodiac]]?.[lang]} />
 
       <h2 className="article-h">{x.others}</h2>
       <div className="other-zodiacs">
