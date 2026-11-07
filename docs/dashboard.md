@@ -47,6 +47,7 @@
   - **비용 0원**: Pro 구독 로그인으로만 돈다. `ANTHROPIC_API_KEY`·`ANTHROPIC_AUTH_TOKEN`은 지우고 넘긴다. 단 주간 한도는 쓴다. Claude 한도 90% 이상이면 받지 않는다.
   - **막아 둔 것**: 외부 연결(MCP) 전부 끔(`--strict-mcp-config`) → Vercel 배포·드라이브 커넥터 없음. `git push/merge/reset/checkout/switch/rebase/clean`, `rm`, `curl`, `vercel`, 웹 검색 금지. 허용 = 파일 읽기·고치기, `node`·`python`·`git add/commit`·`cp` 등(`ORDER_ALLOW`). 드라이브는 동기화 폴더 `G:\내 드라이브\QR메뉴판`을 읽는다.
   - 한 번에 하나만, 40분 넘으면 끊는다. 기록은 `dashboard/orders/<id>.json`·`.jsonl`(git 제외). 대시보드를 껐다 켜면 실행 중이던 것은 '멈춤'이 된다.
+  - 비서실장이 정상 끝 보고(result success)를 내고 남은 백그라운드 담당·명령이 없는데도 **1분 안에 안 꺼지면 대시보드가 끄고 '끝남'으로 바꾼다**(`EndWatch`, 2026-11-07 도야짬뽕 40분 '실행 중' 건, 캡틴 결정 가-1). 끝 보고가 없거나 담당이 남아 있으면 지금처럼 기다린다.
   - 결과 끝 줄이 `결재: …`면 결재함에 '결재 대기'로 올라온다. **확정**·**수정 요청**·**답하기**는 같은 대화를 이어서(`--resume`) 실행한다. 배포는 확정해도 대시보드에서 안 한다(Claude 앱에서 '배포해').
   - 지금 체크아웃된 브랜치에서 일한다. Claude 앱 세션이 같은 폴더에서 일하는 중이면 지시를 보내지 않는다(같은 파일을 둘이 고칠 수 있음).
   - **처음 한 번 로그인 필요**(2026-10-28 확인): 데스크톱 앱의 로그인은 앱 안에만 있어서 `claude -p`는 'Not logged in'이 된다. 사용자가 `dashboard\claude-login.bat`을 두 번 눌러 'Claude account with subscription'으로 직접 로그인한다(AI가 대리 로그인하지 않음). 그 뒤 실패한 지시는 '답하기'로 다시 보내면 처음 지시부터 새로 돈다.

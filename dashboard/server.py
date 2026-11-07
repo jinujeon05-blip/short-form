@@ -1010,6 +1010,56 @@ def show_event(o, ev, owners, talk):
     o["worked"] = sorted(set(o.get("worked") or ["claude"]) | set(owners.values()))
 
 
+END_GRACE = 60  # 정상 끝 보고 뒤 이만큼(초) 지나도 claude -p 가 안 꺼지면 대시보드가 끈다
+
+
+class EndWatch:
+    """claude -p 가 정상 끝 보고(result success)를 내고도 스스로 안 꺼지는 경우를 알아챈다.
+    2026-11-07 도야짬뽕: 14:28 끝 보고·커밋 뒤에도 안 꺼져 40분 제한(14:40)까지 '실행 중'이었다(캡틴 결정 가-1).
+    끝 보고가 없거나, 백그라운드 담당(background_tasks_changed)·백그라운드 명령(task_started → task_notification)이
+    남아 있으면 지금처럼 기다린다. 40분 제한(ORDER_TIMEOUT)은 그대로."""
+
+    def __init__(self, grace=END_GRACE):
+        self.grace, self.done_at, self.last = grace, None, time.time()
+        self.agents, self.started = set(), set()  # 남은 백그라운드 담당 task_id, 끝 알림을 아직 못 받은 tool_use_id
+
+    def feed(self, ev, now=None):
+        now = now or time.time()
+        self.last = now
+        t, st = ev.get("type"), ev.get("subtype")
+        if t == "result":
+            self.done_at = now if (st == "success" and not ev.get("is_error")) else None
+        elif t in ("assistant", "user"):
+            self.done_at = None  # 다시 일하기 시작함(백그라운드 담당 보고를 받고 이어 가는 경우 등)
+        elif t == "system" and st == "background_tasks_changed":
+            self.agents = {x.get("task_id") for x in (ev.get("tasks") or []) if isinstance(x, dict)}
+        elif t == "system" and st == "task_started" and ev.get("tool_use_id"):
+            self.started.add(ev["tool_use_id"])
+        elif t == "system" and st == "task_notification":
+            self.started.discard(ev.get("tool_use_id"))
+
+    def stuck(self, now=None):
+        now = now or time.time()
+        return bool(self.done_at and not self.agents and not self.started and now - max(self.done_at, self.last) >= self.grace)
+
+
+def end_watch_loop(o, p, watch, every=5):
+    """실행 중 몇 초마다 확인 → 끝 보고 뒤 안 꺼진 채 grace 가 지나면 프로그램을 끈다(출력이 닫혀 run_order 가 '끝남'으로 마무리)."""
+    while p.poll() is None:
+        time.sleep(every)
+        with ORDER_LOCK:
+            hit = p.poll() is None and watch.stuck() and o.get("status") == "running"
+            if hit:
+                o["autoEnded"] = time.time()
+        if hit:
+            print(f"지시 {o['id']}: 끝 보고 뒤 {watch.grace}초 지나도 claude -p 가 안 꺼져 대시보드가 끕니다")
+            try:
+                p.kill()
+            except Exception:
+                pass
+            return
+
+
 def run_order(o, prompt):
     try:
         cached("hr", 120, build_hr)  # 비서실장이 읽을 out/hr.json 을 새로 만든다
@@ -1044,6 +1094,8 @@ def run_order(o, prompt):
         p.stdin.close()
         killer = threading.Timer(ORDER_TIMEOUT, p.kill)
         killer.start()
+        watch = EndWatch()
+        threading.Thread(target=end_watch_loop, args=(o, p, watch), daemon=True).start()
         with open(log, "ab") as f:
             for raw in p.stdout:
                 f.write(raw)
@@ -1054,6 +1106,7 @@ def run_order(o, prompt):
                 if not isinstance(ev, dict):
                     continue
                 with ORDER_LOCK:
+                    watch.feed(ev)
                     if ev.get("type") == "result":
                         result = ev
                         # 담당이 백그라운드로 일하면 한 실행에 result 가 여러 번 온다 → 모두 더한다(마지막 것만 세면 0으로 나왔다, 2026-11-01)
