@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://andong.qrmenuasia.com/sitemap.xml

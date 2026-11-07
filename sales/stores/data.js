@@ -643,6 +643,12 @@ window.STORES = [
     type: { ko: "한국식 중식 · 짬뽕 · 짜장 · 탕수육 · 양장피 · 술안주 세트", vi: "Món Hoa kiểu Hàn · Mì Jjambbong · Mì tương đen · Thịt chua ngọt · Set đồ nhắm", en: "Korean-Chinese · Jjambbong · Jjajang · Sweet & sour pork · Yangjangpi · Snack sets", zh: "韩式中餐 · 炒码面 · 炸酱面 · 糖醋肉 · 两张皮 · 下酒菜套餐", ja: "韓国式中華・チャンポン・ジャージャー麺・酢豚・ヤンジャンピ・おつまみセット" },
     keywords: "도야짬뽕 도야 짬뽕 doya doya jjambbong jjamppong 하노이 중국집 중식 중화요리 한국식 중화요리 짬뽕 소고기짬뽕 해물짬뽕 백짬뽕 크림짬뽕 마라짬뽕 순두부짬뽕 수제비짬뽕 냉짬뽕 쟁반짬뽕 콩국수 짜장면 짜장 간짜장 쟁반짜장 탕수육 유린기 깐풍기 크림새우 칠리새우 깐풍새우 고추잡채 꽃빵 누룽지탕 짬뽕탕 양장피 볶음밥 잡채밥 군만두 물만두 떡볶이 김밥 고량주 소주 đình thôn mỹ đình từ liêm nam từ liêm hà nội nhà hàng hàn quốc mì jjambbong mì cay hải sản mì tương đen thịt chua ngọt tôm sốt kem tôm sốt chilli há cảo korean chinese black bean noodles spicy seafood noodle soup sweet and sour pork 炒码面 炸酱面 糖醋肉 韩式中餐 チャンポン ジャージャー麺 酢豚 韓国式中華"
   },
+  { id: "andong", name: "안동곱창 Andong Hanu Gopchang", sub: "소곱창 모듬 · 한우 곱창 · 갈비찜 · 뼈해장국 · 국밥", url: "https://andong.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
+    address: "18 ngách 39/70 Đ. Đình Thôn, Mỹ Đình 1, Nam Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Andong+Hanu+Gopchang/@21.0175163,105.7774719,19z",
+    type: { ko: "한식 곱창 · 막창 · 소고기·뒷고기 구이 · 갈비찜 · 뼈해장국 · 국밥", vi: "Lòng bò nướng · Thịt bò, thịt heo nướng · Sườn bò hầm · Canh xương heo · Canh cơm", en: "Korean gopchang · Makchang · Beef & pork BBQ · Braised short ribs · Pork bone soup · Gukbap", zh: "韩式烤牛肠 · 烤牛肉猪肉 · 炖牛排 · 猪骨汤 · 汤饭", ja: "コプチャン・マクチャン・焼肉・カルビチム・ヘジャンクク・クッパ" },
+    keywords: "안동곱창 안동 곱창 andong andong gopchang andong hanu gopchang 하노이 곱창 소곱창 한우곱창 대창 막창 양깃머리 특양 염통 곱창모듬 곱창전골 곱창구이 갈비살 안창살 살치살 차돌박이 뒷고기 항정살 가브리살 꽃삼겹 갈비찜 매운갈비찜 감자탕 뼈전골 뼈해장국 해장국 국밥 소고기국밥 내장국밥 순두부찌개 김치찌개 된장찌개 육회비빔밥 냉면 물냉면 비빔냉면 계란찜 양밥 볶음밥 안동소주 소주 đình thôn mỹ đình nam từ liêm hà nội nhà hàng hàn quốc lòng bò nướng lòng non lòng già thịt nướng hàn quốc canh xương heo mì lạnh korean beef intestine bbq gopchang makchang galbi jjim 韩式烤牛肠 牛小肠 烤肉 コプチャン ホルモン 焼肉"
+  },
 ];
 window.SI = {
   ko: {

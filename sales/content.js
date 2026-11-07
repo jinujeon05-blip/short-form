@@ -145,6 +145,8 @@ window.DEMOS = [
     name: "돈오리 DONORI", type: { ko: "한식 고기구이 · 눈꽃삼겹살 · 오리 BBQ · 하노이", vi: "Thịt nướng Hàn Quốc · Ba chỉ heo hoa tuyết · Vịt BBQ · Hà Nội", zh: "韩式烤肉 · 雪花五花肉 · 烤鸭 · 河内", ja: "韓国焼肉・雪花サムギョプサル・鴨BBQ・ハノイ", en: "Korean BBQ · Snowflake pork belly · Duck BBQ · Hanoi" } },
   { id: "doya", hidden: true, url: "https://doya.qrmenuasia.com", shot: "img/demo-doya.jpg", qr: "img/qr-doya.svg",
     name: "도야짬뽕 DOYA JJAMBBONG", type: { ko: "한국식 중식 · 짬뽕 · 짜장 · 탕수육 · 하노이", vi: "Món Hoa kiểu Hàn · Mì Jjambbong · Mì tương đen · Thịt chua ngọt · Hà Nội", zh: "韩式中餐 · 炒码面 · 炸酱面 · 糖醋肉 · 河内", ja: "韓国式中華・チャンポン・ジャージャー麺・酢豚・ハノイ", en: "Korean-Chinese · Jjambbong · Jjajang · Sweet & sour pork · Hanoi" } },
+  { id: "andong", hidden: true, url: "https://andong.qrmenuasia.com", shot: "img/demo-andong.jpg", qr: "img/qr-andong.svg",
+    name: "안동곱창 Andong Hanu Gopchang", type: { ko: "한식 곱창 · 고기구이 · 국밥 · 하노이", vi: "Lòng bò nướng · Thịt nướng · Canh cơm Hàn Quốc · Hà Nội", zh: "韩式烤牛肠 · 烤肉 · 汤饭 · 河内", ja: "韓国ホルモン・焼肉・クッパ・ハノイ", en: "Korean gopchang · BBQ · Gukbap · Hanoi" } },
 ];
 
 window.T = {
