@@ -337,6 +337,8 @@ let ordTimer, wasRunning = false;
 async function loadOrders() {
   const r = await api('/api/orders');
   S.orders = r.orders; S.vercel = r.vercel;
+  // 서버 파이썬 코드가 켠 뒤 바뀌었으면 '다시 켜야 적용' 경고(2026-11-07 안동곱창·육대장 건)
+  $('#code-warn').textContent = r.codeChanged?.length ? `대시보드 코드가 바뀌었어요(${r.codeChanged.join(', ')}) — 다시 켜야 적용돼요(start-dashboard.bat)` : '';
   const running = S.orders.some(o => o.status === 'running' || o.status === 'stopping' || o.deployState === 'running');
   renderInbox(); renderOffice(); renderCounts();
   if (S.open?.startsWith('order:')) renderOrderPanel(S.open.slice(6)); else refreshTalks();

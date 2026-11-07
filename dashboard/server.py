@@ -1344,6 +1344,27 @@ def open_order_terminal(oid):
     return None
 
 
+# 서버가 켜진 뒤 대시보드 파이썬 코드가 바뀌면 결재함에 '다시 켜야 적용' 경고를 띄운다.
+# 파이썬은 켜 둔 동안 새 코드를 읽지 않는다 → 고쳐 놓고 옛 코드로 계속 돈 일(2026-11-07 안동곱창·육대장 '배포 멈춤' 건).
+# 화면 파일(static/)은 새로 고침이면 바로 바뀌므로 보지 않는다.
+def code_stamp():
+    out = {}
+    for f in sorted(HERE.glob("*.py")):
+        try:
+            out[f.name] = hashlib.sha256(f.read_bytes()).hexdigest()
+        except OSError:
+            out[f.name] = None
+    return out
+
+
+CODE_AT_START = code_stamp()
+
+
+def code_changed():
+    now = code_stamp()
+    return sorted(n for n in set(now) | set(CODE_AT_START) if now.get(n) != CODE_AT_START.get(n))
+
+
 def orders_view():
     with ORDER_LOCK:
         rows = sorted(ORDERS.values(), key=lambda o: -o["createdAt"])[:40]
@@ -1678,7 +1699,7 @@ class Handler(BaseHTTPRequestHandler):
                 jobs = sorted(JOBS.values(), key=lambda j: -j["startedAt"])
                 return self.json({"jobs": [dict(j) for j in jobs]})
         if p == "/api/orders":
-            return self.json({"orders": orders_view(), "ready": claude_exe() is not None, "vercel": bool(vercel_token())})
+            return self.json({"orders": orders_view(), "ready": claude_exe() is not None, "vercel": bool(vercel_token()), "codeChanged": code_changed()})
         if p == "/api/talk":
             qs = parse_qs(u.query)
             frm = (qs.get("from") or ["0"])[0]
