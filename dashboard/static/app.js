@@ -110,9 +110,17 @@ const hm = t => new Date(t * 1000).toLocaleTimeString('ko-KR', { hour: '2-digit'
 const day = t => new Date(t * 1000).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' });
 function orderState(o) {
   if (o.deployState === 'running') return ['run', 'b-warn', '배포 중'];
+  if (o.status === 'done' && o.deploy?.length && o.deployState === 'fail') return ['wait', 'b-stop', '배포 멈춤'];
   if (o.status === 'done' && o.deploy?.length && !o.deployState) return ['wait', 'b-warn', '배포 대기'];
   if (o.status === 'done' && o.approval) return ['wait', 'b-warn', '결재 대기'];
   return ST[o.status] || ['', 'b-na', o.status];
+}
+// 배포가 멈춘 이유(서버 deployErr, 옛 지시는 마지막 '배포 멈춤:' 줄) — 2026-11-07 결재함에 이유가 안 보여 계속 누른 건
+function deployErr(o) {
+  if (o.deployState !== 'fail') return '';
+  if (o.deployErr) return o.deployErr;
+  const t = [...o.turns].reverse().find(t => t.by === 'system' && t.text.startsWith('배포 멈춤:'));
+  return t ? t.text.split(/\r?\n/)[0].slice(6).trim() :'이유를 못 찾았어요(대화 맨 아래 확인)';
 }
 function lastText(o) { const t = [...o.turns].reverse().find(t => t.by !== 'me'); return t ? t.text : ''; }
 function renderInbox() {
@@ -127,6 +135,7 @@ function renderInbox() {
     const st = o.steps?.at(-1), now = st ? `${WHO[st.who] || '비서실장'} · ${st.text}` : '시작하는 중…';
     const sub = o.deployState === 'running' ? (o.deployLog?.at(-1) || '배포 시작…') : o.status === 'running' ? now
       : o.status === 'scheduled' ? `${day(o.runAt)} ${hm(o.runAt)} 시작 예정 · ${o.runWhy || ''}${o.waitWhy ? ' · 기다리는 중' : ''}`
+      : o.deploy?.length && o.deployState === 'fail' ? '배포 멈춤: ' + deployErr(o)
       : o.deploy?.length && !o.deployState ? '배포 확정 기다림: ' + o.deploy.join(', ') : o.approval ? '결재: ' + o.approval : lastText(o).split('\n')[0];
     return `<button class="ord ${cls}" data-order="${o.id}"><b>${esc(o.title)}</b><p>${esc(sub)}</p>
       <span class="muted"><span class="badge ${bc}">${bt}</span>${hm(o.createdAt)}${o.via === 'phone' ? ' · 폰' : ''}</span></button>`;
@@ -169,6 +178,7 @@ function renderOrderPanel(oid) {
   const dep = o.deploy?.length ? (o.deployState === 'running'
     ? `<h5>배포 진행</h5><ul class="steps">${(o.deployLog || []).map(s => `<li>${esc(s)}</li>`).join('') || '<li>시작하는 중…</li>'}</ul>`
     : o.deployState === 'done' ? '' : `<div class="reply"><h5>배포</h5><p><b>배포할 가게:</b> ${o.deploy.map(s => `${esc(s)}.qrmenuasia.com`).join(', ')}</p>
+      ${o.deployState === 'fail' ? `<p class="send-err">지난 배포가 멈췄어요: ${esc(deployErr(o))}<br>이유를 해결한 뒤 다시 누르세요(main이 빠진 것은 이제 서버가 직접 합쳐요).</p>` : ''}
       ${S.vercel ? `<button class="btn approve" id="deploy-go">배포 확정</button>` : '<p class="muted">Vercel 토큰이 아직 없어 배포 버튼이 꺼져 있어요(docs/dashboard.md \'Vercel 토큰 넣기\').</p>'}
       <p class="muted">작업 브랜치를 깃허브에 올리고(main 아님) 그 커밋으로 배포합니다. 가게 찾기용이면 가게 찾기 목록(qrmenu-intro)도 같이 배포해요. 배포 1번마다 Vercel 빌드 비용이 조금 듭니다.</p></div>`) : '';
   const keep = $('#reply-text')?.value || '', keepWhen = $('#reply-when')?.value || '', keepAt = $('#reply-at')?.value || '';

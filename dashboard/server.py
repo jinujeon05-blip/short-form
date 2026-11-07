@@ -1476,7 +1476,20 @@ def run_deploy(o, shops):
         sh(["git", "fetch", "origin", "main"], timeout=120)
         code, _ = sh(["git", "merge-base", "--is-ancestor", "origin/main", "HEAD"])
         if code != 0:
-            raise RuntimeError("이 브랜치에 최신 main이 없어요. 비서실장에게 'origin/main 합쳐줘'를 먼저 시켜 주세요.")
+            # 비서실장(claude -p)은 git merge 가 금지라 합칠 수 없다 → 캡틴이 [배포 확정]을 누르면 서버가 직접 합친다
+            # (2026-11-07 안동곱창·육대장 '배포 대기'가 계속 남은 건, 캡틴 결정 다-1). 충돌이 있으면 합치지 않고 멈춘다.
+            code, out = sh(["git", "merge-tree", "--write-tree", "HEAD", "origin/main"])
+            if code != 0:
+                raise RuntimeError("이 브랜치에 최신 main이 없고, 합치면 충돌이 나요(" + " ".join(out.split()[1:6]) + "). PC Claude 앱에서 'main 합쳐줘'로 충돌을 풀어 주세요.")
+            code, dirty_all = sh(["git", "status", "--porcelain", "--untracked-files=no"])
+            if dirty_all.strip():
+                raise RuntimeError("이 브랜치에 최신 main이 없는데, 커밋 안 한 수정이 있어 합치지 않았어요: " + " ".join(l[3:] for l in dirty_all.splitlines()[:5]))
+            n = sh(["git", "rev-list", "--count", "HEAD..origin/main"])[1].strip()
+            code, out = sh(["git", "merge", "--no-edit", "origin/main"], timeout=120)
+            if code != 0:
+                sh(["git", "merge", "--abort"])
+                raise RuntimeError("main 합치기 실패(되돌림): " + out.strip()[-200:])
+            log(f"최신 main(커밋 {n}개)을 이 브랜치에 합침(충돌 없음)")
         code, out = sh(["git", "push", "origin", f"HEAD:refs/heads/{branch}"], timeout=180)
         if code != 0:
             raise RuntimeError("깃허브에 올리기(push) 실패: " + out.strip()[-200:])
@@ -1522,6 +1535,7 @@ def run_deploy(o, shops):
     except Exception as e:
         with ORDER_LOCK:
             o["deployState"] = "fail"
+            o["deployErr"] = str(e)[:300]  # 결재함에 빨간 글씨로 보여 줌
             o["turns"].append({"by": "system", "text": "배포 멈춤: " + str(e)[:300] + "\n" + "\n".join(o.get("deployLog") or []), "at": time.time()})
     with ORDER_LOCK:
         save_order(o)
@@ -1537,7 +1551,7 @@ def start_deploy(oid):
             return "배포할 가게가 없는 지시예요"
         if o["status"] in ("running", "stopping") or any(x.get("deployState") == "running" for x in ORDERS.values()):
             return "실행 중인 일이 끝난 뒤에 눌러 주세요"
-        o.update(deployState="running", deployLog=[])
+        o.update(deployState="running", deployLog=[], deployErr=None)
         o["turns"].append({"by": "me", "text": "배포 확정: " + ", ".join(o["deploy"]), "at": time.time(), "approve": True})
         save_order(o)
     threading.Thread(target=run_deploy, args=(o, list(o["deploy"])), daemon=True).start()
