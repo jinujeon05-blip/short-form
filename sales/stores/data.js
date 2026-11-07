@@ -631,6 +631,12 @@ window.STORES = [
     type: { ko: "한식 BBQ · 양념갈비 · 육회 · 연포탕 · 점심 반상 · 와인", vi: "BBQ Hàn Quốc · Sườn bò tẩm ướp · Gỏi bò · Lẩu bạch tuộc · Set trưa", en: "Korean BBQ · Marinated galbi · Beef tartare · Octopus hotpot · Lunch sets", zh: "韩式烤肉 · 腌制牛排 · 生拌牛肉 · 章鱼锅 · 午市套餐", ja: "韓国BBQ・味付けカルビ・ユッケ・ナクチ鍋・ランチ定食" },
     keywords: "삼원정 samwonjung samwonjeong 삼원정 하노이 한식 소갈비 양념갈비 고기구이 육회 연포탕 낙지볶음 갈비탕 해물파전 점심 반상 갈비찜 간장게장 와인 콜키지 미딩 mỹ đình nam từ liêm hà nội nhà hàng hàn quốc sườn bò thịt nướng hàn quốc lẩu bạch tuộc 韩式烤肉 腌制牛排 牛肉 章鱼锅 韓国焼肉 カルビ ユッケ korean bbq galbi beef tartare octopus hotpot my dinh"
   },
+  { id: "donori", name: "돈오리 DONORI", sub: "눈꽃삼겹살 · 오리 BBQ · 훈제오리 보쌈 · 점심 세트", url: "https://donori.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "bbq"], tags: ["photos"],
+    address: "205 Đ. Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EB%8F%88%EC%98%A4%EB%A6%AC/@21.0158181,105.7738536,18z",
+    type: { ko: "한식 고기구이 · 눈꽃삼겹살 · 오리 BBQ · 능이백숙 · 점심 세트", vi: "Thịt nướng Hàn Quốc · Ba chỉ heo hoa tuyết · Vịt BBQ · Vịt hầm nấm · Set trưa", en: "Korean BBQ · Snowflake pork belly · Duck BBQ · Duck mushroom soup · Lunch sets", zh: "韩式烤肉 · 雪花五花肉 · 烤鸭 · 炖鸭汤 · 午市套餐", ja: "韓国焼肉・雪花サムギョプサル・鴨BBQ・鴨の水炊き・ランチセット" },
+    keywords: "돈오리 donori 하노이 한식 고기구이 눈꽃삼겹살 삼겹살 목살 항정살 오리 오리고기 오리주물럭 오리로스 훈제오리 보쌈 능이백숙 냉면 막국수 점심 세트 소주 đình thôn mỹ đình từ liêm nam từ liêm hà nội nhà hàng hàn quốc thịt nướng hàn quốc ba chỉ heo vịt nướng vịt xào cay vịt xông khói 韩式烤肉 五花肉 烤鸭 韓国焼肉 サムギョプサル 鴨"
+  },
 ];
 window.SI = {
   ko: {

@@ -141,6 +141,8 @@ window.DEMOS = [
     name: "수원성 하노이 SUWONSUNG", type: { ko: "소고기 · 돼지고기 구이 · 냉면 · 하노이", vi: "Thịt bò · Thịt lợn nướng · Miến lạnh · Hà Nội", zh: "烤牛肉 · 烤猪肉 · 冷面 · 河内", ja: "牛・豚の焼肉・冷麺・ハノイ", en: "Beef & pork BBQ · Cold noodles · Hanoi" } },
   { id: "samwonjeong", hidden: true, url: "https://samwonjeong.qrmenuasia.com", shot: "img/demo-samwonjeong.jpg", qr: "img/qr-samwonjeong.svg",
     name: "삼원정 SAMWONJUNG", type: { ko: "한식 BBQ · 양념갈비 · 육회 · 연포탕 · 하노이", vi: "BBQ Hàn Quốc · Sườn bò tẩm ướp · Lẩu bạch tuộc · Hà Nội", zh: "韩式烤肉 · 腌制牛排 · 生拌牛肉 · 章鱼锅 · 河内", ja: "韓国BBQ・味付けカルビ・ユッケ・ナクチ鍋・ハノイ", en: "Korean BBQ · Marinated galbi · Beef tartare · Octopus hotpot · Hanoi" } },
+  { id: "donori", hidden: true, url: "https://donori.qrmenuasia.com", shot: "img/demo-donori.jpg", qr: "img/qr-donori.svg",
+    name: "돈오리 DONORI", type: { ko: "한식 고기구이 · 눈꽃삼겹살 · 오리 BBQ · 하노이", vi: "Thịt nướng Hàn Quốc · Ba chỉ heo hoa tuyết · Vịt BBQ · Hà Nội", zh: "韩式烤肉 · 雪花五花肉 · 烤鸭 · 河内", ja: "韓国焼肉・雪花サムギョプサル・鴨BBQ・ハノイ", en: "Korean BBQ · Snowflake pork belly · Duck BBQ · Hanoi" } },
 ];
 
 window.T = {

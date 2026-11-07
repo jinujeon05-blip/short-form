@@ -83,6 +83,7 @@ const SHOPS = {
   suwonyang: { type: 'Restaurant', cuisine: ['Korean', 'Lamb BBQ', 'Lamb skewers', 'Chinese'], country: 'VN', currency: 'VND', og: 'img/lambribs.jpg' },
   suwonhanoi: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef', 'Pork'], country: 'VN', currency: 'VND', og: 'img/samgyeop.jpg' },
   samwonjeong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Galbi', 'Beef'], country: 'VN', currency: 'VND', og: 'img/nakji.jpg' },
+  donori: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork belly', 'Duck'], country: 'VN', currency: 'VND', og: 'img/jumulleok.jpg' },
   chachacha: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Beef', 'Pork belly'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   yonggalbi: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Galbi', 'Unlimited galbi'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   seoulbrothers: { type: 'Restaurant', cuisine: ['Korean', 'Korean pub', 'Fried chicken', 'Anju'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
