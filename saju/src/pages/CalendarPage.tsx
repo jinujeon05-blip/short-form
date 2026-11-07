@@ -4,6 +4,8 @@ import { useMemo, useState } from 'react';
 import { jdnFromYmd } from '../engine/astro';
 import { PURPOSES, Purpose, dayInfo, holidaysOf, personalClash, suitsPurpose, upcomingDays, zodiacOfYear } from '../engine/almanac';
 import { PURPOSE_TEXT } from '../content/purposes';
+import { PURPOSE_DEPTH } from '../content/depthPurposes';
+import { Depth } from '../components/Depth';
 import { Link, RoutePath, hrefFor, navigate } from '../router';
 import { CalendarCountry } from '../engine/lunar';
 import { readStore, useI18n, writeStore } from '../i18n';
@@ -194,6 +196,7 @@ export function CalendarPage({ purpose: routePurpose = null }: { purpose?: Purpo
           </ul>
         </div>
       )}
+      {purpose && <Depth text={PURPOSE_DEPTH[purpose]?.[lang]} />}
       <h3 className="article-h">{pt.more}</h3>
       <div className="other-zodiacs">
         {PURPOSES.filter((p) => p !== purpose).map((p) => (
