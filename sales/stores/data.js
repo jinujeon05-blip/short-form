@@ -661,6 +661,12 @@ window.STORES = [
     type: { ko: "한식 돼지고기 구이 · 냉삼 · 모듬 구이 · 육회 · 냉면 · 점심 특선", vi: "Thịt heo nướng Hàn Quốc · Ba chỉ đông lạnh · Combo thịt nướng · Gỏi bò · Mì lạnh · Bữa trưa đặc biệt", en: "Korean pork BBQ · Frozen pork belly · BBQ combos · Yukhoe · Naengmyeon · Lunch special", zh: "韩式烤猪肉 · 冷冻五花肉 · 烤肉拼盘 · 生拌牛肉 · 冷面 · 午市特餐", ja: "韓国式豚焼肉・冷凍サムギョプサル・焼肉盛り合わせ・ユッケ・冷麺・ランチ特選" },
     keywords: "스마일회관 스마일 smile nhà hàng smile 하노이 고기집 하노이 삼겹살 미딩 딘톤 냉삼 냉동삼겹살 대패삼겹살 대패 소금구이 천겹살 항정살 벌집껍데기 쪽갈비 뒷고기 차돌박이 간장불고기 석쇠불고기 모듬구이 새마을 육회 칼국수 된장술밥 된장찌개 물냉면 비빔냉면 볶음밥 점심특선 청국장 누룽지탕 đình thôn mỹ đình từ liêm hà nội thịt nướng hàn quốc ba chỉ đông lạnh thịt heo nướng korean bbq pork belly 韩式烤肉 五花肉 サムギョプサル 삼겹살 맛집"
   },
+  { id: "torei", name: "토레이 이자카야 TOREI", sub: "야키토리 · 쿠시카츠 · 튀김 · 나베 · 사시미 · 하이볼", url: "https://torei.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese", "bar"], tags: ["photos"],
+    address: "1 Ngõ 179 Đình Thôn, Mỹ Đình, Nam Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Torei%EC%9D%B4%EC%9E%90%EC%B9%B4%EC%95%BC/@21.0177133,105.7761836,19z",
+    type: { ko: "일식 이자카야 · 야키토리 · 쿠시카츠 · 튀김 · 나베 · 하이볼", vi: "Izakaya Nhật Bản · Xiên nướng Yakitori · Xiên chiên Kushikatsu · Món chiên · Lẩu · Highball", en: "Japanese izakaya · Yakitori · Kushikatsu · Fried dishes · Nabe hot pot · Highball", zh: "日式居酒屋 · 烤鸡肉串 · 炸串 · 炸物 · 日式火锅 · 嗨棒", ja: "居酒屋・やきとり・串カツ・揚げ物・鍋・ハイボール" },
+    keywords: "토레이 토레이이자카야 torei robata torei 로바타 이자카야 하노이 이자카야 하노이 일식 미딩 딘톤 야키토리 닭꼬치 쿠시카츠 꼬치튀김 치킨난반 테바사키 가라아게 유린기 교자 고등어구이 시샤모 야키니쿠 명란 연어사시미 시메사바 야키소바 나폴리탄 오뎅나베 나가사키짬뽕 대방어 생굴 하이볼 삿포로 생맥주 소주 đình thôn mỹ đình từ liêm hà nội izakaya nhật bản quán nhậu nhật xiên nướng yakitori kushikatsu lẩu oden cá hồi sashimi japanese izakaya hanoi 居酒屋 焼き鳥 串カツ 日式居酒屋 이자카야 맛집"
+  },
 ];
 window.SI = {
   ko: {
