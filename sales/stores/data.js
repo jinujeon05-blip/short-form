@@ -666,7 +666,13 @@ window.STORES = [
     address: "1 Ngõ 179 Đình Thôn, Mỹ Đình, Nam Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Torei%EC%9D%B4%EC%9E%90%EC%B9%B4%EC%95%BC/@21.0177133,105.7761836,19z",
     type: { ko: "일식 이자카야 · 야키토리 · 쿠시카츠 · 튀김 · 나베 · 하이볼", vi: "Izakaya Nhật Bản · Xiên nướng Yakitori · Xiên chiên Kushikatsu · Món chiên · Lẩu · Highball", en: "Japanese izakaya · Yakitori · Kushikatsu · Fried dishes · Nabe hot pot · Highball", zh: "日式居酒屋 · 烤鸡肉串 · 炸串 · 炸物 · 日式火锅 · 嗨棒", ja: "居酒屋・やきとり・串カツ・揚げ物・鍋・ハイボール" },
     keywords: "토레이 토레이이자카야 torei robata torei 로바타 이자카야 하노이 이자카야 하노이 일식 미딩 딘톤 야키토리 닭꼬치 쿠시카츠 꼬치튀김 치킨난반 테바사키 가라아게 유린기 교자 고등어구이 시샤모 야키니쿠 명란 연어사시미 시메사바 야키소바 나폴리탄 오뎅나베 나가사키짬뽕 대방어 생굴 하이볼 삿포로 생맥주 소주 đình thôn mỹ đình từ liêm hà nội izakaya nhật bản quán nhậu nhật xiên nướng yakitori kushikatsu lẩu oden cá hồi sashimi japanese izakaya hanoi 居酒屋 焼き鳥 串カツ 日式居酒屋 이자카야 맛집"
+  },  { id: "shangla", name: "샹라 XIANG LA 香辣", sub: "마라탕 · 마라샹궈 · 중화요리 · 닭발 · 장어 · 꼬치", url: "https://shangla.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["chinese", "bar"], tags: ["photos"],
+    address: "Căn A16, Đ. Mỹ Đình / Lô DD Đ. Mễ Trì, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EC%83%B9%EB%9D%BC(%E9%A6%99%E8%BE%A3)%26%EC%9D%B4%EC%8B%AD%EC%82%AC%EC%A0%88%EA%B8%B0/@21.0185167,105.7761496,19z",
+    type: { ko: "마라탕 · 마라샹궈 · 중화요리 · 닭발 · 한식 안주 · 백주", vi: "Canh Mala · Đồ Xào Mala · Món Hoa · Chân gà · Món nhậu Hàn · Rượu trắng", en: "Malatang · Mala Xiang Guo · Chinese dishes · Spicy chicken feet · Korean bar food · Baijiu", zh: "麻辣烫 · 麻辣香锅 · 中餐 · 鸡爪 · 韩式下酒菜 · 白酒", ja: "麻辣湯・麻辣香鍋・中華料理・鶏足・韓国おつまみ・白酒" },
+    keywords: "샹라 香辣 xiang la xiangla 이십사절기 하노이 마라탕 하노이 마라샹궈 미딘 메찌 중식 중화요리 사천요리 라즈지 어향가지 마파두부 꿔바로우 유린기 깐풍기 창잉터우 공심채 닭발 국물닭발 직화닭발 장어구이 장어덮밥 꼬치 백주 고량주 연태고량주 마오타이 malatang mala hanoi chinese food my dinh canh mala chan ga lau tu xuyen"
   },
+
 ];
 window.SI = {
   ko: {

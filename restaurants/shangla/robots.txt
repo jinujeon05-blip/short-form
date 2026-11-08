@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shangla.qrmenuasia.com/sitemap.xml

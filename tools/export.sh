@@ -66,6 +66,7 @@ name() {
     yukdaejang) echo "육대장" ;;
     smile) echo "스마일회관" ;;
     torei) echo "토레이이자카야" ;;
+    shangla) echo "샹라" ;;
     texasbbq) echo "CTQ 텍사스 BBQ" ;;
     hoolala) echo "훌랄라치킨" ;;
     gaonjae) echo "가온재" ;;
