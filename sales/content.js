@@ -149,6 +149,8 @@ window.DEMOS = [
     name: "안동곱창 Andong Hanu Gopchang", type: { ko: "한식 곱창 · 고기구이 · 국밥 · 하노이", vi: "Lòng bò nướng · Thịt nướng · Canh cơm Hàn Quốc · Hà Nội", zh: "韩式烤牛肠 · 烤肉 · 汤饭 · 河内", ja: "韓国ホルモン・焼肉・クッパ・ハノイ", en: "Korean gopchang · BBQ · Gukbap · Hanoi" } },
   { id: "yukdaejang", hidden: true, url: "https://yukdaejang.qrmenuasia.com", shot: "img/demo-yukdaejang.jpg", qr: "img/qr-yukdaejang.svg",
     name: "육대장 Yuk Dae Jang", type: { ko: "한식 육개장 · 보쌈 · 전골 · 하노이", vi: "Canh bò cay YukGaeJang · Thịt heo hầm · Lẩu Hàn Quốc · Hà Nội", zh: "韩式辣牛肉汤 · 菜包肉 · 火锅 · 河内", ja: "ユッケジャン・ポッサム・鍋料理・ハノイ", en: "Korean yukgaejang · Bossam · Hot pot · Hanoi" } },
+  { id: "smile", hidden: true, url: "https://smile.qrmenuasia.com", shot: "img/demo-smile.jpg", qr: "img/qr-smile.svg",
+    name: "스마일회관 SMILE", type: { ko: "한식 돼지고기 구이 · 냉삼 · 육회 · 하노이", vi: "Thịt heo nướng Hàn Quốc · Ba chỉ đông lạnh · Gỏi bò · Hà Nội", zh: "韩式烤猪肉 · 冷冻五花肉 · 生拌牛肉 · 河内", ja: "韓国式豚焼肉・冷凍サムギョプサル・ユッケ・ハノイ", en: "Korean pork BBQ · Frozen pork belly · Yukhoe · Hanoi" } },
 ];
 
 window.T = {

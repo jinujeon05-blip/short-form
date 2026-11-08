@@ -655,6 +655,12 @@ window.STORES = [
     type: { ko: "한식 육개장 · 설렁탕 · 갈비탕 · 냉면 · 보쌈 · 전골 · 만두 · 곱창", vi: "Canh bò cay YukGaeJang · Canh xương bò · Canh sườn bò · Mì lạnh · Thịt heo hầm · Lẩu · Há cảo · Lòng bò nướng", en: "Korean yukgaejang · Seolleongtang · Galbitang · Naengmyeon · Bossam · Hot pot · Dumplings · Gopchang", zh: "韩式辣牛肉汤 · 牛骨汤 · 排骨汤 · 冷面 · 菜包肉 · 火锅 · 饺子 · 烤牛肠", ja: "ユッケジャン・ソルロンタン・カルビタン・冷麺・ポッサム・鍋・餃子・コプチャン" },
     keywords: "육대장 옛날전통육개장 육개장 yuk dae jang yukdaejang yukgaejang 하노이 육개장 미딩 송다 육칼면 생육칼면 꼬막육개장 순두부육개장 해물순두부육개장 갈비탕 설렁탕 황태설렁탕 사골떡만두국 떡만두국 냉면 양지냉면 물냉면 비빔냉면 한방보쌈 간장보쌈 보쌈 보쌈무침 양지무침 꼬막무침 육개장전골 부대전골 부대찌개 모듬수육전골 수육 갈비찜 대장갈비찜 만두 갈비만두 김치만두 왕만두 곱창 대창 막창 특양 염통 삼겹살 우삼겹 mỹ đình sông đà từ liêm hà nội nhà hàng hàn quốc canh bò cay lẩu thập cẩm thịt heo hầm há cảo mì lạnh korean spicy beef soup bossam budae jjigae dumplings 韩式辣牛肉汤 辣牛肉汤 ユッケジャン 육개장 맛집"
   },
+  { id: "smile", name: "스마일회관 SMILE", sub: "냉삼 · 대패 · 천겹살 · 모듬 구이 · 육회 · 냉면", url: "https://smile.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
+    address: "19 Ngõ 179 Đình Thôn, Mỹ Đình, Nam Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EC%8A%A4%EB%A7%88%EC%9D%BC%ED%9A%8C%EA%B4%80/@21.0176262,105.7766022,19z",
+    type: { ko: "한식 돼지고기 구이 · 냉삼 · 모듬 구이 · 육회 · 냉면 · 점심 특선", vi: "Thịt heo nướng Hàn Quốc · Ba chỉ đông lạnh · Combo thịt nướng · Gỏi bò · Mì lạnh · Bữa trưa đặc biệt", en: "Korean pork BBQ · Frozen pork belly · BBQ combos · Yukhoe · Naengmyeon · Lunch special", zh: "韩式烤猪肉 · 冷冻五花肉 · 烤肉拼盘 · 生拌牛肉 · 冷面 · 午市特餐", ja: "韓国式豚焼肉・冷凍サムギョプサル・焼肉盛り合わせ・ユッケ・冷麺・ランチ特選" },
+    keywords: "스마일회관 스마일 smile nhà hàng smile 하노이 고기집 하노이 삼겹살 미딩 딘톤 냉삼 냉동삼겹살 대패삼겹살 대패 소금구이 천겹살 항정살 벌집껍데기 쪽갈비 뒷고기 차돌박이 간장불고기 석쇠불고기 모듬구이 새마을 육회 칼국수 된장술밥 된장찌개 물냉면 비빔냉면 볶음밥 점심특선 청국장 누룽지탕 đình thôn mỹ đình từ liêm hà nội thịt nướng hàn quốc ba chỉ đông lạnh thịt heo nướng korean bbq pork belly 韩式烤肉 五花肉 サムギョプサル 삼겹살 맛집"
+  },
 ];
 window.SI = {
   ko: {
