@@ -685,6 +685,12 @@ window.STORES = [
     type: { ko: "한식·일식 · 사시미 · 초밥 · 덮밥 · 한국산 해물 · 점심 특선", vi: "Nhà hàng Hàn – Nhật · Sashimi · Sushi · Cơm bát · Hải sản Hàn Quốc · Set trưa", en: "Korean–Japanese · Sashimi · Sushi · Rice bowls · Korean seafood · Lunch specials", zh: "韩式日料 · 刺身 · 寿司 · 盖饭 · 韩国海鲜 · 午市特价", ja: "韓国料理・和食・刺身・寿司・丼・韓国産海鮮・ランチ" },
     keywords: "더 식탁 식탁 더식탁 the sik tak siktak thesiktak sik tak 하노이 사시미 회 횟집 일식 초밥 스시 모듬 사시미 도미 광어 참다랑어 참치 자바리 연어 모듬초밥 연어초밥 후토마키 장어덮밥 사시미덮밥 회덮밥 물회 소바 우동 모듬튀김 돈까스 캘리포니아롤 한국산 해물 개불 해삼 멍게 우니 성게알 전복 활새우 메로구이 새우튀김 점심특선 소주 화요 복분자 사케 쿠보타 닷사이 five star đình thôn mỹ đình từ liêm hà nội nhà hàng hàn quốc sashimi sushi hải sản korean japanese restaurant 刺身 寿司 맛집"
   },
+  { id: "onban", name: "온반 ONBAN", sub: "맑은 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", url: "https://onban.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean"], tags: ["photos"],
+    address: "TT3-C18 Five Star, Ngõ 154 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/ONBAN(%EC%98%A8%EB%B0%98)/@21.0185646,105.7756547,19z",
+    type: { ko: "한식 · 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", vi: "Nhà hàng Hàn Quốc · Canh thịt heo hầm · Lẩu · Bossam · Gà om · Mì kiều mạch", en: "Korean · Pork gomtang soup · Hot pot · Bossam · Braised chicken · Buckwheat noodles", zh: "韩国料理 · 猪肉清汤 · 火锅 · 菜包肉 · 炖鸡 · 荞麦冷面", ja: "韓国料理・豚コムタン・鍋・ポッサム・チムタク・マッククス" },
+    keywords: "온반 onban 하노이 돼지곰탕 곰탕 맑은 돼지곰탕 얼큰 돼지곰탕 해장 항정 전골 항정살 조개 보쌈 수육 불향간장수육 닭볶음탕 찜닭 두루치기 대패삼겹 오징어 칼국수 볶칼면 닭냉채 막국수 물막국수 들기름 막국수 메밀국수 감자채전 소주 막걸리 five star đình thôn mỹ đình từ liêm hà nội nhà hàng hàn quốc canh thịt heo hầm mì kiều mạch gà om korean restaurant 猪肉汤 コムタン 맛집"
+  },
   { id: "mokgumeong", name: "목구멍 Moggumung", sub: "미박삼겹살 · 항정살 · 우대갈비 · 목구멍 플래터 · 냉면", url: "https://mokgumeong.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
     address: "122 P. Trần Văn Lai, Mỹ Đình, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EB%AA%A9%EA%B5%AC%EB%A9%8D+%ED%95%98%EB%85%B8%EC%9D%B4+%EB%AF%B8%EB%94%A9%EC%A0%90/@21.0165124,105.7772973,19z",
