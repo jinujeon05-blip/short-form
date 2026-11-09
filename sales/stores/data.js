@@ -655,6 +655,12 @@ window.STORES = [
     type: { ko: "한식 육개장 · 설렁탕 · 갈비탕 · 냉면 · 보쌈 · 전골 · 만두 · 곱창", vi: "Canh bò cay YukGaeJang · Canh xương bò · Canh sườn bò · Mì lạnh · Thịt heo hầm · Lẩu · Há cảo · Lòng bò nướng", en: "Korean yukgaejang · Seolleongtang · Galbitang · Naengmyeon · Bossam · Hot pot · Dumplings · Gopchang", zh: "韩式辣牛肉汤 · 牛骨汤 · 排骨汤 · 冷面 · 菜包肉 · 火锅 · 饺子 · 烤牛肠", ja: "ユッケジャン・ソルロンタン・カルビタン・冷麺・ポッサム・鍋・餃子・コプチャン" },
     keywords: "육대장 옛날전통육개장 육개장 yuk dae jang yukdaejang yukgaejang 하노이 육개장 미딩 송다 육칼면 생육칼면 꼬막육개장 순두부육개장 해물순두부육개장 갈비탕 설렁탕 황태설렁탕 사골떡만두국 떡만두국 냉면 양지냉면 물냉면 비빔냉면 한방보쌈 간장보쌈 보쌈 보쌈무침 양지무침 꼬막무침 육개장전골 부대전골 부대찌개 모듬수육전골 수육 갈비찜 대장갈비찜 만두 갈비만두 김치만두 왕만두 곱창 대창 막창 특양 염통 삼겹살 우삼겹 mỹ đình sông đà từ liêm hà nội nhà hàng hàn quốc canh bò cay lẩu thập cẩm thịt heo hầm há cảo mì lạnh korean spicy beef soup bossam budae jjigae dumplings 韩式辣牛肉汤 辣牛肉汤 ユッケジャン 육개장 맛집"
   },
+  { id: "horangi", name: "호랑이식당 Nhà Hàng Hổ", sub: "수제돈까스 · 순살치킨 · 덮밥 · 롤 · 파스타 · 떡볶이", url: "https://horangi.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "chicken", "western"], tags: ["photos"],
+    address: "The Emerald, SH01, CT8 tòa E2, Ngõ 180 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Nh%C3%A0+H%C3%A0ng+H%E1%BB%95_%ED%98%B8%EB%9E%91%EC%9D%B4+%EC%8B%9D%EB%8B%B9/@21.0170703,105.7736126,20z",
+    type: { ko: "한식 · 수제돈까스 · 순살치킨 · 덮밥 · 김밥롤 · 파스타 · 떡볶이", vi: "Món Hàn · Thịt heo chiên xù · Gà không xương · Cơm · Cơm cuộn · Mỳ Ý · Tteokbokki", en: "Korean · Handmade pork cutlet · Boneless chicken · Rice bowls · Rolls · Pasta · Tteokbokki", zh: "韩餐 · 手工炸猪排 · 无骨炸鸡 · 盖饭 · 紫菜卷 · 意面 · 炒年糕", ja: "韓国料理・手作りトンカツ・骨なしチキン・丼・キンパ風ロール・パスタ・トッポッキ" },
+    keywords: "호랑이식당 호랑이 식당 nha hang ho nhà hàng hổ horangi 하노이 한식 분식 돈까스 수제돈까스 치즈돈까스 카레돈까스 고구마돈까스 순살치킨 양념치킨 간장치킨 후라이드 덮밥 닭갈비덮밥 삼겹살덮밥 치킨덮밥 카레덮밥 오므라이스 김치볶음밥 우동 롤 김밥 파스타 로제파스타 까르보나라 리조또 떡볶이 로제떡볶이 치즈볼 군만두 the emerald đình thôn từ liêm hà nội nhà hàng hàn quốc thịt heo chiên xù gà rán cơm cuộn korean pork cutlet tonkatsu fried chicken 炸猪排 トンカツ 맛집"
+  },
   { id: "myungheewon", name: "명희원 明熙園", sub: "짜장면 · 짬뽕 · 탕수육 · 양장피 · 깐풍기 · 알뜰세트", url: "https://myungheewon.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["chinese", "korean", "noodle"], tags: ["photos"],
     address: "Lô 15 TT1, KĐT Mỹ Đình Sông Đà, Mỹ Đình 1, Nam Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EB%AA%85%ED%9D%AC%EC%9B%90/@21.0176035,105.7758376,21z",
