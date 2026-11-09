@@ -679,6 +679,12 @@ window.STORES = [
     type: { ko: "한국식 숯불 꼬치 주점 · 닭꼬치 · 부대찌개 · 오뎅탕 · 노가리 · 하이볼", vi: "Quán xiên nướng than kiểu Hàn · Xiên gà · Lẩu quân đội · Canh chả cá · Cá khô · Highball", en: "Korean charcoal skewer pub · Chicken skewers · Army stew · Fish cake soup · Dried fish · Highball", zh: "韩式炭火烤串酒馆 · 鸡肉串 · 部队锅 · 鱼糕汤 · 干鱼 · 嗨棒", ja: "韓国式炭火串焼き酒場・焼き鳥・プデチゲ・おでん鍋・干物・ハイボール" },
     keywords: "꼬치마차 꼬치 마차 ko chi ma cha kochimacha kkochimacha nhà hàng thịt xiên 하노이 꼬치 닭꼬치 숯불 닭꼬치 치즈 닭꼬치 파꼬치 모듬꼬치 부대찌개 오뎅탕 번데기탕 곶감 치즈 말이 카프레제 닭발 제육볶음 노가리 오징어 한치 쥐포 소주 생맥주 삿포로 하이볼 술집 주점 포차 미딩 미딘 đình thôn mỹ đình từ liêm hà nội xiên nướng xiên gà lẩu quân đội canh chả cá quán nhậu hàn quốc korean pub skewers 烤串 串焼き 맛집"
   },
+  { id: "thesiktak", name: "더 식탁 The Sik Tak", sub: "사시미 · 초밥 세트 · 장어덮밥 · 한국산 해물 · 점심 특선", url: "https://thesiktak.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "japanese", "seafood"], tags: ["photos"],
+    address: "C11 KĐT Five Star, Ngõ 154 Đình Thôn, Mỹ Đình, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EB%8D%94+%EC%8B%9D%ED%83%81(%EC%8B%9D%ED%83%81)/@21.0185924,105.775374,19z",
+    type: { ko: "한식·일식 · 사시미 · 초밥 · 덮밥 · 한국산 해물 · 점심 특선", vi: "Nhà hàng Hàn – Nhật · Sashimi · Sushi · Cơm bát · Hải sản Hàn Quốc · Set trưa", en: "Korean–Japanese · Sashimi · Sushi · Rice bowls · Korean seafood · Lunch specials", zh: "韩式日料 · 刺身 · 寿司 · 盖饭 · 韩国海鲜 · 午市特价", ja: "韓国料理・和食・刺身・寿司・丼・韓国産海鮮・ランチ" },
+    keywords: "더 식탁 식탁 더식탁 the sik tak siktak thesiktak sik tak 하노이 사시미 회 횟집 일식 초밥 스시 모듬 사시미 도미 광어 참다랑어 참치 자바리 연어 모듬초밥 연어초밥 후토마키 장어덮밥 사시미덮밥 회덮밥 물회 소바 우동 모듬튀김 돈까스 캘리포니아롤 한국산 해물 개불 해삼 멍게 우니 성게알 전복 활새우 메로구이 새우튀김 점심특선 소주 화요 복분자 사케 쿠보타 닷사이 five star đình thôn mỹ đình từ liêm hà nội nhà hàng hàn quốc sashimi sushi hải sản korean japanese restaurant 刺身 寿司 맛집"
+  },
   { id: "mokgumeong", name: "목구멍 Moggumung", sub: "미박삼겹살 · 항정살 · 우대갈비 · 목구멍 플래터 · 냉면", url: "https://mokgumeong.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
     address: "122 P. Trần Văn Lai, Mỹ Đình, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EB%AA%A9%EA%B5%AC%EB%A9%8D+%ED%95%98%EB%85%B8%EC%9D%B4+%EB%AF%B8%EB%94%A9%EC%A0%90/@21.0165124,105.7772973,19z",

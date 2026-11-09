@@ -68,6 +68,7 @@ name() {
     myungheewon) echo "명희원" ;;
     horangi) echo "호랑이식당" ;;
     kkochimacha) echo "꼬치마차" ;;
+    thesiktak) echo "더식탁" ;;
     honggang) echo "홍강" ;;
     smile) echo "스마일회관" ;;
     torei) echo "토레이이자카야" ;;
