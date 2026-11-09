@@ -697,6 +697,11 @@ window.STORES = [
     type: { ko: "메밀국수 · 콩국수 · 수제 돈까스 · 만두", vi: "Mì kiều mạch · Mì nước đậu nành · Tonkatsu · Bánh bao", en: "Buckwheat soba · Kongguksu · Handmade tonkatsu · Dumplings", zh: "荞麦面 · 冷豆浆面 · 手工猪排 · 饺子", ja: "そば・豆乳麺・手作りとんかつ・マンドゥ" },
     keywords: "메르밀 메르 밀 mereumil 하노이 메밀 메밀국수 메밀면 소바 냉메밀 땡초메밀 온메밀 우삼겹 온메밀 들기름 메밀 들기름막국수 비빔메밀 콩국수 메밀 콩국수 우삼겹 짬뽕 메밀 오뎅소바 새우튀김 등심돈까스 치즈돈까스 돈까스 고기왕만두 만두 콩물 mỹ đình mễ trì từ liêm hà nội nhà hàng hàn quốc mì kiều mạch soba tonkatsu korean restaurant 荞麦面 そば 맛집"
   },
+  { id: "jenniemom", name: "분짜 제니맘 Bún Chả Jenniemom", sub: "숯불 분짜 · 분짜짠 · 분목 · 넴 · 반똠 · 분짜 세트", url: "https://jenniemom.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["noodle", "bbq"], tags: ["photos"],
+    address: "Khu Sông Đà (gần CT4 Sông Đà), Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/B%C3%BAn+Ch%E1%BA%A3+Jenniemom/@21.0177021,105.7805612,17z",
+    type: { ko: "베트남 음식 · 하노이 분짜 · 넴 · 반똠 · 반미", vi: "Bún chả Hà Nội · Nem rán · Bánh tôm · Bánh mì", en: "Vietnamese · Hanoi bún chả · Fried spring rolls · Shrimp fritters · Bánh mì", zh: "越南菜 · 河内烤肉米线 · 炸春卷 · 虾饼 · 法棍", ja: "ベトナム料理・ハノイ式ブンチャー・揚げ春巻き・海老揚げ・バインミー" },
+    keywords: "분짜 제니맘 분짜제니맘 jenniemom jennie mom bún chả jenniemom 하노이 분짜 숯불 분짜 분짜짠 분목 넴 짜조 반똠 반미 소불고기 반미 분짜 세트 베트남 음식 미딩 송다 ct4 bun cha bún chả chan bún mọc nem rán bánh tôm bánh mì trà đá trà tắc từ liêm mỹ đình sông đà hanoi hà nội vietnamese food grilled pork rice noodles spring rolls" },
   { id: "jungsung", name: "정성 JUNGSUNG", sub: "한우 미나리 육회 · 큐브 꽃살 스테이크 · 숙성 삼겹살 · 보일링 쉬림프 · 점심 특선", url: "https://jungsung.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean", "bbq"], tags: ["photos"],
     address: "Ô đất CT8, The Emerald, Đ. Mỹ Đình – Mễ Trì, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/JUNGSUNG/@21.0166637,105.7739575,19z",
