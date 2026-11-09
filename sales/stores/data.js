@@ -691,6 +691,12 @@ window.STORES = [
     type: { ko: "한식 횟집 · 사시미 · 회 세트 · 해산물 요리", vi: "Nhà hàng sashimi Hàn Quốc · Set cá sống · Hải sản", en: "Korean sashimi · Sashimi sets · Seafood", zh: "韩式生鱼片 · 刺身套餐 · 海鲜", ja: "韓国式刺身・刺身セット・海鮮料理" },
     keywords: "일류 사시미 일류사시미 일류 il ryu ilryu korean sashimi 하노이 횟집 회 사시미 모듬회 광어 제주 광어 다금바리 병어 흑돔 갑오징어 연어회 스끼다시 회 세트 아나고 문어삼합 새우 소금구이 장어구이 물회 산낙지 조개술찜 탕수육 칠리새우 해물파전 점심 초밥 모듬초밥 후토마끼 회덮밥 장어덮밥 냉메밀 소주 사케 đình thôn mỹ đình từ liêm hà nội nhà hàng hàn quốc sashimi cá sống hải sản korean restaurant 刺身 生鱼片 맛집"
   },
+  { id: "mereumil", name: "메르밀 Mereumil", sub: "냉메밀 · 땡초메밀 · 들기름 메밀 · 메밀 콩국수 · 수제 돈까스", url: "https://mereumil.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "noodle"], tags: ["photos"],
+    address: "A3 Lô DD, KĐT Mễ Trì, Đ. Mỹ Đình, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Mereumil/@21.018098,105.7757468,19z",
+    type: { ko: "메밀국수 · 콩국수 · 수제 돈까스 · 만두", vi: "Mì kiều mạch · Mì nước đậu nành · Tonkatsu · Bánh bao", en: "Buckwheat soba · Kongguksu · Handmade tonkatsu · Dumplings", zh: "荞麦面 · 冷豆浆面 · 手工猪排 · 饺子", ja: "そば・豆乳麺・手作りとんかつ・マンドゥ" },
+    keywords: "메르밀 메르 밀 mereumil 하노이 메밀 메밀국수 메밀면 소바 냉메밀 땡초메밀 온메밀 우삼겹 온메밀 들기름 메밀 들기름막국수 비빔메밀 콩국수 메밀 콩국수 우삼겹 짬뽕 메밀 오뎅소바 새우튀김 등심돈까스 치즈돈까스 돈까스 고기왕만두 만두 콩물 mỹ đình mễ trì từ liêm hà nội nhà hàng hàn quốc mì kiều mạch soba tonkatsu korean restaurant 荞麦面 そば 맛집"
+  },
   { id: "onban", name: "온반 ONBAN", sub: "맑은 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", url: "https://onban.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean"], tags: ["photos"],
     address: "TT3-C18 Five Star, Ngõ 154 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/ONBAN(%EC%98%A8%EB%B0%98)/@21.0185646,105.7756547,19z",

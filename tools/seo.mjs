@@ -95,6 +95,7 @@ const SHOPS = {
   thesiktak: { type: 'Restaurant', cuisine: ['Korean', 'Japanese', 'Sashimi', 'Sushi', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/moodeum_sashimi.jpg' },
   onban: { type: 'Restaurant', cuisine: ['Korean', 'Gomtang', 'Hot Pot', 'Buckwheat Noodles'], country: 'VN', currency: 'VND', og: 'img/gomtang.jpg' },
   ilryu: { type: 'Restaurant', cuisine: ['Korean', 'Sashimi', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/moduem.jpg' },
+  mereumil: { type: 'Restaurant', cuisine: ['Korean', 'Noodles', 'Soba'], country: 'VN', currency: 'VND', og: 'img/naeng.jpg' },
   torei: { type: 'Restaurant', cuisine: ['Japanese', 'Izakaya', 'Yakitori'], country: 'VN', currency: 'VND', og: 'img/yakitori.jpg' },
   shangla: { type: 'Restaurant', cuisine: ['Chinese', 'Sichuan', 'Korean'], country: 'VN', currency: 'VND', og: 'img/malaxiangguo.jpg' },
   smile: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork BBQ'], country: 'VN', currency: 'VND', og: 'img/daepae.jpg' },
