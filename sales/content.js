@@ -155,6 +155,8 @@ window.DEMOS = [
     name: "명희원 明熙園", type: { ko: "한국식 중식 · 짜장면 · 짬뽕 · 탕수육 · 하노이", vi: "Món Hoa kiểu Hàn · Mì tương đen · Mì cay · Thịt chua ngọt · Hà Nội", zh: "韩式中餐 · 炸酱面 · 海鲜辣汤面 · 糖醋肉 · 河内", ja: "韓国式中華・ジャージャー麺・チャンポン・酢豚・ハノイ", en: "Korean-Chinese · Jjajangmyeon · Jjamppong · Sweet & sour pork · Hanoi" } },
   { id: "honggang", hidden: true, url: "https://honggang.qrmenuasia.com", shot: "img/demo-honggang.jpg", qr: "img/qr-honggang.svg",
     name: "홍강 SÔNG HỒNG", type: { ko: "한국식 중식 · 짜장면 · 짬뽕 · 탕수육 · 하노이", vi: "Món Hoa kiểu Hàn · Mì tương đen · Mì cay · Thịt chua ngọt · Hà Nội", zh: "韩式中餐 · 炸酱面 · 海鲜辣汤面 · 糖醋肉 · 河内", ja: "韓国式中華・ジャージャー麺・チャンポン・酢豚・ハノイ", en: "Korean-Chinese · Jjajangmyeon · Jjamppong · Sweet & sour pork · Hanoi" } },
+  { id: "kkochimacha", hidden: true, url: "https://kkochimacha.qrmenuasia.com", shot: "img/demo-kkochimacha.jpg", qr: "img/qr-kkochimacha.svg",
+    name: "꼬치마차 KO CHI MA CHA", type: { ko: "한국식 숯불 꼬치 · 안주 · 주점 · 하노이", vi: "Xiên nướng than kiểu Hàn · Món nhậu · Hà Nội", zh: "韩式炭火烤串 · 下酒菜 · 酒馆 · 河内", ja: "韓国式炭火串焼き・おつまみ・酒場・ハノイ", en: "Korean charcoal skewers · Anju · Pub · Hanoi" } },
   { id: "mokgumeong", hidden: true, url: "https://mokgumeong.qrmenuasia.com", shot: "img/demo-mokgumeong.jpg", qr: "img/qr-mokgumeong.svg",
     name: "목구멍 Moggumung", type: { ko: "한식 고기구이 · 미박삼겹살 · 우대갈비 · 하노이", vi: "Thịt nướng Hàn Quốc · Ba chỉ heo · Sườn bò · Hà Nội", zh: "韩式烤肉 · 带皮五花肉 · 牛排骨 · 河内", ja: "韓国焼肉・皮付きサムギョプサル・牛カルビ・ハノイ", en: "Korean BBQ · Skin-on pork belly · Beef short rib · Hanoi" } },
   { id: "smile", hidden: true, url: "https://smile.qrmenuasia.com", shot: "img/demo-smile.jpg", qr: "img/qr-smile.svg",

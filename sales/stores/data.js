@@ -673,6 +673,12 @@ window.STORES = [
     type: { ko: "한국식 중식 · 짜장면 · 짬뽕 · 탕수육 · 깐풍기 · 양장피 · 세트", vi: "Món Hoa kiểu Hàn · Mì tương đen · Mì cay hải sản · Thịt chua ngọt · Gà chiên xào cay · Combo set", en: "Korean-Chinese · Jjajangmyeon · Jjamppong · Sweet & sour pork · Kkanpunggi · Yangjangpi · Combo sets", zh: "韩式中餐 · 炸酱面 · 海鲜辣汤面 · 糖醋肉 · 干烹鸡 · 两张皮 · 套餐", ja: "韓国式中華・ジャージャー麺・チャンポン・酢豚・カンプンギ・ヤンジャンピ・セット" },
     keywords: "홍강 紅江 song hong sông hồng honggang 하노이 중국집 중식 중화요리 한국식 중화요리 배달안해요 짜장면 유니짜장 짬뽕 해물짬뽕 고기짬뽕 짬뽕밥 해물우동 잡채밥 볶음밥 계란볶음밥 새우볶음밥 해물볶음밥 군만두 쇼마이 탕수육 사천탕수육 유린탕수육 깐풍기 닭강정 유린기 간쇼새우 양장피 잡채 마파두부 떡볶이 세트 콤보 연태고량주 소주 đình thôn mỹ đình từ liêm hà nội nhà hàng trung hoa kiểu hàn mì tương đen mì cay hải sản thịt lợn sốt chua ngọt korean chinese jjajangmyeon jjamppong tangsuyuk 炸酱面 糖醋肉 ジャージャー麺 チャンポン 중국집 맛집"
   },
+  { id: "kkochimacha", name: "꼬치마차 KO CHI MA CHA", sub: "숯불 닭꼬치 · 모듬 꼬치 · 부대찌개 · 오뎅탕 · 마른 안주", url: "https://kkochimacha.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bar", "korean"], tags: ["photos"],
+    address: "Đ. Mỹ Đình, Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EA%BC%AC%EC%B9%98%EB%A7%88%EC%B0%A8+Nh%C3%A0+h%C3%A0ng+th%E1%BB%8Bt+xi%C3%AAn+KO+CHI+MA+CHA/@21.0184014,105.7757765,20z",
+    type: { ko: "한국식 숯불 꼬치 주점 · 닭꼬치 · 부대찌개 · 오뎅탕 · 노가리 · 하이볼", vi: "Quán xiên nướng than kiểu Hàn · Xiên gà · Lẩu quân đội · Canh chả cá · Cá khô · Highball", en: "Korean charcoal skewer pub · Chicken skewers · Army stew · Fish cake soup · Dried fish · Highball", zh: "韩式炭火烤串酒馆 · 鸡肉串 · 部队锅 · 鱼糕汤 · 干鱼 · 嗨棒", ja: "韓国式炭火串焼き酒場・焼き鳥・プデチゲ・おでん鍋・干物・ハイボール" },
+    keywords: "꼬치마차 꼬치 마차 ko chi ma cha kochimacha kkochimacha nhà hàng thịt xiên 하노이 꼬치 닭꼬치 숯불 닭꼬치 치즈 닭꼬치 파꼬치 모듬꼬치 부대찌개 오뎅탕 번데기탕 곶감 치즈 말이 카프레제 닭발 제육볶음 노가리 오징어 한치 쥐포 소주 생맥주 삿포로 하이볼 술집 주점 포차 미딩 미딘 đình thôn mỹ đình từ liêm hà nội xiên nướng xiên gà lẩu quân đội canh chả cá quán nhậu hàn quốc korean pub skewers 烤串 串焼き 맛집"
+  },
   { id: "mokgumeong", name: "목구멍 Moggumung", sub: "미박삼겹살 · 항정살 · 우대갈비 · 목구멍 플래터 · 냉면", url: "https://mokgumeong.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
     address: "122 P. Trần Văn Lai, Mỹ Đình, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EB%AA%A9%EA%B5%AC%EB%A9%8D+%ED%95%98%EB%85%B8%EC%9D%B4+%EB%AF%B8%EB%94%A9%EC%A0%90/@21.0165124,105.7772973,19z",
