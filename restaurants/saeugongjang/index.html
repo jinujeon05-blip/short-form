@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0c0f">
+<title>새우공장 ㅅㅇㄱㅈ 메뉴</title>
+<meta name="description" content="새우공장 ㅅㅇㄱㅈ · Pocha &amp; Pub · 활새우 소금구이 · 활새우회 — Kiosk 11B2, tòa CT4, Mỹ Đình Sông Đà, Từ Liêm, Hà Nội">
+<style>
+  :root {
+    --paper: #0a0c0f;
+    --paper-2: #14181d;
+    --band: #0a0c0f;
+    --band-2: #4dff3b;
+    --ink: #f4e24c;
+    --text: #eef0ea;
+    --muted: #9ba39a;
+    --line: #272c33;
+    --rust: #e4472f;
+    --gold: #ff7a1a;
+    --green: #4dff3b;
+    --frame: #e8eae4;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; background: var(--paper); }
+  body {
+    margin: 0; color: var(--text); background: var(--paper);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.4;
+  }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── 상단: 메뉴판처럼 검은 바탕에 흰 가는 테두리와 모서리 점 ── */
+  header { position: relative; overflow: hidden; text-align: center; padding: 20px 0 30px; }
+  header::before { content: ""; position: absolute; inset: 8px; border: 1px solid var(--frame); border-radius: 2px; pointer-events: none; opacity: .85; }
+  header::after { content: ""; position: absolute; left: 4px; bottom: 4px; width: 9px; height: 9px; border-radius: 50%; background: var(--frame); box-shadow: calc(100vw - 17px) 0 0 var(--frame); pointer-events: none; }
+  .corner { position: absolute; top: 4px; width: 9px; height: 9px; border: 0; border-radius: 50%; background: var(--frame); pointer-events: none; }
+  .corner.l { left: 4px; }
+  .corner.r { right: 4px; }
+  .langs { position: relative; z-index: 1; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: var(--text); background: transparent; border: 1px solid #4a525a; border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: #0a0c0f; background: var(--green); border-color: var(--green); }
+  .logo { display: block; width: 132px; height: auto; margin: 26px auto 0; }
+  .logo.sign { width: 100%; max-width: 440px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; margin-top: 18px; }
+  h1 { margin: 12px 0 0; font-size: 40px; font-weight: 800; letter-spacing: 10px; padding-left: 10px; line-height: 1; color: var(--ink); }
+  .en { margin: 8px 0 0; font-size: 15px; font-weight: 400; letter-spacing: 7px; color: var(--text); opacity: .85; }
+  .tagline { margin: 12px 0 0; font-size: 14.5px; font-weight: 600; color: var(--green); }
+  .chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 14px; position: relative; z-index: 1; }
+  .chips span { font-size: 12.5px; font-weight: 700; color: var(--gold); background: transparent; border: 1px solid #7a4515; border-radius: 4px; padding: 4px 11px; }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; background: var(--paper); border-bottom: 1px solid var(--green); box-shadow: 0 4px 14px rgba(0,0,0,.6); }
+  nav .wrap { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-top: 7px; padding-bottom: 7px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: var(--text); text-decoration: none; font-size: 14px; font-weight: 700; padding: 8px 12px; border-radius: 4px; white-space: nowrap; }
+  nav a.active { color: #0a0c0f; background: var(--green); }
+
+  /* ── 메뉴 ── */
+  section { padding: 30px 0 6px; }
+  .head { display: block; }
+  h2 { margin: 0; font-size: 27px; font-weight: 800; letter-spacing: .3px; text-align: left; color: var(--green); padding-bottom: 8px; border-bottom: 1px solid #6b7a68; text-shadow: 0 0 12px rgba(77,255,59,.28); }
+  h2 small { display: block; margin-top: 3px; font-size: 14px; font-weight: 400; letter-spacing: 0; color: var(--muted); text-shadow: none; }
+  .note { margin: 12px 0 0; font-size: 13.5px; color: var(--green); background: var(--paper-2); border-left: 3px solid var(--green); border-radius: 0 6px 6px 0; padding: 8px 12px; }
+  .tip { margin: 14px 0 0; font-size: 13.5px; color: var(--text); background: var(--paper-2); border: 1px dashed #5a636b; border-radius: 6px; padding: 10px 12px; }
+  .tip b { color: var(--gold); margin-right: 4px; }
+
+  ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  li { display: flex; gap: 12px; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  .thumb { flex: none; width: 96px; height: 72px; border-radius: 6px; overflow: hidden; padding: 0; border: 1px solid #3a4148; background: var(--paper-2); cursor: zoom-in; }
+  .thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .info { flex: 1; min-width: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 3px; }
+  .tags span { font-size: 10.5px; font-weight: 800; letter-spacing: .3px; color: #fff; background: var(--rust); border-radius: 3px; padding: 1px 6px; }
+  .tags .best { background: var(--green); color: #0a0c0f; }
+  .tags .special { background: var(--gold); color: #0a0c0f; }
+  .tags .hot { background: transparent; color: #ff6a52; border: 1px solid #8a3426; }
+  .row { display: flex; align-items: baseline; gap: 8px; }
+  .row b { font-size: 17px; font-weight: 800; color: var(--ink); }
+  .row .unit { font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .row .leader { flex: 1; min-width: 10px; border-bottom: 2px dotted #4a525a; transform: translateY(-4px); }
+  .price { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--green); }
+  .price small { font-size: 11px; color: var(--green); opacity: .75; margin-left: 1px; }
+  .sizes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+  .sizes span { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--green); background: var(--paper-2); border: 1px solid #3b6a35; border-radius: 4px; padding: 2px 8px; }
+  .sizes span i { font-style: normal; font-size: 11px; font-weight: 800; color: #0a0c0f; background: var(--ink); border-radius: 3px; padding: 0 4px; margin-right: 5px; }
+  .sizes span small { color: var(--green); opacity: .75; }
+  .desc { margin-top: 4px; font-size: 13px; color: #c3c8bf; }
+  .sub { margin-top: 3px; font-size: 13px; color: var(--muted); }
+  .sub.it { font-style: italic; }
+
+  /* ── 가게 정보 ── */
+  footer { margin-top: 40px; background: var(--paper); border-top: 1px solid var(--green); color: var(--text); padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); }
+  .quote { text-align: center; font-size: 15px; line-height: 1.7; margin: 0 0 18px; }
+  .quote small { display: block; margin-top: 4px; font-size: 12.5px; opacity: .8; }
+  .pills { display: grid; gap: 10px; }
+  .pill { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; text-align: left; color: var(--text); text-decoration: none; background: var(--paper-2); border: 1px solid #323940; border-radius: 6px; padding: 10px 14px 10px 10px; cursor: pointer; }
+  .pill i { flex: none; width: 40px; height: 40px; border-radius: 6px; display: grid; place-items: center; background: var(--green); }
+  .pill i svg { width: 20px; height: 20px; color: #0a0c0f; }
+  .pill div { flex: 1; min-width: 0; }
+  .pill small { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .pill strong { display: block; font-size: 16px; font-weight: 800; word-break: break-word; color: var(--ink); }
+  .pill em { flex: none; font-style: normal; font-size: 12px; font-weight: 700; color: var(--gold); }
+  .vnd { text-align: center; margin: 16px 0 0; font-size: 12px; color: var(--muted); }
+
+  .zoom { position: fixed; inset: 0; z-index: 30; display: none; place-items: center; padding: 16px; background: rgba(0,0,0,.92); cursor: zoom-out; }
+  .zoom.show { display: grid; }
+  .zoom figure { margin: 0; max-width: 560px; width: 100%; }
+  .zoom img { width: 100%; border-radius: 8px; display: block; background: var(--paper); }
+  .zoom figcaption { margin-top: 10px; text-align: center; font-size: 16px; font-weight: 800; color: var(--ink); }
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 40; background: var(--green); color: #0a0c0f; font-size: 14px; font-weight: 700; padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+<style id="partner-theme">
+  /* 하단 파트너 배너(다산·JS welink) 색을 이 메뉴판에 맞춘다 */
+  :root { --pt-mode: dark; --pt-bg: #14181d; --pt-ink: #eef0ea; --pt-muted: #9ba39a; --pt-line: #323940; --pt-accent: #4dff3b; --pt-btn: #4dff3b; --pt-btn-ink: #0a0c0f; --pt-shadow: 0 6px 16px rgba(0,0,0,.6); }
+</style>
+<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
+<link rel="canonical" href="https://saeugongjang.qrmenuasia.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="새우공장 ㅅㅇㄱㅈ 메뉴">
+<meta property="og:description" content="새우공장 ㅅㅇㄱㅈ · Pocha &amp;amp; Pub · 활새우 소금구이 · 활새우회 — Kiosk 11B2, tòa CT4, Mỹ Đình Sông Đà, Từ Liêm, Hà Nội">
+<meta property="og:url" content="https://saeugongjang.qrmenuasia.com/">
+<meta property="og:image" content="https://saeugongjang.qrmenuasia.com/img/salt.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"새우공장 ㅅㅇㄱㅈ","url":"https://saeugongjang.qrmenuasia.com/","address":{"@type":"PostalAddress","streetAddress":"Kiosk 11B2, tầng 1, tòa CT4, KĐT Mỹ Đình Sông Đà, Từ Liêm, Hà Nội","addressCountry":"VN"},"telephone":"0368178543","image":"https://saeugongjang.qrmenuasia.com/img/salt.jpg","servesCuisine":["Korean","Seafood","Shrimp"],"hasMenu":{"@type":"Menu","name":"새우공장 ㅅㅇㄱㅈ menu","inLanguage":["ko","en","zh","ja","vi"],"hasMenuSection":[{"@type":"MenuSection","name":"Shrimp-kase Set (1kg)","hasMenuItem":[{"@type":"MenuItem","name":"A. Live Shrimp Salt-Grilled","alternateName":["A. 활새우 소금구이","Tôm tươi hấp muối","A. 活虾盐烤","A. 活エビの塩焼き"],"offers":{"@type":"Offer","price":1080000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"B. Live Shrimp Sashimi","alternateName":["B. 활새우회","Tôm sashimi","B. 活虾刺身","B. 活エビの刺身"],"offers":{"@type":"Offer","price":1180000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"C. Live Shrimp in Spicy Sauce","alternateName":["C. 활새우 양념무침","Tôm tươi trộn sốt cay","C. 活虾辣酱拌","C. 活エビのピリ辛和え"],"offers":{"@type":"Offer","price":1330000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Sides & Bar Snacks","hasMenuItem":[{"@type":"MenuItem","name":"Kimchi Hot Pot","alternateName":["김치전골","Canh kimchi","泡菜火锅","キムチ鍋"],"offers":{"@type":"Offer","price":290000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Spicy Webfoot Octopus (Jjukkumi)","alternateName":["쭈꾸미 볶음","Bạch tuộc xào cay","辣炒章鱼仔","イイダコの辛炒め"],"offers":{"@type":"Offer","price":290000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Spicy Chicken (Dakgalbi)","alternateName":["닭갈비 구이","Gà nướng sốt cay","烤辣鸡排","タッカルビ焼き"],"offers":{"@type":"Offer","price":280000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fish Cake Soup (Odeng-tang)","alternateName":["오뎅탕","Canh chả cá","鱼饼汤","おでん鍋"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tteokbokki with Thin-sliced Pork Belly","alternateName":["대패삼겹 떡볶이","Tteokbokki thịt ba chỉ","薄切五花肉炒年糕","薄切り豚バラのトッポッキ"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Whole Squid Grilled in Butter","alternateName":["통오징어 버터구이","Mực nướng bơ tỏi","黄油烤整只鱿鱼","イカ丸ごとバター焼き"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Smoked Duck with Seasoned Chives","alternateName":["훈제오리 부추무침","Vịt xông khói trộn hẹ","烟熏鸭肉拌韭菜","燻製鴨のニラ和え"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Thin-sliced Pork Belly Stir-fried with Bean Sprouts","alternateName":["대패삼겹 숙주볶음","Thịt ba chỉ xào giá đỗ","薄切五花肉炒豆芽","薄切り豚バラともやし炒め"],"offers":{"@type":"Offer","price":250000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Dried Pollack (Meoktae) · Shredded Dried Pollack (Hwangtae)","alternateName":["먹태 · 황태채","Cá khô","黑干明太鱼 · 干明太鱼丝","燻製スケトウダラ（モクテ）・干しスケトウダラの細切り（ファンテチェ）"],"offers":{"@type":"Offer","price":270000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Braised Pork Ribs","alternateName":["매콤 등갈비찜","Sườn heo hấp cay","香辣焖猪肋排","ピリ辛スペアリブ蒸し"],"offers":{"@type":"Offer","price":450000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Webfoot Octopus & Pork Belly","alternateName":["쭈꾸미 삼겹 볶음","Bạch tuộc ba chỉ xào cay","辣炒章鱼仔五花肉","イイダコと豚バラの炒め"],"offers":{"@type":"Offer","price":320000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Shrimp Fried Rice","alternateName":["새우 볶음밥","Cơm chiên tôm","虾炒饭","エビチャーハン"],"offers":{"@type":"Offer","price":120000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Shrimp Ramyeon","alternateName":["새우 얼큰라면","Mì tôm cay","辣虾拉面","エビ辛ラーメン"],"offers":{"@type":"Offer","price":120000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Pasta","alternateName":["얼큰 파스타","Mì Ý cay","辣味意面","ピリ辛パスタ"],"offers":{"@type":"Offer","price":180000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Watermelon Bingsu (Shaved Ice)","alternateName":["수박빙수","Dưa hấu bingsu","西瓜刨冰","スイカかき氷（ピンス）"],"offers":{"@type":"Offer","price":140000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sugared Tomato Slices","alternateName":["달달 토마토","Cà chua ngọt","糖渍番茄","砂糖がけトマト"],"offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Canned Yellow Peaches","alternateName":["황도","Đào vàng","罐头黄桃","缶詰の黄桃"],"offers":{"@type":"Offer","price":170000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fried Mini Crabs (half plain · half seasoned)","alternateName":["미니 게 튀김 (후라이드 반 · 양념 반)","Ghẹ chiên sốt Hàn Quốc","炸小螃蟹（一半原味 · 一半调味酱）","ミニカニ揚げ（プレーン半分・ヤンニョム半分）"],"offers":{"@type":"Offer","price":290000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Soju · Beer · Makgeolli","hasMenuItem":[{"@type":"MenuItem","name":"Soju (Chamisul · Saero · Chum Churum · Jinro · Good Day)","alternateName":["소주 (참이슬 · 새로 · 처음처럼 · 진로 · 좋은데이)","烧酒（Chamisul · Saero · Chum Churum · Jinro · Good Day）","焼酎（チャミスル・セロ・チョウムチョロム・ジンロ・グッドデー）"],"offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beer (Tiger · Hanoi · Saigon)","alternateName":["맥주 (타이거 · 하노이 · 사이공)","Bia (Tiger · Hà Nội · Sài Gòn)","啤酒（虎牌 · 河内 · 西贡）","ビール（タイガー・ハノイ・サイゴン）"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Makgeolli (Korean Rice Wine)","alternateName":["막걸리","Makgeolli","马格利酒（韩国米酒）","マッコリ"],"offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Soft Drinks (Soda · Red Bull · Cola · Lemon-lime Soda)","alternateName":["음료 (소다 · 레드불 · 콜라 · 사이다)","Nước ngọt (Soda · Red Bull · Coca · Sprite)","饮料（苏打水 · 红牛 · 可乐 · 雪碧类汽水）","ドリンク（ソーダ・レッドブル・コーラ・サイダー）"],"offers":{"@type":"Offer","price":20000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Highball","hasMenuItem":[{"@type":"MenuItem","name":"Glenfiddich Highball","alternateName":["글렌피딕 하이볼","Glenfiddich highball","格兰菲迪 Highball","グレンフィディック ハイボール"],"offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Singleton Highball","alternateName":["싱글톤 하이볼","Singleton highball","苏格登 Highball","シングルトン ハイボール"],"offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bowmore Highball","alternateName":["보모어 하이볼","Bowmore highball","波摩 Highball","ボウモア ハイボール"],"offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Ardbeg Highball","alternateName":["아드벡 하이볼","Ardbeg highball","阿贝 Highball","アードベッグ ハイボール"],"offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bokbunja (Korean Black Raspberry) Highball","alternateName":["복분자 하이볼","Highball phúc bồn tử","覆盆子 Highball","覆盆子（ポクブンジャ）ハイボール"],"offers":{"@type":"Offer","price":140000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Baekseju (Herbal Rice Wine) Highball","alternateName":["백세주 하이볼","Highball Baekseju","百岁酒 Highball","百歳酒（ペクセジュ）ハイボール"],"offers":{"@type":"Offer","price":120000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Energy Highball (Non-alcoholic)","alternateName":["에너지 하이볼 (무알콜)","Energy highball (không cồn)","能量 Highball（无酒精）","エナジーハイボール（ノンアルコール）"],"offers":{"@type":"Offer","price":110000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Whisky","hasMenuItem":[{"@type":"MenuItem","name":"Ardbeg 10 Years","alternateName":["아드벡 10년","Ardbeg 10","阿贝10年","アードベッグ 10年"],"offers":{"@type":"Offer","price":330000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bowmore 12 Years","alternateName":["보모어 12년","Bowmore 12","波摩12年","ボウモア 12年"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Singleton 12 Years","alternateName":["싱글톤 12년","Singleton 12","苏格登12年","シングルトン 12年"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Glenfiddich 12 Years","alternateName":["글렌피딕 12년","Glenfiddich 12","格兰菲迪12年","グレンフィディック 12年"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Glenfiddich 18 Years","alternateName":["글렌피딕 18년","Glenfiddich 18","格兰菲迪18年","グレンフィディック 18年"],"offers":{"@type":"Offer","price":570000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Johnnie Walker Blue Label (bottle)","alternateName":["조니워커 블루라벨 (한 병)","Johnnie Walker Blue Label (chai)","尊尼获加蓝牌（一瓶）","ジョニーウォーカー ブルーラベル（ボトル）"],"offers":{"@type":"Offer","price":11400000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Ballantine's 23 Years (bottle)","alternateName":["발렌타인 23년 (한 병)","Ballantine's 23 (chai)","百龄坛23年（一瓶）","バランタイン 23年（ボトル）"],"offers":{"@type":"Offer","price":10400000,"priceCurrency":"VND"}}]}]}}</script>
+<!-- seo:end -->
+</head>
+<body>
+<header>
+  <span class="corner l"></span><span class="corner r"></span>
+  <div class="wrap">
+    <div class="langs" id="langs"></div>
+    <img class="logo sign" src="img/sign.jpg" alt="">
+    <h1>새우공장</h1>
+    <p class="en">ㅅㅇㄱㅈ · POCHA &amp; PUB</p>
+    <p class="tagline" id="tagline"></p>
+    <div class="chips" id="chips"></div>
+  </div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap" id="menu"></main>
+
+<footer>
+  <div class="wrap">
+    <p class="quote" id="quote"></p>
+    <div class="pills">
+      <button class="pill" id="wifi" type="button" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg></i>
+        <div><small id="wifiLabel"></small><strong id="wifiText"></strong></div>
+        <em id="wifiCopy"></em>
+      </button>
+      <div class="pill" id="hours" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></i>
+        <div><small id="hoursLabel"></small><strong id="hoursText"></strong></div>
+      </div>
+      <a class="pill" id="call">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></i>
+        <div><small id="callLabel"></small><strong id="callText"></strong></div>
+      </a>
+      <a class="pill" id="map" target="_blank" rel="noopener">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></i>
+        <div><small id="mapLabel"></small><strong id="mapText"></strong></div>
+      </a>
+    </div>
+    <p class="vnd" id="foot"></p>
+  </div>
+</footer>
+
+<div class="zoom" id="zoom"><figure><img id="zoomImg" alt=""><figcaption id="zoomCap"></figcaption></figure></div>
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<!-- override:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script src="https://qrmenuasia.com/api/override?shop=saeugongjang"></script>
+<!-- override:end -->
+<script>
+  const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
+  const UI = {
+    ko: { title: "메뉴", tagline: "활새우 소금구이 · 활새우회 · 소주 맥주 하이볼", chips: ["Pocha & Pub", "세트에 라면·볶음밥·계란찜 무료"],
+      must: "Must Try", best: "BEST", special: "스페셜", spicy: "🌶 매콤", tip: "TIP", market: "시가",
+      quote: "여기 새우 있어요, 여기 소주 맥주 하이볼 있어요.<br>맛있는 시간 보내세요.<small>– 새우공장 ㅅㅇㄱㅈ –</small>",
+      copy: "복사", copied: "비밀번호를 복사했어요", hours: "영업시간", call: "전화 · 예약", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND) · 메뉴·가격은 손님이 구글 지도에 올린 메뉴판 기준이며 바뀔 수 있어요" },
+    en: { title: "Menu", tagline: "Live shrimp salt-grilled · Live shrimp sashimi · Soju, beer & highballs", chips: ["Pocha & Pub", "Free ramyeon, fried rice & steamed egg with sets"],
+      must: "Must Try", best: "BEST", special: "Special", spicy: "🌶 Spicy", tip: "TIP", market: "Market price",
+      quote: "Shrimp here! Soju, beer and highballs here!<br>Enjoy your time with us.<small>– Saeugongjang ㅅㅇㄱㅈ –</small>",
+      copy: "Copy", copied: "Password copied", hours: "Opening hours", call: "Call · Reservations", map: "Address · Map", vnd: "Prices in Vietnamese đồng (VND) · Menu and prices are based on the menu photos customers posted on Google Maps and may change" },
+    zh: { title: "菜单", tagline: "活虾盐烤 · 活虾刺身 · 烧酒 啤酒 Highball", chips: ["Pocha & Pub", "套餐免费附赠拉面·炒饭·蒸蛋"],
+      must: "必吃", best: "人气", special: "特色", spicy: "🌶 辣", tip: "小贴士", market: "时价",
+      quote: "这里有虾！这里有烧酒、啤酒和 Highball！<br>祝您用餐愉快。<small>– 새우공장 ㅅㅇㄱㅈ –</small>",
+      copy: "复制", copied: "密码已复制", hours: "营业时间", call: "电话 · 预订", map: "地址 · 地图", vnd: "价格单位：越南盾（VND）· 菜单和价格以顾客上传到谷歌地图的菜单照片为准，可能会有变动" },
+    ja: { title: "メニュー", tagline: "活エビの塩焼き・活エビの刺身・焼酎 ビール ハイボール", chips: ["Pocha & Pub", "セットにラーメン・チャーハン・卵蒸し無料"],
+      must: "Must Try", best: "BEST", special: "スペシャル", spicy: "🌶 辛口", tip: "TIP", market: "時価",
+      quote: "エビあります！焼酎・ビール・ハイボールもあります！<br>どうぞごゆっくり。<small>– 새우공장 ㅅㅇㄱㅈ –</small>",
+      copy: "コピー", copied: "パスワードをコピーしました", hours: "営業時間", call: "電話・ご予約", map: "住所・地図", vnd: "価格はベトナムドン（VND）です・メニューと価格はお客様がGoogleマップに投稿したメニュー写真に基づいており、変更される場合があります" },
+    vi: { title: "Thực đơn", tagline: "Tôm tươi hấp muối · Tôm sashimi · Soju, bia, highball", chips: ["Pocha & Pub", "Set tặng kèm mì, cơm chiên, trứng hấp"],
+      must: "Must Try", best: "BEST", special: "Đặc biệt", spicy: "🌶 Cay", tip: "TIP", market: "Liên hệ",
+      quote: "Ở đây có tôm! Ở đây có soju, bia, highball!<br>Chúc quý khách ngon miệng.<small>– 새우공장 ㅅㅇㄱㅈ –</small>",
+      copy: "Sao chép", copied: "Đã sao chép mật khẩu", hours: "Giờ mở cửa", call: "Gọi điện · Đặt bàn", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND · Thực đơn và giá theo menu do khách đăng trên Google Maps, có thể thay đổi" },
+  };
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const storage = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  let observer;
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  const fmt = (n) => n.toLocaleString("en-US");
+
+  function priceHtml(it, t) {
+    if (it.sizes) return `<div class="sizes">${it.sizes.map(([s, p]) => `<span><i>${s}</i>${fmt(p)}<small>₫</small></span>`).join("")}</div>`;
+    return "";
+  }
+
+  function render(lang) {
+    const t = UI[lang], R = window.RESTAURANT;
+    // 아랫줄: 한국어 화면 → 베트남어(직원용), 그 외 → 한국어
+    const second = lang === "ko" ? "vi" : "ko";
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand.ko} ${R.brand.en} · ${t.title}`;
+
+    $("langs").innerHTML = LANGS.map(([c, label]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+    $("tagline").textContent = t.tagline;
+    $("chips").innerHTML = t.chips.map((c) => `<span>${esc(c)}</span>`).join("");
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}">
+        <div class="head"><h2>${esc(cat.name[lang])}${lang !== "vi" ? `<small>${esc(cat.name.vi)}</small>` : `<small>${esc(cat.name.ko)}</small>`}</h2></div>
+        ${cat.note ? `<p class="note">${esc(cat.note[lang])}</p>` : ""}
+        <ul>${cat.items.map((it) => {
+          const tags = [it.tag ? `<span class="${it.tag}">${esc(t[it.tag])}</span>` : "", it.spicy ? `<span class="hot">${esc(t.spicy)}</span>` : ""].join("");
+          const single = it.sizes ? "" : `<span class="leader"></span><span class="price">${it.price == null ? esc(t.market) : `${fmt(it.price)}<small>₫</small>`}</span>`;
+          return `
+          <li>
+            ${it.photo ? `<button class="thumb" type="button" data-photo="${it.photo}" data-cap="${esc(it.name[lang])}"><img src="${it.photo}" alt="${esc(it.name[lang])}" loading="lazy"></button>` : ""}
+            <div class="info">
+              ${tags.trim() ? `<div class="tags">${tags}</div>` : ""}
+              <div class="row"><b>${esc(it.name[lang])}</b>${it.unit ? `<span class="unit">${esc(it.unit)}</span>` : ""}${single}</div>
+              ${priceHtml(it, t)}
+              ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
+              <div class="sub ${second === "vi" ? "it" : ""}">${esc(it.name[second])}</div>
+            </div>
+          </li>`; }).join("")}
+        </ul>
+        ${cat.tip ? `<p class="tip"><b>${esc(t.tip)}</b>${esc(cat.tip[lang])}</p>` : ""}
+      </section>`).join("");
+
+    $("quote").innerHTML = t.quote;
+    if (R.wifi) {
+      $("wifi").hidden = false;
+      $("wifiLabel").textContent = `Wi-Fi · ${R.wifi.ssid}`;
+      $("wifiText").textContent = R.wifi.password;
+      $("wifiCopy").textContent = t.copy;
+    }
+    if (R.hours) {
+      $("hours").hidden = false;
+      $("hoursLabel").textContent = t.hours;
+      $("hoursText").textContent = typeof R.hours === "string" ? R.hours : R.hours[lang];
+    }
+    $("callLabel").textContent = t.call;
+    $("callText").textContent = R.phone;
+    $("call").href = "tel:" + R.phone.replace(/[^\d+]/g, "");
+    $("mapLabel").textContent = t.map;
+    $("mapText").textContent = R.address;
+    $("map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.brand.en + " " + R.address);
+    $("foot").textContent = t.vnd;
+    observeSections();
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  $("menu").addEventListener("click", (e) => {
+    const b = e.target.closest(".thumb");
+    if (!b) return;
+    $("zoomImg").src = b.dataset.photo;
+    $("zoomCap").textContent = b.dataset.cap;
+    $("zoom").classList.add("show");
+  });
+  $("zoom").addEventListener("click", () => $("zoom").classList.remove("show"));
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+  $("wifi").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(RESTAURANT.wifi.password); toast(UI[lang].copied); }
+    catch { toast(RESTAURANT.wifi.password); }
+  });
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+<script src="dasan.js"></script>
+<script src="stores-link.js"></script>
+<script src="lang-menu.js"></script>
+<script src="qr-home.js"></script>
+<!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
+<!-- analytics:end -->
+</body>
+</html>
