@@ -655,6 +655,12 @@ window.STORES = [
     type: { ko: "한식 육개장 · 설렁탕 · 갈비탕 · 냉면 · 보쌈 · 전골 · 만두 · 곱창", vi: "Canh bò cay YukGaeJang · Canh xương bò · Canh sườn bò · Mì lạnh · Thịt heo hầm · Lẩu · Há cảo · Lòng bò nướng", en: "Korean yukgaejang · Seolleongtang · Galbitang · Naengmyeon · Bossam · Hot pot · Dumplings · Gopchang", zh: "韩式辣牛肉汤 · 牛骨汤 · 排骨汤 · 冷面 · 菜包肉 · 火锅 · 饺子 · 烤牛肠", ja: "ユッケジャン・ソルロンタン・カルビタン・冷麺・ポッサム・鍋・餃子・コプチャン" },
     keywords: "육대장 옛날전통육개장 육개장 yuk dae jang yukdaejang yukgaejang 하노이 육개장 미딩 송다 육칼면 생육칼면 꼬막육개장 순두부육개장 해물순두부육개장 갈비탕 설렁탕 황태설렁탕 사골떡만두국 떡만두국 냉면 양지냉면 물냉면 비빔냉면 한방보쌈 간장보쌈 보쌈 보쌈무침 양지무침 꼬막무침 육개장전골 부대전골 부대찌개 모듬수육전골 수육 갈비찜 대장갈비찜 만두 갈비만두 김치만두 왕만두 곱창 대창 막창 특양 염통 삼겹살 우삼겹 mỹ đình sông đà từ liêm hà nội nhà hàng hàn quốc canh bò cay lẩu thập cẩm thịt heo hầm há cảo mì lạnh korean spicy beef soup bossam budae jjigae dumplings 韩式辣牛肉汤 辣牛肉汤 ユッケジャン 육개장 맛집"
   },
+  { id: "mokgumeong", name: "목구멍 Moggumung", sub: "미박삼겹살 · 항정살 · 우대갈비 · 목구멍 플래터 · 냉면", url: "https://mokgumeong.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
+    address: "122 P. Trần Văn Lai, Mỹ Đình, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EB%AA%A9%EA%B5%AC%EB%A9%8D+%ED%95%98%EB%85%B8%EC%9D%B4+%EB%AF%B8%EB%94%A9%EC%A0%90/@21.0165124,105.7772973,19z",
+    type: { ko: "한식 고기구이 · 삼겹살 · 항정살 · 우대갈비 · 냉면 · 찌개", vi: "Thịt nướng Hàn Quốc · Ba chỉ heo · Nọng heo · Sườn bò · Mì lạnh · Canh", en: "Korean BBQ · Pork belly · Pork jowl · Beef short rib · Naengmyeon · Stew", zh: "韩式烤肉 · 五花肉 · 猪颈肉 · 牛排骨 · 冷面 · 汤锅", ja: "韓国焼肉・サムギョプサル・豚トロ・牛カルビ・冷麺・チゲ" },
+    keywords: "목구멍 moggumung mokgumeong mok gu meong 하노이 목구멍 미딩 쩐반라이 고기구이 삼겹살 미박삼겹살 목살 특목살 항정살 갈비본살 우대갈비 소갈비 미나리 미나리삼겹살 플래터 하프플래터 베스트세트 냉면 물냉면 비빔냉면 된장찌개 도가니 김치찌개 돼지김치찌개 솥뚜껑볶음밥 볶음밥 계란찜 라면 신라면 짜파게티 불닭볶음면 소주 막걸리 복분자 화요 trần văn lai mỹ đình từ liêm hà nội nhà hàng hàn quốc thịt nướng hàn quốc ba chỉ nọng heo sườn bò mì lạnh korean bbq pork belly beef short rib 韩式烤肉 五花肉 サムギョプサル 焼肉 고기 맛집"
+  },
   { id: "smile", name: "스마일회관 SMILE", sub: "냉삼 · 대패 · 천겹살 · 모듬 구이 · 육회 · 냉면", url: "https://smile.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
     address: "19 Ngõ 179 Đình Thôn, Mỹ Đình, Nam Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EC%8A%A4%EB%A7%88%EC%9D%BC%ED%9A%8C%EA%B4%80/@21.0176262,105.7766022,19z",

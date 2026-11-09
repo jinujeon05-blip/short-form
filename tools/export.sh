@@ -64,6 +64,7 @@ name() {
     doya) echo "도야짬뽕" ;;
     andong) echo "안동곱창" ;;
     yukdaejang) echo "육대장" ;;
+    mokgumeong) echo "목구멍" ;;
     smile) echo "스마일회관" ;;
     torei) echo "토레이이자카야" ;;
     shangla) echo "샹라" ;;

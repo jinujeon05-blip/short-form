@@ -87,6 +87,7 @@ const SHOPS = {
   doya: { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Noodles', 'Jjamppong', 'Jjajangmyeon'], country: 'VN', currency: 'VND', og: 'img/jjamppong.jpg' },
   andong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Gopchang', 'Beef'], country: 'VN', currency: 'VND', og: 'img/gopchang-modum.jpg' },
   yukdaejang: { type: 'Restaurant', cuisine: ['Korean', 'Yukgaejang', 'Korean Soup', 'Bossam'], country: 'VN', currency: 'VND', og: 'img/yukgaejang.jpg' },
+  mokgumeong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork Belly', 'Naengmyeon'], country: 'VN', currency: 'VND', og: 'img/samgyeop.jpg' },
   torei: { type: 'Restaurant', cuisine: ['Japanese', 'Izakaya', 'Yakitori'], country: 'VN', currency: 'VND', og: 'img/yakitori.jpg' },
   shangla: { type: 'Restaurant', cuisine: ['Chinese', 'Sichuan', 'Korean'], country: 'VN', currency: 'VND', og: 'img/malaxiangguo.jpg' },
   smile: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork BBQ'], country: 'VN', currency: 'VND', og: 'img/daepae.jpg' },
