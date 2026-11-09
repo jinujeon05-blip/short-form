@@ -685,6 +685,12 @@ window.STORES = [
     type: { ko: "한식·일식 · 사시미 · 초밥 · 덮밥 · 한국산 해물 · 점심 특선", vi: "Nhà hàng Hàn – Nhật · Sashimi · Sushi · Cơm bát · Hải sản Hàn Quốc · Set trưa", en: "Korean–Japanese · Sashimi · Sushi · Rice bowls · Korean seafood · Lunch specials", zh: "韩式日料 · 刺身 · 寿司 · 盖饭 · 韩国海鲜 · 午市特价", ja: "韓国料理・和食・刺身・寿司・丼・韓国産海鮮・ランチ" },
     keywords: "더 식탁 식탁 더식탁 the sik tak siktak thesiktak sik tak 하노이 사시미 회 횟집 일식 초밥 스시 모듬 사시미 도미 광어 참다랑어 참치 자바리 연어 모듬초밥 연어초밥 후토마키 장어덮밥 사시미덮밥 회덮밥 물회 소바 우동 모듬튀김 돈까스 캘리포니아롤 한국산 해물 개불 해삼 멍게 우니 성게알 전복 활새우 메로구이 새우튀김 점심특선 소주 화요 복분자 사케 쿠보타 닷사이 five star đình thôn mỹ đình từ liêm hà nội nhà hàng hàn quốc sashimi sushi hải sản korean japanese restaurant 刺身 寿司 맛집"
   },
+  { id: "ilryu", name: "일류 사시미 IL RYU", sub: "모듬회 세트 · 광어회 · 연어회 · 산낙지 · 장어구이 · 점심 초밥", url: "https://ilryu.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "seafood"], tags: ["photos"],
+    address: "176 Đ. Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EC%9D%BC%EB%A5%98+%EC%82%AC%EC%8B%9C%EB%AF%B8/@21.0181921,105.7756793,19z",
+    type: { ko: "한식 횟집 · 사시미 · 회 세트 · 해산물 요리", vi: "Nhà hàng sashimi Hàn Quốc · Set cá sống · Hải sản", en: "Korean sashimi · Sashimi sets · Seafood", zh: "韩式生鱼片 · 刺身套餐 · 海鲜", ja: "韓国式刺身・刺身セット・海鮮料理" },
+    keywords: "일류 사시미 일류사시미 일류 il ryu ilryu korean sashimi 하노이 횟집 회 사시미 모듬회 광어 제주 광어 다금바리 병어 흑돔 갑오징어 연어회 스끼다시 회 세트 아나고 문어삼합 새우 소금구이 장어구이 물회 산낙지 조개술찜 탕수육 칠리새우 해물파전 점심 초밥 모듬초밥 후토마끼 회덮밥 장어덮밥 냉메밀 소주 사케 đình thôn mỹ đình từ liêm hà nội nhà hàng hàn quốc sashimi cá sống hải sản korean restaurant 刺身 生鱼片 맛집"
+  },
   { id: "onban", name: "온반 ONBAN", sub: "맑은 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", url: "https://onban.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean"], tags: ["photos"],
     address: "TT3-C18 Five Star, Ngõ 154 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/ONBAN(%EC%98%A8%EB%B0%98)/@21.0185646,105.7756547,19z",

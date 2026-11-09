@@ -70,6 +70,7 @@ name() {
     kkochimacha) echo "꼬치마차" ;;
     thesiktak) echo "더식탁" ;;
     onban) echo "온반" ;;
+    ilryu) echo "일류사시미" ;;
     honggang) echo "홍강" ;;
     smile) echo "스마일회관" ;;
     torei) echo "토레이이자카야" ;;

@@ -159,6 +159,8 @@ window.DEMOS = [
     name: "꼬치마차 KO CHI MA CHA", type: { ko: "한국식 숯불 꼬치 · 안주 · 주점 · 하노이", vi: "Xiên nướng than kiểu Hàn · Món nhậu · Hà Nội", zh: "韩式炭火烤串 · 下酒菜 · 酒馆 · 河内", ja: "韓国式炭火串焼き・おつまみ・酒場・ハノイ", en: "Korean charcoal skewers · Anju · Pub · Hanoi" } },
   { id: "thesiktak", hidden: true, url: "https://thesiktak.qrmenuasia.com", shot: "img/demo-thesiktak.jpg", qr: "img/qr-thesiktak.svg",
     name: "더 식탁 The Sik Tak", type: { ko: "한식·일식 · 사시미 · 초밥 · 하노이", vi: "Nhà hàng Hàn – Nhật · Sashimi · Sushi · Hà Nội", zh: "韩式日料 · 刺身 · 寿司 · 河内", ja: "韓国料理・和食・刺身・寿司・ハノイ", en: "Korean–Japanese · Sashimi · Sushi · Hanoi" } },
+  { id: "ilryu", hidden: true, url: "https://ilryu.qrmenuasia.com", shot: "img/demo-ilryu.jpg", qr: "img/qr-ilryu.svg",
+    name: "일류 사시미 IL RYU", type: { ko: "한식 횟집 · 사시미 · 회 세트 · 하노이", vi: "Nhà hàng sashimi Hàn Quốc · Set cá sống · Hà Nội", zh: "韩式生鱼片 · 刺身套餐 · 河内", ja: "韓国式刺身・刺身セット・ハノイ", en: "Korean sashimi · Sashimi sets · Hanoi" } },
   { id: "onban", hidden: true, url: "https://onban.qrmenuasia.com", shot: "img/demo-onban.jpg", qr: "img/qr-onban.svg",
     name: "온반 ONBAN", type: { ko: "한식 · 돼지곰탕 · 전골 · 막국수 · 하노이", vi: "Nhà hàng Hàn Quốc · Canh thịt heo hầm · Lẩu · Mì kiều mạch · Hà Nội", zh: "韩国料理 · 猪肉清汤 · 火锅 · 荞麦冷面 · 河内", ja: "韓国料理・豚コムタン・鍋・マッククス・ハノイ", en: "Korean · Pork gomtang · Hot pot · Buckwheat noodles · Hanoi" } },
   { id: "mokgumeong", hidden: true, url: "https://mokgumeong.qrmenuasia.com", shot: "img/demo-mokgumeong.jpg", qr: "img/qr-mokgumeong.svg",
