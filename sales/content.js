@@ -149,6 +149,8 @@ window.DEMOS = [
     name: "안동곱창 Andong Hanu Gopchang", type: { ko: "한식 곱창 · 고기구이 · 국밥 · 하노이", vi: "Lòng bò nướng · Thịt nướng · Canh cơm Hàn Quốc · Hà Nội", zh: "韩式烤牛肠 · 烤肉 · 汤饭 · 河内", ja: "韓国ホルモン・焼肉・クッパ・ハノイ", en: "Korean gopchang · BBQ · Gukbap · Hanoi" } },
   { id: "yukdaejang", hidden: true, url: "https://yukdaejang.qrmenuasia.com", shot: "img/demo-yukdaejang.jpg", qr: "img/qr-yukdaejang.svg",
     name: "육대장 Yuk Dae Jang", type: { ko: "한식 육개장 · 보쌈 · 전골 · 하노이", vi: "Canh bò cay YukGaeJang · Thịt heo hầm · Lẩu Hàn Quốc · Hà Nội", zh: "韩式辣牛肉汤 · 菜包肉 · 火锅 · 河内", ja: "ユッケジャン・ポッサム・鍋料理・ハノイ", en: "Korean yukgaejang · Bossam · Hot pot · Hanoi" } },
+  { id: "honggang", hidden: true, url: "https://honggang.qrmenuasia.com", shot: "img/demo-honggang.jpg", qr: "img/qr-honggang.svg",
+    name: "홍강 SÔNG HỒNG", type: { ko: "한국식 중식 · 짜장면 · 짬뽕 · 탕수육 · 하노이", vi: "Món Hoa kiểu Hàn · Mì tương đen · Mì cay · Thịt chua ngọt · Hà Nội", zh: "韩式中餐 · 炸酱面 · 海鲜辣汤面 · 糖醋肉 · 河内", ja: "韓国式中華・ジャージャー麺・チャンポン・酢豚・ハノイ", en: "Korean-Chinese · Jjajangmyeon · Jjamppong · Sweet & sour pork · Hanoi" } },
   { id: "mokgumeong", hidden: true, url: "https://mokgumeong.qrmenuasia.com", shot: "img/demo-mokgumeong.jpg", qr: "img/qr-mokgumeong.svg",
     name: "목구멍 Moggumung", type: { ko: "한식 고기구이 · 미박삼겹살 · 우대갈비 · 하노이", vi: "Thịt nướng Hàn Quốc · Ba chỉ heo · Sườn bò · Hà Nội", zh: "韩式烤肉 · 带皮五花肉 · 牛排骨 · 河内", ja: "韓国焼肉・皮付きサムギョプサル・牛カルビ・ハノイ", en: "Korean BBQ · Skin-on pork belly · Beef short rib · Hanoi" } },
   { id: "smile", hidden: true, url: "https://smile.qrmenuasia.com", shot: "img/demo-smile.jpg", qr: "img/qr-smile.svg",

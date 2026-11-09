@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://honggang.qrmenuasia.com/sitemap.xml

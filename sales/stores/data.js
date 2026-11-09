@@ -655,6 +655,12 @@ window.STORES = [
     type: { ko: "한식 육개장 · 설렁탕 · 갈비탕 · 냉면 · 보쌈 · 전골 · 만두 · 곱창", vi: "Canh bò cay YukGaeJang · Canh xương bò · Canh sườn bò · Mì lạnh · Thịt heo hầm · Lẩu · Há cảo · Lòng bò nướng", en: "Korean yukgaejang · Seolleongtang · Galbitang · Naengmyeon · Bossam · Hot pot · Dumplings · Gopchang", zh: "韩式辣牛肉汤 · 牛骨汤 · 排骨汤 · 冷面 · 菜包肉 · 火锅 · 饺子 · 烤牛肠", ja: "ユッケジャン・ソルロンタン・カルビタン・冷麺・ポッサム・鍋・餃子・コプチャン" },
     keywords: "육대장 옛날전통육개장 육개장 yuk dae jang yukdaejang yukgaejang 하노이 육개장 미딩 송다 육칼면 생육칼면 꼬막육개장 순두부육개장 해물순두부육개장 갈비탕 설렁탕 황태설렁탕 사골떡만두국 떡만두국 냉면 양지냉면 물냉면 비빔냉면 한방보쌈 간장보쌈 보쌈 보쌈무침 양지무침 꼬막무침 육개장전골 부대전골 부대찌개 모듬수육전골 수육 갈비찜 대장갈비찜 만두 갈비만두 김치만두 왕만두 곱창 대창 막창 특양 염통 삼겹살 우삼겹 mỹ đình sông đà từ liêm hà nội nhà hàng hàn quốc canh bò cay lẩu thập cẩm thịt heo hầm há cảo mì lạnh korean spicy beef soup bossam budae jjigae dumplings 韩式辣牛肉汤 辣牛肉汤 ユッケジャン 육개장 맛집"
   },
+  { id: "honggang", name: "홍강 SÔNG HỒNG 紅江", sub: "짜장면 · 짬뽕 · 탕수육 · 깐풍기 · 양장피 · 세트", url: "https://honggang.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["chinese", "korean", "noodle"], tags: ["photos"],
+    address: "Ngõ 145 Đ. Đình Thôn, Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%ED%99%8D%EA%B0%95+(%EB%B0%B0%EB%8B%AC%EC%95%88%ED%95%B4%EC%9A%94.)/@21.0178196,105.776804,19z",
+    type: { ko: "한국식 중식 · 짜장면 · 짬뽕 · 탕수육 · 깐풍기 · 양장피 · 세트", vi: "Món Hoa kiểu Hàn · Mì tương đen · Mì cay hải sản · Thịt chua ngọt · Gà chiên xào cay · Combo set", en: "Korean-Chinese · Jjajangmyeon · Jjamppong · Sweet & sour pork · Kkanpunggi · Yangjangpi · Combo sets", zh: "韩式中餐 · 炸酱面 · 海鲜辣汤面 · 糖醋肉 · 干烹鸡 · 两张皮 · 套餐", ja: "韓国式中華・ジャージャー麺・チャンポン・酢豚・カンプンギ・ヤンジャンピ・セット" },
+    keywords: "홍강 紅江 song hong sông hồng honggang 하노이 중국집 중식 중화요리 한국식 중화요리 배달안해요 짜장면 유니짜장 짬뽕 해물짬뽕 고기짬뽕 짬뽕밥 해물우동 잡채밥 볶음밥 계란볶음밥 새우볶음밥 해물볶음밥 군만두 쇼마이 탕수육 사천탕수육 유린탕수육 깐풍기 닭강정 유린기 간쇼새우 양장피 잡채 마파두부 떡볶이 세트 콤보 연태고량주 소주 đình thôn mỹ đình từ liêm hà nội nhà hàng trung hoa kiểu hàn mì tương đen mì cay hải sản thịt lợn sốt chua ngọt korean chinese jjajangmyeon jjamppong tangsuyuk 炸酱面 糖醋肉 ジャージャー麺 チャンポン 중국집 맛집"
+  },
   { id: "mokgumeong", name: "목구멍 Moggumung", sub: "미박삼겹살 · 항정살 · 우대갈비 · 목구멍 플래터 · 냉면", url: "https://mokgumeong.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["bbq", "korean"], tags: ["photos"],
     address: "122 P. Trần Văn Lai, Mỹ Đình, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EB%AA%A9%EA%B5%AC%EB%A9%8D+%ED%95%98%EB%85%B8%EC%9D%B4+%EB%AF%B8%EB%94%A9%EC%A0%90/@21.0165124,105.7772973,19z",
