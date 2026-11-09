@@ -16,6 +16,7 @@
 - 장바구니는 휴대폰에 6시간 저장된다(언어를 바꿔도 유지, 다음 방문 때는 비어 있음).
 
 ## 다산(DASAN) 파트너 배너
+- **2026-11-09 사용자 지시로 꺼짐**: `_shared/dasan.js` 맨 위 `const ON = false;` → 모든 메뉴판·가게 찾기 페이지에서 안 나온다. 다시 켜려면 `true`로 바꾸고 `sync-dasan.sh` + `sales/stores/dasan.js` 복사 후 배포.
 - 사용자가 베트남 파트너와 하는 인력공급 회사 다산(https://dasanhr.com) 배너를 메뉴판 맨 아래(footer 다음)에 넣는다. 대상: 숯꾸이·EROS·Ăn Vội·가마솥·바이오&뷰티·수원성·헬로치킨 (백천화덕아나고는 한국 매장이라 다산 대신 JS welink). **가게 찾기용 메뉴판에도 항상 넣는다.**
 - 원본은 `restaurants/_shared/dasan.js`·`dasan-logo.png` 하나뿐이다. 고친 뒤 `restaurants/_shared/sync-dasan.sh`로 각 가게 폴더에 복사하고 가게마다 다시 배포한다 (Vercel 루트가 가게 폴더라 공통 폴더를 직접 못 씀).
 - 언어별: ko/en/zh/ja는 기업 의뢰(dasanhr.com/ko/business, 0917 302 200), vi는 구직자용(dasanhr.com/vi, Zalo 0937 250 787). `<html lang>`이 바뀌면 문구도 따라 바뀐다.
