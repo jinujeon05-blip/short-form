@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jungsung.qrmenuasia.com/sitemap.xml

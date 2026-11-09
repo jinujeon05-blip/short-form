@@ -163,6 +163,8 @@ window.DEMOS = [
     name: "일류 사시미 IL RYU", type: { ko: "한식 횟집 · 사시미 · 회 세트 · 하노이", vi: "Nhà hàng sashimi Hàn Quốc · Set cá sống · Hà Nội", zh: "韩式生鱼片 · 刺身套餐 · 河内", ja: "韓国式刺身・刺身セット・ハノイ", en: "Korean sashimi · Sashimi sets · Hanoi" } },
   { id: "mereumil", hidden: true, url: "https://mereumil.qrmenuasia.com", shot: "img/demo-mereumil.jpg", qr: "img/qr-mereumil.svg",
     name: "메르밀 Mereumil", type: { ko: "메밀국수 · 콩국수 · 수제 돈까스 · 하노이", vi: "Mì kiều mạch · Mì nước đậu nành · Tonkatsu · Hà Nội", zh: "荞麦面 · 冷豆浆面 · 手工猪排 · 河内", ja: "そば・豆乳麺・手作りとんかつ・ハノイ", en: "Buckwheat soba · Kongguksu · Handmade tonkatsu · Hanoi" } },
+  { id: "jungsung", hidden: true, url: "https://jungsung.qrmenuasia.com", shot: "img/demo-jungsung.jpg", qr: "img/qr-jungsung.svg",
+    name: "정성 JUNGSUNG", type: { ko: "한우·숙성 고기구이 · 보일링 시푸드 · 하노이", vi: "Thịt nướng Hàn Quốc · Hải sản sốt cay · Hà Nội", zh: "韩牛·熟成烤肉 · 香辣海鲜锅 · 河内", ja: "韓牛・熟成焼肉・ボイリングシーフード・ハノイ", en: "Hanwoo & aged Korean BBQ · Boiling seafood · Hanoi" } },
   { id: "onban", hidden: true, url: "https://onban.qrmenuasia.com", shot: "img/demo-onban.jpg", qr: "img/qr-onban.svg",
     name: "온반 ONBAN", type: { ko: "한식 · 돼지곰탕 · 전골 · 막국수 · 하노이", vi: "Nhà hàng Hàn Quốc · Canh thịt heo hầm · Lẩu · Mì kiều mạch · Hà Nội", zh: "韩国料理 · 猪肉清汤 · 火锅 · 荞麦冷面 · 河内", ja: "韓国料理・豚コムタン・鍋・マッククス・ハノイ", en: "Korean · Pork gomtang · Hot pot · Buckwheat noodles · Hanoi" } },
   { id: "mokgumeong", hidden: true, url: "https://mokgumeong.qrmenuasia.com", shot: "img/demo-mokgumeong.jpg", qr: "img/qr-mokgumeong.svg",

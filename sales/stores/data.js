@@ -697,6 +697,12 @@ window.STORES = [
     type: { ko: "메밀국수 · 콩국수 · 수제 돈까스 · 만두", vi: "Mì kiều mạch · Mì nước đậu nành · Tonkatsu · Bánh bao", en: "Buckwheat soba · Kongguksu · Handmade tonkatsu · Dumplings", zh: "荞麦面 · 冷豆浆面 · 手工猪排 · 饺子", ja: "そば・豆乳麺・手作りとんかつ・マンドゥ" },
     keywords: "메르밀 메르 밀 mereumil 하노이 메밀 메밀국수 메밀면 소바 냉메밀 땡초메밀 온메밀 우삼겹 온메밀 들기름 메밀 들기름막국수 비빔메밀 콩국수 메밀 콩국수 우삼겹 짬뽕 메밀 오뎅소바 새우튀김 등심돈까스 치즈돈까스 돈까스 고기왕만두 만두 콩물 mỹ đình mễ trì từ liêm hà nội nhà hàng hàn quốc mì kiều mạch soba tonkatsu korean restaurant 荞麦面 そば 맛집"
   },
+  { id: "jungsung", name: "정성 JUNGSUNG", sub: "한우 미나리 육회 · 큐브 꽃살 스테이크 · 숙성 삼겹살 · 보일링 쉬림프 · 점심 특선", url: "https://jungsung.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "bbq"], tags: ["photos"],
+    address: "Ô đất CT8, The Emerald, Đ. Mỹ Đình – Mễ Trì, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/JUNGSUNG/@21.0166637,105.7739575,19z",
+    type: { ko: "한우·숙성 고기구이 · 보일링 시푸드 · 찌개 · 냉면", vi: "Thịt nướng Hàn Quốc · Hải sản sốt cay · Canh hầm · Mì lạnh", en: "Korean BBQ (Hanwoo & aged pork) · Boiling seafood · Stews · Naengmyeon", zh: "韩式烤肉（韩牛·熟成猪肉）· 香辣海鲜锅 · 汤锅 · 冷面", ja: "韓国焼肉（韓牛・熟成豚）・ボイリングシーフード・チゲ・冷麺" },
+    keywords: "정성 jungsung 정성 고기 master grill house 하노이 미딘 메찌 디 에메랄드 the emerald 한우 소고기 꽃갈비살 살치살 안창살 늑간살 토시살 차돌박이 차돌삼합 큐브 스테이크 숙성 삼겹살 항정살 목살 꼬들살 LA갈비 돼지갈비 보일링 시푸드 보일링 쉬림프 샤브샤브 산더미 불고기 육회 미나리 육회 해장 전골 김치전골 장터국밥 김치찌개 된장찌개 칼국수 냉면 만두 점심 특선 mỹ đình mễ trì từ liêm hà nội nhà hàng hàn quốc thịt nướng hàn quốc korean bbq 韩国烤肉 焼肉 맛집 고깃집"
+  },
   { id: "onban", name: "온반 ONBAN", sub: "맑은 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", url: "https://onban.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean"], tags: ["photos"],
     address: "TT3-C18 Five Star, Ngõ 154 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/ONBAN(%EC%98%A8%EB%B0%98)/@21.0185646,105.7756547,19z",
