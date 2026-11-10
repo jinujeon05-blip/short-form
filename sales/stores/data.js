@@ -730,6 +730,12 @@ window.STORES = [
     type: { ko: "삼계탕 전문 한식당 · 전복 삼계탕 · 갈비탕 · 닭한마리 · 갈비찜 · 냉면", vi: "Nhà hàng Hàn Quốc chuyên gà hầm sâm · Gà hầm bào ngư · Canh sườn · Lẩu gà · Sườn om · Mì lạnh", en: "Korean samgyetang restaurant · Abalone samgyetang · Galbitang · Chicken hot pot · Braised short ribs · Cold noodles", zh: "韩式参鸡汤专门店 · 鲍鱼参鸡汤 · 牛排骨汤 · 一只鸡火锅 · 炖牛排骨 · 冷面", ja: "サムゲタン専門の韓国料理店・アワビサムゲタン・カルビタン・タッカンマリ・カルビチム・冷麺" },
     keywords: "삼계탕천국 삼계탕 천국 samgyetang cheonguk samgyetang 하노이 미딩 미딘 도딘티엔 한식 삼계탕 반계탕 전복삼계탕 얼큰삼계탕 영양삼계탕 한방삼계탕 블랙삼계탕 쌍화삼계탕 사물삼계탕 마라삼계탕 하수오삼계탕 갈비탕 전복갈비탕 한방갈비탕 닭한마리 찜닭 안동찜닭 닭볶음탕 묵은지 닭발 국물닭발 갈비찜 매운갈비찜 갈비전골 닭갈비 미나리삼겹살 닭다리구이 물냉면 비빔냉면 십전대보탕 쌍화차 막걸리 소주 보양식 đỗ đình thiện mỹ đình từ liêm hà nội nhà hàng hàn quốc gà hầm sâm gà tần sâm gà hầm bào ngư canh sườn bò lẩu gà sườn om mì lạnh korean ginseng chicken soup abalone galbitang 参鸡汤 鲍鱼参鸡汤 牛排骨汤 サムゲタン 参鶏湯 カルビタン 맛집"
   },
+  { id: "kobul", name: "코불 KOBUL", sub: "불고기 · 구이 한판 · 찜 · 전골 · 1인 정식 · 냉면 · 족발", url: "https://kobul.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "bbq"], tags: ["photos"],
+    address: "LK45, IA20 Ciputra, Nam Thăng Long, Phú Thượng, Hà Nội", map: "https://maps.app.goo.gl/VFpNfkEdsB6jieqF9",
+    type: { ko: "코리안 불고기 · 구이 한판 · 찜 · 전골 · 1인 정식 · 냉면 · 족발", vi: "Nhà hàng Hàn Quốc BBQ · Bulgogi · Món nướng · Món hầm · Lẩu · Cơm phần · Mì lạnh · Chân giò", en: "Korean bulgogi & BBQ · Grill platters · Braised dishes · Hot pots · Meal sets · Cold noodles · Jokbal", zh: "韩式烤肉 · 烤肉拼盘 · 炖菜 · 火锅 · 单人套餐 · 冷面 · 猪蹄", ja: "韓国式プルコギ＆BBQ・焼き盛り・チム・チョンゴル・一人前定食・冷麺・チョッパル" },
+    keywords: "코불 kobul 코리안불고기 korean bulgogi 하노이 시푸트라 ciputra 한식 불고기 고추장불고기 간장불고기 닭갈비 떡볶이 LA갈비 구이한판 통삼겹 훈제오리 생새우 소금구이 돼지갈비찜 안동찜닭 닭도리탕 감자탕 부대찌개 소갈비만두전골 돈까스 탕수육 정식 김치찌개 육개장 물냉면 비빔냉면 족발 냉족발 두부김치 해물파전 계란말이 짬뽕라면 소주 맥주 nhà hàng hàn quốc kobul thịt nướng bulgogi ciputra nam thăng long phú thượng hà nội quán nhậu hàn quốc lẩu hàn quốc gà hầm cay sườn bò la nướng tôm sú nướng muối mì lạnh chân giò hầm cơm phần hàn quốc 韩国烤肉 河内 韩国料理 烤肉 火锅 冷面 猪蹄 韓国料理 ハノイ プルコギ 焼肉 チョンゴル 冷麺 チョッパル"
+  },
   { id: "onban", name: "온반 ONBAN", sub: "맑은 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", url: "https://onban.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean"], tags: ["photos"],
     address: "TT3-C18 Five Star, Ngõ 154 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/ONBAN(%EC%98%A8%EB%B0%98)/@21.0185646,105.7756547,19z",
