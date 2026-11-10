@@ -169,6 +169,8 @@ window.DEMOS = [
     name: "새우공장 ㅅㅇㄱㅈ", type: { ko: "활새우 소금구이 · 활새우회 · 포차 · 하노이", vi: "Tôm tươi hấp muối · Tôm sashimi · Quán nhậu Hàn · Hà Nội", zh: "活虾盐烤 · 活虾刺身 · 韩式小酒馆 · 河内", ja: "活エビ塩焼き・活エビ刺身・韓国式居酒屋・ハノイ", en: "Salt-grilled live shrimp · Shrimp sashimi · Korean pub · Hanoi" } },
   { id: "poomba", hidden: true, url: "https://poomba.qrmenuasia.com", shot: "img/demo-poomba.jpg", qr: "img/qr-poomba.svg",
     name: "품바 POOMBA", type: { ko: "민속주점 · 모듬전 · 참숯 꼬치 · 막걸리 · 하노이", vi: "Quán nhậu Hàn · Bánh xèo Hàn Quốc · Xiên nướng than · Makgeolli · Hà Nội", zh: "韩式民俗酒馆 · 韩式煎饼 · 炭火串烧 · 马格利酒 · 河内", ja: "韓国式民俗酒場・チヂミ・炭火串焼き・マッコリ・ハノイ", en: "Korean traditional pub · Jeon pancakes · Charcoal skewers · Makgeolli · Hanoi" } },
+  { id: "korilla", hidden: true, url: "https://korilla.qrmenuasia.com", shot: "img/demo-korilla.jpg", qr: "img/qr-korilla.svg",
+    name: "코릴라 펍 Korilla Pub", type: { ko: "한국식 펍 · 치킨 · 안주 · 수제 맥주 · 하노이", vi: "Quán pub kiểu Hàn · Gà rán · Đồ nhắm · Bia thủ công · Hà Nội", zh: "韩式酒吧 · 炸鸡 · 下酒菜 · 精酿啤酒 · 河内", ja: "韓国式パブ・チキン・おつまみ・クラフトビール・ハノイ", en: "Korean pub · Chicken · Bar snacks · Craft beer · Hanoi" } },
   { id: "jungsung", hidden: true, url: "https://jungsung.qrmenuasia.com", shot: "img/demo-jungsung.jpg", qr: "img/qr-jungsung.svg",
     name: "정성 JUNGSUNG", type: { ko: "한우·숙성 고기구이 · 보일링 시푸드 · 하노이", vi: "Thịt nướng Hàn Quốc · Hải sản sốt cay · Hà Nội", zh: "韩牛·熟成烤肉 · 香辣海鲜锅 · 河内", ja: "韓牛・熟成焼肉・ボイリングシーフード・ハノイ", en: "Hanwoo & aged Korean BBQ · Boiling seafood · Hanoi" } },
   { id: "onban", hidden: true, url: "https://onban.qrmenuasia.com", shot: "img/demo-onban.jpg", qr: "img/qr-onban.svg",

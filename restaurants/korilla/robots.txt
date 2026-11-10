@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://korilla.qrmenuasia.com/sitemap.xml

@@ -99,6 +99,7 @@ const SHOPS = {
   jenniemom: { type: 'Restaurant', cuisine: ['Vietnamese', 'Bún chả', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/buncha.jpg' },
   saeugongjang: { type: 'Restaurant', cuisine: ['Korean', 'Seafood', 'Shrimp'], country: 'VN', currency: 'VND', og: 'img/salt.jpg' },
   poomba: { type: 'BarOrPub', cuisine: ['Korean', 'Korean pancakes', 'Skewers'], country: 'VN', currency: 'VND', og: 'img/jeon-a.jpg' },
+  korilla: { type: 'BarOrPub', cuisine: ['Korean', 'Korean fried chicken', 'Craft beer'], country: 'VN', currency: 'VND', og: 'img/tteokbokki.jpg' },
   jungsung: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/yukhoe.jpg' },
   torei: { type: 'Restaurant', cuisine: ['Japanese', 'Izakaya', 'Yakitori'], country: 'VN', currency: 'VND', og: 'img/yakitori.jpg' },
   shangla: { type: 'Restaurant', cuisine: ['Chinese', 'Sichuan', 'Korean'], country: 'VN', currency: 'VND', og: 'img/malaxiangguo.jpg' },
