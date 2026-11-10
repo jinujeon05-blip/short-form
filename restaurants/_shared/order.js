@@ -5,18 +5,22 @@
 //   labels: 문구 바꾸기(선택) — 예: 호텔은 { table: { ko: "객실 번호", vi: "Số phòng", … }, tablePh: { … } }
 // 메뉴 화면은 각 가게 index.html 이 그린다. 이 파일은 #menu > section(MENU 순서) > ul > li(items 순서)에 버튼만 붙인다.
 // 테이블 번호: QR 주소에 ?t=5 를 붙이면 주문서에 자동으로 들어간다.
+// 주방으로 보내기(2026-11-10): admin '주문·주방 기기' 탭에서 그 가게를 켠 경우에만 버튼이 보인다(기본 꺼짐).
+//   주문서를 열 때 qrmenuasia.com/api/order?shop= 로 켜짐 여부를 한 번 묻고, 누르면 주방 화면(qrmenuasia.com/kitchen)으로 간다.
+//   테이블 QR 열쇠: admin이 만든 테이블 주소의 &k= 를 같이 보낸다. 가게 아이디는 주소(<가게>.qrmenuasia.com)에서 읽거나 ORDER.shop.
 (function () {
   const MENU = window.MENU, R = window.RESTAURANT || {};
   if (!Array.isArray(MENU) || !document.getElementById("menu")) return;
-  const CFG = Object.assign({ staff: "vi", currency: "₫", zalo: null }, window.ORDER || {});
+  const CFG = Object.assign({ staff: "vi", currency: "₫", zalo: null, api: "https://qrmenuasia.com" }, window.ORDER || {});
+  if (!CFG.shop) { const h = location.hostname.match(/^([a-z0-9]+)\.qrmenuasia\.com$|^([a-z0-9]+)-menu\.vercel\.app$/); CFG.shop = h ? h[1] || h[2] : null; }
   const KEY = "qo-cart-v1", TTL = 6 * 3600 * 1000; // 오래된 장바구니(지난 방문)는 비운다
 
   const T = {
-    ko: { say: "이 화면을 직원에게 보여주세요", add: "담기", items: "개", view: "주문서 보기", title: "주문서", total: "합계", table: "테이블 번호", tablePh: "예: 5", note: "요청사항", notePh: "덜 맵게, 앞접시 2개 등", show: "직원에게 보여주기", send: "주문서 복사하고 Zalo 열기", copied: "주문서를 복사했어요 — Zalo에 붙여넣어 보내세요", copyFail: "복사가 안 됐어요 — 아래 내용을 직접 복사해 주세요", clear: "비우기", preview: "주문서 내용 보기", market: "시가", after: "후식", plus: "시가 메뉴 별도", hint: "최종 금액은 가게에서 확인해 드려요", close: "닫기", added: "담았어요" },
-    en: { say: "Please show this screen to the staff", add: "Add", items: "items", view: "View order", title: "Your order", total: "Total", table: "Table no.", tablePh: "e.g. 5", note: "Requests", notePh: "Less spicy, 2 extra plates…", show: "Show to staff", send: "Copy order & open Zalo", copied: "Order copied — paste it in Zalo to send", copyFail: "Couldn't copy — please copy the text below", clear: "Clear", preview: "Show order text", market: "Market price", after: "With BBQ", plus: "+ market-price items", hint: "The shop will confirm the final amount", close: "Close", added: "Added" },
-    zh: { say: "请把此画面给服务员看", add: "加入", items: "份", view: "查看订单", title: "我的订单", total: "合计", table: "桌号", tablePh: "例：5", note: "备注", notePh: "少辣、多拿两个碟子等", show: "给服务员看", send: "复制订单并打开Zalo", copied: "订单已复制 — 粘贴到Zalo发送", copyFail: "复制失败 — 请手动复制下方内容", clear: "清空", preview: "查看订单内容", market: "时价", after: "配烤肉价", plus: "另加时价菜品", hint: "最终金额以店家确认为准", close: "关闭", added: "已加入" },
-    ja: { say: "この画面をスタッフに見せてください", add: "追加", items: "点", view: "注文を見る", title: "ご注文", total: "合計", table: "テーブル番号", tablePh: "例：5", note: "ご要望", notePh: "辛さ控えめ、取り皿2枚など", show: "スタッフに見せる", send: "注文をコピーしてZaloを開く", copied: "注文をコピーしました — Zaloに貼り付けて送信", copyFail: "コピーできませんでした — 下の内容をコピーしてください", clear: "空にする", preview: "注文内容を見る", market: "時価", after: "焼肉と一緒に", plus: "＋時価メニュー", hint: "最終金額はお店で確認します", close: "閉じる", added: "追加しました" },
-    vi: { say: "Đưa màn hình này cho nhân viên", add: "Thêm", items: "món", view: "Xem đơn", title: "Đơn gọi món", total: "Tổng", table: "Số bàn", tablePh: "VD: 5", note: "Ghi chú", notePh: "Ít cay, thêm 2 bát…", show: "Đưa nhân viên xem", send: "Sao chép đơn & mở Zalo", copied: "Đã sao chép đơn — dán vào Zalo để gửi", copyFail: "Không sao chép được — hãy chép nội dung bên dưới", clear: "Xóa đơn", preview: "Xem nội dung đơn", market: "Thời giá", after: "Giá ăn kèm thịt nướng", plus: "+ món thời giá", hint: "Quán sẽ xác nhận số tiền cuối cùng", close: "Đóng", added: "Đã thêm" },
+    ko: { say: "이 화면을 직원에게 보여주세요", add: "담기", items: "개", view: "주문서 보기", title: "주문서", total: "합계", table: "테이블 번호", tablePh: "예: 5", note: "요청사항", notePh: "덜 맵게, 앞접시 2개 등", show: "직원에게 보여주기", send: "주문서 복사하고 Zalo 열기", copied: "주문서를 복사했어요 — Zalo에 붙여넣어 보내세요", copyFail: "복사가 안 됐어요 — 아래 내용을 직접 복사해 주세요", clear: "비우기", preview: "주문서 내용 보기", market: "시가", after: "후식", plus: "시가 메뉴 별도", hint: "최종 금액은 가게에서 확인해 드려요", close: "닫기", added: "담았어요", kitchen: "주방으로 주문 보내기", sending: "보내는 중…", sent: "주문이 주방에 들어갔어요", sentNo: "주문 번호", needTable: "테이블 번호를 먼저 적어 주세요", sendFail: "보내지 못했어요 — 이 화면을 직원에게 보여주세요", badKey: "테이블 QR을 다시 찍어 주세요 — 또는 직원에게 보여주세요" },
+    en: { say: "Please show this screen to the staff", add: "Add", items: "items", view: "View order", title: "Your order", total: "Total", table: "Table no.", tablePh: "e.g. 5", note: "Requests", notePh: "Less spicy, 2 extra plates…", show: "Show to staff", send: "Copy order & open Zalo", copied: "Order copied — paste it in Zalo to send", copyFail: "Couldn't copy — please copy the text below", clear: "Clear", preview: "Show order text", market: "Market price", after: "With BBQ", plus: "+ market-price items", hint: "The shop will confirm the final amount", close: "Close", added: "Added", kitchen: "Send order to kitchen", sending: "Sending…", sent: "Your order is in the kitchen", sentNo: "Order no.", needTable: "Please enter your table number first", sendFail: "Couldn't send — please show this screen to the staff", badKey: "Please scan the table QR again — or show this to the staff" },
+    zh: { say: "请把此画面给服务员看", add: "加入", items: "份", view: "查看订单", title: "我的订单", total: "合计", table: "桌号", tablePh: "例：5", note: "备注", notePh: "少辣、多拿两个碟子等", show: "给服务员看", send: "复制订单并打开Zalo", copied: "订单已复制 — 粘贴到Zalo发送", copyFail: "复制失败 — 请手动复制下方内容", clear: "清空", preview: "查看订单内容", market: "时价", after: "配烤肉价", plus: "另加时价菜品", hint: "最终金额以店家确认为准", close: "关闭", added: "已加入", kitchen: "发送订单到厨房", sending: "发送中…", sent: "订单已送到厨房", sentNo: "订单号", needTable: "请先填写桌号", sendFail: "发送失败 — 请把此画面给服务员看", badKey: "请重新扫描桌上的二维码 — 或给服务员看" },
+    ja: { say: "この画面をスタッフに見せてください", add: "追加", items: "点", view: "注文を見る", title: "ご注文", total: "合計", table: "テーブル番号", tablePh: "例：5", note: "ご要望", notePh: "辛さ控えめ、取り皿2枚など", show: "スタッフに見せる", send: "注文をコピーしてZaloを開く", copied: "注文をコピーしました — Zaloに貼り付けて送信", copyFail: "コピーできませんでした — 下の内容をコピーしてください", clear: "空にする", preview: "注文内容を見る", market: "時価", after: "焼肉と一緒に", plus: "＋時価メニュー", hint: "最終金額はお店で確認します", close: "閉じる", added: "追加しました", kitchen: "厨房に注文を送る", sending: "送信中…", sent: "ご注文を厨房に送りました", sentNo: "注文番号", needTable: "先にテーブル番号を入力してください", sendFail: "送信できませんでした — この画面をスタッフに見せてください", badKey: "テーブルのQRをもう一度読み取ってください — またはスタッフに見せてください" },
+    vi: { say: "Đưa màn hình này cho nhân viên", add: "Thêm", items: "món", view: "Xem đơn", title: "Đơn gọi món", total: "Tổng", table: "Số bàn", tablePh: "VD: 5", note: "Ghi chú", notePh: "Ít cay, thêm 2 bát…", show: "Đưa nhân viên xem", send: "Sao chép đơn & mở Zalo", copied: "Đã sao chép đơn — dán vào Zalo để gửi", copyFail: "Không sao chép được — hãy chép nội dung bên dưới", clear: "Xóa đơn", preview: "Xem nội dung đơn", market: "Thời giá", after: "Giá ăn kèm thịt nướng", plus: "+ món thời giá", hint: "Quán sẽ xác nhận số tiền cuối cùng", close: "Đóng", added: "Đã thêm", kitchen: "Gửi đơn vào bếp", sending: "Đang gửi…", sent: "Đơn đã được gửi vào bếp", sentNo: "Số đơn", needTable: "Vui lòng nhập số bàn trước", sendFail: "Không gửi được — hãy đưa màn hình này cho nhân viên", badKey: "Vui lòng quét lại mã QR trên bàn — hoặc đưa nhân viên xem" },
   };
   for (const [k, byLang] of Object.entries(CFG.labels || {})) for (const [l, v] of Object.entries(byLang)) if (T[l]) T[l][k] = v;
   // 직원에게 보여주는 주문서 머리말 (직원 언어)
@@ -46,7 +50,11 @@
   const cart = new Map(fresh ? (saved.items || []).filter(([k, q]) => ITEMS.has(k) && q > 0) : []);
   const qTable = new URLSearchParams(location.search).get("t") || new URLSearchParams(location.search).get("table");
   let table = (qTable || (fresh && saved.table) || "").slice(0, 12), note = (fresh && saved.note) || "";
-  const save = () => storage((s) => s.setItem(KEY, JSON.stringify({ t: Date.now(), items: [...cart], table, note })));
+  // 테이블 QR 열쇠(&k=)는 그 QR의 테이블 번호와 짝으로만 쓴다(손님이 번호를 바꾸면 안 보냄)
+  const qKey = new URLSearchParams(location.search).get("k");
+  let tkey = qTable && qKey ? { table: qTable.slice(0, 12), k: qKey.slice(0, 20) } : (fresh && saved.tkey) || null;
+  let kitchenOn = null, sending = false; // null = 아직 안 물어봄
+  const save = () => storage((s) => s.setItem(KEY, JSON.stringify({ t: Date.now(), items: [...cart], table, note, tkey })));
   const count = () => [...cart.values()].reduce((a, b) => a + b, 0);
   const total = () => [...cart].reduce((n, [k, q]) => n + (ITEMS.get(k).opt.price || 0) * q, 0);
   const hasMarket = () => [...cart.keys()].some((k) => ITEMS.get(k).opt.price == null);
@@ -204,6 +212,10 @@
     $("qoTable").placeholder = t.tablePh;
     $("qoNoteL").firstChild.textContent = t.note;
     $("qoNote").placeholder = t.notePh;
+    $("qoKitchen").hidden = !kitchenOn;
+    $("qoKitchen").textContent = sending ? t.sending : t.kitchen;
+    $("qoKitchen").disabled = sending;
+    $("qoShow").className = kitchenOn ? "qo-ghost" : "qo-main";
     $("qoShow").textContent = t.show;
     $("qoSend").hidden = !CFG.zalo;
     $("qoSend").textContent = t.send;
@@ -219,6 +231,36 @@
     $("qoSheet").hidden = false;
     document.body.style.overflow = "hidden";
     renderSheet();
+    checkKitchen();
+  }
+  // 이 가게가 주방 주문을 받는지 한 번만 묻는다(실패하면 버튼을 안 보여 줌 → 예전과 똑같이 동작)
+  async function checkKitchen() {
+    if (kitchenOn !== null || !CFG.shop || CFG.kitchen === false) return;
+    kitchenOn = false;
+    try {
+      const r = await fetch(`${CFG.api}/api/order?shop=${CFG.shop}`, { cache: "no-store" });
+      if (r.ok) kitchenOn = !!(await r.json()).on;
+    } catch {}
+    if (kitchenOn && !$("qoSheet").hidden) renderSheet();
+  }
+  async function sendKitchen() {
+    const t = T[langOf()], l = T[CFG.staff] ? CFG.staff : "vi", me = langOf();
+    if (sending) return;
+    if (!table.trim()) { toast(t.needTable); $("qoTable").focus(); return; }
+    const items = [...cart].map(([k, q]) => { const p = ITEMS.get(k).opt.price; return { name: lineName(k, l), sub: me === l ? "" : lineName(k, me), q, price: p == null ? null : p * q }; });
+    const body = { shop: CFG.shop, table: table.trim(), note: note.trim(), lang: me, currency: CFG.currency, items, k: tkey && tkey.table === table.trim() ? tkey.k : "" };
+    sending = true; renderSheet();
+    let res = null, err = "";
+    try {
+      const r = await fetch(`${CFG.api}/api/order`, { method: "POST", headers: { "content-type": "text/plain" }, body: JSON.stringify(body) });
+      if (r.ok) res = await r.json(); else err = ((await r.json().catch(() => ({}))).error) || "x";
+    } catch { err = "net"; }
+    sending = false;
+    if (!res) { renderSheet(); toast(err === "key" ? t.badKey : t.sendFail); return; }
+    // 보낸 내용을 직원 화면 모양으로 보여 주고 장바구니를 비운다(두 번 보내기 방지)
+    $("qoStaffBody").innerHTML = `<p class="say" style="color:#1a7f37;font-size:17px">✅ ${esc(t.sent)}<br>${esc(t.sentNo)} #${res.no}</p>` + staffHtml().replace(/^\s*<p class="say">[^<]*<\/p>/, "");
+    cart.clear(); note = ""; update(); closeSheet();
+    $("qoStaff").hidden = false; $("qoStaff").scrollTop = 0;
   }
   function closeSheet() { $("qoSheet").hidden = true; document.body.style.overflow = ""; }
 
@@ -254,6 +296,7 @@
             <label id="qoNoteL">.<input id="qoNote" maxlength="200" autocomplete="off"></label>
           </div>
           <div class="qo-acts">
+            <button type="button" class="qo-main" id="qoKitchen" hidden></button>
             <button type="button" class="qo-main" id="qoShow"></button>
             <button type="button" class="qo-zalo" id="qoSend" hidden></button>
             <button type="button" class="qo-ghost" id="qoClear"></button>
@@ -294,6 +337,7 @@
       $("qoStaff").scrollTop = 0;
     });
     $("qoStaffX").addEventListener("click", () => { $("qoStaff").hidden = true; });
+    $("qoKitchen").addEventListener("click", sendKitchen);
     $("qoSend").addEventListener("click", async () => {
       const t = T[langOf()];
       if (await copy(orderText())) {

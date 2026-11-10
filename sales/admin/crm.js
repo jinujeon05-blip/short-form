@@ -8,8 +8,8 @@
   const nameOf = (id) => (STORES.find((s) => s.id === id) || { name: id }).name;
   const STATUS = { listing: '가게 찾기용(동의 전)', pitched: '제안함', talking: '협의 중', contracted: '정식·계약', paused: '보류' };
   const defStatus = (s) => (s.listing ? 'listing' : 'contracted');
-  const ACT = { 'menu-save': '메뉴 저장', 'menu-restore': '이전 버전으로 복원', 'menu-reset': '기본 메뉴로 초기화', photo: '사진 올림', login: '점주 로그인', 'owner-pw': '점주 비밀번호 발급', 'owner-off': '점주 로그인 끔', crm: '영업 정보 수정' };
-  const ACTOR = { admin: '관리자', owner: '점주' };
+  const ACT = { 'menu-save': '메뉴 저장', 'menu-restore': '이전 버전으로 복원', 'menu-reset': '기본 메뉴로 초기화', photo: '사진 올림', login: '점주 로그인', 'owner-pw': '점주 비밀번호 발급', 'owner-off': '점주 로그인 끔', crm: '영업 정보 수정', 'k-login': '주방 기기 로그인', 'k-set': '주방 주문 설정', 'k-pin': '주방 PIN 발급', 'k-logout': '주방 기기 모두 로그아웃', 'k-test': '시험 주문' };
+  const ACTOR = { admin: '관리자', owner: '점주', kitchen: '주방' };
   const fmtT = (ts) => new Date(ts).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   let crm = { shops: {} }, owners = {}, custom = {}, sel = null, editor = null, menuShop = null, statsCache = null;
 
@@ -158,11 +158,11 @@
   // ───── 탭 전환 ─────
   function show(tab, arg) {
     document.querySelectorAll('#tabs button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.t === tab));
-    ['stats', 'shops', 'menu', 'report', 'sec'].forEach((t) => { const el = $('tab-' + t); if (el) el.hidden = t !== tab; });
+    ['stats', 'shops', 'menu', 'kitchen', 'report', 'sec'].forEach((t) => { const el = $('tab-' + t); if (el) el.hidden = t !== tab; });
     $('range').style.display = tab === 'stats' ? '' : 'none'; $('reload').style.display = tab === 'stats' ? '' : 'none';
-    if (tab === 'shops') loadShops(); else if (tab === 'menu') menuTab(arg); else if (tab === 'report') reportTab(); else if (tab === 'sec') secTab();
+    if (tab === 'shops') loadShops(); else if (tab === 'menu') menuTab(arg); else if (tab === 'kitchen') window.QMKitchen && QMKitchen.open(); else if (tab === 'report') reportTab(); else if (tab === 'sec') secTab();
     try { history.replaceState(null, '', '#' + tab); } catch {}
   }
   $('tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) show(b.dataset.t); });
-  window.QMAdmin = { show, start() { const t = (location.hash || '').slice(1); if (['shops', 'menu', 'report', 'sec'].includes(t)) show(t); } };
+  window.QMAdmin = { show, start() { const t = (location.hash || '').slice(1); if (['shops', 'menu', 'kitchen', 'report', 'sec'].includes(t)) show(t); } };
 })();

@@ -125,4 +125,4 @@ async function logEvent(actor, action, shop = '', note = '') {
 const readBody = (req) => (req.body && typeof req.body === 'object' ? req.body : typeof req.body === 'string' ? JSON.parse(req.body || '{}') : {});
 const validShop = (s) => /^[a-z0-9]{2,20}$/.test(String(s || ''));
 
-Object.assign(module.exports, { ipOf, ipHash, isBlocked, addFail, ownerToken, verifyOwnerToken, reportToken, hashPw, newPassword, actorFor, logEvent, readBody, validShop, safeEq });
+Object.assign(module.exports, { hmac, ipOf, ipHash, isBlocked, addFail, ownerToken, verifyOwnerToken, reportToken, hashPw, newPassword, actorFor, logEvent, readBody, validShop, safeEq });

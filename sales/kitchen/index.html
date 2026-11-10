@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#16171b">
+<title>Bếp · QR MENU</title>
+<style>
+  :root { --bg: #16171b; --card: #22242c; --ink: #f1efe9; --muted: #9a958a; --line: #353843; --new: #ff5a36; --cook: #f5b100; --done: #3fb950; --btn: #2d303a; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; -webkit-font-smoothing: antialiased; }
+  body { padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+  button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .btn { background: var(--btn); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-weight: 700; font-size: 15px; }
+  .btn.big { width: 100%; padding: 16px; font-size: 18px; }
+  .btn.primary { background: var(--new); border-color: var(--new); color: #fff; }
+  .center { max-width: 380px; margin: 14vh auto 0; padding: 0 16px; text-align: center; }
+  .center h1 { font-size: 22px; margin: 0 0 6px; }
+  .center p { color: var(--muted); margin: 0 0 16px; font-size: 15px; line-height: 1.5; }
+  .pin { width: 100%; font: inherit; font-size: 30px; letter-spacing: 10px; text-align: center; padding: 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); margin-bottom: 12px; }
+  .err { color: #ff7b72; min-height: 22px; font-size: 14px; margin-top: 8px; }
+  header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--bg); border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 17px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  header .sp { flex: 1; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex: none; }
+  .dot.ok { background: var(--done); } .dot.bad { background: var(--new); }
+  .st { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .hb { padding: 8px 11px; font-size: 14px; }
+  .off { margin: 12px 14px 0; padding: 12px 14px; border: 1px dashed var(--cook); border-radius: 12px; color: var(--cook); font-size: 14px; }
+  .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 12px 14px 40px; align-items: start; }
+  .col h2 { display: flex; align-items: center; gap: 8px; font-size: 15px; margin: 2px 2px 10px; color: var(--muted); }
+  .col h2 b { background: var(--btn); color: var(--ink); border-radius: 999px; padding: 1px 9px; font-size: 13px; }
+  .col.new h2 { color: var(--new); } .col.cook h2 { color: var(--cook); } .col.done h2 { color: var(--done); }
+  .o { background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--muted); border-radius: 14px; padding: 12px 12px 10px; margin-bottom: 10px; }
+  .o.new { border-left-color: var(--new); animation: blink 1.2s ease-in-out infinite alternate; }
+  .o.cooking { border-left-color: var(--cook); } .o.done, .o.cancel { border-left-color: var(--done); opacity: .62; }
+  .o.cancel { border-left-color: var(--muted); text-decoration: line-through; }
+  @keyframes blink { from { box-shadow: 0 0 0 0 rgba(255,90,54,0); } to { box-shadow: 0 0 0 3px rgba(255,90,54,.55); } }
+  .oh { display: flex; align-items: baseline; gap: 8px; }
+  .oh .no { font-size: 15px; color: var(--muted); font-weight: 700; }
+  .oh .tb { font-size: 26px; font-weight: 800; }
+  .oh .tm { margin-left: auto; font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .o ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  .o li { display: grid; grid-template-columns: 38px 1fr; gap: 0 6px; padding: 5px 0; border-top: 1px solid var(--line); }
+  .o li em { font-style: normal; font-weight: 800; font-size: 19px; text-align: right; }
+  .o li b { font-size: 17px; line-height: 1.3; }
+  .o li small { grid-column: 2; color: var(--muted); font-size: 13px; }
+  .o .nt { margin-top: 8px; padding: 7px 9px; border: 1.5px dashed var(--cook); border-radius: 10px; font-weight: 700; font-size: 15px; white-space: pre-wrap; }
+  .o .tot { margin-top: 6px; font-size: 13px; color: var(--muted); text-align: right; }
+  .o .tag { font-size: 11px; font-weight: 800; background: var(--cook); color: #111; border-radius: 6px; padding: 1px 6px; }
+  .acts { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .acts button { flex: 1; min-width: 80px; padding: 11px 8px; border-radius: 10px; border: 1px solid var(--line); background: var(--btn); font-weight: 800; font-size: 15px; }
+  .acts .go { background: var(--new); border-color: var(--new); color: #fff; }
+  .acts .fin { background: var(--done); border-color: var(--done); color: #08130a; }
+  .acts .sm { flex: none; min-width: 0; padding: 11px 12px; }
+  .empty { color: var(--muted); font-size: 14px; padding: 18px 4px; text-align: center; border: 1px dashed var(--line); border-radius: 12px; }
+  .sheet { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; }
+  .sheet > div { background: var(--card); width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; border-radius: 18px 18px 0 0; padding: 18px 16px calc(20px + env(safe-area-inset-bottom)); }
+  .sheet h3 { margin: 0 0 12px; font-size: 18px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+  .row small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .row select, .row input[type=text] { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 8px; max-width: 46%; }
+  .row input[type=checkbox] { width: 24px; height: 24px; flex: none; }
+  .help { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 12px 0 0; }
+  .toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 30; background: #000; color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 14px; font-weight: 700; opacity: 0; transition: opacity .2s; pointer-events: none; max-width: 92vw; text-align: center; }
+  .toast.on { opacity: .92; }
+  #printArea { display: none; }
+  @media (max-width: 860px) { .board { grid-template-columns: 1fr; } .col.done { order: 3; } }
+  @media print {
+    body > *:not(#printArea) { display: none !important; }
+    #printArea { display: block !important; color: #000; background: #fff; font-family: system-ui, sans-serif; }
+    #printArea img { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="center" id="vLogin" hidden>
+  <h1 id="lTitle"></h1>
+  <p id="lHelp"></p>
+  <input class="pin" id="pin" inputmode="numeric" autocomplete="one-time-code" maxlength="8">
+  <button class="btn big primary" id="lGo"></button>
+  <div class="err" id="lErr"></div>
+  <p style="margin-top:18px"><button class="btn hb" data-lang="vi">Tiếng Việt</button> <button class="btn hb" data-lang="ko">한국어</button></p>
+</div>
+
+<div class="center" id="vStart" hidden>
+  <h1 id="sTitle"></h1>
+  <p id="sHelp"></p>
+  <button class="btn big primary" id="sGo"></button>
+</div>
+
+<div id="vMain" hidden>
+  <header>
+    <span class="dot" id="dot"></span>
+    <h1 id="hName"></h1>
+    <span class="st" id="hSt"></span>
+    <span class="sp"></span>
+    <button class="btn hb" id="hSet">⚙</button>
+  </header>
+  <div class="off" id="offNote" hidden></div>
+  <div class="board">
+    <section class="col new"><h2><span id="cNew"></span><b id="nNew">0</b></h2><div id="lNew"></div></section>
+    <section class="col cook"><h2><span id="cCook"></span><b id="nCook">0</b></h2><div id="lCook"></div></section>
+    <section class="col done"><h2><span id="cDone"></span><b id="nDone">0</b></h2><div id="lDone"></div></section>
+  </div>
+</div>
+
+<div class="sheet" id="vSet" hidden><div>
+  <h3 id="tSet"></h3>
+  <div class="row"><span id="tLang"></span><select id="oLang"><option value="vi">Tiếng Việt</option><option value="ko">한국어</option></select></div>
+  <div class="row"><span><span id="tName"></span><small id="tNameH"></small></span><input type="text" id="oName" maxlength="30"></div>
+  <div class="row"><span><span id="tPrinter"></span><small id="tPrinterH"></small></span><select id="oPrinter"></select></div>
+  <div class="row"><span id="tPaper"></span><select id="oPaper"><option value="58">58mm</option><option value="80">80mm</option></select></div>
+  <div class="row"><span><span id="tAuto"></span><small id="tAutoH"></small></span><input type="checkbox" id="oAuto"></div>
+  <div class="row"><span id="tSound"></span><input type="checkbox" id="oSound"></div>
+  <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+    <button class="btn" id="bTestPrint"></button><button class="btn" id="bTestSound"></button><button class="btn" id="bOut"></button>
+  </div>
+  <p class="help" id="tHelp"></p>
+  <button class="btn big" id="bClose" style="margin-top:14px"></button>
+</div></div>
+
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const ls = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  const shop = (new URLSearchParams(location.search).get("shop") || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const API = "/api/kitchen?action=";
+  const K = (k) => "qk_" + shop + "_" + k;
+  const get = (k, d) => { const v = ls((s) => s.getItem(K(k))); return v == null ? d : v; };
+  const set = (k, v) => ls((s) => s.setItem(K(k), v));
+
+  const TX = {
+    vi: { login: "Đăng nhập màn hình bếp", loginH: "Nhập mã PIN 6 số do quản lý cung cấp.", go: "Vào", wrong: "Mã PIN không đúng", blocked: "Nhập sai quá nhiều lần. Thử lại sau 1 giờ.", noShop: "Thiếu mã quán trong địa chỉ (?shop=…)",
+      start: "Bắt đầu nhận đơn", startH: "Nhấn nút để bật âm thanh báo đơn mới và giữ màn hình luôn sáng.", startGo: "▶ Bắt đầu",
+      cNew: "Đơn mới", cCook: "Đang làm", cDone: "Xong (hôm nay)", accept: "Nhận đơn", done: "Xong", print: "In", cancel: "Hủy", undo: "Hoàn tác", none: "Chưa có đơn", table: "Bàn", ago: "phút trước", now: "vừa xong",
+      total: "Tổng", market: "thời giá", test: "THỬ", ok: "Đã kết nối", bad: "Mất kết nối – đang thử lại", off: "Quán đang TẮT nhận đơn online. Khách chưa gửi đơn được (quản lý bật trong trang admin).", cancelQ: "Hủy đơn này?",
+      set: "Cài đặt máy này", lang: "Ngôn ngữ", name: "Tên máy", nameH: "VD: Bếp 1, Quầy", printer: "Máy in", printerH: "Mặc định do quản lý chọn", paper: "Khổ giấy", auto: "Tự in đơn mới", autoH: "Cần app RawBT. Nếu không tự in, nhấn nút In.", sound: "Âm thanh báo đơn",
+      pRawbt: "Máy in Bluetooth (app RawBT)", pBrowser: "In qua trình duyệt", pNone: "Không in", testPrint: "In thử", testSound: "Thử âm thanh", out: "Đăng xuất", close: "Đóng", newOrder: "Đơn mới", printed: "Đã gửi lệnh in",
+      help: "Máy in Bluetooth: cài app “RawBT” (miễn phí) trên máy Android → ghép đôi máy in → trong RawBT chọn máy in → quay lại đây và nhấn “In thử”. iPhone/iPad dùng “In qua trình duyệt”." },
+    ko: { login: "주방 화면 로그인", loginH: "관리자에게 받은 6자리 PIN을 넣어 주세요.", go: "들어가기", wrong: "PIN이 맞지 않아요", blocked: "너무 많이 틀렸어요. 1시간 뒤에 다시 해 주세요.", noShop: "주소에 가게 아이디(?shop=…)가 없어요",
+      start: "주문 받기 시작", startH: "버튼을 누르면 새 주문 알림 소리가 켜지고 화면이 꺼지지 않아요.", startGo: "▶ 시작",
+      cNew: "새 주문", cCook: "만드는 중", cDone: "완료 (오늘)", accept: "접수", done: "완료", print: "인쇄", cancel: "취소", undo: "되돌리기", none: "주문이 없어요", table: "테이블", ago: "분 전", now: "방금",
+      total: "합계", market: "시가", test: "시험", ok: "연결됨", bad: "연결 끊김 – 다시 시도 중", off: "이 가게는 온라인 주문이 꺼져 있어요. 손님은 아직 주문을 보낼 수 없어요(admin에서 켜기).", cancelQ: "이 주문을 취소할까요?",
+      set: "이 기기 설정", lang: "언어", name: "기기 이름", nameH: "예: 주방 1, 카운터", printer: "프린터", printerH: "기본값은 관리자가 정함", paper: "용지 폭", auto: "새 주문 자동 인쇄", autoH: "RawBT 앱 필요. 자동으로 안 나오면 인쇄 버튼을 눌러 주세요.", sound: "알림 소리",
+      pRawbt: "블루투스 프린터 (RawBT 앱)", pBrowser: "브라우저 인쇄", pNone: "인쇄 안 함", testPrint: "시험 인쇄", testSound: "소리 시험", out: "로그아웃", close: "닫기", newOrder: "새 주문", printed: "인쇄 명령을 보냈어요",
+      help: "블루투스 프린터: 안드로이드 기기에 무료 앱 “RawBT” 설치 → 프린터 블루투스 연결 → RawBT에서 프린터 선택 → 여기서 “시험 인쇄”. 아이폰·아이패드는 “브라우저 인쇄”를 쓰세요." },
+  };
+  let lang = get("lang", (navigator.language || "").toLowerCase().startsWith("ko") ? "ko" : "vi");
+  const t = () => TX[lang];
+  let token = get("token", ""), since = 0, cfg = { on: false, poll: 15, printer: "rawbt", paper: 58 };
+  const orders = new Map(); // id → { status, data }
+  let started = false, timer = null, failCount = 0, firstLoad = true;
+  const device = get("device", "") || (() => { const d = Math.random().toString(36).slice(2, 12); set("device", d); return d; })();
+
+  function toast(m) { const el = $("toast"); el.textContent = m; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2200); }
+  function view(v) { ["vLogin", "vStart", "vMain"].forEach((x) => ($(x).hidden = x !== v)); }
+
+  function paintText() {
+    document.documentElement.lang = lang;
+    const x = t();
+    $("lTitle").textContent = x.login; $("lHelp").textContent = shop ? x.loginH : x.noShop; $("lGo").textContent = x.go;
+    $("sTitle").textContent = x.start; $("sHelp").textContent = x.startH; $("sGo").textContent = x.startGo;
+    $("cNew").textContent = x.cNew; $("cCook").textContent = x.cCook; $("cDone").textContent = x.cDone;
+    $("tSet").textContent = x.set; $("tLang").textContent = x.lang; $("tName").textContent = x.name; $("tNameH").textContent = x.nameH;
+    $("tPrinter").textContent = x.printer; $("tPrinterH").textContent = x.printerH; $("tPaper").textContent = x.paper; $("tAuto").textContent = x.auto; $("tAutoH").textContent = x.autoH; $("tSound").textContent = x.sound;
+    $("oPrinter").innerHTML = `<option value="">${esc(x.printerH)}</option><option value="rawbt">${esc(x.pRawbt)}</option><option value="browser">${esc(x.pBrowser)}</option><option value="none">${esc(x.pNone)}</option>`;
+    $("oPrinter").value = get("printer", "");
+    $("bTestPrint").textContent = x.testPrint; $("bTestSound").textContent = x.testSound; $("bOut").textContent = x.out; $("bClose").textContent = x.close; $("tHelp").textContent = x.help;
+    $("offNote").textContent = x.off;
+    if (!$("vMain").hidden) render();
+  }
+
+  // ── 서버 ──
+  async function call(action, body) {
+    const opt = body ? { method: "POST", headers: { "content-type": "application/json", "x-kitchen-token": token }, body: JSON.stringify({ shop, ...body }) } : { headers: { "x-kitchen-token": token }, cache: "no-store" };
+    const r = await fetch(API + action + (body ? "" : "&shop=" + shop + "&since=" + since), opt);
+    if (r.status === 401) { logout(); throw new Error("auth"); }
+    if (!r.ok) throw new Error(String(r.status));
+    return r.json();
+  }
+  function logout() { token = ""; set("token", ""); stop(); orders.clear(); since = 0; view("vLogin"); }
+
+  async function login() {
+    const pin = $("pin").value.replace(/\D/g, "");
+    if (!pin || !shop) return;
+    $("lErr").textContent = "";
+    try {
+      const r = await fetch(API + "login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ shop, pin }) });
+      if (r.status === 429) return ($("lErr").textContent = t().blocked);
+      if (!r.ok) return ($("lErr").textContent = t().wrong);
+      token = (await r.json()).token; set("token", token); $("pin").value = "";
+      view("vStart");
+    } catch { $("lErr").textContent = t().bad; }
+  }
+
+  async function poll() {
+    clearTimeout(timer);
+    try {
+      const j = await call("poll");
+      failCount = 0; setConn(true);
+      cfg = j.cfg || cfg;
+      if (!j.same) {
+        since = j.ts;
+        const fresh = [];
+        for (const o of j.orders) {
+          const cur = orders.get(o.id);
+          if (!cur) {
+            try { const r = await fetch(o.url); if (!r.ok) continue; orders.set(o.id, { status: o.status, data: await r.json() }); if (o.status === "new" && !firstLoad) fresh.push(o.id); } catch {}
+          } else cur.status = o.status;
+        }
+        firstLoad = false;
+        render();
+        if (fresh.length) onNew(fresh);
+      }
+      $("offNote").hidden = !!cfg.on;
+    } catch (e) { if (e.message === "auth") return; failCount++; setConn(false); }
+    const wait = failCount ? Math.min(60, 5 * failCount) : (Number(cfg.poll) || 15);
+    timer = setTimeout(poll, wait * 1000);
+  }
+  function stop() { clearTimeout(timer); timer = null; }
+  function setConn(ok) { $("dot").className = "dot " + (ok ? "ok" : "bad"); $("hSt").textContent = ok ? `${t().ok} · ${new Date().toLocaleTimeString(lang === "ko" ? "ko-KR" : "vi-VN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}` : t().bad; }
+
+  async function setStatus(id, status) {
+    const o = orders.get(id); if (!o) return;
+    const prev = o.status; o.status = status; render();
+    try { await call("status", { id, status }); } catch (e) { o.status = prev; render(); if (e.message !== "auth") toast(t().bad); }
+  }
+
+  // ── 그리기 ──
+  const money = (n, cur) => Number(n || 0).toLocaleString("en-US") + (cur || "₫");
+  function ago(at) { const m = Math.floor((Date.now() - at) / 60000); return m < 1 ? t().now : `${m} ${t().ago}`; }
+  function card(id, o) {
+    const d = o.data, x = t();
+    const items = d.items.map((it) => `<li><em>${it.q}×</em><b>${esc(it.name)}</b>${it.sub && it.sub !== it.name ? `<small>${esc(it.sub)}</small>` : ""}</li>`).join("");
+    const acts = o.status === "new" ? `<button class="go" data-s="cooking" data-id="${id}">${x.accept}</button><button class="sm" data-p="${id}">🖨 ${x.print}</button><button class="sm" data-s="cancel" data-id="${id}">✕</button>`
+      : o.status === "cooking" ? `<button class="fin" data-s="done" data-id="${id}">✓ ${x.done}</button><button class="sm" data-p="${id}">🖨 ${x.print}</button><button class="sm" data-s="cancel" data-id="${id}">✕</button>`
+      : `<button class="sm" data-p="${id}">🖨 ${x.print}</button>`;
+    return `<article class="o ${o.status}"><div class="oh"><span class="no">#${d.no}</span><span class="tb">${esc(x.table)} ${esc(d.table)}</span>${d.test ? `<span class="tag">${x.test}</span>` : ""}<span class="tm">${new Date(d.at).toLocaleTimeString(lang === "ko" ? "ko-KR" : "vi-VN", { hour: "2-digit", minute: "2-digit" })} · ${ago(d.at)}</span></div>
+      <ul>${items}</ul>${d.note ? `<div class="nt">${esc(d.note)}</div>` : ""}<div class="tot">${x.total} ${money(d.total, d.currency)}${d.market ? ` + ${x.market}` : ""}</div><div class="acts">${acts}</div></article>`;
+  }
+  function render() {
+    const all = [...orders.entries()].sort((a, b) => a[1].data.at - b[1].data.at);
+    const pick = (f) => all.filter(([, o]) => f(o.status));
+    const n = pick((s) => s === "new"), c = pick((s) => s === "cooking"), d = pick((s) => s === "done" || s === "cancel").reverse().slice(0, 30);
+    const fill = (el, cnt, arr) => { $(cnt).textContent = arr.length; $(el).innerHTML = arr.map(([id, o]) => card(id, o)).join("") || `<div class="empty">${t().none}</div>`; };
+    fill("lNew", "nNew", n); fill("lCook", "nCook", c); fill("lDone", "nDone", d);
+    document.title = (n.length ? `(${n.length}) ` : "") + "Bếp · QR MENU";
+    if (!n.length) stopAlarm();
+  }
+
+  // ── 소리 (새 주문이 '접수'될 때까지 20초마다 다시 울림) ──
+  let actx = null, alarm = null;
+  function beep() {
+    if (get("sound", "1") !== "1") return;
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const now = actx.currentTime;
+      [0, 0.22, 0.44].forEach((d, i) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = "square"; o.frequency.value = i === 2 ? 1320 : 990; g.gain.setValueAtTime(0.0001, now + d); g.gain.exponentialRampToValueAtTime(0.35, now + d + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, now + d + 0.18); o.connect(g); g.connect(actx.destination); o.start(now + d); o.stop(now + d + 0.2); });
+    } catch {}
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+  }
+  function startAlarm() { beep(); clearInterval(alarm); alarm = setInterval(() => { if ([...orders.values()].some((o) => o.status === "new")) beep(); else stopAlarm(); }, 20000); }
+  function stopAlarm() { clearInterval(alarm); alarm = null; }
+  function onNew(ids) {
+    startAlarm(); toast(`🔔 ${t().newOrder} ×${ids.length}`);
+    if (get("auto", "0") === "1") ids.forEach((id, i) => setTimeout(() => printOrder(id), i * 2500));
+  }
+
+  // ── 인쇄 ──
+  // 영수증을 그림(캔버스)으로 그린다 → 베트남어·한국어 글자가 프린터 글꼴과 상관없이 그대로 나온다.
+  const printerMode = () => get("printer", "") || cfg.printer || "rawbt";
+  const paperPx = () => (Number(get("paper", "")) || Number(cfg.paper) || 58) === 80 ? 576 : 384;
+  function ticketCanvas(d) {
+    const W = paperPx(), pad = 8, c = document.createElement("canvas"), g = c.getContext("2d");
+    const F = "system-ui, -apple-system, Roboto, 'Noto Sans', 'Noto Sans KR', sans-serif";
+    const s = W / 384; // 58mm 기준 크기
+    const lines = [];
+    const add = (text, size, weight = 400, align = "left", gap = 4) => lines.push({ text: String(text), size: Math.round(size * s), weight, align, gap: Math.round(gap * s) });
+    const rule = () => lines.push({ rule: true, gap: Math.round(6 * s) });
+    add(`#${d.no}${d.test ? "  [TEST]" : ""}`, 22, 700, "left", 2);
+    add(`${t().table} ${d.table}`, 40, 800, "left", 4);
+    add(new Date(d.at).toLocaleString(lang === "ko" ? "ko-KR" : "vi-VN"), 18, 400, "left", 4);
+    rule();
+    d.items.forEach((it) => { add(`${it.q} × ${it.name}`, 26, 700, "left", 2); if (it.sub && it.sub !== it.name) add(`   ${it.sub}`, 18, 400, "left", 4); });
+    rule();
+    if (d.note) add(`★ ${d.note}`, 24, 700, "left", 6);
+    add(`${t().total}: ${money(d.total, d.currency)}${d.market ? " + " + t().market : ""}`, 20, 600, "right", 4);
+    // 줄 바꿈 계산
+    const rows = [];
+    for (const l of lines) {
+      if (l.rule) { rows.push(l); continue; }
+      g.font = `${l.weight} ${l.size}px ${F}`;
+      let cur = "";
+      for (const ch of l.text.split(/(\s+)/)) {
+        const test = cur + ch;
+        if (g.measureText(test).width > W - pad * 2 && cur.trim()) { rows.push({ ...l, text: cur.trimEnd() }); cur = ch.trimStart(); }
+        else cur = test;
+        while (g.measureText(cur).width > W - pad * 2 && cur.length > 1) { let k = cur.length - 1; while (k > 1 && g.measureText(cur.slice(0, k)).width > W - pad * 2) k--; rows.push({ ...l, text: cur.slice(0, k) }); cur = cur.slice(k); }
+      }
+      if (cur.trim()) rows.push({ ...l, text: cur });
+    }
+    const H = rows.reduce((h, r) => h + (r.rule ? r.gap * 2 + 2 : r.size * 1.25 + r.gap), pad * 2) + 40;
+    c.width = W; c.height = Math.ceil(H);
+    g.fillStyle = "#fff"; g.fillRect(0, 0, W, c.height); g.fillStyle = "#000"; g.textBaseline = "top";
+    let y = pad;
+    for (const r of rows) {
+      if (r.rule) { y += r.gap; g.fillRect(pad, y, W - pad * 2, 2); y += r.gap + 2; continue; }
+      g.font = `${r.weight} ${r.size}px ${F}`; g.textAlign = r.align;
+      g.fillText(r.text, r.align === "right" ? W - pad : pad, y); y += r.size * 1.25 + r.gap;
+    }
+    return c;
+  }
+  // ESC/POS 래스터 이미지(GS v 0) → RawBT 앱으로 보낸다
+  function escpos(c) {
+    const W = c.width, H = c.height, bw = W / 8, px = c.getContext("2d").getImageData(0, 0, W, H).data, out = [0x1b, 0x40];
+    for (let y0 = 0; y0 < H; y0 += 200) {
+      const h = Math.min(200, H - y0);
+      out.push(0x1d, 0x76, 0x30, 0x00, bw & 255, bw >> 8, h & 255, h >> 8);
+      for (let y = y0; y < y0 + h; y++) for (let xb = 0; xb < bw; xb++) {
+        let b = 0;
+        for (let k = 0; k < 8; k++) { const i = (y * W + xb * 8 + k) * 4; if (px[i] * 0.3 + px[i + 1] * 0.59 + px[i + 2] * 0.11 < 150) b |= 0x80 >> k; }
+        out.push(b);
+      }
+    }
+    out.push(0x1b, 0x64, 0x04, 0x1d, 0x56, 0x42, 0x00); // 4줄 띄우고 자르기
+    let bin = ""; const u = new Uint8Array(out);
+    for (let i = 0; i < u.length; i += 0x8000) bin += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000));
+    return btoa(bin);
+  }
+  function printData(d) {
+    const mode = printerMode();
+    if (mode === "none") return;
+    const c = ticketCanvas(d);
+    if (mode === "rawbt") {
+      location.href = `intent:base64,${escpos(c)}#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;`;
+    } else {
+      $("printArea").innerHTML = `<style>@page{size:${paperPx() === 576 ? 80 : 58}mm auto;margin:0}</style><img src="${c.toDataURL("image/png")}">`;
+      setTimeout(() => window.print(), 50);
+    }
+    toast(t().printed);
+  }
+  const printOrder = (id) => { const o = orders.get(id); if (o) printData(o.data); };
+
+  // ── 화면 켜 두기 ──
+  let lock = null;
+  async function keepAwake() { try { if ("wakeLock" in navigator) lock = await navigator.wakeLock.request("screen"); } catch {} }
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && started) { keepAwake(); poll(); } });
+
+  async function beat() {
+    if (!token) return;
+    try { await call("beat", { device, name: get("name", ""), printer: printerMode() }); } catch {}
+  }
+
+  function start() {
+    started = true; view("vMain"); $("hName").textContent = shop;
+    try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); actx.resume && actx.resume(); } catch {}
+    keepAwake(); render(); poll(); beat(); setInterval(beat, 5 * 60e3);
+    setInterval(() => { if (orders.size) render(); }, 60e3); // '몇 분 전' 갱신
+  }
+
+  // ── 버튼 ──
+  document.addEventListener("click", (e) => {
+    const l = e.target.closest("[data-lang]"); if (l) { lang = l.dataset.lang; set("lang", lang); paintText(); return; }
+    const s = e.target.closest("[data-s]");
+    if (s) { if (s.dataset.s === "cancel" && !confirm(t().cancelQ)) return; if (s.dataset.s === "cooking") stopAlarm(); setStatus(s.dataset.id, s.dataset.s); return; }
+    const p = e.target.closest("[data-p]"); if (p) return printOrder(p.dataset.p);
+  });
+  $("lGo").onclick = login; $("pin").addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+  $("sGo").onclick = start;
+  $("hSet").onclick = () => { $("oLang").value = lang; $("oName").value = get("name", ""); $("oPrinter").value = get("printer", ""); $("oPaper").value = get("paper", "") || String(cfg.paper || 58); $("oAuto").checked = get("auto", "0") === "1"; $("oSound").checked = get("sound", "1") === "1"; $("vSet").hidden = false; };
+  $("bClose").onclick = () => { $("vSet").hidden = true; beat(); };
+  $("vSet").addEventListener("click", (e) => { if (e.target === $("vSet")) $("vSet").hidden = true; });
+  $("oLang").onchange = () => { lang = $("oLang").value; set("lang", lang); paintText(); };
+  $("oName").onchange = () => set("name", $("oName").value.trim());
+  $("oPrinter").onchange = () => set("printer", $("oPrinter").value);
+  $("oPaper").onchange = () => set("paper", $("oPaper").value);
+  $("oAuto").onchange = () => set("auto", $("oAuto").checked ? "1" : "0");
+  $("oSound").onchange = () => set("sound", $("oSound").checked ? "1" : "0");
+  $("bTestSound").onclick = () => { const s = get("sound", "1"); set("sound", "1"); beep(); set("sound", s); };
+  $("bTestPrint").onclick = () => printData({ no: 0, test: true, table: "TEST", at: Date.now(), note: lang === "ko" ? "시험 인쇄 · 한글 Tiếng Việt" : "In thử · Tiếng Việt 한글", currency: "₫", total: 150000, market: false, items: [{ q: 2, name: "Phở bò tái", sub: "소고기 쌀국수", price: 100000 }, { q: 1, name: "Trà đá", sub: "아이스티", price: 50000 }] });
+  $("bOut").onclick = () => { $("vSet").hidden = true; logout(); };
+  window.__qk = { orders, ticketCanvas, escpos }; // 시험용
+
+  paintText();
+  if (!shop) view("vLogin"); else if (token) view("vStart"); else view("vLogin");
+})();
+</script>
+</body>
+</html>

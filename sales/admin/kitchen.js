@@ -1,0 +1,125 @@
+// 관리자 화면 '주문·주방 기기' 탭: 가게별 주방 주문 켜기/끄기, 주방 PIN, 연결된 기기, 프린터 기본값, 테이블 QR 주소, 시험 주문
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const key = () => { try { return sessionStorage.getItem('qm_admin'); } catch { return null; } };
+  // 정식(계약) 가게를 먼저, 가게 찾기용은 뒤에
+  const STORES = (window.STORES || []).slice().sort((a, b) => (a.listing ? 1 : 0) - (b.listing ? 1 : 0));
+  const nameOf = (id) => (STORES.find((s) => s.id === id) || { name: id }).name;
+  const PRN = { rawbt: '블루투스 영수증 프린터 (안드로이드 + RawBT 앱)', browser: '브라우저 인쇄 (PC·아이패드·와이파이 프린터)', none: '인쇄 안 함 (화면만)' };
+  const fmtT = (ts) => (ts ? new Date(ts).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '–');
+  let shop = null, data = null;
+  const css = document.createElement('style');
+  css.textContent = '#tab-kitchen .grid2>*,#tab-kitchen .cards>*{min-width:0}#tab-kitchen .copy{overflow-wrap:anywhere}';
+  document.head.appendChild(css);
+
+  async function api(action, body) {
+    const q = '/api/kitchen?action=' + action + (body ? '' : '&shop=' + shop);
+    const r = await fetch(q, body ? { method: 'POST', headers: { 'x-admin-key': key() || '', 'content-type': 'application/json' }, body: JSON.stringify({ shop, ...body }) } : { headers: { 'x-admin-key': key() || '' }, cache: 'no-store' });
+    if (r.status === 401) { try { sessionStorage.removeItem('qm_admin'); } catch {} location.reload(); throw new Error('auth'); }
+    if (!r.ok) throw new Error('failed');
+    return r.json();
+  }
+  const copy = async (t, btn) => { try { await navigator.clipboard.writeText(t); if (btn) btn.textContent = '복사했어요'; } catch { prompt('복사해 주세요', t); } };
+  function modal(html) {
+    const m = document.createElement('div'); m.className = 'modal'; m.innerHTML = `<div>${html}<div style="margin-top:12px"><button class="btn" data-x="1">닫기</button></div></div>`;
+    m.addEventListener('click', (e) => { if (e.target === m || e.target.dataset.x) m.remove(); }); document.body.appendChild(m); return m;
+  }
+  const devKind = (ua) => (/iPad/.test(ua) ? '아이패드' : /iPhone/.test(ua) ? '아이폰' : /Android/.test(ua) ? (/Mobile/.test(ua) ? '안드로이드 폰' : '안드로이드 태블릿') : /Windows/.test(ua) ? 'PC(윈도우)' : /Mac/.test(ua) ? '맥' : '기타');
+
+  function open() {
+    const box = $('tab-kitchen');
+    if (!box.dataset.init) {
+      box.dataset.init = '1';
+      box.innerHTML = `<div class="card" style="margin-bottom:12px"><div class="f"><div><label>가게</label><select id="kShop">${STORES.map((s) => `<option value="${s.id}">${esc(s.name)}${s.listing ? ' · 가게 찾기용' : ''}</option>`).join('')}</select></div>
+        <div style="align-self:end;font-size:13px;color:var(--muted)">손님이 메뉴판 주문서에서 <b>주방으로 보내기</b>를 누르면, 주방 태블릿·폰 화면에 소리와 함께 뜨고 영수증 프린터로 인쇄돼요. 처음엔 모든 가게가 <b>꺼짐</b>이에요.</div></div></div>
+        <div id="kBody"></div>`;
+      $('kShop').addEventListener('change', () => load($('kShop').value));
+      box.addEventListener('click', onClick);
+    }
+    load(shop || STORES[0].id);
+  }
+
+  async function load(id) {
+    shop = id; $('kShop').value = id;
+    const el = $('kBody'); el.innerHTML = '<div class="card">불러오는 중…</div>';
+    try { data = await api('k-get'); } catch (e) { if (e.message !== 'auth') el.innerHTML = '<div class="card">불러오지 못했어요. 잠시 뒤 다시 해 주세요.</div>'; return; }
+    paint();
+  }
+
+  function paint() {
+    const c = data.cfg, kurl = `https://qrmenuasia.com/kitchen/?shop=${shop}`;
+    const online = data.devices.filter((d) => Date.now() - d.at < 12 * 60e3).length;
+    $('kBody').innerHTML = `
+      <div class="cards">
+        <div class="card"><small>주방 주문</small><b style="color:${c.on ? 'var(--ok)' : 'var(--muted)'}">${c.on ? '켜짐' : '꺼짐'}</b><i>${c.on ? '손님이 보낼 수 있어요' : '손님 화면에 버튼이 안 보여요'}</i></div>
+        <div class="card"><small>오늘 주문</small><b>${data.todayCount}</b><i>마지막 변경 ${fmtT(data.lastOrder)}</i></div>
+        <div class="card"><small>켜져 있는 주방 기기</small><b>${online}</b><i>최근 12분 안 신호 · 전체 ${data.devices.length}대</i></div>
+        <div class="card"><small>주방 PIN</small><b style="font-size:20px">${data.hasPin ? '있음' : '없음'}</b><i>${data.hasPin ? '바꾸면 모든 기기 다시 로그인' : '먼저 만들어 주세요'}</i></div>
+      </div>
+      <div class="grid2" style="margin-top:0">
+        <div class="card"><h2 style="margin:0 0 6px;font-size:16px">① 주문 받기 설정</h2>
+          <div class="f" style="grid-template-columns:1fr">
+            <div><label><input type="checkbox" id="kOn" ${c.on ? 'checked' : ''} style="width:auto"> 손님 주문서에 <b>주방으로 보내기</b> 버튼 켜기</label></div>
+            <div><label><input type="checkbox" id="kKey" ${c.needKey ? 'checked' : ''} style="width:auto"> 테이블 QR로 들어온 손님만 주문 가능 (가게 밖 장난 주문 막기)</label></div>
+            <div><label>주방 화면이 새 주문을 확인하는 간격</label><select id="kPoll">${[5, 10, 15, 20, 30].map((n) => `<option value="${n}"${n === c.poll ? ' selected' : ''}>${n}초마다${n === 15 ? ' (추천)' : n === 5 ? ' (빠름·사용량 많음)' : ''}</option>`).join('')}</select></div>
+            <div><label>기본 프린터 (기기마다 바꿀 수 있어요)</label><select id="kPrn">${Object.entries(PRN).map(([k, v]) => `<option value="${k}"${k === c.printer ? ' selected' : ''}>${v}</option>`).join('')}</select></div>
+            <div><label>영수증 용지 폭</label><select id="kPaper"><option value="58"${c.paper === 58 ? ' selected' : ''}>58mm (작은 휴대용·가장 흔함)</option><option value="80"${c.paper === 80 ? ' selected' : ''}>80mm (카운터용 큰 것)</option></select></div>
+          </div>
+          <div class="tg"><button class="btn primary" data-k="save">설정 저장</button><button class="btn" data-k="test">시험 주문 보내기</button></div>
+        </div>
+        <div class="card"><h2 style="margin:0 0 6px;font-size:16px">② 주방 기기 연결</h2>
+          <p style="font-size:13px;margin:0 0 8px;color:var(--muted)">주방 태블릿·폰에서 아래 주소를 열고 PIN 6자리를 넣으면 끝이에요. 앱 설치는 필요 없어요(프린터를 쓰면 RawBT 앱만).</p>
+          <div class="copy">${esc(kurl)}</div>
+          <div class="tg" style="margin-top:0"><button class="btn" data-k="copyk">주소 복사</button><a class="btn" href="${esc(kurl)}" target="_blank" rel="noopener">열어 보기</a><button class="btn primary" data-k="pin">${data.hasPin ? 'PIN 새로 만들기' : 'PIN 만들기'}</button><button class="btn" data-k="logout">모든 기기 로그아웃</button></div>
+          <div class="scroll" style="margin-top:10px"><table><thead><tr><th>기기</th><th>종류</th><th>프린터</th><th>마지막 신호</th></tr></thead><tbody>${data.devices.map((d) => `<tr style="cursor:default"><td class="name"><span class="dot ${Date.now() - d.at < 12 * 60e3 ? 'on' : ''}"></span> ${esc(d.name || '이름 없음')}</td><td>${devKind(d.ua || '')}</td><td>${esc({ rawbt: 'RawBT', browser: '브라우저', none: '없음' }[d.printer] || '–')}</td><td class="num">${fmtT(d.at)}</td></tr>`).join('') || '<tr><td colspan="4" class="zero">아직 연결된 기기가 없어요</td></tr>'}</tbody></table></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px"><h2 style="margin:0 0 6px;font-size:16px">③ 테이블별 QR 주소</h2>
+        <p style="font-size:13px;margin:0 0 8px;color:var(--muted)">테이블 번호가 자동으로 들어가는 주소예요. ‘테이블 QR로 들어온 손님만’을 켜면 이 주소로 들어온 손님만 주문을 보낼 수 있어요. QR 카드로 만들 땐 이 목록을 Claude에게 주세요.</p>
+        <div class="tg" style="margin-top:0;align-items:center">테이블 <input class="inl" id="kFrom" type="number" min="1" value="1" style="width:80px"> ~ <input class="inl" id="kTo" type="number" min="1" value="20" style="width:80px"><button class="btn" data-k="tables">주소 만들기</button></div>
+        <div id="kTables"></div>
+      </div>
+      <div class="card" style="margin-top:14px"><h2 style="margin:0 0 6px;font-size:16px">연결 안내 (사장님께 설명할 때)</h2>
+        <ol style="font-size:14px;line-height:1.7;margin:0;padding-left:20px">
+          <li><b>화면만</b>: 주방에 있는 안드로이드 태블릿·폰(아이패드도 됨)에서 ②의 주소 열기 → PIN 입력 → <b>시작</b>. 새 주문이 오면 소리가 나고 빨갛게 깜빡여요.</li>
+          <li><b>영수증 프린터</b>: 블루투스 감열 프린터(58mm, 예: Xprinter·Goojprt, 약 50~80만 동)를 태블릿과 블루투스로 연결 → 무료 앱 <b>RawBT</b> 설치 → RawBT에서 프린터 선택 → 주방 화면 ⚙ → <b>시험 인쇄</b>.</li>
+          <li><b>PC·와이파이 프린터</b>: 카운터 PC에서 주방 화면을 열고 ⚙ → 프린터를 ‘브라우저 인쇄’로. 인쇄 창이 한 번 뜨니 확인을 눌러요.</li>
+          <li>베트남어·한국어 글자는 그림으로 인쇄돼서 프린터 글꼴과 상관없이 깨지지 않아요.</li>
+        </ol>
+        <p class="note" style="margin-top:10px">· 손님 쪽 <b>주방으로 보내기</b> 버튼은 장바구니가 있는 메뉴판(숯꾸이·가마솥·치뱅이·퍼틴 등)에만 붙어요. 가게 찾기용(메뉴 보기만)은 주문서가 없어요.<br>· 버튼이 실제 손님 화면에 나오려면 그 가게 메뉴판에 새 주문서 파일을 넣고 다시 배포해야 해요(Claude에게 “○○ 주방 주문 켜줘”).<br>· 확인 간격이 짧을수록 서버 저장소 사용량이 늘어요. 처음엔 15초로 두고 사용량을 본 뒤 조정해요.</p>
+      </div>`;
+  }
+
+  async function onClick(e) {
+    const b = e.target.closest('[data-k]'); if (!b) return;
+    const a = b.dataset.k;
+    try {
+      if (a === 'save') {
+        await api('k-set', { patch: { on: $('kOn').checked, needKey: $('kKey').checked, poll: +$('kPoll').value, printer: $('kPrn').value, paper: +$('kPaper').value } });
+        b.textContent = '저장했어요'; setTimeout(() => load(shop), 600);
+      } else if (a === 'test') {
+        const j = await api('k-test', {}); b.textContent = `#${j.no} 보냈어요`; setTimeout(() => load(shop), 800);
+      } else if (a === 'copyk') copy(`https://qrmenuasia.com/kitchen/?shop=${shop}`, b);
+      else if (a === 'pin') {
+        if (data.hasPin && !confirm('PIN을 새로 만들면 지금 연결된 주방 기기는 모두 다시 로그인해야 해요. 계속할까요?')) return;
+        const j = await api('k-pin', {});
+        const kurl = `https://qrmenuasia.com/kitchen/?shop=${shop}`;
+        const msg = `[${nameOf(shop)}] Màn hình bếp: ${kurl}\nMã PIN: ${j.pin}\n(주방 화면 주소: ${kurl} — PIN: ${j.pin})`;
+        const m = modal(`<h2 style="margin-top:0">주방 PIN</h2><p style="font-size:14px">이 창을 닫으면 다시 볼 수 없어요. 주방 직원에게 아래 문구를 보내 주세요.</p><div class="copy" style="font-size:20px;text-align:center;letter-spacing:6px">${j.pin}</div><div class="copy">${esc(msg)}</div><button class="btn primary" data-c="1">문구 복사</button>`);
+        m.querySelector('[data-c]').onclick = (ev) => copy(msg, ev.target);
+        load(shop);
+      } else if (a === 'logout') {
+        if (!confirm('이 가게의 모든 주방 기기를 로그아웃할까요? (PIN은 그대로)')) return;
+        await api('k-logout', {}); load(shop);
+      } else if (a === 'tables') {
+        const j = await api('k-tables', { from: +$('kFrom').value, to: +$('kTo').value });
+        const text = j.rows.map((r) => `${r.table}\t${r.url}`).join('\n');
+        $('kTables').innerHTML = `<div class="copy" style="max-height:220px;overflow:auto">${esc(text)}</div><button class="btn" id="kTabCopy">전체 복사</button>`;
+        $('kTabCopy').onclick = (ev) => copy(text, ev.target);
+      }
+    } catch (er) { if (er.message !== 'auth') alert('처리하지 못했어요. 잠시 뒤 다시 해 주세요.'); }
+  }
+
+  window.QMKitchen = { open };
+})();

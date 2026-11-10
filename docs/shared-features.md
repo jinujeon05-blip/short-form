@@ -12,6 +12,7 @@
 - 원본 `restaurants/_shared/order.js` 하나. 고친 뒤 `restaurants/_shared/sync-order.sh`로 복사하고 다시 배포한다. 대상: 숯꾸이·EROS·가마솥·수원성·백천·킴스호텔 (Ăn Vội·바이오&뷰티는 자체 장바구니가 따로 있음).
 - 가게 설정은 `menu.js`의 `window.ORDER = { staff, currency, zalo, labels }`(`labels`로 문구 바꾸기, 예: 킴스호텔의 '객실·테이블 번호') — `staff`는 주문서 언어(베트남 매장 `vi`, 백천 `ko`), `zalo: null`이면 Zalo 버튼 숨김.
 - 각 가게 `index.html`은 손대지 않는다. `#menu > section`(MENU 순서) `> ul > li`(items 순서)에 버튼을 붙이므로, 메뉴 화면 구조를 바꿀 때 이 순서를 지킨다. 시가(`price: null`)는 합계에서 빼고 "시가 메뉴 별도"로 표시.
+- **주방으로 주문 보내기**(2026-11-10): admin '주문·주방 기기'에서 켠 가게만 버튼이 보인다(기본 꺼짐). 상세 `docs/admin-system.md` 끝.
 - 테이블 번호: QR 주소에 `?t=5`를 붙이면 주문서에 자동으로 들어간다 (테이블별 QR을 만들 때 사용).
 - 장바구니는 휴대폰에 6시간 저장된다(언어를 바꿔도 유지, 다음 방문 때는 비어 있음).
 
