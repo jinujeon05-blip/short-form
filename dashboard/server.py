@@ -1716,6 +1716,19 @@ def match_shop(folder, known):
     return ("check", best) if hit else ("new", None)
 
 
+def phone_shop(info_file, phones):
+    """사진 수집기의 store_info.json 전화번호가 docs/stores.md 어느 가게 줄에 있으면 그 가게 id."""
+    try:
+        store = json.loads(info_file.read_text(encoding="utf-8")).get("store") or {}
+    except Exception:
+        return None
+    num = re.sub(r"\D", "", str(store.get("phone") or ""))
+    num = "0" + num[2:] if num.startswith("84") and len(num) >= 11 else num
+    if len(num) < 9:
+        return None
+    return next((sid for sid, line in phones.items() if num in line), None)
+
+
 def hidden_folders():
     try:
         return set(json.loads(HIDE_FILE.read_text(encoding="utf-8")))
@@ -1727,6 +1740,8 @@ def build_newshops():
     if not DRIVE.is_dir():
         return {"status": "nodrive", "how": f"드라이브 동기화 폴더({DRIVE})가 안 보여요. 구글 드라이브 앱이 켜져 있는지 확인해 주세요.", "folders": [], "made": [], "hidden": []}
     known, hide = known_shops(), hidden_folders()
+    phones = {m.group(1): re.sub(r"(?<=\d)[ .\-](?=\d)", "", line) for line in read("docs/stores.md").splitlines()
+              for m in [re.match(r"^\| `restaurants/([a-z0-9]+)` \|", line)] if m}  # 가게 줄(숫자 사이 띄어쓰기를 붙인 것)
     with ORDER_LOCK:
         mine = {}
         for o in sorted(ORDERS.values(), key=lambda o: o["createdAt"]):
@@ -1753,6 +1768,11 @@ def build_newshops():
             rows.append({**row, "state": "queued" if st == "scheduled" else "running", "order": oid})
             continue
         state, sid = match_shop(d.name, known)
+        if state != "made" and "store_info.json" in files:
+            # 이름이 달라도(폴더 '미즈 레스토랑' ↔ 기록 '미즈 MIZ') 사진 수집기가 적어 둔 전화번호가 기록에 있으면 같은 가게다(2026-11-10)
+            hit = phone_shop(d / "store_info.json", phones)
+            if hit:
+                state, sid = "made", hit
         if state == "made":
             made.append({"name": d.name, "id": sid})
         elif d.name in hide:
