@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cheonguk.qrmenuasia.com/sitemap.xml

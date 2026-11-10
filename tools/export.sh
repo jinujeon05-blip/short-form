@@ -77,6 +77,7 @@ name() {
     saeugongjang) echo "새우공장" ;;
     poomba) echo "품바" ;;
     korilla) echo "코릴라펍" ;;
+    cheonguk) echo "삼계탕천국" ;;
     honggang) echo "홍강" ;;
     smile) echo "스마일회관" ;;
     torei) echo "토레이이자카야" ;;

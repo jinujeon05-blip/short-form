@@ -724,6 +724,12 @@ window.STORES = [
     type: { ko: "한국식 펍 · 치킨 · 튀김 · 분식 · 탕 · 수제 맥주 · 하이볼 · 위스키", vi: "Quán pub kiểu Hàn · Gà rán · Đồ chiên · Tokbokki · Lẩu · Bia thủ công · Highball · Whisky", en: "Korean pub · Fried chicken · Fried snacks · Tteokbokki · Soups · Craft beer · Highball · Whisky", zh: "韩式酒吧 · 炸鸡 · 油炸小吃 · 炒年糕 · 汤锅 · 精酿啤酒 · 嗨棒 · 威士忌", ja: "韓国式パブ・チキン・揚げ物・トッポッキ・鍋・クラフトビール・ハイボール・ウイスキー" },
     keywords: "코릴라 코릴라펍 korilla korilla pub 하노이 펍 술집 호프 미찌 메찌 me tri 순살치킨 후라이드 양념치킨 반반치킨 찜닭 경산찜닭 닭똥집 돈까스 오징어튀김 새우튀김 감자튀김 샐러드 골뱅이소면 떡볶이 로제떡볶이 오징어볶음 스팸 오뎅탕 짬뽕탕 마른안주 과일 화채 황태채 한치 쥐포 하이볼 위스키 수제맥주 생맥주 소주 칵테일 mễ trì từ liêm hà nội quán pub hàn quốc gà rán bia thủ công korean pub fried chicken craft beer highball 韩式酒吧 炸鸡 精酿啤酒 韓国 パブ チキン"
   },
+  { id: "cheonguk", name: "삼계탕천국 Samgyetang Cheonguk", sub: "삼계탕 18가지 · 전복 삼계탕 · 갈비탕 · 닭한마리 · 갈비찜 · 냉면", url: "https://cheonguk.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean", "noodle"], tags: ["photos"],
+    address: "Lô 68 TT4, P. Đỗ Đình Thiện, Mỹ Đình 1, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Samgyetang+Cheonguk/@21.0163041,105.778503,19z",
+    type: { ko: "삼계탕 전문 한식당 · 전복 삼계탕 · 갈비탕 · 닭한마리 · 갈비찜 · 냉면", vi: "Nhà hàng Hàn Quốc chuyên gà hầm sâm · Gà hầm bào ngư · Canh sườn · Lẩu gà · Sườn om · Mì lạnh", en: "Korean samgyetang restaurant · Abalone samgyetang · Galbitang · Chicken hot pot · Braised short ribs · Cold noodles", zh: "韩式参鸡汤专门店 · 鲍鱼参鸡汤 · 牛排骨汤 · 一只鸡火锅 · 炖牛排骨 · 冷面", ja: "サムゲタン専門の韓国料理店・アワビサムゲタン・カルビタン・タッカンマリ・カルビチム・冷麺" },
+    keywords: "삼계탕천국 삼계탕 천국 samgyetang cheonguk samgyetang 하노이 미딩 미딘 도딘티엔 한식 삼계탕 반계탕 전복삼계탕 얼큰삼계탕 영양삼계탕 한방삼계탕 블랙삼계탕 쌍화삼계탕 사물삼계탕 마라삼계탕 하수오삼계탕 갈비탕 전복갈비탕 한방갈비탕 닭한마리 찜닭 안동찜닭 닭볶음탕 묵은지 닭발 국물닭발 갈비찜 매운갈비찜 갈비전골 닭갈비 미나리삼겹살 닭다리구이 물냉면 비빔냉면 십전대보탕 쌍화차 막걸리 소주 보양식 đỗ đình thiện mỹ đình từ liêm hà nội nhà hàng hàn quốc gà hầm sâm gà tần sâm gà hầm bào ngư canh sườn bò lẩu gà sườn om mì lạnh korean ginseng chicken soup abalone galbitang 参鸡汤 鲍鱼参鸡汤 牛排骨汤 サムゲタン 参鶏湯 カルビタン 맛집"
+  },
   { id: "onban", name: "온반 ONBAN", sub: "맑은 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", url: "https://onban.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean"], tags: ["photos"],
     address: "TT3-C18 Five Star, Ngõ 154 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/ONBAN(%EC%98%A8%EB%B0%98)/@21.0185646,105.7756547,19z",
