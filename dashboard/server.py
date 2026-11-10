@@ -731,6 +731,7 @@ ORDERS_DIR = HERE / "orders"  # 지시 기록 (git 제외)
 ORDERS, PROCS = {}, {}
 ORDER_LOCK = threading.Lock()
 ORDER_TIMEOUT = 40 * 60
+ORDER_MODEL = "sonnet"  # 비서실장(claude -p) 모델. 캡틴 지시 2026-11-10
 CODEX_POSIX = "/" + str(Path(os.environ.get("APPDATA", "")) / "npm" / "codex").replace(":", "").replace("\\", "/")
 CODEX_POSIX = CODEX_POSIX[0] + CODEX_POSIX[1].lower() + CODEX_POSIX[2:]  # /c/Users/.../npm/codex
 
@@ -1067,7 +1068,9 @@ def run_order(o, prompt):
     except Exception:
         pass
     exe = claude_exe()
-    args = [exe, "-p", "--output-format", "stream-json", "--verbose", "--permission-mode", "auto",
+    # 비서실장은 sonnet 으로 고정(2026-11-10 캡틴 지시): 11-09 저녁부터 기본 모델이 opus 로 바뀌어 가게 한 곳이 440~640만 토큰이 됐다.
+    # 담당은 각자 정의(.claude/agents)의 모델을 그대로 쓴다(정식 가게 마지막 검토의 opus 포함).
+    args = [exe, "-p", "--model", ORDER_MODEL, "--output-format", "stream-json", "--verbose", "--permission-mode", "auto",
             "--strict-mcp-config", "--append-system-prompt", ORDER_RULES + (ARGON_RULE if o.get("argon") else ""),
             "--add-dir", r"G:\내 드라이브\QR메뉴판",
             "--allowedTools", *ORDER_ALLOW, "--disallowedTools", *ORDER_DENY]
@@ -1079,7 +1082,7 @@ def run_order(o, prompt):
     env.update(PYTHONUTF8="1", PYTHONIOENCODING="utf-8")  # 한글 경로·출력에서 python 도구가 죽지 않게
     env["PATH"] = os.pathsep.join([d for d in extra if Path(d).is_dir()] + [env.get("PATH", "")])
     log = ORDERS_DIR / f"{o['id']}.jsonl"
-    result, err, used, t0 = None, None, 0, time.time()
+    result, err, used, t0, used_all = None, None, 0, time.time(), 0
     owners = {}  # 도구 호출 id → 그 일을 하는 담당 (담당 안에서 부른 도구도 그 담당 몫)
     o["active"] = []
     with ORDER_LOCK:
@@ -1113,6 +1116,10 @@ def run_order(o, prompt):
                         # 담당이 백그라운드로 일하면 한 실행에 result 가 여러 번 온다 → 모두 더한다(마지막 것만 세면 0으로 나왔다, 2026-11-01)
                         u = ev.get("usage") if isinstance(ev.get("usage"), dict) else {}
                         used += sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
+                        # usage 는 비서실장 몫뿐이라 담당 몫(가게당 50~120만)이 빠졌다(2026-11-10). modelUsage = 모델별 합계(담당 포함),
+                        # 실행 하나 안에서 누적이라 마지막 것을 쓴다. 없으면 위 usage 합으로 둔다.
+                        if isinstance(ev.get("modelUsage"), dict) and ev["modelUsage"]:
+                            used_all = sum(int(m.get(k) or 0) for m in ev["modelUsage"].values() if isinstance(m, dict) for k in MODEL_KEYS)
                     # 화면 표시(진행 단계·팀 대화)는 한 줄 해석이 틀려도 그 줄만 건너뛴다.
                     # 여기서 죽으면 비서실장은 아직 일하는데 지시가 '실패'가 됐다(2026-11-04 태백산 'str' object has no attribute 'get' 건)
                     try:
@@ -1148,8 +1155,9 @@ def run_order(o, prompt):
         o["deploy"] = [x for x in re.findall(r"[a-z0-9]+", d.group(1)) if (ROOT / "restaurants" / x / "index.html").exists()] if (d and o["status"] == "done") else None
         o["deployState"] = None
         if result:
-            o["tokens"] = (o.get("tokens") or 0) + used
-            o["tokensVersion"] = 2  # 2026-10-28부터 다시 읽은 것(cache read)까지 센다. 그 전 기록은 적게 나옴
+            # 2 = 2026-10-28부터 다시 읽은 것(cache read)까지. 3 = 2026-11-10부터 담당 몫까지. '답하기'로 이어 돈 옛 지시는 앞부분이 옛 방식 그대로라 2로 둔다
+            o["tokensVersion"] = 3 if (used_all and (not o.get("tokens") or o.get("tokensVersion") == 3)) else 2
+            o["tokens"] = (o.get("tokens") or 0) + max(used, used_all)
         o["turns"].append({"by": "claude", "text": text, "at": time.time()})
         if o["status"] != "done" and (not o["talk"] or o["talk"][-1]["text"] != talk_clean(text)):
             talk.add("claude", "captain", "report", text)  # 실패·멈춤 이유도 대화에 남긴다

@@ -189,7 +189,7 @@ function renderOrderPanel(oid) {
   const sched = o.status === 'scheduled';
   const who = t => t.by === 'me' ? (t.approve ? '캡틴 · 확정' : '캡틴') : t.by === 'claude' ? '비서실장 보고' : '알림';
   $('#panel-body').innerHTML = `<h2>${esc(o.title)}</h2>
-    <p class="muted"><span class="badge ${bc}">${bt}</span> ${day(o.createdAt)} ${hm(o.createdAt)} · ${o.via === 'phone' ? '폰에서 지시' : 'PC에서 지시'}${o.argon ? ' · Argon 사용' : ''}${o.tokens ? ` · 토큰 약 ${o.tokens >= 10000 ? Math.round(o.tokens / 10000) + '만' : Math.round(o.tokens / 1000) + '천'}${o.tokensVersion === 2 ? '(다시 읽은 것 포함)' : '(옛 기록: 다시 읽은 것 빠짐)'}` : ''}</p>
+    <p class="muted"><span class="badge ${bc}">${bt}</span> ${day(o.createdAt)} ${hm(o.createdAt)} · ${o.via === 'phone' ? '폰에서 지시' : 'PC에서 지시'}${o.argon ? ' · Argon 사용' : ''}${o.tokens ? ` · 토큰 약 ${o.tokens >= 10000 ? Math.round(o.tokens / 10000) + '만' : Math.round(o.tokens / 1000) + '천'}${o.tokensVersion === 3 ? '(담당·다시 읽은 것 포함)' : o.tokensVersion === 2 ? '(담당 몫 빠짐 — 사용량 탭이 맞는 값)' : '(옛 기록: 다시 읽은 것 빠짐)'}` : ''}</p>
     ${o.sessionId ? `<p class="muted">창 없이 실행돼서 Claude 앱 세션 목록에는 안 보여요. 대화 전체는 ${local() ? '<button class="btn ghost" id="order-open">PC에서 대화 열기</button>' : 'PC 대시보드의 [PC에서 대화 열기]'}로 봅니다.</p>` : ''}
     ${(o.images || []).length ? `<h5>폰 화면 캡처 (로고·간판 확인)</h5><div class="shots">${o.images.map(f => `<a href="/out/${encodeURIComponent(f)}" target="_blank" rel="noopener"><img src="/out/${encodeURIComponent(f)}?t=${Math.round(o.endedAt || 0)}" alt="${esc(f)}"></a>`).join('')}</div>` : ''}
     ${o.turns.map(t => `<div class="turn ${t.by}"><span class="muted">${who(t)} · ${hm(t.at)}</span>${esc(t.text)}</div>`).join('')}
