@@ -5,7 +5,7 @@
 //   kq/<가게>/<열쇠>/<날짜>/s-<주문id>.<상태>   상태 표시(빈 파일). cooking(만드는 중)·done(완료)·cancel(취소)
 //   kq/<가게>/<열쇠>/dev/<기기id>.json          주방 기기 마지막 접속(5분마다)
 // bell.ts 가 바뀌었을 때만 목록(list, 비싼 읽기)을 읽는다 → 주문이 없을 땐 비용이 거의 안 든다.
-const { put, head } = require('@vercel/blob');
+const { put, head, BlobNotFoundError } = require('@vercel/blob');
 const L = require('./_lib');
 const S = require('./_store');
 
@@ -26,7 +26,8 @@ async function readBell(shop) {
     if (!r.ok) throw new Error('bell ' + r.status);
     return { ...DEFAULT, ...(await r.json()) };
   } catch (e) {
-    if (/not.?found|404/i.test(String(e && (e.name + e.message)))) return { ...DEFAULT };
+    // 아직 설정 파일이 없는 가게 = 꺼짐. 실제 @vercel/blob 은 오류 이름이 시험용과 달라 문구로도 확인한다(2026-11-10 실서버 500 건)
+    if ((BlobNotFoundError && e instanceof BlobNotFoundError) || /not.?found|does not exist|404/i.test(String(e && (e.name + ' ' + e.message)))) return { ...DEFAULT };
     throw e;
   }
 }
