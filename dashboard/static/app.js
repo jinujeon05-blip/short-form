@@ -126,14 +126,16 @@ function lastText(o) { const t = [...o.turns].reverse().find(t => t.by !== 'me')
 function renderInbox() {
   const wait = S.orders.filter(o => o.status === 'done' && (o.approval || (o.deploy?.length && o.deployState !== 'done')));
   const live = S.orders.filter(o => o.status === 'running' || o.status === 'stopping');
-  const sched = S.orders.filter(o => o.status === 'scheduled').sort((a, b) => a.runAt - b.runAt);
-  const rest = S.orders.filter(o => !wait.includes(o) && !live.includes(o) && !sched.includes(o)).slice(0, 8);
+  const sched = S.orders.filter(o => o.status === 'scheduled' && !o.queue).sort((a, b) => a.runAt - b.runAt);
+  const line = queueLine();  // 새 가게 줄(2026-11-10): 예약과 따로 보여 준다
+  const rest = S.orders.filter(o => !wait.includes(o) && !live.includes(o) && !sched.includes(o) && !line.includes(o)).slice(0, 8);
   $('#inbox-count').textContent = wait.length;
   $('#inbox-count').className = 'badge ' + (wait.length ? 'b-warn' : 'b-na');
   const item = o => {
     const [cls, bc, bt] = orderState(o);
     const st = o.steps?.at(-1), now = st ? `${WHO[st.who] || '비서실장'} · ${st.text}` : '시작하는 중…';
     const sub = o.deployState === 'running' ? (o.deployLog?.at(-1) || '배포 시작…') : o.status === 'running' ? now
+      : o.queue && o.status === 'scheduled' ? (o.hold ? '줄 멈춤: ' + o.hold : `줄 ${line.indexOf(o) + 1}번째 · 앞 가게가 끝나면 시작${o.waitWhy ? ' · 기다리는 중: ' + o.waitWhy : ''}`)
       : o.status === 'scheduled' ? `${day(o.runAt)} ${hm(o.runAt)} 시작 예정 · ${o.runWhy || ''}${o.waitWhy ? ' · 기다리는 중' : ''}`
       : o.deploy?.length && o.deployState === 'fail' ? '배포 멈춤: ' + deployErr(o)
       : o.deploy?.length && !o.deployState ? '배포 확정 기다림: ' + o.deploy.join(', ') : o.approval ? '결재: ' + o.approval : lastText(o).split('\n')[0];
@@ -143,7 +145,8 @@ function renderInbox() {
   // 예약 칸은 0건이어도 둔다: 예약이 들어갔는지 여기서 바로 확인(2026-11-01 캡틴 결정 '가-1')
   const schedBox = `<h5 class="muted" style="margin:0 0 6px">예약 ${sched.length}건</h5>`
     + (sched.length ? sched.map(item).join('') : '<p class="muted" style="margin:0 0 10px;font-size:12px">예약 없음 — 예약하기를 누르면 여기에 시작 시각과 함께 보여요.</p>');
-  $('#inbox').innerHTML = schedBox + ((wait.length || live.length || rest.length)
+  const lineBox = line.length ? `<h5 class="muted" style="margin:0 0 6px">새 가게 줄 ${line.length}곳</h5>` + line.map(item).join('') : '';
+  $('#inbox').innerHTML = schedBox + lineBox + ((wait.length || live.length || rest.length)
     ? [...wait, ...live].map(item).join('') + (rest.length ? `<h5 class="muted" style="margin:10px 0 6px">지난 지시</h5>${rest.map(item).join('')}` : '')
     : '<p class="muted">아직 지시가 없습니다. 위에 적어 보내면 여기로 보고가 올라옵니다.</p>');
   const busy = live.length > 0;
@@ -191,7 +194,11 @@ function renderOrderPanel(oid) {
     ${(o.images || []).length ? `<h5>폰 화면 캡처 (로고·간판 확인)</h5><div class="shots">${o.images.map(f => `<a href="/out/${encodeURIComponent(f)}" target="_blank" rel="noopener"><img src="/out/${encodeURIComponent(f)}?t=${Math.round(o.endedAt || 0)}" alt="${esc(f)}"></a>`).join('')}</div>` : ''}
     ${o.turns.map(t => `<div class="turn ${t.by}"><span class="muted">${who(t)} · ${hm(t.at)}</span>${esc(t.text)}</div>`).join('')}
     ${sched ? '' : `<h5>팀 대화 <small class="muted">비서실장·담당이 주고받은 말 (누르면 펼침)</small></h5><div class="talk" id="panel-talk"></div>`}
-    ${sched ? `<div class="reply"><h5>예약</h5><p><b>${day(o.runAt)} ${hm(o.runAt)}</b>에 시작합니다 (${esc(o.runWhy || '')}).</p>
+    ${sched && o.queue ? `<div class="reply"><h5>새 가게 줄</h5><p><b>줄 ${queueLine().indexOf(o) + 1}번째</b>입니다. 앞 가게가 끝나면 시작합니다.</p>
+      ${o.hold ? `<p class="send-err">줄 멈춤: ${esc(o.hold)}<br>왼쪽 '새 가게' 칸의 [줄 다시 시작]을 누르면 이어서 해요.</p>` : o.waitWhy ? `<p class="muted">기다리는 이유: ${esc(o.waitWhy)}</p>` : ''}
+      <p class="muted">대시보드 검은 창이 켜져 있고 PC가 잠들지 않아야 시작돼요. 배포는 끝난 뒤 [배포 확정]을 눌러야 합니다.</p>
+      <button class="btn ghost" id="order-stop">줄에서 빼기</button></div>`
+    : sched ? `<div class="reply"><h5>예약</h5><p><b>${day(o.runAt)} ${hm(o.runAt)}</b>에 시작합니다 (${esc(o.runWhy || '')}).</p>
       ${o.waitWhy ? `<p class="muted">기다리는 이유: ${esc(o.waitWhy)}</p>` : ''}
       <p class="muted">대시보드 검은 창이 켜져 있고 PC가 잠들지 않아야 시작돼요. 그 시각에 다른 지시가 실행 중이면 끝난 뒤에 시작해요.</p>
       <button class="btn ghost" id="order-stop">예약 취소</button></div>`
@@ -343,10 +350,106 @@ async function loadOrders() {
   renderInbox(); renderOffice(); renderCounts();
   if (S.open?.startsWith('order:')) renderOrderPanel(S.open.slice(6)); else refreshTalks();
   $('#talk-live').textContent = S.orders.some(o => o.status === 'running') ? '●' : '';
-  if (wasRunning && !running) { loadFeed(); loadBrief(); toast('지시 실행이 끝났습니다. 결재함을 확인하세요.'); }
+  if (wasRunning && !running) { loadFeed(); loadBrief(); loadNewshops(); S.usage = null; if (!$('#tab-usage').hidden) loadUsage(); toast('지시 실행이 끝났습니다. 결재함을 확인하세요.'); }
+  renderNewshops();
   wasRunning = running;
   clearTimeout(ordTimer);
   ordTimer = setTimeout(loadOrders, running ? 2500 : 15000);
+}
+
+// ---------------------------------------------------------------- 새 가게 줄 세우기 (2026-11-10, 캡틴 결정 '가-1')
+// 드라이브 QR메뉴판/ 폴더 중 아직 안 만든 가게(/api/newshops). 캡틴이 골라 [줄 세우기]를 누르면 한 곳씩 차례로 만든다.
+const queueLine = () => S.orders.filter(o => o.status === 'scheduled' && o.queue).sort((a, b) => a.runAt - b.runAt);
+const tok = n => n >= 10000 ? Math.round(n / 10000).toLocaleString('ko-KR') + '만' : n >= 1000 ? Math.round(n / 1000) + '천' : String(n || 0);
+S.nsPick = new Set();
+function renderNewshops() {
+  let d = S.newshops;
+  if (!d) return;
+  const box = $('#newshops');
+  if (d.status !== 'ok') { box.innerHTML = `<p class="muted">${esc(d.how || '드라이브 폴더를 읽지 못했어요.')}</p>`; $('#ns-count').textContent = '–'; return; }
+  const line = queueLine(), pos = id => line.findIndex(o => o.id === id) + 1;
+  // 줄·만드는 중 표시는 방금 읽은 지시 목록(S.orders)으로 정한다 — 서버의 폴더 목록은 2분마다만 새로 읽어서 한 박자 늦다
+  const ordOf = name => S.orders.filter(o => o.folder === name && !['fail', 'stopped'].includes(o.status)).sort((a, b) => b.createdAt - a.createdAt)[0];
+  const folders = d.folders.map(f => {
+    const o = ordOf(f.name);
+    if (o) return { ...f, order: o.id, state: o.status === 'scheduled' ? 'queued' : o.status === 'done' ? 'made' : 'running' };
+    return f.state === 'queued' || f.state === 'running' ? { ...f, state: 'new' } : f;  // 실패·멈춤 → 다시 고를 수 있게
+  }).filter(f => f.state !== 'made');
+  d = { ...d, folders };
+  const can = d.folders.filter(f => f.state === 'new' || f.state === 'check');
+  for (const n of [...S.nsPick]) if (!can.some(f => f.name === n)) S.nsPick.delete(n);
+  $('#ns-count').textContent = can.length;
+  $('#ns-count').className = 'badge ' + (can.length ? 'b-warn' : 'b-na');
+  const hold = d.hold || line.find(o => o.hold)?.hold;
+  const row = f => {
+    const info = `메뉴판 ${f.menus}장 · 사진 ${f.photos}장`;
+    if (f.state === 'running' || f.state === 'queued') {
+      return `<button class="ns on" data-order="${esc(f.order)}"><b>${esc(f.name)}</b><span class="badge ${f.state === 'running' ? 'b-warn' : 'b-na'}">${f.state === 'running' ? '만드는 중' : `줄 ${pos(f.order) || ''}번째`}</span><small>${info}</small></button>`;
+    }
+    if (f.state === 'empty') return `<div class="ns off"><b>${esc(f.name)}</b><span class="badge b-na">메뉴판 사진 없음</span><small>사진 ${f.photos}장 · 메뉴판 사진(menu_)이 없어 만들 수 없어요</small><button class="x" data-hide="${esc(f.name)}" title="이 폴더 숨기기" aria-label="${esc(f.name)} 숨기기">숨기기</button></div>`;
+    return `<label class="ns"><input type="checkbox" data-folder="${esc(f.name)}"${S.nsPick.has(f.name) ? ' checked' : ''}><b>${esc(f.name)}</b>${f.state === 'check' ? '<span class="badge b-warn">확인 필요</span>' : '<span class="badge b-ok">새 가게</span>'}
+      <small>${info}${f.state === 'check' ? ` · 이미 만든 '${esc(f.guess)}'와 이름이 비슷해요. 같은 가게면 숨기기` : ''}</small><button class="x" data-hide="${esc(f.name)}" title="이 폴더 숨기기" aria-label="${esc(f.name)} 숨기기">숨기기</button></label>`;
+  };
+  const n = S.nsPick.size;
+  const html = (hold ? `<p class="send-err" style="margin:0 0 8px">줄 멈춤: ${esc(hold)} <button class="btn ghost" id="queue-resume">줄 다시 시작</button></p>` : '')
+    + (d.folders.length ? d.folders.map(row).join('') : '<p class="muted" style="margin:0 0 8px">새로 올라온 가게가 없습니다. 사진 수집기로 드라이브에 올리면 여기에 보여요.</p>')
+    + (can.length ? `<div class="cmd-foot" style="margin-top:8px"><span class="muted">가게 찾기용으로 한 곳씩 차례로 만들어요. 한도 90%가 넘으면 풀릴 때까지 기다리고, 배포는 [배포 확정]을 눌러야 해요.</span>
+        <button class="btn" id="queue-go"${n ? '' : ' disabled'}>${n ? `${n}곳 줄 세우기` : '줄 세우기'}</button></div><p class="send-err" id="queue-err" role="alert"></p>` : '')
+    + `<details class="ns-more"><summary>이미 만든 것으로 본 폴더 ${d.made.length}곳${d.hidden.length ? ` · 숨긴 폴더 ${d.hidden.length}곳` : ''}</summary>
+        ${d.hidden.map(h => `<p>${esc(h)} <button class="x" data-show="${esc(h)}">다시 보이기</button></p>`).join('')}
+        <p class="muted">${d.made.map(m => esc(m.name) + (m.id ? ` → ${esc(m.id)}` : ' → 대시보드에서 만듦')).join(' · ') || '없음'}</p>
+        <p class="muted">폴더 이름과 docs/stores.md 가게 이름을 맞춰 본 결과예요. 틀린 것이 있으면 알려 주세요.</p></details>`;
+  if (box.dataset.html === html) return;  // 바뀐 것이 없으면 다시 그리지 않는다(펼친 목록·오류 글 유지)
+  const open = $('.ns-more', box)?.open || S.nsOpen;
+  box.dataset.html = html;
+  box.innerHTML = html;
+  if (open) $('.ns-more', box).open = true;
+  S.nsOpen = false;
+}
+async function loadNewshops() {
+  try { S.newshops = await api('/api/newshops'); } catch { return; }
+  renderNewshops();
+}
+async function sendQueue() {
+  const folders = [...S.nsPick];
+  const avg = S.usage?.shopAvg ? ` 최근 가게 한 곳 평균은 약 ${tok(S.usage.shopAvg)} 토큰이었어요.` : '';
+  if (!confirm(`${folders.length}곳을 줄 세울까요?\n${folders.join(', ')}\n\n가게 찾기용으로 한 곳씩 차례로 만들고, 배포는 하지 않습니다.${avg}`)) return;
+  const r = await post('/api/queue', { folders }).catch(() => ({ error: '대시보드 서버에 닿지 않았어요(검은 창이 꺼졌는지 확인)' }));
+  if (r.error) { $('#queue-err').textContent = '안 됐어요: ' + r.error; return toast(r.error); }
+  S.nsPick.clear();
+  toast(`${r.count}곳을 줄 세웠습니다. 앞에서부터 한 곳씩 시작해요.`);
+  await loadOrders(); loadNewshops();
+}
+
+// ---------------------------------------------------------------- 사용량 탭 (2026-11-10, 캡틴 결정 '나-1')
+// 지시별 토큰(다시 읽은 것·담당 몫 포함)·걸린 시간·막힌 명령 수. 실행 기록에서 계산해 추가 토큰이 들지 않는다(/api/usage).
+const MODEL_COLOR = { opus: '#6a4cf0', sonnet: '#2f6fec', haiku: '#1f9d63', fable: '#c46a00' };
+function renderUsage() {
+  const u = S.usage, box = $('#tab-usage');
+  if (!u) { box.innerHTML = '<p class="muted">실행 기록을 읽는 중…</p>'; return; }
+  if (!u.rows.length) { box.innerHTML = '<p class="muted">아직 지시 기록이 없습니다.</p>'; return; }
+  const max = Math.max(...u.rows.map(r => r.total), 1);
+  const stName = { done: '끝남', fail: '실패', stopped: '멈춤', running: '실행 중', stopping: '멈추는 중', scheduled: '예약' };
+  box.innerHTML = `<div class="hr-kpi"><div><small>최근 7일 합계</small><b>${tok(u.week)}</b><span>대시보드 지시만 (Claude 앱에서 쓴 양은 빠짐)</span></div>
+      <div><small>가게 한 곳 평균</small><b>${u.shopAvg ? tok(u.shopAvg) : '–'}</b><span>끝난 가게 지시 ${u.shopCount}건</span></div>
+      <div><small>가장 큰 지시</small><b>${tok(max)}</b><span>${esc(u.rows.find(r => r.total === max)?.title.slice(0, 18) || '')}</span></div></div>
+    <p class="muted">합계 = 비서실장 + 담당, 다시 읽은 것(cache read)까지 포함. 막대 색: <i class="lg" style="background:${MODEL_COLOR.opus}"></i>opus <i class="lg" style="background:${MODEL_COLOR.sonnet}"></i>sonnet <i class="lg" style="background:${MODEL_COLOR.haiku}"></i>haiku · 담당별 숫자는 대략(다시 읽은 것 빠짐). 안티그래비티(agy)는 제미나이 한도라 횟수만 셉니다.</p>`
+    + u.rows.map(r => {
+      const ms = Object.entries(r.models).sort((a, b) => b[1] - a[1]);
+      const bar = ms.length ? ms.map(([m, n]) => `<i style="width:${n / max * 100}%;background:${MODEL_COLOR[m] || '#8a94a6'}" title="${esc(m)} ${tok(n)}"></i>`).join('')
+        : `<i style="width:${r.total / max * 100}%;background:#8a94a6"></i>`;
+      const parts = ms.map(([m, n]) => `${m === r.main ? '비서실장(' + esc(m) + ')' : '담당 ' + esc(m)} ${tok(n)}`);
+      const ag = Object.entries(r.agents).sort((a, b) => b[1] - a[1]).map(([a, n]) => `${esc(WHO[a] || a)} ${tok(n)}`);
+      return `<div class="use" data-order="${esc(r.id)}"><div class="uh"><b>${esc(r.title)}</b><span class="muted">${day(r.at)} ${hm(r.at)} · ${stName[r.status] || esc(r.status)}</span><strong>${tok(r.total)}</strong></div>
+        <div class="ubar">${bar}</div>
+        <div class="um">${parts.length ? `<span>${parts.join(' · ')}</span>` : '<span>옛 기록(모델별 숫자 없음)</span>'}<span>${r.minutes}분</span>${r.denied ? `<span class="bad">막힌 명령 ${r.denied}번</span>` : ''}<span>이미지 직접 봄 ${r.images}번</span>${r.agy ? `<span>agy ${r.agy}번</span>` : ''}</div>
+        ${ag.length ? `<div class="um sub"><span>담당별(대략): ${ag.join(' · ')}</span></div>` : ''}</div>`;
+    }).join('');
+}
+async function loadUsage() {
+  if (!S.usage) renderUsage();
+  try { S.usage = await api('/api/usage'); } catch { return; }
+  renderUsage();
 }
 
 // ---------------------------------------------------------------- 할당량
@@ -423,7 +526,7 @@ function renderCounts() {
   const full = S.stores.filter(s => s.kind === 'full').length, list = S.stores.filter(s => s.kind === 'listing').length;
   const items = S.todo.length;
   const run = S.jobs.filter(j => j.status === 'running').length + S.orders.filter(o => o.status === 'running').length;
-  const sched = S.orders.filter(o => o.status === 'scheduled').sort((a, b) => a.runAt - b.runAt);
+  const sched = S.orders.filter(o => o.status === 'scheduled' && !o.queue).sort((a, b) => a.runAt - b.runAt);
   const schedHtml = sched.length ? `<span class="go sched" data-order="${sched[0].id}" role="button" tabindex="0" title="다음 예약 열기">예약 <b>${sched.length}</b>건 (다음 ${day(sched[0].runAt)} ${hm(sched[0].runAt)}) ›</span>` : '<span class="sched">예약 <b>0</b></span>';
   $('#counts').innerHTML = `<span>가게 <b>${S.stores.length}</b></span><span>정식 <b>${full}</b></span><span>가게 찾기용 <b>${list}</b></span><span class="go" data-go="todo" role="button" tabindex="0" title="할 일 탭 열기">할 일 <b>${items}</b>건 ›</span><span>실행 중 <b>${run}</b></span>${schedHtml}`;
 }
@@ -549,6 +652,16 @@ function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.ad
 document.addEventListener('click', async e => {
   const msg = e.target.closest('.msg.long');  // 긴 말은 눌러서 펼치기·접기 (글자를 고르는 중이면 그대로)
   if (msg && !getSelection().toString()) return msg.classList.toggle('open');
+  const hideBtn = e.target.closest('[data-hide], [data-show]');  // 새 가게 칸: 폴더 숨기기·다시 보이기
+  if (hideBtn) {
+    e.preventDefault();
+    const name = hideBtn.dataset.hide ?? hideBtn.dataset.show;
+    S.nsOpen = hideBtn.dataset.show != null;
+    await post('/api/newshops/hide', { name, hide: hideBtn.dataset.hide != null });
+    return loadNewshops();
+  }
+  if (e.target.id === 'queue-go') return sendQueue();
+  if (e.target.id === 'queue-resume') { const r = await post('/api/queue/resume', {}); toast(r.error || '줄을 다시 시작합니다.'); await loadOrders(); return loadNewshops(); }
   const ord = e.target.closest('[data-order]');
   if (ord) {
     const o = S.orders.find(x => x.id === ord.dataset.order);
@@ -582,6 +695,7 @@ document.addEventListener('click', async e => {
     document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b === tab));
     document.querySelectorAll('.tab').forEach(s => { s.hidden = s.id !== 'tab-' + tab.dataset.tab; });
     if (tab.dataset.tab === 'talk') refreshTalks();
+    if (tab.dataset.tab === 'usage') loadUsage();
     return;
   }
   const k = e.target.closest('#kind button');
@@ -620,6 +734,12 @@ document.addEventListener('change', e => {
   const m = e.target.id.match(/^(order|reply)-when$/);
   if (m) return whenHint(m[1]);
   if (e.target.id === 'talk-pick') { S.talkSel = e.target.value; refreshTalks(); }
+  if (e.target.dataset.folder) {  // 새 가게 고르기
+    S.nsPick[e.target.checked ? 'add' : 'delete'](e.target.dataset.folder);
+    const b = $('#queue-go'), n = S.nsPick.size;
+    if (b) { b.disabled = !n; b.textContent = n ? `${n}곳 줄 세우기` : '줄 세우기'; }
+    $('#newshops').dataset.html = '';
+  }
 });
 $('#chips').innerHTML = CHIPS.map(([t], i) => `<button data-i="${i}">${t}</button>`).join('');
 
@@ -653,9 +773,10 @@ async function loadAll() {
   $('#updated').textContent = `저장소 기준 · ${new Date().toLocaleTimeString('ko-KR')} 새로 읽음`;
   loadCollector();
   loadHr();
+  loadNewshops();
   S.visits = await api('/api/visits'); renderVisits();
 }
 renderOffice();
 loadAll();
 setInterval(() => api('/api/quota').then(q => { S.quota = q; renderQuota(); }), 60000);
-setInterval(() => { loadFeed(); loadBrief(); loadHr(); }, 120000);
+setInterval(() => { loadFeed(); loadBrief(); loadHr(); loadNewshops(); }, 120000);
