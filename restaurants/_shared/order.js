@@ -5,6 +5,7 @@
 //   labels: 문구 바꾸기(선택) — 예: 호텔은 { table: { ko: "객실 번호", vi: "Số phòng", … }, tablePh: { … } }
 // 메뉴 화면은 각 가게 index.html 이 그린다. 이 파일은 #menu > section(MENU 순서) > ul > li(items 순서)에 버튼만 붙인다.
 // 테이블 번호: QR 주소에 ?t=5 를 붙이면 주문서에 자동으로 들어간다.
+// 품절(2026-11-10): 점주 화면에서 품절(soldOut)로 바꾼 메뉴는 담기 버튼을 붙이지 않고(품절 배지는 override가 붙임), 장바구니에 남아 있던 것은 뺀다.
 // 주방으로 보내기(2026-11-10): admin '주문·주방 기기' 탭에서 그 가게를 켠 경우에만 버튼이 보인다(기본 꺼짐).
 //   주문서를 열 때 qrmenuasia.com/api/order?shop= 로 켜짐 여부를 한 번 묻고, 누르면 주방 화면(qrmenuasia.com/kitchen)으로 간다.
 //   테이블 QR 열쇠: admin이 만든 테이블 주소의 &k= 를 같이 보낸다. 가게 아이디는 주소(<가게>.qrmenuasia.com)에서 읽거나 ORDER.shop.
@@ -16,11 +17,11 @@
   const KEY = "qo-cart-v1", TTL = 6 * 3600 * 1000; // 오래된 장바구니(지난 방문)는 비운다
 
   const T = {
-    ko: { say: "이 화면을 직원에게 보여주세요", add: "담기", items: "개", view: "주문서 보기", title: "주문서", total: "합계", table: "테이블 번호", tablePh: "예: 5", note: "요청사항", notePh: "덜 맵게, 앞접시 2개 등", show: "직원에게 보여주기", send: "주문서 복사하고 Zalo 열기", copied: "주문서를 복사했어요 — Zalo에 붙여넣어 보내세요", copyFail: "복사가 안 됐어요 — 아래 내용을 직접 복사해 주세요", clear: "비우기", preview: "주문서 내용 보기", market: "시가", after: "후식", plus: "시가 메뉴 별도", hint: "최종 금액은 가게에서 확인해 드려요", close: "닫기", added: "담았어요", kitchen: "주방으로 주문 보내기", sending: "보내는 중…", sent: "주문이 주방에 들어갔어요", sentNo: "주문 번호", needTable: "테이블 번호를 먼저 적어 주세요", sendFail: "보내지 못했어요 — 이 화면을 직원에게 보여주세요", badKey: "테이블 QR을 다시 찍어 주세요 — 또는 직원에게 보여주세요" },
-    en: { say: "Please show this screen to the staff", add: "Add", items: "items", view: "View order", title: "Your order", total: "Total", table: "Table no.", tablePh: "e.g. 5", note: "Requests", notePh: "Less spicy, 2 extra plates…", show: "Show to staff", send: "Copy order & open Zalo", copied: "Order copied — paste it in Zalo to send", copyFail: "Couldn't copy — please copy the text below", clear: "Clear", preview: "Show order text", market: "Market price", after: "With BBQ", plus: "+ market-price items", hint: "The shop will confirm the final amount", close: "Close", added: "Added", kitchen: "Send order to kitchen", sending: "Sending…", sent: "Your order is in the kitchen", sentNo: "Order no.", needTable: "Please enter your table number first", sendFail: "Couldn't send — please show this screen to the staff", badKey: "Please scan the table QR again — or show this to the staff" },
-    zh: { say: "请把此画面给服务员看", add: "加入", items: "份", view: "查看订单", title: "我的订单", total: "合计", table: "桌号", tablePh: "例：5", note: "备注", notePh: "少辣、多拿两个碟子等", show: "给服务员看", send: "复制订单并打开Zalo", copied: "订单已复制 — 粘贴到Zalo发送", copyFail: "复制失败 — 请手动复制下方内容", clear: "清空", preview: "查看订单内容", market: "时价", after: "配烤肉价", plus: "另加时价菜品", hint: "最终金额以店家确认为准", close: "关闭", added: "已加入", kitchen: "发送订单到厨房", sending: "发送中…", sent: "订单已送到厨房", sentNo: "订单号", needTable: "请先填写桌号", sendFail: "发送失败 — 请把此画面给服务员看", badKey: "请重新扫描桌上的二维码 — 或给服务员看" },
-    ja: { say: "この画面をスタッフに見せてください", add: "追加", items: "点", view: "注文を見る", title: "ご注文", total: "合計", table: "テーブル番号", tablePh: "例：5", note: "ご要望", notePh: "辛さ控えめ、取り皿2枚など", show: "スタッフに見せる", send: "注文をコピーしてZaloを開く", copied: "注文をコピーしました — Zaloに貼り付けて送信", copyFail: "コピーできませんでした — 下の内容をコピーしてください", clear: "空にする", preview: "注文内容を見る", market: "時価", after: "焼肉と一緒に", plus: "＋時価メニュー", hint: "最終金額はお店で確認します", close: "閉じる", added: "追加しました", kitchen: "厨房に注文を送る", sending: "送信中…", sent: "ご注文を厨房に送りました", sentNo: "注文番号", needTable: "先にテーブル番号を入力してください", sendFail: "送信できませんでした — この画面をスタッフに見せてください", badKey: "テーブルのQRをもう一度読み取ってください — またはスタッフに見せてください" },
-    vi: { say: "Đưa màn hình này cho nhân viên", add: "Thêm", items: "món", view: "Xem đơn", title: "Đơn gọi món", total: "Tổng", table: "Số bàn", tablePh: "VD: 5", note: "Ghi chú", notePh: "Ít cay, thêm 2 bát…", show: "Đưa nhân viên xem", send: "Sao chép đơn & mở Zalo", copied: "Đã sao chép đơn — dán vào Zalo để gửi", copyFail: "Không sao chép được — hãy chép nội dung bên dưới", clear: "Xóa đơn", preview: "Xem nội dung đơn", market: "Thời giá", after: "Giá ăn kèm thịt nướng", plus: "+ món thời giá", hint: "Quán sẽ xác nhận số tiền cuối cùng", close: "Đóng", added: "Đã thêm", kitchen: "Gửi đơn vào bếp", sending: "Đang gửi…", sent: "Đơn đã được gửi vào bếp", sentNo: "Số đơn", needTable: "Vui lòng nhập số bàn trước", sendFail: "Không gửi được — hãy đưa màn hình này cho nhân viên", badKey: "Vui lòng quét lại mã QR trên bàn — hoặc đưa nhân viên xem" },
+    ko: { say: "이 화면을 직원에게 보여주세요", add: "담기", items: "개", view: "주문서 보기", title: "주문서", total: "합계", table: "테이블 번호", tablePh: "예: 5", note: "요청사항", notePh: "덜 맵게, 앞접시 2개 등", show: "직원에게 보여주기", send: "주문서 복사하고 Zalo 열기", copied: "주문서를 복사했어요 — Zalo에 붙여넣어 보내세요", copyFail: "복사가 안 됐어요 — 아래 내용을 직접 복사해 주세요", clear: "비우기", preview: "주문서 내용 보기", market: "시가", after: "후식", plus: "시가 메뉴 별도", hint: "최종 금액은 가게에서 확인해 드려요", close: "닫기", added: "담았어요", kitchen: "주방으로 주문 보내기", sending: "보내는 중…", sent: "주문이 주방에 들어갔어요", sentNo: "주문 번호", needTable: "테이블 번호를 먼저 적어 주세요", sendFail: "보내지 못했어요 — 이 화면을 직원에게 보여주세요", badKey: "테이블 QR을 다시 찍어 주세요 — 또는 직원에게 보여주세요", soGone: "품절된 메뉴는 장바구니에서 뺐어요" },
+    en: { say: "Please show this screen to the staff", add: "Add", items: "items", view: "View order", title: "Your order", total: "Total", table: "Table no.", tablePh: "e.g. 5", note: "Requests", notePh: "Less spicy, 2 extra plates…", show: "Show to staff", send: "Copy order & open Zalo", copied: "Order copied — paste it in Zalo to send", copyFail: "Couldn't copy — please copy the text below", clear: "Clear", preview: "Show order text", market: "Market price", after: "With BBQ", plus: "+ market-price items", hint: "The shop will confirm the final amount", close: "Close", added: "Added", kitchen: "Send order to kitchen", sending: "Sending…", sent: "Your order is in the kitchen", sentNo: "Order no.", needTable: "Please enter your table number first", sendFail: "Couldn't send — please show this screen to the staff", badKey: "Please scan the table QR again — or show this to the staff", soGone: "Sold-out items were removed from your cart" },
+    zh: { say: "请把此画面给服务员看", add: "加入", items: "份", view: "查看订单", title: "我的订单", total: "合计", table: "桌号", tablePh: "例：5", note: "备注", notePh: "少辣、多拿两个碟子等", show: "给服务员看", send: "复制订单并打开Zalo", copied: "订单已复制 — 粘贴到Zalo发送", copyFail: "复制失败 — 请手动复制下方内容", clear: "清空", preview: "查看订单内容", market: "时价", after: "配烤肉价", plus: "另加时价菜品", hint: "最终金额以店家确认为准", close: "关闭", added: "已加入", kitchen: "发送订单到厨房", sending: "发送中…", sent: "订单已送到厨房", sentNo: "订单号", needTable: "请先填写桌号", sendFail: "发送失败 — 请把此画面给服务员看", badKey: "请重新扫描桌上的二维码 — 或给服务员看", soGone: "已售罄的菜品已从购物车移除" },
+    ja: { say: "この画面をスタッフに見せてください", add: "追加", items: "点", view: "注文を見る", title: "ご注文", total: "合計", table: "テーブル番号", tablePh: "例：5", note: "ご要望", notePh: "辛さ控えめ、取り皿2枚など", show: "スタッフに見せる", send: "注文をコピーしてZaloを開く", copied: "注文をコピーしました — Zaloに貼り付けて送信", copyFail: "コピーできませんでした — 下の内容をコピーしてください", clear: "空にする", preview: "注文内容を見る", market: "時価", after: "焼肉と一緒に", plus: "＋時価メニュー", hint: "最終金額はお店で確認します", close: "閉じる", added: "追加しました", kitchen: "厨房に注文を送る", sending: "送信中…", sent: "ご注文を厨房に送りました", sentNo: "注文番号", needTable: "先にテーブル番号を入力してください", sendFail: "送信できませんでした — この画面をスタッフに見せてください", badKey: "テーブルのQRをもう一度読み取ってください — またはスタッフに見せてください", soGone: "売り切れのメニューはカートから外しました" },
+    vi: { say: "Đưa màn hình này cho nhân viên", add: "Thêm", items: "món", view: "Xem đơn", title: "Đơn gọi món", total: "Tổng", table: "Số bàn", tablePh: "VD: 5", note: "Ghi chú", notePh: "Ít cay, thêm 2 bát…", show: "Đưa nhân viên xem", send: "Sao chép đơn & mở Zalo", copied: "Đã sao chép đơn — dán vào Zalo để gửi", copyFail: "Không sao chép được — hãy chép nội dung bên dưới", clear: "Xóa đơn", preview: "Xem nội dung đơn", market: "Thời giá", after: "Giá ăn kèm thịt nướng", plus: "+ món thời giá", hint: "Quán sẽ xác nhận số tiền cuối cùng", close: "Đóng", added: "Đã thêm", kitchen: "Gửi đơn vào bếp", sending: "Đang gửi…", sent: "Đơn đã được gửi vào bếp", sentNo: "Số đơn", needTable: "Vui lòng nhập số bàn trước", sendFail: "Không gửi được — hãy đưa màn hình này cho nhân viên", badKey: "Vui lòng quét lại mã QR trên bàn — hoặc đưa nhân viên xem", soGone: "Đã bỏ món hết hàng khỏi giỏ" },
   };
   for (const [k, byLang] of Object.entries(CFG.labels || {})) for (const [l, v] of Object.entries(byLang)) if (T[l]) T[l][k] = v;
   // 직원에게 보여주는 주문서 머리말 (직원 언어)
@@ -47,7 +48,10 @@
   // ── 장바구니 (localStorage, 순서 유지) ──
   const saved = storage((s) => JSON.parse(s.getItem(KEY) || "null"));
   const fresh = saved && Date.now() - saved.t < TTL;
-  const cart = new Map(fresh ? (saved.items || []).filter(([k, q]) => ITEMS.has(k) && q > 0) : []);
+  const soldOut = (k) => !!ITEMS.get(k).it.soldOut;
+  const kept = fresh ? (saved.items || []).filter(([k, q]) => ITEMS.has(k) && q > 0) : [];
+  const cart = new Map(kept.filter(([k]) => !soldOut(k)));
+  const soGone = kept.length - cart.size; // 지난번에 담았는데 그사이 품절된 메뉴 수
   const qTable = new URLSearchParams(location.search).get("t") || new URLSearchParams(location.search).get("table");
   let table = (qTable || (fresh && saved.table) || "").slice(0, 12), note = (fresh && saved.note) || "";
   // 테이블 QR 열쇠(&k=)는 그 QR의 테이블 번호와 짝으로만 쓴다(손님이 번호를 바꾸면 안 보냄)
@@ -164,7 +168,7 @@
       const lis = sec.querySelectorAll(":scope > ul > li");
       cat.items.forEach((it, i) => {
         const li = lis[i];
-        if (!li || li.querySelector(".qo-add")) return;
+        if (!li || it.soldOut || li.querySelector(".qo-add")) return;
         const box = document.createElement("div");
         box.className = "qo-add";
         box.innerHTML = options(it).map((opt, o) =>
@@ -310,7 +314,7 @@
 
     document.addEventListener("click", (e) => {
       const b = e.target.closest(".qo-add button");
-      if (!b) return;
+      if (!b || soldOut(b.dataset.k)) return;
       cart.set(b.dataset.k, (cart.get(b.dataset.k) || 0) + 1);
       update();
       toast(`${T[langOf()].added} · ${lineName(b.dataset.k, langOf())}`);
@@ -356,6 +360,7 @@
 
     decorate();
     update();
+    if (soGone) toast(T[langOf()].soGone);
     new MutationObserver(decorate).observe($("menu"), { childList: true });
     new MutationObserver(() => { paintButtons(); update(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
   }

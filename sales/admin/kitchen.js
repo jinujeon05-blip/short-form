@@ -76,8 +76,9 @@
         </div>
       </div>
       <div class="card" style="margin-top:14px"><h2 style="margin:0 0 6px;font-size:16px">③ 테이블별 QR 주소</h2>
-        <p style="font-size:13px;margin:0 0 8px;color:var(--muted)">테이블 번호가 자동으로 들어가는 주소예요. ‘테이블 QR로 들어온 손님만’을 켜면 이 주소로 들어온 손님만 주문을 보낼 수 있어요. QR 카드로 만들 땐 이 목록을 Claude에게 주세요.</p>
-        <div class="tg" style="margin-top:0;align-items:center">테이블 <input class="inl" id="kFrom" type="number" min="1" value="1" style="width:80px"> ~ <input class="inl" id="kTo" type="number" min="1" value="20" style="width:80px"><button class="btn" data-k="tables">주소 만들기</button></div>
+        <p style="font-size:13px;margin:0 0 8px;color:var(--muted)">테이블 번호가 자동으로 들어가는 주소예요. ‘테이블 QR로 들어온 손님만’을 켜면 이 주소로 들어온 손님만 주문을 보낼 수 있어요. 테이블 번호를 고르고 <b>QR 카드 인쇄</b>를 누르면 바로 카드가 만들어져요.</p>
+        <div class="tg" style="margin-top:0;align-items:center">테이블 <input class="inl" id="kFrom" type="number" min="1" value="1" style="width:80px"> ~ <input class="inl" id="kTo" type="number" min="1" value="20" style="width:80px"><button class="btn" data-k="tables">주소 만들기</button><button class="btn primary" data-k="cards">QR 카드 인쇄</button></div>
+        <p style="font-size:12.5px;margin:6px 0 0;color:var(--muted)">QR 카드 인쇄: 새 창에 A4 한 장당 4장(A6, 105×148mm)이 나와요. 인쇄 창에서 ‘PDF로 저장’을 고르거나 바로 인쇄한 뒤 점선을 따라 자르세요.</p>
         <div id="kTables"></div>
       </div>
       <div class="card" style="margin-top:14px"><h2 style="margin:0 0 6px;font-size:16px">연결 안내 (사장님께 설명할 때)</h2>
@@ -117,8 +118,43 @@
         const text = j.rows.map((r) => `${r.table}\t${r.url}`).join('\n');
         $('kTables').innerHTML = `<div class="copy" style="max-height:220px;overflow:auto">${esc(text)}</div><button class="btn" id="kTabCopy">전체 복사</button>`;
         $('kTabCopy').onclick = (ev) => copy(text, ev.target);
+      } else if (a === 'cards') {
+        const w = window.open('', '_blank'); // 기다린 뒤에 열면 팝업 차단될 수 있어 먼저 연다
+        if (!w) { alert('새 창이 막혔어요. 브라우저에서 팝업을 허용해 주세요.'); return; }
+        w.document.write('<p style="font-family:sans-serif;padding:20px">QR 카드를 만드는 중…</p>');
+        let j;
+        try { j = await api('k-tables', { from: +$('kFrom').value, to: +$('kTo').value }); } catch (er) { w.close(); throw er; }
+        w.document.open(); w.document.write(cardsHtml(nameOf(shop), j.rows)); w.document.close();
       }
     } catch (er) { if (er.message !== 'auth') alert('처리하지 못했어요. 잠시 뒤 다시 해 주세요.'); }
+  }
+
+  // 테이블별 QR 카드(공통 모양): A4 세로 한 장에 A6 카드 4장, 점선 = 자르는 선
+  function qrSvg(text) {
+    const q = window.QMQR(text), n = q.n, pad = 2;
+    let d = '';
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.dark(r, c)) d += `M${c + pad} ${r + pad}h1v1h-1z`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + pad * 2} ${n + pad * 2}" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#000"/></svg>`;
+  }
+  function cardsHtml(name, rows) {
+    const SAY = [['ko', '찍어서 메뉴 보고 주문하세요'], ['vi', 'Quét mã để xem thực đơn và gọi món'], ['en', 'Scan to see the menu & order'], ['zh', '扫码查看菜单并点餐'], ['ja', '読み取ってメニューを見てご注文ください']];
+    const card = (r) => `<div class="c"><div class="nm">${esc(name)}</div><div class="tb"><small>TABLE · BÀN · 테이블</small><b>${esc(r.table)}</b></div>
+      <div class="qr">${qrSvg(r.url)}</div><ul>${SAY.map(([l, s]) => `<li lang="${l}">${esc(s)}</li>`).join('')}</ul><div class="ft">qrmenuasia.com</div></div>`;
+    const pages = [];
+    for (let i = 0; i < rows.length; i += 4) pages.push(`<section class="pg">${rows.slice(i, i + 4).map(card).join('')}</section>`);
+    return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(name)} 테이블 QR 카드</title><style>
+      @page{size:A4 portrait;margin:0}*{box-sizing:border-box}html,body{margin:0;background:#eee;color:#111;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+      .bar{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 16px;background:#222;color:#fff;font-size:14px}.bar button{font:inherit;font-weight:700;padding:8px 16px;border:0;border-radius:8px;background:#fff;color:#111;cursor:pointer}
+      .pg{width:210mm;height:297mm;margin:12px auto;background:#fff;display:grid;grid-template-columns:105mm 105mm;grid-template-rows:148.5mm 148.5mm;page-break-after:always;break-after:page;overflow:hidden}
+      .c{border:1px dashed #bbb;padding:8mm 8mm 6mm;display:flex;flex-direction:column;align-items:center;text-align:center;overflow:hidden}
+      .nm{font-size:15pt;font-weight:800;line-height:1.2;max-height:2.4em;overflow:hidden;word-break:keep-all}
+      .tb{margin:3mm 0 2mm;display:flex;align-items:center;gap:3mm}.tb small{font-size:7.5pt;font-weight:700;color:#555;letter-spacing:.5px;writing-mode:horizontal-tb}.tb b{font-size:30pt;line-height:1;font-weight:900;border:2.5px solid #111;border-radius:3mm;padding:1mm 4mm;min-width:16mm}
+      .qr{width:56mm;height:56mm}.qr svg{width:100%;height:100%;display:block}
+      ul{list-style:none;margin:3mm 0 0;padding:0;font-size:8.6pt;line-height:1.45;font-weight:600}li:first-child{font-size:10pt;font-weight:800}
+      .ft{margin-top:auto;font-size:7pt;color:#888}
+      @media screen and (max-width:820px){.pg{zoom:.45}}
+      @media print{html,body{background:#fff}.bar{display:none}.pg{margin:0}}
+    </style></head><body><div class="bar"><span>${esc(name)} · 테이블 ${esc(rows[0].table)}~${esc(rows[rows.length - 1].table)} · ${rows.length}장 (A4 ${pages.length}쪽)</span><button onclick="print()">인쇄 / PDF 저장</button></div>${pages.join('')}</body></html>`;
   }
 
   window.QMKitchen = { open };
