@@ -44,6 +44,7 @@
 저장소 루트에서 실행한다. 모두 이 클라우드 환경(Playwright 전역 설치, poppler)에서 검증했다.
 - `node tools/qr.cjs <URL> <출력.svg> [L|M|Q|H]` — QR 만들기 (기본 Q). 같은 이름의 `.json`도 생긴다.
 - `python3 tools/qr-check.py <qr.json>` — QR을 직접 해독해 URL 확인 (버전 3만 가능 → 안 되면 `M`으로 다시 만든다). 확인 후 `.json`은 지운다.
+- `node tools/card-themes.mjs` — admin 'QR 카드 인쇄'용 가게별 카드 자료(색·로고·전용 틀) 다시 만들기. 가게 추가·로고·table-card.html 변경 뒤 돌리고 qrmenu-intro 배포(상세 `docs/admin-system.md` 주방 절).
 - `node tools/card.mjs <가게>` — `print/table-card.html` → `table-card.png`·`table-card-A6.pdf`, `table-card-A4.html`이 있으면 `table-card-A4x4.pdf`. 카드 밖으로 넘친 요소도 알려 준다. **만든 PDF는 항상 사용자에게 보낸다.**
 - `node tools/sns.mjs <가게> [vi|ko…] [버튼 글자, 기본 MENU] [가게 이름]` — SNS 홍보 이미지 `print/sns-square.png`(1080×1080, 게시물·Zalo)·`sns-story.png`(1080×1920, 스토리). 메뉴판 첫 화면+QR+주소, 색은 가게 `partner-theme`. 가게 이름·종류는 `sales/content.js`의 `DEMOS`에서 가져오므로 새 가게는 DEMOS에 먼저 넣는다. 한국 매장은 `ko`, 바이오&뷰티는 `vi SHOP "Bio & Beauty"`. 기본형에 포함이라 새 가게마다 만들어 사용자에게 보낸다. QR 아래 안내 문구는 정사각형·스토리 모두 **5개 언어(베트남어·한국어·영어·중국어·일본어)를 항상 다 넣는다**(사용자 지시 2026-10-21, 예전 정사각형은 3개 언어였음 — 다른 가게는 다시 만들 때 반영).
 - `node tools/check-listing.mjs` — **가게 찾기용 점검(새 가게를 만들거나 고친 뒤, 배포 전에 항상)**: 26곳 전부 하단 '가격 단위' 줄에 5개 언어 '구글 지도에 올린 메뉴판 기준' 문구가 있는지, 별도 문구 상자가 없는지, 다산 배너·가게 더 보기·방문 기록 코드가 있는지 검사. 문제가 있으면 종료 코드 1.

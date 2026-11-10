@@ -44,6 +44,12 @@
   footer .tel { font-size: 3.6mm; letter-spacing: .2mm; }
   footer .addr { font-family: "Inter", sans-serif; font-weight: 600; font-size: 2.4mm; }
   footer .deli { font-family: "Inter", sans-serif; font-weight: 700; font-size: 2.2mm; opacity: .9; }
+  /* 테이블 번호 자리(admin 인쇄 때 번호가 채워짐, 단독 인쇄 땐 숨김) */
+  .tno { position: absolute; right: calc(100% - 3mm); top: -6mm; z-index: 3; min-width: 12mm; height: 12mm; padding: 0 1.8mm; box-sizing: border-box; border-radius: 99mm;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--band); color: #fff; box-shadow: 0 0 0 .8mm var(--paper);
+    font-family: system-ui, "Segoe UI", sans-serif; font-weight: 800; font-size: 6.5mm; line-height: .95; }
+  .tno::before { content: "BÀN"; font-size: 1.8mm; letter-spacing: .2mm; line-height: 1; margin-bottom: .3mm; opacity: .9; }
+  .tno:empty { display: none; }
 </style>
 </head>
 <body>
@@ -58,6 +64,7 @@
   </div>
   <div class="qr-box">
     <img src="qr.svg" alt="QR https://gamasot.qrmenuasia.com">
+    <div class="tno" data-table></div>
     <span class="badge">5 ngôn ngữ</span>
   </div>
   <h1>QUÉT MÃ <span>XEM THỰC ĐƠN</span></h1>

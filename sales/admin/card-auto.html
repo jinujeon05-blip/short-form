@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>자동 테이블 QR 카드 틀</title>
+<!--
+  admin '주문·주방 기기' ③ 'QR 카드 인쇄'가 쓰는 자동 카드 틀(전용 디자인이 없는 가게용). 카드 한 장 = 105×148mm.
+  admin이 style들과 body 안쪽을 가져가 카드마다 {{…}}를 채운다: {{NAME}} {{SUB}} {{TYPE}} {{IMG}} {{TABLE}} {{QR}} {{PHONE}} {{ADDRESS}}
+  카드를 감싼 .qm-slot 에 가게 메뉴판 색이 CSS 변수로 온다: --c-bg --c-ink --c-muted --c-line --c-accent --c-btn --c-btnInk (+ data-mode="light|dark")
+  .qm-slot[data-img="logo|photo|none"] — 맨 위 그림 종류(로고 / 간판·가게 사진 / 없음). 없음이면 그림 칸을 숨긴다.
+  @page 는 쓰지 않는다(admin이 A4에 4장씩 놓음). 외부 글꼴은 /admin/cards/fonts/ 만.
+-->
+<style>
+  .card { position: relative; width: 105mm; height: 148mm; overflow: hidden; display: flex; flex-direction: column; align-items: center; text-align: center;
+    background: var(--c-bg, #fff); color: var(--c-ink, #111); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; box-sizing: border-box; }
+  .card * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* 안쪽 가는 테두리 */
+  .card::after { content: ""; position: absolute; inset: 3mm; border: .35mm solid var(--c-accent, #c8102e); border-radius: 2mm; opacity: .55; pointer-events: none; }
+  /* 맨 위 */
+  .hero { flex: none; display: block; margin-top: 7mm; width: 24mm; height: 24mm; object-fit: contain; background: #fff; border-radius: 50%; padding: 2mm; border: .4mm solid var(--c-line, #ddd); }
+  .qm-slot[data-img="photo"] .hero { margin: 0; width: 105mm; height: 33mm; border: 0; border-radius: 0; padding: 0; object-fit: cover; border-bottom: 1.2mm solid var(--c-accent, #c8102e); }
+  .qm-slot[data-img="none"] .hero { display: none; }
+  .head { flex: none; width: 100%; padding: 4mm 9mm 0; }
+  .qm-slot[data-img="photo"] .head { padding-top: 3.5mm; }
+  .name { font-size: 6.4mm; line-height: 1.12; font-weight: 800; letter-spacing: .1mm; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-break: keep-all; overflow-wrap: anywhere; }
+  .qm-slot[data-img="none"] .name { font-size: 8mm; }
+  .sub, .type { margin-top: 1mm; font-size: 3mm; color: var(--c-muted, #777); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .type { display: none; }
+  .sub:empty { display: none; }
+  /* 테이블 번호 */
+  .table { flex: none; margin-top: 3mm; display: flex; align-items: center; gap: 2.5mm; padding: 1mm 5mm 1mm 4mm; border-radius: 99mm; background: var(--c-btn, #222); color: var(--c-btnInk, #fff); }
+  .table small { font-size: 2.3mm; line-height: 1.25; letter-spacing: .25mm; font-weight: 700; text-align: right; opacity: .9; white-space: nowrap; }
+  .table b { font-size: 11mm; line-height: 1; font-weight: 800; min-width: 9mm; }
+  .qm-slot[data-img="none"] .table { margin-top: 8mm; }
+  .qm-slot[data-img="none"] .card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 7mm; background: var(--c-accent, #c8102e); }
+  .qm-slot[data-img="none"] .head { padding-top: 17mm; }
+  .qm-slot[data-img="none"] .name { font-size: 9mm; }
+  .qm-slot[data-img="none"] .sub { margin-top: 2mm; font-size: 3.4mm; }
+  .qm-slot[data-img="none"] .qr { margin-top: 7mm; width: 48mm; height: 48mm; }
+  .qm-slot[data-img="none"] .say { margin-top: 6mm; }
+  /* QR */
+  .qr { flex: none; display: block; margin-top: 3mm; width: 44mm; height: 44mm; padding: 1.5mm; background: #fff; border-radius: 2.5mm; border: .4mm solid var(--c-line, #ddd); }
+  .qm-slot[data-mode="dark"] .qr { border-color: #fff; }
+  /* 안내 */
+  .say { flex: none; list-style: none; margin-top: 3mm; width: 100%; padding: 0 8mm; }
+  .say li { font-size: 2.6mm; line-height: 1.35; color: var(--c-muted, #777); }
+  .say li[lang="vi"] { font-size: 3.7mm; font-weight: 800; color: var(--c-ink, #111); line-height: 1.2; margin-bottom: .8mm; }
+  .say li[lang="ko"] { font-weight: 700; }
+  .card footer { flex: none; margin-top: auto; width: 100%; padding: 0 8mm 5.5mm; font-size: 2.5mm; line-height: 1.35; color: var(--c-muted, #777); display: flex; flex-direction: column; gap: .3mm; align-items: center; }
+  .card footer .tel { font-weight: 800; font-size: 3mm; color: var(--c-ink, #111); }
+  .card footer .addr { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card footer .tel:empty, .card footer .addr:empty { display: none; }
+  .card footer:not(:has(:not(:empty))) { display: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="hero" src="{{IMG}}" alt="">
+  <div class="head">
+    <div class="name">{{NAME}}</div>
+    <div class="sub">{{SUB}}</div>
+  </div>
+  <div class="table"><small>TABLE<br>BÀN · 테이블</small> <b>{{TABLE}}</b></div>
+  <img class="qr" src="{{QR}}" alt="QR">
+  <ul class="say">
+    <li lang="vi">Quét mã để xem thực đơn và gọi món</li>
+    <li lang="ko">찍어서 메뉴 보고 주문하세요</li>
+    <li lang="en">Scan to see the menu &amp; order</li>
+    <li lang="zh">扫码查看菜单并点餐</li>
+    <li lang="ja">読み取ってメニューを見てご注文ください</li>
+  </ul>
+  <footer><span class="tel">{{PHONE}}</span> <span class="addr">{{ADDRESS}}</span></footer>
+</div>
+</body>
+</html>
