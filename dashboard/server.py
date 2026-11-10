@@ -791,6 +791,11 @@ def load_orders():
         if o.get("status") == "running":  # 대시보드를 껐다 켜면 실행 중이던 것은 끊긴다
             o["status"] = "stopped"
             o.setdefault("turns", []).append({"by": "system", "text": "대시보드를 다시 켜서 실행이 끊겼습니다. '답하기'로 이어서 시킬 수 있어요.", "at": time.time()})
+        if o.get("tokensVersion") == 3:  # 새 방식 숫자는 실행 기록에서 다시 계산한다(이어 돈 지시를 두 번 세던 값 바로잡기, 2026-11-10)
+            try:
+                o["tokens"] = read_usage(ORDERS_DIR / f"{o['id']}.jsonl")["total"] or o.get("tokens")
+            except Exception:
+                pass
         ORDERS[o["id"]] = o
 
 
@@ -1082,7 +1087,7 @@ def run_order(o, prompt):
     env.update(PYTHONUTF8="1", PYTHONIOENCODING="utf-8")  # 한글 경로·출력에서 python 도구가 죽지 않게
     env["PATH"] = os.pathsep.join([d for d in extra if Path(d).is_dir()] + [env.get("PATH", "")])
     log = ORDERS_DIR / f"{o['id']}.jsonl"
-    result, err, used, t0, used_all = None, None, 0, time.time(), 0
+    result, err, used, t0 = None, None, 0, time.time()
     owners = {}  # 도구 호출 id → 그 일을 하는 담당 (담당 안에서 부른 도구도 그 담당 몫)
     o["active"] = []
     with ORDER_LOCK:
@@ -1116,10 +1121,6 @@ def run_order(o, prompt):
                         # 담당이 백그라운드로 일하면 한 실행에 result 가 여러 번 온다 → 모두 더한다(마지막 것만 세면 0으로 나왔다, 2026-11-01)
                         u = ev.get("usage") if isinstance(ev.get("usage"), dict) else {}
                         used += sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
-                        # usage 는 비서실장 몫뿐이라 담당 몫(가게당 50~120만)이 빠졌다(2026-11-10). modelUsage = 모델별 합계(담당 포함),
-                        # 실행 하나 안에서 누적이라 마지막 것을 쓴다. 없으면 위 usage 합으로 둔다.
-                        if isinstance(ev.get("modelUsage"), dict) and ev["modelUsage"]:
-                            used_all = sum(int(m.get(k) or 0) for m in ev["modelUsage"].values() if isinstance(m, dict) for k in MODEL_KEYS)
                     # 화면 표시(진행 단계·팀 대화)는 한 줄 해석이 틀려도 그 줄만 건너뛴다.
                     # 여기서 죽으면 비서실장은 아직 일하는데 지시가 '실패'가 됐다(2026-11-04 태백산 'str' object has no attribute 'get' 건)
                     try:
@@ -1156,8 +1157,15 @@ def run_order(o, prompt):
         o["deployState"] = None
         if result:
             # 2 = 2026-10-28부터 다시 읽은 것(cache read)까지. 3 = 2026-11-10부터 담당 몫까지. '답하기'로 이어 돈 옛 지시는 앞부분이 옛 방식 그대로라 2로 둔다
-            o["tokensVersion"] = 3 if (used_all and (not o.get("tokens") or o.get("tokensVersion") == 3)) else 2
-            o["tokens"] = (o.get("tokens") or 0) + max(used, used_all)
+            o["tokens"] = (o.get("tokens") or 0) + used
+            o["tokensVersion"] = 2
+            # usage 합은 비서실장 몫뿐이라 담당 몫이 빠진다 → 실행 기록 전체를 다시 읽은 값(담당 포함, read_usage)이 있으면 그것으로 바꾼다
+            try:
+                whole = read_usage(log)["total"]
+                if whole:
+                    o["tokens"], o["tokensVersion"] = whole, 3
+            except Exception as e:
+                print("토큰 다시 계산 실패:", o["id"], repr(e)[:200])
         o["turns"].append({"by": "claude", "text": text, "at": time.time()})
         if o["status"] != "done" and (not o["talk"] or o["talk"][-1]["text"] != talk_clean(text)):
             talk.add("claude", "captain", "report", text)  # 실패·멈춤 이유도 대화에 남긴다
@@ -1557,7 +1565,7 @@ def run_deploy(o, shops):
             try:
                 with urllib.request.urlopen("https://qrmenuasia.com/sitemap.xml", timeout=30) as r:
                     n = r.read().decode("utf-8").count("<loc>")
-                stores = len(re.findall(r"^\s*\{ id:", read("sales/stores/data.js"), re.M))
+                stores = len(re.findall(r"\{\s*id:\s*[\"']", read("sales/stores/data.js")))
                 log(f"사이트맵 주소 {n}개 (가게 {stores}곳 + 2 = {stores + 2}개여야 함)" + (" ✔" if n == stores + 2 else " ✘ 확인 필요"))
             except Exception as e:
                 log(f"사이트맵 확인 실패: {e}")
@@ -1863,14 +1871,14 @@ def model_short(name):
 
 
 def read_usage(f):
-    models, agents, kinds, seg = {}, {}, {}, None
+    # 합계 세는 법: result 의 model_usage_since_last_result(지난 result 뒤로 늘어난 양)를 모두 더한다.
+    # modelUsage 는 대화(session) 전체 누적이고 '답하기'(--resume)로 이어 돌아도 앞 실행 몫이 들어 있어서, 실행마다 더하면 두 번 센다
+    # (2026-11-10 코불: 1219만으로 나왔지만 실제 626만). 그 칸이 없는 옛 기록은 대화별 가장 큰 누적값을 쓴다.
+    models, agents, kinds = {}, {}, {}
+    peak, has_delta = {}, False  # peak: 대화 id → 모델별 가장 큰 누적값
     denied = images = agy = 0
     main = None
-
-    def close():
-        for name, u in (seg or {}).items():
-            if isinstance(u, dict):
-                models[name] = models.get(name, 0) + sum(int(u.get(k) or 0) for k in MODEL_KEYS)
+    total_of = lambda u: sum(int(u.get(k) or 0) for k in MODEL_KEYS) if isinstance(u, dict) else 0
 
     with open(f, "rb") as fh:
         for raw in fh:
@@ -1883,11 +1891,14 @@ def read_usage(f):
             if not isinstance(ev, dict):
                 continue
             t, sub = ev.get("type"), ev.get("subtype")
-            if t == "system" and sub == "init":  # 실행 한 번(claude -p 하나)의 시작: modelUsage 는 실행 안에서 누적이라 마지막 것만 센다
-                close()
-                seg = None
-            elif t == "result" and isinstance(ev.get("modelUsage"), dict):
-                seg = ev["modelUsage"]
+            if t == "result" and isinstance(ev.get("modelUsage"), dict):
+                if isinstance(ev.get("model_usage_since_last_result"), dict):
+                    has_delta = True
+                    for name, u in ev["model_usage_since_last_result"].items():
+                        models[name] = models.get(name, 0) + total_of(u)
+                top = peak.setdefault(ev.get("session_id"), {})
+                for name, u in ev["modelUsage"].items():
+                    top[name] = max(top.get(name, 0), total_of(u))
             elif t == "system" and sub == "task_started":
                 kinds[ev.get("task_id")] = ev.get("subagent_type") if ev.get("task_type") == "local_agent" else None
             elif t == "system" and sub == "task_notification":
@@ -1907,7 +1918,11 @@ def read_usage(f):
                         images += 1
                     if b.get("name") == "Bash" and re.search(r"(^|[\s;&|])agy\s", str(b["input"].get("command", ""))):
                         agy += 1
-    close()
+    if not has_delta:
+        models = {}
+        for top in peak.values():
+            for name, n in top.items():
+                models[name] = models.get(name, 0) + n
     by = {}
     for name, n in models.items():
         by[model_short(name)] = by.get(model_short(name), 0) + n
