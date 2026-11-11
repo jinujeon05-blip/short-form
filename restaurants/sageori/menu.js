@@ -13,12 +13,12 @@ window.MENU = [
   {
     id: "bone",
     name: { ko: "직화뼈구이", en: "Charcoal-Grilled Ribs", zh: "直火烤排骨", ja: "直火骨焼き(ジクァ ッポグイ)", vi: "Sườn nướng than hoa" },
-    note: { ko: "반판 500g · 한판 1000g", en: "Half tray 500g · Full tray 1000g", zh: "半盘 500g · 整盘 1000g", ja: "半皿 500g · 1皿 1000g", vi: "Nửa khay 500g · Cả khay 1000g" },
+    note: { ko: "반판 500g · 한판 1000g (뼈양념갈비는 1인분)", en: "Half tray 500g · Full tray 1000g (Marinated Pork Ribs: per person)", zh: "半盘 500g · 整盘 1000g（腌制带骨排骨为每人份）", ja: "半皿 500g · 1皿 1000g(骨付き味付けカルビは1人前)", vi: "Nửa khay 500g · Cả khay 1000g (Sườn heo tẩm ướp: giá 1 người)" },
     items: [
       { name: { ko: "직화등갈비", en: "Grilled Pork Ribs", zh: "直火烤猪肋排(Deungalbi)", ja: "直火豚バックリブ焼き(デンカルビ)", vi: "Sườn non heo nướng (Deungalbi)" }, sizes: [["500g", 430000], ["1000g", 850000]], photo: "img/deungalbi.jpg", tag: "best" },
       { name: { ko: "우대갈비삼겹", en: "Bone-in Pork Belly", zh: "带骨五花肉(Udaegalbi Samgyeop)", ja: "骨付きサムギョプサル(ウデカルビサムギョプ)", vi: "Ba chỉ heo có xương (Udaegalbi Samgyeop)" }, sizes: [["500g", 400000], ["1000g", 800000]] },
       { name: { ko: "고추장직화등갈비", en: "Gochujang Grilled Pork Ribs", zh: "辣酱直火烤猪肋排(Gochujang Deungalbi)", ja: "コチュジャン豚バックリブ焼き(コチュジャン デンカルビ)", vi: "Sườn non heo nướng sốt tương ớt Hàn (Gochujang Deungalbi)" }, sizes: [["500g", 450000], ["1000g", 900000]], spicy: true },
-      { name: { ko: "뼈양념갈비", en: "Marinated Pork Ribs", zh: "腌制带骨排骨(Ppyeo Yangnyeom Galbi)", ja: "骨付き味付けカルビ(ッポ ヤンニョムカルビ)", vi: "Sườn heo tẩm ướp (Ppyeo Yangnyeom Galbi)" }, price: 220000, unit: "1P" },
+      { name: { ko: "뼈양념갈비", en: "Marinated Pork Ribs", zh: "腌制带骨排骨(Ppyeo Yangnyeom Galbi)", ja: "骨付き味付けカルビ(ッポ ヤンニョムカルビ)", vi: "Sườn heo tẩm ướp (Ppyeo Yangnyeom Galbi)" }, price: 220000 },
     ],
   },
   {
