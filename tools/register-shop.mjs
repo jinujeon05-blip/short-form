@@ -21,6 +21,7 @@ const EXAMPLE = {
   type: { ko: '한식 · 돼지국밥 · 순대 · 수육', vi: 'Cơm canh thịt Hàn Quốc · Canh lòng · Thịt luộc', en: 'Korean pork soup · Sundae · Boiled pork', zh: '韩式猪肉汤饭 · 血肠 · 白切肉', ja: '韓国豚クッパ・スンデ・ポッサム' },
   keywords: '가게 이름(한글·영문·다른 표기) 대표 메뉴 지역 이름을 띄어쓰기로',
   schema: 'Restaurant', cuisine: ['Korean', 'Pork Soup', 'Sundae'], og: 'img/sign.jpg',
+  map: 'https://www.google.com/maps/place/… (수집기 maps_url, menu.js 에 mapUrl 이 있으면 생략)',
   listing: true,
   storesRow: '성저최고돼지국밥 Seongjeo — 순대국밥·수육 (주소, 전화, 영업시간) — **가게 찾기용**(날짜). 맨 위는 간판 사진. 메뉴 51개',
 };

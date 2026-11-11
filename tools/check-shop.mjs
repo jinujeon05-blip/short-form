@@ -55,7 +55,7 @@ console.log(`  캡처: ${out}/${id}-ko.png (전체) · .scratch/${id}/top.png (�
 if (shotBad) bad++;
 
 const st = execFileSync('git', ['status', '--porcelain', '--untracked-files=all'], { cwd: ROOT, encoding: 'utf8' }).split('\n').filter((l) => l && !l.includes('.scratch/'));
-const mine = st.filter((l) => l.includes(`restaurants/${id}/`)), other = st.filter((l) => !l.includes(`restaurants/${id}/`));
+const mine = st.filter((l) => l.includes(`restaurants/${id}/`)), other = st.filter((l) => !l.includes(`restaurants/${id}/`) && (!l.startsWith('??') || /^\?\? "?(sales|tools|docs|restaurants)\//.test(l)));
 console.log(`■ 커밋 안 한 파일: 이 가게 ${mine.length}개 · 그 밖 ${other.length}개`);
 if (other.length) console.log(other.slice(0, 20).map((l) => '  ' + l).join('\n') + (other.length > 20 ? `\n  … 외 ${other.length - 20}개` : ''));
 console.log(bad ? `결과: ✘ ${bad}곳 고칠 것` : '결과: 모두 통과');

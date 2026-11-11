@@ -17,6 +17,8 @@
   - QR 아래 안내는 **5개 언어 모두** 넣는다.
   - 한국 매장은 `ko`.
 - `node tools/demo.mjs <가게>` — 가게 찾기·소개서 카드 사진 `sales/img/demo-<가게>.jpg`.
+- **새 가게 한 번에 도구(2026-11-11)**: `python tools/photos.py prep <가게id> "<드라이브 폴더>"`(준비) · `node tools/register-shop.mjs <가게id>`(등록, 정보는 `.scratch/<가게id>/register.json`, 예시 `--example`) · `node tools/check-shop.mjs <가게id>`(점검·캡처). 상세 `docs/new-shop.md` 맨 위.
+- `node tools/seo.mjs <가게id>`·`node tools/analytics.mjs <가게id>` — **가게id를 주면 그 가게 파일만** 고친다(전체 사이트맵은 같이 맞춤). 가게id 없이 돌리는 것은 공통 양식을 바꿨을 때만.
 - `node tools/seo.mjs` — canonical·og·JSON-LD·robots·sitemap. 메뉴·가격·주소를 바꾸거나 새 가게가 생기면 다시 돌린다. seo·analytics는 **내용이 바뀐 파일만** 쓴다(사이트맵 날짜도 바뀐 가게만, 2026-10-30) — 돌린 뒤 다른 가게가 바뀌어 있으면 그 가게 `menu.js`를 고치고 seo를 안 돌린 것이니 같이 커밋한다.
 - `sh tools/export.sh <폴더> [가게…|sales]` — 보낼 파일을 `<상호>_<파일>`로 복사한다.
 - `node tools/sales-pdf.mjs` — 소개서 PDF 5개 언어. 각각 2쪽인지 확인하고, `.demos`는 7칸이다.

@@ -2,6 +2,12 @@
 
 > **새 가게를 만들 때 반드시 처음부터 끝까지 읽는다.** 요약은 `CLAUDE.md` 1장, 화면 구조는 `docs/standard.md`.
 
+> **PC에서는 도구 3개로 한 번에 한다(2026-11-11, 토큰 줄이기 '가-1')** — 손으로 나눠 하지 않는다. 앞 가게 커밋을 열어 따라 하지도 않는다.
+> 1. 준비: `python tools/photos.py prep <가게id> "<드라이브 폴더 이름>"` — 사진 복사·모음 이미지·메뉴판 줄이기·가게 정보·이미 있는 가게인지·agy 명령까지 한 번에 나온다.
+> 2. 등록: `.scratch/<가게id>/register.json`을 쓰고(`node tools/register-shop.mjs --example`이 예시) `node tools/register-shop.mjs <가게id>` — 6번 '등록' 전부.
+> 3. 점검: `node tools/check-shop.mjs <가게id>` — 검색 정보 다시 맞춤·TODO·표준·목록·캡처·넘침·커밋 안 한 파일. **번역·메뉴를 고친 뒤와 커밋 직전에 한 번 더.**
+> 왜: 비서실장이 긴 대화를 44번 왕복해 가게당 350~620만 토큰이 들었다(97%가 다시 읽은 것). 왕복 수를 줄이는 것이 전부다 — 명령은 묶어서 한 번에, 큰 출력은 `| tail`로.
+
 1. **사용자에게 먼저 묻는다**: "사장님 동의·비용을 받고 만드는 가게(정식)인가, 손님 가게 찾기용(무동의·무료)인가?"
 2. **자료 받기**:
    - "사진 수집기로 올렸어"라고 하면 `docs/maps-photos.md` 방식으로 받는다. 드라이브 `QR메뉴판/<가게>/`의 `menu_*.jpg` 등을 4장씩 `download_file_content`로 받는다. `claude_bundle_*.zip`을 여러 개 동시에 받으면 연결이 끊긴다.
@@ -29,15 +35,16 @@
      - **영업시간을 항상 넣는다**(사용자 지시 2026-10-28, 새 가게부터 — 이미 만든 가게는 그대로). 아래 가게 정보의 전화·주소 칸 **위에 같은 모양 칸**(🕒)으로 넣는다. 값은 `store_info.json`의 `hours`(비어 있거나 '모름'이면 구글 지도 링크를 열어 직접 확인 — 2026-10-30 낭만집·어수사는 지도에 있었음), 메뉴판·간판에 다른 시간이 있으면 대조하고 다르면 `docs/todo.md`에 적는다. 상세는 `docs/standard.md`.
      - 하단 '가격 단위' 줄 끝에 5개 언어로 " · 메뉴·가격은 구글 지도에 올린 메뉴판 기준이며 바뀔 수 있어요"를 붙인다. 올린 쪽이 가게 계정이면 '가게가 구글 지도에 올린', 손님이면 '손님이 구글 지도에 올린'으로 고쳐 써도 된다. 출처가 다르면 같은 줄에서 맞게 고친다.
 6. **등록**:
+   - **`node tools/register-shop.mjs <가게id>` 한 번으로 아래를 전부 한다**(아래 목록은 그 도구가 하는 일).
    - `_shared/sync-lang.sh`·`sync-dasan.sh`·`sync-stores.sh`의 SHOPS
-   - `tools/seo.mjs`의 SHOPS, 그다음 `node tools/seo.mjs`
+   - `tools/seo.mjs`의 SHOPS, 그다음 `node tools/seo.mjs <가게id>`(**가게id를 꼭 준다** — 안 주면 다른 가게 파일까지 바뀐다)
    - `tools/export.sh`의 `name()`
    - `sales/content.js`의 `DEMOS`(SNS용, 가게 찾기용은 `hidden: true`)
    - `node tools/demo.mjs <가게>` → `sales/img/demo-<가게>.jpg`
-   - `node tools/analytics.mjs`
+   - `node tools/analytics.mjs <가게id>`
    - `docs/stores.md`의 표·기록
 7. **점검**:
-   - `node tools/check-standard.mjs <가게>`, `node tools/check-listing.mjs`, `node tools/shot.mjs <가게>`
+   - `node tools/check-shop.mjs <가게>` 한 번(check-standard·check-listing·캡처·넘침 포함). reviewer가 지적한 것을 고친 뒤 **다시 돌리고 나서** 커밋한다.
    - **reviewer 담당**에게 맡긴다: 가격·전화·주소 오타, 빠진 메뉴, 깨진 사진, 글꼴 섞임, 배너 색, **가마솥 표준에 없는 요소**, main 포함 여부.
 8. **사용자가 "배포해"라고 한 뒤에만** 배포한다(`docs/deploy.md`).
    - 가게 찾기용은 사진을 받은 뒤 **배포 직전까지 묻지 않고** 끝낸다(2026-10-27). 색·사진·분류 순서도 묻지 않고 정한다(1번 '정식인가, 가게 찾기용인가?'만 묻는다).

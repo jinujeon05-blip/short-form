@@ -58,6 +58,7 @@
 - 다른 기기(폰 등)에서 쓸 기능은 PC에서 확인 가능한 것(새 코드로 재시작·포트 충돌·방화벽·연결)을 **전부** 확인하고 보고한다. 못 본 부분은 '미확인'이라고 맨 앞에 쓴다(2026-10-27 대시보드 폰 접속 건).
 - PC(윈도우)에서 여러 가게를 고치는 도구(seo·analytics·sync)를 돌린 뒤엔 `git diff --ignore-cr-at-eol --stat`으로 **내 가게 밖 변경이 없는지** 보고 커밋한다(2026-10-27 종로포차 CRLF 건).
 - **가짜 모듈(모의 Blob 등)로 시험한 서버 기능은 배포 직후 실서버에 '빈 상태' 요청을 바로 보내 확인한다**(2026-11-10 주방 주문 API 500 건).
+- **새 가게는 도구 3개로 한 번에**(`photos.py prep`·`register-shop.mjs`·`check-shop.mjs`), `seo.mjs`·`analytics.mjs`는 **가게id를 줘서 그 가게만** 고친다. 번역·메뉴를 고친 뒤와 커밋 직전에 `check-shop.mjs`를 다시 돌린다. 토큰은 왕복 횟수에서 나온다 — 명령을 묶고 큰 출력은 줄인다(2026-11-11 배포 멈춤·가게당 600만 토큰 건).
 - **CLAUDE.md에는 상세를 쌓지 않는다.** 새 규칙은 한 줄로 쓰고, 명령·순서·설명은 `docs/`의 해당 파일에 적는다(2026-11-05 시작 컨텍스트 과다 건).
 
 ## 3. 배포 — **배포·main 머지 직전에 반드시 `docs/deploy.md`를 읽고 그 순서대로 한다**
@@ -102,7 +103,7 @@
 - `src/`·`saju/`·`rpg-demo/`·`server/`는 예전 숏폼 프로젝트 산출물이다.
 
 ## 7. 도구 (`tools/`, 저장소 루트에서 실행) — **도구 사용법·드라이브·윈도우 주의점은 `docs/tools.md` 맨 위 '도구 요약'을 읽는다**
-- 새 가게: `new-shop.mjs` · 점검 `check-standard.mjs <가게>`·`check-listing.mjs` · 캡처 `shot.mjs <가게>`
+- 새 가게: 준비 `photos.py prep <가게> "<드라이브 폴더>"` → `new-shop.mjs` → 등록 `register-shop.mjs <가게>` → 점검·캡처 `check-shop.mjs <가게>`(안에서 `check-standard`·`check-listing` 실행)
 - QR `qr.cjs`+`qr-check.py` · 카드 `card.mjs` · SNS `sns.mjs` · 카드 사진 `demo.mjs` · 검색 `seo.mjs` · 보내기 `export.sh` · 소개서 `sales-pdf.mjs`
 - 윈도우에서 경로는 `tools/pw.mjs`의 `ROOT`·`fileUrl()`로 만든다. `.sh`는 Git Bash로 돌린다.
 
