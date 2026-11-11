@@ -798,6 +798,36 @@ def load_orders():
             except Exception:
                 pass
         ORDERS[o["id"]] = o
+    # 켤 때 한 번: 이미 배포된 가게의 옛 결재 카드를 닫는다(2026-11-11)
+    for o in sorted(ORDERS.values(), key=lambda x: x.get("createdAt") or 0):
+        if o.get("deployState") == "done" and o.get("deploy"):
+            settle_deployed(o, o["deploy"])
+
+
+def settle_deployed(src, shops):
+    """배포가 끝난 가게의 **다른** 결재 카드(배포 대기·결재 대기)를 닫는다. ORDER_LOCK 은 부르는 쪽이 잡지 않는다.
+    '결재함 전부 배포해'처럼 다른 지시에서 배포하면 가게별 카드가 그대로 남아 또 누르게 되던 문제(2026-11-11 황금성·안동집·사거리·성저 건).
+    그 가게 카드인지는 배포 목록·캡처 이름(<가게>-ko.png)·보고 글 속 가게 id 로 본다. 배포보다 뒤에 만든 지시는 건드리지 않는다."""
+    done_at = max([t.get("at") or 0 for t in src.get("turns") or []] + [src.get("createdAt") or 0])
+    for o in list(ORDERS.values()):
+        if o is src or o.get("status") != "done" or (o.get("createdAt") or 0) > done_at:
+            continue
+        pend_deploy = bool(o.get("deploy")) and o.get("deployState") != "done"
+        if not (pend_deploy or o.get("approval")):
+            continue
+        mine = set(o.get("deploy") or [])
+        mine |= {m.group(1) for f in (o.get("images") or []) for m in [re.match(r"([a-z0-9]+)-(?:ko|vi|live)\.png$", f)] if m}
+        text = " ".join(t.get("text") or "" for t in (o.get("turns") or [])[-3:] if t.get("by") != "me")
+        mine |= {x for x in shops if re.search(r"(?<![a-z0-9])" + re.escape(x) + r"(?![a-z0-9])", text)}
+        if not mine or not mine <= set(shops):
+            continue
+        with ORDER_LOCK:
+            if pend_deploy:
+                o["deployState"] = "done"
+            o["approval"] = None
+            o.setdefault("turns", []).append({"by": "system", "at": time.time(), "text":
+                f"다른 지시('{(src.get('title') or '')[:30]}')에서 {', '.join(sorted(mine))} 배포가 끝나 이 결재를 닫았어요. 남은 질문은 필요하면 '답하기'로 이어 가세요."})
+            save_order(o)
 
 
 def step_text(block):
@@ -1592,6 +1622,11 @@ def run_deploy(o, shops):
             o["turns"].append({"by": "system", "text": "배포 멈춤: " + str(e)[:300] + "\n" + "\n".join(o.get("deployLog") or []), "at": time.time()})
     with ORDER_LOCK:
         save_order(o)
+    if o.get("deployState") == "done":
+        try:
+            settle_deployed(o, shops)
+        except Exception as e:  # 카드 정리가 실패해도 배포 결과는 그대로
+            print("settle_deployed:", e)
     _cache.pop("stores", None)
     _cache.pop("recent", None)
 
