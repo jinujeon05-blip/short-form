@@ -736,6 +736,12 @@ window.STORES = [
     type: { ko: "코리안 불고기 · 구이 한판 · 찜 · 전골 · 1인 정식 · 냉면 · 족발", vi: "Nhà hàng Hàn Quốc BBQ · Bulgogi · Món nướng · Món hầm · Lẩu · Cơm phần · Mì lạnh · Chân giò", en: "Korean bulgogi & BBQ · Grill platters · Braised dishes · Hot pots · Meal sets · Cold noodles · Jokbal", zh: "韩式烤肉 · 烤肉拼盘 · 炖菜 · 火锅 · 单人套餐 · 冷面 · 猪蹄", ja: "韓国式プルコギ＆BBQ・焼き盛り・チム・チョンゴル・一人前定食・冷麺・チョッパル" },
     keywords: "코불 kobul 코리안불고기 korean bulgogi 하노이 시푸트라 ciputra 한식 불고기 고추장불고기 간장불고기 닭갈비 떡볶이 LA갈비 구이한판 통삼겹 훈제오리 생새우 소금구이 돼지갈비찜 안동찜닭 닭도리탕 감자탕 부대찌개 소갈비만두전골 돈까스 탕수육 정식 김치찌개 육개장 물냉면 비빔냉면 족발 냉족발 두부김치 해물파전 계란말이 짬뽕라면 소주 맥주 nhà hàng hàn quốc kobul thịt nướng bulgogi ciputra nam thăng long phú thượng hà nội quán nhậu hàn quốc lẩu hàn quốc gà hầm cay sườn bò la nướng tôm sú nướng muối mì lạnh chân giò hầm cơm phần hàn quốc 韩国烤肉 河内 韩国料理 烤肉 火锅 冷面 猪蹄 韓国料理 ハノイ プルコギ 焼肉 チョンゴル 冷麺 チョッパル"
   },
+  { id: "hwanggeumseong", name: "황금성 HWANGGEUMSEONG", sub: "수타 짜장 · 짬뽕 · 탕수육 · 추천요리 · 점심특선 · 포차 메뉴", url: "https://hwanggeumseong.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["chinese", "noodle"], tags: ["photos"],
+    address: "Lô 30 Đ. Hoàng Hoa Thám, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%ED%99%A9%EA%B8%88%EC%84%B1+%EB%B0%95%EB%8B%9D%EC%A0%90(%EC%88%98%ED%83%80%EB%A9%B4+%EC%A0%84%EB%AC%B8%EC%A0%90)/@21.1717324,106.0565438,17z",
+    type: { ko: "수타면 전문 중식 · 짜장 · 짬뽕 · 탕수육 · 추천요리 · 점심특선", vi: "Nhà hàng Hoa kiểu Hàn · Mì tay · Mì đen · Mì cay · Thịt chua ngọt · Set trưa", en: "Korean-Chinese restaurant · Hand-pulled noodles · Jajangmyeon · Jjamppong · Tangsuyuk · Lunch sets", zh: "手工面韩式中餐 · 炸酱面 · 辣海鲜汤面 · 糖醋肉 · 午餐套餐", ja: "手打ち麺の韓国式中華・ジャジャン麺・チャンポン・タンスユク・ランチセット" },
+    keywords: "황금성 박닝점 박닌 hwanggeumseong hwang geum seong 수타면 수타 손짜장 손짬뽕 짜장면 짬뽕 탕수육 중국집 중식 한국식 중화요리 양장피 유산슬 팔보채 깐풍기 라조기 마파두부 칠리새우 크림새우 고추잡채 누룽지탕 오향장육 짬짜 볶짬 볶짜 탕짬 탕짜 점심특선 세트메뉴 해물짬뽕전골 쇠고기짬뽕전골 마라탕 마라샹궈 마라짬뽕 소갈비짬뽕 차돌짬뽕 통오징어짬뽕 낙지볶음 제육볶음 동파육 냉면 콩국수 포차 nhà hàng mì cay mì đen hàn quốc bắc ninh hoàng hoa thám võ cường món hoa 韩式中餐 手工面 北宁 韓国式中華 手打ち麺 バクニン"
+  },
   { id: "onban", name: "온반 ONBAN", sub: "맑은 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", url: "https://onban.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean"], tags: ["photos"],
     address: "TT3-C18 Five Star, Ngõ 154 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/ONBAN(%EC%98%A8%EB%B0%98)/@21.0185646,105.7756547,19z",

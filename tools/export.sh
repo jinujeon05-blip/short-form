@@ -79,6 +79,7 @@ name() {
     korilla) echo "코릴라펍" ;;
     cheonguk) echo "삼계탕천국" ;;
     kobul) echo "코불" ;;
+    hwanggeumseong) echo "황금성" ;;
     honggang) echo "홍강" ;;
     smile) echo "스마일회관" ;;
     torei) echo "토레이이자카야" ;;

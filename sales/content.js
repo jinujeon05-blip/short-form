@@ -175,6 +175,8 @@ window.DEMOS = [
     name: "삼계탕천국 Samgyetang Cheonguk", type: { ko: "삼계탕 · 갈비탕 · 닭한마리 · 하노이", vi: "Gà hầm sâm · Canh sườn · Lẩu gà Hàn Quốc · Hà Nội", zh: "参鸡汤 · 牛排骨汤 · 一只鸡火锅 · 河内", ja: "サムゲタン・カルビタン・タッカンマリ・ハノイ", en: "Samgyetang · Galbitang · Chicken hot pot · Hanoi" } },
   { id: "kobul", hidden: true, url: "https://kobul.qrmenuasia.com", shot: "img/demo-kobul.jpg", qr: "img/qr-kobul.svg",
     name: "코불 KOBUL", type: { ko: "코리안 불고기 · 구이 · 찜 · 전골 · 하노이", vi: "Bulgogi Hàn Quốc · Món nướng · Món hầm · Lẩu · Hà Nội", zh: "韩式烤肉 · 炖菜 · 火锅 · 河内", ja: "韓国プルコギ・焼き物・チム・チョンゴル・ハノイ", en: "Korean bulgogi · BBQ · Braised dishes · Hot pots · Hanoi" } },
+  { id: "hwanggeumseong", hidden: true, url: "https://hwanggeumseong.qrmenuasia.com", shot: "img/demo-hwanggeumseong.jpg", qr: "img/qr-hwanggeumseong.svg",
+    name: "황금성 HWANGGEUMSEONG", type: { ko: "수타 짜장·짬뽕 · 한국식 중화요리 · 박닌", vi: "Mì tay Hàn Quốc · Món Hoa kiểu Hàn · Bắc Ninh", zh: "手工拉面 · 韩式中餐 · 北宁", ja: "手打ちジャージャー麺・韓国式中華・バクニン", en: "Hand-pulled noodles · Korean-Chinese · Bac Ninh" } },
   { id: "jungsung", hidden: true, url: "https://jungsung.qrmenuasia.com", shot: "img/demo-jungsung.jpg", qr: "img/qr-jungsung.svg",
     name: "정성 JUNGSUNG", type: { ko: "한우·숙성 고기구이 · 보일링 시푸드 · 하노이", vi: "Thịt nướng Hàn Quốc · Hải sản sốt cay · Hà Nội", zh: "韩牛·熟成烤肉 · 香辣海鲜锅 · 河内", ja: "韓牛・熟成焼肉・ボイリングシーフード・ハノイ", en: "Hanwoo & aged Korean BBQ · Boiling seafood · Hanoi" } },
   { id: "onban", hidden: true, url: "https://onban.qrmenuasia.com", shot: "img/demo-onban.jpg", qr: "img/qr-onban.svg",
