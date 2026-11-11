@@ -1,4 +1,6 @@
-// 검색 등록용 준비: node tools/seo.mjs
+// 검색 등록용 준비: node tools/seo.mjs [가게id…]
+// 가게id 를 주면 **그 가게 파일만** 고친다(다른 가게는 읽기만, 전체 사이트맵 sales/sitemap.xml 은 같이 맞춤) — 새 가게·한 가게 수정은 항상 이렇게.
+// 가게id 없이 돌리면 전부 다시 만든다(공통 양식을 바꿨을 때만).
 // 가게마다 index.html <head> 에 대표 주소(canonical)·링크 미리보기(og)·가게 정보 구조화 데이터(JSON-LD)를 넣고
 // robots.txt·sitemap.xml 을 만든다. 소개서(sales/)에는 전체 사이트맵(qrmenuasia.com/sitemap.xml)을 만든다.
 // 메뉴·가격·주소를 고친 뒤 다시 돌리면 <!-- seo:start --> ~ <!-- seo:end --> 부분만 새로 바뀐다.
@@ -191,9 +193,18 @@ function inject(file, html) {
   return writeIfChanged(file, s);
 }
 
+const ONLY = process.argv.slice(2);
+for (const s of ONLY) if (!SHOPS[s]) { console.error(`seo.mjs 의 SHOPS 에 없는 가게: ${s}`); process.exit(1); }
 const shopUrls = [], shopMod = {};
 for (const [shop, cfg] of Object.entries(SHOPS)) {
   const dir = `${ROOT}/restaurants/${shop}`;
+  if (ONLY.length && !ONLY.includes(shop)) {
+    // 다른 가게는 건드리지 않는다(2026-11-11 배포 멈춤 건: 뒤 가게를 만들 때 앞 가게 파일이 바뀌어 남음)
+    const u = `https://${shop}.${DOMAIN}/`;
+    shopUrls.push(u);
+    shopMod[u] = lastmodOf(`${dir}/sitemap.xml`, u) || lastmodOf(`${ROOT}/sales/sitemap.xml`, u) || today;
+    continue;
+  }
   const ctx = { window: {} };
   vm.runInNewContext(readFileSync(`${dir}/menu.js`, 'utf8'), ctx);
   const R = ctx.window.RESTAURANT, MENU = ctx.window.MENU || [];
@@ -249,7 +260,7 @@ for (const [shop, cfg] of Object.entries(SHOPS)) {
 // 소개서·가게 찾기 (qrmenuasia.com): 전체 사이트맵 하나로 모든 가게를 함께 알린다
 const sales = `${ROOT}/sales`;
 const main = `https://${DOMAIN}/`;
-const salesChanged = inject(`${sales}/index.html`, block([
+const salesChanged = ONLY.length ? false : inject(`${sales}/index.html`, block([
   `<link rel="canonical" href="${main}">`,
   `<meta name="naver-site-verification" content="373cad11eece55044bada0b3b79a8f55a2b8e00c">`, // 네이버 서치어드바이저 소유 확인 (지우지 말 것)
   `<meta property="og:type" content="website">`,

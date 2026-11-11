@@ -1,5 +1,5 @@
 // ① 자체 방문 집계 신호(sendBeacon) ② 점주가 고친 메뉴 불러오기(menu.js 바로 뒤, 가게 메뉴판만)를 모든 메뉴판·소개서·가게 찾기 페이지에 넣는다 (여러 번 돌려도 같은 결과).
-// 사용법: node tools/analytics.mjs      ※ 새 가게를 만들면 한 번 돌린다.
+// 사용법: node tools/analytics.mjs [가게id…]   ※ 새 가게는 가게id 를 줘서 그 가게 파일만 고친다. 없이 돌리면 전부.
 // 신호는 https://qrmenuasia.com/api/hit (sales/api/hit.js) 로 간다 → 집계는 https://qrmenuasia.com/admin
 // - 내 방문 제외: 주소 끝에 ?notrack 을 붙여 한 번 열면 그 브라우저·그 주소에서는 기록하지 않는다. 다시 기록하려면 ?track
 // - 로봇(검색엔진 등)은 서버에서 걸러낸다. 개인정보는 저장하지 않는다(방문자는 날짜·소금을 섞은 해시값).
@@ -20,13 +20,15 @@ const overrideBlock = (shop) => `<!-- override:start (tools/analytics.mjs 가 �
 <!-- override:end -->
 `;
 
+const ONLY = process.argv.slice(2);
 const files = [];
 for (const d of fs.readdirSync(path.join(root, 'restaurants'))) {
   if (d.startsWith('_')) continue;
+  if (ONLY.length && !ONLY.includes(d)) continue;
   const f = path.join(root, 'restaurants', d, 'index.html');
   if (fs.existsSync(f)) files.push(f);
 }
-files.push(path.join(root, 'sales/index.html'), path.join(root, 'sales/stores/index.html'), path.join(root, 'sales/stores/game.html'));
+if (!ONLY.length) files.push(path.join(root, 'sales/index.html'), path.join(root, 'sales/stores/index.html'), path.join(root, 'sales/stores/game.html'));
 
 let n = 0;
 for (const f of files) {
