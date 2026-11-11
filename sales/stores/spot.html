@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="고깃집 한 상 틀린 그림 찾기 — 위아래 상차림에서 다른 곳을 찾아보세요. Tìm điểm khác nhau · Spot the difference">
+<title>틀린 그림 찾기 · 고깃집 한 상</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+  :root {
+    --ink: #16130f; --ink-2: #2a251f; --paper: #faf7f2; --card: #fff; --line: #e9e2d7;
+    --muted: #6f675d; --accent: #e0452b; --accent-2: #f2a03d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; background: var(--paper); color: var(--ink); }
+  body {
+    line-height: 1.45; -webkit-font-smoothing: antialiased;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "PingFang SC", "Noto Sans SC", sans-serif;
+  }
+  h1, h2, p { margin: 0; }
+  button, a { font: inherit; -webkit-tap-highlight-color: transparent; }
+  [hidden] { display: none !important; }
+
+  .topbar { background: var(--ink); color: #fff; padding: 12px 14px; border-bottom: 1px solid #2b241d; }
+  .topbar-inner { max-width: 520px; margin: 0 auto; display: flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; }
+  .back { color: #d8cfc3; text-decoration: none; font-size: 13.5px; font-weight: 700; padding: 5px 10px;
+    border-radius: 999px; border: 1px solid #473e34; white-space: nowrap; }
+  .top-title { font-size: 16.5px; font-weight: 900; letter-spacing: -.3px; white-space: nowrap; }
+  .langs { display: flex; gap: 5px; flex-wrap: wrap; margin-left: auto; }
+  .langs button { font-size: 12px; font-weight: 600; color: #d8cfc3; background: transparent;
+    border: 1px solid #5a4f43; border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: var(--ink); background: #fff; border-color: #fff; }
+
+  .wrap { max-width: 520px; margin: 0 auto; padding: 10px 12px 28px; width: 100%; }
+
+  /* 점수판 */
+  .hud { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .dots { display: flex; gap: 5px; }
+  .dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #d9cfc0; background: #fff; transition: .25s; }
+  .dots i.on { background: var(--accent); border-color: var(--accent); transform: scale(1.12); }
+  .time { flex: 1; height: 10px; border-radius: 999px; background: #ece4d8; overflow: hidden; }
+  .time b { display: block; height: 100%; width: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent-2), var(--accent)); transition: width .25s linear; }
+  .time.low b { background: #d92b1d; }
+  .sec { font-weight: 800; font-size: 14px; min-width: 30px; text-align: right; font-variant-numeric: tabular-nums; }
+  .sec.hit { animation: pen .5s; }
+  @keyframes pen { 30% { color: #d92b1d; transform: scale(1.35); } }
+  .hint { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 5px 11px;
+    font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; color: var(--ink); }
+  .hint:disabled { opacity: .4; }
+
+  /* 그림 두 장 */
+  .board { display: grid; gap: 8px; }
+  .pic { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid #7a5230;
+    box-shadow: 0 6px 18px rgba(60, 40, 20, .13); background: #c79a68; touch-action: manipulation; }
+  .pic svg { display: block; width: 100%; height: auto; cursor: pointer; }
+  .pic.shake { animation: shake .3s; }
+  @keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  .ring { fill: none; stroke: #ff3b30; stroke-width: 4; stroke-dasharray: 400; stroke-dashoffset: 400;
+    animation: draw .45s ease-out forwards; filter: drop-shadow(0 1px 1px rgba(0,0,0,.35)); }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .glow { fill: none; stroke: #ffd60a; stroke-width: 5; animation: glow .5s ease-in-out 3 alternate; }
+  @keyframes glow { from { opacity: .15; } to { opacity: 1; } }
+  .miss { stroke: #fff; stroke-width: 5; stroke-linecap: round; animation: fade .6s forwards; }
+  @keyframes fade { to { opacity: 0; } }
+  .burst { fill: none; stroke: #ffd60a; stroke-width: 3.5; stroke-linecap: round; transform-box: fill-box; transform-origin: center;
+    animation: burst .55s ease-out forwards; }
+  @keyframes burst { from { transform: scale(.55); opacity: 1; } to { transform: scale(1.3); opacity: 0; } }
+  .lv { font-size: 13px; font-weight: 900; color: var(--accent); white-space: nowrap; }
+  .snd { border: 1px solid #473e34; background: transparent; border-radius: 999px; padding: 3px 8px; font-size: 14px; cursor: pointer; line-height: 1.2; }
+  .confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .confetti i { position: absolute; top: -14px; width: 9px; height: 14px; border-radius: 2px; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(105vh) rotate(540deg); } }
+  .tip { margin-top: 9px; text-align: center; font-size: 13px; color: var(--muted); }
+
+  /* 시작·결과 창 */
+  .veil { position: fixed; inset: 0; background: rgba(22, 19, 15, .62); display: grid; place-items: center; padding: 20px; z-index: 5; }
+  .sheet { position: relative; background: #fff; border-radius: 22px; padding: 24px 20px 20px; width: 100%; max-width: 340px; text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,.3); }
+  .sheet .big { font-size: 46px; line-height: 1; }
+  .sheet h2 { font-size: 21px; font-weight: 900; margin-top: 10px; letter-spacing: -.4px; }
+  .sheet p { margin-top: 7px; color: var(--muted); font-size: 14.5px; }
+  .btns { display: grid; gap: 8px; margin-top: 18px; }
+  .btn { display: block; border: 0; border-radius: 14px; padding: 13px; font-weight: 800; font-size: 15.5px;
+    cursor: pointer; text-decoration: none; background: var(--accent); color: #fff; }
+  .btn.sub { background: #f3ede4; color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-inner">
+  <a class="back" id="back" href="game.html">←</a>
+  <span class="top-title" id="title"></span>
+  <button class="snd" id="snd" type="button" aria-label="sound"></button>
+  <div class="langs" id="langs"></div>
+</div></div>
+
+<div class="wrap">
+  <div class="hud">
+    <b class="lv" id="lv"></b>
+    <div class="dots" id="dots"></div>
+    <div class="time" id="time"><b id="bar"></b></div>
+    <span class="sec" id="sec"></span>
+    <button class="hint" id="hint" type="button"></button>
+  </div>
+  <div class="board">
+    <div class="pic" id="picA"></div>
+    <div class="pic" id="picB"></div>
+  </div>
+  <p class="tip" id="tip"></p>
+</div>
+
+<div class="veil" id="veil"><div class="confetti" id="confetti"></div><div class="sheet">
+  <div class="big" id="vBig"></div>
+  <h2 id="vTitle"></h2>
+  <p id="vText"></p>
+  <div class="btns">
+    <button class="btn" id="vGo" type="button"></button>
+    <a class="btn sub" id="vStores" href="./"></a>
+  </div>
+</div></div>
+
+<script>
+(function () {
+  "use strict";
+  var T = {
+    ko: { title: "틀린 그림 찾기", back: "← 게임", hint: "💡 힌트", tip: "위아래 상차림에서 다른 곳을 찾아 눌러 주세요",
+      sT: "고깃집 한 상 틀린 그림 찾기", sP: "위아래 그림에서 다른 곳을 찾아요. 단계가 오를수록 어려워져요. 잘못 누르면 5초가 줄어요.", go: "시작",
+      lv: "{n}단계", wT: "{n}단계 통과!", wP: "남은 시간 {s}초 · 힌트 {h}번 사용", lT: "시간 끝!", lP: "{n}단계에서 멈췄어요 · 최고 기록 {b}단계",
+      next: "{n}단계 도전", again: "1단계부터 다시", stores: "가게 찾기로 가기" },
+    vi: { title: "Tìm điểm khác nhau", back: "← Trò chơi", hint: "💡 Gợi ý", tip: "Chạm vào những điểm khác nhau giữa hai mâm cơm",
+      sT: "Tìm điểm khác nhau · Mâm cơm Hàn", sP: "Tìm điểm khác nhau giữa hình trên và hình dưới. Càng lên màn càng khó. Chạm sai sẽ bị trừ 5 giây.", go: "Bắt đầu",
+      lv: "Màn {n}", wT: "Qua màn {n}!", wP: "Còn {s} giây · dùng {h} gợi ý", lT: "Hết giờ!", lP: "Dừng ở màn {n} · kỷ lục: màn {b}",
+      next: "Chơi màn {n}", again: "Chơi lại từ màn 1", stores: "Đến trang tìm quán" },
+    en: { title: "Spot the difference", back: "← Games", hint: "💡 Hint", tip: "Tap the differences between the two tables",
+      sT: "Spot the difference · Korean table", sP: "Find the differences between the top and bottom pictures. Each level gets harder. A wrong tap costs 5 seconds.", go: "Start",
+      lv: "Level {n}", wT: "Level {n} cleared!", wP: "{s}s left · {h} hints used", lT: "Time's up!", lP: "Stopped at level {n} · best: level {b}",
+      next: "Go to level {n}", again: "Restart from level 1", stores: "Go to store finder" },
+    zh: { title: "找不同", back: "← 游戏", hint: "💡 提示", tip: "点出上下两桌菜的不同之处",
+      sT: "找不同 · 韩式一桌菜", sP: "找出上下两张图的不同之处，关卡越高越难。点错会扣5秒。", go: "开始",
+      lv: "第{n}关", wT: "第{n}关通过！", wP: "剩余{s}秒 · 用了{h}次提示", lT: "时间到！", lP: "停在第{n}关 · 最高纪录第{b}关",
+      next: "挑战第{n}关", again: "从第1关重新开始", stores: "去找店页面" },
+    ja: { title: "まちがい探し", back: "← ゲーム", hint: "💡 ヒント", tip: "上下の食卓でちがう所をタップしてください",
+      sT: "まちがい探し · 韓国の食卓", sP: "上下の絵でちがう所を探します。ステージが進むほど難しくなります。まちがえると5秒減ります。", go: "スタート",
+      lv: "ステージ{n}", wT: "ステージ{n}クリア！", wP: "残り{s}秒 · ヒント{h}回", lT: "時間切れ！", lP: "ステージ{n}で終了 · 最高記録ステージ{b}",
+      next: "ステージ{n}に挑戦", again: "ステージ1からもう一度", stores: "お店検索へ" }
+  };
+  var LANGS = [["ko", "한국어"], ["vi", "Tiếng Việt"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"]];
+  var qs = new URLSearchParams(location.search);
+  var lang = qs.get("lang");
+  if (!T[lang]) { var nl = (navigator.language || "ko").slice(0, 2); lang = T[nl] ? nl : "ko"; }
+  var t = T[lang];
+  var $ = function (id) { return document.getElementById(id); };
+  document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+  document.title = t.sT;
+
+  /* ───── 음식 그림 (모두 코드로 그림, 가운데가 0,0) — 고깃집 한 상 ───── */
+  var sh = function (rx, ry, dy) { return '<ellipse cx="3" cy="' + dy + '" rx="' + rx + '" ry="' + ry + '" fill="#2a1606" opacity=".45" filter="url(#fS)"/>'; };
+  var at = function (x, y, r, s) { return '<g transform="translate(' + x + " " + y + ") rotate(" + (r || 0) + ')">' + s + "</g>"; };
+  var steam = function (y, w) {
+    return '<g fill="none" stroke="#fff" stroke-width="' + (w || 4.5) + '" stroke-linecap="round" opacity=".72" filter="url(#fM)">' +
+      [-15, 1, 17].map(function (x, i) { return '<path d="M' + x + " " + (y - (i === 1 ? 5 : 0)) + 'q-8 -9 0 -18t0 -18"/>'; }).join("") + "</g>";
+  };
+  var gloss = function (r) { return '<path d="M' + (-r * .78).toFixed(1) + " " + (-r * .38).toFixed(1) + "A" + r + " " + r + " 0 0 1 " + (-r * .2).toFixed(1) + " " + (-r * .84).toFixed(1) + '" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>'; };
+  // 구운 삼겹살 한 점
+  var PORK = '<rect x="-18" y="-7.5" width="36" height="15" rx="5.5" fill="#8a4319"/><rect x="-17" y="-6.5" width="34" height="13" rx="4.8" fill="url(#gPork)"/>' +
+    '<rect x="-15" y="-3" width="30" height="2.5" rx="1.2" fill="#fff3e2"/><rect x="-15" y="2" width="30" height="2" rx="1" fill="#fff3e2" opacity=".9"/>' +
+    '<path d="M-11 -6l5 12M-1 -6l5 12M9 -6l5 12" stroke="#55250b" stroke-width="1.7" opacity=".6"/>' +
+    '<rect x="-13" y="-5.6" width="17" height="1.5" rx=".7" fill="#fff" opacity=".6"/>';
+  // 김치 한 조각
+  var KIM = '<rect x="-10" y="-7" width="20" height="14" rx="5" fill="url(#gKim)"/><rect x="-8" y="-4.5" width="8" height="9" rx="3" fill="#fbe9d2"/>' +
+    '<path d="M2 -5q4 5 0 10M6 -4q3 4 0 8" stroke="#8f1710" stroke-width="1.3" fill="none"/><circle cx="-4" cy="-1" r=".9" fill="#c9281c"/><circle cx="-5.5" cy="2.4" r=".8" fill="#c9281c"/>' +
+    '<rect x="-7" y="-5.7" width="11" height="1.4" rx=".7" fill="#fff" opacity=".5"/>';
+  // 쌈 채소 한 장
+  var leaf = function (edge, body) {
+    var s = "";
+    for (var a = 0; a < 360; a += 30) s += '<circle cx="' + (14 * Math.cos(a * Math.PI / 180)).toFixed(1) + '" cy="' + (19 * Math.sin(a * Math.PI / 180)).toFixed(1) + '" r="7" fill="' + edge + '"/>';
+    return s + '<ellipse rx="14.5" ry="19.5" fill="' + body + '"/>' +
+      '<path d="M0 20V-15M0 9l-8 -7M0 9l8 -7M0 -1l-7 -6M0 -1l7 -6" stroke="#f1fae0" stroke-width="1.3" fill="none" opacity=".85" stroke-linecap="round"/>';
+  };
+  var CHILI = '<path d="M-13 0q13 -8 26 -1q-13 7 -26 1z" fill="#4c9a2a"/><path d="M-9 -1.6q9 -3.6 17 -.6" stroke="#b9e59a" stroke-width="1.2" fill="none" opacity=".8"/><path d="M-13 0l-5 -2.5" stroke="#2f6b1a" stroke-width="2.4" stroke-linecap="round"/>';
+  var TOFU = '<rect x="-8" y="-5" width="16" height="15" rx="3" fill="#dccb9f"/><rect x="-8" y="-8" width="16" height="15" rx="3" fill="#fffaf0"/><rect x="-5.5" y="-6.2" width="7" height="1.6" rx=".8" fill="#fff"/>';
+  var ZUC = '<path d="M-7.5 0a7.5 7.5 0 0 1 15 0z" fill="#e6f2b9" stroke="#4f8f2e" stroke-width="2"/><circle cx="-2" cy="-3" r=".9" fill="#c9d98e"/><circle cx="2.4" cy="-2.6" r=".9" fill="#c9d98e"/>';
+
+  var FOOD = {
+    // 삼겹살 불판
+    grill: { t: "B", r: 60, muts: { pork: 1, garlic: 2, gkimchi: 1 }, draw: function (m) {
+      var slits = "", i;
+      for (i = -4; i <= 4; i++) {
+        var h = Math.sqrt(2500 - i * i * 121);
+        slits += '<path d="M' + (i * 11) + " " + (4 - h).toFixed(1) + "V" + (h - 4).toFixed(1) + '" stroke="#0b0908" stroke-width="3.4" stroke-linecap="round"/>' +
+          '<path d="M' + (i * 11) + " " + (-h * .5).toFixed(1) + "V" + (h * .5).toFixed(1) + '" stroke="#ff7a1a" stroke-width="1.2" opacity=".6"/>';
+      }
+      var pp = [[-22, -22, -18], [15, -28, 12], [-27, 3, 8], [8, -4, -10], [-11, 27, 6]], ps = "";
+      for (i = 0; i < (m.pork ? 4 : 5); i++) ps += at(pp[i][0], pp[i][1], pp[i][2], PORK);
+      var gp = [[37, -9], [41, 5], [33, 19]], gs = "";
+      for (i = 0; i < (m.garlic ? 2 : 3); i++) gs += at(gp[i][0], gp[i][1], i * 40,
+        '<ellipse rx="5.4" ry="4.2" fill="#f7e9c2" stroke="#c9a45c" stroke-width=".8"/><ellipse cx="1" cy=".7" rx="2.3" ry="1.6" fill="#c98a3c" opacity=".75"/><ellipse cx="-1.6" cy="-1.4" rx="1.6" ry=".8" fill="#fff" opacity=".7"/>');
+      return sh(63, 59, 7) + '<circle r="60" fill="url(#gIron)"/><circle r="56.5" fill="none" stroke="#7b6e64" stroke-width="1.3" opacity=".75"/><circle r="52" fill="#262120"/>' +
+        slits + '<circle r="52" fill="url(#gGloss)"/>' + (m.gkimchi ? "" : at(21, 37, 20, KIM)) + ps + gs + gloss(58) + steam(-52, 5.5);
+    } },
+    // 쌈 채소 바구니
+    ssam: { t: "M", r: 44, muts: { chili: 1, leaf: 1 }, draw: function (m) {
+      return sh(46, 43, 6) + '<circle r="44" fill="url(#gBasket)"/><circle r="40" fill="none" stroke="#6d4318" stroke-width="2" stroke-dasharray="5 4"/>' +
+        '<circle r="35" fill="#7a4f22"/><circle r="35" fill="none" stroke="#5c3a14" stroke-width="2" stroke-dasharray="4 5"/>' +
+        at(-13, -9, -35, leaf("#55a437", "#84c95a")) + at(13, -12, 28, leaf("#4f9c33", "#7cc254")) + at(-12, 11, -150, leaf("#5fae3e", "#93d368")) +
+        at(10, 6, 62, m.leaf ? leaf("#7b3d7d", "#9a57a0") : leaf("#2c7238", "#3f9550")) +
+        '<g transform="translate(-9 25) rotate(-10) scale(1.2)">' + CHILI + "</g>" + (m.chili ? "" : '<g transform="translate(9 31) rotate(8) scale(1.2)">' + CHILI.replace("#4c9a2a", "#d4301f").replace("#b9e59a", "#ffb3a6") + "</g>");
+    } },
+    // 김치 접시
+    kimchi: { t: "S", r: 30, muts: { ring: 1, less: 2 }, draw: function (m) {
+      var pos = [[-10, -7, -20], [9, -8, 15], [-7, 9, 12], [10, 9, -18]], s = "";
+      for (var i = 0; i < (m.less ? 3 : 4); i++) s += at(pos[i][0], pos[i][1], pos[i][2], KIM);
+      return sh(31, 29, 5) + '<circle r="29" fill="url(#gPlate)" stroke="#cfc7b8" stroke-width="1.2"/>' +
+        '<circle r="23" fill="none" stroke="' + (m.ring ? "#e08878" : "#86aeda") + '" stroke-width="2.2"/>' + s + gloss(27);
+    } },
+    // 쌈장 종지
+    jang: { t: "X", r: 21, muts: { paste: 1, sesame: 2 }, draw: function (m) {
+      var se = "";
+      if (!m.sesame) [[-4, -3, 20], [3, -5, -30], [5, 2, 60], [-2, 4, -10]].forEach(function (p) { se += '<ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="1.9" ry="1.1" fill="#f8ecc4" transform="rotate(' + p[2] + " " + p[0] + " " + p[1] + ')"/>'; });
+      return sh(21, 19, 4) + '<circle r="19" fill="url(#gPlate)" stroke="#cfc7b8" stroke-width="1.2"/><circle r="14.5" fill="#ece5d6"/>' +
+        '<path d="M-11 -2c0-9 9-12 14-9 8-1 11 7 8 13-2 8-12 10-18 6-4-2-5-6-4-10z" fill="' + (m.paste ? "#d12a1c" : "#a2542a") + '"/>' +
+        '<path d="M-7 -5q5 -6 11 -3" stroke="#fff" stroke-width="1.8" fill="none" opacity=".45" stroke-linecap="round"/>' + se;
+    } },
+    // 된장찌개 뚝배기
+    stew: { t: "M", r: 48, muts: { tofu: 1, steam: 1, zuc: 2 }, draw: function (m) {
+      var tf = [[-14, -7, -12], [10, -12, 9], [-1, 13, 18]], zc = [[18, 9, -30], [-21, 12, 25], [4, -25, 170]], s = "", i;
+      for (i = 0; i < (m.zuc ? 2 : 3); i++) s += at(zc[i][0], zc[i][1], zc[i][2], ZUC);
+      for (i = 0; i < (m.tofu ? 2 : 3); i++) s += at(tf[i][0], tf[i][1], tf[i][2], TOFU);
+      return sh(50, 46, 6) + '<rect x="-57" y="-9" width="15" height="18" rx="6" fill="#161210"/><rect x="42" y="-9" width="15" height="18" rx="6" fill="#161210"/>' +
+        '<circle r="46" fill="url(#gIron)"/><circle r="39.5" fill="#33271d"/><circle r="36.5" fill="#b9792c"/><circle r="36.5" fill="url(#gSoup)"/>' +
+        '<circle cx="-24" cy="-12" r="2.6" fill="none" stroke="#f3d79a" stroke-width="1" opacity=".8"/><circle cx="26" cy="-8" r="1.9" fill="none" stroke="#f3d79a" stroke-width="1" opacity=".8"/><circle cx="12" cy="26" r="2.2" fill="none" stroke="#f3d79a" stroke-width="1" opacity=".8"/>' +
+        s + '<circle cx="23" cy="-20" r="3.5" fill="#c2241b"/><circle cx="23" cy="-20" r="1.3" fill="#f6d7a8"/><ellipse cx="-8" cy="27" rx="5.5" ry="2.6" fill="#5fb552" transform="rotate(-20 -8 27)"/>' +
+        gloss(44) + (m.steam ? "" : steam(-38));
+    } },
+    // 공깃밥
+    rice: { t: "S", r: 34, muts: { bowl: 1, beans: 2 }, draw: function (m) {
+      var g = "", s = "";
+      [[-9, -6], [6, -10], [-2, 4], [11, 3], [-13, 6], [3, -2], [-5, 13], [9, 12], [-14, -4], [0, -14]].forEach(function (p, i) {
+        g += '<ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="3.5" ry="1.7" fill="#e8dfcb" transform="rotate(' + (i * 37) + " " + p[0] + " " + p[1] + ')"/>';
+      });
+      if (!m.beans) [[-4, -4], [6, 1], [-1, 9], [9, -8], [-11, 3]].forEach(function (p) {
+        s += '<ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="2.7" ry="2.1" fill="#3a2540"/><circle cx="' + (p[0] - .8) + '" cy="' + (p[1] - .7) + '" r=".7" fill="#fff" opacity=".6"/>';
+      });
+      return sh(35, 33, 5) + '<circle r="33" fill="' + (m.bowl ? "url(#gBrass)" : "url(#gSteel)") + '" stroke="' + (m.bowl ? "#a17c27" : "#88939c") + '" stroke-width="1.4"/>' +
+        '<circle r="27" fill="' + (m.bowl ? "#f0dca2" : "#e9eef2") + '"/><circle r="24" fill="#fffdf8"/><circle r="24" fill="url(#gSoup)"/>' + g + s + gloss(31);
+    } },
+    // 소주병과 잔
+    soju: { t: "T", r: 46, muts: { cap: 1, mark: 1, glass: 2 }, draw: function (m) {
+      return sh(22, 8, 46) +
+        '<rect x="-6.5" y="-50" width="13" height="30" rx="3" fill="url(#gBottle)"/><path d="M-6.5 -22h13l7 10v52a5 5 0 0 1-5 5h-17a5 5 0 0 1-5-5v-52z" fill="url(#gBottle)"/>' +
+        '<rect x="-7.5" y="-56" width="15" height="9" rx="2.5" fill="' + (m.cap ? "#2f6fd4" : "#d43a2f") + '"/><rect x="-5.5" y="-54.5" width="4" height="6" rx="1.5" fill="#fff" opacity=".35"/>' +
+        '<rect x="-12.5" y="-3" width="25" height="29" rx="2.5" fill="#fbfaf4"/><circle cy="8" r="6.5" fill="' + (m.mark ? "#d43a2f" : "#2f8a4a") + '"/>' +
+        '<rect x="-8" y="18" width="16" height="2.2" rx="1.1" fill="#9aa39a"/><rect x="-5" y="21.6" width="10" height="1.6" rx=".8" fill="#c3cac3"/>' +
+        '<rect x="-10.5" y="-18" width="3" height="58" rx="1.5" fill="#fff" opacity=".42"/><rect x="8" y="-10" width="1.6" height="46" rx=".8" fill="#fff" opacity=".22"/>' +
+        '<g transform="translate(-31 31)"><ellipse cx="2" cy="12" rx="10" ry="3" fill="#2a1606" opacity=".3"/>' +
+        '<path d="M-9 -9h18l-3 20h-12z" fill="#eef7fa" stroke="#93adb8" stroke-width="1.2" opacity=".95"/>' +
+        (m.glass ? "" : '<path d="M-7.7 -1h15.4l-1.7 11h-12z" fill="#b5e0ee"/>') + '<path d="M-6 -7l1.4 15" stroke="#fff" stroke-width="1.5" opacity=".8"/></g>';
+    } },
+    // 물냉면
+    naeng: { t: "M", r: 44, muts: { egg: 1, cuc: 2, ice: 2 }, draw: function (m) {
+      var n = "", cu = "", ic = "", i, cp = [[-17, -13, -30], [-9, -19, -18], [-23, -5, -44]], ip = [[23, 15], [-21, 19]];
+      for (i = 0; i < 5; i++) n += '<ellipse cx="' + (i % 2 ? 2 : -2) + '" cy="' + (i * 1.5 - 1) + '" rx="' + (24 - i * 4) + '" ry="' + (17 - i * 3) + '" fill="none" stroke="' + (i % 2 ? "#8d7355" : "#a98e6c") + '" stroke-width="3.2"/>';
+      for (i = 0; i < (m.cuc ? 2 : 3); i++) cu += at(cp[i][0], cp[i][1], cp[i][2], '<rect x="-8" y="-1.9" width="16" height="3.8" rx="1.9" fill="#c5e8a0" stroke="#3f8a2c" stroke-width="1"/>');
+      for (i = 0; i < (m.ice ? 1 : 2); i++) ic += at(ip[i][0], ip[i][1], i ? 20 : -15, '<rect x="-5.5" y="-5.5" width="11" height="11" rx="2.5" fill="#eaf7fd" stroke="#9ccbe0" stroke-width="1" opacity=".92"/><path d="M-3 -2.6h4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>');
+      return sh(46, 43, 6) + '<circle r="44" fill="url(#gSteel)" stroke="#88939c" stroke-width="1.4"/><circle r="38.5" fill="#c9d1d8"/><circle r="36" fill="#dccb9c"/><circle r="36" fill="url(#gSoup)"/>' +
+        ic + n + cu + at(17, -13, 18, '<rect x="-9" y="-3.2" width="18" height="6.4" rx="2.2" fill="#fcf7e8" stroke="#d6cba6" stroke-width=".8"/>') +
+        (m.egg ? "" : at(4, 4, -15, '<ellipse rx="10.5" ry="8.4" fill="#fffdf6" stroke="#ddd5bf" stroke-width=".9"/><circle cx="1" r="4.8" fill="url(#gYolk)"/><circle cx="-.6" cy="-1.6" r="1.3" fill="#fff" opacity=".75"/>')) + gloss(42);
+    } },
+    // 계란찜
+    egg: { t: "M", r: 42, muts: { steam: 1, carrot: 1, onion: 2 }, draw: function (m) {
+      var s = "", i, op = [[-12, -8], [8, -14], [14, 6], [-6, 12], [-18, 6], [2, -2]], cp = [[-2, -17], [17, -4], [-15, -1], [4, 15]];
+      for (i = 0; i < (m.onion ? 4 : 6); i++) s += '<rect x="' + (op[i][0] - 2.8) + '" y="' + (op[i][1] - 1.4) + '" width="5.6" height="2.8" rx="1.4" fill="#4aa046" transform="rotate(' + (i * 50) + " " + op[i][0] + " " + op[i][1] + ')"/>';
+      if (!m.carrot) for (i = 0; i < 4; i++) s += '<rect x="' + (cp[i][0] - 2) + '" y="' + (cp[i][1] - 2) + '" width="4" height="4" rx="1.1" fill="#ee7f22"/>';
+      return sh(44, 41, 6) + '<rect x="-52" y="-8" width="14" height="16" rx="5" fill="#161210"/><rect x="38" y="-8" width="14" height="16" rx="5" fill="#161210"/>' +
+        '<circle r="42" fill="url(#gIron)"/><circle r="36" fill="#33271d"/><circle r="34" fill="url(#gEgg)"/>' +
+        '<path d="M-30 8q5 14 19 20M30 4q-3 14 -17 22" stroke="#cf8f22" stroke-width="1.5" fill="none" opacity=".5"/>' +
+        '<path d="M-22 -11q8 -13 23 -14" stroke="#fff" stroke-width="3.2" fill="none" opacity=".55" stroke-linecap="round"/>' + s + gloss(40) + (m.steam ? "" : steam(-34));
+    } },
+    // 파절이
+    paj: { t: "S", r: 30, muts: { plate: 1, flake: 2 }, draw: function (m) {
+      var s = "", f = "", i, col = ["#3f9a3a", "#72c45c", "#eef6d8", "#2f7d32"];
+      for (i = 0; i < 14; i++) s += '<path d="M-15 0q15 ' + (i % 2 ? -9 : 9) + ' 30 0" stroke="' + col[i % 4] + '" stroke-width="2.4" fill="none" stroke-linecap="round" transform="rotate(' + (i * 26) + ") translate(0 " + ((i % 5) - 2) * 3 + ')"/>';
+      if (!m.flake) [[-6, -4], [5, -7], [8, 4], [-3, 7], [0, -1], [-10, 3], [11, -3]].forEach(function (p) { f += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="1.4" fill="#d4301f"/>'; });
+      return sh(31, 29, 5) + '<circle r="29" fill="' + (m.plate ? "url(#gIron)" : "url(#gPlate)") + '" stroke="' + (m.plate ? "#0c0a09" : "#cfc7b8") + '" stroke-width="1.2"/>' +
+        '<circle r="22.5" fill="' + (m.plate ? "#2a2421" : "#f1ece1") + '"/>' + s + f + gloss(27);
+    } },
+    // 마늘·고추 종지
+    side: { t: "X", r: 21, muts: { red: 1, garlic: 2 }, draw: function (m) {
+      var s = "", i, gp = [[-6, -5], [5, -7], [-7, 5], [0, 1]], cp = [[8, 5], [10, -2], [2, 9]];
+      for (i = 0; i < (m.garlic ? 3 : 4); i++) s += at(gp[i][0], gp[i][1], i * 35, '<ellipse rx="4.4" ry="3.1" fill="#fbf3d6" stroke="#c9b06e" stroke-width=".8"/><ellipse rx="1.4" ry=".8" fill="#e0cd92"/>');
+      for (i = 0; i < 3; i++) s += '<circle cx="' + cp[i][0] + '" cy="' + cp[i][1] + '" r="3" fill="#f4f7e4" stroke="' + (m.red && i === 0 ? "#d4301f" : "#3f9a3a") + '" stroke-width="2"/>';
+      return sh(21, 19, 4) + '<circle r="19" fill="url(#gPlate)" stroke="#cfc7b8" stroke-width="1.2"/><circle r="14.5" fill="#ece5d6"/>' + s;
+    } },
+    // 맥주병과 잔
+    beer: { t: "T", r: 46, muts: { cap: 1, foam: 1, mark: 2 }, draw: function (m) {
+      return sh(22, 8, 46) + '<rect x="-6" y="-50" width="12" height="26" rx="3" fill="url(#gBeer)"/><path d="M-6 -26h12l8 14v52a5 5 0 0 1-5 5h-18a5 5 0 0 1-5-5v-52z" fill="url(#gBeer)"/>' +
+        '<rect x="-7" y="-56" width="14" height="8" rx="2.5" fill="' + (m.cap ? "#d43a2f" : "#e3b93c") + '"/><rect x="-5" y="-54.6" width="4" height="5" rx="1.5" fill="#fff" opacity=".4"/>' +
+        '<rect x="-13" y="-4" width="26" height="28" rx="3" fill="#f6e7b4"/><path d="M0 2l2.6 5.4 5.8.6-4.4 4 1.3 5.8L0 14.8l-5.3 3 1.3-5.8-4.4-4 5.8-.6z" fill="' + (m.mark ? "#2f6fd4" : "#c2241b") + '"/>' +
+        '<rect x="-11" y="-20" width="3" height="60" rx="1.5" fill="#fff" opacity=".32"/>' +
+        '<g transform="translate(-32 26)"><ellipse cx="2" cy="17" rx="11" ry="3" fill="#2a1606" opacity=".3"/><path d="M-10 -14h20l-2 30h-16z" fill="#f2c230" stroke="#b9891a" stroke-width="1.2"/>' +
+        (m.foam ? "" : '<path d="M-10.6 -14h21.2l-.6 8q-5 3-10 0t-10 0z" fill="#fffdf5"/><circle cx="-6" cy="-15" r="3.4" fill="#fffdf5"/><circle cx="0" cy="-16.5" r="4" fill="#fffdf5"/><circle cx="6" cy="-15" r="3.4" fill="#fffdf5"/>') +
+        '<path d="M-7 -8l1 20" stroke="#fff" stroke-width="1.6" opacity=".6"/></g>';
+    } },
+    // 수저
+    spoon: { t: "U", r: 34, muts: { one: 1, flip: 1 }, draw: function (m) {
+      var sp = "<g" + (m.flip ? ' transform="rotate(180 -9 0)"' : "") + '><rect x="-11.2" y="-34" width="4.4" height="92" rx="2.2" fill="url(#gSteel)" stroke="#88939c" stroke-width=".6"/>' +
+        '<ellipse cx="-9" cy="-46" rx="9.5" ry="14" fill="url(#gSteel)" stroke="#88939c"/><ellipse cx="-11.5" cy="-50" rx="3.4" ry="6" fill="#fff" opacity=".65"/></g>';
+      return '<rect x="-21" y="-62" width="42" height="124" rx="5" fill="#2a1606" opacity=".3" filter="url(#fS)"/><rect x="-21" y="-64" width="42" height="126" rx="5" fill="#f6efe1"/>' +
+        '<rect x="-18" y="-61" width="36" height="120" rx="3" fill="none" stroke="#c94a3c" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>' + sp +
+        '<rect x="6" y="-58" width="3.6" height="114" rx="1.8" fill="url(#gSteel)" stroke="#88939c" stroke-width=".6"/>' +
+        (m.one ? "" : '<rect x="12.6" y="-58" width="3.6" height="114" rx="1.8" fill="url(#gSteel)" stroke="#88939c" stroke-width=".6"/>');
+    } }
+  };
+
+  // 한 상 차림 자리 (그림 크기 360×300). 앞에서부터 쓰므로 쉬운 단계는 앞 6자리만 쓴다.
+  // t: B 불판 · M 큰 그릇 · S 작은 접시 · X 종지 · T 병과 잔 · U 수저
+  var LAYOUTS = [
+    [{ t: "B", x: 180, y: 112 }, { t: "M", x: 58, y: 66 }, { t: "M", x: 68, y: 226 }, { t: "S", x: 236, y: 244 },
+     { t: "T", x: 330, y: 198 }, { t: "S", x: 306, y: 46 }, { t: "X", x: 284, y: 112 }, { t: "U", x: 156, y: 236, s: .9 }],
+    [{ t: "B", x: 104, y: 118 }, { t: "M", x: 252, y: 64 }, { t: "M", x: 214, y: 224 }, { t: "S", x: 54, y: 248 },
+     { t: "T", x: 334, y: 150 }, { t: "S", x: 312, y: 258 }, { t: "X", x: 172, y: 34 }, { t: "U", x: 136, y: 240, s: .9 }]
+  ];
+  var DEFS = "<defs>" +
+    '<filter id="fS" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.2"/></filter>' +
+    '<filter id="fM" x="-60%" y="-30%" width="220%" height="160%"><feGaussianBlur stdDeviation="1.5"/></filter>' +
+    '<linearGradient id="gWood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b47a45"/><stop offset=".5" stop-color="#a66c3a"/><stop offset="1" stop-color="#8f5a2c"/></linearGradient>' +
+    '<radialGradient id="gVig" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#2a1606" stop-opacity="0"/><stop offset="1" stop-color="#2a1606" stop-opacity=".5"/></radialGradient>' +
+    '<radialGradient id="gIron" cx=".35" cy=".28"><stop offset="0" stop-color="#5a4f49"/><stop offset=".6" stop-color="#2a2320"/><stop offset="1" stop-color="#120e0c"/></radialGradient>' +
+    '<radialGradient id="gGloss" cx=".3" cy=".25" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></radialGradient>' +
+    '<radialGradient id="gSoup" cx=".35" cy=".3"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></radialGradient>' +
+    '<linearGradient id="gPork" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4bb93"/><stop offset="1" stop-color="#d07f4e"/></linearGradient>' +
+    '<linearGradient id="gKim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ee4a35"/><stop offset="1" stop-color="#b31c12"/></linearGradient>' +
+    '<radialGradient id="gBasket" cx=".4" cy=".35"><stop offset="0" stop-color="#c9924f"/><stop offset="1" stop-color="#8f5d28"/></radialGradient>' +
+    '<radialGradient id="gPlate" cx=".4" cy=".35"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e6dfd2"/></radialGradient>' +
+    '<linearGradient id="gBottle" x1="0" x2="1"><stop offset="0" stop-color="#27803f"/><stop offset=".45" stop-color="#58bd72"/><stop offset="1" stop-color="#226f38"/></linearGradient>' +
+    '<linearGradient id="gSteel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f8fa"/><stop offset=".5" stop-color="#bcc6ce"/><stop offset="1" stop-color="#e6ebef"/></linearGradient>' +
+    '<linearGradient id="gBrass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4dd92"/><stop offset=".5" stop-color="#c99d3c"/><stop offset="1" stop-color="#eed382"/></linearGradient>' +
+    '<radialGradient id="gYolk" cx=".35" cy=".3"><stop offset="0" stop-color="#ffd257"/><stop offset="1" stop-color="#f59b0b"/></radialGradient>' +
+    '<radialGradient id="gEgg" cx=".38" cy=".32"><stop offset="0" stop-color="#fff3b4"/><stop offset=".7" stop-color="#f8cf58"/><stop offset="1" stop-color="#e9a52c"/></radialGradient>' +
+    '<linearGradient id="gBeer" x1="0" x2="1"><stop offset="0" stop-color="#4f2b0c"/><stop offset=".45" stop-color="#91581f"/><stop offset="1" stop-color="#432308"/></linearGradient>' +
+    "</defs>";
+  function table() {
+    var g = "", i;
+    for (i = 1; i < 4; i++) g += '<path d="M0 ' + (i * 75) + 'H360" stroke="#5e3716" stroke-width="1.6" opacity=".5"/><path d="M0 ' + (i * 75 + 1.6) + 'H360" stroke="#e0b07a" stroke-width=".8" opacity=".35"/>';
+    for (i = 0; i < 12; i++) g += '<path d="M' + ((i * 97) % 300 - 20) + " " + (10 + i * 24.5) + 'q60 -6 120 0t120 0" stroke="#6b401b" stroke-width="1" fill="none" opacity=".28"/>';
+    return '<rect width="360" height="300" fill="url(#gWood)"/>' + g +
+      '<ellipse cx="318" cy="268" rx="7" ry="4" fill="none" stroke="#5e3716" stroke-width="1.2" opacity=".4"/><rect width="360" height="300" fill="url(#gVig)"/>';
+  }
+  function scene(diff) {
+    var s = '<svg viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg" role="img">' + DEFS + table();
+    cur.forEach(function (p, i) {
+      var m = {}; if (diff && diff[i]) m[diff[i]] = true;
+      s += '<g transform="translate(' + p.x + " " + p.y + ")" + (p.s ? " scale(" + p.s + ")" : "") + (p.flip ? " scale(-1 1)" : "") + '">' + FOOD[p.f].draw(m) + "</g>";
+    });
+    return s + '<g class="marks"></g></svg>';
+  }
+
+  /* ───── 게임 진행 ───── */
+  var PENALTY = 5, level = 1, best = 0, cur = [], cf, sound = true;
+  var diff, found, left, hints, timer, playing = false, usedHints, nextLevel = 1;
+  var picA = $("picA"), picB = $("picB");
+  var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
+  var shuffle = function (a) { return a.slice().sort(function () { return Math.random() - .5; }); };
+  try { best = +localStorage.getItem("qm_spot_best") || 0; sound = localStorage.getItem("qm_spot_mute") !== "1"; } catch (e) {}
+
+  // 단계별 설정: 음식 수 · 틀린 곳 수 · 시간 · 작은 차이를 쓸지(0 안 씀, 1 섞음, 2 먼저 씀)
+  function conf(lv) {
+    if (lv === 1) return { n: 6, need: 3, time: 60, hard: 0 };
+    if (lv === 2) return { n: 8, need: 4, time: 75, hard: 0 };
+    if (lv === 3) return { n: 8, need: 5, time: 90, hard: 1 };
+    return { n: 8, need: 5, time: Math.max(50, 90 - (lv - 3) * 10), hard: 2 };
+  }
+
+  // 소리 (파일 없이 브라우저가 내는 짧은 음)
+  var AC;
+  function beep(f, d, type, when, vol) {
+    if (!sound) return;
+    try {
+      AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+      var o = AC.createOscillator(), g = AC.createGain(), t0 = AC.currentTime + (when || 0);
+      o.type = type || "sine"; o.frequency.value = f;
+      g.gain.setValueAtTime(vol || .12, t0); g.gain.exponentialRampToValueAtTime(.001, t0 + d);
+      o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0 + d);
+    } catch (e) {}
+  }
+
+  function newBoard() {
+    cf = conf(level);
+    var lay = pick(LAYOUTS), mirror = Math.random() < .5, used = {};
+    cur = lay.slice(0, cf.n).map(function (sl) {
+      var names = shuffle(Object.keys(FOOD).filter(function (k) { return FOOD[k].t === sl.t && !used[k]; }));
+      used[names[0]] = true;
+      return { f: names[0], x: mirror ? 360 - sl.x : sl.x, y: sl.y, s: sl.s, flip: mirror && sl.t === "T" };
+    });
+    diff = {};
+    shuffle(cur.map(function (_, i) { return i; })).slice(0, cf.need).forEach(function (i) {
+      var mu = FOOD[cur[i].f].muts, keys = Object.keys(mu);
+      var easy = keys.filter(function (k) { return mu[k] === 1; }), hard = keys.filter(function (k) { return mu[k] === 2; });
+      diff[i] = pick(cf.hard === 0 ? easy : (cf.hard === 2 && hard.length ? hard : keys));
+    });
+    var flip = Math.random() < .5;   // 어느 쪽이 바뀐 그림인지 매번 다르게
+    picA.innerHTML = scene(flip ? diff : null); picB.innerHTML = scene(flip ? null : diff);
+    found = {}; left = cf.time; hints = 2; usedHints = 0; hud();
+  }
+  function hud() {
+    var n = Object.keys(found).length, d = "";
+    for (var i = 0; i < cf.need; i++) d += '<i class="' + (i < n ? "on" : "") + '"></i>';
+    $("dots").innerHTML = d;
+    $("lv").textContent = t.lv.replace("{n}", level);
+    $("bar").style.width = Math.max(0, left / cf.time * 100) + "%";
+    $("time").classList.toggle("low", left <= 15);
+    $("sec").textContent = Math.max(0, Math.ceil(left));
+    $("hint").textContent = t.hint + " " + hints;
+    $("hint").disabled = hints < 1 || !playing;
+    $("snd").textContent = sound ? "🔊" : "🔇";
+  }
+  function mark(html) {
+    [picA, picB].forEach(function (p) { p.querySelector(".marks").insertAdjacentHTML("beforeend", html); });
+  }
+  function tap(e) {
+    if (!playing) return;
+    var svg = e.currentTarget.querySelector("svg"), b = svg.getBoundingClientRect();
+    var x = (e.clientX - b.left) * 360 / b.width, y = (e.clientY - b.top) * 300 / b.height, hit = -1;
+    Object.keys(diff).forEach(function (i) {
+      var p = cur[i], r = FOOD[p.f].r + 6;
+      if (!found[i] && Math.hypot(x - p.x, y - p.y) <= r) hit = i;
+    });
+    if (hit < 0) {
+      left -= PENALTY; e.currentTarget.classList.remove("shake"); void e.currentTarget.offsetWidth; e.currentTarget.classList.add("shake");
+      $("sec").classList.remove("hit"); void $("sec").offsetWidth; $("sec").classList.add("hit");
+      e.currentTarget.querySelector(".marks").insertAdjacentHTML("beforeend",
+        '<path class="miss" d="M' + (x - 9) + " " + (y - 9) + "l18 18m0 -18l-18 18" + '"/>');
+      beep(150, .22, "square", 0, .06);
+      if (navigator.vibrate) navigator.vibrate(60);
+      hud(); if (left <= 0) end(false); return;
+    }
+    found[hit] = true;
+    var p = cur[hit], r = FOOD[p.f].r + 3, rays = "";
+    for (var a = 0; a < 360; a += 45) rays += '<path d="M0 ' + (-r - 5) + "V" + (-r - 15) + '" transform="rotate(' + a + ')"/>';
+    mark('<circle class="ring" cx="' + p.x + '" cy="' + p.y + '" r="' + r + '"/><g transform="translate(' + p.x + " " + p.y + ')"><g class="burst">' + rays + "</g></g>");
+    beep(880, .12); beep(1320, .2, "sine", .09);
+    hud();
+    if (Object.keys(found).length >= cf.need) end(true);
+  }
+  function hint() {
+    if (!playing || hints < 1) return;
+    var rest = Object.keys(diff).filter(function (i) { return !found[i]; }); if (!rest.length) return;
+    hints--; usedHints++;
+    var p = cur[pick(rest)];
+    mark('<circle class="glow" cx="' + p.x + '" cy="' + p.y + '" r="' + (FOOD[p.f].r + 8) + '"/>');
+    setTimeout(function () { document.querySelectorAll(".glow").forEach(function (g) { g.remove(); }); }, 1600);
+    beep(660, .15); hud();
+  }
+  function start() {
+    level = nextLevel; newBoard(); playing = true; $("veil").hidden = true; $("confetti").innerHTML = ""; hud();
+    clearInterval(timer);
+    timer = setInterval(function () { left -= .25; hud(); if (left <= 0) end(false); }, 250);
+  }
+  function confetti() {
+    var h = "", col = ["#e0452b", "#f2a03d", "#ffd60a", "#3f9d58", "#2f6fd4", "#fff"];
+    for (var i = 0; i < 26; i++) h += '<i style="left:' + (Math.random() * 100).toFixed(1) + "%;background:" + col[i % 6] + ";animation-delay:" + (Math.random() * .5).toFixed(2) + "s;animation-duration:" + (1.4 + Math.random()).toFixed(2) + 's"></i>';
+    $("confetti").innerHTML = h;
+  }
+  function end(win) {
+    if (!playing) return;
+    playing = false; clearInterval(timer); hud();
+    if (win) {
+      if (level > best) { best = level; try { localStorage.setItem("qm_spot_best", best); } catch (e) {} }
+      [523, 659, 784, 1047].forEach(function (f, i) { beep(f, .22, "triangle", .12 * i + .15, .13); });
+    } else {
+      Object.keys(diff).forEach(function (i) {   // 못 찾은 곳을 노란 점선 원으로 알려 줌
+        if (!found[i]) { var p = cur[i]; mark('<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (FOOD[p.f].r + 3) + '" fill="none" stroke="#ffd60a" stroke-width="4" stroke-dasharray="7 5"/>'); }
+      });
+      beep(300, .3, "sawtooth", 0, .05); beep(200, .45, "sawtooth", .25, .05);
+    }
+    nextLevel = win ? level + 1 : 1;
+    setTimeout(function () {
+      $("vBig").textContent = win ? "🎉" : "⏰";
+      $("vTitle").textContent = win ? t.wT.replace("{n}", level) : t.lT;
+      $("vText").textContent = win ? t.wP.replace("{s}", Math.ceil(left)).replace("{h}", usedHints)
+        : t.lP.replace("{n}", level).replace("{b}", best);
+      $("vGo").textContent = win ? t.next.replace("{n}", level + 1) : t.again;
+      $("veil").hidden = false; if (win) confetti();
+    }, win ? 800 : 1700);
+  }
+
+  /* ───── 화면 글 ───── */
+  $("title").textContent = t.title; $("back").textContent = t.back; $("back").href = "game.html?lang=" + lang;
+  $("tip").textContent = t.tip;
+  $("langs").innerHTML = LANGS.map(function (l) {
+    return '<button type="button" data-lang="' + l[0] + '" aria-pressed="' + (l[0] === lang) + '">' + l[1] + "</button>";
+  }).join("");
+  $("langs").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (b) location.search = "?lang=" + b.dataset.lang;
+  });
+  $("vBig").textContent = "🔍"; $("vTitle").textContent = t.sT; $("vText").textContent = t.sP;
+  $("vGo").textContent = t.go; $("vStores").textContent = t.stores; $("vStores").href = "./?lang=" + lang;
+  $("vGo").addEventListener("click", start);
+  $("hint").addEventListener("click", hint);
+  $("snd").addEventListener("click", function () {
+    sound = !sound; try { localStorage.setItem("qm_spot_mute", sound ? "0" : "1"); } catch (e) {}
+    hud(); beep(880, .1);
+  });
+  picA.addEventListener("click", tap); picB.addEventListener("click", tap);
+  newBoard();
+})();
+</script>
+<!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
+<!-- analytics:end -->
+</body>
+</html>

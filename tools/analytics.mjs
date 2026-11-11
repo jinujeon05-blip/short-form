@@ -28,7 +28,7 @@ for (const d of fs.readdirSync(path.join(root, 'restaurants'))) {
   const f = path.join(root, 'restaurants', d, 'index.html');
   if (fs.existsSync(f)) files.push(f);
 }
-if (!ONLY.length) files.push(path.join(root, 'sales/index.html'), path.join(root, 'sales/stores/index.html'), path.join(root, 'sales/stores/game.html'));
+if (!ONLY.length) files.push(path.join(root, 'sales/index.html'), path.join(root, 'sales/stores/index.html'), path.join(root, 'sales/stores/game.html'), path.join(root, 'sales/stores/spot.html'));
 
 let n = 0;
 for (const f of files) {

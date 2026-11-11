@@ -244,8 +244,8 @@ window.T = {
     popular: "추천",
     plans: {
       basic: ["기본형", ["5개 언어 메뉴판", "기존 메뉴판 사진·로고 활용", "테이블 QR 카드 PDF (A6 · A4)", "SNS 홍보 이미지 2종", "와이파이 · 전화 · 지도 버튼"]],
-      premium: ["프리미엄", ["기본형 전체 포함", "가게 분위기 맞춤 디자인", "음식 사진 정리 · 배치", "시안 수정 포함"]],
-      monthly: ["월 관리", ["메뉴판 사이트 유지", "사장님 수정 화면 (품절·가격·사진)", "직접 수정은 횟수 제한 없음 · 맡기는 수정은 월 4회까지", "방문 리포트", "연 결제 시 {yearly} (2개월 무료)"]],
+      premium: ["프리미엄", ["기본형 전체 포함", "가게 분위기 맞춤 디자인", "음식 사진 정리 · 배치", "시안 수정 포함", "가게 SNS 홍보영상 2회 제작"]],
+      monthly: ["월 관리", ["메뉴판 사이트 유지", "사장님 수정 화면 (품절·가격·사진)", "직접 수정은 횟수 제한 없음 · 맡기는 수정은 월 2회까지", "방문 리포트", "연 결제 시 {yearly} (2개월 무료)"]],
     },
     optTitle: "추가 옵션",
     opts: [
@@ -318,8 +318,8 @@ window.T = {
     popular: "Đề xuất",
     plans: {
       basic: ["Cơ bản", ["Thực đơn 5 ngôn ngữ", "Dùng ảnh và logo từ thực đơn cũ", "File PDF thẻ QR để bàn (A6 · A4)", "2 hình ảnh quảng bá SNS","Nút Wi-Fi · Gọi điện · Bản đồ"]],
-      premium: ["Cao cấp", ["Bao gồm toàn bộ gói Cơ bản", "Thiết kế theo phong cách quán", "Chỉnh sửa và sắp xếp ảnh món ăn", "Bao gồm chỉnh sửa bản mẫu"]],
-      monthly: ["Bảo trì hàng tháng", ["Duy trì trang thực đơn", "Trang chỉnh sửa cho chủ quán (hết món · giá · ảnh)", "Tự sửa không giới hạn · nhờ chúng tôi sửa tối đa 4 lần/tháng", "Báo cáo lượt xem", "Trả theo năm {yearly} (miễn phí 2 tháng)"]],
+      premium: ["Cao cấp", ["Bao gồm toàn bộ gói Cơ bản", "Thiết kế theo phong cách quán", "Chỉnh sửa và sắp xếp ảnh món ăn", "Bao gồm chỉnh sửa bản mẫu", "Làm 2 video quảng bá quán cho mạng xã hội"]],
+      monthly: ["Bảo trì hàng tháng", ["Duy trì trang thực đơn", "Trang chỉnh sửa cho chủ quán (hết món · giá · ảnh)", "Tự sửa không giới hạn · nhờ chúng tôi sửa tối đa 2 lần/tháng", "Báo cáo lượt xem", "Trả theo năm {yearly} (miễn phí 2 tháng)"]],
     },
     optTitle: "Tùy chọn thêm",
     opts: [
@@ -392,8 +392,8 @@ window.T = {
     popular: "Popular",
     plans: {
       basic: ["Basic", ["5-language menu", "Uses photos & logo from your current menu", "Table QR card PDFs (A6 · A4)", "2 social media promo images","Wi-Fi · Call · Map buttons"]],
-      premium: ["Premium", ["Everything in Basic", "Custom design for your venue", "Food photo clean-up & layout", "Draft revisions included"]],
-      monthly: ["Monthly care", ["Menu site kept online", "Owner edit page (sold out · prices · photos)", "Unlimited self-edits · up to 4 edits a month done by us", "Visit report", "Yearly: {yearly} (2 months free)"]],
+      premium: ["Premium", ["Everything in Basic", "Custom design for your venue", "Food photo clean-up & layout", "Draft revisions included", "2 social media promo videos for your restaurant"]],
+      monthly: ["Monthly care", ["Menu site kept online", "Owner edit page (sold out · prices · photos)", "Unlimited self-edits · up to 2 edits a month done by us", "Visit report", "Yearly: {yearly} (2 months free)"]],
     },
     optTitle: "Add-ons",
     opts: [
@@ -466,8 +466,8 @@ window.T = {
     popular: "推荐",
     plans: {
       basic: ["基础版", ["5种语言菜单", "使用原菜单的照片和标志", "二维码桌牌PDF（A6 · A4）", "2张社交媒体宣传图","Wi-Fi · 电话 · 地图按钮"]],
-      premium: ["高级版", ["包含基础版全部内容", "按店铺风格定制设计", "菜品照片整理与排版", "包含样稿修改"]],
-      monthly: ["月度维护", ["保持菜单网站运行", "店主修改页面（售罄·价格·照片）", "自己修改不限次数 · 委托修改每月最多4次", "访问报告", "按年付费 {yearly}（免2个月）"]],
+      premium: ["高级版", ["包含基础版全部内容", "按店铺风格定制设计", "菜品照片整理与排版", "包含样稿修改", "制作2条店铺社交媒体宣传视频"]],
+      monthly: ["月度维护", ["保持菜单网站运行", "店主修改页面（售罄·价格·照片）", "自己修改不限次数 · 委托修改每月最多2次", "访问报告", "按年付费 {yearly}（免2个月）"]],
     },
     optTitle: "附加选项",
     opts: [
@@ -540,8 +540,8 @@ window.T = {
     popular: "おすすめ",
     plans: {
       basic: ["ベーシック", ["5言語メニュー", "今のメニューの写真・ロゴを活用", "テーブル用QRカードPDF（A6・A4）", "SNS用宣伝画像 2種","Wi-Fi・電話・地図ボタン"]],
-      premium: ["プレミアム", ["ベーシックの内容をすべて含む", "お店に合わせたオリジナルデザイン", "料理写真の整理・レイアウト", "デザイン案の修正込み"]],
-      monthly: ["月額サポート", ["メニューサイトの維持", "オーナー用修正画面（売り切れ・価格・写真）", "ご自身での修正は回数無制限 · 依頼での修正は月4回まで", "アクセスレポート", "年払い {yearly}（2か月分無料）"]],
+      premium: ["プレミアム", ["ベーシックの内容をすべて含む", "お店に合わせたオリジナルデザイン", "料理写真の整理・レイアウト", "デザイン案の修正込み", "お店のSNS用PR動画を2本制作"]],
+      monthly: ["月額サポート", ["メニューサイトの維持", "オーナー用修正画面（売り切れ・価格・写真）", "ご自身での修正は回数無制限 · 依頼での修正は月2回まで", "アクセスレポート", "年払い {yearly}（2か月分無料）"]],
     },
     optTitle: "オプション",
     opts: [
