@@ -748,6 +748,12 @@ window.STORES = [
     type: { ko: "한식 · 안동국밥 · 아구찜 · 감자탕 · 갈비찜 · 냉면 · 수육", vi: "Nhà hàng Hàn Quốc · Cơm canh Andong · Agujjim · Canh xương khoai tây · Sườn om · Mì lạnh", en: "Korean restaurant · Andong gukbap · Agujjim · Gamjatang · Galbijjim · Naengmyeon", zh: "韩国料理 · 安东汤饭 · 辣炖安康鱼 · 土豆排骨汤 · 炖排骨 · 冷面", ja: "韓国料理・アンドンクッパ・アグチム・カムジャタン・カルビチム・冷麺" },
     keywords: "안동집 박닌 andongjip an dong jip nhà hàng an dong jip 안동국밥 설렁탕 갈비탕 소머리국밥 육개장 꼬리곰탕 도가니탕 아구찜 해물찜 코다리찜 갈비찜 안의갈비찜 감자탕 묵은지감자탕 김치찜 갈치조림 고등어조림 만두전골 부대전골 국수전골 닭볶음탕 홍어삼합 수육 생불고기 LA갈비 냉면 물냉면 비빔냉면 냉모밀 한식 nhà hàng hàn quốc bắc ninh võ cường ngọc hân công chúa 韩国料理 北宁 韓国料理 バクニン"
   },
+  { id: "sageori", name: "사거리(뼈구이)집 SAGEORI", sub: "직화등갈비 · 매운뼈구이 · 숯불구이 · 삼겹 · 갈매기살", url: "https://sageori.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean"], tags: ["photos"],
+    address: "53C4+CMC, Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%82%AC%EA%B1%B0%EB%A6%AC(%EB%BC%88%EA%B5%AC%EC%9D%B4)%EC%A7%91/@21.1710741,106.0566521,17z",
+    type: { ko: "숯불구이 · 직화 뼈구이 · 등갈비 · 삼겹 · 갈매기살", vi: "Nhà hàng nướng Hàn Quốc · Sườn nướng · Thịt nướng than · Ba chỉ", en: "Korean BBQ · Charcoal grill · Grilled pork ribs · Pork belly", zh: "韩式烤肉 · 炭火烤肉 · 直火烤排骨 · 五花肉", ja: "韓国焼肉・炭火焼き・直火スペアリブ・サムギョプサル" },
+    keywords: "사거리 뼈구이집 사거리뼈구이 sageori sa geo ri bone bbq 직화등갈비 우대갈비삼겹 고추장등갈비 뼈양념갈비 매운뼈구이 치즈뼈구이 로제뼈구이 등뼈구이 숯불구이 갈매기살 갈비덧살 항정살 생삼겹 꽃살 소갈비살 소안창살 계란찜 된장찌개 멸치국수 김치말이국수 된장술밥 한식 고기집 nhà hàng nướng hàn quốc sườn nướng thịt nướng bắc ninh võ cường ngọc hân công chúa 韩式烤肉 烤排骨 北宁 韓国焼肉 バクニン"
+  },
   { id: "onban", name: "온반 ONBAN", sub: "맑은 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", url: "https://onban.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean"], tags: ["photos"],
     address: "TT3-C18 Five Star, Ngõ 154 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/ONBAN(%EC%98%A8%EB%B0%98)/@21.0185646,105.7756547,19z",

@@ -104,6 +104,7 @@ const SHOPS = {
   kobul: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Bulgogi'], country: 'VN', currency: 'VND', og: 'img/mulnaengmyeon.jpg' },
   hwanggeumseong: { type: 'Restaurant', cuisine: ['Korean Chinese', 'Chinese', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/mapa-dubu.jpg' },
   andongjip: { type: 'Restaurant', cuisine: ['Korean', 'Soup', 'Stew'], country: 'VN', currency: 'VND', og: 'img/gamjatang.jpg' },
+  sageori: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork Ribs'], country: 'VN', currency: 'VND', og: 'img/deungalbi.jpg' },
   jungsung: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/yukhoe.jpg' },
   torei: { type: 'Restaurant', cuisine: ['Japanese', 'Izakaya', 'Yakitori'], country: 'VN', currency: 'VND', og: 'img/yakitori.jpg' },
   shangla: { type: 'Restaurant', cuisine: ['Chinese', 'Sichuan', 'Korean'], country: 'VN', currency: 'VND', og: 'img/malaxiangguo.jpg' },
