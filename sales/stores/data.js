@@ -742,6 +742,12 @@ window.STORES = [
     type: { ko: "수타면 전문 중식 · 짜장 · 짬뽕 · 탕수육 · 추천요리 · 점심특선", vi: "Nhà hàng Hoa kiểu Hàn · Mì tay · Mì đen · Mì cay · Thịt chua ngọt · Set trưa", en: "Korean-Chinese restaurant · Hand-pulled noodles · Jajangmyeon · Jjamppong · Tangsuyuk · Lunch sets", zh: "手工面韩式中餐 · 炸酱面 · 辣海鲜汤面 · 糖醋肉 · 午餐套餐", ja: "手打ち麺の韓国式中華・ジャジャン麺・チャンポン・タンスユク・ランチセット" },
     keywords: "황금성 박닝점 박닌 hwanggeumseong hwang geum seong 수타면 수타 손짜장 손짬뽕 짜장면 짬뽕 탕수육 중국집 중식 한국식 중화요리 양장피 유산슬 팔보채 깐풍기 라조기 마파두부 칠리새우 크림새우 고추잡채 누룽지탕 오향장육 짬짜 볶짬 볶짜 탕짬 탕짜 점심특선 세트메뉴 해물짬뽕전골 쇠고기짬뽕전골 마라탕 마라샹궈 마라짬뽕 소갈비짬뽕 차돌짬뽕 통오징어짬뽕 낙지볶음 제육볶음 동파육 냉면 콩국수 포차 nhà hàng mì cay mì đen hàn quốc bắc ninh hoàng hoa thám võ cường món hoa 韩式中餐 手工面 北宁 韓国式中華 手打ち麺 バクニン"
   },
+  { id: "andongjip", name: "안동집 AN DONG JIP", sub: "안동국밥 · 아구찜 · 감자탕 · 갈비찜 · 냉면 · 수육", url: "https://andongjip.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean"], tags: ["photos"],
+    address: "193 Ngọc Hân Công Chúa, Khu Bồ Sơn, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%95%88%EB%8F%99%EC%A7%91+%EB%B0%95%EB%8B%8C/@21.171511,106.058035,17z",
+    type: { ko: "한식 · 안동국밥 · 아구찜 · 감자탕 · 갈비찜 · 냉면 · 수육", vi: "Nhà hàng Hàn Quốc · Cơm canh Andong · Agujjim · Canh xương khoai tây · Sườn om · Mì lạnh", en: "Korean restaurant · Andong gukbap · Agujjim · Gamjatang · Galbijjim · Naengmyeon", zh: "韩国料理 · 安东汤饭 · 辣炖安康鱼 · 土豆排骨汤 · 炖排骨 · 冷面", ja: "韓国料理・アンドンクッパ・アグチム・カムジャタン・カルビチム・冷麺" },
+    keywords: "안동집 박닌 andongjip an dong jip nhà hàng an dong jip 안동국밥 설렁탕 갈비탕 소머리국밥 육개장 꼬리곰탕 도가니탕 아구찜 해물찜 코다리찜 갈비찜 안의갈비찜 감자탕 묵은지감자탕 김치찜 갈치조림 고등어조림 만두전골 부대전골 국수전골 닭볶음탕 홍어삼합 수육 생불고기 LA갈비 냉면 물냉면 비빔냉면 냉모밀 한식 nhà hàng hàn quốc bắc ninh võ cường ngọc hân công chúa 韩国料理 北宁 韓国料理 バクニン"
+  },
   { id: "onban", name: "온반 ONBAN", sub: "맑은 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", url: "https://onban.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean"], tags: ["photos"],
     address: "TT3-C18 Five Star, Ngõ 154 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/ONBAN(%EC%98%A8%EB%B0%98)/@21.0185646,105.7756547,19z",
