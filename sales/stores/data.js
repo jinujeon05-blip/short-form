@@ -790,6 +790,12 @@ window.STORES = [
     keywords: "샹라 香辣 xiang la xiangla 이십사절기 하노이 마라탕 하노이 마라샹궈 미딘 메찌 중식 중화요리 사천요리 라즈지 어향가지 마파두부 꿔바로우 유린기 깐풍기 창잉터우 공심채 닭발 국물닭발 직화닭발 장어구이 장어덮밥 꼬치 백주 고량주 연태고량주 마오타이 malatang mala hanoi chinese food my dinh canh mala chan ga lau tu xuyen"
   },
 
+  { id: "daehansangho", name: "대한상회 고깃집 DAEHAN SANGHOE", sub: "삼겹살 · 목살 · 돼지한판 · 점심 특선", url: "https://daehansangho.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["bbq","korean"], tags: ["photos"],
+    address: "Korea Town, Phố Nguyên Hồng Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%EB%8C%80%ED%95%9C%EC%83%81%ED%9A%8C+%EA%B3%A0%EA%B9%83%EC%A7%91+(Daehan+Sanghoe)/@21.1731547,106.0595611,19z/data=!4m6!3m5!1s0x31350fd2b7630d5f:0x6652722e3f1270bd!8m2!3d21.1731547!4d106.0595611!16s%2Fg%2F11tnk1sw01?authuser=0&entry=ttu&g_ep=EgoyMDI2MTEwOC4wIKXMDSoASAFQAw%3D%3D",
+    type: { ko: "한식 · 돼지고기 구이 · 점심 특선", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ nướng · Món ăn trưa", en: "Korean BBQ · Grilled pork belly · Lunch specials", zh: "韩式烤肉 · 五花肉 · 午餐特选", ja: "韓国焼肉・サムギョプサル・ランチ" },
+    keywords: "대한상회 고깃집 대한상회 Daehan Sanghoe 삼겹살 목살 돼지한판 박닌 Bac Ninh Korea Town thịt nướng Hàn Quốc korean bbq pork belly 韩式烤肉 焼肉"
+  },
 ];
 window.SI = {
   ko: {

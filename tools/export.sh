@@ -100,6 +100,7 @@ name() {
     gardenia) echo "가드니아돈까스" ;;
     namme) echo "남매식당" ;;
     inyeon) echo "인연식당" ;;
+    daehansangho) echo "대한상회 고깃집" ;;
     *) echo "$1" ;;
   esac
 }

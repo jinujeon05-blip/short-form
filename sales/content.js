@@ -195,6 +195,8 @@ window.DEMOS = [
     name: "토레이 이자카야 TOREI", type: { ko: "일식 이자카야 · 야키토리 · 쿠시카츠 · 하노이", vi: "Izakaya Nhật Bản · Xiên nướng Yakitori · Xiên chiên · Hà Nội", zh: "日式居酒屋 · 烤鸡肉串 · 炸串 · 河内", ja: "居酒屋・やきとり・串カツ・ハノイ", en: "Japanese izakaya · Yakitori · Kushikatsu · Hanoi" } },
   { id: "shangla", hidden: true, url: "https://shangla.qrmenuasia.com", shot: "img/demo-shangla.jpg", qr: "img/qr-shangla.svg",
     name: "샹라 XIANG LA", type: { ko: "마라탕 · 마라샹궈 · 중화요리 · 닭발 · 하노이", vi: "Canh Mala · Đồ Xào Mala · Món Hoa · Chân gà · Hà Nội", zh: "麻辣烫 · 麻辣香锅 · 中餐 · 鸡爪 · 河内", ja: "麻辣湯・麻辣香鍋・中華料理・鶏足・ハノイ", en: "Malatang · Mala Xiang Guo · Chinese dishes · Chicken feet · Hanoi" } },
+  { id: "daehansangho", hidden: true, url: "https://daehansangho.qrmenuasia.com", shot: "img/demo-daehansangho.jpg", qr: "img/qr-daehansangho.svg",
+    name: "대한상회 고깃집 DAEHAN SANGHOE", type: { ko: "한식 · 돼지고기 구이 · 점심 특선", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ nướng · Món ăn trưa", en: "Korean BBQ · Grilled pork belly · Lunch specials", zh: "韩式烤肉 · 五花肉 · 午餐特选", ja: "韓国焼肉・サムギョプサル・ランチ" } },
 ];
 
 window.T = {
