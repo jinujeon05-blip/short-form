@@ -82,6 +82,7 @@ name() {
     hwanggeumseong) echo "황금성" ;;
     andongjip) echo "안동집" ;;
     sageori) echo "사거리뼈구이집" ;;
+    seongjeo) echo "성저최고돼지국밥" ;;
     honggang) echo "홍강" ;;
     smile) echo "스마일회관" ;;
     torei) echo "토레이이자카야" ;;

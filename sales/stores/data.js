@@ -754,6 +754,12 @@ window.STORES = [
     type: { ko: "숯불구이 · 직화 뼈구이 · 등갈비 · 삼겹 · 갈매기살", vi: "Nhà hàng nướng Hàn Quốc · Sườn nướng · Thịt nướng than · Ba chỉ", en: "Korean BBQ · Charcoal grill · Grilled pork ribs · Pork belly", zh: "韩式烤肉 · 炭火烤肉 · 直火烤排骨 · 五花肉", ja: "韓国焼肉・炭火焼き・直火スペアリブ・サムギョプサル" },
     keywords: "사거리 뼈구이집 사거리뼈구이 sageori sa geo ri bone bbq 직화등갈비 우대갈비삼겹 고추장등갈비 뼈양념갈비 매운뼈구이 치즈뼈구이 로제뼈구이 등뼈구이 숯불구이 갈매기살 갈비덧살 항정살 생삼겹 꽃살 소갈비살 소안창살 계란찜 된장찌개 멸치국수 김치말이국수 된장술밥 한식 고기집 nhà hàng nướng hàn quốc sườn nướng thịt nướng bắc ninh võ cường ngọc hân công chúa 韩式烤肉 烤排骨 北宁 韓国焼肉 バクニン"
   },
+  { id: "seongjeo", name: "성저최고돼지국밥 SEONGJEO", sub: "순대국밥 · 모듬순대 · 수육 · 닭갈비 · 국물요리", url: "https://seongjeo.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean"], tags: [],
+    address: "05A-N6 Nguyễn Cao, Phường Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%84%B1%EC%A0%80%EC%B5%9C%EA%B3%A0%EB%8F%BC%EC%A7%80%EA%B5%AD%EB%B0%A5/@21.1733859,106.0573809,17z/data=!3m1!4b1!4m6!3m5!1s0x31350f0003a895a1:0xe10076e422181f78!8m2!3d21.1733859!4d106.0573809!16s%2Fg%2F11z7qvhcb7?entry=ttu&g_ep=EgoyMDI2MTEwOC4wIKXMDSoASAFQAw%3D%3D",
+    type: { ko: "한식 · 돼지국밥 · 순대 · 수육 · 닭갈비", vi: "Cơm canh thịt Hàn Quốc · Canh lòng · Thịt luộc · Gà xào", en: "Korean pork soup · Sundae · Boiled pork · Dakgalbi", zh: "韩式猪肉汤饭 · 血肠 · 白切肉 · 辣炒鸡", ja: "韓国豚クッパ・スンデ・ポッサム・タッカルビ" },
+    keywords: "성저최고돼지국밥 성저국밥 성저 sungjeo seongjeo seongjeo choego dwaeji gukbap 돼지국밥 순대국밥 순대 모듬순대 찹쌀순대 수육 내장수육 닭갈비 치즈닭갈비 설렁탕 육개장 청국장 순두부 김치전골 막걸리 한식 cơm canh thịt hàn quốc canh lòng bắc ninh võ cường nguyễn cao 韩式猪肉汤饭 北宁 韓国豚クッパ バクニン"
+  },
   { id: "onban", name: "온반 ONBAN", sub: "맑은 돼지곰탕 · 항정 전골 · 보쌈 · 찜닭 · 막국수", url: "https://onban.qrmenuasia.com", listing: true,
     region: "hanoi", cats: ["korean"], tags: ["photos"],
     address: "TT3-C18 Five Star, Ngõ 154 Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/ONBAN(%EC%98%A8%EB%B0%98)/@21.0185646,105.7756547,19z",

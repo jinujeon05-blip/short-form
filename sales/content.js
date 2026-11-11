@@ -181,6 +181,8 @@ window.DEMOS = [
     name: "안동집 AN DONG JIP", type: { ko: "한식 · 안동국밥 · 아구찜 · 감자탕 · 박닌", vi: "Món Hàn · Cơm canh · Agujjim · Bắc Ninh", zh: "韩国料理 · 汤饭 · 辣炖安康鱼 · 北宁", ja: "韓国料理・クッパ・アグチム・バクニン", en: "Korean food · Gukbap · Agujjim · Bac Ninh" } },
   { id: "sageori", hidden: true, url: "https://sageori.qrmenuasia.com", shot: "img/demo-sageori.jpg", qr: "img/qr-sageori.svg",
     name: "사거리(뼈구이)집 SAGEORI", type: { ko: "숯불구이 · 직화 뼈구이 · 박닌", vi: "Thịt nướng than · Sườn nướng · Bắc Ninh", zh: "炭火烤肉 · 直火烤排骨 · 北宁", ja: "炭火焼き・直火スペアリブ・バクニン", en: "Charcoal BBQ · Grilled pork ribs · Bac Ninh" } },
+  { id: "seongjeo", hidden: true, url: "https://seongjeo.qrmenuasia.com", shot: "img/demo-seongjeo.jpg", qr: "img/qr-seongjeo.svg",
+    name: "성저최고돼지국밥 SEONGJEO", type: { ko: "한식 · 돼지국밥 · 순대 · 수육 · 박닌", vi: "Cơm canh thịt Hàn Quốc · Canh lòng · Thịt luộc · Bắc Ninh", zh: "韩式猪肉汤饭 · 血肠 · 白切肉 · 北宁", ja: "韓国豚クッパ・スンデ・ポッサム・バクニン", en: "Korean pork soup · Sundae · Boiled pork · Bac Ninh" } },
   { id: "jungsung", hidden: true, url: "https://jungsung.qrmenuasia.com", shot: "img/demo-jungsung.jpg", qr: "img/qr-jungsung.svg",
     name: "정성 JUNGSUNG", type: { ko: "한우·숙성 고기구이 · 보일링 시푸드 · 하노이", vi: "Thịt nướng Hàn Quốc · Hải sản sốt cay · Hà Nội", zh: "韩牛·熟成烤肉 · 香辣海鲜锅 · 河内", ja: "韓牛・熟成焼肉・ボイリングシーフード・ハノイ", en: "Hanwoo & aged Korean BBQ · Boiling seafood · Hanoi" } },
   { id: "onban", hidden: true, url: "https://onban.qrmenuasia.com", shot: "img/demo-onban.jpg", qr: "img/qr-onban.svg",
