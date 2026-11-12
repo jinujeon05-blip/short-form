@@ -1837,14 +1837,32 @@ def hide_folder(name, hide):
     return None
 
 
+def queue_why(shops, folder):
+    """한 곳만 줄에 넣으려다 안 됐을 때 그 이유(사진 수집기 [대시보드 줄에 넣기] 버튼에 그대로 보인다, 2026-11-12)."""
+    if shops.get("status") != "ok":
+        return shops.get("how")
+    row = next((r for r in shops["folders"] if r["name"] == folder), None)
+    if row:
+        return {"queued": f"'{folder}'은(는) 이미 줄에 있어요", "running": f"'{folder}'은(는) 지금 만드는 중이에요",
+                "empty": f"'{folder}' 폴더에 메뉴판 사진(menu_)이 없어서 줄에 못 넣어요"}.get(row["state"])
+    made = next((m for m in shops["made"] if m["name"] == folder), None)
+    if made:
+        return f"'{folder}'은(는) 이미 만든 가게로 보여요" + (f"({made['id']})" if made.get("id") else "") + ". 다시 만들려면 Claude에 직접 지시해 주세요"
+    if folder in shops["hidden"]:
+        return f"'{folder}'은(는) 대시보드 '새 가게' 칸에서 숨긴 폴더예요. 다시 보이기를 누른 뒤 넣어 주세요"
+    return f"드라이브 QR메뉴판 폴더에서 '{folder}'을(를) 못 찾았어요({DRIVE})"
+
+
 def start_queue(folders, via):
     """고른 폴더를 차례로 줄 세운다. 폴더 이름은 드라이브 목록에 실제로 있는 '새 가게·확인 필요'만 받는다."""
     if not claude_exe():
         return 0, "Claude Code 실행 파일을 찾지 못함(Claude 데스크톱 앱이 설치돼 있어야 함)"
-    ok = {r["name"] for r in build_newshops()["folders"] if r["state"] in ("new", "check")}
-    picked = [f for f in dict.fromkeys(str(f) for f in (folders if isinstance(folders, list) else [])) if f in ok]
+    shops = build_newshops()
+    ok = {r["name"] for r in shops["folders"] if r["state"] in ("new", "check")}
+    asked = list(dict.fromkeys(str(f) for f in (folders if isinstance(folders, list) else [])))
+    picked = [f for f in asked if f in ok]
     if not picked:
-        return 0, "줄 세울 가게를 골라 주세요(이미 줄에 있거나 만든 가게는 뺐어요)"
+        return 0, (queue_why(shops, asked[0]) if len(asked) == 1 else None) or "줄 세울 가게를 골라 주세요(이미 줄에 있거나 만든 가게는 뺐어요)"
     with ORDER_LOCK:
         waiting = sum(1 for o in ORDERS.values() if o.get("queue") and o["status"] == "scheduled")
         if waiting + len(picked) > QUEUE_MAX:
@@ -2176,6 +2194,10 @@ class Handler(BaseHTTPRequestHandler):
             err = start_deploy(str(body.get("id", "")))
             return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
         if path == "/api/queue":
+            # 사진 수집기가 보낼 때는 저장한 폴더 경로도 같이 온다: 드라이브 QR메뉴판 밖에 저장한 것이면 이름이 같아도 거절
+            src, fl = body.get("path"), body.get("folders")
+            if src and not (isinstance(fl, list) and len(fl) == 1 and os.path.normcase(os.path.abspath(str(src))) == os.path.normcase(os.path.abspath(str(DRIVE / str(fl[0]))))):
+                return self.json({"error": f"드라이브 QR메뉴판 폴더({DRIVE})에 저장한 가게만 줄에 넣을 수 있어요"}, 400)
             n, err = start_queue(body.get("folders"), "phone" if isinstance(self, RemoteHandler) else "pc")
             return self.json({"error": err} if err else {"ok": True, "count": n}, 400 if err else 200)
         if path == "/api/queue/resume":
