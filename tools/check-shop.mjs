@@ -1,6 +1,6 @@
 // 가게 점검·캡처를 한 번에: node tools/check-shop.mjs <가게id> [저장폴더, 기본 dashboard/out]
 // 하는 일: seo.mjs <가게>·analytics.mjs <가게>(그 가게만 다시 맞춤) → TODO 남은 수 → check-standard → check-listing
-//          → 폰 화면 캡처 <저장폴더>/<가게>-ko.png + 맨 위 부분 .scratch/<가게>/top.png(직접 볼 때는 이 작은 그림) → 커밋 안 한 파일 목록
+//          → 폰 화면 캡처 <저장폴더>/<가게>-ko.png + 맨 위 부분 .scratch/<가게>/top.png(직접 볼 때는 이 작은 그림) → 카드 사진 sales/img/demo-<가게>.jpg 다시 찍기 → 커밋 안 한 파일 목록
 // **메뉴·번역을 고친 뒤와 커밋 직전에 한 번 더 돌린다** — 번역을 고치고 검색용 정보를 다시 안 만들어 배포가 멈춘 일(2026-11-11 안동집·황금성).
 // 만든 이유(2026-11-11): 점검을 명령 여러 번에 나눠 하면서 대화가 길어져 토큰이 많이 들었다.
 import fs from 'node:fs';
@@ -54,8 +54,14 @@ console.log(`■ 화면: ${shotBad ? '✘ ' : '통과 '}폰 가로 넘침 ${wide
 console.log(`  캡처: ${out}/${id}-ko.png (전체) · .scratch/${id}/top.png (맨 위, 직접 볼 때)`);
 if (shotBad) bad++;
 
+// 카드 사진(가게 찾기 목록·소개서)을 지금 화면으로 다시 찍는다 — 등록(register-shop) 때 찍은 사진이 꾸미기 전 모습으로 남던 일(2026-11-12 강남면옥 '가마솥' 카드).
+const demo = `sales/img/demo-${id}.jpg`;
+if (fs.existsSync(`${ROOT}/${demo}`)) run('카드 사진 다시 찍기', 'node', ['tools/demo.mjs', id], 1);
+else console.log(`■ 카드 사진: 아직 없음(${demo}) — register-shop.mjs 로 등록하면 생긴다`);
+
 const st = execFileSync('git', ['status', '--porcelain', '--untracked-files=all'], { cwd: ROOT, encoding: 'utf8' }).split('\n').filter((l) => l && !l.includes('.scratch/'));
-const mine = st.filter((l) => l.includes(`restaurants/${id}/`)), other = st.filter((l) => !l.includes(`restaurants/${id}/`) && (!l.startsWith('??') || /^\?\? "?(sales|tools|docs|restaurants)\//.test(l)));
+const isMine = (l) => l.includes(`restaurants/${id}/`) || l.includes(demo);
+const mine = st.filter(isMine), other = st.filter((l) => !isMine(l) &&(!l.startsWith('??') || /^\?\? "?(sales|tools|docs|restaurants)\//.test(l)));
 console.log(`■ 커밋 안 한 파일: 이 가게 ${mine.length}개 · 그 밖 ${other.length}개`);
 if (other.length) console.log(other.slice(0, 20).map((l) => '  ' + l).join('\n') + (other.length > 20 ? `\n  … 외 ${other.length - 20}개` : ''));
 console.log(bad ? `결과: ✘ ${bad}곳 고칠 것` : '결과: 모두 통과');
