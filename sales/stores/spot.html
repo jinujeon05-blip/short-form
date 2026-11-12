@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="고깃집 한 상 틀린 그림 찾기 — 위아래 상차림에서 다른 곳을 찾아보세요. Tìm điểm khác nhau · Spot the difference">
-<title>틀린 그림 찾기 · 고깃집 한 상</title>
+<meta name="description" content="한식 한 상 틀린 그림 찾기 — 위아래 상차림에서 다른 곳을 찾아보세요. Tìm điểm khác nhau · Spot the difference">
+<title>틀린 그림 찾기 · 한식 한 상</title>
 <link rel="icon" href="/favicon.ico">
 <style>
   :root {
@@ -53,7 +53,10 @@
   .board { display: grid; gap: 8px; }
   .pic { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid #7a5230;
     box-shadow: 0 6px 18px rgba(60, 40, 20, .13); background: #c79a68; touch-action: manipulation; }
-  .pic svg { display: block; width: 100%; height: auto; cursor: pointer; }
+  .pic { aspect-ratio: 6 / 5; background: #b98a55 url(spot-art/table.jpg) center / cover; cursor: pointer; user-select: none; -webkit-user-select: none; }
+  .pic svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+  .it { position: absolute; transform: translate(-50%, -50%); pointer-events: none; filter: drop-shadow(0 3px 3px rgba(40, 20, 5, .5)); }
+  .it img { display: block; width: 100%; height: auto; }
   .pic.shake { animation: shake .3s; }
   @keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
   .ring { fill: none; stroke: #ff3b30; stroke-width: 4; stroke-dasharray: 400; stroke-dashoffset: 400;
@@ -124,7 +127,7 @@
   "use strict";
   var T = {
     ko: { title: "틀린 그림 찾기", back: "← 게임", hint: "💡 힌트", tip: "위아래 상차림에서 다른 곳을 찾아 눌러 주세요",
-      sT: "고깃집 한 상 틀린 그림 찾기", sP: "위아래 그림에서 다른 곳을 찾아요. 단계가 오를수록 어려워져요. 잘못 누르면 5초가 줄어요.", go: "시작",
+      sT: "한식 한 상 틀린 그림 찾기", sP: "위아래 그림에서 다른 곳을 찾아요. 단계가 오를수록 어려워져요. 잘못 누르면 5초가 줄어요.", go: "시작",
       lv: "{n}단계", wT: "{n}단계 통과!", wP: "남은 시간 {s}초 · 힌트 {h}번 사용", lT: "시간 끝!", lP: "{n}단계에서 멈췄어요 · 최고 기록 {b}단계",
       next: "{n}단계 도전", again: "1단계부터 다시", stores: "가게 찾기로 가기" },
     vi: { title: "Tìm điểm khác nhau", back: "← Trò chơi", hint: "💡 Gợi ý", tip: "Chạm vào những điểm khác nhau giữa hai mâm cơm",
@@ -153,206 +156,61 @@
   document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
   document.title = t.sT;
 
-  /* ───── 음식 그림 (모두 코드로 그림, 가운데가 0,0) — 고깃집 한 상 ───── */
-  var sh = function (rx, ry, dy) { return '<ellipse cx="3" cy="' + dy + '" rx="' + rx + '" ry="' + ry + '" fill="#2a1606" opacity=".45" filter="url(#fS)"/>'; };
-  var at = function (x, y, r, s) { return '<g transform="translate(' + x + " " + y + ") rotate(" + (r || 0) + ')">' + s + "</g>"; };
-  var steam = function (y, w) {
-    return '<g fill="none" stroke="#fff" stroke-width="' + (w || 4.5) + '" stroke-linecap="round" opacity=".72" filter="url(#fM)">' +
-      [-15, 1, 17].map(function (x, i) { return '<path d="M' + x + " " + (y - (i === 1 ? 5 : 0)) + 'q-8 -9 0 -18t0 -18"/>'; }).join("") + "</g>";
+  /* ───── 음식 그림 (만화풍 그림 파일 spot-art/*.webp 50장, 2026-11-12) ───── */
+  // 종류: L 큰 요리 · M 그릇·뚝배기 · S 작은 접시 · X 종지·잔 · T 병 · G 맥주잔 · U 수저·소품
+  var TYPES = {
+    L: "grill dakgalbi pajeon kimchijeon jeon bossam tangsu chicken fish jjimdak tteok bulgogi japchae",
+    M: "ssam stew egg naeng kimchijjigae bibimbap jjajang jjamppong gukbap kalguksu galbitang bibimnaeng yukgaejang eomuk sundubu friedrice",
+    S: "kimchi paj rice mandu gimbap sundae gyeranmari dubukimchi oikimchi",
+    X: "jang garlic glass", T: "soju beer", G: "mug", U: "spoon chop tongs scissors gchili rchili"
   };
-  var gloss = function (r) { return '<path d="M' + (-r * .78).toFixed(1) + " " + (-r * .38).toFixed(1) + "A" + r + " " + r + " 0 0 1 " + (-r * .2).toFixed(1) + " " + (-r * .84).toFixed(1) + '" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>'; };
-  // 구운 삼겹살 한 점
-  var PORK = '<rect x="-18" y="-7.5" width="36" height="15" rx="5.5" fill="#8a4319"/><rect x="-17" y="-6.5" width="34" height="13" rx="4.8" fill="url(#gPork)"/>' +
-    '<rect x="-15" y="-3" width="30" height="2.5" rx="1.2" fill="#fff3e2"/><rect x="-15" y="2" width="30" height="2" rx="1" fill="#fff3e2" opacity=".9"/>' +
-    '<path d="M-11 -6l5 12M-1 -6l5 12M9 -6l5 12" stroke="#55250b" stroke-width="1.7" opacity=".6"/>' +
-    '<rect x="-13" y="-5.6" width="17" height="1.5" rx=".7" fill="#fff" opacity=".6"/>';
-  // 김치 한 조각
-  var KIM = '<rect x="-10" y="-7" width="20" height="14" rx="5" fill="url(#gKim)"/><rect x="-8" y="-4.5" width="8" height="9" rx="3" fill="#fbe9d2"/>' +
-    '<path d="M2 -5q4 5 0 10M6 -4q3 4 0 8" stroke="#8f1710" stroke-width="1.3" fill="none"/><circle cx="-4" cy="-1" r=".9" fill="#c9281c"/><circle cx="-5.5" cy="2.4" r=".8" fill="#c9281c"/>' +
-    '<rect x="-7" y="-5.7" width="11" height="1.4" rx=".7" fill="#fff" opacity=".5"/>';
-  // 쌈 채소 한 장
-  var leaf = function (edge, body) {
-    var s = "";
-    for (var a = 0; a < 360; a += 30) s += '<circle cx="' + (14 * Math.cos(a * Math.PI / 180)).toFixed(1) + '" cy="' + (19 * Math.sin(a * Math.PI / 180)).toFixed(1) + '" r="7" fill="' + edge + '"/>';
-    return s + '<ellipse rx="14.5" ry="19.5" fill="' + body + '"/>' +
-      '<path d="M0 20V-15M0 9l-8 -7M0 9l8 -7M0 -1l-7 -6M0 -1l7 -6" stroke="#f1fae0" stroke-width="1.3" fill="none" opacity=".85" stroke-linecap="round"/>';
-  };
-  var CHILI = '<path d="M-13 0q13 -8 26 -1q-13 7 -26 1z" fill="#4c9a2a"/><path d="M-9 -1.6q9 -3.6 17 -.6" stroke="#b9e59a" stroke-width="1.2" fill="none" opacity=".8"/><path d="M-13 0l-5 -2.5" stroke="#2f6b1a" stroke-width="2.4" stroke-linecap="round"/>';
-  var TOFU = '<rect x="-8" y="-5" width="16" height="15" rx="3" fill="#dccb9f"/><rect x="-8" y="-8" width="16" height="15" rx="3" fill="#fffaf0"/><rect x="-5.5" y="-6.2" width="7" height="1.6" rx=".8" fill="#fff"/>';
-  var ZUC = '<path d="M-7.5 0a7.5 7.5 0 0 1 15 0z" fill="#e6f2b9" stroke="#4f8f2e" stroke-width="2"/><circle cx="-2" cy="-3" r=".9" fill="#c9d98e"/><circle cx="2.4" cy="-2.6" r=".9" fill="#c9d98e"/>';
-
-  var FOOD = {
-    // 삼겹살 불판
-    grill: { t: "B", r: 60, muts: { pork: 1, garlic: 2, gkimchi: 1 }, draw: function (m) {
-      var slits = "", i;
-      for (i = -4; i <= 4; i++) {
-        var h = Math.sqrt(2500 - i * i * 121);
-        slits += '<path d="M' + (i * 11) + " " + (4 - h).toFixed(1) + "V" + (h - 4).toFixed(1) + '" stroke="#0b0908" stroke-width="3.4" stroke-linecap="round"/>' +
-          '<path d="M' + (i * 11) + " " + (-h * .5).toFixed(1) + "V" + (h * .5).toFixed(1) + '" stroke="#ff7a1a" stroke-width="1.2" opacity=".6"/>';
-      }
-      var pp = [[-22, -22, -18], [15, -28, 12], [-27, 3, 8], [8, -4, -10], [-11, 27, 6]], ps = "";
-      for (i = 0; i < (m.pork ? 4 : 5); i++) ps += at(pp[i][0], pp[i][1], pp[i][2], PORK);
-      var gp = [[37, -9], [41, 5], [33, 19]], gs = "";
-      for (i = 0; i < (m.garlic ? 2 : 3); i++) gs += at(gp[i][0], gp[i][1], i * 40,
-        '<ellipse rx="5.4" ry="4.2" fill="#f7e9c2" stroke="#c9a45c" stroke-width=".8"/><ellipse cx="1" cy=".7" rx="2.3" ry="1.6" fill="#c98a3c" opacity=".75"/><ellipse cx="-1.6" cy="-1.4" rx="1.6" ry=".8" fill="#fff" opacity=".7"/>');
-      return sh(63, 59, 7) + '<circle r="60" fill="url(#gIron)"/><circle r="56.5" fill="none" stroke="#7b6e64" stroke-width="1.3" opacity=".75"/><circle r="52" fill="#262120"/>' +
-        slits + '<circle r="52" fill="url(#gGloss)"/>' + (m.gkimchi ? "" : at(21, 37, 20, KIM)) + ps + gs + gloss(58) + steam(-52, 5.5);
-    } },
-    // 쌈 채소 바구니
-    ssam: { t: "M", r: 44, muts: { chili: 1, leaf: 1 }, draw: function (m) {
-      return sh(46, 43, 6) + '<circle r="44" fill="url(#gBasket)"/><circle r="40" fill="none" stroke="#6d4318" stroke-width="2" stroke-dasharray="5 4"/>' +
-        '<circle r="35" fill="#7a4f22"/><circle r="35" fill="none" stroke="#5c3a14" stroke-width="2" stroke-dasharray="4 5"/>' +
-        at(-13, -9, -35, leaf("#55a437", "#84c95a")) + at(13, -12, 28, leaf("#4f9c33", "#7cc254")) + at(-12, 11, -150, leaf("#5fae3e", "#93d368")) +
-        at(10, 6, 62, m.leaf ? leaf("#7b3d7d", "#9a57a0") : leaf("#2c7238", "#3f9550")) +
-        '<g transform="translate(-9 25) rotate(-10) scale(1.2)">' + CHILI + "</g>" + (m.chili ? "" : '<g transform="translate(9 31) rotate(8) scale(1.2)">' + CHILI.replace("#4c9a2a", "#d4301f").replace("#b9e59a", "#ffb3a6") + "</g>");
-    } },
-    // 김치 접시
-    kimchi: { t: "S", r: 30, muts: { ring: 1, less: 2 }, draw: function (m) {
-      var pos = [[-10, -7, -20], [9, -8, 15], [-7, 9, 12], [10, 9, -18]], s = "";
-      for (var i = 0; i < (m.less ? 3 : 4); i++) s += at(pos[i][0], pos[i][1], pos[i][2], KIM);
-      return sh(31, 29, 5) + '<circle r="29" fill="url(#gPlate)" stroke="#cfc7b8" stroke-width="1.2"/>' +
-        '<circle r="23" fill="none" stroke="' + (m.ring ? "#e08878" : "#86aeda") + '" stroke-width="2.2"/>' + s + gloss(27);
-    } },
-    // 쌈장 종지
-    jang: { t: "X", r: 21, muts: { paste: 1, sesame: 2 }, draw: function (m) {
-      var se = "";
-      if (!m.sesame) [[-4, -3, 20], [3, -5, -30], [5, 2, 60], [-2, 4, -10]].forEach(function (p) { se += '<ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="1.9" ry="1.1" fill="#f8ecc4" transform="rotate(' + p[2] + " " + p[0] + " " + p[1] + ')"/>'; });
-      return sh(21, 19, 4) + '<circle r="19" fill="url(#gPlate)" stroke="#cfc7b8" stroke-width="1.2"/><circle r="14.5" fill="#ece5d6"/>' +
-        '<path d="M-11 -2c0-9 9-12 14-9 8-1 11 7 8 13-2 8-12 10-18 6-4-2-5-6-4-10z" fill="' + (m.paste ? "#d12a1c" : "#a2542a") + '"/>' +
-        '<path d="M-7 -5q5 -6 11 -3" stroke="#fff" stroke-width="1.8" fill="none" opacity=".45" stroke-linecap="round"/>' + se;
-    } },
-    // 된장찌개 뚝배기
-    stew: { t: "M", r: 48, muts: { tofu: 1, steam: 1, zuc: 2 }, draw: function (m) {
-      var tf = [[-14, -7, -12], [10, -12, 9], [-1, 13, 18]], zc = [[18, 9, -30], [-21, 12, 25], [4, -25, 170]], s = "", i;
-      for (i = 0; i < (m.zuc ? 2 : 3); i++) s += at(zc[i][0], zc[i][1], zc[i][2], ZUC);
-      for (i = 0; i < (m.tofu ? 2 : 3); i++) s += at(tf[i][0], tf[i][1], tf[i][2], TOFU);
-      return sh(50, 46, 6) + '<rect x="-57" y="-9" width="15" height="18" rx="6" fill="#161210"/><rect x="42" y="-9" width="15" height="18" rx="6" fill="#161210"/>' +
-        '<circle r="46" fill="url(#gIron)"/><circle r="39.5" fill="#33271d"/><circle r="36.5" fill="#b9792c"/><circle r="36.5" fill="url(#gSoup)"/>' +
-        '<circle cx="-24" cy="-12" r="2.6" fill="none" stroke="#f3d79a" stroke-width="1" opacity=".8"/><circle cx="26" cy="-8" r="1.9" fill="none" stroke="#f3d79a" stroke-width="1" opacity=".8"/><circle cx="12" cy="26" r="2.2" fill="none" stroke="#f3d79a" stroke-width="1" opacity=".8"/>' +
-        s + '<circle cx="23" cy="-20" r="3.5" fill="#c2241b"/><circle cx="23" cy="-20" r="1.3" fill="#f6d7a8"/><ellipse cx="-8" cy="27" rx="5.5" ry="2.6" fill="#5fb552" transform="rotate(-20 -8 27)"/>' +
-        gloss(44) + (m.steam ? "" : steam(-38));
-    } },
-    // 공깃밥
-    rice: { t: "S", r: 34, muts: { bowl: 1, beans: 2 }, draw: function (m) {
-      var g = "", s = "";
-      [[-9, -6], [6, -10], [-2, 4], [11, 3], [-13, 6], [3, -2], [-5, 13], [9, 12], [-14, -4], [0, -14]].forEach(function (p, i) {
-        g += '<ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="3.5" ry="1.7" fill="#e8dfcb" transform="rotate(' + (i * 37) + " " + p[0] + " " + p[1] + ')"/>';
-      });
-      if (!m.beans) [[-4, -4], [6, 1], [-1, 9], [9, -8], [-11, 3]].forEach(function (p) {
-        s += '<ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="2.7" ry="2.1" fill="#3a2540"/><circle cx="' + (p[0] - .8) + '" cy="' + (p[1] - .7) + '" r=".7" fill="#fff" opacity=".6"/>';
-      });
-      return sh(35, 33, 5) + '<circle r="33" fill="' + (m.bowl ? "url(#gBrass)" : "url(#gSteel)") + '" stroke="' + (m.bowl ? "#a17c27" : "#88939c") + '" stroke-width="1.4"/>' +
-        '<circle r="27" fill="' + (m.bowl ? "#f0dca2" : "#e9eef2") + '"/><circle r="24" fill="#fffdf8"/><circle r="24" fill="url(#gSoup)"/>' + g + s + gloss(31);
-    } },
-    // 소주병과 잔
-    soju: { t: "T", r: 46, muts: { cap: 1, mark: 1, glass: 2 }, draw: function (m) {
-      return sh(22, 8, 46) +
-        '<rect x="-6.5" y="-50" width="13" height="30" rx="3" fill="url(#gBottle)"/><path d="M-6.5 -22h13l7 10v52a5 5 0 0 1-5 5h-17a5 5 0 0 1-5-5v-52z" fill="url(#gBottle)"/>' +
-        '<rect x="-7.5" y="-56" width="15" height="9" rx="2.5" fill="' + (m.cap ? "#2f6fd4" : "#d43a2f") + '"/><rect x="-5.5" y="-54.5" width="4" height="6" rx="1.5" fill="#fff" opacity=".35"/>' +
-        '<rect x="-12.5" y="-3" width="25" height="29" rx="2.5" fill="#fbfaf4"/><circle cy="8" r="6.5" fill="' + (m.mark ? "#d43a2f" : "#2f8a4a") + '"/>' +
-        '<rect x="-8" y="18" width="16" height="2.2" rx="1.1" fill="#9aa39a"/><rect x="-5" y="21.6" width="10" height="1.6" rx=".8" fill="#c3cac3"/>' +
-        '<rect x="-10.5" y="-18" width="3" height="58" rx="1.5" fill="#fff" opacity=".42"/><rect x="8" y="-10" width="1.6" height="46" rx=".8" fill="#fff" opacity=".22"/>' +
-        '<g transform="translate(-31 31)"><ellipse cx="2" cy="12" rx="10" ry="3" fill="#2a1606" opacity=".3"/>' +
-        '<path d="M-9 -9h18l-3 20h-12z" fill="#eef7fa" stroke="#93adb8" stroke-width="1.2" opacity=".95"/>' +
-        (m.glass ? "" : '<path d="M-7.7 -1h15.4l-1.7 11h-12z" fill="#b5e0ee"/>') + '<path d="M-6 -7l1.4 15" stroke="#fff" stroke-width="1.5" opacity=".8"/></g>';
-    } },
-    // 물냉면
-    naeng: { t: "M", r: 44, muts: { egg: 1, cuc: 2, ice: 2 }, draw: function (m) {
-      var n = "", cu = "", ic = "", i, cp = [[-17, -13, -30], [-9, -19, -18], [-23, -5, -44]], ip = [[23, 15], [-21, 19]];
-      for (i = 0; i < 5; i++) n += '<ellipse cx="' + (i % 2 ? 2 : -2) + '" cy="' + (i * 1.5 - 1) + '" rx="' + (24 - i * 4) + '" ry="' + (17 - i * 3) + '" fill="none" stroke="' + (i % 2 ? "#8d7355" : "#a98e6c") + '" stroke-width="3.2"/>';
-      for (i = 0; i < (m.cuc ? 2 : 3); i++) cu += at(cp[i][0], cp[i][1], cp[i][2], '<rect x="-8" y="-1.9" width="16" height="3.8" rx="1.9" fill="#c5e8a0" stroke="#3f8a2c" stroke-width="1"/>');
-      for (i = 0; i < (m.ice ? 1 : 2); i++) ic += at(ip[i][0], ip[i][1], i ? 20 : -15, '<rect x="-5.5" y="-5.5" width="11" height="11" rx="2.5" fill="#eaf7fd" stroke="#9ccbe0" stroke-width="1" opacity=".92"/><path d="M-3 -2.6h4" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>');
-      return sh(46, 43, 6) + '<circle r="44" fill="url(#gSteel)" stroke="#88939c" stroke-width="1.4"/><circle r="38.5" fill="#c9d1d8"/><circle r="36" fill="#dccb9c"/><circle r="36" fill="url(#gSoup)"/>' +
-        ic + n + cu + at(17, -13, 18, '<rect x="-9" y="-3.2" width="18" height="6.4" rx="2.2" fill="#fcf7e8" stroke="#d6cba6" stroke-width=".8"/>') +
-        (m.egg ? "" : at(4, 4, -15, '<ellipse rx="10.5" ry="8.4" fill="#fffdf6" stroke="#ddd5bf" stroke-width=".9"/><circle cx="1" r="4.8" fill="url(#gYolk)"/><circle cx="-.6" cy="-1.6" r="1.3" fill="#fff" opacity=".75"/>')) + gloss(42);
-    } },
-    // 계란찜
-    egg: { t: "M", r: 42, muts: { steam: 1, carrot: 1, onion: 2 }, draw: function (m) {
-      var s = "", i, op = [[-12, -8], [8, -14], [14, 6], [-6, 12], [-18, 6], [2, -2]], cp = [[-2, -17], [17, -4], [-15, -1], [4, 15]];
-      for (i = 0; i < (m.onion ? 4 : 6); i++) s += '<rect x="' + (op[i][0] - 2.8) + '" y="' + (op[i][1] - 1.4) + '" width="5.6" height="2.8" rx="1.4" fill="#4aa046" transform="rotate(' + (i * 50) + " " + op[i][0] + " " + op[i][1] + ')"/>';
-      if (!m.carrot) for (i = 0; i < 4; i++) s += '<rect x="' + (cp[i][0] - 2) + '" y="' + (cp[i][1] - 2) + '" width="4" height="4" rx="1.1" fill="#ee7f22"/>';
-      return sh(44, 41, 6) + '<rect x="-52" y="-8" width="14" height="16" rx="5" fill="#161210"/><rect x="38" y="-8" width="14" height="16" rx="5" fill="#161210"/>' +
-        '<circle r="42" fill="url(#gIron)"/><circle r="36" fill="#33271d"/><circle r="34" fill="url(#gEgg)"/>' +
-        '<path d="M-30 8q5 14 19 20M30 4q-3 14 -17 22" stroke="#cf8f22" stroke-width="1.5" fill="none" opacity=".5"/>' +
-        '<path d="M-22 -11q8 -13 23 -14" stroke="#fff" stroke-width="3.2" fill="none" opacity=".55" stroke-linecap="round"/>' + s + gloss(40) + (m.steam ? "" : steam(-34));
-    } },
-    // 파절이
-    paj: { t: "S", r: 30, muts: { plate: 1, flake: 2 }, draw: function (m) {
-      var s = "", f = "", i, col = ["#3f9a3a", "#72c45c", "#eef6d8", "#2f7d32"];
-      for (i = 0; i < 14; i++) s += '<path d="M-15 0q15 ' + (i % 2 ? -9 : 9) + ' 30 0" stroke="' + col[i % 4] + '" stroke-width="2.4" fill="none" stroke-linecap="round" transform="rotate(' + (i * 26) + ") translate(0 " + ((i % 5) - 2) * 3 + ')"/>';
-      if (!m.flake) [[-6, -4], [5, -7], [8, 4], [-3, 7], [0, -1], [-10, 3], [11, -3]].forEach(function (p) { f += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="1.4" fill="#d4301f"/>'; });
-      return sh(31, 29, 5) + '<circle r="29" fill="' + (m.plate ? "url(#gIron)" : "url(#gPlate)") + '" stroke="' + (m.plate ? "#0c0a09" : "#cfc7b8") + '" stroke-width="1.2"/>' +
-        '<circle r="22.5" fill="' + (m.plate ? "#2a2421" : "#f1ece1") + '"/>' + s + f + gloss(27);
-    } },
-    // 마늘·고추 종지
-    side: { t: "X", r: 21, muts: { red: 1, garlic: 2 }, draw: function (m) {
-      var s = "", i, gp = [[-6, -5], [5, -7], [-7, 5], [0, 1]], cp = [[8, 5], [10, -2], [2, 9]];
-      for (i = 0; i < (m.garlic ? 3 : 4); i++) s += at(gp[i][0], gp[i][1], i * 35, '<ellipse rx="4.4" ry="3.1" fill="#fbf3d6" stroke="#c9b06e" stroke-width=".8"/><ellipse rx="1.4" ry=".8" fill="#e0cd92"/>');
-      for (i = 0; i < 3; i++) s += '<circle cx="' + cp[i][0] + '" cy="' + cp[i][1] + '" r="3" fill="#f4f7e4" stroke="' + (m.red && i === 0 ? "#d4301f" : "#3f9a3a") + '" stroke-width="2"/>';
-      return sh(21, 19, 4) + '<circle r="19" fill="url(#gPlate)" stroke="#cfc7b8" stroke-width="1.2"/><circle r="14.5" fill="#ece5d6"/>' + s;
-    } },
-    // 맥주병과 잔
-    beer: { t: "T", r: 46, muts: { cap: 1, foam: 1, mark: 2 }, draw: function (m) {
-      return sh(22, 8, 46) + '<rect x="-6" y="-50" width="12" height="26" rx="3" fill="url(#gBeer)"/><path d="M-6 -26h12l8 14v52a5 5 0 0 1-5 5h-18a5 5 0 0 1-5-5v-52z" fill="url(#gBeer)"/>' +
-        '<rect x="-7" y="-56" width="14" height="8" rx="2.5" fill="' + (m.cap ? "#d43a2f" : "#e3b93c") + '"/><rect x="-5" y="-54.6" width="4" height="5" rx="1.5" fill="#fff" opacity=".4"/>' +
-        '<rect x="-13" y="-4" width="26" height="28" rx="3" fill="#f6e7b4"/><path d="M0 2l2.6 5.4 5.8.6-4.4 4 1.3 5.8L0 14.8l-5.3 3 1.3-5.8-4.4-4 5.8-.6z" fill="' + (m.mark ? "#2f6fd4" : "#c2241b") + '"/>' +
-        '<rect x="-11" y="-20" width="3" height="60" rx="1.5" fill="#fff" opacity=".32"/>' +
-        '<g transform="translate(-32 26)"><ellipse cx="2" cy="17" rx="11" ry="3" fill="#2a1606" opacity=".3"/><path d="M-10 -14h20l-2 30h-16z" fill="#f2c230" stroke="#b9891a" stroke-width="1.2"/>' +
-        (m.foam ? "" : '<path d="M-10.6 -14h21.2l-.6 8q-5 3-10 0t-10 0z" fill="#fffdf5"/><circle cx="-6" cy="-15" r="3.4" fill="#fffdf5"/><circle cx="0" cy="-16.5" r="4" fill="#fffdf5"/><circle cx="6" cy="-15" r="3.4" fill="#fffdf5"/>') +
-        '<path d="M-7 -8l1 20" stroke="#fff" stroke-width="1.6" opacity=".6"/></g>';
-    } },
-    // 수저
-    spoon: { t: "U", r: 34, muts: { one: 1, flip: 1 }, draw: function (m) {
-      var sp = "<g" + (m.flip ? ' transform="rotate(180 -9 0)"' : "") + '><rect x="-11.2" y="-34" width="4.4" height="92" rx="2.2" fill="url(#gSteel)" stroke="#88939c" stroke-width=".6"/>' +
-        '<ellipse cx="-9" cy="-46" rx="9.5" ry="14" fill="url(#gSteel)" stroke="#88939c"/><ellipse cx="-11.5" cy="-50" rx="3.4" ry="6" fill="#fff" opacity=".65"/></g>';
-      return '<rect x="-21" y="-62" width="42" height="124" rx="5" fill="#2a1606" opacity=".3" filter="url(#fS)"/><rect x="-21" y="-64" width="42" height="126" rx="5" fill="#f6efe1"/>' +
-        '<rect x="-18" y="-61" width="36" height="120" rx="3" fill="none" stroke="#c94a3c" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>' + sp +
-        '<rect x="6" y="-58" width="3.6" height="114" rx="1.8" fill="url(#gSteel)" stroke="#88939c" stroke-width=".6"/>' +
-        (m.one ? "" : '<rect x="12.6" y="-58" width="3.6" height="114" rx="1.8" fill="url(#gSteel)" stroke="#88939c" stroke-width=".6"/>');
-    } }
-  };
-
-  // 한 상 차림 자리 (그림 크기 360×300). 앞에서부터 쓰므로 쉬운 단계는 앞 6자리만 쓴다.
-  // t: B 불판 · M 큰 그릇 · S 작은 접시 · X 종지 · T 병과 잔 · U 수저
-  var LAYOUTS = [
-    [{ t: "B", x: 180, y: 112 }, { t: "M", x: 58, y: 66 }, { t: "M", x: 68, y: 226 }, { t: "S", x: 236, y: 244 },
-     { t: "T", x: 330, y: 198 }, { t: "S", x: 306, y: 46 }, { t: "X", x: 284, y: 112 }, { t: "U", x: 156, y: 236, s: .9 }],
-    [{ t: "B", x: 104, y: 118 }, { t: "M", x: 252, y: 64 }, { t: "M", x: 214, y: 224 }, { t: "S", x: 54, y: 248 },
-     { t: "T", x: 334, y: 150 }, { t: "S", x: 312, y: 258 }, { t: "X", x: 172, y: 34 }, { t: "U", x: 136, y: 240, s: .9 }]
-  ];
-  var DEFS = "<defs>" +
-    '<filter id="fS" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.2"/></filter>' +
-    '<filter id="fM" x="-60%" y="-30%" width="220%" height="160%"><feGaussianBlur stdDeviation="1.5"/></filter>' +
-    '<linearGradient id="gWood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b47a45"/><stop offset=".5" stop-color="#a66c3a"/><stop offset="1" stop-color="#8f5a2c"/></linearGradient>' +
-    '<radialGradient id="gVig" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#2a1606" stop-opacity="0"/><stop offset="1" stop-color="#2a1606" stop-opacity=".5"/></radialGradient>' +
-    '<radialGradient id="gIron" cx=".35" cy=".28"><stop offset="0" stop-color="#5a4f49"/><stop offset=".6" stop-color="#2a2320"/><stop offset="1" stop-color="#120e0c"/></radialGradient>' +
-    '<radialGradient id="gGloss" cx=".3" cy=".25" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></radialGradient>' +
-    '<radialGradient id="gSoup" cx=".35" cy=".3"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></radialGradient>' +
-    '<linearGradient id="gPork" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4bb93"/><stop offset="1" stop-color="#d07f4e"/></linearGradient>' +
-    '<linearGradient id="gKim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ee4a35"/><stop offset="1" stop-color="#b31c12"/></linearGradient>' +
-    '<radialGradient id="gBasket" cx=".4" cy=".35"><stop offset="0" stop-color="#c9924f"/><stop offset="1" stop-color="#8f5d28"/></radialGradient>' +
-    '<radialGradient id="gPlate" cx=".4" cy=".35"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e6dfd2"/></radialGradient>' +
-    '<linearGradient id="gBottle" x1="0" x2="1"><stop offset="0" stop-color="#27803f"/><stop offset=".45" stop-color="#58bd72"/><stop offset="1" stop-color="#226f38"/></linearGradient>' +
-    '<linearGradient id="gSteel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f8fa"/><stop offset=".5" stop-color="#bcc6ce"/><stop offset="1" stop-color="#e6ebef"/></linearGradient>' +
-    '<linearGradient id="gBrass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4dd92"/><stop offset=".5" stop-color="#c99d3c"/><stop offset="1" stop-color="#eed382"/></linearGradient>' +
-    '<radialGradient id="gYolk" cx=".35" cy=".3"><stop offset="0" stop-color="#ffd257"/><stop offset="1" stop-color="#f59b0b"/></radialGradient>' +
-    '<radialGradient id="gEgg" cx=".38" cy=".32"><stop offset="0" stop-color="#fff3b4"/><stop offset=".7" stop-color="#f8cf58"/><stop offset="1" stop-color="#e9a52c"/></radialGradient>' +
-    '<linearGradient id="gBeer" x1="0" x2="1"><stop offset="0" stop-color="#4f2b0c"/><stop offset=".45" stop-color="#91581f"/><stop offset="1" stop-color="#432308"/></linearGradient>' +
-    "</defs>";
-  function table() {
-    var g = "", i;
-    for (i = 1; i < 4; i++) g += '<path d="M0 ' + (i * 75) + 'H360" stroke="#5e3716" stroke-width="1.6" opacity=".5"/><path d="M0 ' + (i * 75 + 1.6) + 'H360" stroke="#e0b07a" stroke-width=".8" opacity=".35"/>';
-    for (i = 0; i < 12; i++) g += '<path d="M' + ((i * 97) % 300 - 20) + " " + (10 + i * 24.5) + 'q60 -6 120 0t120 0" stroke="#6b401b" stroke-width="1" fill="none" opacity=".28"/>';
-    return '<rect width="360" height="300" fill="url(#gWood)"/>' + g +
-      '<ellipse cx="318" cy="268" rx="7" ry="4" fill="none" stroke="#5e3716" stroke-width="1.2" opacity=".4"/><rect width="360" height="300" fill="url(#gVig)"/>';
+  var SIZE = { L: 106, M: 92, S: 72, X: 44, T: 96, G: 62, U: 70 };   // 긴 쪽 길이(그림 폭 360 기준)
+  var ASPECT = {"grill":0.75,"ssam":0.79,"stew":0.8,"egg":0.8,"naeng":0.88,"rice":0.95,"kimchi":0.8,"paj":0.8,"soju":3.08,"beer":3.19,"mug":1.28,"glass":1.15,"spoon":3.52,"chop":5.68,"jang":1.05,"garlic":1.02,"gchili":1.56,"rchili":1.44,"tongs":0.91,"scissors":1.25,"tteok":0.97,"pajeon":0.99,"japchae":1.0,"mandu":0.97,"gimbap":0.97,"sundae":0.97,"jjajang":0.97,"jjamppong":0.99,"tangsu":1.0,"kimchijjigae":0.91,"bibimbap":0.97,"chicken":0.97,"bulgogi":0.97,"gukbap":0.99,"friedrice":1.0,"kalguksu":0.97,"gyeranmari":0.97,"bossam":0.97,"kimchijeon":0.97,"dakgalbi":0.96,"galbitang":0.98,"bibimnaeng":0.97,"yukgaejang":0.97,"eomuk":1.05,"sundubu":0.94,"dubukimchi":0.99,"fish":0.99,"jjimdak":0.97,"jeon":0.97,"oikimchi":0.97};   // 높이/폭
+  var NOHUE = " rice glass spoon chop tongs garlic gukbap kalguksu galbitang eomuk mandu bossam ";   // 색을 바꿔도 티가 안 나는 것
+  var PLAIN = " rice glass garlic ";                                                                  // 뒤집거나 돌려도 티가 안 나는 것
+  var TYPE = {};
+  Object.keys(TYPES).forEach(function (t) { TYPES[t].split(" ").forEach(function (k) { TYPE[k] = t; }); });
+  function dims(k) { var z = SIZE[TYPE[k]], a = ASPECT[k]; return a >= 1 ? { w: z / a, h: z } : { w: z, h: z * a }; }
+  // 틀린 곳 만드는 방법: [방법, 값, 난이도(1 쉬움·2 어려움)] — hue 색 · flip 좌우 뒤집기 · rot 돌리기 · size 크기 · gone 없애기
+  function mutsFor(k) {
+    var t = TYPE[k], hue = NOHUE.indexOf(" " + k + " ") < 0, m = [];
+    if (PLAIN.indexOf(" " + k + " ") >= 0) return [["gone", 0, 1], ["size", .74, 2]];
+    if (t === "T") return [["hue", 100, 1], ["gone", 0, 1], ["rot", 24, 2], ["size", .82, 2]];
+    if (t === "G") return [["flip", 0, 1], ["hue", -45, 1], ["gone", 0, 1]];
+    if (t === "X") return [["gone", 0, 1], ["hue", 85, 1], ["size", .72, 2]];
+    if (t === "U") {
+      m = [["gone", 0, 1], ["rot", 45, 1]];
+      if (hue) m.push(["hue", k === "scissors" ? 150 : -95, 1]);
+      if (k !== "spoon" && k !== "chop") m.push(["flip", 0, 2]);
+      return m;
+    }
+    if (hue) m.push(["hue", [70, -70, 150][k.length % 3], 1]); else m.push(["gone", 0, 1]);
+    if (t === "S" && hue) m.push(["gone", 0, 1]);
+    m.push(["flip", 0, 2], ["rot", 180, 2], ["size", .8, 2]);
+    return m;
   }
+  // 한 상 차림 자리 (그림 크기 360×300). 앞에서부터 쓰므로 쉬운 단계는 앞 6자리만 쓴다.
+  var LAYOUTS = [
+    [{ t: "L", x: 180, y: 108 }, { t: "M", x: 60, y: 62 }, { t: "M", x: 62, y: 226 }, { t: "S", x: 238, y: 248 },
+     { t: "T", x: 312, y: 152 }, { t: "S", x: 304, y: 48 }, { t: "X", x: 260, y: 114 }, { t: "U", x: 148, y: 240 }, { t: "G", x: 322, y: 256 }],
+    [{ t: "L", x: 104, y: 112 }, { t: "M", x: 250, y: 58 }, { t: "M", x: 214, y: 226 }, { t: "S", x: 60, y: 256 },
+     { t: "T", x: 322, y: 150 }, { t: "S", x: 312, y: 258 }, { t: "X", x: 174, y: 32 }, { t: "U", x: 136, y: 238 }, { t: "G", x: 30, y: 190 }]
+  ];
+  var ART = "spot-art/";
+
   function scene(diff) {
-    var s = '<svg viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg" role="img">' + DEFS + table();
+    var s = "";
     cur.forEach(function (p, i) {
-      var m = {}; if (diff && diff[i]) m[diff[i]] = true;
-      s += '<g transform="translate(' + p.x + " " + p.y + ")" + (p.s ? " scale(" + p.s + ")" : "") + (p.flip ? " scale(-1 1)" : "") + '">' + FOOD[p.f].draw(m) + "</g>";
+      var mu = diff && diff[i], tr = "", fl = "", w = dims(p.f).w;
+      if (mu && mu[0] === "gone") return;
+      if (mu && mu[0] === "flip") tr += " scaleX(-1)";
+      if (mu && mu[0] === "rot") tr += " rotate(" + mu[1] + "deg)";
+      if (mu && mu[0] === "size") w = w * mu[1];
+      if (mu && mu[0] === "hue") fl = "filter:hue-rotate(" + mu[1] + "deg);";
+      s += '<div class="it" data-i="' + i + '" style="left:' + (p.x / 3.6).toFixed(2) + "%;top:" + (p.y / 3).toFixed(2) + "%;width:" + (w / 3.6).toFixed(2) + '%">' +
+        '<img src="' + ART + p.f + '.webp" alt="" draggable="false" style="' + fl + (tr ? "transform:" + tr : "") + '"></div>';
     });
-    return s + '<g class="marks"></g></svg>';
+    return s + '<svg class="ov" viewBox="0 0 360 300"><g class="marks"></g></svg>';
   }
 
   /* ───── 게임 진행 ───── */
@@ -363,12 +221,12 @@
   var shuffle = function (a) { return a.slice().sort(function () { return Math.random() - .5; }); };
   try { best = +localStorage.getItem("qm_spot_best") || 0; sound = localStorage.getItem("qm_spot_mute") !== "1"; } catch (e) {}
 
-  // 단계별 설정: 음식 수 · 틀린 곳 수 · 시간 · 작은 차이를 쓸지(0 안 씀, 1 섞음, 2 먼저 씀)
+  // 단계별 설정: 음식 수 · 틀린 곳 수 · 시간 · 어려운 차이를 쓸지(0 안 씀, 1 섞음, 2 먼저 씀)
   function conf(lv) {
     if (lv === 1) return { n: 6, need: 3, time: 60, hard: 0 };
     if (lv === 2) return { n: 8, need: 4, time: 75, hard: 0 };
-    if (lv === 3) return { n: 8, need: 5, time: 90, hard: 1 };
-    return { n: 8, need: 5, time: Math.max(50, 90 - (lv - 3) * 10), hard: 2 };
+    if (lv === 3) return { n: 9, need: 5, time: 90, hard: 1 };
+    return { n: 9, need: 5, time: Math.max(50, 90 - (lv - 3) * 10), hard: 2 };
   }
 
   // 소리 (파일 없이 브라우저가 내는 짧은 음)
@@ -388,15 +246,16 @@
     cf = conf(level);
     var lay = pick(LAYOUTS), mirror = Math.random() < .5, used = {};
     cur = lay.slice(0, cf.n).map(function (sl) {
-      var names = shuffle(Object.keys(FOOD).filter(function (k) { return FOOD[k].t === sl.t && !used[k]; }));
+      var names = shuffle(Object.keys(TYPE).filter(function (k) { return TYPE[k] === sl.t && !used[k]; }));
       used[names[0]] = true;
-      return { f: names[0], x: mirror ? 360 - sl.x : sl.x, y: sl.y, s: sl.s, flip: mirror && sl.t === "T" };
+      var d = dims(names[0]);
+      return { f: names[0], x: mirror ? 360 - sl.x : sl.x, y: sl.y, r: Math.max(Math.max(d.w, d.h) / 2, 20) };
     });
     diff = {};
     shuffle(cur.map(function (_, i) { return i; })).slice(0, cf.need).forEach(function (i) {
-      var mu = FOOD[cur[i].f].muts, keys = Object.keys(mu);
-      var easy = keys.filter(function (k) { return mu[k] === 1; }), hard = keys.filter(function (k) { return mu[k] === 2; });
-      diff[i] = pick(cf.hard === 0 ? easy : (cf.hard === 2 && hard.length ? hard : keys));
+      var mu = mutsFor(cur[i].f);
+      var easy = mu.filter(function (m) { return m[2] === 1; }), hard = mu.filter(function (m) { return m[2] === 2; });
+      diff[i] = pick(cf.hard === 0 ? easy : (cf.hard === 2 && hard.length ? hard : mu));
     });
     var flip = Math.random() < .5;   // 어느 쪽이 바뀐 그림인지 매번 다르게
     picA.innerHTML = scene(flip ? diff : null); picB.innerHTML = scene(flip ? null : diff);
@@ -419,11 +278,11 @@
   }
   function tap(e) {
     if (!playing) return;
-    var svg = e.currentTarget.querySelector("svg"), b = svg.getBoundingClientRect();
+    var b = e.currentTarget.getBoundingClientRect();
     var x = (e.clientX - b.left) * 360 / b.width, y = (e.clientY - b.top) * 300 / b.height, hit = -1;
     Object.keys(diff).forEach(function (i) {
-      var p = cur[i], r = FOOD[p.f].r + 6;
-      if (!found[i] && Math.hypot(x - p.x, y - p.y) <= r) hit = i;
+      var p = cur[i];
+      if (!found[i] && Math.hypot(x - p.x, y - p.y) <= p.r + 5) hit = i;
     });
     if (hit < 0) {
       left -= PENALTY; e.currentTarget.classList.remove("shake"); void e.currentTarget.offsetWidth; e.currentTarget.classList.add("shake");
@@ -435,7 +294,7 @@
       hud(); if (left <= 0) end(false); return;
     }
     found[hit] = true;
-    var p = cur[hit], r = FOOD[p.f].r + 3, rays = "";
+    var p = cur[hit], r = p.r + 2, rays = "";
     for (var a = 0; a < 360; a += 45) rays += '<path d="M0 ' + (-r - 5) + "V" + (-r - 15) + '" transform="rotate(' + a + ')"/>';
     mark('<circle class="ring" cx="' + p.x + '" cy="' + p.y + '" r="' + r + '"/><g transform="translate(' + p.x + " " + p.y + ')"><g class="burst">' + rays + "</g></g>");
     beep(880, .12); beep(1320, .2, "sine", .09);
@@ -447,7 +306,7 @@
     var rest = Object.keys(diff).filter(function (i) { return !found[i]; }); if (!rest.length) return;
     hints--; usedHints++;
     var p = cur[pick(rest)];
-    mark('<circle class="glow" cx="' + p.x + '" cy="' + p.y + '" r="' + (FOOD[p.f].r + 8) + '"/>');
+    mark('<circle class="glow" cx="' + p.x + '" cy="' + p.y + '" r="' + (p.r + 7) + '"/>');
     setTimeout(function () { document.querySelectorAll(".glow").forEach(function (g) { g.remove(); }); }, 1600);
     beep(660, .15); hud();
   }
@@ -469,7 +328,7 @@
       [523, 659, 784, 1047].forEach(function (f, i) { beep(f, .22, "triangle", .12 * i + .15, .13); });
     } else {
       Object.keys(diff).forEach(function (i) {   // 못 찾은 곳을 노란 점선 원으로 알려 줌
-        if (!found[i]) { var p = cur[i]; mark('<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (FOOD[p.f].r + 3) + '" fill="none" stroke="#ffd60a" stroke-width="4" stroke-dasharray="7 5"/>'); }
+        if (!found[i]) { var p = cur[i]; mark('<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (p.r + 2) + '" fill="none" stroke="#ffd60a" stroke-width="4" stroke-dasharray="7 5"/>'); }
       });
       beep(300, .3, "sawtooth", 0, .05); beep(200, .45, "sawtooth", .25, .05);
     }
