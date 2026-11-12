@@ -102,6 +102,7 @@ name() {
     inyeon) echo "인연식당" ;;
     daehansangho) echo "대한상회 고깃집" ;;
     kangnammyeonok) echo "강남면옥" ;;
+    jinmi) echo "진미식당" ;;
     *) echo "$1" ;;
   esac
 }

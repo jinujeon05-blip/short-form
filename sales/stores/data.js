@@ -802,6 +802,12 @@ window.STORES = [
     type: { ko: "한식 · 냉면 · 숯불구이 · 조림", vi: "Món Hàn · Mì lạnh · Thịt nướng than · Cá kho", en: "Korean · Cold noodles · Charcoal BBQ · Braised fish", zh: "韩餐 · 冷面 · 炭火烤肉 · 炖鱼", ja: "韓国料理・冷麺・炭火焼肉・コダリ煮" },
     keywords: "강남면옥 Kangnam Myeonok Kang Nam 江南面屋 박닌 냉면 숯불구이 민물장어 코다리조림 촌불고기 Miến lạnh Kang Nam Bắc Ninh"
   },
+  { id: "jinmi", name: "진미식당 JINMI", sub: "찌개 · 국밥 · 갈비탕 · 부대찌개 · 왕돈가스 · 고기 · 안주", url: "https://jinmi.qrmenuasia.com",
+    region: "bacninh", cats: ["korean"], tags: [],
+    address: "206 Hoàng Hoa Thám, Võ Cường, TP. Bắc Ninh", map: "https://www.google.com/maps/place/Nh%C3%A0+H%C3%A0ng+Jinmi+%EC%A7%84%EB%AF%B8+%EC%8B%9D%EB%8B%B9/@21.1721216,106.0535836,17z",
+    type: { ko: "한식 · 찌개 · 국밥 · 안주 · 고기", vi: "Món Hàn · Canh lẩu · Món nhậu · Thịt nướng", en: "Korean stews · Soups · Anju · BBQ", zh: "韩餐 · 炖锅 · 汤饭 · 下酒菜 · 烤肉", ja: "韓国料理・チゲ・クッパ・おつまみ・焼肉" },
+    keywords: "진미식당 진미 Jinmi 박닌 Bắc Ninh Võ Cường 한식 부대찌개 갈비탕 설렁탕 순두부찌개 왕돈가스 만두전골 보쌈 삼겹살 Nhà hàng Hàn Quốc"
+  },
 ];
 window.SI = {
   ko: {

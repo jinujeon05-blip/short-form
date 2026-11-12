@@ -199,6 +199,8 @@ window.DEMOS = [
     name: "대한상회 고깃집 DAEHAN SANGHOE", type: { ko: "한식 · 돼지고기 구이 · 점심 특선", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ nướng · Món ăn trưa", en: "Korean BBQ · Grilled pork belly · Lunch specials", zh: "韩式烤肉 · 五花肉 · 午餐特选", ja: "韓国焼肉・サムギョプサル・ランチ" } },
   { id: "kangnammyeonok", hidden: true, url: "https://kangnammyeonok.qrmenuasia.com", shot: "img/demo-kangnammyeonok.jpg", qr: "img/qr-kangnammyeonok.svg",
     name: "강남면옥 KANGNAM MYEONOK", type: { ko: "한식 · 냉면 · 숯불구이 · 조림", vi: "Món Hàn · Mì lạnh · Thịt nướng than · Cá kho", en: "Korean · Cold noodles · Charcoal BBQ · Braised fish", zh: "韩餐 · 冷面 · 炭火烤肉 · 炖鱼", ja: "韓国料理・冷麺・炭火焼肉・コダリ煮" } },
+  { id: "jinmi", url: "https://jinmi.qrmenuasia.com", shot: "img/demo-jinmi.jpg", qr: "img/qr-jinmi.svg",
+    name: "진미식당 JINMI", type: { ko: "한식 · 찌개 · 국밥 · 안주 · 고기", vi: "Món Hàn · Canh lẩu · Món nhậu · Thịt nướng", en: "Korean stews · Soups · Anju · BBQ", zh: "韩餐 · 炖锅 · 汤饭 · 下酒菜 · 烤肉", ja: "韓国料理・チゲ・クッパ・おつまみ・焼肉" } },
 ];
 
 window.T = {
