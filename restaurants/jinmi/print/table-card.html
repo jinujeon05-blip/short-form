@@ -13,9 +13,10 @@
   body { font-family: "Gmarket", "Inter", "WenQuanYi Zen Hei", sans-serif; color: var(--ink); }
   .card { position: relative; width: 105mm; height: 148mm; overflow: hidden; background: var(--paper); display: flex; flex-direction: column; align-items: center; }
   .card > * { position: relative; z-index: 1; }
-  .sign { width: 105mm; height: 40mm; object-fit: cover; object-position: center 40%; display: block; border-bottom: 1.2mm solid var(--red); }
+  .top { width: 105mm; height: 38mm; display: flex; align-items: center; justify-content: center; background: var(--paper); border-bottom: 1.2mm solid var(--red); }
+  .top img { width: 80mm; height: auto; display: block; }
   .dots { width: 100%; height: 2mm; margin-top: 1.4mm; background: radial-gradient(circle, var(--yellow) 0.45mm, transparent 0.55mm) 0 50% / 4mm 2mm repeat-x; }
-  .name { margin-top: 2mm; font-family: "Jalnan"; font-size: 9.5mm; letter-spacing: 1.4mm; line-height: 1; color: var(--yellow); }
+  .name { margin-top: 2mm; font-family: "Jalnan"; font-size: 7mm; letter-spacing: 1.2mm; line-height: 1; color: var(--yellow); }
   .en { margin-top: 1.2mm; font-size: 3.6mm; letter-spacing: 1.8mm; color: var(--red); }
   .tag { margin-top: 1.4mm; font-family: "Inter", sans-serif; font-weight: 600; font-size: 2.8mm; color: var(--muted); }
   .qr-box { margin-top: 3.4mm; background: #fff; border-radius: 3mm; padding: 2mm; box-shadow: 0 0 0 .7mm var(--yellow), 0 1.5mm 4mm rgba(0,0,0,.5); }
@@ -43,7 +44,7 @@
 </head>
 <body>
 <div class="card">
-  <img class="sign" src="../img/sign.jpg" alt="">
+  <div class="top"><img src="../img/logo.png" alt=""></div>
   <div class="dots"></div>
   <div class="name">진미식당</div>
   <div class="en">JINMI</div>
