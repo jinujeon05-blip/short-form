@@ -197,6 +197,8 @@ window.DEMOS = [
     name: "샹라 XIANG LA", type: { ko: "마라탕 · 마라샹궈 · 중화요리 · 닭발 · 하노이", vi: "Canh Mala · Đồ Xào Mala · Món Hoa · Chân gà · Hà Nội", zh: "麻辣烫 · 麻辣香锅 · 中餐 · 鸡爪 · 河内", ja: "麻辣湯・麻辣香鍋・中華料理・鶏足・ハノイ", en: "Malatang · Mala Xiang Guo · Chinese dishes · Chicken feet · Hanoi" } },
   { id: "daehansangho", hidden: true, url: "https://daehansangho.qrmenuasia.com", shot: "img/demo-daehansangho.jpg", qr: "img/qr-daehansangho.svg",
     name: "대한상회 고깃집 DAEHAN SANGHOE", type: { ko: "한식 · 돼지고기 구이 · 점심 특선", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ nướng · Món ăn trưa", en: "Korean BBQ · Grilled pork belly · Lunch specials", zh: "韩式烤肉 · 五花肉 · 午餐特选", ja: "韓国焼肉・サムギョプサル・ランチ" } },
+  { id: "kangnammyeonok", hidden: true, url: "https://kangnammyeonok.qrmenuasia.com", shot: "img/demo-kangnammyeonok.jpg", qr: "img/qr-kangnammyeonok.svg",
+    name: "강남면옥 KANGNAM MYEONOK", type: { ko: "한식 · 냉면 · 숯불구이 · 조림", vi: "Món Hàn · Mì lạnh · Thịt nướng than · Cá kho", en: "Korean · Cold noodles · Charcoal BBQ · Braised fish", zh: "韩餐 · 冷面 · 炭火烤肉 · 炖鱼", ja: "韓国料理・冷麺・炭火焼肉・コダリ煮" } },
 ];
 
 window.T = {

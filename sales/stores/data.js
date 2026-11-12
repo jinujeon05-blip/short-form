@@ -796,6 +796,12 @@ window.STORES = [
     type: { ko: "한식 · 돼지고기 구이 · 점심 특선", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ nướng · Món ăn trưa", en: "Korean BBQ · Grilled pork belly · Lunch specials", zh: "韩式烤肉 · 五花肉 · 午餐特选", ja: "韓国焼肉・サムギョプサル・ランチ" },
     keywords: "대한상회 고깃집 대한상회 Daehan Sanghoe 삼겹살 목살 돼지한판 박닌 Bac Ninh Korea Town thịt nướng Hàn Quốc korean bbq pork belly 韩式烤肉 焼肉"
   },
+  { id: "kangnammyeonok", name: "강남면옥 KANGNAM MYEONOK", sub: "코다리 냉면 · 물냉면 · 소고기 숯불구이 · 민물장어 · 코다리조림", url: "https://kangnammyeonok.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean","bbq","noodle"], tags: [],
+    address: "125 Ngọc Hân Công Chúa, Bắc Ninh", map: "https://www.google.com/maps/place/Kangnam+Myeonok/@21.1735261,106.0608023,20z/data=!4m6!3m5!1s0x31350eab274b0413:0xff649be009cb1b19!8m2!3d21.1737!4d106.061!16s%2Fg%2F11j6305bqp",
+    type: { ko: "한식 · 냉면 · 숯불구이 · 조림", vi: "Món Hàn · Mì lạnh · Thịt nướng than · Cá kho", en: "Korean · Cold noodles · Charcoal BBQ · Braised fish", zh: "韩餐 · 冷面 · 炭火烤肉 · 炖鱼", ja: "韓国料理・冷麺・炭火焼肉・コダリ煮" },
+    keywords: "강남면옥 Kangnam Myeonok Kang Nam 江南面屋 박닌 냉면 숯불구이 민물장어 코다리조림 촌불고기 Miến lạnh Kang Nam Bắc Ninh"
+  },
 ];
 window.SI = {
   ko: {

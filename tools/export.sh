@@ -101,6 +101,7 @@ name() {
     namme) echo "남매식당" ;;
     inyeon) echo "인연식당" ;;
     daehansangho) echo "대한상회 고깃집" ;;
+    kangnammyeonok) echo "강남면옥" ;;
     *) echo "$1" ;;
   esac
 }
