@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>진미식당 JINMI · QR 카드</title>
+<style>
+  @font-face { font-family: "Jalnan"; src: url("../../../public/fonts/Jalnan2.ttf"); }
+  @font-face { font-family: "Gmarket"; src: url("../../../public/fonts/GmarketSansTTFBold.ttf"); }
+  @page { size: 105mm 148mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --paper: #1f1e1c; --paper-2: #2a2926; --ink: #f4efe2; --muted: #bdb7a8; --yellow: #f2d93a; --red: #e23a30; --green: #8fcf4d; }
+  html, body { background: #fff; }
+  body { font-family: "Gmarket", "Inter", "WenQuanYi Zen Hei", sans-serif; color: var(--ink); }
+  .card { position: relative; width: 105mm; height: 148mm; overflow: hidden; background: var(--paper); display: flex; flex-direction: column; align-items: center; }
+  .card > * { position: relative; z-index: 1; }
+  .sign { width: 105mm; height: 40mm; object-fit: cover; object-position: center 40%; display: block; border-bottom: 1.2mm solid var(--red); }
+  .dots { width: 100%; height: 2mm; margin-top: 1.4mm; background: radial-gradient(circle, var(--yellow) 0.45mm, transparent 0.55mm) 0 50% / 4mm 2mm repeat-x; }
+  .name { margin-top: 2mm; font-family: "Jalnan"; font-size: 9.5mm; letter-spacing: 1.4mm; line-height: 1; color: var(--yellow); }
+  .en { margin-top: 1.2mm; font-size: 3.6mm; letter-spacing: 1.8mm; color: var(--red); }
+  .tag { margin-top: 1.4mm; font-family: "Inter", sans-serif; font-weight: 600; font-size: 2.8mm; color: var(--muted); }
+  .qr-box { margin-top: 3.4mm; background: #fff; border-radius: 3mm; padding: 2mm; box-shadow: 0 0 0 .7mm var(--yellow), 0 1.5mm 4mm rgba(0,0,0,.5); }
+  .qr-box img { display: block; width: 38mm; height: 38mm; }
+  .badge { font-family: "Inter", sans-serif; font-weight: 800; position: absolute; right: -6mm; top: -3mm; transform: rotate(8deg); background: var(--red); color: #fff; font-size: 2.5mm; padding: .9mm 2mm .7mm; border-radius: 99mm; }
+  h1 { margin-top: 3.4mm; font-family: "Inter", sans-serif; font-weight: 900; font-size: 5.2mm; letter-spacing: .2mm; text-align: center; line-height: 1.15; }
+  h1 span { color: var(--yellow); }
+  .h1-en { margin-top: 1mm; font-family: "Inter", sans-serif; font-weight: 800; font-size: 3.5mm; letter-spacing: .5mm; text-align: center; }
+  .h1-en span { color: var(--yellow); }
+  .langs { display: flex; flex-wrap: wrap; justify-content: center; gap: .5mm 3.5mm; margin-top: 1.4mm; font-family: "Inter", "WenQuanYi Zen Hei", sans-serif; font-weight: 600; font-size: 2.6mm; color: var(--muted); }
+  .langs em { font-style: normal; display: inline-block; width: 4.6mm; font-size: 1.9mm; font-weight: 800; color: var(--green); }
+  .ko { font-family: "Gmarket"; font-weight: 400; }
+  .ja { font-family: "IPAGothic", sans-serif; }
+  .card > footer { position: absolute; left: 0; right: 0; bottom: 0; height: 15mm; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: .8mm; background: var(--red); color: #fff; }
+  footer .tel { font-size: 3.6mm; letter-spacing: .2mm; }
+  footer .addr { font-family: "Inter", sans-serif; font-weight: 600; font-size: 2.4mm; }
+  footer .deli { font-family: "Inter", sans-serif; font-weight: 700; font-size: 2.2mm; opacity: .92; }
+  /* 테이블 번호 자리(admin 인쇄 때 번호가 채워짐, 단독 인쇄 땐 숨김) */
+  .tno { position: absolute; right: calc(100% - 3mm); top: -6mm; z-index: 3; min-width: 12mm; height: 12mm; padding: 0 1.8mm; box-sizing: border-box; border-radius: 99mm;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--red); color: #fff; box-shadow: 0 0 0 .8mm var(--paper);
+    font-family: system-ui, "Segoe UI", sans-serif; font-weight: 800; font-size: 6.5mm; line-height: .95; }
+  .tno::before { content: "BÀN"; font-size: 1.8mm; letter-spacing: .2mm; line-height: 1; margin-bottom: .3mm; opacity: .9; }
+  .tno:empty { display: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="sign" src="../img/sign.jpg" alt="">
+  <div class="dots"></div>
+  <div class="name">진미식당</div>
+  <div class="en">JINMI</div>
+  <div class="tag">Nhà hàng Hàn Quốc</div>
+  <div class="qr-box">
+    <img src="qr.svg" alt="QR https://jinmi.qrmenuasia.com">
+    <div class="tno" data-table></div>
+    <span class="badge">5 ngôn ngữ</span>
+  </div>
+  <h1>QUÉT MÃ <span>XEM THỰC ĐƠN</span></h1>
+  <div class="h1-en">SCAN QR <span>FOR MENU</span></div>
+  <div class="langs">
+    <div><em>KO</em><span class="ko">QR 찍고 메뉴 보기</span></div>
+    <div><em>ZH</em>扫码看菜单</div>
+    <div><em>JA</em><span class="ja">メニューを見る</span></div>
+  </div>
+  <footer>
+    <div class="tel">☎ 0868 333 769</div>
+    <div class="addr">206 Hoàng Hoa Thám, Võ Cường, TP. Bắc Ninh</div>
+    <div class="deli">09:00 – 22:00</div>
+  </footer>
+</div>
+</body>
+</html>
