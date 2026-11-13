@@ -6,7 +6,25 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import vm from 'node:vm';
 import { chromium, ROOT, serve } from './pw.mjs';
+
+// 정식 가게 결과물: 정식(sales/stores/data.js 에 listing: true 가 없는 가게)은 print/ 에 이 파일이 다 있어야 한다.
+// 진미식당이 QR 카드만 만들고 SNS 이미지를 빠뜨린 일(2026-11-13)로 넣었다. 가게 찾기용은 검사하지 않는다.
+const PRINT = [['print/table-card-A6.pdf', 'node tools/card.mjs'], ['print/sns-square.png', 'node tools/sns.mjs'], ['print/sns-story.png', 'node tools/sns.mjs']];
+const sb = { window: {} }; vm.runInNewContext(fs.readFileSync(`${ROOT}/sales/stores/data.js`, 'utf8'), sb);
+const STORES = sb.window.STORES || [];
+const isFull = (sid) => { const s = STORES.find((x) => x.id === sid); return !!s && !s.listing; };
+const missingPrint = (sid) => PRINT.filter(([f]) => !fs.existsSync(`${ROOT}/restaurants/${sid}/${f}`));
+
+// node tools/check-shop.mjs --print-all : 정식 가게 전부의 결과물 빠짐만 본다(화면 캡처·seo 안 돌림)
+if (process.argv[2] === '--print-all') {
+  const full = STORES.filter((s) => !s.listing && fs.existsSync(`${ROOT}/restaurants/${s.id}/index.html`));
+  const miss = full.map((s) => [s.id, s.name, missingPrint(s.id)]).filter(([, , m]) => m.length);
+  console.log(`정식 가게 ${full.length}곳 중 결과물 빠진 곳 ${miss.length}곳`);
+  miss.forEach(([sid, name, m]) => console.log(`  ${sid} (${name}): ${m.map(([f]) => f.replace('print/', '')).join(', ')}`));
+  process.exit(miss.length ? 1 : 0);
+}
 
 const [id, out = 'dashboard/out'] = process.argv.slice(2);
 if (!/^[a-z0-9]+$/.test(id || '') || !fs.existsSync(`${ROOT}/restaurants/${id}/index.html`)) { console.error('사용법: node tools/check-shop.mjs <가게id> [저장폴더]'); process.exit(1); }
@@ -29,6 +47,12 @@ const todo = ['menu.js', 'index.html'].map((f) => [f, (fs.readFileSync(`${ROOT}/
 const left = todo.filter(([, n]) => n);
 console.log(`■ TODO 남은 곳: ${left.length ? '✘ ' + left.map(([f, n]) => `${f} ${n}개`).join(', ') : '없음'}`);
 if (left.length) bad++;
+
+if (isFull(id)) {
+  const m = missingPrint(id);
+  console.log(`■ 정식 결과물(QR 카드·SNS): ${m.length ? '✘ 빠짐 ' + m.map(([f, c]) => `${f} (${c} ${id})`).join(', ') : '통과'}`);
+  if (m.length) bad++;
+} else console.log('■ 정식 결과물: 가게 찾기용이라 검사 안 함');
 
 run('가마솥 표준', 'node', ['tools/check-standard.mjs', id], 20);
 run('가게 찾기 목록', 'node', ['tools/check-listing.mjs'], 8);

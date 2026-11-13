@@ -27,7 +27,11 @@
    - 메뉴판 속 작은 그림은 잘라 쓰지 않는다.
    - `price == null`(시가)을 처리한다.
 5. **종류별 내용**:
-   - **정식**: 장바구니·주문서(Zalo), 테이블 QR 카드, SNS 이미지, 점주 자료.
+   - **정식**: 장바구니·주문서(Zalo) + 아래 결과물을 **전부** 만들어 상호를 붙여 사용자에게 보낸다(2026-11-13 진미 SNS 누락 건). `check-shop.mjs`가 앞의 3개 파일이 없으면 실패시킨다.
+     - 테이블 QR 카드: `print/table-card.html`(QR=`print/qr.svg`, `qr.cjs`) → `node tools/card.mjs <가게>` → `print/table-card-A6.pdf`·`table-card.png`
+     - SNS 이미지: `node tools/sns.mjs <가게> ko`(한국 매장, 그 밖 `vi`) → `print/sns-square.png`(1080×1080)·`print/sns-story.png`(1080×1920). 두 장을 직접 열어 잘림·5개 언어 확인
+     - 점주 자료(사용자가 원할 때): `print/guide.html` → `node tools/pdf.mjs restaurants/<가게>/print/guide.html restaurants/<가게>/print/guide-<가게>.pdf`(예: `restaurants/gamasot/print/`)
+     - 정식 가게 전부의 빠짐 확인: `node tools/check-shop.mjs --print-all`
    - **가게 찾기용**:
      - 메뉴 보기만. Zalo·장바구니·주문서는 넣지 않는다.
      - 다산 배너는 꺼져 있다(2026-11-09 사용자 지시로 전부 뺌, `dasan.js`의 `ON = false`). 파일 복사·SHOPS 등록은 그대로 해 둔다.
