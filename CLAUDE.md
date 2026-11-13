@@ -111,5 +111,6 @@
 
 ## 8. 상세 기록 (`docs/`, 필요할 때만 읽음)
 - `team-plan.md` 기획서(30문항·조직도, 팀·대시보드 일 전에 읽음) · `standard.md` 가마솥 표준(새 가게마다) · `new-shop.md` 새 가게 체크리스트 상세 · `deploy.md` 배포·머지 순서
+- `shop-builder.md` 대시보드 '가게 만들기' 탭(캡틴이 화면에서 가게를 직접 만들기·AI 번역, `tools/build-shop.mjs`·`dashboard/builder.py`)
 - `tools.md` 도구 상세 · `team-test.md` 담당 명령·시험 기록 · `mistakes.md` 실수 사건 · `stores.md` 가게 목록·기록(`grep -n "가게이름"`) · `todo.md` 남은 할 일(말한 가게 줄만)
 - `seo.md` 도메인·검색 · `maps-photos.md` 사진 수집기 · `admin-system.md` 방문 기록·점주 편집·주방 주문(주방 화면·프린터) · `qr-home.md` QR MENU 버튼(지구본 배지 재시도 안 함) · `shared-features.md` 공통 기능 · `dashboard.md` 대시보드 'Jinwoo 에이전트'(127.0.0.1:8899)

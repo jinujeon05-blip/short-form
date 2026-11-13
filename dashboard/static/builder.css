@@ -34,8 +34,8 @@
 .bd-seg { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; font-size: 13px; }
 .bd-topimg { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .bd-topimg img { max-width: 100%; border-radius: 10px; border: 1px solid var(--line); background: repeating-conic-gradient(#eee 0 25%, #fff 0 50%) 0 0 / 16px 16px; }
-.bd-topimg img.sign { width: 320px; aspect-ratio: 16 / 9; object-fit: cover; }
-.bd-topimg img.logo { max-height: 120px; }
+.bd-topimg img.bd-top-sign { width: 320px; aspect-ratio: 16 / 9; object-fit: cover; }
+.bd-topimg img.bd-top-logo { max-height: 120px; }
 .bd-empty { width: 320px; max-width: 100%; aspect-ratio: 16 / 9; border: 2px dashed var(--line); border-radius: 10px; display: grid; place-items: center; color: var(--sub); }
 .bd-file { cursor: pointer; }
 .bd-presets { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
@@ -70,6 +70,7 @@
 .bd-checks { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; margin-bottom: 8px; }
 .bd-drafts { display: flex; flex-wrap: wrap; gap: 6px; }
 .bd-actions .muted { margin: 0 0 10px; line-height: 1.45; }
+#bd-err { white-space: pre-line; }
 .bd-log { max-height: 260px; overflow: auto; background: #10151f; color: #d8e1ef; border-radius: 10px; padding: 10px; font: 12px/1.45 ui-monospace, Consolas, monospace; white-space: pre-wrap; word-break: break-word; margin: 0 0 8px; }
 .bd-prev-h { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; } .bd-prev-h b { margin-right: auto; }
 .bd-prev-h select { width: auto; padding: 3px 6px; }

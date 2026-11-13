@@ -263,7 +263,7 @@ def commit(sid):
                   f"배포는 아래 [배포 확정]을 눌러야 해요. 배포 전에 폰 화면 캡처를 한 번 보세요.\n캡처: {shot}\n배포준비: {sid}")
         o = {"id": oid, "title": f"가게 만들기: {name} ({sid})", "status": "done", "via": "builder", "createdAt": time.time(),
              "turns": [{"by": "me", "text": f"가게 만들기 화면에서 {name}({sid}) 저장·커밋", "at": time.time()},
-                       {"by": "claude", "text": report, "at": time.time()}],
+                       {"by": "system", "text": report, "at": time.time()}],  # AI 보고가 아니라 '알림'으로 보인다
              "steps": [], "deploy": [sid], "deployState": None, "images": [shot] if (SV.OUT / shot).is_file() else [],
              "approval": None, "decision": None, "seenAt": None, "endedAt": time.time(), "builder": True}
         SV.ORDERS[oid] = o

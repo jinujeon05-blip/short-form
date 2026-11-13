@@ -142,7 +142,7 @@
           <label><input type="radio" name="bd-top" value="sign" ${D.top === 'sign' ? 'checked' : ''}> 로고가 없어요 → 간판이 보이는 가게 사진</label>
         </div>
         <div class="bd-topimg">
-          ${hasTop ? `<img src="/builder-img/${B.id}/${topImg}?t=${Date.now()}" alt="" class="${D.top}">` : `<div class="bd-empty">${D.top === 'logo' ? '로고' : '간판 사진'}을 올려 주세요</div>`}
+          ${hasTop ? `<img src="/builder-img/${B.id}/${topImg}?t=${Date.now()}" alt="" class="bd-top-${D.top}">` : `<div class="bd-empty">${D.top === 'logo' ? '로고' : '간판 사진'}을 올려 주세요</div>`}
           <label class="btn ghost bd-file">${hasTop ? '바꾸기' : '올리기'}<input type="file" accept="image/*" id="bd-topfile" hidden></label>
         </div>
         <p class="muted">${D.top === 'logo' ? '로고는 긴 변 800px 이하 PNG로 줄여서 올려요.' : '간판 사진은 16:9로 잘라요(끌어서 위치, 막대로 크기).'}</p>
@@ -388,7 +388,12 @@
     if (t.id === 'bd-discard') return discard();
   }
   const D_items = () => B.D.cats.flatMap(c => c.items);
-  const err = msg => { const el = $('#bd-err'); if (el) el.textContent = msg ? '안 됐어요: ' + msg : ''; if (msg) say(msg.split('\n')[0]); };
+  const err = msg => {
+    const el = $('#bd-err');
+    const hint = /비어 있음/.test(msg || '') ? '\n→ 번역 칸이 비었으면 [AI 번역으로 빈 칸 채우기]를 먼저 누르세요' : '';
+    if (el) el.textContent = msg ? '안 됐어요: ' + msg.replace(/^만들기 멈춤: ?/, '') + hint : '';
+    if (msg) say(msg.replace(/^만들기 멈춤: ?/, '').trim().split('\n')[0] || '안 됐어요');
+  };
 
   // 표 붙여 넣기: 분류 | 이름 | 가격
   function bulk() {

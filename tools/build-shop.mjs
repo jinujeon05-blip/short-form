@@ -326,7 +326,12 @@ function fullPrint() {
 </html>
 `);
   console.log(node('tools/card.mjs', id).trim().split('\n').slice(-2).join('\n'));
-  console.log(node('tools/sns.mjs', id, J.snsLang === 'ko' ? 'ko' : 'vi').trim().split('\n').slice(-2).join('\n'));
+  // SNS 이미지 제목은 기본이 '한글 이름 + 영문 이름'인데, 길면 세 줄이 되어 아래 일본어 안내가 잘렸다(2026-11-13 시험) → 길면 한글 이름만
+  const full = `${J.name.ko.trim()} ${J.name.en.trim().toUpperCase()}`;
+  const snsName = full.length > 14 ? J.name.ko.trim() : full;
+  const sns = node('tools/sns.mjs', id, J.snsLang === 'ko' ? 'ko' : 'vi', 'MENU', snsName).trim();
+  console.log(sns.split('\n').slice(-2).join('\n'));
+  if (/넘친 요소: [A-Z]/.test(sns)) console.log('주의: SNS 이미지에 넘친 글자가 있어요 — restaurants/' + id + '/print/sns-*.png 를 열어 보세요');
 }
 
 if (step === 'build') build();
