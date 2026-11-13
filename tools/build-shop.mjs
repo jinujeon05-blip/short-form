@@ -13,6 +13,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { STYLES, styleCss } from './shop-styles.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LANGS = ['ko', 'en', 'zh', 'ja', 'vi'];
 const die = (m) => { console.error('만들기 멈춤: ' + m); process.exit(1); };
@@ -57,6 +58,7 @@ if (!/^https:\/\/(www\.)?(google\.[a-z.]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps
 if (!J.info?.hours?.ko?.trim()) problems.push('영업시간이 비어 있음');
 const T = J.theme || {};
 for (const k of ['band', 'accent', 'title']) if (!HEX.test(T[k] || '')) problems.push(`색(${k})이 #rrggbb 형식이 아님`);
+if (T.style && !STYLES[T.style]) problems.push(`모양 스타일 '${T.style}' 이 없음`);
 const cats = (J.cats || []).filter((c) => c && (c.name?.ko || (c.items || []).length));
 if (!cats.length) problems.push('메뉴 분류가 없음');
 let photos = 0;
@@ -175,6 +177,9 @@ function build() {
       .replace(/quote: "(?:[^"\\]|\\.)*"/, `quote: ${q(quote)}`);
     h = h.replace(m[1], () => s);
   }
+  // 모양 스타일(tools/shop-styles.mjs): 본 스타일 바로 뒤에 CSS만 덧씌운다(구조·글꼴은 그대로)
+  const sty = styleCss(T.style || 'basic', C, dark, mix);
+  if (sty) repRe(/<\/style>\r?\n/, (m) => m + sty, 'style 끝');
   fs.writeFileSync(path.join(dir, 'index.html'), h);
 
   // menu.js

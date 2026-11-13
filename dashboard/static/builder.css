@@ -94,3 +94,14 @@
   .bd-frame.phone { height: 640px; }
   .bd-frame.pc iframe { transform: scale(.26); } .bd-frame.pc { height: 420px; }
 }
+/* 모양 스타일 카드 (tools/shop-styles.mjs, 2026-11-13) */
+.bd-styles { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 8px; margin-bottom: 6px; }
+.bd-sty { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 6px 6px 8px; cursor: pointer; font: inherit; min-width: 0; }
+.bd-sty strong { font-size: 13px; margin-top: 4px; }
+.bd-sty small { font-size: 11px; color: #666; line-height: 1.3; }
+.bd-sty em { font-style: normal; font-size: 11px; color: #2f6fec; }
+.bd-sty.on { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(47,111,236,.25); }
+.bd-sty-th { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; height: 72px; border-radius: 6px; overflow: hidden; padding: 6px 8px 0; border: 1px solid rgba(0,0,0,.12); box-sizing: border-box; }
+.bd-sty-th b { font-size: 12px; font-weight: 800; letter-spacing: 1px; line-height: 1.3; }
+.bd-sty-th u { display: block; width: calc(100% + 16px); height: 8px; border-radius: 0; flex: none; }
+.bd-sty-th s { display: block; width: 100%; height: 9px; flex: none; text-decoration: none; }

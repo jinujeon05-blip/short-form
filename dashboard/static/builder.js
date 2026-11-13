@@ -25,6 +25,27 @@
     pub: { label: '주점 · 어둡고 세련되게', mode: 'dark', band: '#7a1f2b', accent: '#e0b04a', title: '#e0b04a' },
     night: { label: '이자카야 · 밤', mode: 'dark', band: '#23395b', accent: '#f2c14e', title: '#f2c14e' },
   };
+  // 모양 스타일(2026-11-13 가-1·나-1): 고르면 어울리는 색이 같이 들어가고, 색은 아래에서 따로 바꾼다.
+  // 실제 CSS 는 tools/shop-styles.mjs(id 가 같아야 함). th = 미리보기 그림(바탕·제목·탭·메뉴 칸)
+  const STYLES = {
+    basic: { label: '기본', desc: '위쪽 띠·줄 목록', fit: '모든 가게', c: { mode: 'light', band: '#8a5a3c', accent: '#c0392b', title: '#5a3a26' },
+      th: { bg: '#fbf8f4', top: 'border-top:4px solid #8a5a3c', t: 'color:#5a3a26', nav: 'background:#8a5a3c', row: 'border-bottom:1px solid #e6dccf' } },
+    signbox: { label: '간판 상자', desc: '이름을 테두리 간판으로, 사각 도장 탭', fit: '식당·고깃집', c: { mode: 'light', band: '#a3241b', accent: '#f0b323', title: '#1e1b18' },
+      th: { bg: '#fbf6f4', t: 'color:#1e1b18;border:2px solid #1e1b18;box-shadow:2px 2px 0 #a3241b;background:#fff;padding:0 4px', nav: 'background:#a3241b;border-radius:0', row: 'border-bottom:1px solid #ead6d2' } },
+    hanji: { label: '한지·먹', desc: '한지 결 바탕, 붓 획 밑줄, 매듭 장식', fit: '한식·국밥·백반', c: { mode: 'light', band: '#3b3a36', accent: '#b8322a', title: '#2a2723' },
+      th: { bg: '#f5efe2', t: 'color:#2a2723;border-bottom:3px solid #3b3a36;border-radius:0 0 40% 20%', nav: 'background:#3b3a36;box-shadow:inset 0 -2px 0 #b8322a', row: 'border-bottom:1px dashed #cfc5b3' } },
+    wood: { label: '나무 판', desc: '나무결 바탕, 판자 메뉴 칸, 도장 가격', fit: '바비큐·고깃집·포차', c: { mode: 'dark', band: '#6b4226', accent: '#e0a84a', title: '#f1d9a8' },
+      th: { bg: 'repeating-linear-gradient(0deg,#3a2616 0 5px,#33210f 5px 7px)', t: 'color:#f1d9a8', nav: 'background:#6b4226', row: 'background:#4a3020;border-radius:3px;margin-bottom:3px;border:0' } },
+    chalk: { label: '칠판', desc: '칠판 바탕, 분필 글씨, 점선', fit: '호프·주점·카페', c: { mode: 'dark', band: '#2e4a3a', accent: '#f2d16b', title: '#f4f1e8' },
+      th: { bg: '#24332a', top: 'border-top:4px solid #8a6a43', t: 'color:#f4f1e8;text-shadow:0 0 3px rgba(255,255,255,.5)', nav: 'background:#1b261f', row: 'border-bottom:1px dashed rgba(255,255,255,.35)' } },
+    neon: { label: '네온', desc: '어두운 벽돌 벽, 빛나는 이름·탭', fit: '이자카야·바·치킨호프', c: { mode: 'dark', band: '#2a1745', accent: '#ff3ea5', title: '#4ef3ff' },
+      th: { bg: '#15111c', t: 'color:#4ef3ff;text-shadow:0 0 4px #4ef3ff,0 0 9px #4ef3ff', nav: 'background:#0d0b12;box-shadow:0 1px 0 #ff3ea5', row: 'border-bottom:1px solid rgba(255,255,255,.12)' } },
+    pop: { label: '분식 팝', desc: '물방울 점 바탕, 그림자 카드, 말풍선 가격', fit: '분식·디저트·치킨', c: { mode: 'light', band: '#ff8a1f', accent: '#e8336d', title: '#ff5a1f' },
+      th: { bg: 'radial-gradient(#ff8a1f33 22%,transparent 24%) 0 0/9px 9px,#fff8f2', t: 'color:#ff5a1f;text-shadow:1px 1px 0 #e8336d', nav: 'background:#fff;border:1.5px solid #222;box-shadow:1px 1px 0 #222', row: 'background:#fff;border:1.5px solid #222;border-radius:5px;box-shadow:2px 2px 0 #ff8a1f;margin-bottom:3px' } },
+    modern: { label: '깔끔 모던', desc: '장식 최소, 얇은 선, 밑줄 탭', fit: '카페·면옥·샐러드', c: { mode: 'light', band: '#222222', accent: '#e4572e', title: '#111111' },
+      th: { bg: '#ffffff', top: 'border-top:2px solid #222', t: 'color:#111;font-weight:600', nav: 'background:#fff;border-bottom:1px solid #ddd;box-shadow:inset 0 -2px 0 #e4572e', row: 'border-bottom:1px solid #eee' } },
+  };
+  const styleThumb = s => `<i class="bd-sty-th" style="background:${s.th.bg};${s.th.top || ''}"><b style="${s.th.t}">가게</b><u style="${s.th.nav}"></u><s style="${s.th.row}"></s><s style="${s.th.row}"></s></i>`;
   const CUISINE = { korean: 'Korean', bbq: 'Korean BBQ', chicken: 'Fried Chicken', noodle: 'Noodles', cafe: 'Cafe', western: 'Western',
     seafood: 'Seafood', chinese: 'Korean-Chinese', japanese: 'Japanese', pub: 'Pub', bar: 'Bar', snack: 'Korean Street Food', hotel: 'Hotel' };
 
@@ -32,7 +53,7 @@
     kind: 'listing', top: 'sign', name: { ko: '', en: '' },
     tagline: blank5(), chips: [], quote: blank5(), quoteBy: blank5(),
     info: { phone: '', address: '', mapUrl: '', hours: blank5(), wifiName: '', wifiPass: '' }, order: { zalo: '' },
-    theme: { preset: 'warm', ...PRESETS.warm }, snsLang: 'vi',
+    theme: { style: 'basic', preset: 'warm', ...PRESETS.warm }, snsLang: 'vi',
     cats: [{ name: blank5(), note: null, items: [] }],
     reg: { region: 'bacninh', cats: ['korean'], tags: [], type: blank5(), cuisine: ['Korean'], sub: '', keywords: '', schema: 'Restaurant' },
   });
@@ -148,7 +169,9 @@
         <p class="muted">${D.top === 'logo' ? '로고는 긴 변 800px 이하 PNG로 줄여서 올려요.' : '간판 사진은 16:9로 잘라요(끌어서 위치, 막대로 크기).'}</p>
       </section>
 
-      <section class="bd-card"><h3><i>3</i>색</h3>
+      <section class="bd-card"><h3><i>3</i>모양과 색</h3>
+        <div class="bd-styles">${Object.entries(STYLES).map(([k, st]) => `<button type="button" class="bd-sty ${(D.theme.style || 'basic') === k ? 'on' : ''}" data-style="${k}">${styleThumb(st)}<strong>${st.label}</strong><small>${st.desc}</small><em>${st.fit}</em></button>`).join('')}</div>
+        <p class="muted">모양을 고르면 어울리는 색이 같이 들어가요. 색은 아래 색 묶음이나 색 칸으로 따로 바꿀 수 있어요.</p>
         <div class="bd-presets">${Object.entries(PRESETS).map(([k, p]) => `<button type="button" class="bd-preset ${D.theme.preset === k ? 'on' : ''}" data-preset="${k}" style="--b:${p.band};--a:${p.accent};--bg:${p.mode === 'dark' ? '#1b1a18' : '#faf8f4'}"><span></span>${p.label}</button>`).join('')}</div>
         <div class="bd-grid4">
           <label class="bd-l"><span>바탕</span><select data-p="theme.mode"><option value="light">밝게</option><option value="dark">어둡게</option></select></label>
@@ -355,6 +378,7 @@
     if (t.id === 'bd-create') return create();
     if (t.dataset.load) return loadDraft(t.dataset.load);
     if (t.id === 'bd-other') { if (B.dirty) await save(); B.D = null; B.id = ''; B.meta = null; return open(); }
+    if (t.dataset.style) { Object.assign(B.D.theme, STYLES[t.dataset.style].c, { style: t.dataset.style, preset: '' }); return changed(true); }
     if (t.dataset.preset) { const p = PRESETS[t.dataset.preset]; Object.assign(B.D.theme, p, { preset: t.dataset.preset }); delete B.D.theme.label; return changed(true); }
     if (t.dataset.add === 'chip') { B.D.chips.push(blank5()); return changed(true); }
     if (t.dataset.add === 'cat') { B.D.cats.push({ name: blank5(), note: null, items: [] }); return changed(true); }
