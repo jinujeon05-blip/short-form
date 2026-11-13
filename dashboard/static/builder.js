@@ -107,7 +107,7 @@
       <details ${opt.openTr ? 'open' : ''}><summary>번역 ${filled}/4${L4.some(l => B.ai.has(path + '.' + l)) ? ' <em class="ai-mark">AI 초안</em>' : ''}</summary><div class="bd-tr">${L4.map(one).join('')}</div></details>
     </div>`;
   }
-  const inp = (path, label, ph = '', type = 'text') => `<label class="bd-l"><span>${label}</span><input type="${type}" data-p="${path}" placeholder="${esc(ph)}"></label>`;
+  const inp = (path, label, ph = '', type = 'text') => `<label class="bd-l ${B.ai.has(path) ? 'ai' : ''}"><span>${label}</span><input type="${type}" data-p="${path}" placeholder="${esc(ph)}"></label>`;
 
   function render() {
     const D = B.D, st = B.info?.state?.stage, locked = st === 'committed';

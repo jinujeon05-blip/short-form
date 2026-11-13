@@ -241,6 +241,7 @@ def commit(sid):
     draft = json.loads((ddir(sid) / "draft.json").read_text(encoding="utf-8"))
     name = (draft.get("name") or {}).get("ko") or sid
     kind = "가게 찾기용" if draft.get("kind") == "listing" else "정식"
+    keep_sitemap_others(sid)
     paths = [f"restaurants/{sid}", f"sales/img/demo-{sid}.jpg"] + [f for f in REG_FILES if (SV.ROOT / f).exists()]
     code, out = SV.sh(["git", "add", "--", *paths])
     if code != 0:
@@ -271,6 +272,24 @@ def commit(sid):
     SV._cache.pop("recent", None)
     SV._cache.pop("stores", None)
     return {"commit": sha, "order": oid}, None
+
+
+def keep_sitemap_others(sid):
+    """전체 사이트맵(sales/sitemap.xml)은 seo.mjs 가 다른 가게 날짜까지 다시 맞춘다(그 가게 sitemap.xml 이 커밋 안 된 채 바뀌어 있으면,
+    2026-11-13 시험에서 19곳 날짜가 바뀜). 저장 전에 이 파일이 깨끗했는지 확인했으므로, 이 가게 줄만 남기고 다른 줄은 커밋된 그대로 되돌린다."""
+    f = SV.ROOT / "sales" / "sitemap.xml"
+    if not f.is_file():
+        return
+    code, head = SV.sh(["git", "show", "HEAD:sales/sitemap.xml"])
+    if code != 0:
+        return
+    loc = lambda l: (re.search(r"<loc>([^<]+)</loc>", l) or [None, None])[1]
+    old = {loc(l): l.rstrip("\r") for l in head.splitlines() if loc(l)}
+    raw = f.read_bytes().decode("utf-8")
+    nl = "\r\n" if "\r\n" in raw else "\n"
+    mine = f"//{sid}.qrmenuasia.com/"
+    out = [(l if (mine in l or loc(l) not in old) else old[loc(l)]) for l in raw.replace("\r\n", "\n").split("\n")]
+    f.write_bytes(nl.join(out).encode("utf-8"))
 
 
 def discard(sid):
