@@ -696,6 +696,7 @@ document.addEventListener('click', async e => {
     document.querySelectorAll('.tab').forEach(s => { s.hidden = s.id !== 'tab-' + tab.dataset.tab; });
     if (tab.dataset.tab === 'talk') refreshTalks();
     if (tab.dataset.tab === 'usage') loadUsage();
+    if (tab.dataset.tab === 'builder' && window.Builder) window.Builder.open();
     return;
   }
   const k = e.target.closest('#kind button');

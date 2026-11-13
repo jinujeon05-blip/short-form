@@ -28,6 +28,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, quote, urlparse
 
+import builder  # 운영자 모드 '가게 만들기' (dashboard/builder.py)
+
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 STATIC = HERE / "static"
@@ -2078,7 +2080,8 @@ def build_brief():
 
 # ---------------------------------------------------------------- HTTP
 MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
-        ".css": "text/css; charset=utf-8", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml"}
+        ".css": "text/css; charset=utf-8", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml",
+        ".json": "application/json; charset=utf-8", ".xml": "application/xml; charset=utf-8", ".txt": "text/plain; charset=utf-8"}
 ALLOWED_HOSTS = {f"127.0.0.1:{PORT}", f"localhost:{PORT}"}
 
 
@@ -2167,6 +2170,50 @@ class Handler(BaseHTTPRequestHandler):
             return self.json(cached("newshops", 120, build_newshops))
         if p == "/api/usage":
             return self.json(build_usage())
+        # 가게 만들기 (builder.py)
+        if p == "/api/builder/meta":
+            return self.json(builder.meta())
+        if p == "/api/builder/draft":
+            return self.json(builder.load((parse_qs(u.query).get("id") or [""])[0]))
+        if p.startswith("/builder-img/"):  # /builder-img/<가게>/<사진>
+            parts = p.split("/")
+            if len(parts) == 4 and builder.SHOP_RE.match(parts[2]) and builder.IMG_RE.match(parts[3]):
+                return self.file(builder.ddir(parts[2]) / "img" / parts[3], builder.base())
+            return self.send_error(404)
+        if p.startswith("/shop/"):  # 미리보기: restaurants/<가게>/ 파일(폴더 밖은 거절)
+            parts = p.split("/", 3)
+            if len(parts) >= 3 and SHOP_RE.match(parts[2]):
+                rest = parts[3] if len(parts) == 4 and parts[3] else "index.html"
+                return self.file(ROOT / "restaurants" / parts[2] / rest, ROOT / "restaurants" / parts[2])
+            return self.send_error(404)
+        return self.send_error(404)
+
+    def builder_post(self, path, body):
+        sid = str(body.get("id", ""))
+        if path == "/api/builder/save":
+            err = builder.save(sid, body.get("draft"))
+            return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
+        if path == "/api/builder/photo":
+            err = builder.photo(sid, str(body.get("name", "")), str(body.get("data", "")))
+            return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
+        if path == "/api/builder/photo/delete":
+            err = builder.photo_delete(sid, str(body.get("name", "")))
+            return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
+        if path == "/api/builder/translate":
+            got, used, errs = builder.translate(body.get("items"), str(body.get("engine") or "auto"))
+            return self.json({"result": got, "engine": used, "errors": errs})
+        if path == "/api/builder/build":
+            out, err = builder.build(sid)
+            return self.json({"error": err} if err else {"ok": True, "out": out}, 400 if err else 200)
+        if path == "/api/builder/finish":
+            err = builder.finish(sid)
+            return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
+        if path == "/api/builder/commit":
+            res, err = builder.commit(sid)
+            return self.json({"error": err} if err else {"ok": True, **res}, 400 if err else 200)
+        if path == "/api/builder/discard":
+            err = builder.discard(sid)
+            return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
         return self.send_error(404)
 
     def do_POST(self):
@@ -2175,11 +2222,15 @@ class Handler(BaseHTTPRequestHandler):
         # 다른 사이트의 폼 전송을 막으려고 직접 정한 머리글이 있어야만 받는다
         if self.headers.get("X-Dashboard") != "1":
             return self.send_error(403)
-        length = min(int(self.headers.get("Content-Length") or 0), 10000)
+        # 가게 만들기는 사진(최대 4MB → base64 약 5.4MB)·초안(메뉴 수백 개)을 받는다. 그 밖은 예전처럼 1만 바이트
+        cap = 6_000_000 if urlparse(self.path).path.startswith("/api/builder/") else 10000
+        length = min(int(self.headers.get("Content-Length") or 0), cap)
         try:
             body = json.loads(self.rfile.read(length) or b"{}")
         except Exception:
             body = {}
+        if urlparse(self.path).path.startswith("/api/builder/"):
+            return self.builder_post(urlparse(self.path).path, body)
         if urlparse(self.path).path == "/api/collector/launch":
             err = launch_collector()
             _cache.pop("collector", None)
@@ -2357,6 +2408,7 @@ def start_remote():
 
 
 if __name__ == "__main__":
+    builder.init(__import__("__main__"))
     load_orders()
     threading.Thread(target=scheduler, daemon=True).start()
     srv = ThreadingHTTPServer((HOST, PORT), Handler)
