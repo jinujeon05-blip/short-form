@@ -13,7 +13,8 @@ import { ANIMAL_SLUGS, FORTUNE_YEARS } from '../src/engine/yearly.ts';
 import { YearlyIndexPage, YearlyZodiacPage } from '../src/pages/YearlyPage.tsx';
 import { HazardPage } from '../src/pages/HazardPage.tsx';
 import { CalendarPage } from '../src/pages/CalendarPage.tsx';
-import { DreamDetailPage, DreamIndexPage } from '../src/pages/DreamPage.tsx';
+import { DreamDetailPage, DreamIndexPage, FeelingPage } from '../src/pages/DreamPage.tsx';
+import { FEELING_SLUGS } from '../src/content/dreams/feelings.ts';
 import { DREAM_SLUGS } from '../src/content/dreams/index.ts';
 import { PURPOSES } from '../src/engine/almanac.ts';
 import { AgePage } from '../src/pages/AgePage.tsx';
@@ -38,7 +39,7 @@ const articles = JSON.parse(fs.readFileSync(path.join(root, 'src/content/article
 const adClient = config.adsense?.client ?? '';
 
 const TOOL_ROUTES = ['/', '/calendar', '/match', '/name', '/naming', '/saju', '/samjae', '/age', '/hangul', '/jesa', '/holidays'];
-const DREAM_ROUTES = ['/dream', '/taemong', ...DREAM_SLUGS.map((x) => `/dream/${x}`)];
+const DREAM_ROUTES = ['/dream', '/taemong', ...FEELING_SLUGS.map((x) => `/dream/feeling-${x}`), ...DREAM_SLUGS.map((x) => `/dream/${x}`)];
 const CALENDAR_ROUTES = PURPOSES.map((x) => `/calendar/${x}`);
 const DAILY_ROUTES = ['/daily', ...ANIMAL_SLUGS.map((a) => `/daily/${a}`)];
 const INFO_ROUTES = ['/guide', '/about', '/method', '/privacy', '/terms'];
@@ -88,6 +89,8 @@ function renderFortune(route, lang) {
     ? createElement(TaemongPage)
     : route === '/dream'
     ? createElement(DreamIndexPage, { query: '' })
+    : route.startsWith('/dream/feeling-')
+    ? createElement(FeelingPage, { slug: route.slice(15) })
     : route.startsWith('/dream/')
     ? createElement(DreamDetailPage, { slug: route.slice(7) })
     : route.startsWith('/calendar/')

@@ -5,6 +5,7 @@ import articles from './content/articles.json';
 import { ANIMAL_SLUGS, FORTUNE_YEARS } from './engine/yearly';
 import { PURPOSES } from './engine/almanac';
 import { DREAM_SLUGS } from './content/dreams';
+import { FEELING_SLUGS } from './content/dreams/feelings';
 
 export const ROUTES = ['/', '/calendar', '/match', '/name', '/naming', '/saju', '/samjae', '/daily', '/age', '/hangul', '/jesa', '/holidays', '/dream', '/taemong', '/guide', '/about', '/method', '/privacy', '/terms'] as const;
 export const GUIDE_SLUGS: string[] = articles.guides.map((g) => g.slug);
@@ -16,7 +17,7 @@ export function isKnownPath(p: string): p is RoutePath {
   const m = p.match(/^\/guide\/([a-z0-9-]+)$/);
   if (m) return GUIDE_SLUGS.includes(m[1]);
   const dr = p.match(/^\/dream\/([a-z-]+)$/);
-  if (dr) return DREAM_SLUGS.includes(dr[1]);
+  if (dr) return DREAM_SLUGS.includes(dr[1]) || (dr[1].startsWith('feeling-') && FEELING_SLUGS.includes(dr[1].slice(8)));
   const cp = p.match(/^\/calendar\/([a-z]+)$/);
   if (cp) return (PURPOSES as string[]).includes(cp[1]);
   const dz = p.match(/^\/daily\/([a-z]+)$/);
