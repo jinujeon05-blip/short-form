@@ -29,6 +29,7 @@
 5. **종류별 내용**:
    - **정식**: 장바구니·주문서(Zalo) + 아래 결과물을 **전부** 만들어 상호를 붙여 사용자에게 보낸다(2026-11-13 진미 SNS 누락 건). `check-shop.mjs`가 앞의 3개 파일이 없으면 실패시킨다.
      - 테이블 QR 카드: `print/table-card.html`(QR=`print/qr.svg`, `qr.cjs`) → `node tools/card.mjs <가게>` → `print/table-card-A6.pdf`·`table-card.png`
+     - 디자인 틀 고르기(2026-11-14): `node tools/promo-designs.mjs --recommend <지역키> <모양 스타일> <사진 수>`로 같은 도시와 겹치지 않는 것을 캡틴에게 번호 보기로 묻고 `card.mjs`·`sns.mjs`에 `--design <id>`(상세 `docs/tools.md` 'SNS·카드 디자인 틀')
      - SNS 이미지: `node tools/sns.mjs <가게> ko`(한국 매장, 그 밖 `vi`) → `print/sns-square.png`(1080×1080)·`print/sns-story.png`(1080×1920). 두 장을 직접 열어 잘림·5개 언어 확인
      - 점주 자료(사용자가 원할 때): `print/guide.html` → `node tools/pdf.mjs restaurants/<가게>/print/guide.html restaurants/<가게>/print/guide-<가게>.pdf`(예: `restaurants/gamasot/print/`)
      - 정식 가게 전부의 빠짐 확인: `node tools/check-shop.mjs --print-all`
