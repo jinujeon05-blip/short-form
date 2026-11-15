@@ -4,7 +4,9 @@
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const key = () => { try { return sessionStorage.getItem('qm_admin'); } catch { return null; } };
   // 정식(계약) 가게를 먼저, 가게 찾기용은 뒤에
-  const STORES = (window.STORES || []).slice().sort((a, b) => (a.listing ? 1 : 0) - (b.listing ? 1 : 0));
+  // 시험 가게(가게 찾기 목록·사이트맵에 없음)는 이 탭에서만 맨 앞에 보인다 — restaurants/testshop, docs/kitchen-test.md
+  const TEST = [{ id: 'testshop', name: 'QR 시험 식당 (시험용)' }];
+  const STORES = TEST.concat((window.STORES || []).slice().sort((a, b) => (a.listing ? 1 : 0) - (b.listing ? 1 : 0)));
   const nameOf = (id) => (STORES.find((s) => s.id === id) || { name: id }).name;
   const PRN = { rawbt: '블루투스 영수증 프린터 (안드로이드 + RawBT 앱)', browser: '브라우저 인쇄 (PC·아이패드·와이파이 프린터)', none: '인쇄 안 함 (화면만)' };
   const fmtT = (ts) => (ts ? new Date(ts).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '–');

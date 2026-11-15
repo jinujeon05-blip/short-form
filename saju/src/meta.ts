@@ -5,6 +5,7 @@ import { YEARLY } from './content/yearly';
 import { DAILY } from './content/daily';
 import { PURPOSE_TEXT } from './content/purposes';
 import { DREAM_UI, dreamBySlug } from './content/dreams';
+import { FEELING_UI, feelingBySlug } from './content/dreams/feelings';
 import type { Purpose } from './engine/almanac';
 import { ko } from './i18n/ko';
 import { vi } from './i18n/vi';
@@ -26,6 +27,12 @@ export function metaFor(path: string, lang: Lang): PageMeta {
   if (guide) {
     const doc = guide[lang];
     return { title: `${doc.title} | ${BRAND[lang]}`, description: doc.description, h1: doc.title };
+  }
+  const fe = path.match(/^\/dream\/feeling-([a-z]+)$/);
+  const feeling = fe ? feelingBySlug(fe[1]) : undefined;
+  if (feeling) {
+    const x = feeling[lang];
+    return { title: `${x.title} · ${FEELING_UI[lang].heading} | ${BRAND[lang]}`, description: FEELING_UI[lang].desc(x.name), h1: x.title };
   }
   const dr = path.match(/^\/dream\/([a-z-]+)$/);
   const dream = dr ? dreamBySlug(dr[1]) : undefined;
