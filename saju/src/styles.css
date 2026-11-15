@@ -619,6 +619,16 @@ input:focus, select:focus, button:focus-visible { outline: 2px solid var(--gold)
 }
 .dream-search { width: 100%; font-size: 1.05rem; margin: 12px 0 4px; }
 .dream-cats { margin: 18px 0 10px; }
+.feeling-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 16px; }
+.feeling-chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px;
+  background: var(--panel); border: 1px solid var(--line); color: var(--text); font-size: 0.92rem;
+}
+.feeling-chip .emo { width: 20px; height: 20px; }
+.feeling-chip:hover { text-decoration: none; border-color: var(--gold); }
+.feeling-chip.on { border-color: var(--gold); color: var(--gold-soft); }
+.feeling-match { margin: 12px 0; }
+.feeling-match .feeling-chips { margin-bottom: 0; }
 .dream-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
 .dream-card {
   display: flex; gap: 10px; align-items: center; padding: 12px; border-radius: 12px;

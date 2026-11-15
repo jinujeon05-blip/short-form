@@ -76,3 +76,27 @@ describe('dream deep sections', () => {
     }
   });
 });
+
+describe('feelings', () => {
+  it('link only to existing dreams, 14 each, no duplicates', async () => {
+    const { FEELINGS } = await import('./feelings');
+    const { DREAM_SLUGS } = await import('./index');
+    for (const f of FEELINGS) {
+      expect(f.dreams.length, f.slug).toBe(14);
+      expect(new Set(f.dreams).size, f.slug).toBe(14);
+      for (const s of f.dreams) expect(DREAM_SLUGS, `${f.slug}:${s}`).toContain(s);
+    }
+  });
+  it('are found by the words people type', async () => {
+    const { searchFeelings } = await import('./feelings');
+    const cases: [string, 'ko' | 'vi', string][] = [
+      ['포근', 'ko', 'cozy'], ['포근한 꿈', 'ko', 'cozy'], ['따뜻한', 'ko', 'cozy'], ['무서운 꿈', 'ko', 'scared'],
+      ['설레는', 'ko', 'excited'], ['쫓기는 느낌', 'ko', 'chased'], ['답답한 꿈', 'ko', 'frustrated'], ['슬픈 꿈', 'ko', 'sad'],
+      ['창피한', 'ko', 'embarrassed'], ['외로운', 'ko', 'lonely'], ['개운한', 'ko', 'relieved'], ['불안', 'ko', 'anxious'],
+      ['mơ thấy sợ hãi', 'vi', 'scared'], ['ấm áp', 'vi', 'cozy'], ['cô đơn', 'vi', 'lonely'], ['buồn', 'vi', 'sad'],
+    ];
+    for (const [q, lang, slug] of cases) expect(searchFeelings(q, lang).map((f) => f.slug), q).toContain(slug);
+    expect(searchFeelings('돼지', 'ko')).toEqual([]);
+    expect(searchFeelings('rắn', 'vi')).toEqual([]);
+  });
+});
