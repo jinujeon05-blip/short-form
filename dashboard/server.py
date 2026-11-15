@@ -1555,9 +1555,14 @@ def run_deploy(o, shops):
             code, out = sh(["git", "merge-tree", "--write-tree", "HEAD", "origin/main"])
             if code != 0:
                 raise RuntimeError("이 브랜치에 최신 main이 없고, 합치면 충돌이 나요(" + " ".join(out.split()[1:6]) + "). PC Claude 앱에서 'main 합쳐줘'로 충돌을 풀어 주세요.")
+            # 커밋 안 한 수정은 '합치기가 실제로 바꾸는 파일'과 겹칠 때만 막는다. 겹치지 않으면 git merge 가 그대로 둔다
+            # (2026-11-15 진미식당: 무관한 19개 가게 seo 결과 때문에 배포 전체가 멈춘 건, 캡틴 결정 나-1).
             code, dirty_all = sh(["git", "status", "--porcelain", "--untracked-files=no"])
-            if dirty_all.strip():
-                raise RuntimeError("이 브랜치에 최신 main이 없는데, 커밋 안 한 수정이 있어 합치지 않았어요: " + " ".join(l[3:] for l in dirty_all.splitlines()[:5]))
+            dirty_paths = {l[3:].strip().strip('"').split(" -> ")[-1] for l in dirty_all.splitlines() if l.strip()}
+            code, incoming = sh(["git", "diff", "--name-only", "HEAD...origin/main"])
+            overlap = sorted(dirty_paths & {p.strip() for p in incoming.splitlines() if p.strip()})
+            if code != 0 or overlap:
+                raise RuntimeError("이 브랜치에 최신 main이 없는데, main이 바꾸는 파일에 커밋 안 한 수정이 있어 합치지 않았어요: " + " ".join(overlap[:5] or ["(바뀌는 파일 목록을 못 읽음)"]))
             n = sh(["git", "rev-list", "--count", "HEAD..origin/main"])[1].strip()
             code, out = sh(["git", "merge", "--no-edit", "origin/main"], timeout=120)
             if code != 0:
