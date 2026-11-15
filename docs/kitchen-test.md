@@ -12,7 +12,7 @@
 ## 로컬 시험 결과 (2026-11-15, 모의 서버 = `.scratch/kitchen-test/server.cjs`를 testshop용으로 바꿔 씀)
 - 25개 항목 PASS: 꺼짐/켜짐 `GET /api/order` · 손님 폰(390) 주문서 → 주방 PC(1280·1366) 새 주문·소리·깜빡임·제목 '(1)' · (가) 브라우저 인쇄 → `window.print` 1번, 영수증 80mm(576px) · (나) 인쇄 안 함 → print 0번 · 접수→만드는 중→완료 · 주방 폰 폭 · admin PC·폰 폭 넘침 0, 화면 오류 0.
 - 캡처: `docs/kitchen-test/guest-sheet.png`(손님 주문서) · `ga-2-new.png`(새 주문) · `ga-ticket-80mm.png`(영수증 그림) · `na-3-done.png`(인쇄 없이 완료) · `admin-pc.png`.
-- **발견**: (나) '인쇄 안 함'이어도 주문 카드에 `🖨 인쇄` 버튼이 그대로 보이고 눌러도 아무 일이 없다(`sales/kitchen/index.html` `card()`). 고칠지 캡틴 결정 대기.
+- **발견**: (나) '인쇄 안 함'이어도 주문 카드에 `🖨 인쇄` 버튼이 그대로 보이고 눌러도 아무 일이 없다(`sales/kitchen/index.html` `card()`). **캡틴 결정(2026-11-15) '가-2 그대로'** — 숨기지 않는다.
 - **미확인**: 실제 프린터 출력(USB·LAN·RawBT), 아이폰 소리, 실서버(Vercel Blob)에서의 흐름, admin '테이블 QR로 들어온 손님만' + 카드 인쇄 흐름(실서버에서 캡틴이 확인).
 
 ## 배포 기록 (2026-11-15)
