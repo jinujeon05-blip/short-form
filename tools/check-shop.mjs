@@ -67,6 +67,9 @@ p.on('pageerror', (e) => errs.push(e.message)); p.on('requestfailed', (r) => err
 p.on('response', (r) => { if (r.status() >= 400 && r.url().startsWith(site.url)) errs.push(`${r.status()} ${r.url().replace(site.url, '')}`); });
 await p.goto(`${site.url}/restaurants/${id}/index.html?lang=ko`); await p.waitForTimeout(800);
 const wide = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+// 지연 로딩 사진을 전부 불러온 뒤 찍는다(안 그러면 아래쪽 사진이 빈 칸으로 찍힘, 2026-11-15 진미 건). 못 불러온 사진은 오류로 센다.
+const brokenImgs = await p.evaluate(async () => { const im = [...document.images]; im.forEach((i) => { i.loading = 'eager'; }); await Promise.all(im.map((i) => (i.complete ? 1 : new Promise((r) => { i.onload = i.onerror = r; })))); return im.filter((i) => i.getAttribute('src') && !i.naturalWidth).map((i) => i.getAttribute('src')); });
+brokenImgs.forEach((s) => errs.push('깨진 사진 ' + s));
 await p.screenshot({ path: `${outDir}/${id}-ko.png`, fullPage: true });
 await p.screenshot({ path: `${scratch}/top.png`, clip: { x: 0, y: 0, width: 390, height: 1400 }, fullPage: true });
 const pc = await b.newPage({ viewport: { width: 1280, height: 800 } });
