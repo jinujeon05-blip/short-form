@@ -15,6 +15,11 @@
 - **발견**: (나) '인쇄 안 함'이어도 주문 카드에 `🖨 인쇄` 버튼이 그대로 보이고 눌러도 아무 일이 없다(`sales/kitchen/index.html` `card()`). 고칠지 캡틴 결정 대기.
 - **미확인**: 실제 프린터 출력(USB·LAN·RawBT), 아이폰 소리, 실서버(Vercel Blob)에서의 흐름, admin '테이블 QR로 들어온 손님만' + 카드 인쇄 흐름(실서버에서 캡틴이 확인).
 
+## 배포 기록 (2026-11-15)
+- 커밋 `32445f7`(main 합침) → 새 프로젝트 `testshop-menu`(로그인 보호 해제, `testshop.qrmenuasia.com` 붙임) + `qrmenu-intro` 재배포(admin `kitchen.js` 시험 가게 줄, owner-panel 미배포분 `2dc9c94` 진미 카드 자료 포함).
+- 확인: `https://testshop.qrmenuasia.com/?t=1` 200·noindex·폰 폭 넘침 0(`docs/kitchen-test/live-phone.png`, 꺼져 있어 '주방으로 보내기' 숨김 = 정상) · `GET /api/order?shop=testshop` → `{on:false}` · 꺼진 상태 주문 POST → 409 · `/kitchen/?shop=testshop`·`/admin` 200 · 실서버 admin kitchen.js에 testshop 있음 · 사이트맵 148(저장소 파일과 같음, testshop 없음).
+- **미확인**: 켠 뒤 `on:true`(admin 로그인이 필요해 캡틴이 켠 뒤 확인), 실제 폰 주문→주방 화면.
+
 ## 캡틴이 직접 할 일 (배포 뒤, 한 단계씩)
 > 비밀번호·PIN 입력과 admin 로그인은 AI가 하지 않습니다. 캡틴이 직접 합니다.
 
