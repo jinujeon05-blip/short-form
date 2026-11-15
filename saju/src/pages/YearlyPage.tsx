@@ -6,6 +6,7 @@ import { ANIMAL_SLUGS, YearFortune, yearFortune, yearRanking } from '../engine/y
 import { YEARLY } from '../content/yearly';
 import { YEARLY_DEPTH } from '../content/depthYearly';
 import { Depth } from '../components/Depth';
+import { HUB_DEPTH } from '../content/depthHubs';
 import { HAZARD } from '../content/hazard';
 import { Lang, useI18n } from '../i18n';
 import { Link, RoutePath, hrefFor, navigate } from '../router';
@@ -73,6 +74,7 @@ export function YearlyIndexPage({ year }: { year: number }) {
           </li>
         ))}
       </ol>
+      <Depth text={HUB_DEPTH.fortune[lang]} />
       <AdSlot name="article" />
       <p className="muted small center">{y.disclaimer}</p>
     </article>

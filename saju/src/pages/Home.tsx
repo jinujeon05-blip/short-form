@@ -1,6 +1,6 @@
 import { Baby, Cake, CalendarHeart, Heart, Moon, Shield, Sparkles } from 'lucide-react';
 import { Emoji } from '../components/Emoji';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MoonPhase, phaseName } from '../components/MoonPhase';
 import { dayInfo } from '../engine/almanac';
 import { Lang, useI18n } from '../i18n';
@@ -17,6 +17,7 @@ import { InstallApp } from '../components/InstallApp';
 import { TodayCard } from '../components/TodayCard';
 import { TODAY } from '../content/today';
 import { YEARLY } from '../content/yearly';
+import { HOME_ABOUT } from '../content/homeAbout';
 
 export function Home() {
   const { t, lang } = useI18n();
@@ -25,6 +26,9 @@ export function Home() {
   const info = dayInfo(jdn, basis);
   const lunar = info.lunar[basis];
   const [phase, setPhase] = useState<number | null>(null);
+  // Today's card and detail depend on the visitor's date; skip them in the prerendered HTML so it never shows a stale build date.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <>
@@ -58,7 +62,17 @@ export function Home() {
         </div>
       </section>
 
-      <TodayCard info={info} basis={basis} />
+      <section className="section tool-guide home-about">
+        <h2 className="article-h">{HOME_ABOUT[lang].title}</h2>
+        {HOME_ABOUT[lang].paras.map((p) => <p key={p.slice(0, 24)}>{p}</p>)}
+        <p className="center">
+          {HOME_ABOUT[lang].links.map((l, i) => (
+            <span key={l.to}>{i > 0 && ' · '}<Link to={l.to}>{l.label} →</Link></span>
+          ))}
+        </p>
+      </section>
+
+      {mounted && <TodayCard info={info} basis={basis} />}
 
       <Link to="/fortune/2027" className="year-banner">
         <span className="year-banner-emoji" aria-hidden="true"><Emoji e={lang === 'vi' ? '🐐' : '🐑'} /></span>
@@ -71,13 +85,15 @@ export function Home() {
 
       <InstallApp />
 
-      <Section eyebrow="今日 · HÔM NAY" title={TODAY[lang].detail}>
-        <DayDetail info={info} basis={basis} />
-        <p className="muted small center">
-          {t.day.basisNote}: {basis === 'VN' ? t.calendar.basisVN : t.calendar.basisKR} ·{' '}
-          <Link to="/calendar">{t.nav.calendar} →</Link>
-        </p>
-      </Section>
+      {mounted && (
+        <Section eyebrow="今日 · HÔM NAY" title={TODAY[lang].detail}>
+          <DayDetail info={info} basis={basis} />
+          <p className="muted small center">
+            {t.day.basisNote}: {basis === 'VN' ? t.calendar.basisVN : t.calendar.basisKR} ·{' '}
+            <Link to="/calendar">{t.nav.calendar} →</Link>
+          </p>
+        </Section>
+      )}
 
       <AdSlot name="home" />
 
@@ -160,7 +176,7 @@ export function Home() {
       </section>
 
       <Section eyebrow="讀 · BÀI VIẾT" title={t.guide.title}>
-        <GuideList limit={3} />
+        <GuideList limit={6} />
         <p className="center"><Link to="/guide">{t.guide.more} →</Link></p>
       </Section>
     </>

@@ -6,6 +6,8 @@ import { DREAM_DEEP } from '../content/dreams/deep';
 import { useI18n } from '../i18n';
 import { Link, RoutePath, hrefFor } from '../router';
 import { AdSlot } from '../components/AdSlot';
+import { Depth } from '../components/Depth';
+import { HUB_DEPTH } from '../content/depthHubs';
 
 export const dreamPath = (slug?: string): RoutePath => (slug ? `/dream/${slug}` : '/dream') as RoutePath;
 
@@ -76,6 +78,7 @@ export function DreamIndexPage({ query }: { query: string }) {
         <p className="muted">{ui.noResult(q)}</p>
       )}
 
+      <Depth text={HUB_DEPTH.dream[lang]} />
       <AdSlot name="article" />
       <p className="muted small">{ui.disclaimer}</p>
       <p className="muted small">{ui.note}</p>

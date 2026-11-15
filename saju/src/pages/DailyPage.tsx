@@ -7,6 +7,7 @@ import { ANIMAL_SLUGS, FORTUNE_YEARS } from '../engine/yearly';
 import { DAILY } from '../content/daily';
 import { DAILY_DEPTH } from '../content/depthDaily';
 import { Depth } from '../components/Depth';
+import { HUB_DEPTH } from '../content/depthHubs';
 import { Lang, useI18n } from '../i18n';
 import { Dict } from '../i18n/ko';
 import { Link, RoutePath, hrefFor, navigate } from '../router';
@@ -107,6 +108,7 @@ export function DailyIndexPage({ query }: { query: string }) {
           </li>
         ))}
       </ol>
+      <Depth text={HUB_DEPTH.daily[lang]} />
       <AdSlot name="article" />
       <p className="muted small center">{x.disclaimer}</p>
     </article>
