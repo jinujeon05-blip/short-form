@@ -56,6 +56,10 @@
     const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     if (!document.getElementById('me-css')) { const s = document.createElement('style'); s.id = 'me-css'; s.textContent = CSS; document.head.appendChild(s); }
     root.classList.add('me');
+    // 같은 자리(root)에 다시 mount 하면 예전 편집기의 이벤트를 먼저 뗀다. 안 떼면 관리 화면에서 가게를 바꾼 뒤
+    // 버튼이 예전 가게 편집기에도 같이 눌려 사진이 첫 가게로 올라가고 저장도 두 번 된다(2026-11-15 진미 김치쪽갈비찜 사진 건).
+    if (root._meAbort) root._meAbort.abort();
+    const AC = new AbortController(); root._meAbort = AC; const on = { signal: AC.signal };
     let D = null, dirty = false, msg = null;
 
     const api = async (path, init = {}) => {
@@ -209,7 +213,7 @@
       } else if (k === 'cname') editSrc(c.name, lg, t.value);
       else if (k === 'cnote') { c.note = c.note || {}; editSrc(c.note, lg, t.value); }
       touch();
-    });
+    }, on);
 
     root.addEventListener('click', async (e) => {
       const b = e.target.closest('[data-a]'); if (!b) return;
@@ -230,7 +234,7 @@
       else if (a === 'photo') return pickPhoto(900, (u) => { D.menu[ci].items[ii].photo = u; });
       else if (a === 'cphoto') return pickPhoto(1400, (u) => { D.menu[ci].photo = u; });
       touch(); paint();
-    });
+    }, on);
 
     function fail(er) {
       if (er.message === 'auth') return setMsg(T.authErr), paint();
@@ -273,7 +277,7 @@
         dirty = false; msg = null; paint();
       } catch (er) { root.textContent = ''; setMsg(er.message === 'auth' ? T.authErr : er.message === 'blocked' ? T.blocked : T.fail); root.innerHTML = `<div class="msg">${esc(msg.text)}</div>`; }
     }
-    window.addEventListener('beforeunload', (e) => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+    window.addEventListener('beforeunload', (e) => { if (dirty) { e.preventDefault(); e.returnValue = ''; } }, on);
     load();
     return { reload: load };
   }

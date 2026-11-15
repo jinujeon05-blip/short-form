@@ -114,3 +114,10 @@ CLAUDE.md의 '절대 규칙'은 이 사건들에서 나왔다. 규칙만 지키�
 - 원인 ②(구조): `dashboard/server.py` `run_deploy`가 main 합치기 전 **작업 폴더 전체**에 커밋 안 한 수정이 하나라도 있으면 멈췄다. `git merge`는 겹치지 않는 수정은 그대로 두므로 지나치게 엄격했다(들어올 main 변경은 `saju/`뿐이었음).
 - 고침: 19곳은 별도 커밋(`72feaae`, 캡틴 결정 가-2). 점검은 `git diff --name-only HEAD...origin/main`과 **겹치는** 미커밋 파일만 막게 바꿈(나-1). 대시보드를 다시 켜야 적용.
 - 규칙: 안전 점검은 실제로 위험한 경우(겹치는 파일)만 막는다. 여러 가게 도구를 돌린 뒤엔 바로 그 결과를 커밋한다.
+
+## 2026-11-15 관리 화면에서 가게를 바꾸면 예전 가게 편집기가 남아 사진·저장이 엉뚱한 가게로 감 (진미 김치쪽갈비찜 사진 건)
+- 증상: 관리 화면(qrmenuasia.com/admin#menu)에서 진미 김치쪽갈비찜 [사진 올리기] → "사진을 올리지 못했어요". 이유 표시를 넣고 보니 `server 200: Cannot read properties of undefined (reading 'items')`.
+- 원인: `admin/crm.js`가 가게를 바꿀 때마다 같은 `#menuEd`에 `MenuEditor.mount`를 다시 하는데, `menu-editor.js`가 예전 클릭·입력 이벤트를 떼지 않았다. 버튼 한 번에 첫 가게(biobeauty) 편집기도 같이 동작 → 사진은 biobeauty로 올라가고 그 편집기에 없는 칸이라 오류. **저장도 첫 가게까지 두 번** 된다(로컬 시험으로 재현: `save:biobeauty,save:jinmi`). 사진 기능은 10-22에 가짜 Blob·한 가게로만 시험해서 못 봤다.
+- 고침: `mount`가 같은 root의 예전 이벤트를 `AbortController`로 뗀다. 시험 페이지(가짜 fetch)에서 두 번 mount 뒤 저장 → `save:jinmi`만. 실패 경고에 단계·이유를 붙여 둔 덕에 원인을 한 번에 찾음.
+- 확인: biobeauty·eros·jinmi는 점주 저장본 없음(`/api/override` = default) → 잘못 저장된 흔적 없음. 그 밖에 가게를 여러 번 바꾼 날의 저장은 미확인.
+- 규칙: 같은 자리에 다시 그리는 화면 부품은 예전 이벤트를 떼고, 시험은 '가게 바꾸기'처럼 실제 쓰는 순서대로 한다.
