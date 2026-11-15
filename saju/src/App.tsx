@@ -17,7 +17,7 @@ import { NamingPage } from './pages/NamingPage';
 import { TaemongPage } from './pages/TaemongPage';
 import { JesaPage } from './pages/JesaPage';
 import { HolidaysPage } from './pages/HolidaysPage';
-import { DreamDetailPage, DreamIndexPage } from './pages/DreamPage';
+import { DreamDetailPage, DreamIndexPage, FeelingPage } from './pages/DreamPage';
 import { DailyIndexPage, DailyZodiacPage } from './pages/DailyPage';
 import { metaFor } from './meta';
 import { GuideIndexPage, GuidePage, InfoPage } from './pages/ArticlePages';
@@ -132,6 +132,8 @@ function Shell({ route }: { route: Route }) {
           <NamePage query={route.search} />
         ) : route.path === '/dream' ? (
           <DreamIndexPage query={route.search} />
+        ) : route.path.startsWith('/dream/feeling-') ? (
+          <FeelingPage key={route.path} slug={route.path.slice(15)} />
         ) : route.path.startsWith('/dream/') ? (
           <DreamDetailPage key={route.path} slug={route.path.slice(7)} />
         ) : route.path === '/holidays' ? (
