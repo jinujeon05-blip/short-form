@@ -105,3 +105,17 @@
 .bd-sty-th b { font-size: 12px; font-weight: 800; letter-spacing: 1px; line-height: 1.3; }
 .bd-sty-th u { display: block; width: calc(100% + 16px); height: 8px; border-radius: 0; flex: none; }
 .bd-sty-th s { display: block; width: 100%; height: 9px; flex: none; text-decoration: none; }
+/* SNS 이미지·QR 카드 디자인 고르기(2026-11-14) — 견본 그림 /static/promo/<id>.jpg */
+.bd-promos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin: 4px 0 6px; }
+.bd-promo { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 6px 6px 8px; cursor: pointer; font: inherit; min-width: 0; }
+.bd-promo img { display: block; width: 100%; aspect-ratio: 7 / 4; object-fit: cover; border-radius: 6px; background: #eee; }
+.bd-promo strong { font-size: 13px; margin-top: 4px; }
+.bd-promo small { font-size: 11px; color: #666; line-height: 1.3; }
+.bd-promo em { font-style: normal; font-size: 11px; color: #2f6fec; }
+.bd-promo i { font-style: normal; font-size: 11px; color: #2a8a4a; overflow-wrap: anywhere; }
+.bd-promo i.warn { color: #b4541b; }
+.bd-promo .bd-rec { font-size: 11px; color: #c78a00; }
+.bd-promo.on { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(47,111,236,.25); }
+.bd-promo.off { opacity: .5; cursor: not-allowed; }
+.bd-promo-out { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; margin-top: 6px; }
+.bd-promo-out img { display: block; height: 140px; width: auto; border-radius: 6px; border: 1px solid var(--line); }

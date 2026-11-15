@@ -14,6 +14,7 @@ import vm from 'node:vm';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { STYLES, styleCss } from './shop-styles.mjs';
+import { DESIGNS, usedDesigns, recordDesign, shopPhotos } from './promo-designs.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LANGS = ['ko', 'en', 'zh', 'ja', 'vi'];
 const die = (m) => { console.error('만들기 멈춤: ' + m); process.exit(1); };
@@ -23,7 +24,8 @@ const [id, draftDir, step = 'build'] = process.argv.slice(2);
 if (id === '--meta') {
   const D = readWin('sales/stores/data.js');
   const shops = fs.readdirSync(path.join(ROOT, 'restaurants')).filter((d) => /^[a-z0-9]+$/.test(d));
-  console.log(JSON.stringify({ regions: D.REGIONS, cats: D.CATS, tags: D.TAGS, shops }));
+  // promo = SNS·QR 카드 디자인 목록과 가게별 사용 기록(같은 도시에서 겹치지 않게 추천, tools/promo-designs.mjs)
+  console.log(JSON.stringify({ regions: D.REGIONS, cats: D.CATS, tags: D.TAGS, shops, promo: { designs: DESIGNS, used: usedDesigns() } }));
   process.exit(0);
 }
 if (!/^[a-z0-9]{2,30}$/.test(id || '')) die('가게 id 는 영문 소문자·숫자 2~30자');
@@ -330,12 +332,19 @@ function fullPrint() {
 </body>
 </html>
 `);
-  console.log(node('tools/card.mjs', id).trim().split('\n').slice(-2).join('\n'));
+  // SNS·QR 카드 디자인 틀(캡틴이 화면에서 고름, 없으면 basic). 사진형인데 음식 사진이 모자라면 basic 으로
+  let design = DESIGNS[J.promo?.design] ? J.promo.design : 'basic';
+  const nPhotos = shopPhotos(id).length;
+  if (nPhotos < DESIGNS[design].photos) { console.log(`디자인 ${DESIGNS[design].label}은 음식 사진 ${DESIGNS[design].photos}장 이상 필요해서(지금 ${nPhotos}장) 기본으로 만들어요`); design = 'basic'; }
+  const dArg = design === 'basic' ? [] : ['--design', design];
+  console.log(`SNS·QR 카드 디자인: ${DESIGNS[design].label}`);
+  console.log(node('tools/card.mjs', id, ...dArg).trim().split('\n').slice(-3).join('\n'));
+  if (design === 'basic') { recordDesign(id, 'card', 'basic'); recordDesign(id, 'sns', 'basic'); }
   // SNS 이미지 제목은 기본이 '한글 이름 + 영문 이름'인데, 길면 세 줄이 되어 아래 일본어 안내가 잘렸다(2026-11-13 시험) → 길면 한글 이름만
   const full = `${J.name.ko.trim()} ${J.name.en.trim().toUpperCase()}`;
   const snsName = full.length > 14 ? J.name.ko.trim() : full;
-  const sns = node('tools/sns.mjs', id, J.snsLang === 'ko' ? 'ko' : 'vi', 'MENU', snsName).trim();
-  console.log(sns.split('\n').slice(-2).join('\n'));
+  const sns = node('tools/sns.mjs', id, J.snsLang === 'ko' ? 'ko' : 'vi', 'MENU', snsName, ...dArg).trim();
+  console.log(sns.split('\n').slice(-3).join('\n'));
   if (/넘친 요소: [A-Z]/.test(sns)) console.log('주의: SNS 이미지에 넘친 글자가 있어요 — restaurants/' + id + '/print/sns-*.png 를 열어 보세요');
 }
 

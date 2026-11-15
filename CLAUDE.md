@@ -106,7 +106,7 @@
 
 ## 7. 도구 (`tools/`, 저장소 루트에서 실행) — **도구 사용법·드라이브·윈도우 주의점은 `docs/tools.md` 맨 위 '도구 요약'을 읽는다**
 - 새 가게: 준비 `photos.py prep <가게> "<드라이브 폴더>"` → `new-shop.mjs` → 등록 `register-shop.mjs <가게>` → 점검·캡처 `check-shop.mjs <가게>`(안에서 `check-standard`·`check-listing` 실행)
-- QR `qr.cjs`+`qr-check.py` · 카드 `card.mjs` · SNS `sns.mjs` · 카드 사진 `demo.mjs` · 검색 `seo.mjs` · 보내기 `export.sh` · 소개서 `sales-pdf.mjs`
+- QR `qr.cjs`+`qr-check.py` · 카드 `card.mjs` · SNS `sns.mjs`(둘 다 `--design` 디자인 틀, 같은 도시와 겹치지 않게 `promo-designs.mjs --recommend`) · 카드 사진 `demo.mjs` · 검색 `seo.mjs` · 보내기 `export.sh` · 소개서 `sales-pdf.mjs`
 - 윈도우에서 경로는 `tools/pw.mjs`의 `ROOT`·`fileUrl()`로 만든다. `.sh`는 Git Bash로 돌린다.
 
 ## 8. 상세 기록 (`docs/`, 필요할 때만 읽음)

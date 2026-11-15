@@ -2,11 +2,42 @@
 // 버튼 글자가 MENU 가 아니면(예: 화장품 판매 SHOP) 안내 문구도 '상품 보기'로 바뀐다.
 // → restaurants/<가게>/print/sns-square.png (1080×1080, 게시물·Zalo) · sns-story.png (1080×1920, 스토리)
 // 가게 이름·종류·주소는 sales/content.js 의 DEMOS, 색은 가게 index.html 의 partner-theme 를 쓴다.
+// --design <id>: 배치·모양이 다른 디자인 틀(tools/promo-designs.mjs — photo·neon·collage·chalk·minimal). 안 주면 basic(아래 예전 모양).
+//   쓴 디자인은 print/promo.json 에 남는다(같은 도시 가게끼리 겹치지 않게 추천할 때 씀).
 import { chromium, ROOT, fileUrl, serve } from './pw.mjs';
 import { readFileSync, existsSync, mkdirSync } from 'fs';
 import vm from 'vm';
-const [shop, lang = 'vi', label = 'MENU', nameArg] = process.argv.slice(2);
-if (!shop) { console.error('사용법: node tools/sns.mjs <가게폴더명> [vi|ko|en|zh|ja] [MENU|SHOP] [가게 이름]'); process.exit(1); }
+import { spawnSync } from 'child_process';
+import { DESIGNS, loadShop, snsHtml, recordDesign } from './promo-designs.mjs';
+const argv = process.argv.slice(2);
+const di = argv.indexOf('--design');
+const design = di >= 0 ? argv.splice(di, 2)[1] : 'basic';
+const [shop, lang = 'vi', label = 'MENU', nameArg] = argv;
+if (!shop) { console.error('사용법: node tools/sns.mjs <가게폴더명> [vi|ko|en|zh|ja] [MENU|SHOP] [가게 이름] [--design basic|photo|neon|collage|chalk|minimal]'); process.exit(1); }
+if (!DESIGNS[design]) { console.error(`모르는 디자인 ${design} — ${Object.keys(DESIGNS).join('·')}`); process.exit(1); }
+if (design !== 'basic') {
+  const Dz = loadShop(shop, { lang, label, name: nameArg });
+  if (Dz.photos.length < DESIGNS[design].photos) { console.error(`${design} 디자인은 음식 사진(가로 400px 이상)이 ${DESIGNS[design].photos}장 이상 필요해요 — ${shop} 은 ${Dz.photos.length}장`); process.exit(1); }
+  const font = readFileSync(`${ROOT}/public/fonts/GmarketSansTTFBold.ttf`).toString('base64');
+  const uri = Dz.photos.map((f) => `data:image/jpeg;base64,${readFileSync(`${ROOT}/restaurants/${shop}/img/${f}`).toString('base64')}`);
+  const photo = (i) => (uri.length ? uri[i % uri.length] : '');
+  const out = `${ROOT}/restaurants/${shop}/print`; mkdirSync(out, { recursive: true });
+  const b = await chromium.launch();
+  for (const [W, H, story, file] of [[1080, 1080, false, 'sns-square.png'], [1080, 1920, true, 'sns-story.png']]) {
+    const p = await b.newPage({ viewport: { width: W, height: H } });
+    await p.setContent(snsHtml(design, Dz, { W, H, story, font, photo }), { waitUntil: 'load' });
+    await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(400);
+    const over = await p.evaluate(([W, H]) => [...document.querySelectorAll('body *')].filter((e) => { if (e.closest('svg') && e.tagName !== 'svg') return false; const r = e.getBoundingClientRect(); return r.width && (r.right > W + .5 || r.bottom > H + .5 || r.left < -.5 || r.top < -.5); }).map((e) => (e.className?.baseVal ?? e.className) || e.tagName), [W, H]);
+    const cut = await p.evaluate(() => [...document.querySelectorAll('[data-fit]')].filter((e) => { const c = (e.firstElementChild || e).getBoundingClientRect(), b = e.getBoundingClientRect(); return c.width > b.width + 2 || c.height > b.height + 2; }).map((e) => e.className));
+    await p.screenshot({ path: `${out}/${file}` });
+    console.log(`${out}/${file}`, `| 디자인 ${design}`, over.length ? `| 화면 밖으로 넘친 요소: ${over}` : '| 넘침 없음', cut.length ? `| 글자 잘림: ${cut}` : '');
+  }
+  await b.close();
+  recordDesign(shop, 'sns', design);
+  const qc = spawnSync('python', [`${ROOT}/tools/qr-img-check.py`, `https://${Dz.url}`, `${out}/sns-square.png`, `${out}/sns-story.png`], { encoding: 'utf8', env: { ...process.env, PYTHONIOENCODING: 'utf-8' } });
+  console.log((qc.stdout || qc.stderr || 'QR 그림 확인 못 함(python 없음)').trim());
+  process.exit(qc.status === 1 ? 1 : 0);
+}
 
 const ctx = { window: {} }; vm.runInNewContext(readFileSync(`${ROOT}/sales/content.js`, 'utf8'), ctx);
 const d = ctx.window.DEMOS.find((x) => x.id === shop);
@@ -78,3 +109,4 @@ for (const [W, H, story, file] of [[1080, 1080, false, 'sns-square.png'], [1080,
 }
 await b.close();
 site.close();
+if (existsSync(`${ROOT}/restaurants/${shop}/print/promo.json`)) recordDesign(shop, 'sns', 'basic');

@@ -46,6 +46,32 @@
       th: { bg: '#ffffff', top: 'border-top:2px solid #222', t: 'color:#111;font-weight:600', nav: 'background:#fff;border-bottom:1px solid #ddd;box-shadow:inset 0 -2px 0 #e4572e', row: 'border-bottom:1px solid #eee' } },
   };
   const styleThumb = s => `<i class="bd-sty-th" style="background:${s.th.bg};${s.th.top || ''}"><b style="${s.th.t}">가게</b><u style="${s.th.nav}"></u><s style="${s.th.row}"></s><s style="${s.th.row}"></s></i>`;
+  // SNS·QR 카드 디자인 틀(2026-11-14 가-1·나-1·다-1): 목록·사용 기록은 B.meta.promo(tools/promo-designs.mjs), 견본 그림은 /static/promo/<id>.jpg(진미식당으로 만든 것)
+  // 추천 순서 = tools/promo-designs.mjs 의 recommend 와 같은 규칙(바꾸면 둘 다): 사진 모자람 → 맨 뒤, 같은 도시에서 씀 → 뒤, 모양 스타일 어울림 → 앞, 덜 쓴 것 → 앞
+  function promoRank(D, nPhotos) {
+    const P = B.meta.promo || { designs: {}, used: [] }, region = D.reg?.region || '', style = D.theme?.style || 'basic';
+    return Object.entries(P.designs).map(([id, d]) => {
+      const same = P.used.filter(u => u.id !== B.id && u.region && u.region === region && (u.sns === id || u.card === id)).map(u => u.id);
+      const total = P.used.filter(u => u.id !== B.id && (u.sns === id || u.card === id)).length;
+      const ok = nPhotos >= d.photos, fit = d.styles.includes(style);
+      return { id, d, ok, same, fit, score: (ok ? 0 : 1000) + (same.length ? 100 + same.length : 0) - (fit ? 10 : 0) + total * 0.1 };
+    }).sort((a, b) => a.score - b.score);
+  }
+  function promoHtml(D, nPhotos, st) {
+    if (!B.meta.promo) return '';
+    const R = promoRank(D, nPhotos), pick = D.promo?.design || '', best = R.find(r => r.ok && !r.same.length) || R[0];
+    const rName = (B.meta.regions?.[D.reg?.region] || {}).ko || '이 도시';
+    const done = st === 'registered' || st === 'checked' || st === 'committed', t = B.info?.state?.at || Date.now();
+    return `<div class="bd-sub">SNS 이미지·QR 카드 디자인 <small class="muted">같은 도시(${esc(rName)}) 가게가 쓰는 디자인은 뒤로 가요. 고르지 않으면 ★추천으로 만들어요</small></div>
+      <div class="bd-promos">${R.map(r => `<button type="button" class="bd-promo ${(pick || best.id) === r.id ? 'on' : ''} ${r.ok ? '' : 'off'}" data-promo="${r.id}" ${r.ok ? '' : 'disabled'}>
+        <img src="/static/promo/${r.id}.jpg" alt="" loading="lazy">
+        <strong>${esc(r.d.label)}${r.id === best.id ? ' <b class="bd-rec">★추천</b>' : ''}</strong><small>${esc(r.d.desc)}</small><em>${esc(r.d.fit)}</em>
+        ${!r.ok ? `<i class="warn">음식 사진 ${r.d.photos}장 이상 필요(지금 ${nPhotos}장)</i>` : r.same.length ? `<i class="warn">같은 도시 ${esc(r.same.slice(0, 2).join('·'))}${r.same.length > 2 ? ` 외 ${r.same.length - 2}곳` : ''} 사용 중</i>` : r.fit ? '<i>모양 스타일과 어울려요</i>' : ''}
+      </button>`).join('')}</div>
+      <p class="muted">견본은 진미식당으로 만든 그림이에요. 실제 이미지는 [② 저장·점검] 때 이 가게 이름·색·사진으로 만들어져요.</p>
+      ${done ? `<div class="bd-promo-out"><a href="/shop/${B.id}/print/sns-square.png?t=${t}" target="_blank" rel="noopener"><img src="/shop/${B.id}/print/sns-square.png?t=${t}" alt="SNS 정사각형"></a><a href="/shop/${B.id}/print/sns-story.png?t=${t}" target="_blank" rel="noopener"><img src="/shop/${B.id}/print/sns-story.png?t=${t}" alt="SNS 스토리"></a><a href="/shop/${B.id}/print/table-card.png?t=${t}" target="_blank" rel="noopener"><img src="/shop/${B.id}/print/table-card.png?t=${t}" alt="QR 카드"></a></div>
+        <p class="muted">위는 지금 만들어진 이미지예요(누르면 크게). 디자인을 바꾸면 [② 저장·점검]을 다시 눌러야 새로 만들어져요.</p>` : ''}`;
+  }
   const CUISINE = { korean: 'Korean', bbq: 'Korean BBQ', chicken: 'Fried Chicken', noodle: 'Noodles', cafe: 'Cafe', western: 'Western',
     seafood: 'Seafood', chinese: 'Korean-Chinese', japanese: 'Japanese', pub: 'Pub', bar: 'Bar', snack: 'Korean Street Food', hotel: 'Hotel' };
 
@@ -234,7 +260,7 @@
           <label class="bd-l"><span>요리 종류(영문, 쉼표로)</span><input data-cuisine value="${esc(D.reg.cuisine.join(', '))}" placeholder="Korean, Naengmyeon"></label>
           ${inp('reg.sub', '대표 메뉴 한 줄(비우면 분류 이름)', '예: 냉면 · 갈비 · 만두')}
         </div>
-        ${D.kind === 'full' ? `<label class="bd-l"><span>SNS 이미지 언어</span><select data-p="snsLang"><option value="vi">베트남어(베트남 손님)</option><option value="ko">한국어(한국 손님)</option></select></label>` : ''}
+        ${D.kind === 'full' ? `<label class="bd-l"><span>SNS 이미지 언어</span><select data-p="snsLang"><option value="vi">베트남어(베트남 손님)</option><option value="ko">한국어(한국 손님)</option></select></label>${promoHtml(D, photos.length, st)}` : ''}
       </section>
     </div>
 
@@ -343,7 +369,7 @@
       if (p === 'theme.band' || p === 'theme.accent' || p === 'theme.title' || p === 'theme.mode') B.D.theme.preset = '';
       setAt(p, v);
       if (B.ai.delete(p)) el.closest('.bd-l')?.classList.remove('ai');  // 사람이 고치면 'AI 초안' 표시를 뗀다
-      changed(e.type === 'change' && (el.tagName === 'SELECT' && /^(kind|cats\.\d+\.items\.\d+\.photo)$/.test(p)));
+      changed(e.type === 'change' && (el.tagName === 'SELECT' && /^(kind|reg\.region|cats\.\d+\.items\.\d+\.photo)$/.test(p)));
     } else if (el.dataset.size) {
       const [p, si, k] = splitLast(el.dataset.size, 2);
       const it = at(p); it.sizes[+si][+k] = +k === 1 ? Number(el.value.replace(/[^\d]/g, '')) || '' : el.value;
@@ -378,6 +404,7 @@
     if (t.id === 'bd-create') return create();
     if (t.dataset.load) return loadDraft(t.dataset.load);
     if (t.id === 'bd-other') { if (B.dirty) await save(); B.D = null; B.id = ''; B.meta = null; return open(); }
+    if (t.dataset.promo) { B.D.promo = { design: t.dataset.promo }; return changed(true); }
     if (t.dataset.style) { Object.assign(B.D.theme, STYLES[t.dataset.style].c, { style: t.dataset.style, preset: '' }); return changed(true); }
     if (t.dataset.preset) { const p = PRESETS[t.dataset.preset]; Object.assign(B.D.theme, p, { preset: t.dataset.preset }); delete B.D.theme.label; return changed(true); }
     if (t.dataset.add === 'chip') { B.D.chips.push(blank5()); return changed(true); }
@@ -570,6 +597,11 @@
   async function finish(btn) {
     if (!confirm('저장·점검을 할까요?\n가게 찾기 목록·검색 정보·카드 사진에 이 가게를 등록하고(공통 파일 몇 개에 한 줄씩 들어가요), check-shop 으로 점검해요. 1~3분 걸려요. 배포는 하지 않아요.')) return;
     btn.disabled = true; err('');
+    if (B.D.kind === 'full' && !B.D.promo?.design && B.meta.promo) {  // 디자인을 안 골랐으면 ★추천으로
+      const photos = (B.info?.images || []).filter(n => /^[a-z0-9-]+\.jpg$/.test(n) && n !== 'sign.jpg');
+      const R = promoRank(B.D, photos.length); B.D.promo = { design: (R.find(r => r.ok && !r.same.length) || R[0]).id };
+      if (!(await save())) { btn.disabled = false; return err('저장이 안 돼서 멈췄어요'); }
+    }
     const r = await post('/api/builder/finish', { id: B.id });
     if (r.error) { btn.disabled = false; return err(r.error); }
     pollJob();
