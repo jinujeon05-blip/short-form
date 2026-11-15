@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>QR 시험 식당 테이블 QR (열쇠 없는 시험용)</title>
+<!-- PDF: node tools/pdf.mjs restaurants/testshop/print/test-qr.html restaurants/testshop/print/test-qr.pdf -->
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; color: #1f2a2b; background: #fff; }
+  .page { width: 210mm; height: 297mm; padding: 12mm; display: flex; flex-direction: column; gap: 8mm; }
+  .head { text-align: center; font-size: 12pt; color: #5f6f70; }
+  .head b { display: block; font-size: 17pt; color: #234649; }
+  .cards { flex: 1; display: grid; grid-template-rows: repeat(3, 1fr); gap: 6mm; }
+  .card { display: flex; align-items: center; gap: 10mm; border: 2px dashed #9fb9b5; border-radius: 6mm; padding: 6mm 10mm; }
+  .card img { width: 62mm; height: 62mm; flex: none; }
+  .no { font-size: 15pt; font-weight: 700; color: #c0573a; }
+  .no b { display: block; font-size: 54pt; line-height: 1; color: #2f5d62; }
+  .txt { font-size: 12pt; line-height: 1.5; margin-top: 4mm; }
+  .url { font-size: 9.5pt; color: #5f6f70; margin-top: 3mm; word-break: break-all; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="head"><b>QR 시험 식당 · 테이블 QR (시험용)</b>폰 카메라로 찍으면 그 테이블 번호로 주문서가 열립니다 · 실제 가게 아님</div>
+  <div class="cards">
+    <div class="card"><img src="qr-t1.svg" alt=""><div><div class="no">BÀN · 테이블<b>1</b></div><div class="txt">QR을 찍어 메뉴를 고르고<br>'주방으로 주문 보내기'를 누르세요<br>Quét QR để gọi món</div><div class="url">https://testshop.qrmenuasia.com/?t=1</div></div></div>
+    <div class="card"><img src="qr-t2.svg" alt=""><div><div class="no">BÀN · 테이블<b>2</b></div><div class="txt">QR을 찍어 메뉴를 고르고<br>'주방으로 주문 보내기'를 누르세요<br>Quét QR để gọi món</div><div class="url">https://testshop.qrmenuasia.com/?t=2</div></div></div>
+    <div class="card"><img src="qr-t3.svg" alt=""><div><div class="no">BÀN · 테이블<b>3</b></div><div class="txt">QR을 찍어 메뉴를 고르고<br>'주방으로 주문 보내기'를 누르세요<br>Quét QR để gọi món</div><div class="url">https://testshop.qrmenuasia.com/?t=3</div></div></div>
+  </div>
+</div>
+</body>
+</html>
