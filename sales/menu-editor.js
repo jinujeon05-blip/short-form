@@ -95,15 +95,21 @@
       const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
       inp.onchange = async () => {
         const f = inp.files[0]; if (!f) return;
+        // 실패하면 어느 단계에서 왜 막혔는지 함께 보여 준다(2026-11-15 진미 김치쪽갈비찜 사진 건)
+        let step = 'open';
         try {
           const b = await resizeToBlob(f, max);
+          if (!b || !b.size) throw new Error('empty_blob');
           if (b.size > 3_800_000) return alert(T.upBig);
+          step = 'send';
           const r = await fetch('/api/photo?shop=' + encodeURIComponent(opts.shop), { method: 'POST', headers: { ...(opts.headers() || {}), 'content-type': 'image/jpeg' }, body: b });
           if (r.status === 401) { opts.onAuthFail && opts.onAuthFail(); return; }
-          const j = await r.json();
-          if (!r.ok) throw new Error(j.error);
+          step = 'server ' + r.status;
+          const txt = await r.text();
+          let j = {}; try { j = JSON.parse(txt); } catch { throw new Error(txt.slice(0, 80) || 'no_json'); }
+          if (!r.ok) throw new Error(j.error || 'failed');
           done(j.url); touch(); paint();
-        } catch (e) { alert(T.upErr); }
+        } catch (e) { alert(T.upErr + '\n(' + step + ': ' + ((e && (e.message || e.name)) || '?') + ', ' + (f.type || '?') + ' ' + Math.round(f.size / 1024) + 'KB)'); }
       };
       inp.click();
     }
