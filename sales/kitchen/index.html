@@ -68,6 +68,7 @@
   .toast.on { opacity: .92; }
   #printArea { display: none; }
   @media (max-width: 860px) { .board { grid-template-columns: 1fr; } .col.done { order: 3; } }
+  @media (max-width: 600px) { header .st { display: none; } header { padding: 10px; gap: 6px; } }
   @media print {
     body > *:not(#printArea) { display: none !important; }
     #printArea { display: block !important; color: #000; background: #fff; font-family: system-ui, sans-serif; }
@@ -98,10 +99,20 @@
     <h1 id="hName"></h1>
     <span class="st" id="hSt"></span>
     <span class="sp"></span>
+    <div class="seg" id="hTabs"><button data-tab="list" id="hTabL"></button><button data-tab="floor" id="hTabF"></button></div>
     <button class="btn hb" id="hSet">⚙</button>
   </header>
   <div class="off" id="offNote" hidden></div>
-  <div class="board">
+  <div id="fView" hidden>
+    <div class="fbar"><span id="fZones"></span><span class="sp"></span><button class="btn hb" id="fEdit"></button></div>
+    <div class="ftool" id="fTool" hidden></div>
+    <p class="fhint" id="fHint" hidden></p>
+    <div class="fprop" id="fProp" hidden></div>
+    <div class="fwrap" id="fWrap"><div class="floor" id="fFloor"></div></div>
+    <div class="flegend" id="fLegend"></div>
+    <div class="fextra" id="fExtra"></div>
+  </div>
+  <div class="board" id="lView">
     <section class="col new"><h2><span id="cNew"></span><b id="nNew">0</b></h2><div id="lNew"></div></section>
     <section class="col cook"><h2><span id="cCook"></span><b id="nCook">0</b></h2><div id="lCook"></div></section>
     <section class="col done"><h2><span id="cDone"></span><b id="nDone">0</b></h2><div id="lDone"></div></section>
@@ -124,9 +135,17 @@
   <button class="btn big" id="bClose" style="margin-top:14px"></button>
 </div></div>
 
+<div class="sheet" id="vTable" hidden><div>
+  <h3 id="tbTitle"></h3>
+  <p class="sum" id="tbSum"></p>
+  <div id="tbList"></div>
+  <div class="tacts"><button class="btn clr" id="tbClear"></button><button class="btn" id="tbClose"></button></div>
+</div></div>
+
 <div class="toast" id="toast"></div>
 <div id="printArea"></div>
 
+<script src="/kitchen/floor.js"></script>
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
@@ -179,6 +198,7 @@
     $("oPrinter").value = get("printer", "");
     $("bTestPrint").textContent = x.testPrint; $("bTestSound").textContent = x.testSound; $("bOut").textContent = x.out; $("bClose").textContent = x.close; $("tHelp").textContent = x.help;
     $("offNote").textContent = x.off;
+    if (floor) { const [a, b] = floor.tabText(); $("hTabL").innerHTML = `${esc(a)}<b id="hNewN"></b>`; $("hTabF").textContent = b; }
     if (!$("vMain").hidden) render();
   }
 
@@ -221,6 +241,7 @@
           } else cur.status = o.status;
         }
         firstLoad = false;
+        if (floor) floor.update(j);
         render();
         if (fresh.length) onNew(fresh);
       }
@@ -256,6 +277,8 @@
     const n = pick((s) => s === "new"), c = pick((s) => s === "cooking"), d = pick((s) => s === "done" || s === "cancel").reverse().slice(0, 30);
     const fill = (el, cnt, arr) => { $(cnt).textContent = arr.length; $(el).innerHTML = arr.map(([id, o]) => card(id, o)).join("") || `<div class="empty">${t().none}</div>`; };
     fill("lNew", "nNew", n); fill("lCook", "nCook", c); fill("lDone", "nDone", d);
+    if ($("hNewN")) $("hNewN").textContent = n.length && tab === "floor" ? n.length : "";
+    if (floor) floor.render();
     document.title = (n.length ? `(${n.length}) ` : "") + "Bếp · QR MENU";
     if (!n.length) stopAlarm();
   }
@@ -392,12 +415,24 @@
   function start() {
     started = true; view("vMain"); $("hName").textContent = shop;
     try { audioOut(); } catch {}
-    keepAwake(); render(); poll(); beat(); setInterval(beat, 5 * 60e3);
+    setTab(tab); keepAwake(); poll(); beat(); setInterval(beat, 5 * 60e3);
     setInterval(() => { if (orders.size) render(); }, 60e3); // '몇 분 전' 갱신
+  }
+
+  // ── 목록 | 배치도 탭 (기기마다 마지막 탭 기억) ──
+  let tab = get("tab", "list") === "floor" && window.QKFloor ? "floor" : "list";
+  const floor = window.QKFloor ? QKFloor.init({ $, esc, money, ago, card, call, toast, get, set, orders, lang: () => lang, t }) : null;
+  function setTab(v) {
+    if (v === "list" && floor && floor.editing()) return toast(lang === "ko" ? "배치 편집을 먼저 저장하거나 취소해 주세요" : "Hãy Lưu hoặc Hủy sửa sơ đồ trước");
+    tab = floor ? v : "list"; set("tab", tab);
+    $("hTabs").hidden = !floor; $("hTabL").classList.toggle("on", tab === "list"); $("hTabF").classList.toggle("on", tab === "floor");
+    $("lView").hidden = tab !== "list"; $("fView").hidden = tab !== "floor";
+    render();
   }
 
   // ── 버튼 ──
   document.addEventListener("click", (e) => {
+    const tb = e.target.closest("[data-tab]"); if (tb) return setTab(tb.dataset.tab);
     const l = e.target.closest("[data-lang]"); if (l) { lang = l.dataset.lang; set("lang", lang); paintText(); return; }
     const s = e.target.closest("[data-s]");
     if (s) { if (s.dataset.s === "cancel" && !confirm(t().cancelQ)) return; if (s.dataset.s === "cooking") stopAlarm(); setStatus(s.dataset.id, s.dataset.s); return; }

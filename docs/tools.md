@@ -25,6 +25,7 @@
 - `node tools/sales-pdf.mjs` — 소개서 PDF 5개 언어. 각각 2쪽인지 확인하고, `.demos`는 7칸이다.
 - 기타: `tools/pdf.mjs`(HTML→PDF), `tools/mockup.mjs`(포장재 시안), `tools/app-icon.mjs`(웹앱 아이콘), `tools/thumb.py`(페이지 그림에서 3:4로 자르기), `node tools/analytics.mjs`(방문 기록·점주 편집 블록)
 - **윈도우 PC(로컬 세션, `D:\qrmenu`, 2026-10-27)**: 도구 경로는 `tools/pw.mjs`의 `ROOT`·`fileUrl()`(fileURLToPath·pathToFileURL)로 만든다. `new URL(import.meta.url).pathname`·`` `file://${경로}` ``는 윈도우에서 깨지니 쓰지 않는다. `.sh`는 Git Bash로 돌린다.
+- **AI 명령창 주의(2026-11-16)**: 파일을 고치는 node·python 스크립트의 문자열 안에 `\u0000`·`\x00` 같은 이스케이프를 넣으면 스크립트가 실제 제어 문자로 바꿔 파일에 쓴다(_kitchen.js·tools.md가 '바이너리'로 보인 건). 이런 글자가 든 줄은 Edit 도구로 고치거나, 역슬래시를 `String.fromCharCode(92)`로 만든다. 고친 뒤 `git diff --stat`에 `Bin`이 뜨면 다시 본다.
 - **드라이브**:
   - **PC 로컬 세션은 드라이브가 동기화돼 있다**(`G:\내 드라이브\QR메뉴판\<가게>\`, 2026-10-28 확인). zip을 받지 말고 거기서 사진·`store_info.json`·`클로드_안내.md`를 스크래치로 바로 복사한다(다운로드 토큰 0, 작은 간판 사진도 바로 받음).
   - 10MB 넘는 파일은 못 받는다.

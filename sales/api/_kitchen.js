@@ -4,6 +4,8 @@
 //   kq/<가게>/<열쇠>/<날짜>/o-<주문id>.json     주문 1건 = 파일 1개(동시에 들어와도 서로 덮어쓰지 않음, 한 번 쓰면 안 바뀜)
 //   kq/<가게>/<열쇠>/<날짜>/s-<주문id>.<상태>   상태 표시(빈 파일). cooking(만드는 중)·done(완료)·cancel(취소)
 //   kq/<가게>/<열쇠>/dev/<기기id>.json          주방 기기 마지막 접속(5분마다)
+//   kq/<가게>/<열쇠>/layout.json               테이블 배치도(구역·테이블·장식). 바꾸면 bell.layoutTs 를 올린다
+//   kq/<가게>/<열쇠>/<날짜>/c-<시각>-<테이블hex>.clr  '자리 정리'(손님 나감) 표시. 그 시각 전 주문은 배치도에서 빠진다
 // bell.ts 가 바뀌었을 때만 목록(list, 비싼 읽기)을 읽는다 → 주문이 없을 땐 비용이 거의 안 든다.
 const { put, head, BlobNotFoundError } = require('@vercel/blob');
 const L = require('./_lib');
@@ -43,19 +45,58 @@ const touch = (shop, bell, extra = {}) => writeBell(shop, { ...bell, ...extra, t
 const putFile = (p, body, type = 'application/json') =>
   put(p, body, { access: 'public', addRandomSuffix: false, allowOverwrite: true, contentType: type, cacheControlMaxAge: 31536000 });
 
-// 오늘·어제(베트남 시간) 주문과 상태. 자정을 넘겨 영업하는 가게도 있어서 이틀을 본다.
-async function listOrders(shop) {
-  const base = dir(shop), out = new Map();
+// 오늘·어제(베트남 시간) 주문과 상태 + '자리 정리' 기록. 자정을 넘겨 영업하는 가게도 있어서 이틀을 본다.
+async function listState(shop) {
+  const base = dir(shop), out = new Map(), clears = [];
   for (const d of [L.dateOf(Date.now() - 86400000), L.dateOf()]) {
     for (const b of await S.listAll(`${base}/${d}/`)) {
       const name = b.pathname.slice(base.length + d.length + 2);
       let m = name.match(/^o-([0-9]+-[a-f0-9]+)\.json$/);
       if (m) { const o = out.get(m[1]) || { id: m[1], status: 'new' }; o.url = b.url; out.set(m[1], o); continue; }
       m = name.match(/^s-([0-9]+-[a-f0-9]+)\.([a-z]+)$/);
-      if (m && RANK[m[2]] != null) { const o = out.get(m[1]) || { id: m[1], status: 'new' }; if (RANK[m[2]] > RANK[o.status]) o.status = m[2]; out.set(m[1], o); }
+      if (m && RANK[m[2]] != null) { const o = out.get(m[1]) || { id: m[1], status: 'new' }; if (RANK[m[2]] > RANK[o.status]) o.status = m[2]; out.set(m[1], o); continue; }
+      m = name.match(/^c-([0-9]+)-([0-9a-f]{2,96})\.clr$/);
+      if (m) clears.push({ table: Buffer.from(m[2], 'hex').toString('utf8'), at: Number(m[1]) });
     }
   }
-  return [...out.values()].filter((o) => o.url).sort((a, b) => a.id.localeCompare(b.id));
+  return { orders: [...out.values()].filter((o) => o.url).sort((a, b) => a.id.localeCompare(b.id)), clears };
+}
+const listOrders = async (shop) => (await listState(shop)).orders;
+const tableNorm = (v) => String(v == null ? '' : v).trim().toLowerCase().slice(0, 12);
+const clearPath = (shop, table, at = Date.now()) => `${dir(shop)}/${L.dateOf(at)}/c-${at}-${Buffer.from(tableNorm(table), 'utf8').toString('hex')}.clr`;
+
+// 테이블 배치도. 주방 화면 '배치 편집'에서 저장, 모든 주방 기기가 같이 본다.
+const KINDS = ['table', 'kitchen', 'counter', 'wc', 'door', 'wall', 'plant'];
+const SHAPES = ['round', 'square', 'rect'];
+function cleanLayout(v) {
+  if (!v || typeof v !== 'object') return null;
+  const str = (x, n) => (typeof x === 'string' ? x.replace(/[\x00-\x1f]/g, ' ').trim().slice(0, n) : '');
+  const num = (x, lo, hi) => Math.min(hi, Math.max(lo, Math.round(Number(x) || 0)));
+  const zones = (Array.isArray(v.zones) ? v.zones : []).slice(0, 8)
+    .map((z) => ({ id: str(z && z.id, 8).replace(/[^a-z0-9]/gi, ''), name: str(z && z.name, 20) }))
+    .filter((z, i, a) => z.id && a.findIndex((y) => y.id === z.id) === i);
+  if (!zones.length) return null;
+  const zid = new Set(zones.map((z) => z.id));
+  const items = (Array.isArray(v.items) ? v.items : []).slice(0, 200).filter((x) => x && KINDS.includes(x.k) && zid.has(x.z)).map((x) => {
+    const o = { id: str(x.id, 12).replace(/[^a-z0-9]/gi, '') || S.rand(3), k: x.k, z: x.z, x: num(x.x, 0, 2000), y: num(x.y, 0, 2000), w: num(x.w, 10, 1000), h: num(x.h, 10, 1000), name: str(x.name, 12) };
+    if (x.k === 'table') { o.shape = SHAPES.includes(x.shape) ? x.shape : 'square'; o.seats = num(x.seats, 0, 16); }
+    return o;
+  });
+  return { v: 1, zones, items };
+}
+async function readLayout(shop, bell) {
+  if (!bell.layoutTs) return null;
+  const p = `${dir(shop)}/layout.json`;
+  if (!BASE) { const h = await head(p); learn(h.url, p); }
+  const r = await fetch(`${BASE}/${p}?v=${bell.layoutTs}`, { cache: 'no-store' });
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error('layout ' + r.status);
+  return cleanLayout(await r.json());
+}
+async function writeLayout(shop, layout) {
+  const p = `${dir(shop)}/layout.json`;
+  const r = await put(p, JSON.stringify(layout), { access: 'public', addRandomSuffix: false, allowOverwrite: true, contentType: 'application/json', cacheControlMaxAge: 60 });
+  learn(r.url, p);
 }
 
 // 주방 기기 열쇠: 60일. 관리자가 '모든 기기 로그아웃'(gen 올림)이나 PIN 새로 만들기를 하면 전부 풀린다.
@@ -84,4 +125,4 @@ function cleanOrder(b) {
   return { table: s(b.table, 12), note: s(b.note, 200), lang: s(b.lang, 5), currency: s(b.currency, 3) || '₫', items, total, market: items.some((x) => x.price == null) };
 }
 
-module.exports = { DEFAULT, STATUSES, dir, readBell, writeBell, touch, putFile, listOrders, kitchenToken, verifyKitchen, tableKey, newId, dateOfId, cleanOrder };
+module.exports = { DEFAULT, STATUSES, dir, readBell, writeBell, touch, putFile, listOrders, listState, tableNorm, clearPath, cleanLayout, readLayout, writeLayout, kitchenToken, verifyKitchen, tableKey, newId, dateOfId, cleanOrder };

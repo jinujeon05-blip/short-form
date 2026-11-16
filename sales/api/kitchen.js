@@ -4,6 +4,9 @@
 //   GET  poll      ?shop=&since=<ts>      → 바뀐 게 없으면 { same:true }, 있으면 { ts, cfg, orders:[{id,url,status}] }
 //   POST status    {shop, id, status}     cooking | done | cancel
 //   POST beat      {shop, device, name, printer}  5분마다 "켜져 있어요"
+//   GET  layout    ?shop=                 → { layout, layoutTs }  테이블 배치도(없으면 layout:null → 화면이 기본 배치를 그림)
+//   POST layout    {shop, layout}         배치도 저장(모든 주방 기기가 같이 봄)
+//   POST clear     {shop, table}          '자리 정리'(손님 나감) → 그 테이블 지난 주문을 배치도에서 뺀다
 // 관리자 (헤더 x-admin-key):
 //   GET  k-get     ?shop=                 → 설정·PIN 여부·기기 목록·오늘 주문 수
 //   POST k-set     {shop, patch}          주문 받기 켜기/끄기, 테이블 QR 열쇠, 확인 간격, 기본 프린터
@@ -40,8 +43,10 @@ async function kitchenApi(req, res, action) {
   if (action === 'poll') {
     const since = Number(req.query.since) || 0;
     if (since && bell.ts && bell.ts <= since) return res.json({ same: true, ts: bell.ts, cfg });
-    return res.json({ ts: bell.ts || Date.now(), cfg, orders: await K.listOrders(shop) });
+    const st = await K.listState(shop);
+    return res.json({ ts: bell.ts || Date.now(), cfg, orders: st.orders, clears: st.clears, layoutTs: bell.layoutTs || 0 });
   }
+  if (action === 'layout' && req.method === 'GET') return res.json({ layout: await K.readLayout(shop, bell), layoutTs: bell.layoutTs || 0 });
   if (req.method !== 'POST') return res.status(405).end();
   const body = L.readBody(req);
   if (action === 'status') {
@@ -49,6 +54,23 @@ async function kitchenApi(req, res, action) {
     await K.putFile(`${K.dir(shop)}/${K.dateOfId(body.id)}/s-${body.id}.${body.status}`, '1', 'text/plain');
     await K.touch(shop, bell);
     return res.json({ ok: true });
+  }
+  if (action === 'layout') {
+    const layout = K.cleanLayout(body.layout);
+    if (!layout) return res.status(400).json({ error: 'bad_layout' });
+    await K.writeLayout(shop, layout);
+    const layoutTs = Date.now();
+    await K.touch(shop, bell, { layoutTs });
+    await L.logEvent('kitchen', 'k-layout', shop);
+    return res.json({ ok: true, layoutTs, layout });
+  }
+  if (action === 'clear') {
+    const table = K.tableNorm(body.table);
+    if (!table) return res.status(400).json({ error: 'bad_request' });
+    const at = Date.now();
+    await K.putFile(K.clearPath(shop, table, at), '1', 'text/plain');
+    await K.touch(shop, bell);
+    return res.json({ ok: true, at });
   }
   if (action === 'beat') {
     const dev = String(body.device || '').replace(/[^a-z0-9]/gi, '').slice(0, 16);
