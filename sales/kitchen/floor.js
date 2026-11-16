@@ -8,7 +8,7 @@
       list: "Danh sách", floor: "Sơ đồ bàn", edit: "✎ Sửa sơ đồ", save: "Lưu", cancel: "Hủy", addTable: "+ Bàn", addDecor: "+ Đồ vật…",
       addZone: "+ Khu", renZone: "Đổi tên khu", delZone: "Xóa khu", zoneQ: "Tên khu (VD: Tầng 1, Tầng 2, Sân ngoài)", delZoneQ: "Xóa khu này và mọi thứ trong đó?", lastZone: "Phải còn ít nhất 1 khu",
       zone0: "Sảnh", name: "Số bàn", nameH: "Giống số trên mã QR của bàn", dname: "Tên", shape: "Hình", round: "Tròn", square: "Vuông", rect: "Dài", seats: "Ghế", size: "Cỡ", rot: "↻ Xoay", copy: "⧉ Nhân bản", del: "🗑 Xóa",
-      kitchen: "Bếp", counter: "Quầy", wc: "WC", door: "Lối vào", wall: "Vách", plant: "Cây",
+      kitchen: "Bếp", counter: "Quầy", wc: "WC", door: "Lối vào", stairs: "Cầu thang", wall: "Vách", plant: "Cây",
       sEmpty: "Bàn trống", sNew: "Đơn mới", sCook: "Đang làm", sDone: "Đã ra món (đang ăn)", more: "khác", extra: "Bàn chưa có trên sơ đồ",
       hint: "Kéo bàn để di chuyển. Chạm vào bàn để sửa số, hình, số ghế. Xong thì nhấn Lưu.", dirtyQ: "Bỏ các thay đổi chưa lưu?", saved: "Đã lưu sơ đồ", dup: "Số bàn bị trùng: ", saveFail: "Lưu không được – thử lại",
       clear: "🧹 Dọn bàn (khách đã về)", clearQ: "Dọn bàn này? Bàn sẽ trở lại trống.", clearQ2: "Bàn này còn {n} đơn chưa xong. Vẫn dọn bàn?", cleared: "Đã dọn bàn", noOrder: "Chưa có đơn", since: "Từ", close: "Đóng", total: "Tổng",
@@ -17,14 +17,14 @@
       list: "목록", floor: "배치도", edit: "✎ 배치 편집", save: "저장", cancel: "취소", addTable: "+ 테이블", addDecor: "+ 장식…",
       addZone: "+ 구역", renZone: "구역 이름", delZone: "구역 삭제", zoneQ: "구역 이름 (예: 1층, 2층, 야외)", delZoneQ: "이 구역과 안의 테이블·장식을 모두 지울까요?", lastZone: "구역은 1개 이상 있어야 해요",
       zone0: "홀", name: "테이블 번호", nameH: "테이블 QR 번호와 같아야 주문이 이 자리에 떠요", dname: "이름", shape: "모양", round: "둥근", square: "네모", rect: "긴 네모", seats: "의자", size: "크기", rot: "↻ 돌리기", copy: "⧉ 복사", del: "🗑 삭제",
-      kitchen: "주방", counter: "카운터", wc: "화장실", door: "입구", wall: "벽", plant: "화분",
+      kitchen: "주방", counter: "카운터", wc: "화장실", door: "입구", stairs: "계단", wall: "벽", plant: "화분",
       sEmpty: "빈 자리", sNew: "새 주문", sCook: "만드는 중", sDone: "음식 나감(식사 중)", more: "외", extra: "배치도에 없는 테이블",
       hint: "테이블을 끌어서 옮기세요. 테이블을 누르면 번호·모양·의자 수를 바꿀 수 있어요. 다 되면 저장.", dirtyQ: "저장하지 않은 변경을 버릴까요?", saved: "배치를 저장했어요", dup: "테이블 번호가 겹쳐요: ", saveFail: "저장 실패 – 다시 시도해 주세요",
       clear: "🧹 자리 정리 (손님 나감)", clearQ: "이 테이블을 정리할까요? 빈 자리로 돌아가요.", clearQ2: "아직 안 끝난 주문이 {n}건 있어요. 그래도 정리할까요?", cleared: "자리를 정리했어요", noOrder: "주문이 없어요", since: "시작", close: "닫기", total: "합계",
     },
   };
-  const ICON = { kitchen: "🍲", counter: "💰", wc: "🚻", door: "🚪", wall: "", plant: "🌿" };
-  const DSIZE = { kitchen: [240, 140], counter: [200, 70], wc: [120, 100], door: [130, 40], wall: [240, 14], plant: [56, 56] };
+  const ICON = { kitchen: "🍲", counter: "💰", wc: "🚻", door: "🚪", stairs: "⬆", wall: "", plant: "🌿" };
+  const DSIZE = { kitchen: [240, 140], counter: [200, 70], wc: [120, 100], door: [130, 40], stairs: [150, 90], wall: [240, 14], plant: [56, 56] };
   const norm = (v) => String(v == null ? "" : v).trim().toLowerCase().slice(0, 12);
   const rid = () => Math.random().toString(36).slice(2, 8);
   const clone = (o) => JSON.parse(JSON.stringify(o));
@@ -53,7 +53,7 @@
   .fhint { font-size: 13px; color: var(--muted); margin: 0 2px 8px; line-height: 1.5; }
   .fwrap { overflow: auto; border-radius: 16px; background: #e9e2d6; -webkit-overflow-scrolling: touch; }
   .floor { position: relative; margin: 0 auto; background: #f4efe6; border-radius: 16px; box-shadow: inset 0 0 0 6px #5b5148; font-size: 14px; color: #2b2622; user-select: none; -webkit-user-select: none; }
-  .floor.ed { background-color: #f4efe6; background-image: radial-gradient(#cfc5b5 1.2px, transparent 1.3px); }
+  .floor.ed { background-color: #f4efe6; background-image: radial-gradient(#cfc5b5 1.2px, transparent 1.3px); background-size: 20px 20px; }
   .it { position: absolute; }
   .floor.ed .it { touch-action: none; cursor: grab; }
   .floor:not(.ed) .it.ftb { cursor: pointer; }
@@ -79,6 +79,9 @@
   .k-counter .dk { background: #b89a7a; border: 2px solid #8d7254; color: #fff; }
   .k-wc .dk { background: #dbe7f3; border: 2px solid #9db6cf; color: #36506b; }
   .k-door .dk { background: transparent; border: 2px dashed #8d8478; color: #5b5148; }
+  .k-stairs .dk { border: 2px solid #8d8478; border-radius: 6px; color: #3b342e; background: repeating-linear-gradient(90deg, #e2d9cb 0 9px, #b9ad9b 9px 11px); }
+  .k-stairs.v .dk { background: repeating-linear-gradient(0deg, #e2d9cb 0 9px, #b9ad9b 9px 11px); }
+  .k-stairs .dk span { background: rgba(244,239,230,.92); border-radius: 6px; padding: 2px 6px; }
   .k-wall .dk { background: #5b5148; border-radius: 4px; }
   .k-plant .dk { background: #cfe5c0; border: 2px solid #8fb978; border-radius: 50%; font-size: 1.2em; }
   .fx { position: absolute; top: -12px; right: -12px; width: 28px; height: 28px; border-radius: 50%; background: #e5484d; color: #fff; border: 2px solid #fff; font-weight: 900; font-size: 15px; line-height: 22px; text-align: center; padding: 0; z-index: 2; }
@@ -162,7 +165,7 @@
       const fx = isSel ? `<button class="fx" data-fdel="${it.id}">✕</button>` : "";
       if (it.k !== "table") {
         const label = it.k === "wall" ? "" : `${ICON[it.k]}${it.k === "plant" ? "" : " " + esc(it.name || x[it.k])}`;
-        return `<div class="it k-${it.k}${isSel ? " sel" : ""}" data-fid="${it.id}" style="${pos}"><div class="dk">${label}</div>${fx}</div>`;
+        return `<div class="it k-${it.k}${it.h > it.w ? " v" : ""}${isSel ? " sel" : ""}" data-fid="${it.id}" style="${pos}"><div class="dk">${it.k === "stairs" ? `<span>${label}</span>` : label}</div>${fx}</div>`;
       }
       const key = norm(it.name), list = edit ? [] : active(key), state = stateOf(list), sm = summary(list);
       const size = ph < 50 || pw < 60 ? " xs" : ph < 68 || pw < 76 ? " sm" : "";
@@ -188,7 +191,7 @@
       $("fEdit").hidden = edit; $("fEdit").textContent = x.edit;
       $("fTool").hidden = !edit; $("fHint").hidden = true;
       if (edit) {
-        $("fTool").innerHTML = `<button data-fact="addTable">${x.addTable}</button><select data-fact="addDecor"><option value="">${x.addDecor}</option>${["kitchen", "counter", "wc", "door", "wall", "plant"].map((k) => `<option value="${k}">${ICON[k]} ${x[k]}</option>`).join("")}</select>`
+        $("fTool").innerHTML = `<button data-fact="addTable">${x.addTable}</button><select data-fact="addDecor"><option value="">${x.addDecor}</option>${["kitchen", "counter", "wc", "door", "stairs", "wall", "plant"].map((k) => `<option value="${k}">${ICON[k]} ${x[k]}</option>`).join("")}</select>`
           + `<button data-fact="addZone">${x.addZone}</button><button data-fact="renZone">${x.renZone}</button><button data-fact="delZone">${x.delZone}</button><span class="sp"></span>`
           + `<button data-fact="cancel">${x.cancel}</button><button class="pri" data-fact="save">${x.save}</button>`;
       }

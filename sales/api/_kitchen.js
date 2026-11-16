@@ -66,7 +66,7 @@ const tableNorm = (v) => String(v == null ? '' : v).trim().toLowerCase().slice(0
 const clearPath = (shop, table, at = Date.now()) => `${dir(shop)}/${L.dateOf(at)}/c-${at}-${Buffer.from(tableNorm(table), 'utf8').toString('hex')}.clr`;
 
 // 테이블 배치도. 주방 화면 '배치 편집'에서 저장, 모든 주방 기기가 같이 본다.
-const KINDS = ['table', 'kitchen', 'counter', 'wc', 'door', 'wall', 'plant'];
+const KINDS = ['table', 'kitchen', 'counter', 'wc', 'door', 'stairs', 'wall', 'plant'];
 const SHAPES = ['round', 'square', 'rect'];
 function cleanLayout(v) {
   if (!v || typeof v !== 'object') return null;
