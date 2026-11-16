@@ -23,8 +23,11 @@
       clear: "🧹 자리 정리 (손님 나감)", clearQ: "이 테이블을 정리할까요? 빈 자리로 돌아가요.", clearQ2: "아직 안 끝난 주문이 {n}건 있어요. 그래도 정리할까요?", cleared: "자리를 정리했어요", noOrder: "주문이 없어요", since: "시작", close: "닫기", total: "합계",
     },
   };
-  const ICON = { kitchen: "🍲", counter: "💰", wc: "🚻", door: "🚪", stairs: "⬆", wall: "", plant: "🌿" };
-  const DSIZE = { kitchen: [240, 140], counter: [200, 70], wc: [120, 100], door: [130, 40], stairs: [150, 90], wall: [240, 14], plant: [56, 56] };
+  // 장식: 문(입구)·벽은 여기서, 나머지는 floor-icons.js(QKIcons)의 그림 아이콘
+  const IC = (window.QKIcons && window.QKIcons.kinds) || {};
+  const DSIZE = { door: [130, 40], wall: [240, 14] };
+  for (const k in IC) DSIZE[k] = IC[k].size;
+  const dname = (k, x, lang) => (IC[k] ? IC[k][lang] || IC[k].vi : x[k]);
   const norm = (v) => String(v == null ? "" : v).trim().toLowerCase().slice(0, 12);
   const rid = () => Math.random().toString(36).slice(2, 8);
   const clone = (o) => JSON.parse(JSON.stringify(o));
@@ -75,15 +78,11 @@
   .ftb.s-done .ch { background: #8db1ee; }
   @keyframes fblink { from { box-shadow: 0 0 0 0 rgba(255,90,54,0); } to { box-shadow: 0 0 0 6px rgba(255,90,54,.45); } }
   .dk { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 4px; text-align: center; font-weight: 800; font-size: .9em; border-radius: 10px; overflow: hidden; line-height: 1.1; padding: 2px; }
-  .k-kitchen .dk { background: #d9d4cc; border: 2px solid #a59d91; color: #4a443d; }
-  .k-counter .dk { background: #b89a7a; border: 2px solid #8d7254; color: #fff; }
-  .k-wc .dk { background: #dbe7f3; border: 2px solid #9db6cf; color: #36506b; }
   .k-door .dk { background: transparent; border: 2px dashed #8d8478; color: #5b5148; }
-  .k-stairs .dk { border: 2px solid #8d8478; border-radius: 6px; color: #3b342e; background: repeating-linear-gradient(90deg, #e2d9cb 0 9px, #b9ad9b 9px 11px); }
-  .k-stairs.v .dk { background: repeating-linear-gradient(0deg, #e2d9cb 0 9px, #b9ad9b 9px 11px); }
-  .k-stairs .dk span { background: rgba(244,239,230,.92); border-radius: 6px; padding: 2px 6px; }
   .k-wall .dk { background: #5b5148; border-radius: 4px; }
-  .k-plant .dk { background: #cfe5c0; border: 2px solid #8fb978; border-radius: 50%; font-size: 1.2em; }
+  .it.ic .ic { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .it.ic .dk { background: none; border: 0; align-items: flex-end; padding-bottom: 4px; overflow: visible; }
+  .it.ic .dk span { background: rgba(255,255,255,.9); color: #3b342e; border-radius: 6px; padding: 1px 6px; font-size: .85em; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
   .fx { position: absolute; top: -12px; right: -12px; width: 28px; height: 28px; border-radius: 50%; background: #e5484d; color: #fff; border: 2px solid #fff; font-weight: 900; font-size: 15px; line-height: 22px; text-align: center; padding: 0; z-index: 2; }
   .flegend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 10px 2px 0; font-size: 13px; color: var(--muted); }
   .flegend span { display: inline-flex; align-items: center; gap: 6px; }
@@ -164,8 +163,13 @@
       const x = tx(), isSel = edit && it.id === sel;
       const fx = isSel ? `<button class="fx" data-fdel="${it.id}">✕</button>` : "";
       if (it.k !== "table") {
-        const label = it.k === "wall" ? "" : `${ICON[it.k]}${it.k === "plant" ? "" : " " + esc(it.name || x[it.k])}`;
-        return `<div class="it k-${it.k}${it.h > it.w ? " v" : ""}${isSel ? " sel" : ""}" data-fid="${it.id}" style="${pos}"><div class="dk">${it.k === "stairs" ? `<span>${label}</span>` : label}</div>${fx}</div>`;
+        const ic = IC[it.k];
+        if (ic) {
+          const nm = it.name || (ic.label ? dname(it.k, x, ctx.lang()) : "");
+          return `<div class="it ic k-${it.k}${isSel ? " sel" : ""}" data-fid="${it.id}" style="${pos}">${QKIcons.svg(it.k, it.w, it.h)}<div class="dk">${nm ? `<span>${esc(nm)}</span>` : ""}</div>${fx}</div>`;
+        }
+        const label = it.k === "wall" ? "" : `🚪 ${esc(it.name || x[it.k])}`;
+        return `<div class="it k-${it.k}${isSel ? " sel" : ""}" data-fid="${it.id}" style="${pos}"><div class="dk">${label}</div>${fx}</div>`;
       }
       const key = norm(it.name), list = edit ? [] : active(key), state = stateOf(list), sm = summary(list);
       const size = ph < 50 || pw < 60 ? " xs" : ph < 68 || pw < 76 ? " sm" : "";
@@ -179,6 +183,10 @@
       return `<div class="it ftb ${it.shape} s-${state}${size}${isSel ? " sel" : ""}" data-fid="${esc(it.id)}" data-ftable="${esc(key)}" style="${pos}">${chairs(it, pw2, ph2, extra ? 0.8 : s)}<div class="tbx">${body}</div>${fx}</div>`;
     }
 
+    function decorOptions(x) {
+      const lg = ctx.lang(), G = (window.QKIcons && QKIcons.groups) || [];
+      return G.map((g) => `<optgroup label="${esc(g[lg] || g.vi)}">${Object.keys(IC).filter((k) => IC[k].g === g.id).map((k) => `<option value="${k}">${esc(dname(k, x, lg))}</option>`).join("")}${g.id === "d" ? `<option value="door">${esc(x.door)}</option><option value="wall">${esc(x.wall)}</option>` : ""}</optgroup>`).join("");
+    }
     let scale = 1;
     function render() {
       if ($("fView").hidden && $("vTable").hidden) return;
@@ -191,7 +199,7 @@
       $("fEdit").hidden = edit; $("fEdit").textContent = x.edit;
       $("fTool").hidden = !edit; $("fHint").hidden = true;
       if (edit) {
-        $("fTool").innerHTML = `<button data-fact="addTable">${x.addTable}</button><select data-fact="addDecor"><option value="">${x.addDecor}</option>${["kitchen", "counter", "wc", "door", "stairs", "wall", "plant"].map((k) => `<option value="${k}">${ICON[k]} ${x[k]}</option>`).join("")}</select>`
+        $("fTool").innerHTML = `<button data-fact="addTable">${x.addTable}</button><select data-fact="addDecor"><option value="">${x.addDecor}</option>${decorOptions(x)}</select>`
           + `<button data-fact="addZone">${x.addZone}</button><button data-fact="renZone">${x.renZone}</button><button data-fact="delZone">${x.delZone}</button><span class="sp"></span>`
           + `<button data-fact="cancel">${x.cancel}</button><button class="pri" data-fact="save">${x.save}</button>`;
       }
@@ -205,7 +213,7 @@
           ? `<label title="${esc(x.nameH)}">${x.name} <input data-fprop="name" maxlength="12" value="${esc(it.name)}"></label>`
             + `<label>${x.shape} <select data-fprop="shape">${["square", "round", "rect"].map((k) => `<option value="${k}"${it.shape === k ? " selected" : ""}>${x[k]}</option>`).join("")}</select></label>`
             + `<label>${x.seats} <select data-fprop="seats">${Array.from({ length: 13 }, (_, n) => `<option${it.seats === n ? " selected" : ""}>${n}</option>`).join("")}</select></label>${sz}<button data-fact="copy">${x.copy}</button><button data-fact="del">${x.del}</button>`
-          : `${it.k === "wall" || it.k === "plant" ? "" : `<label>${x.dname} <input data-fprop="name" maxlength="12" placeholder="${esc(x[it.k])}" value="${esc(it.name)}"></label>`}${sz}<button data-fact="del">${x.del}</button>`;
+          : `${it.k === "wall" ? "" : `<label>${x.dname} <input data-fprop="name" maxlength="12" placeholder="${esc(dname(it.k, x, ctx.lang()))}" value="${esc(it.name)}"></label>`}${sz}<button data-fact="del">${x.del}</button>`;
       }
       // 바닥
       const items = L.items.filter((i) => i.z === zone);
@@ -277,6 +285,7 @@
       }
       if (a === "addDecor") {
         const k = el.value; el.value = ""; if (!k) return;
+        if (!DSIZE[k]) return;
         const [w, h] = DSIZE[k], p = freeSpot(w, h), n = { id: "d" + rid(), k, z: zone, ...p, w, h, name: "" };
         draft.items.push(n); sel = n.id; return change();
       }
