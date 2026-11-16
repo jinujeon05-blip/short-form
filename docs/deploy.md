@@ -6,7 +6,7 @@
 - **`qrmenu-intro`(소개서·가게 찾기·사이트맵, rootDirectory `sales`) 배포 전**:
   1. `git fetch origin`
   2. 모든 원격 브랜치의 가게 수를 비교한다: `for b in $(git branch -r | grep -v HEAD); do echo "$b $(git show $b:sales/stores/data.js | grep -c '^  { id:')"; done`
-  3. `list_deployments`로 직전 배포의 브랜치·커밋을 본다. 거기에 내 브랜치에 없는 가게가 있으면 먼저 합친다.
+  3. `list_deployments`로 직전 배포의 브랜치·커밋을 본다. 거기에 내 브랜치에 없는 가게가 있으면 먼저 합친다. **가게 수만 보지 말고 최근 배포 5개의 커밋이 모두 내 브랜치에 들어 있는지 `git merge-base --is-ancestor <sha> HEAD`로 본다**(빠진 것은 그 브랜치를 합친 뒤 배포, 2026-11-16 주방 소리 덮어쓰기 건).
   4. 배포 뒤 `https://qrmenuasia.com/sitemap.xml`의 주소 수가 가게 수+2인지 확인한다.
 - **방법**: 커밋·푸시 후 Vercel MCP `create_deployment`에 `gitSource`(github, org `jinujeon05-blip`, repo `short-form`, 브랜치·커밋 sha)와 `projectSettings.rootDirectory: "restaurants/<가게>"`를 넘긴다.
 - **새 가게 첫 배포**:
