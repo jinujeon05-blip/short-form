@@ -7,7 +7,7 @@
     vi: {
       list: "Danh sách", floor: "Sơ đồ bàn", edit: "✎ Sửa sơ đồ", save: "Lưu", cancel: "Hủy", addTable: "+ Bàn", addDecor: "+ Đồ vật…",
       addZone: "+ Khu", renZone: "Đổi tên khu", delZone: "Xóa khu", zoneQ: "Tên khu (VD: Tầng 1, Tầng 2, Sân ngoài)", delZoneQ: "Xóa khu này và mọi thứ trong đó?", lastZone: "Phải còn ít nhất 1 khu",
-      zone0: "Sảnh", name: "Số bàn", nameH: "Giống số trên mã QR của bàn", dname: "Tên", shape: "Hình", round: "Tròn", square: "Vuông", rect: "Dài", seats: "Ghế", size: "Cỡ", rot: "↻ Xoay", copy: "⧉ Nhân bản", del: "🗑 Xóa",
+      zone0: "Sảnh", name: "Số bàn", nameH: "Giống số trên mã QR của bàn", dname: "Tên", shape: "Hình", round: "Tròn", square: "Vuông", rect: "Dài", seats: "Ghế", size: "Cỡ", rot: "↻ Xoay", flip: "⇋ Lật", copy: "⧉ Nhân bản", del: "🗑 Xóa",
       kitchen: "Bếp", counter: "Quầy", wc: "WC", door: "Lối vào", stairs: "Cầu thang", wall: "Vách", plant: "Cây",
       sEmpty: "Bàn trống", sNew: "Đơn mới", sCook: "Đang làm", sDone: "Đã ra món (đang ăn)", more: "khác", extra: "Bàn chưa có trên sơ đồ",
       hint: "Kéo bàn để di chuyển. Chạm vào bàn để sửa số, hình, số ghế. Xong thì nhấn Lưu.", dirtyQ: "Bỏ các thay đổi chưa lưu?", saved: "Đã lưu sơ đồ", dup: "Số bàn bị trùng: ", saveFail: "Lưu không được – thử lại",
@@ -16,7 +16,7 @@
     ko: {
       list: "목록", floor: "배치도", edit: "✎ 배치 편집", save: "저장", cancel: "취소", addTable: "+ 테이블", addDecor: "+ 장식…",
       addZone: "+ 구역", renZone: "구역 이름", delZone: "구역 삭제", zoneQ: "구역 이름 (예: 1층, 2층, 야외)", delZoneQ: "이 구역과 안의 테이블·장식을 모두 지울까요?", lastZone: "구역은 1개 이상 있어야 해요",
-      zone0: "홀", name: "테이블 번호", nameH: "테이블 QR 번호와 같아야 주문이 이 자리에 떠요", dname: "이름", shape: "모양", round: "둥근", square: "네모", rect: "긴 네모", seats: "의자", size: "크기", rot: "↻ 돌리기", copy: "⧉ 복사", del: "🗑 삭제",
+      zone0: "홀", name: "테이블 번호", nameH: "테이블 QR 번호와 같아야 주문이 이 자리에 떠요", dname: "이름", shape: "모양", round: "둥근", square: "네모", rect: "긴 네모", seats: "의자", size: "크기", rot: "↻ 돌리기", flip: "⇋ 뒤집기", copy: "⧉ 복사", del: "🗑 삭제",
       kitchen: "주방", counter: "카운터", wc: "화장실", door: "입구", stairs: "계단", wall: "벽", plant: "화분",
       sEmpty: "빈 자리", sNew: "새 주문", sCook: "만드는 중", sDone: "음식 나감(식사 중)", more: "외", extra: "배치도에 없는 테이블",
       hint: "테이블을 끌어서 옮기세요. 테이블을 누르면 번호·모양·의자 수를 바꿀 수 있어요. 다 되면 저장.", dirtyQ: "저장하지 않은 변경을 버릴까요?", saved: "배치를 저장했어요", dup: "테이블 번호가 겹쳐요: ", saveFail: "저장 실패 – 다시 시도해 주세요",
@@ -166,7 +166,7 @@
         const ic = IC[it.k];
         if (ic) {
           const nm = it.name || (ic.label ? dname(it.k, x, ctx.lang()) : "");
-          return `<div class="it ic k-${it.k}${isSel ? " sel" : ""}" data-fid="${it.id}" style="${pos}">${QKIcons.svg(it.k, it.w, it.h)}<div class="dk">${nm ? `<span>${esc(nm)}</span>` : ""}</div>${fx}</div>`;
+          return `<div class="it ic k-${it.k}${isSel ? " sel" : ""}" data-fid="${it.id}" style="${pos}">${QKIcons.svg(it.k, it.w, it.h, it.f)}<div class="dk">${nm ? `<span>${esc(nm)}</span>` : ""}</div>${fx}</div>`;
         }
         const label = it.k === "wall" ? "" : `🚪 ${esc(it.name || x[it.k])}`;
         return `<div class="it k-${it.k}${isSel ? " sel" : ""}" data-fid="${it.id}" style="${pos}"><div class="dk">${label}</div>${fx}</div>`;
@@ -208,7 +208,7 @@
       $("fProp").hidden = !edit; // 편집 중엔 늘 자리를 차지(누를 때 배치도가 밀리지 않게)
       if (edit && !it) $("fProp").innerHTML = `<span class="fhint" style="margin:0">${esc(x.hint)}</span>`;
       if (it) {
-        const sz = `<label>${x.size} <button data-fact="smaller">−</button><button data-fact="bigger">+</button></label><button data-fact="rot">${x.rot}</button>`;
+        const sz = `<label>${x.size} <button data-fact="smaller">−</button><button data-fact="bigger">+</button></label><button data-fact="rot">${x.rot}</button>${it.k === "swing" ? `<button data-fact="flip">${x.flip}</button>` : ""}`;
         $("fProp").innerHTML = it.k === "table"
           ? `<label title="${esc(x.nameH)}">${x.name} <input data-fprop="name" maxlength="12" value="${esc(it.name)}"></label>`
             + `<label>${x.shape} <select data-fprop="shape">${["square", "round", "rect"].map((k) => `<option value="${k}"${it.shape === k ? " selected" : ""}>${x[k]}</option>`).join("")}</select></label>`
@@ -306,11 +306,17 @@
       if (!it) return;
       if (a === "del") { draft.items = draft.items.filter((i) => i !== it); sel = ""; return change(); }
       if (a === "copy") { const p = freeSpot(it.w, it.h), nums = draft.items.filter((i) => i.k === "table").map((i) => parseInt(i.name, 10)).filter((n) => n > 0); const n = { ...it, id: "t" + rid(), ...p, name: String((nums.length ? Math.max(...nums) : 0) + 1) }; draft.items.push(n); sel = n.id; return change(); }
-      if (a === "rot") { [it.w, it.h] = [it.h, it.w]; it.x = Math.min(it.x, W - it.w); return change(); }
+      // 여닫이 문: 정사각형이라 가로·세로를 바꿔도 그대로 → 그림을 90도씩 돌린다(f 아래 두 자리), 뒤집기는 f 의 4
+      if (a === "rot" && it.k === "swing") { const f = it.f || 0; it.f = (f & 4) | ((f + 1) & 3); return change(); }
+      if (a === "flip") { it.f = (it.f || 0) ^ 4; return change(); }
+      if (a === "rot") { [it.w, it.h] = [it.h, it.w]; it.x = Math.min(it.x, W - it.w); it.y = Math.min(it.y, 2000 - it.h); return change(); }
       if (a === "bigger" || a === "smaller") {
-        const f = a === "bigger" ? 1.15 : 1 / 1.15, mn = it.k === "wall" ? 10 : 40;
-        const sn = (v) => Math.max(mn, Math.min(it.k === "wall" ? 1000 : 600, Math.round((v * f) / SNAP) * SNAP));
-        if (it.k === "wall") { if (it.w >= it.h) it.w = Math.max(40, sn(it.w)); else it.h = Math.max(40, sn(it.h)); }
+        // 긴 물건(칸막이·벽·미닫이 문 등, 긴 변이 짧은 변의 3배 이상)은 길이만 바꾸고 두께는 그대로.
+        // 줄일 때 최솟값 때문에 오히려 커지지 않게, 최솟값은 지금 크기보다 크지 않게(2026-11-16 진미 유리 칸막이 건)
+        const f = a === "bigger" ? 1.15 : 1 / 1.15, mx = it.k === "wall" ? 1000 : 600;
+        const sn = (v) => Math.max(Math.min(40, v), Math.min(mx, Math.round((v * f) / SNAP) * SNAP));
+        const long = it.k !== "table" && Math.max(it.w, it.h) >= 3 * Math.min(it.w, it.h);
+        if (long) { if (it.w >= it.h) it.w = sn(it.w); else it.h = sn(it.h); }
         else { it.w = sn(it.w); it.h = sn(it.h); }
         it.x = Math.min(it.x, W - it.w); return change();
       }

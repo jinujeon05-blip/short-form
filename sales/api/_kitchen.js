@@ -79,6 +79,7 @@ function cleanLayout(v) {
   const zid = new Set(zones.map((z) => z.id));
   const items = (Array.isArray(v.items) ? v.items : []).slice(0, 200).filter((x) => x && KINDS.includes(x.k) && zid.has(x.z)).map((x) => {
     const o = { id: str(x.id, 12).replace(/[^a-z0-9]/gi, '') || S.rand(3), k: x.k, z: x.z, x: num(x.x, 0, 2000), y: num(x.y, 0, 2000), w: num(x.w, 10, 1000), h: num(x.h, 10, 1000), name: str(x.name, 12) };
+    if (x.k === 'swing' && x.f) o.f = num(x.f, 0, 7);
     if (x.k === 'table') { o.shape = SHAPES.includes(x.shape) ? x.shape : 'square'; o.seats = num(x.seats, 0, 16); }
     return o;
   });

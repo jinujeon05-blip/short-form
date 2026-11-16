@@ -90,6 +90,7 @@
   ];
   window.QKIcons = {
     kinds: K, groups: GROUPS,
-    svg: (k, w, h) => (K[k] ? `<svg class="ic" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${K[k].draw(w, h)}</svg>` : ""),
+    // f: 여닫이 문 방향(아래 두 자리 = 90도씩 돌림, 4 = 좌우 뒤집기). 가운데를 기준으로 돌린다
+    svg: (k, w, h, f) => { if (!K[k]) return ""; let g = K[k].draw(w, h); f = f | 0; if (f) { const cx = n(w / 2), cy = n(h / 2); g = `<g transform="rotate(${(f & 3) * 90} ${cx} ${cy})${f & 4 ? ` translate(${n(w)},0) scale(-1,1)` : ""}">${g}</g>`; } return `<svg class="ic" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${g}</svg>`; },
   };
 })();
