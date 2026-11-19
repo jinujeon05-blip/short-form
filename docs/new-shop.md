@@ -2,6 +2,12 @@
 
 > **새 가게를 만들 때 반드시 처음부터 끝까지 읽는다.** 요약은 `CLAUDE.md` 1장, 화면 구조는 `docs/standard.md`.
 
+> **PC에서는 도구 3개로 한 번에 한다(2026-11-11, 토큰 줄이기 '가-1')** — 손으로 나눠 하지 않는다. 앞 가게 커밋을 열어 따라 하지도 않는다.
+> 1. 준비: `python tools/photos.py prep <가게id> "<드라이브 폴더 이름>"` — 사진 복사·모음 이미지·메뉴판 줄이기·가게 정보·이미 있는 가게인지·agy 명령까지 한 번에 나온다.
+> 2. 등록: `.scratch/<가게id>/register.json`을 쓰고(`node tools/register-shop.mjs --example`이 예시) `node tools/register-shop.mjs <가게id>` — 6번 '등록' 전부.
+> 3. 점검: `node tools/check-shop.mjs <가게id>` — 검색 정보 다시 맞춤·TODO·표준·목록·캡처·넘침·카드 사진 다시 찍기(2026-11-12)·커밋 안 한 파일. **번역·메뉴를 고친 뒤와 커밋 직전에 한 번 더.**
+> 왜: 비서실장이 긴 대화를 44번 왕복해 가게당 350~620만 토큰이 들었다(97%가 다시 읽은 것). 왕복 수를 줄이는 것이 전부다 — 명령은 묶어서 한 번에, 큰 출력은 `| tail`로.
+
 1. **사용자에게 먼저 묻는다**: "사장님 동의·비용을 받고 만드는 가게(정식)인가, 손님 가게 찾기용(무동의·무료)인가?"
 2. **자료 받기**:
    - "사진 수집기로 올렸어"라고 하면 `docs/maps-photos.md` 방식으로 받는다. 드라이브 `QR메뉴판/<가게>/`의 `menu_*.jpg` 등을 4장씩 `download_file_content`로 받는다. `claude_bundle_*.zip`을 여러 개 동시에 받으면 연결이 끊긴다.
@@ -21,23 +27,29 @@
    - 메뉴판 속 작은 그림은 잘라 쓰지 않는다.
    - `price == null`(시가)을 처리한다.
 5. **종류별 내용**:
-   - **정식**: 장바구니·주문서(Zalo), 다산 배너, 테이블 QR 카드, SNS 이미지, 점주 자료.
+   - **정식**: 장바구니·주문서(Zalo) + 아래 결과물을 **전부** 만들어 상호를 붙여 사용자에게 보낸다(2026-11-13 진미 SNS 누락 건). `check-shop.mjs`가 앞의 3개 파일이 없으면 실패시킨다.
+     - 테이블 QR 카드: `print/table-card.html`(QR=`print/qr.svg`, `qr.cjs`) → `node tools/card.mjs <가게>` → `print/table-card-A6.pdf`·`table-card.png`
+     - 디자인 틀 고르기(2026-11-14): `node tools/promo-designs.mjs --recommend <지역키> <모양 스타일> <사진 수>`로 같은 도시와 겹치지 않는 것을 캡틴에게 번호 보기로 묻고 `card.mjs`·`sns.mjs`에 `--design <id>`(상세 `docs/tools.md` 'SNS·카드 디자인 틀')
+     - SNS 이미지: `node tools/sns.mjs <가게> ko`(한국 매장, 그 밖 `vi`) → `print/sns-square.png`(1080×1080)·`print/sns-story.png`(1080×1920). 두 장을 직접 열어 잘림·5개 언어 확인
+     - 점주 자료(사용자가 원할 때): `print/guide.html` → `node tools/pdf.mjs restaurants/<가게>/print/guide.html restaurants/<가게>/print/guide-<가게>.pdf`(예: `restaurants/gamasot/print/`)
+     - 정식 가게 전부의 빠짐 확인: `node tools/check-shop.mjs --print-all`
    - **가게 찾기용**:
      - 메뉴 보기만. Zalo·장바구니·주문서는 넣지 않는다.
-     - 다산 배너는 **항상** 넣는다.
+     - 다산 배너는 꺼져 있다(2026-11-09 사용자 지시로 전부 뺌, `dasan.js`의 `ON = false`). 파일 복사·SHOPS 등록은 그대로 해 둔다.
      - 언어 선택, 가게 더 보기, 검색 등록, 가게 찾기 목록(`sales/stores/data.js`에 `listing: true`)을 넣는다.
      - **영업시간을 항상 넣는다**(사용자 지시 2026-10-28, 새 가게부터 — 이미 만든 가게는 그대로). 아래 가게 정보의 전화·주소 칸 **위에 같은 모양 칸**(🕒)으로 넣는다. 값은 `store_info.json`의 `hours`(비어 있거나 '모름'이면 구글 지도 링크를 열어 직접 확인 — 2026-10-30 낭만집·어수사는 지도에 있었음), 메뉴판·간판에 다른 시간이 있으면 대조하고 다르면 `docs/todo.md`에 적는다. 상세는 `docs/standard.md`.
      - 하단 '가격 단위' 줄 끝에 5개 언어로 " · 메뉴·가격은 구글 지도에 올린 메뉴판 기준이며 바뀔 수 있어요"를 붙인다. 올린 쪽이 가게 계정이면 '가게가 구글 지도에 올린', 손님이면 '손님이 구글 지도에 올린'으로 고쳐 써도 된다. 출처가 다르면 같은 줄에서 맞게 고친다.
 6. **등록**:
+   - **`node tools/register-shop.mjs <가게id>` 한 번으로 아래를 전부 한다**(아래 목록은 그 도구가 하는 일).
    - `_shared/sync-lang.sh`·`sync-dasan.sh`·`sync-stores.sh`의 SHOPS
-   - `tools/seo.mjs`의 SHOPS, 그다음 `node tools/seo.mjs`
+   - `tools/seo.mjs`의 SHOPS, 그다음 `node tools/seo.mjs <가게id>`(**가게id를 꼭 준다** — 안 주면 다른 가게 파일까지 바뀐다)
    - `tools/export.sh`의 `name()`
    - `sales/content.js`의 `DEMOS`(SNS용, 가게 찾기용은 `hidden: true`)
    - `node tools/demo.mjs <가게>` → `sales/img/demo-<가게>.jpg`
-   - `node tools/analytics.mjs`
+   - `node tools/analytics.mjs <가게id>`
    - `docs/stores.md`의 표·기록
 7. **점검**:
-   - `node tools/check-standard.mjs <가게>`, `node tools/check-listing.mjs`, `node tools/shot.mjs <가게>`
+   - `node tools/check-shop.mjs <가게>` 한 번(check-standard·check-listing·캡처·넘침 포함). reviewer가 지적한 것을 고친 뒤 **다시 돌리고 나서** 커밋한다.
    - **reviewer 담당**에게 맡긴다: 가격·전화·주소 오타, 빠진 메뉴, 깨진 사진, 글꼴 섞임, 배너 색, **가마솥 표준에 없는 요소**, main 포함 여부.
 8. **사용자가 "배포해"라고 한 뒤에만** 배포한다(`docs/deploy.md`).
    - 가게 찾기용은 사진을 받은 뒤 **배포 직전까지 묻지 않고** 끝낸다(2026-10-27). 색·사진·분류 순서도 묻지 않고 정한다(1번 '정식인가, 가게 찾기용인가?'만 묻는다).

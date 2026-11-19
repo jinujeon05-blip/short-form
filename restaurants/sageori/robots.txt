@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sageori.qrmenuasia.com/sitemap.xml

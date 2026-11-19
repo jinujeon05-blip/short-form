@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://poomba.qrmenuasia.com/sitemap.xml

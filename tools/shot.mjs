@@ -10,6 +10,8 @@ for (const l of langs.split(',')) {
   const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('requestfailed', r => errs.push('fail ' + r.url()));
   await p.goto(`${site.url}/restaurants/${shop}/index.html?lang=${l}`); await p.waitForTimeout(700);
   const path = `${out}/${shop}-${l}.png`;
+  // 지연 로딩 사진을 전부 불러온 뒤 찍는다(아래쪽 사진이 빈 칸으로 찍히는 것 방지)
+  await p.evaluate(async () => { const im = [...document.images]; im.forEach((i) => { i.loading = 'eager'; }); await Promise.all(im.map((i) => (i.complete ? 1 : new Promise((r) => { i.onload = i.onerror = r; })))); });
   await p.screenshot({ path, fullPage: true });
   console.log(path, errs.length ? errs : '오류 없음');
 }

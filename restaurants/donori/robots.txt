@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://donori.qrmenuasia.com/sitemap.xml

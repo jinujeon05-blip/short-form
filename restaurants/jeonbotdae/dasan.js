@@ -2,6 +2,9 @@
 // 원본은 restaurants/_shared/ 에만 두고, sync-dasan.sh 로 각 가게 폴더에 복사한다.
 // 메뉴판 언어(<html lang>)가 바뀌면 배너 문구도 따라 바뀐다.
 (function () {
+  // 2026-11-09 사용자 지시: 다산 배너를 모든 메뉴판·가게 찾기 페이지에서 뺀다. 다시 넣으려면 true로 바꾸고 sync-dasan.sh.
+  const ON = false;
+  if (!ON) return;
   const BIZ = { href: "https://dasanhr.com/ko/business", tel: "0917 302 200" };
   const T = {
     ko: { tag: "파트너", title: "베트남 북부 인력공급 · 다산 DASAN", sub: "생산직 파견 · 단기 인력 · 전자부품 선별 대행 | 한국어 상담",

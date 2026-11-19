@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jenniemom.qrmenuasia.com/sitemap.xml

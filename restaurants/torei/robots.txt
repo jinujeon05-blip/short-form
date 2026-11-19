@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://torei.qrmenuasia.com/sitemap.xml

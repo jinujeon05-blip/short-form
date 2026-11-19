@@ -52,6 +52,75 @@
   .copybox { margin-top: 14px; padding: 12px; border: 1px dashed var(--line); border-radius: 10px; font-size: 14px; background: var(--bg); }
   svg text { fill: var(--muted); font-size: 10px; }
   @media (max-width: 720px) { .cards { grid-template-columns: repeat(2, 1fr); } .grid2 { grid-template-columns: 1fr; } .hide-m { display: none; } }
+
+  /* ── 2026-11-16 화면 꾸미기(구조·기능은 그대로, 모양만) ── */
+  :root { --shadow: 0 1px 2px rgba(31,36,48,.04), 0 6px 20px rgba(31,36,48,.06); --accent-3: #ff9f43; }
+  @media (prefers-color-scheme: dark) { :root { --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25); --accent-3: #ffb070; } }
+  body { background: radial-gradient(1200px 380px at 50% -120px, var(--accent-2), transparent 70%), var(--bg); background-attachment: fixed; }
+  .wrap { max-width: 1100px; padding: 20px 16px 40px; }
+  .card { border-radius: 16px; box-shadow: var(--shadow); }
+  #app > header { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 12px 14px; box-shadow: var(--shadow); }
+  .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .brand .logo { flex: none; width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; color: #fff; font-weight: 900; font-size: 14px; letter-spacing: -.5px; background: linear-gradient(135deg, var(--accent-3), var(--accent)); box-shadow: 0 4px 12px rgba(232,89,12,.3); }
+  .brand h1 { font-size: 19px; letter-spacing: -.3px; }
+  .brand p { margin: 0; font-size: 12px; color: var(--muted); }
+  .seg { border-radius: 11px; padding: 3px; gap: 2px; background: var(--bg); }
+  .seg button { border-radius: 8px; padding: 6px 13px; }
+  .seg button[aria-pressed="true"] { box-shadow: 0 2px 6px rgba(232,89,12,.3); }
+  .btn { border-radius: 11px; transition: border-color .15s, color .15s, background .15s; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary:hover { color: #fff; filter: brightness(1.05); }
+  #tabs { gap: 4px; margin: 14px 0 16px; padding: 4px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); box-shadow: var(--shadow); scrollbar-width: none; }
+  #tabs::-webkit-scrollbar { display: none; }
+  #tabs button { border-bottom: 0; border-radius: 10px; padding: 9px 15px; font-weight: 600; transition: background .15s, color .15s; }
+  #tabs button:hover { color: var(--ink); background: var(--bg); }
+  #tabs button[aria-pressed="true"] { color: #fff; background: var(--accent); box-shadow: 0 2px 8px rgba(232,89,12,.28); }
+  .cards { gap: 12px; }
+  #cards .card { position: relative; overflow: hidden; padding: 16px 16px 14px; }
+  #cards .card .ic { position: absolute; right: 14px; top: 14px; width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; font-size: 18px; background: var(--accent-2); }
+  #cards .card b { font-size: 30px; letter-spacing: -.5px; margin: 4px 0 2px; }
+  #cards .card:first-child { color: #fff; border-color: transparent; background: linear-gradient(135deg, var(--accent-3), var(--accent)); }
+  #cards .card:first-child small, #cards .card:first-child i { color: rgba(255,255,255,.85); }
+  #cards .card:first-child .ic { background: rgba(255,255,255,.22); }
+  .tablehead { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 0 0 6px; }
+  .tablehead h2 { margin: 0; font-size: 16px; }
+  .tablehead .sp { flex: 1; }
+  .tsearch { display: flex; align-items: center; gap: 8px; flex: 1 1 280px; max-width: 420px; background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 0 12px; margin: 0 0 8px; color: var(--muted); transition: border-color .15s, box-shadow .15s; }
+  .tablehead .tsearch { margin: 0; }
+  .tsearch:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-2); }
+  .tsearch input { flex: 1; min-width: 0; font: inherit; font-size: 15px; color: var(--ink); background: transparent; border: 0; outline: 0; padding: 9px 0; }
+  .tsearch .tcount { flex: none; font-size: 12px; white-space: nowrap; }
+  thead th { position: sticky; top: 0; background: var(--card); z-index: 1; font-size: 12px; letter-spacing: .2px; }
+  tbody tr { transition: background .12s; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .who .rk { flex: none; width: 22px; text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .who .rk.top { width: 22px; height: 22px; line-height: 22px; border-radius: 50%; color: #fff; background: var(--accent); }
+  .who .av { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 14px; }
+  .who .nm { min-width: 0; }
+  .mob { display: inline-flex; align-items: center; gap: 6px; }
+  .mob span { width: 38px; height: 5px; border-radius: 4px; background: var(--accent-2); overflow: hidden; }
+  .mob span i { display: block; height: 100%; background: var(--accent); }
+  .qr0 { color: var(--muted); }
+  td.today { white-space: nowrap; }
+  td.today em { display: block; font-style: normal; font-size: 11px; margin-top: 2px; }
+  td.today em.up { color: #16a34a; } td.today em.down { color: var(--muted); }
+  .qrpos { display: inline-block; min-width: 38px; border-radius: 999px; padding: 1px 8px; background: var(--accent-2); color: var(--accent); font-weight: 700; }
+  @media (max-width: 720px) {
+    #app > header { padding: 10px 12px; gap: 8px; }
+    #app > header .brand { flex: 1 1 100%; }
+    #app > header .sp { display: none; }
+    #app > header .seg button, #app > header .btn { padding: 6px 11px; font-size: 13px; }
+    .brand p { display: none; }
+    td.name { white-space: normal; }
+    .who { gap: 8px; }
+    .who .av { width: 28px; height: 28px; font-size: 12px; border-radius: 8px; }
+    .who .nm { word-break: keep-all; overflow-wrap: anywhere; }
+    #cards .card b { font-size: 24px; }
+    #cards .card .ic { width: 30px; height: 30px; font-size: 15px; }
+    .tsearch { max-width: none; }
+    .who .rk { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -66,7 +135,7 @@
 
   <div id="app" hidden>
     <header>
-      <h1>QR 메뉴 방문 현황</h1>
+      <div class="brand"><span class="logo">QR</span><div><h1>QR 메뉴 방문 현황</h1><p>qrmenuasia.com 관리자</p></div></div>
       <span class="sp"></span>
       <span class="seg" id="range">
         <button type="button" data-d="7">7일</button>
@@ -77,14 +146,17 @@
       <button class="btn" id="out" type="button">나가기</button>
     </header>
 
-    <nav class="tabs" id="tabs"><button type="button" data-t="stats" aria-pressed="true">방문 현황</button><button type="button" data-t="shops" aria-pressed="false">가게 관리</button><button type="button" data-t="menu" aria-pressed="false">메뉴 편집</button><button type="button" data-t="report" aria-pressed="false">리포트</button><button type="button" data-t="sec" aria-pressed="false">보안·기록</button></nav>
+    <nav class="tabs" id="tabs"><button type="button" data-t="stats" aria-pressed="true">방문 현황</button><button type="button" data-t="shops" aria-pressed="false">가게 관리</button><button type="button" data-t="menu" aria-pressed="false">메뉴 편집</button><button type="button" data-t="kitchen" aria-pressed="false">주문·주방 기기</button><button type="button" data-t="sales" aria-pressed="false">매출</button><button type="button" data-t="report" aria-pressed="false">리포트</button><button type="button" data-t="sec" aria-pressed="false">보안·기록</button></nav>
     <div id="tab-stats">
     <div class="cards" id="cards"></div>
 
     <div class="card">
+      <div class="tablehead"><h2>가게별 방문</h2><span class="sp"></span>
+        <div class="tsearch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="가게 이름·주소·초성(ㄱㅁㅅ) 검색" autocomplete="off"><span class="tcount" id="qn"></span></div>
+      </div>
       <div class="scroll">
         <table>
-          <thead><tr><th>가게</th><th>방문자</th><th class="hide-m">페이지뷰</th><th class="hide-m">일 평균</th><th class="hide-m">추이</th><th class="hide-m">모바일</th><th>QR</th></tr></thead>
+          <thead><tr><th>가게</th><th>방문자</th><th class="hide-m">페이지뷰</th><th class="hide-m">일 평균</th><th class="hide-m">추이</th><th class="hide-m">모바일</th><th>오늘</th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
@@ -96,13 +168,15 @@
 
     <p class="note">
       · <b>방문자</b>는 하루 단위로 같은 사람을 한 번만 센 합계예요(같은 사람이 이틀 오면 2). <b>페이지뷰</b>는 페이지를 연 횟수예요.<br>
-      · <b>QR</b>은 주소 끝에 <code>?utm_source=qr</code>를 붙인 QR로 들어온 방문이에요. 이미 인쇄한 QR은 꼬리표가 없어서 “직접·QR(꼬리표 없음)”으로 잡혀요.<br>
+      · <b>오늘</b>은 베트남 시간 0시부터 지금까지 온 방문자예요. 작은 숫자는 어제보다 늘거나 준 수예요.<br>
       · 로봇(검색엔진 등)은 빼고, 사람 식별 정보는 저장하지 않아요. 날짜는 베트남 시간 기준이에요.<br>
       · 내 방문을 빼려면 그 가게 주소 끝에 <code>?notrack</code>을 붙여 한 번 열어 두세요(그 브라우저에서는 기록 안 함, 다시 기록하려면 <code>?track</code>).
     </p>
     </div>
     <div id="tab-shops" hidden></div>
     <div id="tab-menu" hidden></div>
+    <div id="tab-kitchen" hidden></div>
+    <div id="tab-sales" hidden></div>
     <div id="tab-report" hidden></div>
     <div id="tab-sec" hidden></div>
   </div>
@@ -110,7 +184,11 @@
 
 <script src="/stores/data.js"></script>
 <script src="/menu-editor.js"></script>
+<script src="/admin/shop-search.js"></script>
 <script src="/admin/crm.js"></script>
+<script src="/admin/qr.js"></script>
+<script src="/admin/kitchen.js"></script>
+<script src="/revenue.js"></script>
 <script>
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -144,26 +222,44 @@
   const nm = (id) => (NAMES[id] || [id, ""])[0];
 
   function spark(s, dates) {
-    const v = dates.map((d) => (s.days[d] ? s.days[d].vis : 0)), max = Math.max(1, ...v), w = 90, h = 22;
-    const pts = v.map((x, i) => `${(i / Math.max(1, v.length - 1)) * w},${h - 2 - (x / max) * (h - 4)}`).join(" ");
-    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
+    const v = dates.map((d) => (s.days[d] ? s.days[d].vis : 0)), max = Math.max(1, ...v), w = 96, h = 26;
+    const pts = v.map((x, i) => `${((i / Math.max(1, v.length - 1)) * w).toFixed(1)},${(h - 2 - (x / max) * (h - 5)).toFixed(1)}`).join(" ");
+    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polygon points="0,${h} ${pts} ${w},${h}" fill="var(--accent-2)" opacity=".7"/><polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
+  }
+  const HUE = (id) => { let h = 0; for (const c of String(id)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
+  function avatar(id) {
+    const ch = Array.from(String(nm(id)).replace(/^[^0-9A-Za-z가-힣À-ỹ]+/, ""))[0] || "?";
+    return `<span class="av" style="background:hsl(${HUE(id)} 55% 50%)" aria-hidden="true">${esc(ch.toUpperCase())}</span>`;
+  }
+  // 표 검색: 이름·주소·아이디·검색어·초성(ㄱㅁㅅ)
+  function filterRows() {
+    const q = $("q").value; let n = 0, t = 0;
+    document.querySelectorAll("#rows tr[data-id]").forEach((tr) => { t++; const ok = !window.QMShopPick || QMShopPick.match(tr.dataset.id, nm(tr.dataset.id), q); tr.hidden = !ok; if (ok) n++; });
+    $("qn").textContent = q.trim() ? `${n}곳 찾음` : t ? `${t}곳` : "";
   }
 
+  // 오늘·어제 방문자(베트남 시간, data.dates의 마지막 날 = 오늘)
+  const dayVis = (s, d) => (d && s.days[d] ? s.days[d].vis : 0);
+  const diff = (n) => (n > 0 ? `<em class="up">▲${fmt(n)}</em>` : n < 0 ? `<em class="down">▼${fmt(-n)}</em>` : "");
+  let TD = "", YD = "";
+
   function render() {
+    TD = data.dates[data.dates.length - 1]; YD = data.dates[data.dates.length - 2];
     const ids = Object.keys(data.shops).sort((a, b) => data.shops[b].vis - data.shops[a].vis);
-    const all = ids.reduce((t, i) => { const s = data.shops[i]; t.vis += s.vis; t.pv += s.pv; t.qr += s.src.qr || 0; return t; }, { vis: 0, pv: 0, qr: 0 });
+    const all = ids.reduce((t, i) => { const s = data.shops[i]; t.vis += s.vis; t.pv += s.pv; t.td += dayVis(s, TD); t.yd += dayVis(s, YD); return t; }, { vis: 0, pv: 0, td: 0, yd: 0 });
     const shopIds = ids.filter((i) => i !== "intro" && i !== "stores");
     $("cards").innerHTML = [
-      ["총 방문자", fmt(all.vis), `최근 ${days}일`], ["총 페이지뷰", fmt(all.pv), "페이지를 연 횟수"],
-      ["방문 있는 가게", fmt(shopIds.length), "소개서·가게 찾기 제외"], ["QR 꼬리표 방문", pct(all.qr, all.vis), `${fmt(all.qr)}명`],
-    ].map(([a, b, c]) => `<div class="card"><small>${a}</small><b>${b}</b><i>${c}</i></div>`).join("");
+      ["👥", "총 방문자", fmt(all.vis), `최근 ${days}일`], ["📄", "총 페이지뷰", fmt(all.pv), "페이지를 연 횟수"],
+      ["🏪", "방문 있는 가게", fmt(shopIds.length), "소개서·가게 찾기 제외"], ["📅", "오늘 방문자", fmt(all.td), `어제 ${fmt(all.yd)}명 · ${all.td - all.yd >= 0 ? "+" : "−"}${fmt(Math.abs(all.td - all.yd))}`],
+    ].map(([e, a, b, c]) => `<div class="card"><span class="ic" aria-hidden="true">${e}</span><small>${a}</small><b>${b}</b><i>${c}</i></div>`).join("");
     const known = Object.keys(NAMES).filter((i) => !data.shops[i]);
-    $("rows").innerHTML = ids.map((id) => {
-      const s = data.shops[id];
-      return `<tr data-id="${esc(id)}" class="${id === sel ? "sel" : ""}"><td class="name">${esc(nm(id))}<small>${esc((NAMES[id] || [0, id])[1])}</small></td>
-        <td class="num">${fmt(s.vis)}</td><td class="num hide-m">${fmt(s.pv)}</td><td class="num hide-m">${(s.vis / days).toFixed(1)}</td><td class="hide-m">${spark(s, data.dates)}</td>
-        <td class="num hide-m">${pct(s.dev.mobile || 0, s.vis)}</td><td class="num">${pct(s.src.qr || 0, s.vis)}</td></tr>`;
+    $("rows").innerHTML = ids.map((id, i) => {
+      const s = data.shops[id], mob = s.vis ? Math.round(((s.dev.mobile || 0) / s.vis) * 100) : 0, td = dayVis(s, TD), yd = dayVis(s, YD);
+      return `<tr data-id="${esc(id)}" class="${id === sel ? "sel" : ""}"><td class="name"><div class="who"><span class="rk${i < 3 ? " top" : ""}">${i + 1}</span>${avatar(id)}<span class="nm">${esc(nm(id))}<small>${esc((NAMES[id] || [0, id])[1])}</small></span></div></td>
+        <td class="num"><b>${fmt(s.vis)}</b></td><td class="num hide-m">${fmt(s.pv)}</td><td class="num hide-m">${(s.vis / days).toFixed(1)}</td><td class="hide-m">${spark(s, data.dates)}</td>
+        <td class="num hide-m"><span class="mob">${s.vis ? mob + "%" : "–"}<span><i style="width:${mob}%"></i></span></span></td><td class="num today">${td ? `<span class="qrpos">${fmt(td)}</span>` : `<span class="qr0">0</span>`}${diff(td - yd)}</td></tr>`;
     }).join("") || '<tr><td colspan="7" class="zero">아직 기록된 방문이 없어요. 페이지를 배포하고 한 번 열어 보면 바로 나타나요.</td></tr>';
+    filterRows();
     $("none").innerHTML = known.length ? `<b>이 기간 방문이 없는 곳 (${known.length})</b><br>${known.map((i) => esc(nm(i))).join(" · ")}` : "";
     if (sel) showDetail(sel);
   }
@@ -197,6 +293,7 @@
   $("rows").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-id]"); if (tr) { showDetail(tr.dataset.id); $("detail").scrollIntoView({ behavior: "smooth", block: "nearest" }); } });
   $("range").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; days = +b.dataset.d; document.querySelectorAll("#range button").forEach((x) => x.setAttribute("aria-pressed", x === b)); load(); });
   $("reload").onclick = load;
+  $("q").addEventListener("input", filterRows);
   $("out").onclick = () => { store((s) => s.removeItem("qm_admin")); showLogin(); };
   const submit = () => { const v = $("pw").value.trim(); if (!v) return; store((s) => s.setItem("qm_admin", v)); $("pw").value = ""; load(); };
   $("go").onclick = submit;

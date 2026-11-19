@@ -122,6 +122,8 @@
   .opts h3 { font-size: 16px; padding: 12px 0 6px; }
   .opt { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); font-size: 14.5px; }
   .opt span:last-child { font-weight: 700; white-space: nowrap; }
+  .calc-link { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 16px; text-decoration: none; font-weight: 800; font-size: 16px; color: var(--accent); background: #fff4ef; border: 1px solid rgba(224,69,43,.35); border-radius: 14px; padding: 14px 16px; text-align: center; }
+  .calc-link:hover { background: #ffe9df; }
   .note { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
 
   /* ── FAQ ── */
@@ -274,6 +276,21 @@
     .step, .contact, .plan .badge, .feat b, .btn, .demo .shot { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     footer { display: none; }
     #steps { break-before: page; }
+    /* 2026-11-19: 화면이 길어져 3~4쪽이 됨 → 인쇄할 때만 줄여 A4 2쪽 */
+    .demos .demo:nth-child(n+8), .calc-link { display: none; }
+    .phones { height: 180px; }
+    .phone { width: 98px; }
+    .feats { grid-template-columns: repeat(3, 1fr); }
+    .opts { display: grid; grid-template-columns: 1fr 1fr; column-gap: 14px; }
+    .opts h3 { grid-column: 1 / -1; }
+    section { padding: 10px 0; }
+    .hero h1 { font-size: 24px; }
+    .hero p { font-size: 12px; }
+    .feat { padding: 7px 9px; }
+    .feat p { font-size: 10px; line-height: 1.4; }
+    .hero-grid { margin-top: 8px; }
+    .kit-pic { height: 64px; }
+    .demo .url { word-break: break-all; line-height: 1.25; }
   }
 </style>
 <!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
@@ -335,6 +352,7 @@
   <div class="plans" id="plans"></div>
   <div class="opts" id="opts"></div>
   <p class="note" data-t="priceNote"></p>
+  <a class="calc-link" href="/savings/" data-t="calcLink"></a>
 </div></section>
 
 <section id="faq" style="padding-top:0"><div class="wrap">
@@ -355,7 +373,7 @@
 <script>
   const LANGS = [["ko", "한국어"], ["vi", "Tiếng Việt"], ["zh", "中文"], ["ja", "日本語"], ["en", "English"]];
   const SUPPORTED = LANGS.map(([c]) => c);
-  const FEAT_ICONS = ["🌐", "🎨", "🔳", "✏️", "📶", "📱"];
+  const FEAT_ICONS = ["🌐", "🎨", "🔳", "✏️", "📶", "📱", "🛠️", "📊", "🔎"];
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const vnd = (n) => n.toLocaleString("en-US") + "₫";
@@ -383,6 +401,7 @@
     document.title = t.title;
     document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = t[el.dataset.t]; });
     document.querySelectorAll("[data-html]").forEach((el) => { el.innerHTML = t[el.dataset.html]; });
+    const cl = document.querySelector(".calc-link"); if (cl) cl.href = "/savings/?lang=" + lang; // 계산기를 같은 언어로 열기
 
     $("langs").innerHTML = LANGS.map(([c, label]) =>
       `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://samwonjeong.qrmenuasia.com/sitemap.xml

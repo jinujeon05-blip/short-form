@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8">
+<title>Hướng dẫn cài đặt máy in bếp - Quán Jinmi (진미식당)</title>
+<style>
+@page { size: A4; margin: 14mm 14mm 16mm; }
+* { box-sizing: border-box; }
+body { font-family: "Malgun Gothic", "Segoe UI", sans-serif; color: #1d1d1f; font-size: 11pt; line-height: 1.55; margin: 0; }
+h1 { font-size: 22pt; margin: 0 0 4px; }
+h2 { font-size: 15pt; margin: 0 0 10px; padding: 6px 12px; background: #8b2b1e; color: #fff; border-radius: 6px; }
+h3 { font-size: 12pt; margin: 14px 0 6px; color: #8b2b1e; }
+.sub { color: #555; margin: 0 0 14px; }
+.page { page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; }
+td, th { border: 1px solid #ccc; padding: 6px 8px; vertical-align: top; text-align: left; }
+th { background: #f4ece9; width: 30%; }
+.box { border: 2px solid #8b2b1e; border-radius: 8px; padding: 10px 14px; margin: 10px 0; background: #fff8f5; }
+.warn { border-color: #c47a00; background: #fff6e0; }
+.ok { border-color: #2e7d32; background: #eef8ee; }
+ol.steps { padding-left: 0; list-style: none; counter-reset: s; margin: 6px 0; }
+ol.steps > li { counter-increment: s; position: relative; padding: 6px 0 6px 40px; border-bottom: 1px dashed #ddd; }
+ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 6px; width: 28px; height: 28px; border-radius: 50%; background: #8b2b1e; color: #fff; font-weight: bold; text-align: center; line-height: 28px; }
+.chk { display: inline-block; width: 14px; height: 14px; border: 1.5px solid #333; margin-right: 6px; vertical-align: -2px; }
+.btn { display: inline-block; border: 1px solid #888; border-radius: 4px; padding: 0 6px; background: #f2f2f2; font-weight: bold; white-space: nowrap; }
+.vi { color: #666; font-size: 9.5pt; }
+.flow { display: flex; align-items: center; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
+.flow div { border: 2px solid #8b2b1e; border-radius: 8px; padding: 8px 10px; text-align: center; font-size: 10pt; background: #fff; flex: 1; min-width: 90px; }
+.flow span { font-size: 16pt; color: #8b2b1e; }
+.imgs { display: flex; gap: 10px; align-items: flex-start; }
+.imgs figure { margin: 0; flex: 1; }
+.imgs img { width: 100%; border-radius: 6px; border: 1px solid #ccc; }
+figcaption { font-size: 9pt; color: #555; text-align: center; }
+.write { display: inline-block; min-width: 180px; border-bottom: 1px solid #333; height: 18px; }
+.foot { font-size: 9pt; color: #777; margin-top: 12px; }
+section.page:last-child { font-size: 10pt; line-height: 1.45; } section.page:last-child td, section.page:last-child th { padding: 4px 7px; }
+</style></head><body>
+
+<!-- Trang 1 -->
+<section class="page">
+  <h1>Hướng dẫn cài đặt máy in đơn hàng cho bếp - Quán Jinmi (진미식당)</h1>
+  <p class="sub">Cách nhận đơn khách gửi từ QR Menu trên màn hình bếp và in phiếu đơn bằng nút <b>[In]</b>.<br>
+  Người cài đặt làm lần lượt từ trên xuống và đánh dấu vào ô <span class="chk"></span>.</p>
+
+  <h3>Sơ đồ chung</h3>
+  <div class="flow">
+    <div>Điện thoại khách<br><small>Gọi món bằng QR Menu</small></div><span>→</span>
+    <div>Internet</div><span>→</span>
+    <div>Máy tính bảng/điện thoại ở bếp<br><small>Màn hình bếp + app RawBT</small></div><span>→</span>
+    <div>Router wifi của quán<br><small>(modem / bộ phát wifi)</small></div><span>→</span>
+    <div>Máy in ZyWell<br><small>Nối bằng dây mạng (LAN)</small></div>
+  </div>
+
+  <h3>Máy in của quán (đã xác nhận qua ảnh)</h3>
+  <div class="imgs">
+    <figure><img src="printer-label.jpg"><figcaption>Nhãn dưới đáy máy in</figcaption></figure>
+    <div style="flex:1.1">
+      <table>
+        <tr><th>Hãng · Model</th><td>ZyWell <b>ZY-Q822</b> (máy in hóa đơn giấy in nhiệt)</td></tr>
+        <tr><th>Khổ giấy</th><td><b>80mm</b></td></tr>
+        <tr><th>Cách kết nối</th><td><b>USB + LAN (dây mạng)</b><br><b style="color:#b00">Không có Bluetooth</b></td></tr>
+        <tr><th>Hiện trạng</th><td>Mặt sau đã cắm dây nguồn và <b>dây mạng</b></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box warn"><b>Quan trọng:</b> Máy in này không có Bluetooth. Vì vậy kết nối theo cách <b>"dây mạng → router wifi → thiết bị Android dùng cùng wifi"</b>. Không thấy máy in này trong cài đặt Bluetooth của điện thoại là bình thường.</div>
+
+  <h3>Chuẩn bị</h3>
+  <p><span class="chk"></span>Máy in ZyWell (đã bật nguồn, đã lắp giấy in nhiệt 80mm)<br>
+  <span class="chk"></span>Dây mạng của máy in đã cắm vào <b>router wifi của quán</b><br>
+  <span class="chk"></span>1 máy tính bảng hoặc điện thoại <b>Android</b> đặt ở bếp (iPhone/iPad xem phần "Cách khác" ở trang cuối)<br>
+  <span class="chk"></span>Mã PIN 6 số của màn hình bếp (nhận từ người phụ trách QR Menu)<br>
+  <span class="chk"></span>Địa chỉ màn hình bếp: <b>https://qrmenuasia.com/kitchen/?shop=jinmi</b></p>
+</section>
+
+<!-- Trang 2 -->
+<section class="page">
+  <h2>Bước 1 · Tìm địa chỉ IP của máy in — khoảng 3 phút</h2>
+  <p>Để thiết bị Android tìm thấy máy in, cần có <b>địa chỉ IP</b> của máy in (dãy số giống như số nhà trong mạng, ví dụ: 192.168.1.100). Máy in sẽ tự in dãy số này ra giấy.</p>
+  <div class="imgs">
+    <figure style="flex:1"><img src="printer-back.jpg"><figcaption>Mặt sau máy in: dây đen bên trái = nguồn, dây xám ở giữa = dây mạng</figcaption></figure>
+  </div>
+  <ol class="steps">
+    <li><span class="chk"></span>Lần theo <b>dây mạng</b> màu xám ở mặt sau máy in, xem đầu bên kia có cắm vào <b>router wifi</b> (modem) không. Nếu nó cắm thẳng vào máy tính tiền (POS), hãy báo cho người cài đặt.</li>
+    <li><span class="chk"></span><b>Tắt</b> nguồn máy in.</li>
+    <li><span class="chk"></span>Giữ <b>nút FEED (đẩy giấy)</b> ở mặt trước máy in, rồi <b>bật</b> nguồn. Khi nghe tiếng bíp hoặc giấy bắt đầu chạy ra thì thả tay khỏi nút.</li>
+    <li><span class="chk"></span>Trên tờ giấy in ra (phiếu tự kiểm tra), tìm dòng <b>IP Address</b> và ghi vào bên dưới.<br>
+      IP máy in: <span class="write"></span> &nbsp; Cổng (Port): <b>9100</b> (thường là số này)</li>
+    <li><span class="chk"></span>Trên thiết bị Android, mở <b>Cài đặt → Wifi</b>, bấm vào wifi đang kết nối để xem địa chỉ IP của thiết bị.<br>
+      IP thiết bị: <span class="write"></span></li>
+  </ol>
+  <div class="box"><b>So sánh hai số:</b> <b>3 nhóm số đầu</b> của hai địa chỉ IP phải giống nhau.<br>
+  Ví dụ) Máy in <b>192.168.1</b>.100 / Thiết bị <b>192.168.1</b>.25 → giống nhau → sang Bước 2.<br>
+  Ví dụ) Máy in <b>192.168.123</b>.100 / Thiết bị <b>192.168.1</b>.25 → khác nhau → phải đổi IP máy in. Hãy giao cho <b>người cài đặt (cần làm trên máy tính)</b>.</div>
+  <div class="box warn"><b>Lưu ý:</b> Nếu máy in này đang được máy tính tiền (POS) khác dùng, đừng tự ý đổi IP máy in. Máy tính tiền đó có thể ngừng in. Dùng chung mà không đổi IP thì không sao.</div>
+  <p class="vi">Tên nút FEED tùy model: có thể ghi 'FEED' hoặc ký hiệu '↑'. Nếu không in ra phiếu tự kiểm tra, hãy tắt nguồn rồi thử lại một lần nữa.</p>
+</section>
+
+<!-- Trang 3 -->
+<section class="page">
+  <h2>Bước 2 · Cài app RawBT trên thiết bị Android — khoảng 5 phút</h2>
+  <p><b>RawBT</b> là <b>app miễn phí</b> giúp gửi phiếu đơn từ màn hình bếp sang máy in. (Điện thoại của chủ quán Jinmi đã cài sẵn)</p>
+  <ol class="steps">
+    <li><span class="chk"></span>Kết nối thiết bị vào <b>cùng wifi của quán với máy in</b> (đã so sánh IP đạt ở Bước 1).</li>
+    <li><span class="chk"></span>Vào Google Play (CH Play), tìm và cài <b>RawBT</b>. (Đã có thì bỏ qua) — Nếu hiện màn hình trả phí, đừng bấm, hãy đóng lại. Bản miễn phí là đủ.</li>
+    <li><span class="chk"></span>Mở RawBT và vào <b>Cài đặt (biểu tượng bánh răng)</b>.</li>
+    <li><span class="chk"></span>Chọn <b>Cách kết nối (Connection)</b> là <b>Network / LAN·Wi-Fi (TCP/IP)</b>. <b>Không chọn Bluetooth.</b></li>
+    <li><span class="chk"></span>Ở ô <b>địa chỉ IP</b>, nhập IP máy in đã ghi ở Bước 1. Ở ô <b>cổng (Port)</b>, nhập <b>9100</b>.</li>
+    <li><span class="chk"></span>Nếu có mục cài đặt khổ giấy/khổ máy in, chọn <b>80mm</b>.</li>
+    <li><span class="chk"></span>Bấm <b>In thử (Test)</b> trong RawBT, xem giấy có chạy ra không. → Nếu có là xong Bước 2.</li>
+  </ol>
+  <div class="box ok"><b>Nếu làm được đến đây</b> là đã kết nối xong máy in. Chỉ còn chọn "Gửi qua RawBT" trên màn hình bếp.</div>
+  <p class="vi">Tên menu có thể hơi khác tùy phiên bản app (ví dụ: Connection method, Network, Printer IP). Chỉ cần tìm ô có cùng ý nghĩa.</p>
+</section>
+
+<!-- Trang 4 -->
+<section class="page">
+  <h2>Bước 3 · Cài đặt màn hình bếp và in thử — khoảng 3 phút</h2>
+  <p>Màn hình bếp có thể đổi sang tiếng Việt/tiếng Hàn. Trong ngoặc là tên nút khi màn hình để tiếng Hàn.</p>
+  <ol class="steps">
+    <li><span class="chk"></span>Trên <b>Chrome</b> của cùng thiết bị Android, mở <b>qrmenuasia.com/kitchen/?shop=jinmi</b>. (Nếu chọn menu Chrome ⋮ → 'Thêm vào màn hình chính', lần sau có thể mở bằng biểu tượng)</li>
+    <li><span class="chk"></span>Nhập <b>PIN 6 số</b> rồi bấm <span class="btn">Vào</span> <span class="vi">(들어가기)</span>. Đã vào một lần thì 60 ngày không hỏi lại.</li>
+    <li><span class="chk"></span>Bấm <span class="btn">▶ Bắt đầu</span> <span class="vi">(▶ 시작)</span>. Âm báo đơn mới sẽ bật và màn hình không bị tắt.</li>
+    <li><span class="chk"></span>Bấm <span class="btn">⚙</span> ở góc trên bên phải để mở <b>Cài đặt máy này</b> <span class="vi">(이 기기 설정)</span>.</li>
+    <li><span class="chk"></span>Chọn <b>Máy in</b> <span class="vi">(프린터)</span> → <b>Máy in Bluetooth (app RawBT)</b> <span class="vi">(블루투스 프린터 (RawBT 앱))</span>.<br>
+      <small>Tên có chữ 'Bluetooth' nhưng thực ra nghĩa là <b>gửi qua app RawBT</b>. RawBT sẽ gửi sang máy in bằng cách LAN đã cài ở Bước 2, nên máy in này cũng chọn mục này.</small></li>
+    <li><span class="chk"></span><b>Khổ giấy</b> <span class="vi">(용지 폭)</span> → <b>80mm</b>.</li>
+    <li><span class="chk"></span>Ở ô <b>Tên máy</b> <span class="vi">(기기 이름)</span>, ghi tên như 'Bếp 1' (không bắt buộc).</li>
+    <li><span class="chk"></span>Bấm <span class="btn">In thử</span> <span class="vi">(시험 인쇄)</span>. Lần đầu có thể hỏi "Mở bằng RawBT?" → chọn <b>Luôn cho phép</b>. Máy in ra phiếu đơn 'thử' là thành công.</li>
+    <li><span class="chk"></span>(Không bắt buộc) Bật <b>Tự in đơn mới</b> <span class="vi">(새 주문 자동 인쇄)</span>. Tùy thiết bị, có thể không tự in được. Khi đó hãy bấm <span class="btn">In</span> trên thẻ đơn.</li>
+    <li><span class="chk"></span>Bấm <span class="btn">Đóng</span> <span class="vi">(닫기)</span>.</li>
+  </ol>
+  <div class="box ok"><b>Kiểm tra cài đặt xong:</b> Gửi thử 1 đơn thật bằng QR ở bàn khách, rồi bấm <span class="btn">In</span> đơn hiện trên màn hình bếp, xem trên giấy có số bàn, món và số lượng không.</div>
+</section>
+
+<!-- Trang 5 -->
+<section class="page">
+  <h2>Cách dùng hằng ngày</h2>
+  <ol class="steps">
+    <li>Khi bắt đầu bán, bật nguồn máy in, mở màn hình bếp trên thiết bị ở bếp và bấm <span class="btn">▶ Bắt đầu</span>.</li>
+    <li>Khi khách gọi món sẽ có tiếng "ting" và thẻ đơn hiện ở cột <b>Đơn mới</b> <span class="vi">(새 주문)</span>.</li>
+    <li>Bấm <span class="btn">In</span> <span class="vi">(인쇄)</span> trên thẻ → phiếu đơn được in ra.</li>
+    <li>Bắt đầu nấu thì bấm <span class="btn">Nhận đơn</span> <span class="vi">(접수)</span>, ra hết món thì bấm <span class="btn">Xong</span> <span class="vi">(완료)</span>. Bấm nhầm thì bấm <span class="btn">Hoàn tác</span> <span class="vi">(되돌리기)</span>.</li>
+    <li>Thiết bị ở bếp nên <b>cắm sạc liên tục</b> và không tắt wifi.</li>
+  </ol>
+
+  <h2 style="margin-top:16px">Khi không in được, kiểm tra</h2>
+  <table>
+    <tr><th>Triệu chứng</th><td><b>Kiểm tra</b></td></tr>
+    <tr><th>Không in ra gì</th><td>① Nguồn và giấy của máy in ② Dây mạng máy in có cắm vào router không (đèn bên router có nhấp nháy không) ③ Thiết bị có dùng <b>wifi của quán</b> không (không phải dữ liệu di động) ④ In thử trong RawBT có được không</td></tr>
+    <tr><th>Hôm qua in được, hôm nay không</th><td>Tắt rồi bật lại router có thể làm đổi IP máy in. Làm lại Bước 1 để in IP, rồi sửa IP trong RawBT. (Nếu IP cứ đổi, người cài đặt sẽ đặt IP cố định)</td></tr>
+    <tr><th>Chữ quá nhỏ hoặc dồn về một bên</th><td>Kiểm tra ⚙ trên màn hình bếp, khổ giấy có phải <b>80mm</b> không</td></tr>
+    <tr><th>Chỉ ra giấy trắng</th><td>Lắp giấy in nhiệt bị ngược mặt (mặt in là mặt dùng móng tay cào lên thì đen)</td></tr>
+    <tr><th>Màn hình bếp hiện 'Mất kết nối'</th><td>Kiểm tra internet của thiết bị. Sẽ tự kết nối lại.</td></tr>
+    <tr><th>Không nhận được đơn</th><td>Nếu trên đầu màn hình hiện thông báo “Quán đang TẮT nhận đơn online”, hãy nhờ người phụ trách QR Menu bật lại</td></tr>
+  </table>
+
+  <h2 style="margin-top:16px">Cách khác · Khi dùng iPad/PC</h2>
+  <p>RawBT chỉ dành cho Android. Với iPad và máy tính Windows, vào ⚙ trên màn hình bếp → Máy in, chọn <b>In qua trình duyệt</b> <span class="vi">(브라우저 인쇄)</span>, rồi chọn máy in trong cửa sổ in như in tài liệu thông thường. Máy tính Windows cần <b>cài driver máy in ZyWell</b> (USB hoặc LAN) trước, nên cần người cài đặt làm giúp. Nên dùng cách Android.</p>
+
+  <h3>Ghi chép cài đặt</h3>
+  <p>Ngày cài đặt: <span class="write"></span> &nbsp; Người cài đặt: <span class="write"></span><br>
+  IP máy in: <span class="write"></span> &nbsp; Thiết bị ở bếp: <span class="write"></span></p>
+  <p class="foot">Không ghi mã PIN vào tờ giấy này. · Tài liệu: QR Menu · Hướng dẫn cài đặt máy in bếp quán Jinmi (ZyWell ZY-Q822)</p>
+</section>
+
+</body></html>

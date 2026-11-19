@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16130f">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<title>QR 메뉴판 비용 계산기</title>
+<!-- 미리보기(2026-11-17): quicktables.site 벤치마킹 1번. 소개서(/)에는 아직 링크 안 함. 숫자·가격은 /content.js 의 PRICES·CONTACT를 씀 -->
+<style>
+  :root {
+    --ink: #16130f; --paper: #faf7f2; --card: #fff; --line: #e9e2d7; --muted: #6f675d;
+    --accent: #e0452b; --accent-2: #f2a03d; --good: #1f8a4c;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.5;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; -webkit-font-smoothing: antialiased; }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+  h1, h2, h3 { margin: 0; line-height: 1.25; letter-spacing: -.3px; }
+  section { padding: 44px 0; }
+  .sec-title { font-size: 26px; font-weight: 800; }
+  .sec-sub { margin: 8px 0 0; color: var(--muted); }
+
+  .hero { background: radial-gradient(120% 90% at 85% 0%, #3a2416 0%, var(--ink) 55%); color: #fff; padding: 16px 0 44px; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .logo { font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+  .logo i { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: grid; place-items: center; font-style: normal; font-size: 13px; }
+  .langs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: #d8cfc3; background: transparent; border: 1px solid #5a4f43; border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: var(--ink); background: #fff; border-color: #fff; }
+  .kicker { display: inline-block; margin-top: 34px; font-size: 13px; font-weight: 700; color: var(--accent-2); border: 1px solid rgba(242,160,61,.4); border-radius: 999px; padding: 4px 12px; }
+  .hero h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 900; margin-top: 14px; }
+  .hero h1 em { font-style: normal; background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { color: #d8cfc3; font-size: 17px; margin: 14px 0 0; max-width: 34em; }
+
+  /* 계산기 */
+  .tabs { display: flex; gap: 6px; margin-top: 22px; background: #efe8dc; border-radius: 14px; padding: 5px; }
+  .tabs button { flex: 1; font: inherit; font-weight: 700; font-size: 15px; border: 0; border-radius: 10px; padding: 11px 8px; background: transparent; color: var(--muted); cursor: pointer; }
+  .tabs button[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .calc { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .calc[hidden] { display: none; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; }
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label { display: flex; justify-content: space-between; gap: 10px; font-weight: 700; font-size: 15px; }
+  .field label b { color: var(--accent); white-space: nowrap; }
+  .field small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .field input[type=range] { width: 100%; margin-top: 8px; accent-color: var(--accent); }
+  .result h3 { font-size: 15px; color: var(--muted); font-weight: 700; }
+  .big { font-size: clamp(26px, 4.4vw, 36px); font-weight: 900; margin-top: 4px; }
+  .big.bad { color: var(--accent); }
+  .big.good { color: var(--good); }
+  .rows { margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 12px; }
+  .row { display: flex; justify-content: space-between; gap: 10px; font-size: 15px; padding: 4px 0; }
+  .row span:last-child { font-weight: 700; white-space: nowrap; }
+  .note { margin-top: 14px; font-size: 13px; color: var(--muted); }
+  .verdict { margin-top: 14px; border-radius: 12px; padding: 12px 14px; font-weight: 700; background: #eaf6ee; color: var(--good); }
+  .verdict.meh { background: #f6f1e8; color: var(--muted); }
+
+  /* 비교표 */
+  .tbl-wrap { margin-top: 22px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { padding: 12px 10px; text-align: center; border-bottom: 1px solid var(--line); }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { background: #f4eee4; font-size: 14px; }
+  thead th.us { background: var(--ink); color: #fff; }
+  td.us { background: #fff7f2; font-weight: 700; }
+  tr:last-child td { border-bottom: 0; }
+  .y { color: var(--good); font-weight: 900; }
+  .n { color: #b9b0a4; }
+  .p { color: var(--accent-2); font-weight: 700; font-size: 13px; }
+
+  /* 신청 */
+  .start { background: linear-gradient(135deg, var(--accent), #f0662f); color: #fff; border-radius: 22px; padding: 30px 20px; text-align: center; }
+  .start h2 { font-size: 26px; font-weight: 900; }
+  .start p { margin: 8px 0 0; opacity: .92; }
+  .form { display: flex; gap: 8px; max-width: 480px; margin: 20px auto 0; }
+  .form input { flex: 1; min-width: 0; font: inherit; font-size: 16px; border: 0; border-radius: 12px; padding: 13px 14px; }
+  .form button { font: inherit; font-weight: 800; border: 0; border-radius: 12px; padding: 0 18px; background: var(--ink); color: #fff; cursor: pointer; }
+  .sent { display: none; max-width: 480px; margin: 16px auto 0; background: rgba(0,0,0,.18); border-radius: 14px; padding: 14px; text-align: left; }
+  .sent.on { display: block; }
+  .sent pre { white-space: pre-wrap; font: inherit; background: #fff; color: var(--ink); border-radius: 10px; padding: 10px 12px; margin: 8px 0 10px; }
+  .sent .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sent .acts a, .sent .acts button { font: inherit; font-weight: 700; font-size: 14px; text-decoration: none; border: 0; border-radius: 10px; padding: 9px 14px; background: #fff; color: var(--ink); cursor: pointer; }
+  .sent .acts a.zalo { background: #0068ff; color: #fff; }
+  .badges { display: flex; justify-content: center; gap: 8px 16px; flex-wrap: wrap; margin-top: 18px; font-size: 14px; font-weight: 700; }
+  .find { display: inline-block; margin-top: 18px; color: #fff; font-weight: 700; }
+  footer { padding: 28px 0 40px; color: var(--muted); font-size: 13px; text-align: center; }
+  footer a { color: inherit; }
+
+  @media (max-width: 720px) {
+    .calc { grid-template-columns: 1fr; }
+    th, td { padding: 10px 6px; font-size: 13px; }
+    thead th { font-size: 12px; }
+    .form { flex-direction: column; }
+    .form button { padding: 13px; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="topbar">
+      <a class="logo" href="/"><i>QR</i><span>QR MENU</span></a>
+      <div class="langs" id="langs"></div>
+    </div>
+    <span class="kicker" data-t="kicker"></span>
+    <h1 data-t="h1" data-html></h1>
+    <p data-t="lead"></p>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="wrap">
+      <h2 class="sec-title" data-t="calcTitle"></h2>
+      <p class="sec-sub" data-t="calcSub"></p>
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tabPaper" aria-selected="true" data-t="tabPaper"></button>
+        <button role="tab" id="tabApp" aria-selected="false" data-t="tabApp"></button>
+      </div>
+
+      <!-- 가: 종이 메뉴판 -->
+      <div class="calc" id="calcPaper">
+        <div class="panel">
+          <div class="field"><label><span data-t="pBooks"></span><b id="vBooks"></b></label><small data-t="pBooksHint"></small>
+            <input type="range" id="books" min="1" max="40" step="1" value="10"></div>
+          <div class="field"><label><span data-t="pCost"></span><b id="vCost"></b></label><small data-t="pCostHint"></small>
+            <input type="range" id="cost" min="30000" max="500000" step="10000" value="150000"></div>
+          <div class="field"><label><span data-t="pTimes"></span><b id="vTimes"></b></label><small data-t="pTimesHint"></small>
+            <input type="range" id="times" min="0" max="12" step="1" value="3"></div>
+          <div class="field"><label><span data-t="pTrans"></span><b id="vTrans"></b></label><small data-t="pTransHint"></small>
+            <input type="range" id="trans" min="0" max="3000000" step="100000" value="1000000"></div>
+        </div>
+        <div class="panel result">
+          <h3 data-t="pResPaper"></h3>
+          <div class="big bad" id="rPaper"></div>
+          <div class="rows">
+            <div class="row"><span data-t="pRowPrint"></span><span id="rPrint"></span></div>
+            <div class="row"><span data-t="pRowTrans"></span><span id="rTrans"></span></div>
+            <div class="row"><span data-t="pRowUs1"></span><span id="rUs1"></span></div>
+            <div class="row"><span data-t="pRowUs2"></span><span id="rUs2"></span></div>
+          </div>
+          <div class="verdict" id="vPaper"></div>
+          <p class="note" data-t="pNote"></p>
+        </div>
+      </div>
+
+      <!-- 나: 배달앱 수수료 -->
+      <div class="calc" id="calcApp" hidden>
+        <div class="panel">
+          <div class="field"><label><span data-t="aOrders"></span><b id="vOrders"></b></label><small data-t="aOrdersHint"></small>
+            <input type="range" id="orders" min="0" max="2000" step="10" value="300"></div>
+          <div class="field"><label><span data-t="aAvg"></span><b id="vAvg"></b></label><small data-t="aAvgHint"></small>
+            <input type="range" id="avg" min="30000" max="600000" step="10000" value="150000"></div>
+          <div class="field"><label><span data-t="aRate"></span><b id="vRate"></b></label><small data-t="aRateHint"></small>
+            <input type="range" id="rate" min="0" max="40" step="1" value="25"></div>
+          <div class="field"><label><span data-t="aShift"></span><b id="vShift"></b></label><small data-t="aShiftHint"></small>
+            <input type="range" id="shift" min="0" max="50" step="5" value="10"></div>
+        </div>
+        <div class="panel result">
+          <h3 data-t="aResFee"></h3>
+          <div class="big bad" id="rFee"></div>
+          <div class="rows">
+            <div class="row"><span data-t="aRowYear"></span><span id="rFeeYear"></span></div>
+            <div class="row"><span data-t="aRowSave"></span><span id="rSave"></span></div>
+            <div class="row"><span data-t="aRowUs"></span><span id="rUsM"></span></div>
+          </div>
+          <div class="verdict" id="vApp"></div>
+          <p class="note" data-t="aNote"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <h2 class="sec-title" data-t="cmpTitle"></h2>
+      <p class="sec-sub" data-t="cmpSub"></p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th></th><th data-t="colPaper"></th><th data-t="colApp"></th><th class="us" data-t="colUs"></th></tr></thead>
+          <tbody id="cmp"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="start">
+        <h2 data-t="stTitle"></h2>
+        <p data-t="stSub"></p>
+        <form class="form" id="form">
+          <input id="shop" required maxlength="80" autocomplete="organization">
+          <button type="submit" data-t="stBtn"></button>
+        </form>
+        <div class="sent" id="sent">
+          <div data-t="sentLead"></div>
+          <pre id="msg"></pre>
+          <div class="acts">
+            <a class="zalo" id="zaloA" target="_blank" rel="noopener">Zalo</a>
+            <a id="telA" data-t="sentCall"></a>
+            <button type="button" id="copyB" data-t="sentCopy"></button>
+          </div>
+        </div>
+        <div class="badges"><span data-t="b1"></span><span data-t="b2"></span><span data-t="b3"></span></div>
+        <a class="find" href="/stores/" data-t="findLink"></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><a href="/" data-t="back"></a></div></footer>
+
+<script src="/content.js"></script>
+<script>
+(function () {
+  "use strict";
+  var P = window.PRICES || { basic: 2500000, monthly: 350000, yearly: 3500000, cart: 2500000 };
+  var C = window.CONTACT || { phone: "0917 302 200", zalo: "0917 302 200" };
+
+  // 문구 5개 언어(ko·vi 메인, zh·ja·en polisher 2026-11-17).
+  var T = {
+    ko: {
+      kicker: "사장님 계산기",
+      h1: "메뉴판에 <em>매년 얼마</em> 쓰고 계세요?",
+      lead: "종이 메뉴판 다시 찍는 비용과 배달앱 수수료를 직접 넣어 보세요. QR 메뉴판으로 바꾸면 얼마가 남는지 바로 보여 드려요.",
+      calcTitle: "1분 계산기",
+      calcSub: "막대를 움직여 우리 가게 숫자로 맞춰 보세요.",
+      tabPaper: "종이 메뉴판 비용", tabApp: "배달앱 수수료",
+      pBooks: "메뉴판 권수", pBooksHint: "테이블·카운터에 둔 메뉴판 수", pCost: "1권 인쇄·코팅 비용", pCostHint: "인쇄소 견적 기준",
+      pTimes: "1년에 다시 찍는 횟수", pTimesHint: "가격·메뉴가 바뀔 때마다", pTrans: "외국어 번역 맡기는 비용", pTransHint: "한 번 맡길 때 (없으면 0)",
+      pResPaper: "종이 메뉴판, 1년 비용", pRowPrint: "다시 인쇄", pRowTrans: "번역 (1회)",
+      pRowUs1: "QR 메뉴판 첫해 (기본형 + 연 관리)", pRowUs2: "QR 메뉴판 둘째 해부터",
+      pNote: "QR 메뉴판은 가격·품절을 사장님 폰으로 바로 고쳐서 다시 인쇄할 필요가 없어요. 5개 언어 번역이 기본으로 들어 있어요.",
+      vPaperGood: "첫해부터 {x} 아껴요", vPaperGood2: "둘째 해부터 해마다 {x} 아껴요", vPaperMeh: "메뉴판이 적으면 비용 차이는 작아요. 대신 5개 언어 메뉴와 방문 리포트가 생겨요.",
+      aOrders: "배달앱 주문 (한 달)", aOrdersHint: "Grab·ShopeeFood 등을 합친 수", aAvg: "평균 주문 금액", aAvgHint: "주문 1건 금액",
+      aRate: "배달앱 수수료율", aRateHint: "보통 20~30% · 사장님 계약 조건으로 맞추세요", aShift: "직접 주문으로 옮길 비율", aShiftHint: "단골이 Zalo 주문서로 직접 주문한다면",
+      aResFee: "한 달에 내는 수수료", aRowYear: "1년이면", aRowSave: "직접 주문으로 아끼는 돈 (한 달)", aRowUs: "QR 메뉴판 월 관리비",
+      aNote: "직접 주문은 메뉴판의 장바구니 주문서(옵션, 1회 {cart})로 손님이 Zalo로 주문을 보내는 방식이에요. 배달은 가게가 직접 해야 해요.",
+      vAppGood: "한 달 {x} 더 남아요 (관리비 빼고)", vAppMeh: "이 숫자에선 관리비가 더 커요. 외국인 손님 메뉴·방문 리포트가 주된 이유가 돼요.",
+      cmpTitle: "한눈에 비교", cmpSub: "종이 메뉴판·배달앱과 무엇이 다른가요?",
+      colPaper: "종이 메뉴판", colApp: "배달앱", colUs: "QR 메뉴판",
+      rows: [["5개 언어 메뉴", "n", "p:일부", "y"], ["가격·품절 바로 고치기", "n", "y", "y"], ["다시 인쇄 비용", "p:매번", "n", "y:없음"], ["주문마다 수수료", "y:없음", "p:20~30%", "y:없음"], ["손님 방문 리포트", "n", "p:앱 안에서만", "y"], ["구글 검색·가게 찾기 노출", "n", "p:앱 안에서만", "y"]],
+      stTitle: "가게 이름만 보내 주세요", stSub: "메뉴판 사진은 저희가 구글 지도에서 먼저 찾아볼게요. 시안을 보고 마음에 들 때만 시작하세요.",
+      ph: "가게 이름 (예: 숯꾸이 박닌)", stBtn: "시작하기",
+      sentLead: "아래 문구를 Zalo나 전화로 보내 주시면 바로 연락드릴게요.", sentCall: "전화", sentCopy: "문구 복사", copied: "복사됨 ✓",
+      msg: "안녕하세요, QR 메뉴판 문의합니다.\n가게 이름: {shop}",
+      b1: "✓ 시안 먼저 무료 확인", b2: "✓ 5개 언어 기본", b3: "✓ 사장님이 직접 수정",
+      findLink: "혹시 이미 만들어진 우리 가게 메뉴판이 있을까요? 가게 찾기에서 검색 →", back: "← QR 메뉴판 소개로 돌아가기", unit: "₫", books: "권", times: "번"
+    },
+    vi: {
+      kicker: "Máy tính cho chủ quán",
+      h1: "Mỗi năm quán tốn <em>bao nhiêu</em> cho thực đơn?",
+      lead: "Nhập chi phí in lại thực đơn giấy và phí app giao hàng của quán. Chúng tôi cho anh/chị thấy ngay khoản tiết kiệm khi dùng thực đơn QR.",
+      calcTitle: "Tính trong 1 phút", calcSub: "Kéo thanh trượt theo số liệu thật của quán.",
+      tabPaper: "Chi phí thực đơn giấy", tabApp: "Phí app giao hàng",
+      pBooks: "Số cuốn thực đơn", pBooksHint: "Đặt ở bàn và quầy", pCost: "Chi phí in · ép 1 cuốn", pCostHint: "Theo báo giá nhà in",
+      pTimes: "Số lần in lại mỗi năm", pTimesHint: "Mỗi lần đổi giá hoặc món", pTrans: "Chi phí thuê dịch ngoại ngữ", pTransHint: "Một lần (không có thì để 0)",
+      pResPaper: "Thực đơn giấy, chi phí 1 năm", pRowPrint: "In lại", pRowTrans: "Dịch (1 lần)",
+      pRowUs1: "Thực đơn QR năm đầu (Cơ bản + phí năm)", pRowUs2: "Thực đơn QR từ năm thứ hai",
+      pNote: "Với thực đơn QR, chủ quán tự sửa giá và báo hết món ngay trên điện thoại, không cần in lại. Đã gồm sẵn 5 ngôn ngữ.",
+      vPaperGood: "Tiết kiệm {x} ngay năm đầu", vPaperGood2: "Từ năm thứ hai tiết kiệm {x} mỗi năm", vPaperMeh: "Quán ít thực đơn thì chênh lệch nhỏ. Bù lại quán có thực đơn 5 ngôn ngữ và báo cáo lượt xem.",
+      aOrders: "Đơn qua app giao hàng (1 tháng)", aOrdersHint: "Tổng Grab, ShopeeFood…", aAvg: "Giá trị trung bình 1 đơn", aAvgHint: "Số tiền mỗi đơn",
+      aRate: "Phí hoa hồng app", aRateHint: "Thường 20–30% · chỉnh theo hợp đồng của quán", aShift: "Tỷ lệ chuyển sang đặt trực tiếp", aShiftHint: "Nếu khách quen đặt qua Zalo",
+      aResFee: "Phí trả mỗi tháng", aRowYear: "Cả năm", aRowSave: "Tiết kiệm nhờ đặt trực tiếp (tháng)", aRowUs: "Phí duy trì thực đơn QR (tháng)",
+      aNote: "Đặt trực tiếp = khách gửi đơn qua Zalo bằng giỏ hàng trên thực đơn (tuỳ chọn, 1 lần {cart}). Quán tự giao hàng.",
+      vAppGood: "Mỗi tháng dư thêm {x} (đã trừ phí duy trì)", vAppMeh: "Với số này phí duy trì cao hơn. Lý do chính sẽ là thực đơn cho khách nước ngoài và báo cáo lượt xem.",
+      cmpTitle: "So sánh nhanh", cmpSub: "Khác gì thực đơn giấy và app giao hàng?",
+      colPaper: "Thực đơn giấy", colApp: "App giao hàng", colUs: "Thực đơn QR",
+      rows: [["Thực đơn 5 ngôn ngữ", "n", "p:Một phần", "y"], ["Sửa giá · hết món ngay", "n", "y", "y"], ["Chi phí in lại", "p:Mỗi lần", "n", "y:Không"], ["Phí theo từng đơn", "y:Không", "p:20–30%", "y:Không"], ["Báo cáo lượt khách xem", "n", "p:Chỉ trong app", "y"], ["Hiện trên Google · tìm quán", "n", "p:Chỉ trong app", "y"]],
+      stTitle: "Chỉ cần gửi tên quán", stSub: "Chúng tôi sẽ tự tìm ảnh thực đơn trên Google Maps. Xem bản mẫu, ưng ý mới bắt đầu.",
+      ph: "Tên quán (vd: Sutkkui Bắc Ninh)", stBtn: "Bắt đầu",
+      sentLead: "Gửi nội dung dưới đây qua Zalo hoặc gọi điện, chúng tôi sẽ liên hệ ngay.", sentCall: "Gọi", sentCopy: "Sao chép", copied: "Đã chép ✓",
+      msg: "Xin chào, tôi muốn hỏi về thực đơn QR.\nTên quán: {shop}",
+      b1: "✓ Xem bản mẫu miễn phí", b2: "✓ Có sẵn 5 ngôn ngữ", b3: "✓ Chủ quán tự sửa",
+      findLink: "Có thể thực đơn của quán đã có sẵn? Tìm trong danh sách quán →", back: "← Quay lại trang giới thiệu", unit: "₫", books: "cuốn", times: "lần"
+    },
+    zh: {
+      kicker: "店主计算器",
+      h1: "每年在菜单上花了<em>多少钱</em>？",
+      lead: "输入重印纸质菜单的费用和外卖App的佣金。改用二维码菜单后能省多少，马上告诉您。",
+      calcTitle: "1分钟计算器",
+      calcSub: "拖动滑块，调成您店里的实际数字。",
+      tabPaper: "纸质菜单费用", tabApp: "外卖App佣金",
+      pBooks: "菜单本数", pBooksHint: "放在餐桌和收银台的菜单数量", pCost: "每本印刷·覆膜费用", pCostHint: "按印刷店报价",
+      pTimes: "一年重印次数", pTimesHint: "每次改价格或菜品时", pTrans: "外语翻译费用", pTransHint: "每委托一次的费用（没有就填0）",
+      pResPaper: "纸质菜单，一年费用", pRowPrint: "重新印刷", pRowTrans: "翻译（1次）",
+      pRowUs1: "二维码菜单第一年（基础版+年度管理费）", pRowUs2: "二维码菜单第二年起",
+      pNote: "二维码菜单可以用店主的手机直接修改价格和标记售罄，不用重新印刷。基本包含5种语言翻译。",
+      vPaperGood: "第一年就省 {x}", vPaperGood2: "第二年起每年省 {x}", vPaperMeh: "菜单本数少的话，费用差别不大。不过您会多出5种语言的菜单和访问报告。",
+      aOrders: "外卖App订单（每月）", aOrdersHint: "Grab、ShopeeFood等合计", aAvg: "平均订单金额", aAvgHint: "每单的金额",
+      aRate: "外卖App佣金率", aRateHint: "一般为20~30%，请按您的合同条件调整", aShift: "转为直接下单的比例", aShiftHint: "如果老顾客通过Zalo订单直接下单",
+      aResFee: "每月支付的佣金", aRowYear: "一年合计", aRowSave: "直接下单省下的钱（每月）", aRowUs: "二维码菜单月管理费",
+      aNote: "直接下单是指顾客通过菜单上的购物车订单（可选，一次性 {cart}）用Zalo发送订单。配送需要店里自己负责。",
+      vAppGood: "每月多剩 {x}（已扣除管理费）", vAppMeh: "按这个数字，管理费更高。主要价值在于外国客人的菜单和访问报告。",
+      cmpTitle: "一目了然的对比", cmpSub: "和纸质菜单、外卖App有什么不同？",
+      colPaper: "纸质菜单", colApp: "外卖App", colUs: "二维码菜单",
+      rows: [["5种语言菜单", "n", "p:部分", "y"], ["随时修改价格·标记售罄", "n", "y", "y"], ["重印费用", "p:每次都要", "n", "y:没有"], ["每单佣金", "y:没有", "p:20~30%", "y:没有"], ["顾客访问报告", "n", "p:仅限App内", "y"], ["Google搜索·找店曝光", "n", "p:仅限App内", "y"]],
+      stTitle: "只需发送店名", stSub: "菜单照片由我们先在Google Maps上查找。看过样稿，满意了再开始。",
+      ph: "店名（例：Sutkkui Bắc Ninh）", stBtn: "开始",
+      sentLead: "请把下面的内容通过Zalo或电话发给我们，我们会马上联系您。", sentCall: "电话", sentCopy: "复制内容", copied: "已复制 ✓",
+      msg: "您好，我想咨询二维码菜单。\n店名：{shop}",
+      b1: "✓ 先免费看样稿", b2: "✓ 基本含5种语言", b3: "✓ 店主自己修改",
+      findLink: "也许您的店已经有现成的菜单了？在找店里搜索 →", back: "← 返回二维码菜单介绍", unit: "₫", books: "本", times: "次"
+    },
+    ja: {
+      kicker: "オーナー向け計算機",
+      h1: "メニューに毎年<em>いくら</em>かかっていますか？",
+      lead: "紙のメニューを刷り直す費用と、デリバリーアプリの手数料を入れてみてください。QRメニューにするといくら残るか、すぐ分かります。",
+      calcTitle: "1分計算機",
+      calcSub: "バーを動かして、お店の数字に合わせてください。",
+      tabPaper: "紙メニューの費用", tabApp: "デリバリーアプリ手数料",
+      pBooks: "メニューの冊数", pBooksHint: "テーブルやカウンターに置いている数", pCost: "1冊の印刷・コーティング費用", pCostHint: "印刷所の見積もり基準",
+      pTimes: "1年に刷り直す回数", pTimesHint: "価格やメニューが変わるたびに", pTrans: "外国語翻訳を頼む費用", pTransHint: "1回頼むときの金額（なければ0）",
+      pResPaper: "紙メニュー、1年の費用", pRowPrint: "刷り直し", pRowTrans: "翻訳（1回）",
+      pRowUs1: "QRメニュー 初年度（ベーシック＋年間管理費）", pRowUs2: "QRメニュー 2年目から",
+      pNote: "QRメニューは、価格や品切れをオーナーのスマホですぐ直せるので、刷り直しは要りません。5言語の翻訳が基本で入っています。",
+      vPaperGood: "初年度から {x} 節約できます", vPaperGood2: "2年目から毎年 {x} 節約できます", vPaperMeh: "メニューの冊数が少ないと、費用の差は小さいです。その代わり、5言語のメニューと訪問レポートが付きます。",
+      aOrders: "デリバリーアプリの注文（1か月）", aOrdersHint: "Grab・ShopeeFoodなどの合計", aAvg: "平均注文金額", aAvgHint: "注文1件の金額",
+      aRate: "デリバリーアプリの手数料率", aRateHint: "一般に20〜30% ・ お店の契約条件に合わせてください", aShift: "直接注文に移す割合", aShiftHint: "常連のお客様がZaloの注文書で直接注文する場合",
+      aResFee: "1か月に払う手数料", aRowYear: "1年では", aRowSave: "直接注文で節約できる金額（1か月）", aRowUs: "QRメニューの月額管理費",
+      aNote: "直接注文は、メニューのカート注文書（オプション、1回 {cart}）で、お客様がZaloで注文を送る方法です。配送はお店で行う必要があります。",
+      vAppGood: "1か月 {x} 多く残ります（管理費を引いた額）", vAppMeh: "この数字では管理費のほうが高くなります。外国人のお客様向けメニューと訪問レポートが主な理由になります。",
+      cmpTitle: "ひと目で比較", cmpSub: "紙メニューやデリバリーアプリと何が違いますか？",
+      colPaper: "紙メニュー", colApp: "デリバリーアプリ", colUs: "QRメニュー",
+      rows: [["5言語のメニュー", "n", "p:一部", "y"], ["価格・品切れをすぐ修正", "n", "y", "y"], ["刷り直しの費用", "p:毎回", "n", "y:なし"], ["注文ごとの手数料", "y:なし", "p:20〜30%", "y:なし"], ["お客様の訪問レポート", "n", "p:アプリ内のみ", "y"], ["Google検索・お店探しへの掲載", "n", "p:アプリ内のみ", "y"]],
+      stTitle: "お店の名前だけ送ってください", stSub: "メニューの写真は、私たちが先にGoogle Mapsで探します。見本を見て、気に入ったときだけ始めてください。",
+      ph: "お店の名前（例：Sutkkui Bắc Ninh）", stBtn: "始める",
+      sentLead: "下の文をZaloまたはお電話で送っていただければ、すぐご連絡します。", sentCall: "電話", sentCopy: "文をコピー", copied: "コピーしました ✓",
+      msg: "こんにちは。QRメニューについて問い合わせます。\nお店の名前：{shop}",
+      b1: "✓ 見本を先に無料で確認", b2: "✓ 5言語が基本", b3: "✓ オーナーが自分で修正",
+      findLink: "もうお店のメニューができているかもしれません。お店探しで検索 →", back: "← QRメニューの紹介に戻る", unit: "₫", books: "冊", times: "回"
+    },
+    en: {
+      kicker: "Owner calculator",
+      h1: "How much do you spend on menus <em>every year</em>?",
+      lead: "Enter your cost of reprinting paper menus and your delivery app fees. We will show you right away how much you keep with a QR menu.",
+      calcTitle: "1-minute calculator",
+      calcSub: "Move the sliders to match your shop's numbers.",
+      tabPaper: "Paper menu cost", tabApp: "Delivery app fees",
+      pBooks: "Number of menus", pBooksHint: "Menus kept on tables and at the counter", pCost: "Print and lamination cost per menu", pCostHint: "Based on a print shop quote",
+      pTimes: "Reprints per year", pTimesHint: "Each time prices or dishes change", pTrans: "Cost of foreign-language translation", pTransHint: "Per job (enter 0 if none)",
+      pResPaper: "Paper menu, cost for 1 year", pRowPrint: "Reprinting", pRowTrans: "Translation (once)",
+      pRowUs1: "QR menu, first year (Basic + yearly care)", pRowUs2: "QR menu, from the second year",
+      pNote: "With a QR menu you change prices and mark sold-out items from your own phone, so there is no reprinting. Translation into 5 languages is included.",
+      vPaperGood: "You save {x} from the first year", vPaperGood2: "From the second year you save {x} every year", vPaperMeh: "With few menus, the cost difference is small. But you also get a 5-language menu and a visit report.",
+      aOrders: "Delivery app orders (per month)", aOrdersHint: "Total of Grab, ShopeeFood, etc.", aAvg: "Average order value", aAvgHint: "Amount of one order",
+      aRate: "Delivery app fee rate", aRateHint: "Usually 20-30% · set it to your contract", aShift: "Share moved to direct orders", aShiftHint: "If regular customers order directly through a Zalo order form",
+      aResFee: "Fees you pay per month", aRowYear: "Over a year", aRowSave: "Saved by direct orders (per month)", aRowUs: "QR menu monthly care fee",
+      aNote: "Direct ordering means customers send their order by Zalo using the cart order form on the menu (optional, one-time {cart}). You must do the delivery yourself.",
+      vAppGood: "You keep {x} more each month (after the care fee)", vAppMeh: "With these numbers the care fee is higher. The main reasons would be the menu for foreign guests and the visit report.",
+      cmpTitle: "Compare at a glance", cmpSub: "How is it different from paper menus and delivery apps?",
+      colPaper: "Paper menu", colApp: "Delivery app", colUs: "QR menu",
+      rows: [["Menu in 5 languages", "n", "p:Some", "y"], ["Change prices and sold-out items instantly", "n", "y", "y"], ["Reprinting cost", "p:Every time", "n", "y:None"], ["Fee on every order", "y:None", "p:20-30%", "y:None"], ["Customer visit report", "n", "p:Inside the app only", "y"], ["Shown on Google search and shop finder", "n", "p:Inside the app only", "y"]],
+      stTitle: "Just send your shop name", stSub: "We will first look for your menu photos on Google Maps. Start only if you like the sample.",
+      ph: "Shop name (e.g. Sutkkui Bắc Ninh)", stBtn: "Start",
+      sentLead: "Send the text below by Zalo or phone and we will contact you right away.", sentCall: "Call", sentCopy: "Copy text", copied: "Copied ✓",
+      msg: "Hello, I have a question about the QR menu.\nShop name: {shop}",
+      b1: "✓ Free sample first", b2: "✓ 5 languages included", b3: "✓ You edit it yourself",
+      findLink: "Maybe your shop's menu already exists? Search in the shop finder →", back: "← Back to the QR menu intro", unit: "₫", books: "menus", times: "times"
+    }
+  };
+
+  // 언어 고르기: 소개서(/)와 같은 순서 — ?lang= → 소개서에서 고른 언어(localStorage sales-lang) → 휴대폰 언어 → 한국어
+  var LANGS = [["ko", "한국어"], ["vi", "Tiếng Việt"], ["zh", "中文"], ["ja", "日本語"], ["en", "English"]];
+  var SUP = LANGS.map(function (x) { return x[0]; });
+  function store(fn) { try { return fn(localStorage); } catch (e) { return null; } }
+  function detect() {
+    var q = new URLSearchParams(location.search).get("lang");
+    if (SUP.indexOf(q) >= 0) return q;
+    var s = store(function (st) { return st.getItem("sales-lang"); });
+    if (SUP.indexOf(s) >= 0) return s;
+    var ls = navigator.languages || [navigator.language];
+    for (var i = 0; i < ls.length; i++) { var c = (ls[i] || "").toLowerCase().split("-")[0]; if (SUP.indexOf(c) >= 0) return c; }
+    return "ko";
+  }
+  var lang = detect();
+  var $ = function (id) { return document.getElementById(id); };
+  var t = function (k) { return T[lang][k]; };
+  var money = function (n) { return Math.round(n).toLocaleString("vi-VN") + " " + t("unit"); };
+  var fill = function (s, o) { return s.replace(/\{(\w+)\}/g, function (_, k) { return o[k]; }); };
+
+  function render() {
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.querySelectorAll("[data-t]").forEach(function (el) {
+      var v = fill(t(el.dataset.t) || "", { cart: money(P.cart) });
+      if (el.hasAttribute("data-html")) el.innerHTML = v; else el.textContent = v;
+    });
+    $("shop").placeholder = t("ph");
+    $("langs").innerHTML = LANGS.map(function (x) {
+      return '<button type="button" data-l="' + x[0] + '" aria-pressed="' + (x[0] === lang) + '">' + x[1] + "</button>";
+    }).join("");
+    $("cmp").innerHTML = t("rows").map(function (r) {
+      return "<tr><td>" + r[0] + "</td>" + r.slice(1).map(function (c, i) {
+        var k = c.split(":")[0], txt = c.split(":")[1];
+        var mark = k === "y" ? '<span class="y">' + (txt || "✓") + "</span>" : k === "n" ? '<span class="n">✕</span>' : '<span class="p">' + txt + "</span>";
+        return "<td" + (i === 2 ? ' class="us"' : "") + ">" + mark + "</td>";
+      }).join("") + "</tr>";
+    }).join("");
+    calc();
+    if ($("sent").classList.contains("on")) showMsg();
+  }
+
+  function calc() {
+    var books = +$("books").value, cost = +$("cost").value, times = +$("times").value, trans = +$("trans").value;
+    $("vBooks").textContent = books + " " + t("books"); $("vCost").textContent = money(cost);
+    $("vTimes").textContent = times + " " + t("times"); $("vTrans").textContent = money(trans);
+    var print = books * cost * times, paper = print + trans;
+    var us1 = P.basic + P.yearly, us2 = P.yearly;
+    $("rPaper").textContent = money(paper); $("rPrint").textContent = money(print); $("rTrans").textContent = money(trans);
+    $("rUs1").textContent = money(us1); $("rUs2").textContent = money(us2);
+    var vp = $("vPaper");
+    if (paper > us1) { vp.className = "verdict"; vp.textContent = fill(t("vPaperGood"), { x: money(paper - us1) }); }
+    else if (print > us2) { vp.className = "verdict"; vp.textContent = fill(t("vPaperGood2"), { x: money(print - us2) }); }
+    else { vp.className = "verdict meh"; vp.textContent = t("vPaperMeh"); }
+
+    var orders = +$("orders").value, avg = +$("avg").value, rate = +$("rate").value, shift = +$("shift").value;
+    $("vOrders").textContent = orders.toLocaleString("vi-VN"); $("vAvg").textContent = money(avg);
+    $("vRate").textContent = rate + "%"; $("vShift").textContent = shift + "%";
+    var fee = orders * avg * rate / 100, save = fee * shift / 100;
+    $("rFee").textContent = money(fee); $("rFeeYear").textContent = money(fee * 12);
+    $("rSave").textContent = money(save); $("rUsM").textContent = money(P.monthly);
+    var va = $("vApp");
+    if (save > P.monthly) { va.className = "verdict"; va.textContent = fill(t("vAppGood"), { x: money(save - P.monthly) }); }
+    else { va.className = "verdict meh"; va.textContent = t("vAppMeh"); }
+  }
+
+  function showMsg() {
+    var shop = $("shop").value.trim();
+    var m = fill(t("msg"), { shop: shop });
+    var c = lang === "vi" && C.vi ? C.vi : C;
+    $("msg").textContent = m;
+    $("zaloA").href = "https://zalo.me/" + String(c.zalo || c.phone).replace(/\D/g, "");
+    $("telA").href = "tel:" + String(c.phone).replace(/\s/g, "");
+    $("sent").classList.add("on");
+  }
+
+  document.addEventListener("input", function (e) { if (e.target.type === "range") calc(); });
+  $("langs").addEventListener("click", function (e) { var l = e.target.dataset.l; if (l) { lang = l; store(function (st) { st.setItem("sales-lang", l); }); render(); } });
+  [["tabPaper", "calcPaper"], ["tabApp", "calcApp"]].forEach(function (p, i, all) {
+    $(p[0]).addEventListener("click", function () {
+      all.forEach(function (q) { $(q[0]).setAttribute("aria-selected", q === p); $(q[1]).hidden = q !== p; });
+    });
+  });
+  $("form").addEventListener("submit", function (e) { e.preventDefault(); showMsg(); });
+  $("copyB").addEventListener("click", function () {
+    var b = $("copyB"), done = function () { b.textContent = t("copied"); };
+    try { navigator.clipboard.writeText($("msg").textContent).then(done, done); } catch (err) { done(); }
+  });
+  render();
+})();
+</script>
+</body>
+</html>

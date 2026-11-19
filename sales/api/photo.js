@@ -18,15 +18,18 @@ module.exports = async (req, res) => {
     const isJpg = buf[0] === 0xff && buf[1] === 0xd8;
     const isPng = buf[0] === 0x89 && buf[1] === 0x50;
     const isWebp = buf.slice(0, 4).toString() === 'RIFF' && buf.slice(8, 12).toString() === 'WEBP';
-    if (!(isJpg || isPng || isWebp)) return res.status(400).json({ error: 'bad_image' });
+    if (!(isJpg || isPng || isWebp)) {
+      console.warn('photo bad_image', shop, 'bytes=' + buf.length, 'head=' + buf.slice(0, 8).toString('hex'));
+      return res.status(400).json({ error: 'bad_image', bytes: buf.length });
+    }
     const ext = isJpg ? 'jpg' : isPng ? 'png' : 'webp';
     const type = isJpg ? 'image/jpeg' : isPng ? 'image/png' : 'image/webp';
     const b = await S.put(`photos/${shop}/${Date.now()}-${S.rand(3)}.${ext}`, buf, { access: 'public', addRandomSuffix: false, contentType: type, cacheControlMaxAge: 31536000 });
     await L.logEvent(actor, 'photo', shop);
     return res.json({ ok: true, url: b.url });
   } catch (e) {
-    console.error('photo 실패', e && e.message);
-    return res.status(500).json({ error: 'failed' });
+    console.error('photo 실패', shop, e && e.message);
+    return res.status(500).json({ error: 'failed: ' + String((e && e.message) || '').slice(0, 80) });
   }
 };
 module.exports.config = { api: { bodyParser: false } };

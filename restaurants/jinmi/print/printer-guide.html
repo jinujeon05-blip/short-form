@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>진미식당 주방 프린터 설치 설명서</title>
+<style>
+@page { size: A4; margin: 14mm 14mm 16mm; }
+* { box-sizing: border-box; }
+body { font-family: "Malgun Gothic", "Segoe UI", sans-serif; color: #1d1d1f; font-size: 11pt; line-height: 1.55; margin: 0; }
+h1 { font-size: 22pt; margin: 0 0 4px; }
+h2 { font-size: 15pt; margin: 0 0 10px; padding: 6px 12px; background: #8b2b1e; color: #fff; border-radius: 6px; }
+h3 { font-size: 12pt; margin: 14px 0 6px; color: #8b2b1e; }
+.sub { color: #555; margin: 0 0 14px; }
+.page { page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; }
+td, th { border: 1px solid #ccc; padding: 6px 8px; vertical-align: top; text-align: left; }
+th { background: #f4ece9; width: 30%; }
+.box { border: 2px solid #8b2b1e; border-radius: 8px; padding: 10px 14px; margin: 10px 0; background: #fff8f5; }
+.warn { border-color: #c47a00; background: #fff6e0; }
+.ok { border-color: #2e7d32; background: #eef8ee; }
+ol.steps { padding-left: 0; list-style: none; counter-reset: s; margin: 6px 0; }
+ol.steps > li { counter-increment: s; position: relative; padding: 6px 0 6px 40px; border-bottom: 1px dashed #ddd; }
+ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 6px; width: 28px; height: 28px; border-radius: 50%; background: #8b2b1e; color: #fff; font-weight: bold; text-align: center; line-height: 28px; }
+.chk { display: inline-block; width: 14px; height: 14px; border: 1.5px solid #333; margin-right: 6px; vertical-align: -2px; }
+.btn { display: inline-block; border: 1px solid #888; border-radius: 4px; padding: 0 6px; background: #f2f2f2; font-weight: bold; white-space: nowrap; }
+.vi { color: #666; font-size: 9.5pt; }
+.flow { display: flex; align-items: center; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
+.flow div { border: 2px solid #8b2b1e; border-radius: 8px; padding: 8px 10px; text-align: center; font-size: 10pt; background: #fff; flex: 1; min-width: 90px; }
+.flow span { font-size: 16pt; color: #8b2b1e; }
+.imgs { display: flex; gap: 10px; align-items: flex-start; }
+.imgs figure { margin: 0; flex: 1; }
+.imgs img { width: 100%; border-radius: 6px; border: 1px solid #ccc; }
+figcaption { font-size: 9pt; color: #555; text-align: center; }
+.write { display: inline-block; min-width: 180px; border-bottom: 1px solid #333; height: 18px; }
+.foot { font-size: 9pt; color: #777; margin-top: 12px; }
+</style></head><body>
+
+<!-- 1쪽 -->
+<section class="page">
+  <h1>진미식당 주방 주문 프린터 설치 설명서</h1>
+  <p class="sub">손님이 QR 메뉴판으로 보낸 주문을 주방 화면에서 받고, <b>[인쇄]</b> 버튼으로 주문서를 뽑는 방법입니다.<br>
+  설치하는 분은 위에서부터 차례대로 하면서 <span class="chk"></span> 칸에 표시해 주세요.</p>
+
+  <h3>전체 흐름</h3>
+  <div class="flow">
+    <div>손님 폰<br><small>QR 메뉴판에서 주문</small></div><span>→</span>
+    <div>인터넷</div><span>→</span>
+    <div>주방 태블릿/폰<br><small>주방 화면 + RawBT 앱</small></div><span>→</span>
+    <div>가게 와이파이 공유기<br><small>(인터넷 공유기)</small></div><span>→</span>
+    <div>ZyWell 프린터<br><small>랜선(LAN)으로 연결</small></div>
+  </div>
+
+  <h3>이 가게 프린터 (사진으로 확인함)</h3>
+  <div class="imgs">
+    <figure><img src="printer-label.jpg"><figcaption>프린터 바닥 라벨</figcaption></figure>
+    <div style="flex:1.1">
+      <table>
+        <tr><th>제조사·모델</th><td>ZyWell <b>ZY-Q822</b> (영수증 감열 프린터)</td></tr>
+        <tr><th>용지 폭</th><td><b>80mm</b></td></tr>
+        <tr><th>연결 방식</th><td><b>USB + LAN(랜선)</b><br><b style="color:#b00">블루투스 없음</b></td></tr>
+        <tr><th>지금 상태</th><td>뒤쪽에 전원선과 <b>랜선이 꽂혀 있음</b></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box warn"><b>중요:</b> 이 프린터는 블루투스가 없습니다. 그래서 <b>"랜선 → 와이파이 공유기 → 같은 와이파이에 붙은 안드로이드 기기"</b> 방식으로 연결합니다. 휴대폰 블루투스 설정에서는 이 프린터가 보이지 않는 것이 정상입니다.</div>
+
+  <h3>준비물</h3>
+  <p><span class="chk"></span>ZyWell 프린터(전원 켜짐, 80mm 감열 용지 들어 있음)<br>
+  <span class="chk"></span>프린터 랜선이 <b>가게 와이파이 공유기</b>에 꽂혀 있음<br>
+  <span class="chk"></span>주방에 둘 <b>안드로이드</b> 태블릿 또는 폰 1대 (아이폰·아이패드는 마지막 쪽 '다른 방법' 참고)<br>
+  <span class="chk"></span>주방 화면 PIN 6자리 (QR 메뉴판 담당자에게 받음)<br>
+  <span class="chk"></span>주방 화면 주소: <b>https://qrmenuasia.com/kitchen/?shop=jinmi</b></p>
+</section>
+
+<!-- 2쪽 -->
+<section class="page">
+  <h2>1단계 · 프린터 주소(IP) 알아내기 — 약 3분</h2>
+  <p>안드로이드 기기가 프린터를 찾으려면 프린터의 <b>IP 주소</b>(인터넷 안의 집 주소 같은 숫자, 예: 192.168.1.100)가 필요합니다. 프린터가 스스로 종이에 찍어 줍니다.</p>
+  <div class="imgs">
+    <figure style="flex:1"><img src="printer-back.jpg"><figcaption>프린터 뒤쪽: 왼쪽 검은 선 = 전원, 가운데 회색 선 = 랜선</figcaption></figure>
+  </div>
+  <ol class="steps">
+    <li><span class="chk"></span>프린터 뒤쪽 회색 <b>랜선</b>의 다른 쪽 끝이 <b>와이파이 공유기</b>(인터넷 공유기)에 꽂혀 있는지 따라가 봅니다. 다른 계산기(POS)에 바로 꽂혀 있다면 설치 담당자에게 알려 주세요.</li>
+    <li><span class="chk"></span>프린터 전원을 <b>끕니다</b>.</li>
+    <li><span class="chk"></span>프린터 앞의 <b>FEED(종이 올림) 버튼</b>을 누른 채로 전원을 <b>켭니다</b>. 삐 소리가 나거나 종이가 나오기 시작하면 버튼에서 손을 뗍니다.</li>
+    <li><span class="chk"></span>나온 종이(자가 진단표)에서 <b>IP Address</b> 줄을 찾아 아래에 적습니다.<br>
+      프린터 IP: <span class="write"></span> &nbsp; 포트(Port): <b>9100</b> (보통 이 숫자)</li>
+    <li><span class="chk"></span>안드로이드 기기에서 <b>설정 → 와이파이</b>를 열고, 연결된 와이파이를 눌러 기기의 IP 주소를 봅니다.<br>
+      기기 IP: <span class="write"></span></li>
+  </ol>
+  <div class="box"><b>숫자 비교:</b> 두 IP의 <b>앞 세 덩어리</b>가 같아야 합니다.<br>
+  예) 프린터 <b>192.168.1</b>.100 / 기기 <b>192.168.1</b>.25 → 같음 → 2단계로 가세요.<br>
+  예) 프린터 <b>192.168.123</b>.100 / 기기 <b>192.168.1</b>.25 → 다름 → 프린터 IP를 바꿔야 합니다. <b>설치 담당자(컴퓨터 작업 필요)</b>에게 맡기세요.</div>
+  <div class="box warn"><b>주의:</b> 이 프린터를 이미 다른 계산기(POS)가 쓰고 있다면 프린터 IP를 마음대로 바꾸지 마세요. 그 계산기 출력이 멈출 수 있습니다. IP를 바꾸지 않고 같이 쓰는 것은 괜찮습니다.</div>
+  <p class="vi">FEED 버튼 이름은 모델마다 'FEED' 또는 '↑' 표시입니다. 자가 진단표가 안 나오면 전원을 끄고 다시 한 번 해 보세요.</p>
+</section>
+
+<!-- 3쪽 -->
+<section class="page">
+  <h2>2단계 · 안드로이드 기기에 RawBT 앱 설정 — 약 5분</h2>
+  <p><b>RawBT</b>는 주방 화면이 만든 주문서를 프린터로 보내 주는 <b>무료 앱</b>입니다. (진미식당 점주님 폰에는 이미 설치되어 있음)</p>
+  <ol class="steps">
+    <li><span class="chk"></span>기기를 <b>프린터와 같은 가게 와이파이</b>에 연결합니다(1단계에서 숫자 비교 통과).</li>
+    <li><span class="chk"></span>Play 스토어에서 <b>RawBT</b>를 찾아 설치합니다. (이미 있으면 건너뜀) — 유료 결제 화면이 나오면 누르지 말고 닫으세요. 무료로 충분합니다.</li>
+    <li><span class="chk"></span>RawBT를 열고 <b>설정(톱니바퀴)</b>으로 갑니다.</li>
+    <li><span class="chk"></span><b>연결 방법(Connection)</b>을 <b>네트워크 / LAN·Wi-Fi (TCP/IP)</b>로 고릅니다. <b>블루투스가 아닙니다.</b></li>
+    <li><span class="chk"></span><b>IP 주소</b> 칸에 1단계에서 적은 프린터 IP, <b>포트</b>에 <b>9100</b>을 넣습니다.</li>
+    <li><span class="chk"></span>용지·프린터 폭 설정이 있으면 <b>80mm</b>로 맞춥니다.</li>
+    <li><span class="chk"></span>RawBT 안의 <b>테스트 인쇄(Test)</b>를 눌러 종이가 나오는지 봅니다. → 나오면 2단계 끝.</li>
+  </ol>
+  <div class="box ok"><b>여기까지 되면</b> 프린터 연결은 끝났습니다. 남은 건 주방 화면에서 "RawBT로 보내기"를 고르는 것뿐입니다.</div>
+  <p class="vi">앱 버전에 따라 메뉴 이름이 조금 다를 수 있습니다(예: Connection method, Network, Printer IP). 같은 뜻의 칸을 찾으면 됩니다.</p>
+</section>
+
+<!-- 4쪽 -->
+<section class="page">
+  <h2>3단계 · 주방 화면 설정과 시험 인쇄 — 약 3분</h2>
+  <p>주방 화면은 베트남어/한국어로 바꿀 수 있습니다. 괄호 안은 베트남어 화면의 버튼 이름입니다.</p>
+  <ol class="steps">
+    <li><span class="chk"></span>같은 안드로이드 기기의 <b>크롬</b>에서 <b>qrmenuasia.com/kitchen/?shop=jinmi</b> 를 엽니다. (크롬 메뉴 ⋮ → '홈 화면에 추가'를 해 두면 다음부터 아이콘으로 열림)</li>
+    <li><span class="chk"></span><b>PIN 6자리</b>를 넣고 <span class="btn">들어가기</span> <span class="vi">(Vào)</span>. 한 번 들어가면 60일 동안 다시 묻지 않습니다.</li>
+    <li><span class="chk"></span><span class="btn">▶ 시작</span> <span class="vi">(▶ Bắt đầu)</span>을 누릅니다. 새 주문 알림 소리가 켜지고 화면이 꺼지지 않게 됩니다.</li>
+    <li><span class="chk"></span>오른쪽 위 <span class="btn">⚙</span>를 눌러 <b>이 기기 설정</b> <span class="vi">(Cài đặt máy này)</span>을 엽니다.</li>
+    <li><span class="chk"></span><b>프린터</b> <span class="vi">(Máy in)</span> → <b>블루투스 프린터 (RawBT 앱)</b> <span class="vi">(Máy in Bluetooth (app RawBT))</span>를 고릅니다.<br>
+      <small>이름은 '블루투스'지만 실제로는 <b>RawBT 앱으로 보낸다</b>는 뜻입니다. RawBT가 2단계에서 정한 랜(LAN) 방식으로 프린터에 보내므로 이 프린터도 이것을 고르면 됩니다.</small></li>
+    <li><span class="chk"></span><b>용지 폭</b> <span class="vi">(Khổ giấy)</span> → <b>80mm</b>.</li>
+    <li><span class="chk"></span><b>기기 이름</b> <span class="vi">(Tên máy)</span>에 '주방 1'처럼 적습니다(선택).</li>
+    <li><span class="chk"></span><span class="btn">시험 인쇄</span> <span class="vi">(In thử)</span>를 누릅니다. 처음 한 번은 "RawBT로 열까요?"라고 물을 수 있습니다 → <b>항상 허용</b>. 프린터에서 '시험' 주문서가 나오면 성공입니다.</li>
+    <li><span class="chk"></span>(선택) <b>새 주문 자동 인쇄</b> <span class="vi">(Tự in đơn mới)</span>를 켭니다. 기기에 따라 자동으로 안 나올 수 있으니, 그때는 주문 카드의 <span class="btn">인쇄</span>를 누르면 됩니다.</li>
+    <li><span class="chk"></span><span class="btn">닫기</span> <span class="vi">(Đóng)</span>.</li>
+  </ol>
+  <div class="box ok"><b>설치 완료 확인:</b> 손님 자리 QR로 실제 주문을 1건 보내 보고, 주방 화면에 뜬 주문을 <span class="btn">인쇄</span>해서 테이블 번호·메뉴·수량이 종이에 나오는지 봅니다.</div>
+</section>
+
+<!-- 5쪽 -->
+<section class="page">
+  <h2>매일 쓰는 법</h2>
+  <ol class="steps">
+    <li>영업 시작 때 프린터 전원을 켜고, 주방 기기에서 주방 화면을 열어 <span class="btn">▶ 시작</span>.</li>
+    <li>손님이 주문하면 "띵" 소리와 함께 <b>새 주문</b> <span class="vi">(Đơn mới)</span> 칸에 카드가 뜹니다.</li>
+    <li>카드의 <span class="btn">인쇄</span> <span class="vi">(In)</span> → 주문서가 나옵니다.</li>
+    <li>요리를 시작하면 <span class="btn">접수</span> <span class="vi">(Nhận đơn)</span>, 다 나가면 <span class="btn">완료</span> <span class="vi">(Xong)</span>. 잘못 눌렀으면 <span class="btn">되돌리기</span> <span class="vi">(Hoàn tác)</span>.</li>
+    <li>주방 기기는 <b>충전기에 꽂아 두고</b>, 와이파이를 끄지 마세요.</li>
+  </ol>
+
+  <h2 style="margin-top:16px">안 될 때 확인할 것</h2>
+  <table>
+    <tr><th>증상</th><td><b>확인할 것</b></td></tr>
+    <tr><th>아무것도 안 나옴</th><td>① 프린터 전원·용지 ② 프린터 랜선이 공유기에 꽂혀 있는지(공유기 쪽 불이 깜빡이는지) ③ 기기가 <b>가게 와이파이</b>에 붙어 있는지(모바일 데이터 아님) ④ RawBT 테스트 인쇄가 되는지</td></tr>
+    <tr><th>어제까지 됐는데 오늘 안 됨</th><td>공유기를 껐다 켜면 프린터 IP가 바뀔 수 있습니다. 1단계로 IP를 다시 찍어 RawBT의 IP를 고칩니다. (계속 바뀌면 설치 담당자가 IP를 고정)</td></tr>
+    <tr><th>글자가 너무 작거나 한쪽에 몰림</th><td>주방 화면 ⚙ 용지 폭이 <b>80mm</b>인지</td></tr>
+    <tr><th>하얀 종이만 나옴</th><td>감열 용지를 앞뒤 뒤집어 넣기(손톱으로 긁어 검게 되는 면이 인쇄 면)</td></tr>
+    <tr><th>주방 화면에 '연결 끊김'</th><td>기기 인터넷 확인. 저절로 다시 붙습니다.</td></tr>
+    <tr><th>주문이 안 들어옴</th><td>화면 위에 '온라인 주문이 꺼져 있어요'가 보이면 QR 메뉴판 담당자에게 켜 달라고 요청</td></tr>
+  </table>
+
+  <h2 style="margin-top:16px">다른 방법 · 아이패드/PC를 쓸 때</h2>
+  <p>RawBT는 안드로이드 전용입니다. 아이패드·윈도우 PC는 주방 화면 ⚙ → 프린터 <b>브라우저 인쇄</b> <span class="vi">(In qua trình duyệt)</span>를 고르고, 보통 문서처럼 인쇄 창에서 프린터를 골라 찍습니다. 윈도우 PC는 <b>ZyWell 프린터 드라이버 설치</b>(USB 또는 LAN)가 먼저 필요해서 설치 담당자의 작업이 필요합니다. 안드로이드 방식을 권합니다.</p>
+
+  <h3>설치 기록</h3>
+  <p>설치 날짜: <span class="write"></span> &nbsp; 설치한 사람: <span class="write"></span><br>
+  프린터 IP: <span class="write"></span> &nbsp; 주방 기기: <span class="write"></span></p>
+  <p class="foot">PIN 번호는 이 종이에 적지 마세요. · 문서: QR 메뉴판 · 진미식당 주방 프린터(ZyWell ZY-Q822) 설치 설명서</p>
+</section>
+
+</body></html>

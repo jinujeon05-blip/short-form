@@ -1,0 +1,1216 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Thực đơn QR – Cẩm nang dành cho chủ quán</title>
+<style>
+  :root {
+    --ink: #2a2522; --soft: #6b625b; --bg: #f3ede4; --paper: #fffaf3; --line: #eadfce;
+    --main: #e8601c; --main-soft: #fde9dc; --green: #2f8f5b; --green-soft: #e3f3e9;
+    --blue: #2b6cb0; --blue-soft: #e4eef9; --red: #e03131; --red-soft: #fde4e4; --gold: #f2c12e;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Malgun Gothic", "맑은 고딕", sans-serif; font-size: 13pt; line-height: 1.55; word-break: keep-all; counter-reset: pg; }
+  .page { position: relative; width: 210mm; height: 297mm; margin: 0 auto 10mm; padding: 16mm 15mm 18mm; background: var(--paper); overflow: hidden; page-break-after: always; break-after: page; counter-increment: pg; }
+  .page:not(.cover)::after { content: counter(pg); position: absolute; bottom: 8mm; left: 0; right: 0; text-align: center; font-size: 11pt; color: var(--soft); }
+  .page:not(.cover)::before { content: "Thực đơn QR – Cẩm nang chủ quán"; position: absolute; top: 7mm; right: 15mm; font-size: 9.5pt; color: #b3a796; }
+  h1, h2, h3, p { margin: 0; }
+  h2 { font-size: 21pt; line-height: 1.3; margin-bottom: 4mm; }
+  h2 .no { display: inline-block; min-width: 13mm; padding: 0 2.5mm; margin-right: 2.5mm; border-radius: 3mm; background: var(--main); color: #fff; font-size: 16pt; text-align: center; vertical-align: 2px; }
+  h3 { font-size: 15.5pt; margin: 0 0 2mm; }
+  p + p { margin-top: 2mm; }
+  b.hl { background: linear-gradient(transparent 55%, #ffe08a 55%); }
+
+  /* 표지 */
+  .cover { padding: 0; background: linear-gradient(160deg, #e8601c 0%, #f08a3c 55%, #f6b15d 100%); color: #fff; }
+  .cover .in { position: absolute; inset: 0; padding: 26mm 18mm; display: flex; flex-direction: column; }
+  .cover .tag { align-self: flex-start; padding: 2mm 5mm; border-radius: 99px; background: rgba(255,255,255,.22); font-size: 13pt; font-weight: 700; }
+  .cover h1 { margin-top: 10mm; font-size: 40pt; line-height: 1.22; letter-spacing: -1px; }
+  .cover .sub { margin-top: 6mm; font-size: 16pt; opacity: .95; }
+  .cover .phones { position: absolute; right: 16mm; bottom: 52mm; display: flex; gap: 6mm; align-items: flex-end; }
+  .cover .phones .phone { width: 54mm; transform: rotate(-4deg); }
+  .cover .phones .phone + .phone { width: 47mm; transform: rotate(5deg); margin-bottom: 14mm; }
+  .cover .bottom { margin-top: auto; font-size: 13pt; line-height: 1.7; }
+  .cover .bottom b { font-size: 17pt; display: block; }
+
+  /* 폰 틀 */
+  .phone { display: block; width: 100%; border: 2.2mm solid #1d1b1a; border-radius: 6mm; overflow: hidden; background: #1d1b1a; box-shadow: 0 2mm 6mm rgba(60,30,10,.18); }
+  .phone img { display: block; width: 100%; border-radius: 3.6mm; }
+  .card-img { display: block; width: 100%; border-radius: 3mm; box-shadow: 0 2mm 6mm rgba(60,30,10,.18); }
+
+  /* 장 시작 */
+  .chap { background: var(--main); color: #fff; }
+  .chap::before, .chap::after { color: rgba(255,255,255,.75) !important; }
+  .chap .big { font-size: 80pt; font-weight: 800; line-height: 1; opacity: .35; margin-top: 18mm; }
+  .chap h2 { font-size: 34pt; margin-top: 2mm; }
+  .chap .lead { font-size: 16pt; margin-top: 4mm; }
+  .chap .learn { margin-top: 14mm; background: #fff; color: var(--ink); border-radius: 5mm; padding: 8mm 9mm; }
+  .chap .learn h3 { color: var(--main); }
+  .chap .box { color: var(--ink); }
+  .chap .learn ol { margin: 0; padding-left: 7mm; font-size: 14.5pt; }
+  .chap .learn li + li { margin-top: 1.5mm; }
+
+  /* 배우기 칸 */
+  .lesson { display: grid; grid-template-columns: 47mm 1fr; gap: 7mm; align-items: start; }
+  .lesson + .lesson { margin-top: 8mm; padding-top: 7mm; border-top: 0.6mm dashed var(--line); }
+  .lesson.two { grid-template-columns: 1fr 1fr; justify-items: center; }
+  .lesson.two > div { width: 56mm; max-width: 100%; }
+  .lesson.solo { grid-template-columns: 66mm 1fr; }
+  .lesson.wide { grid-template-columns: 68mm 1fr; }
+  .shots { display: flex; gap: 4mm; }
+  .shots .phone { flex: 1; }
+  .cap { margin-top: 2mm; text-align: center; font-size: 10.5pt; color: var(--soft); }
+  ol.num { list-style: none; margin: 3mm 0 0; padding: 0; counter-reset: n; }
+  ol.num > li { position: relative; padding-left: 11mm; min-height: 9mm; counter-increment: n; }
+  ol.num > li + li { margin-top: 2.6mm; }
+  ol.num > li::before { content: counter(n); position: absolute; left: 0; top: 0.4mm; width: 8mm; height: 8mm; border-radius: 50%; background: var(--red); color: #fff; font-weight: 800; font-size: 13pt; line-height: 8mm; text-align: center; }
+  ol.step { list-style: none; margin: 3mm 0 0; padding: 0; counter-reset: s; }
+  ol.step > li { position: relative; padding: 2.4mm 3mm 2.4mm 16mm; background: #fff; border: 0.4mm solid var(--line); border-radius: 3mm; counter-increment: s; }
+  ol.step > li + li { margin-top: 2mm; }
+  ol.step > li::before { content: "Bước " counter(s); position: absolute; left: 2.6mm; top: 2.6mm; font-size: 9.5pt; font-weight: 800; color: var(--main); }
+  .box { margin-top: 4mm; padding: 3.5mm 4.5mm; border-radius: 3.5mm; font-size: 12.5pt; }
+  .box b:first-child { display: block; font-size: 13pt; margin-bottom: 0.6mm; }
+  .tip { background: var(--green-soft); border-left: 2mm solid var(--green); }
+  .tip b:first-child { color: var(--green); }
+  .warn { background: var(--red-soft); border-left: 2mm solid var(--red); }
+  .warn b:first-child { color: var(--red); }
+  .note { background: var(--blue-soft); border-left: 2mm solid var(--blue); }
+  .note b:first-child { color: var(--blue); }
+  .say { margin-top: 4mm; padding: 3.5mm 5mm; border-radius: 5mm 5mm 5mm 1mm; background: #fff; border: 0.5mm solid var(--main); font-size: 12.5pt; }
+  .say::before { content: "🗣 Hãy nói với khách như sau"; display: block; font-size: 10pt; font-weight: 800; color: var(--main); margin-bottom: 0.6mm; }
+  .tagline { display: inline-block; padding: 0.5mm 3mm; border-radius: 99px; font-size: 10.5pt; font-weight: 700; vertical-align: 2px; }
+  .t-base { background: var(--green-soft); color: var(--green); }
+  .t-ask { background: var(--blue-soft); color: var(--blue); }
+  .t-self { background: var(--main-soft); color: var(--main); }
+
+  /* 목차·카드 */
+  .toc { list-style: none; margin: 5mm 0 0; padding: 0; }
+  .toc li { display: flex; gap: 5mm; align-items: center; padding: 3mm 0; border-bottom: 0.4mm solid var(--line); font-size: 14.5pt; }
+  .toc .n { flex: none; width: 11mm; height: 11mm; border-radius: 3mm; background: var(--main); color: #fff; font-weight: 800; text-align: center; line-height: 11mm; }
+  .toc small { display: block; font-size: 11pt; color: var(--soft); line-height: 1.4; }
+  .toc .soon .n { background: #cbbfae; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 5mm; }
+  .card { background: #fff; border: 0.4mm solid var(--line); border-radius: 4mm; padding: 4mm 5mm; }
+  .card .ic { font-size: 22pt; line-height: 1.2; }
+  .card h3 { font-size: 14pt; margin: 1mm 0 0.5mm; }
+  .card p { font-size: 12pt; color: var(--soft); line-height: 1.5; }
+  .flow { display: flex; align-items: stretch; gap: 3mm; margin-top: 5mm; }
+  .flow > div { flex: 1; background: #fff; border: 0.4mm solid var(--line); border-radius: 4mm; padding: 4mm 3mm; text-align: center; font-size: 12.5pt; }
+  .flow > div .ic { font-size: 28pt; display: block; }
+  .flow > i { align-self: center; font-style: normal; font-size: 18pt; color: var(--main); font-weight: 800; }
+  table.t { width: 100%; border-collapse: collapse; margin-top: 4mm; font-size: 12pt; background: #fff; }
+  table.t th, table.t td { border: 0.4mm solid var(--line); padding: 2.2mm 3mm; text-align: left; vertical-align: top; }
+  table.t th { background: var(--main-soft); }
+  .check { list-style: none; margin: 3mm 0 0; padding: 0; }
+  .check li { padding-left: 10mm; position: relative; font-size: 13.5pt; }
+  .check li + li { margin-top: 2mm; }
+  .check li::before { content: ""; position: absolute; left: 0; top: 1mm; width: 6mm; height: 6mm; border: 0.6mm solid var(--main); border-radius: 1.2mm; background: #fff; }
+  .url { display: inline-block; padding: 1mm 3mm; border-radius: 2mm; background: #fff; border: 0.4mm solid var(--line); font-weight: 700; color: var(--blue); }
+
+  .tablet { display: block; max-width: 160mm; margin: 0 auto; border: 2mm solid #1d1b1a; border-radius: 4mm; overflow: hidden; background: #1d1b1a; box-shadow: 0 2mm 6mm rgba(60,30,10,.18); }
+  .tablet img { display: block; width: 100%; }
+  .phrase { margin-top: 3mm; background: #fff; border: 0.4mm solid var(--line); border-radius: 4mm; padding: 3mm 5mm; }
+  .phrase h3 { font-size: 13.5pt; margin-bottom: 1mm; }
+  .phrase p { margin: 1.2mm 0 0; font-size: 12.5pt; line-height: 1.5; padding-left: 12mm; position: relative; }
+  .phrase p::before { position: absolute; left: 0; top: 0.5mm; font-size: 9pt; font-weight: 800; padding: 0 1.5mm; border-radius: 1.5mm; color: #fff; }
+  .phrase .ko::before { content: "Hàn"; background: var(--main); }
+  .phrase .vi::before { content: "Việt"; background: var(--red); }
+  .phrase .en::before { content: "Eng"; background: var(--blue); }
+  .phrase .vi { color: #7a1f1f; } .phrase .en { color: var(--blue); font-size: 11.5pt; }
+  .faq { margin-top: 3.5mm; padding: 3mm 4.5mm; background: #fff; border: 0.4mm solid var(--line); border-radius: 3.5mm; }
+  .faq > b { display: block; font-size: 13.5pt; color: var(--main); }
+  .faq p { margin-top: 1mm; font-size: 12.5pt; }
+  table.fill td { height: 13mm; vertical-align: middle; color: #9a8f82; word-break: break-all; }
+
+  /* 베트남어판: 글이 길어서 상자·표를 조금 줄임 */
+  .box { font-size: 12pt; margin-top: 3mm; } table.t { font-size: 11.5pt; } table.t th, table.t td { padding: 1.8mm 2.6mm; }
+  .faq { margin-top: 2.6mm; padding: 2.4mm 4mm; } .faq p { font-size: 12pt; } .faq > b { font-size: 13pt; }
+  .phrase { margin-top: 2.6mm; padding: 2.6mm 4.5mm; } .phrase p { font-size: 12pt; } .phrase .en { font-size: 11pt; }
+  .lesson.two > div { width: 52mm; }
+  .card .check li { font-size: 11.5pt !important; } .check li + li { margin-top: 1.4mm; }
+  /* 폰·좁은 화면에서 볼 때 */
+  @media screen and (max-width: 820px) {
+    body { font-size: 17px; }
+    .page { width: auto; height: auto; min-height: 0; margin: 0 0 14px; padding: 34px 16px 44px; overflow: visible; }
+    .page:not(.cover)::before { right: 16px; top: 10px; }
+    .cover { min-height: 640px; }
+    .cover .in { position: relative; padding: 40px 22px; min-height: 640px; }
+    .cover h1 { font-size: 34px; }
+    .cover .phones { right: 12px; bottom: 120px; }
+    .cover .phones .phone { width: 120px; } .cover .phones .phone + .phone { width: 105px; }
+    .cover .bottom { margin-top: 260px; }
+    .chap .big { margin-top: 10px; font-size: 64px; }
+    .chap h2 { font-size: 30px; }
+    .lesson, .lesson.wide, .lesson.two, .lesson.solo { grid-template-columns: 1fr; }
+    .lesson > .shots, .lesson > div:first-child > .phone { max-width: 300px; }
+    .grid { grid-template-columns: 1fr !important; }
+    .shots { flex-direction: column; } .shots > div { max-width: 300px; }
+    ol.num[style] { columns: 1 !important; }
+    .lesson[style] { grid-template-columns: 1fr !important; }
+    .lesson > div[style] { flex-direction: column; }
+    .flow { flex-direction: column; } .flow > i { transform: rotate(90deg); }
+  }
+  @media print { body { background: none; } .page { margin: 0; box-shadow: none; } }
+  @media screen and (min-width: 821px) { body { padding: 10mm 0; } .page { box-shadow: 0 2mm 8mm rgba(0,0,0,.12); } }
+</style>
+</head>
+<body>
+
+<!-- ───────── 표지 ───────── -->
+<section class="page cover">
+  <div class="in">
+    <span class="tag">Sách tặng chủ quán đã ký hợp đồng</span>
+    <h1>Thực đơn QR<br>Cẩm nang chủ quán</h1>
+    <p class="sub">Cách dùng · Vận hành quán · Lời nói với khách · Mẹo quảng bá<br>Xem từng hình và làm theo từ từ nhé.</p>
+    <div class="phones">
+      <span class="phone"><img src="img/vi/g01-home.jpg" alt="Màn hình thực đơn của khách"></span>
+      <span class="phone"><img src="img/vi/o02-editor.jpg" alt="Màn hình chủ quán"></span>
+    </div>
+    <p class="bottom"><b>QR MENU · qrmenuasia.com</b>Bản tiếng Việt · Tháng 11/2026</p>
+  </div>
+</section>
+
+<!-- ───────── 이 책 보는 법 + 차례 ───────── -->
+<section class="page">
+  <h2>Cách đọc cuốn sách này</h2>
+  <div class="grid" style="margin-top:2mm">
+    <div class="card"><div class="ic">🔴</div><h3>Số trong vòng tròn đỏ</h3><p>Số đỏ trong hình trùng với số ở phần giải thích bên cạnh. Cứ xem theo thứ tự số.</p></div>
+    <div class="card"><div class="ic">💡</div><h3>Khung xanh lá = Mẹo hay</h3><p>Những mẹo nhỏ giúp việc buôn bán thuận lợi hơn.</p></div>
+    <div class="card"><div class="ic">⚠️</div><h3>Khung đỏ = Cẩn thận</h3><p>Những lỗi hay gặp. Anh/chị nhớ đọc kỹ.</p></div>
+    <div class="card"><div class="ic">🗣</div><h3>Bong bóng lời nói = Nói với khách</h3><p>Cứ đọc đúng như vậy là được. Dùng để hướng dẫn nhân viên cũng tốt.</p></div>
+  </div>
+  <div class="box tip" style="margin-top:8mm"><b>💡 Nên đọc thế nào</b>Anh/chị không cần đọc từ đầu đến cuối. Hôm nay cần phần nào thì mở phần đó, vừa xem hình vừa bấm thử trên điện thoại. Khi dạy nhân viên, hãy cùng xem chương 2 và chương 8.</div>
+</section>
+
+<section class="page">
+  <h2>Mục lục</h2>
+  <ol class="toc">
+    <li><span class="n">1</span><div>Bắt đầu<small>Thực đơn QR là gì, quán mình được lợi gì</small></div></li>
+    <li><span class="n">2</span><div>Làm quen màn hình của khách<small>Ngôn ngữ · hình ảnh · giỏ món · đơn gọi món · gọi nhân viên · món đã gọi</small></div></li>
+    <li><span class="n">3</span><div>Màn hình chủ quán: sửa thực đơn<small>Đăng nhập · giá · hết món · hình ảnh · thông tin quán · ưu đãi hôm nay</small></div></li>
+    <li><span class="n">4</span><div>Màn hình bếp và máy in hóa đơn<small>Nhận đơn · sơ đồ bàn · kết nối máy in</small></div></li>
+    <li><span class="n">5</span><div>Xem số liệu: doanh thu và lượt xem<small>Doanh thu theo ngày · theo món, báo cáo lượt xem</small></div></li>
+    <li><span class="n">6</span><div>Giữ chân khách quen<small>Tích tem · hộp góp ý · đánh giá Google</small></div></li>
+    <li><span class="n">7</span><div>Mẹo vận hành quán<small>Chỗ đặt thẻ QR · huấn luyện nhân viên · bảng kiểm tra hằng ngày</small></div></li>
+    <li><span class="n">8</span><div>Lời nói với khách<small>Câu mẫu theo từng tình huống</small></div></li>
+    <li><span class="n">9</span><div>Mẹo quảng bá quán<small>Hình mạng xã hội · Google Maps · Zalo · Facebook</small></div></li>
+    <li><span class="n">10</span><div>Câu hỏi thường gặp · Khi gặp sự cố<small>Không có tiếng · máy in · tem · liên hệ</small></div></li>
+  </ol>
+</section>
+
+<!-- ───────── 1장 ───────── -->
+<section class="page chap">
+  <div class="big">01</div>
+  <h2>Bắt đầu</h2>
+  <p class="lead">Thực đơn QR là thực đơn của quán mình nằm ngay trong điện thoại của khách.<br>Không khó đâu. Chỉ cần đọc chương này là hôm nay đã dùng được.</p>
+  <div class="learn">
+    <h3>Trong chương này</h3>
+    <ol>
+      <li>Thực đơn QR dùng thế nào?</li>
+      <li>Quán mình được lợi gì?</li>
+      <li>Quán mình đang bật những chức năng nào?</li>
+      <li>5 việc nên làm ngay ngày đầu</li>
+    </ol>
+  </div>
+  <div style="position:absolute;right:15mm;bottom:22mm;width:62mm"><img class="card-img" src="img/common/qr-card.jpg" alt="Thẻ QR đặt trên bàn"><p class="cap" style="color:#fff">Thẻ QR đặt trên bàn (ví dụ: quán Jinmi – 진미식당)</p></div>
+</section>
+
+<section class="page">
+  <h2><span class="no">1-1</span>Thực đơn QR dùng thế này</h2>
+  <p>Khách <b class="hl">không cần cài ứng dụng.</b> Chỉ cần có camera điện thoại.</p>
+  <div class="flow">
+    <div><span class="ic">🪑</span>Khách ngồi vào bàn</div><i>›</i>
+    <div><span class="ic">📷</span>Dùng camera điện thoại quét thẻ QR trên bàn</div><i>›</i>
+    <div><span class="ic">📱</span>Bấm vào đường link hiện trên màn hình, thực đơn sẽ mở ra</div><i>›</i>
+    <div><span class="ic">🍲</span>Xem hình rồi chọn món</div>
+  </div>
+  <div class="lesson wide" style="margin-top:8mm">
+    <div><span class="phone"><img src="img/vi/g01-home.jpg" alt="Màn hình khách thấy đầu tiên"></span><p class="cap">Màn hình đầu tiên khi khách quét QR</p></div>
+    <div>
+      <h3>Địa chỉ thực đơn của quán</h3>
+      <p>Mỗi quán có một địa chỉ riêng.</p>
+      <p style="margin-top:2mm"><span class="url">https://tenquan.qrmenuasia.com</span></p>
+      <p style="margin-top:2mm;font-size:12pt;color:var(--soft)">Ví dụ: quán Jinmi → jinmi.qrmenuasia.com</p>
+      <div class="box tip"><b>💡 Mẹo hay</b>Hãy dán địa chỉ này vào phần giới thiệu Zalo, Facebook của quán. Khách chưa đến quán cũng xem được thực đơn.</div>
+      <div class="box note"><b>📌 Anh/chị nên biết</b>Thẻ QR đặt ở mỗi bàn có <b>số bàn</b>. Vì vậy khách không phải tự nhập số bàn, nó tự vào đơn gọi món.</div>
+      <div class="box warn"><b>⚠️ Cẩn thận</b>Nếu chuyển thẻ QR sang bàn khác thì số bàn sẽ bị sai. Luôn để thẻ đúng chỗ của nó.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">1-2</span>8 điều tốt cho quán mình</h2>
+  <div class="grid">
+    <div class="card"><div class="ic">🌏</div><h3>Khách nước ngoài tự gọi món</h3><p>Hiển thị 5 ngôn ngữ: Hàn, Anh, Trung, Nhật, Việt. Tự đổi theo ngôn ngữ điện thoại của khách.</p></div>
+    <div class="card"><div class="ic">📸</div><h3>Xem hình rồi chọn ngay</h3><p>Bấm vào hình món để xem to. Khách đỡ phải hỏi “món này là món gì?”.</p></div>
+    <div class="card"><div class="ic">✏️</div><h3>Sửa giá ngay trên điện thoại</h3><p>Đổi giá không cần in lại thực đơn. Sửa rồi bấm lưu, trong vòng 1 phút là đổi.</p></div>
+    <div class="card"><div class="ic">🚫</div><h3>Báo hết món</h3><p>Hết nguyên liệu thì chỉ cần tích một cái. Màn hình khách hiện “Hết món”, không còn khách gọi nhầm.</p></div>
+    <div class="card"><div class="ic">🧾</div><h3>Đơn gọi món ít nhầm hơn</h3><p>Món khách chọn hiện chữ to bằng ngôn ngữ của nhân viên. Đỡ nghe nhầm.</p></div>
+    <div class="card"><div class="ic">🔔</div><h3>Gọi nhân viên</h3><p>Gọi nước, thêm đồ ăn kèm, tính tiền bằng nút bấm. Khách không phải giơ tay chờ.</p></div>
+    <div class="card"><div class="ic">🎁</div><h3>Tích tem khách quen</h3><p>Không cần phiếu giấy, tem tích ngay trong điện thoại. Khách sẽ quay lại.</p></div>
+    <div class="card"><div class="ic">📊</div><h3>Số liệu doanh thu, lượt xem</h3><p>Xem bằng con số: món nào bán chạy, có bao nhiêu người đã xem thực đơn.</p></div>
+  </div>
+  <div class="box tip" style="margin-top:6mm"><b>💡 Tóm lại</b>Thực đơn QR = thực đơn giấy (cho khách xem) + một phần việc của nhân viên (nhận món, gọi nhân viên) + cuốn sổ của chủ quán (doanh thu, khách quen).</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">1-3</span>Chức năng quán mình đang bật</h2>
+  <p>Chức năng chia làm ba loại. Xem nhãn màu trong bảng.</p>
+  <p style="margin-top:2mm"><span class="tagline t-base">Bật sẵn</span> &nbsp;<span class="tagline t-ask">Báo chúng tôi sẽ bật</span> &nbsp;<span class="tagline t-self">Chủ quán tự bật</span></p>
+  <table class="t">
+    <tr><th style="width:34%">Chức năng</th><th style="width:30%">Cách bật</th><th>Xem ở chương nào</th></tr>
+    <tr><td>Thực đơn · 5 ngôn ngữ · hình ảnh</td><td><span class="tagline t-base">Bật sẵn</span></td><td>Chương 2</td></tr>
+    <tr><td>Giỏ món · Đưa nhân viên xem</td><td><span class="tagline t-base">Bật sẵn</span></td><td>Chương 2</td></tr>
+    <tr><td>Sửa món · giá · hết món · hình ảnh</td><td><span class="tagline t-base">Bật sẵn</span></td><td>Chương 3</td></tr>
+    <tr><td>Gửi đơn vào bếp · Gọi nhân viên · Món đã gọi</td><td><span class="tagline t-ask">Báo chúng tôi sẽ bật</span></td><td>Chương 2 · 4</td></tr>
+    <tr><td>Màn hình bếp · máy in hóa đơn</td><td><span class="tagline t-ask">Báo chúng tôi sẽ bật</span></td><td>Chương 4</td></tr>
+    <tr><td>Xem doanh thu</td><td>Tích lũy từ ngày bật gọi món vào bếp</td><td>Chương 5</td></tr>
+    <tr><td>Lượt xem</td><td><span class="tagline t-base">Bật sẵn</span></td><td>Chương 5</td></tr>
+    <tr><td>Tích tem · Dải ưu đãi hôm nay</td><td><span class="tagline t-self">Chủ quán tự bật</span></td><td>Chương 3 · 6</td></tr>
+    <tr><td>Hộp góp ý (khách chấm sao)</td><td><span class="tagline t-self">Chủ quán tự bật</span></td><td>Chương 6</td></tr>
+  </table>
+  <h3 style="margin-top:8mm">✅ 5 việc nên làm ngay ngày đầu</h3>
+  <ul class="check">
+    <li>Đặt thẻ QR <b>đúng số bàn</b> ở từng bàn.</li>
+    <li>Dùng điện thoại của chủ quán quét thử QR để mở thực đơn.</li>
+    <li>Thêm một món vào giỏ rồi bấm thử đến 'Đưa nhân viên xem'. (Chương 2)</li>
+    <li>Đăng nhập màn hình chủ quán và chỉ xem giá một món. (Chương 3)</li>
+    <li>Tập hợp nhân viên, cùng xem chương 2 của cuốn sách này.</li>
+  </ul>
+</section>
+
+<!-- ───────── 2장 ───────── -->
+<section class="page chap">
+  <div class="big">02</div>
+  <h2>Làm quen màn hình của khách</h2>
+  <p class="lead">Biết khách thấy gì thì mới giải thích dễ.<br>Anh/chị hãy cầm điện thoại mình và bấm theo.</p>
+  <div class="learn">
+    <h3>Trong chương này</h3>
+    <ol>
+      <li>Màn hình đầu tiên và đổi ngôn ngữ</li>
+      <li>Tìm món và xem hình to</li>
+      <li>Thêm món và đơn gọi món</li>
+      <li>Đưa nhân viên xem · Gửi đơn vào bếp</li>
+      <li>Gọi nhân viên · Món bàn mình đã gọi</li>
+    </ol>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">2-1</span>Màn hình đầu tiên và đổi ngôn ngữ</h2>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/g01-home.jpg" alt="Màn hình đầu tiên"></span><p class="cap">Màn hình đầu tiên</p></div>
+    <div>
+      <p>Khi quét QR, trên cùng là <b>bảng hiệu (hoặc logo)</b> và tên quán, bên dưới là thực đơn.</p>
+      <ol class="num"><li><b>Nút ngôn ngữ</b> — ngôn ngữ đang hiện. Bấm vào để chọn ngôn ngữ khác.</li></ol>
+      <div class="box note"><b>📌 Tự động phù hợp</b>Điện thoại khách Việt mở bằng tiếng Việt, điện thoại khách Hàn mở bằng tiếng Hàn. Khách không phải làm gì thêm.</div>
+    </div>
+  </div>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/g02-lang.jpg" alt="Chọn ngôn ngữ"></span><p class="cap">Sau khi bấm nút ngôn ngữ</p></div>
+    <div>
+      <p>Hiện ra <b>5 ngôn ngữ</b> kèm lá cờ.</p>
+      <p>🇰🇷 한국어 · 🇬🇧 English · 🇨🇳 中文 · 🇯🇵 日本語 · 🇻🇳 Tiếng Việt</p>
+      <div class="say">"Anh/chị bấm nút ở góc trên bên phải là đổi được sang ngôn ngữ anh/chị muốn ạ."</div>
+      <div class="box tip"><b>💡 Mẹo hay</b>Dưới tên món có tên tiếng Việt nhỏ (tùy quán). Nhân viên không biết tiếng Hàn vẫn nhìn màn hình khách là biết món gì.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">2-2</span>Tìm món và xem hình to</h2>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/g04-item.jpg" alt="Danh sách món"></span><p class="cap">Danh sách món</p></div>
+    <div>
+      <p>Phía trên thực đơn có dải <b>tên nhóm món</b> (lẩu, canh, cơm…). Bấm vào là chạy thẳng đến nhóm đó.</p>
+      <ol class="num">
+        <li><b>Hình món</b> — bấm vào để xem to.</li>
+        <li><b>+ Thêm</b> — bấm là món vào giỏ. Bấm thêm lần nữa là thành 2 phần.</li>
+      </ol>
+      <div class="box tip"><b>💡 Mẹo hay</b>Món có hình bán chạy hơn. Món chưa có hình thì xem chương 3 để tải ảnh lên.</div>
+    </div>
+  </div>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/g05-zoom.jpg" alt="Xem hình to"></span><p class="cap">Sau khi bấm vào hình</p></div>
+    <div>
+      <p>Hình hiện to đầy màn hình, tên món ở bên dưới.</p>
+      <p><b>Bấm vào chỗ nào cũng được</b> là quay về danh sách món.</p>
+      <div class="say">"Anh/chị bấm vào hình là xem được hình to ạ."</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">2-3</span>Thêm món và đơn gọi món</h2>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/g06-bar.jpg" alt="Thanh giỏ món"></span><p class="cap">Sau khi thêm món</p></div>
+    <div>
+      <ol class="num">
+        <li><b>Thanh giỏ món</b> — hiện số món đã thêm và tổng tiền. Bấm 'Xem đơn' để mở đơn gọi món.</li>
+        <li><b>Gọi nhân viên</b> — nút gọi nước, đồ ăn kèm… (xem 2-5)</li>
+        <li><b>Món đã gọi</b> — xem những món bàn mình đã gọi. (xem 2-5)</li>
+      </ol>
+      <div class="box note"><b>📌 Anh/chị nên biết</b>Nút số 2 và số 3 chỉ hiện ở quán đã bật 'Gửi đơn vào bếp'.</div>
+    </div>
+  </div>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/g07-sheet.jpg" alt="Đơn gọi món"></span><p class="cap">Đơn gọi món</p></div>
+    <div>
+      <ol class="num">
+        <li><b>Số lượng</b> — đổi số phần bằng − / +.</li>
+        <li><b>Ghi chú</b> — viết như “Ít cay”, “Thêm 2 bát”.</li>
+        <li><b>Gửi đơn vào bếp</b> — đơn đi thẳng đến màn hình bếp. (Chỉ quán đã bật)</li>
+        <li><b>Đưa nhân viên xem</b> — khách đưa màn hình cho nhân viên xem.</li>
+      </ol>
+      <div class="box note"><b>📌 Số bàn</b>Nếu vào bằng thẻ QR thì số bàn đã được điền sẵn.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">2-4</span>Đưa nhân viên xem · Gửi đơn vào bếp</h2>
+  <div class="lesson two">
+    <div>
+      <span class="phone"><img src="img/vi/g08-staff.jpg" alt="Đưa nhân viên xem"></span>
+      <p class="cap">Màn hình sau khi bấm 'Đưa nhân viên xem'</p>
+    </div>
+    <div>
+      <span class="phone"><img src="img/vi/g09-sent.jpg" alt="Sau khi gửi vào bếp"></span>
+      <p class="cap">Sau khi bấm 'Gửi đơn vào bếp'</p>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>👀 Đưa nhân viên xem</h3><p style="color:var(--ink)">Khách đưa điện thoại cho nhân viên xem. Tên món hiện <b>chữ to bằng ngôn ngữ nhân viên (tiếng Việt)</b>, ngôn ngữ của khách hiện nhỏ hơn. Có cả số bàn và tổng tiền. Nhân viên nhìn vào đó để ghi món.</p></div>
+    <div class="card"><h3>📨 Gửi đơn vào bếp</h3><p style="color:var(--ink)">Đơn đi <b>thẳng vào màn hình bếp</b>. Màn hình khách hiện “Đơn đã được gửi vào bếp” kèm <b>số đơn</b>. Nhân viên không cần ra bàn. (Chương 4)</p></div>
+  </div>
+  <div class="say">"Chọn món xong, anh/chị bấm 'Xem đơn' rồi bấm 'Gửi đơn vào bếp'. Bếp nhận được ngay ạ."</div>
+  <div class="box warn"><b>⚠️ Cẩn thận</b>Nếu chỉ bấm 'Đưa nhân viên xem' thì đơn không tự vào bếp. Nhân viên phải ghi lại hoặc báo cho bếp.</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">2-5</span>Gọi nhân viên · Món bàn mình đã gọi</h2>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/g10-call.jpg" alt="Gọi nhân viên"></span><p class="cap">Sau khi bấm 'Gọi nhân viên'</p></div>
+    <div>
+      <p>Bấm 1 trong 6 nút thì <b>màn hình bếp hiện thông báo</b>.</p>
+      <p style="font-size:12.5pt">💧 Cho xin nước · 🥢 Thêm đồ ăn kèm · 🧊 Cho xin đá · 🍽 Thêm chén đĩa, đũa muỗng · 🧾 Tính tiền · 🙋 Gọi nhân viên</p>
+      <div class="box note"><b>📌 Anh/chị nên biết</b>Cùng một nút phải chờ 30 giây mới bấm lại được. Để tránh khách bấm nghịch nhiều lần.</div>
+      <div class="box tip"><b>💡 Mẹo hay</b>Khi có thông báo, hãy bấm [Xong] trên màn hình bếp. Cho đến khi bấm, cứ 30 giây lại kêu “ting” một lần.</div>
+    </div>
+  </div>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/g11-bill.jpg" alt="Món đã gọi"></span><p class="cap">Sau khi bấm 'Món đã gọi'</p></div>
+    <div>
+      <p>Hiện chung ở một chỗ <b>tất cả món do cả nhóm cùng bàn gọi bằng điện thoại của từng người</b>.</p>
+      <p>Mỗi món có trạng thái hiện tại:<br><b>Đã gửi → Đang làm → Đã ra món</b></p>
+      <div class="say">"Anh/chị bấm 'Món đã gọi' là xem được món đang làm tới đâu ạ."</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 3장 ───────── -->
+<section class="page chap">
+  <div class="big">03</div>
+  <h2>Màn hình chủ quán:<br>sửa thực đơn</h2>
+  <p class="lead">Giá, hết món, hình ảnh do chủ quán tự sửa bằng điện thoại.<br>Bấm lưu là màn hình khách đổi <b>trong vòng 1 phút</b>.</p>
+  <div class="learn">
+    <h3>Trong chương này</h3>
+    <ol>
+      <li>Vào màn hình chủ quán</li>
+      <li>Xem qua màn hình đầu tiên</li>
+      <li>Sửa giá · báo hết món · đổi hình</li>
+      <li>Mô tả · nhãn BEST · thông tin quán</li>
+      <li>Quay lại khi sửa nhầm</li>
+      <li>Dải ưu đãi hôm nay</li>
+    </ol>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">3-1</span>Vào màn hình chủ quán</h2>
+  <div class="lesson solo">
+    <div><span class="phone"><img src="img/vi/o01-login.jpg" alt="Đăng nhập chủ quán"></span><p class="cap">Màn hình đăng nhập</p></div>
+    <div>
+      <p>Bấm vào <b>địa chỉ màn hình chủ quán</b> mà chúng tôi đã gửi.</p>
+      <p style="margin-top:2mm"><span class="url">qrmenuasia.com/owner/?shop=maquan</span></p>
+      <ol class="num">
+        <li><b>Mật khẩu</b> — nhập mật khẩu quán mà chúng tôi đã báo riêng.</li>
+        <li><b>Vào</b> — bấm để mở màn hình chủ quán.</li>
+      </ol>
+      <div class="box tip"><b>💡 Mẹo hay: thêm vào màn hình chính</b>Mở địa chỉ, vào menu trình duyệt (⋮), bấm <b>'Thêm vào màn hình chính'</b> là có biểu tượng như ứng dụng. Lần sau vào một chạm.</div>
+      <div class="box warn"><b>⚠️ Cẩn thận</b>Chỉ cho người đáng tin biết mật khẩu. Nhập sai 8 lần sẽ bị khóa 1 giờ. Đóng cửa sổ hoặc để lâu (12 giờ) thì phải nhập lại.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">3-2</span>Xem qua màn hình đầu tiên</h2>
+  <div class="lesson solo">
+    <div><span class="phone"><img src="img/vi/o02-editor.jpg" alt="Màn hình đầu tiên của chủ quán"></span><p class="cap">Màn hình đầu tiên sau khi đăng nhập</p></div>
+    <div>
+      <p>Nút <b>한국어 / Tiếng Việt</b> ở góc trên bên phải giúp đổi chữ trên màn hình. Dùng khi giao việc cho nhân viên người Việt.</p>
+      <ol class="num">
+        <li><b>📊 Doanh thu</b> — doanh thu theo ngày, theo món (chương 5)</li>
+        <li><b>🎁 Khách quen</b> — tích tem, dải ưu đãi hôm nay (3-6, chương 6)</li>
+        <li><b>💬 Góp ý</b> — số sao và lời nhắn của khách (chương 6)</li>
+        <li><b>Lượt xem</b> — số người đã xem thực đơn (chương 5)</li>
+        <li><b>Lưu và hiển thị cho khách</b> — sau khi sửa, <b class="hl">nhất định phải bấm nút này</b>.</li>
+      </ol>
+      <div class="box warn"><b>⚠️ Lỗi hay gặp nhất</b>Sửa xong mà quên bấm nút số 5 'Lưu'. Chưa lưu thì màn hình khách vẫn như cũ. Nếu phía trên hiện “Có thay đổi chưa lưu” nghĩa là vẫn chưa lưu.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">3-3</span>Sửa giá · hết món · hình ảnh</h2>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/o03-item.jpg" alt="Một ô món"></span><p class="cap">Một ô món</p></div>
+    <div>
+      <ol class="num">
+        <li><b>Ảnh</b> — ảnh khách đang thấy.</li>
+        <li><b>Tên món</b> — ô trên là tiếng Hàn, ô dưới là tiếng Việt.</li>
+        <li>Dòng có các nút <b>Hết món · Tải ảnh lên · Xóa ảnh</b>.</li>
+      </ol>
+      <p style="margin-top:3mm">Bên dưới là ô <b>Giá (₫ hoặc ₩)</b>.</p>
+      <div class="box tip"><b>💡 Món theo thời giá</b>Để trống ô giá thì màn hình khách hiện “Hỏi giá”.</div>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:6mm">
+    <div>
+      <h3>💰 Sửa giá</h3>
+      <ol class="step">
+        <li>Bấm vào ô giá của món cần sửa.</li>
+        <li>Chỉ nhập số. VD: <b>120000</b></li>
+        <li>Bấm <b>'Lưu và hiển thị cho khách'</b> ở trên cùng.</li>
+        <li>Mở thực đơn khách trên điện thoại mình để kiểm tra.</li>
+      </ol>
+    </div>
+    <div>
+      <h3>🚫 Báo hết món</h3>
+      <ol class="step">
+        <li>Tích vào ô <b>'Hết món'</b> của món đó.</li>
+        <li>Bấm <b>'Lưu và hiển thị cho khách'</b>.</li>
+        <li>Màn hình khách hiện món mờ đi kèm chữ 'Hết món' màu đỏ.</li>
+        <li>Có nguyên liệu lại thì bỏ tích rồi lưu lại.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">3-4</span>Đổi hình · mô tả · nhãn BEST</h2>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/o04-more.jpg" alt="Sau khi mở Xem thêm"></span><p class="cap">Sau khi bấm 'Xem thêm'</p></div>
+    <div>
+      <h3>📷 Đổi hình</h3>
+      <ol class="step">
+        <li>Bấm <b>'Tải ảnh lên'</b> của món đó.</li>
+        <li>Chọn ảnh món ăn trong thư viện ảnh điện thoại.</li>
+        <li>Bấm <b>'Lưu và hiển thị cho khách'</b>.</li>
+      </ol>
+      <h3 style="margin-top:5mm">📝 Việc làm được trong 'Xem thêm'</h3>
+      <p>· <b>Mô tả</b> — mô tả ngắn như “2–3 người ăn”, “rất cay”<br>· <b>Nhãn</b> — BEST · Món mới · Đề xuất<br>· <b>Món cay</b> — tích vào thì hiện nhãn &quot;🌶&quot;<br>· <b>Chữ hiển thị ở ngôn ngữ khác</b> — tiếng Anh, Trung, Nhật</p>
+      <div class="box note"><b>📌 Dịch tự động</b>Chỉ cần nhập 2 ô tiếng Hàn và tiếng Việt. Khi lưu, hệ thống tự dịch sang tiếng Anh, Trung, Nhật. Nếu không dịch được thì hiện đúng chữ anh/chị đã nhập.</div>
+    </div>
+  </div>
+  <div class="box tip"><b>💡 Cách chụp hình món ăn dễ bán</b>① Chụp ở <b>chỗ sáng</b>, như gần cửa sổ ② Chụp <b>ngang</b> ③ Chụp xéo từ trên xuống (45 độ) ④ Món ăn chiếm đầy khung hình ⑤ Chụp ngay khi còn bốc khói.</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">3-5</span>Thông tin quán · khi sửa nhầm</h2>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/o05-info.jpg" alt="Thông tin quán"></span><p class="cap">Phần thông tin quán</p></div>
+    <div>
+      <p>Sửa <b>giờ mở cửa · số điện thoại · địa chỉ · Wi-Fi (tên · mật khẩu)</b> ở đây. Thông tin hiện ở cuối thực đơn của khách.</p>
+      <div class="box tip"><b>💡 Mẹo hay</b>Ghi sẵn Wi-Fi thì khách tự kết nối, không phải hỏi nhân viên. Giờ mở cửa ngày nghỉ, ngày lễ cũng nên đổi trước.</div>
+      <div class="box note"><b>📌 Thêm món · đổi thứ tự</b>Bấm <b>'+ Thêm món'</b> dưới nhóm món để thêm món mới, <b>'+ Thêm nhóm'</b> để thêm nhóm mới. Dùng <b>▲ ▼</b> để đổi thứ tự, <b>Xóa</b> để xóa.</div>
+    </div>
+  </div>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/o06-hist.jpg" alt="Phiên bản cũ"></span><p class="cap">Sau khi bấm 'Phiên bản cũ'</p></div>
+    <div>
+      <h3>↩️ 2 cách quay lại</h3>
+      <p><b>Phiên bản cũ</b> — mỗi lần lưu đều được ghi lại. Chọn ngày trong danh sách rồi bấm <b>'Dùng phiên bản này'</b> là quay về lúc đó.</p>
+      <p><b>Khôi phục menu ban đầu</b> — quay về thực đơn mà chúng tôi làm lúc đầu. Lịch sử phiên bản cũ vẫn còn.</p>
+      <div class="box tip"><b>💡 Yên tâm</b>Sửa nhầm lúc nào cũng quay lại được. Đừng sợ, cứ bấm thử.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">3-6</span>Dải ưu đãi hôm nay</h2>
+  <div class="lesson solo">
+    <div><span class="phone"><img src="img/vi/o07-loyal.jpg" alt="Màn hình khách quen"></span><p class="cap">Màn hình sau khi bấm 🎁 Khách quen</p></div>
+    <div>
+      <p>Tin ưu đãi hiện thành <b>dải 📣 ngay trên danh sách món</b> trong thực đơn của khách. Hợp để báo giảm giá buổi trưa, khuyến mãi món mới.</p>
+      <ol class="step">
+        <li>Ở màn hình chủ quán, bấm <b>🎁 Khách quen</b>.</li>
+        <li>Viết vào ô <b>'Nội dung'</b> của <b>'Dải ưu đãi hôm nay'</b>.<br>VD: Canh kimchi giảm 20% buổi trưa (11–14h)</li>
+        <li>Chọn ngày bắt đầu và ngày kết thúc. Để trống thì hiện mãi.</li>
+        <li>Bấm <b>'Lưu'</b> ở dưới.</li>
+      </ol>
+      <div class="box note"><b>📌 Anh/chị nên biết</b>Nội dung dải ưu đãi hiện đúng chữ đã viết (không dịch tự động). Nên viết cả tiếng Việt và tiếng Hàn. VD: Giảm 20% buổi trưa · 점심 20% 할인</div>
+      <div class="box warn"><b>⚠️ Cẩn thận</b>Muốn tắt dải ưu đãi thì xóa nội dung rồi lưu. Phần tích tem (phía trên cùng màn hình) sẽ nói kỹ ở chương 6.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 4장 ───────── -->
+<section class="page chap">
+  <div class="big">04</div>
+  <h2>Màn hình bếp và<br>máy in hóa đơn</h2>
+  <p class="lead">Khi khách bấm 'Gửi đơn vào bếp', đơn hiện trên máy tính bảng (hoặc điện thoại) ở bếp.<br>Không cần ghi ra giấy nữa.</p>
+  <div class="learn">
+    <h3>Trong chương này</h3>
+    <ol>
+      <li>Mở màn hình bếp</li>
+      <li>Nhận đơn mới · Đang làm · Xong</li>
+      <li>Khách gọi và cảnh báo khách chưa hài lòng</li>
+      <li>Xem các bàn một lượt trên sơ đồ bàn</li>
+      <li>Cài đặt máy (âm thanh · máy in)</li>
+      <li>Kết nối máy in hóa đơn</li>
+    </ol>
+  </div>
+  <div class="box note" style="margin-top:8mm;background:#fff"><b>📌 Chức năng này: báo chúng tôi sẽ bật</b>Khi bật gọi món vào bếp, chúng tôi sẽ báo <b>địa chỉ màn hình bếp</b> và <b>mã PIN 6 số (mật khẩu)</b>.</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">4-1</span>Mở màn hình bếp</h2>
+  <span class="tablet"><img src="img/vi/k01-login.jpg" alt="Đăng nhập màn hình bếp"></span>
+  <p class="cap">Màn hình đầu tiên trên máy tính bảng ở bếp</p>
+  <div class="grid">
+    <div>
+      <ol class="num">
+        <li>Nhập <b>mã PIN 6 số</b>.</li>
+        <li>Bấm <b>Vào</b>.</li>
+      </ol>
+      <p style="margin-top:3mm">Sau đó nhớ bấm nút <b>'▶ Bắt đầu'</b>. Có bấm thì <b>âm báo</b> đơn mới mới bật và màn hình không tự tắt.</p>
+    </div>
+    <div>
+      <p><span class="url">qrmenuasia.com/kitchen/?shop=maquan</span></p>
+      <div class="box tip"><b>💡 Mẹo hay</b>Vào một lần thì <b>60 ngày</b> không phải nhập lại PIN. Hãy <b>cắm sạc</b> máy tính bảng và đặt ở chỗ bếp dễ nhìn.</div>
+    </div>
+  </div>
+  <div class="box warn"><b>⚠️ Cẩn thận</b>Chỉ cho nhân viên bếp biết PIN. Nhân viên nghỉ việc thì báo chúng tôi. Chúng tôi sẽ tạo PIN mới và đăng xuất tất cả máy khác.</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">4-2</span>Nhận đơn mới</h2>
+  <span class="tablet"><img src="img/vi/k02-new.jpg" alt="Đơn mới"></span>
+  <p class="cap">Khi có đơn mới vào</p>
+  <ol class="num" style="columns:2;column-gap:8mm">
+    <li><b>Danh sách / Sơ đồ bàn</b> — đổi cách xem. (4-5)</li>
+    <li><b>Dải khách gọi</b> — khách gọi nước, tính tiền… (4-4)</li>
+    <li><b>Ô đơn mới</b> — đơn mới vào có viền đỏ.</li>
+    <li><b>Nút đỏ 'Nhận đơn'</b> — nghĩa là đã thấy đơn.</li>
+    <li><b>⚙ Cài đặt</b> — đổi âm thanh, máy in. (4-6)</li>
+  </ol>
+  <div class="box note"><b>📌 Âm thanh</b>Có đơn mới thì kêu “ding-dong” và màn hình nhấp nháy. <b>Cứ 20 giây lại kêu</b> cho đến khi bấm 'Nhận đơn'.</div>
+  <div class="box tip"><b>💡 Thẻ đơn</b>Số bàn · mấy phút trước · món (tiếng Việt chữ to, tiếng Hàn chữ nhỏ) · ghi chú · tổng tiền · [Nhận đơn] [🖨 In] [✕ Hủy]</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">4-3</span>Đang làm → Xong</h2>
+  <span class="tablet"><img src="img/vi/k03-cook.jpg" alt="Đang làm"></span>
+  <p class="cap">Bấm 'Nhận đơn' thì đơn chuyển sang cột giữa 'Đang làm'</p>
+  <div class="flow">
+    <div><span class="ic">🔴</span><b>Đơn mới</b><br>Bấm [Nhận đơn]</div><i>›</i>
+    <div><span class="ic">🟡</span><b>Đang làm</b><br>Làm xong thì bấm [Xong]</div><i>›</i>
+    <div><span class="ic">🟢</span><b>Xong (hôm nay)</b><br>Các đơn đã xong hôm nay</div>
+  </div>
+  <div class="box note"><b>📌 Điện thoại khách cũng đổi theo</b>Bấm ở bếp thì mục 'Món đã gọi' của khách tự đổi: <b>Đã gửi → Đang làm → Đã ra món</b>.</div>
+  <div class="box warn"><b>⚠️ Khi hủy đơn</b>Bấm [Hủy] sẽ hỏi lại một lần. Đơn đã hủy bị trừ khỏi doanh thu và cũng biến mất khỏi mục món đã gọi của khách. Bấm nhầm thì bấm [Hoàn tác].</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">4-4</span>Khách gọi · cảnh báo khách chưa hài lòng</h2>
+  <span class="tablet"><img src="img/vi/k06-voice.jpg" alt="Dải khách gọi"></span>
+  <p class="cap">Dải hiện trên cùng màn hình bếp</p>
+  <table class="t">
+    <tr><th style="width:26%">Màu dải</th><th>Ý nghĩa</th><th style="width:32%">Việc cần làm</th></tr>
+    <tr><td>🔵 Xanh dương</td><td>Mang nước · Thêm đồ ăn kèm · Mang đá · Thêm chén đĩa, đũa muỗng · Gọi nhân viên</td><td>Mang ra rồi bấm [Xong]</td></tr>
+    <tr><td>🟠 Cam</td><td>TÍNH TIỀN</td><td>Mang hóa đơn đến rồi bấm [Xong]</td></tr>
+    <tr><td>🔴 Đỏ</td><td><b>KHÁCH CHƯA HÀI LÒNG</b> — khách chấm 1–3 sao trong hộp góp ý (chương 6)</td><td><b>Ra bàn ngay</b>, hỏi khách chưa hài lòng điều gì rồi bấm [Xong]</td></tr>
+  </table>
+  <div class="box note"><b>📌 Âm thanh</b>Tiếng gọi là “ting ting”, ngắn hơn chuông báo đơn. Cứ 30 giây lại kêu cho đến khi bấm [Xong]. Sau 1 giờ thì tự biến mất.</div>
+  <div class="box tip"><b>💡 Cảnh báo chưa hài lòng là cơ hội</b>Xin lỗi và xử lý ngay trước khi khách ra về, thì thay vì đánh giá xấu, khách sẽ quay lại.</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">4-5</span>Sơ đồ bàn: nhìn các bàn một lượt</h2>
+  <span class="tablet"><img src="img/vi/k04-floor.jpg" alt="Sơ đồ bàn"></span>
+  <p class="cap">Sau khi bấm 'Sơ đồ bàn' ở phía trên</p>
+  <div class="grid">
+    <div>
+      <h3>🎨 Màu viền của bàn</h3>
+      <p>⚪ Xám — Bàn trống<br>🔴 Đỏ (nhấp nháy) — Đơn mới<br>🟡 Vàng — Đang làm<br>🔵 Xanh dương — Đã ra món (đang ăn)</p>
+      <p style="margin-top:2mm">Bấm vào bàn thì mở đơn của bàn đó. Khi khách ra về, bấm <b>[Dọn bàn]</b> để bàn trở lại trống.</p>
+    </div>
+    <div>
+      <h3>✎ Sửa cho giống quán mình</h3>
+      <ol class="step">
+        <li>Bấm <b>✎ Sửa sơ đồ</b>.</li>
+        <li>Kéo bàn bằng ngón tay. <b>+ Bàn</b>, <b>+ Đồ vật…</b> (Bếp · Quầy · WC · Cầu thang · Cây…), <b>+ Khu</b> (Tầng 1 · Tầng 2 · Sân ngoài)</li>
+        <li>Bấm <b>Lưu</b>.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="box warn"><b>⚠️ Cẩn thận</b>Số bàn trên sơ đồ <b>phải giống số bàn trên thẻ QR</b> thì đơn mới hiện đúng chỗ.</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">4-6</span>Cài đặt máy: âm thanh · máy in</h2>
+  <div class="lesson" style="grid-template-columns:82mm 1fr">
+    <div><span class="tablet"><img src="img/vi/k05-set.jpg" alt="Cài đặt máy này"></span><p class="cap">⚙ Cài đặt máy này</p></div>
+    <div>
+      <p>Cài đặt được lưu <b>riêng cho từng máy</b>. Máy tính bảng ở bếp và điện thoại ở quầy có thể cài khác nhau.</p>
+      <ol class="num">
+        <li><b>Máy in</b> — Máy in Bluetooth (app RawBT) / In qua trình duyệt / Không in</li>
+        <li><b>Khổ giấy</b> — 58mm hoặc 80mm (độ rộng giấy của máy in)</li>
+        <li><b>Kiểu âm báo</b> — Chuông ding-dong · Chuông 3 nốt · Reng reng (điện thoại) · Bíp bíp (bếp ồn) · Đàn gõ</li>
+        <li><b>Độ lớn âm thanh</b> — Vừa / To / Rất to</li>
+        <li><b>In thử · Thử âm thanh</b> — kiểm tra xem có hoạt động tốt không</li>
+      </ol>
+    </div>
+  </div>
+  <div class="box warn"><b>⚠️ Khi tiếng nhỏ</b>Dù chọn 'Rất to' trên màn hình, nếu <b>âm lượng của máy</b> nhỏ thì cũng vô ích. Hãy dùng nút âm lượng bên cạnh máy tính bảng để tăng hết cỡ. Tắt luôn chế độ im lặng (rung).</div>
+  <div class="box tip"><b>💡 Tên máy</b>Đặt tên như 'Bếp 1', 'Quầy' thì đỡ nhầm.</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">4-7</span>Kết nối máy in hóa đơn</h2>
+  <div class="lesson" style="grid-template-columns:62mm 1fr">
+    <div><img class="card-img" src="img/common/ticket.jpg" alt="Hóa đơn mẫu" style="border:0.4mm solid var(--line)"><p class="cap">Hóa đơn đơn hàng mẫu</p></div>
+    <div>
+      <p>Khi có đơn, có thể in <b>hóa đơn cho bếp</b> như thế này. Số bàn chữ to, món ăn ghi bằng tiếng Việt và tiếng Hàn.</p>
+      <div class="box note"><b>📌 Không có máy in cũng không sao</b>Chỉ cần nhìn màn hình bếp rồi nấu cũng được. Lúc đó hãy chọn 'Không in' trong cài đặt.</div>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:6mm">
+    <div>
+      <h3>📱 Máy tính bảng, điện thoại Android</h3>
+      <ol class="step">
+        <li>Cài ứng dụng miễn phí <b>RawBT</b> từ CH Play.</li>
+        <li>Máy in Bluetooth: ghép đôi máy in trong Bluetooth của điện thoại (mật khẩu thường là 0000 hoặc 1234).<br>Máy in dùng dây mạng: trong RawBT chọn 'Network' và nhập IP máy in.</li>
+        <li>Chọn máy in trong RawBT.</li>
+        <li>Màn hình bếp ⚙ → Máy in <b>'Máy in Bluetooth (app RawBT)'</b> → <b>In thử</b>.</li>
+      </ol>
+    </div>
+    <div>
+      <h3>💻 Máy tính · iPad</h3>
+      <ol class="step">
+        <li>Kết nối máy in vào máy tính trước (cài phần mềm của hãng máy in).</li>
+        <li>Màn hình bếp ⚙ → Máy in <b>'In qua trình duyệt'</b>.</li>
+        <li>Bấm [🖨 In] rồi chọn máy in đó trong cửa sổ in.</li>
+      </ol>
+      <div class="box tip"><b>💡 Nếu thấy khó</b>Hãy chụp ảnh tên máy in (nhãn dán mặt sau) gửi cho chúng tôi. Chúng tôi sẽ hướng dẫn cách kết nối phù hợp.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 5장 ───────── -->
+<section class="page chap">
+  <div class="big">05</div>
+  <h2>Xem số liệu:<br>doanh thu và lượt xem</h2>
+  <p class="lead">Buôn bán không còn chỉ dựa vào cảm giác mà xem bằng con số.<br>Thấy được món bán chạy, giờ đông khách, khách nước nào.</p>
+  <div class="learn">
+    <h3>Trong chương này</h3>
+    <ol>
+      <li>Xem lịch doanh thu</li>
+      <li>Món bán chạy · đơn theo giờ</li>
+      <li>Cách đọc báo cáo lượt xem</li>
+      <li>Dùng số liệu vào việc buôn bán</li>
+    </ol>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">5-1</span>Lịch doanh thu</h2>
+  <div class="lesson two">
+    <div><span class="phone"><img src="img/vi/r01-cal.jpg" alt="Lịch doanh thu"></span><p class="cap">Màn hình sau khi bấm 📊 Doanh thu</p></div>
+    <div><span class="phone"><img src="img/vi/r02-sum.jpg" alt="Doanh thu theo khoảng thời gian"></span><p class="cap">Kết quả sau khi bấm 'Tháng trước'</p></div>
+  </div>
+  <div class="grid">
+    <div><h3>📅 Lịch</h3><p>Mỗi ô ghi doanh thu ngày đó (ví dụ: 8.2M = 8,2 triệu đồng) và số đơn. <b>Màu càng đậm thì ngày đó bán càng nhiều.</b> Bấm vào ngày để xem riêng ngày đó. Bấm ‹ › để đổi tháng.</p></div>
+    <div><h3>⏱ Nút bấm nhanh</h3><p>Hôm nay · Hôm qua · 7 ngày qua · Tháng này · Tháng trước. Cũng có thể tự chọn ngày bắt đầu và kết thúc (tối đa 93 ngày). Kết quả có <b>Doanh thu · Đơn · TB mỗi đơn</b>.</p></div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">5-2</span>Món bán chạy · giờ đông khách</h2>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/r03-more.jpg" alt="Món bán chạy"></span><p class="cap">Sau khi kéo xuống</p></div>
+    <div>
+      <p><b>Món bán chạy</b> — xem xếp hạng 'Theo số lượng' / 'Theo doanh thu'.</p>
+      <p><b>Đơn theo giờ</b> — cột càng cao là giờ càng đông.</p>
+      <p><b>Doanh thu theo ngày</b> — so sánh từng ngày trong khoảng thời gian đã chọn.</p>
+      <p><b>Tải CSV</b> — mở bằng Excel để dán vào sổ sách.</p>
+      <div class="box warn"><b>⚠️ Cách tính</b>Chỉ tính đơn khách gửi bằng <b>'Gửi đơn vào bếp'</b>. Đơn nhân viên ghi tay, 'Đưa nhân viên xem' và đơn qua Zalo không được tính. Đơn đã hủy bị loại. Tích lũy từ ngày bật gọi món vào bếp.</div>
+      <div class="box tip"><b>💡 Cách dùng số liệu</b>① Món hạng 1–3: gắn nhãn BEST và dùng hình đẹp ② Món gần như không bán được: đổi hình hoặc bỏ khỏi thực đơn ③ Giờ vắng khách: treo 'Dải ưu đãi hôm nay' (3-6)</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">5-3</span>Báo cáo lượt xem</h2>
+  <div class="lesson two">
+    <div><span class="phone"><img src="img/vi/r04-report.jpg" alt="Báo cáo lượt xem"></span><p class="cap">Bấm 'Lượt xem' thì mở trong cửa sổ mới</p></div>
+    <div><span class="phone"><img src="img/vi/r05-report2.jpg" alt="Phần dưới của báo cáo lượt xem"></span><p class="cap">Sau khi kéo xuống</p></div>
+  </div>
+  <table class="t">
+    <tr><th style="width:30%">Mục</th><th>Ý nghĩa</th></tr>
+    <tr><td>Khách truy cập</td><td>Số người đã mở thực đơn (một người chỉ tính 1 lần mỗi ngày)</td></tr>
+    <tr><td>Lượt xem trang</td><td>Số lần thực đơn được mở</td></tr>
+    <tr><td>Ngôn ngữ khách xem</td><td>Biết được khách nước nào đông</td></tr>
+    <tr><td>Khách đến từ đâu</td><td>Quét QR · Tìm quán · Trực tiếp · Google…</td></tr>
+  </table>
+  <div class="box tip"><b>💡 Mẹo hay</b>Dùng 'In / Lưu PDF' để lưu báo cáo cả tháng. Nếu khách nước ngoài đông thì nên quảng bá bằng ngôn ngữ đó (chương 9).</div>
+</section>
+
+<!-- ───────── 6장 ───────── -->
+<section class="page chap">
+  <div class="big">06</div>
+  <h2>Giữ chân khách quen</h2>
+  <p class="lead">Để khách cũ quay lại dễ hơn là tìm khách mới.<br>Chúng tôi giới thiệu hai công cụ: tem và hộp góp ý.</p>
+  <div class="learn">
+    <h3>Trong chương này</h3>
+    <ol>
+      <li>Bật tích tem cho khách quen</li>
+      <li>Tặng tem bằng mã QR tích tem ở quầy</li>
+      <li>Dùng ưu đãi · khách đổi điện thoại</li>
+      <li>Bật hộp góp ý bí mật</li>
+      <li>Đọc ý kiến khách và xử lý · đánh giá Google</li>
+    </ol>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">6-1</span>Bật tích tem cho khách quen</h2>
+  <div class="lesson solo">
+    <div><span class="phone"><img src="img/vi/l01-owner.jpg" alt="Cài đặt tích tem"></span><p class="cap">Màn hình chủ quán → 🎁 Khách quen</p></div>
+    <div>
+      <p>Thay cho phiếu giấy, tem tích ngay trong điện thoại của khách. <b>Chúng tôi không lấy số điện thoại của khách.</b></p>
+      <ol class="step">
+        <li>Ở màn hình chủ quán, bấm <b>🎁 Khách quen</b>.</li>
+        <li><b>Tích vào 'Bật tích tem'</b>.</li>
+        <li>Nhập số vào ô <b>'Số tem cần tích'</b> (3–20 tem). VD: 10</li>
+        <li>Ghi <b>'Ưu đãi nhận được'</b>. VD: Tặng 1 ly nước · 음료 1잔 무료</li>
+        <li>Bấm <b>'Lưu'</b>.</li>
+      </ol>
+      <div class="box warn"><b>⚠️ Lỗi hay gặp nhất</b>Ở bước 2, <b>quên tích 'Bật tích tem'</b> rồi lưu. Khi đó tính năng vẫn bị tắt. Sau khi lưu, hãy kiểm tra thực đơn của khách có dòng '🎁 Tem' không.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">6-2</span>Tặng tem cho khách</h2>
+  <div class="lesson two">
+    <div><span class="phone"><img src="img/vi/l02-counter.jpg" alt="Mã QR tích tem ở quầy"></span><p class="cap">'Mở mã QR tích tem ở quầy'</p></div>
+    <div><span class="phone"><img src="img/vi/l03-guest.jpg" alt="Dòng tem trên thực đơn của khách"></span><p class="cap">Dòng mới hiện trên thực đơn của khách</p></div>
+  </div>
+  <div class="grid">
+    <div>
+      <ol class="step">
+        <li>Khi khách thanh toán, trên điện thoại ở quầy bấm <b>'Mở mã QR tích tem ở quầy'</b>.</li>
+        <li>Cho khách xem mã QR ở tab <b>🎁 Tặng tem</b>.</li>
+        <li>Khách quét bằng camera điện thoại là được 1 tem!</li>
+      </ol>
+    </div>
+    <div>
+      <p><b>① 📣 Dải ưu đãi</b> và <b>② 🎁 dòng tem</b> hiện trên thực đơn của khách.</p>
+      <div class="box note"><b>📌 Anh/chị nên biết</b>Mã QR <b>đổi mỗi 1 phút.</b> Chụp ảnh gửi người khác cũng vô ích. Mỗi khách chỉ nhận được <b>1 lần mỗi ngày</b>.</div>
+    </div>
+  </div>
+  <div class="say">"Khi thanh toán, anh/chị quét mã QR này là được tích tem. Đủ 10 tem được tặng 1 ly nước ạ."</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">6-3</span>Dùng ưu đãi · khách đổi điện thoại</h2>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/l04-stamp.jpg" alt="Thẻ tem"></span><p class="cap">Màn hình của khách vừa nhận tem</p></div>
+    <div>
+      <p>Màn hình khách hiện <b>“Bạn nhận được 1 tem”</b> cùng thẻ tem.</p>
+      <h3 style="margin-top:4mm">🎉 Khách đã đủ tem</h3>
+      <ol class="step">
+        <li>Ở màn hình QR quầy, bấm tab <b>✅ Dùng ưu đãi</b>.</li>
+        <li>Khách quét QR đó thì tem được trừ và ưu đãi được dùng.</li>
+        <li>Tặng ưu đãi đã hứa (nước uống…).</li>
+      </ol>
+      <h3 style="margin-top:4mm">📱 Khách đổi điện thoại</h3>
+      <p>Dưới thẻ tem có <b>mã khôi phục</b> (VD: abcd-efgh). Trên điện thoại mới, nhập vào 'Khôi phục bằng mã' là tem quay lại.</p>
+      <div class="box tip"><b>💡 Mẹo hay</b>Số tem đừng quá nhiều (5–10 tem). Khách mới phải thấy “chẳng mấy chốc là đủ” thì mới quay lại.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">6-4</span>Bật hộp góp ý bí mật</h2>
+  <div class="lesson solo">
+    <div><span class="phone"><img src="img/vi/v04-owner.jpg" alt="Cài đặt hộp góp ý"></span><p class="cap">Màn hình chủ quán → 💬 Góp ý</p></div>
+    <div>
+      <p>Khách để lại <b>số sao (1–5) và vài lời</b> chỉ cho chủ quán. Khách khác không thấy.</p>
+      <ol class="step">
+        <li>Ở màn hình chủ quán, bấm <b>💬 Góp ý</b>.</li>
+        <li><b>Tích vào 'Bật hộp góp ý'</b>.</li>
+        <li>Nhập <b>Link đánh giá Google</b>. (Nếu chưa biết, chúng tôi sẽ tìm giúp)</li>
+        <li>Bấm <b>'Lưu'</b>.</li>
+      </ol>
+      <div class="box note"><b>📌 Ai dùng được?</b>Chỉ <b>khách vào bằng thẻ QR trên bàn</b> mới dùng được. Vì vậy quán đối thủ hay người phá đám không thể gửi lời chê giả.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">6-5</span>Hộp góp ý khách nhìn thấy</h2>
+  <div class="shots">
+    <div style="flex:1"><span class="phone"><img src="img/vi/v01-button.jpg" alt="Nút hộp góp ý"></span><p class="cap">① Nút dưới thực đơn</p></div>
+    <div style="flex:1"><span class="phone"><img src="img/vi/v02-popup.jpg" alt="Chấm sao"></span><p class="cap">② Số sao và lời nhắn</p></div>
+    <div style="flex:1"><span class="phone"><img src="img/vi/v03-sent.jpg" alt="Sau khi gửi"></span><p class="cap">③ Sau khi gửi (2 sao)</p></div>
+  </div>
+  <ol class="num">
+    <li>Cuối thực đơn luôn có nút <b>'💬 Bữa ăn hôm nay thế nào?'</b>. Khi khách gọi 'Tính tiền', nó cũng tự hiện một lần.</li>
+    <li>Chọn sao, viết vài lời rồi bấm <b>'Gửi'</b>.</li>
+    <li>1–3 sao thì khách thấy lời xin lỗi và <b>màn hình bếp hiện cảnh báo đỏ</b> “KHÁCH CHƯA HÀI LÒNG” (4-4). Tất cả khách đều thấy nút <b>'Viết đánh giá Google'</b> giống nhau.</li>
+  </ol>
+</section>
+
+<section class="page">
+  <h2><span class="no">6-6</span>Đọc ý kiến · giữ đánh giá Google</h2>
+  <div class="lesson">
+    <div><span class="phone"><img src="img/vi/v05-list.jpg" alt="Ý kiến gần đây của khách"></span><p class="cap">Ý kiến gần đây</p></div>
+    <div>
+      <p>Chọn <b>7 ngày / 30 ngày</b> để xem số sao trung bình và số lượng theo từng mức sao. Ý kiến 1–3 sao có dòng màu đỏ.</p>
+      <h3 style="margin-top:4mm">😟 Khi có số sao thấp</h3>
+      <ol class="step">
+        <li>Ra bàn ngay và hỏi “Anh/chị có điều gì chưa hài lòng không ạ?”.</li>
+        <li>Đừng biện hộ, hãy xin lỗi → việc gì sửa được ngay thì sửa ngay.</li>
+        <li>Nếu cùng một lời phàn nàn lặp lại nhiều lần thì đưa ra họp nhân viên.</li>
+      </ol>
+      <div class="box warn"><b>⚠️ Quy định của Google — nhất định phải tuân thủ</b>① Không được chỉ nhờ khách chấm sao cao đánh giá. ② Không được tặng giảm giá, đồ uống, tem để đổi lấy đánh giá. ③ Không được viết đánh giá giả. Vi phạm thì <b>Google có thể xóa đánh giá hoặc khóa thông tin quán.</b> Vì vậy hộp góp ý hiện nút đánh giá giống nhau cho mọi khách.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── 7장 ───────── -->
+<section class="page chap">
+  <div class="big">07</div>
+  <h2>Mẹo vận hành quán</h2>
+  <p class="lead">Công cụ chỉ phát huy khi dùng thành thói quen hằng ngày.<br>Từ cách đặt thẻ QR đến bảng kiểm tra hằng ngày, chúng tôi đã tóm tắt lại.</p>
+  <div class="learn">
+    <h3>Trong chương này</h3>
+    <ol>
+      <li>Thẻ QR đặt ở đâu, đặt thế nào?</li>
+      <li>Huấn luyện nhân viên 10 phút</li>
+      <li>Bảng kiểm tra hằng ngày (trước giờ mở cửa · trong giờ bán · đóng cửa)</li>
+      <li>Kiểm tra hằng tuần · hằng tháng</li>
+    </ol>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">7-1</span>Cách đặt thẻ QR</h2>
+  <div class="lesson" style="grid-template-columns:62mm 1fr">
+    <div><img class="card-img" src="img/common/qr-card.jpg" alt="Thẻ QR đặt trên bàn"><p class="cap">Thẻ QR đặt trên bàn (A6)</p></div>
+    <div>
+      <h3>👍 Nên đặt thế này</h3>
+      <ul class="check">
+        <li>Chỗ <b>khách vừa ngồi xuống là thấy</b> — giữa bàn, cạnh ống đũa, hộp khăn giấy</li>
+        <li><b>Dựng đứng</b> trên chân đế hoặc giá acrylic</li>
+        <li>Ép plastic để phần QR <b>không bị gập, không bị ướt</b></li>
+        <li>Mỗi tuần kiểm tra số bàn và số trên thẻ có <b>giống nhau</b> không</li>
+      </ul>
+      <h3 style="margin-top:5mm">👎 Thế này sẽ không quét được</h3>
+      <p>· Chỗ có đèn chiếu phản chiếu · Thẻ dính dầu mỡ · Chỗ quá thấp hoặc khuất · Dán tem hoặc bảng giá lên QR</p>
+      <div class="box tip"><b>💡 Đặt thêm một thẻ ở cửa vào</b>Đặt một mã QR lớn ở trước cửa hoặc quầy tính tiền, khách đang chờ có thể chọn món trước. (Hãy nhờ làm loại QR không có số bàn)</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">7-2</span>Huấn luyện nhân viên 10 phút</h2>
+  <p>Khi có nhân viên mới, hãy cùng làm theo bảng này trong 10 phút. Mở sẵn chương 2, 4, 8 của sách thì sẽ dễ hơn.</p>
+  <table class="t">
+    <tr><th style="width:9%">STT</th><th style="width:35%">Làm gì</th><th>Làm thế nào</th></tr>
+    <tr><td>1</td><td>Làm quen màn hình khách (2 phút)</td><td>Dùng điện thoại nhân viên quét QR, thêm món → đơn gọi món → bấm thử đến 'Đưa nhân viên xem'.</td></tr>
+    <tr><td>2</td><td>Đọc đơn gọi món (1 phút)</td><td>Đọc chữ tiếng Việt to · số bàn · ghi chú trên màn hình 'Đưa nhân viên xem'.</td></tr>
+    <tr><td>3</td><td>Màn hình bếp (3 phút)</td><td>Gửi 1 đơn thử rồi bấm [Nhận đơn] → [Xong]. Bấm thử cả [Xong] ở dải khách gọi.</td></tr>
+    <tr><td>4</td><td>Sơ đồ bàn (1 phút)</td><td>Khi khách ra về, bấm [Dọn bàn].</td></tr>
+    <tr><td>5</td><td>Lời nói với khách (2 phút)</td><td>Đọc thành tiếng các câu mẫu ở chương 8 hai ba lần.</td></tr>
+    <tr><td>6</td><td>Tem · hộp góp ý (1 phút)</td><td>Cho khách xem mã QR tích tem ở quầy khi thanh toán, có cảnh báo đỏ thì ra bàn ngay.</td></tr>
+  </table>
+  <div class="box warn"><b>⚠️ Việc không nói cho nhân viên</b>Hãy để nhân viên không thấy mật khẩu màn hình chủ quán và doanh thu. Màn hình bếp không hiện doanh thu.</div>
+  <div class="box tip"><b>💡 Đổi chữ màn hình chủ quán sang tiếng Việt</b>Bấm 'Tiếng Việt' ở góc trên bên phải màn hình chủ quán thì quản lý người Việt cũng sửa được thực đơn.</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">7-3</span>Bảng kiểm tra hằng ngày</h2>
+  <p>Hãy in trang này ra và dán ở bếp hoặc quầy.</p>
+  <div class="grid" style="grid-template-columns:1fr 1fr 1fr;gap:3.5mm">
+    <div class="card"><h3>🌅 Trước giờ mở cửa</h3>
+      <ul class="check" style="font-size:12pt">
+        <li>Bật máy tính bảng ở bếp · cắm sạc</li>
+        <li>Bấm '▶ Bắt đầu' trên màn hình bếp</li>
+        <li>⚙ → Thử âm thanh</li>
+        <li>Giấy máy in · In thử</li>
+        <li>Nguyên liệu hôm nay không có → tích hết món · lưu</li>
+        <li>Thẻ QR đúng chỗ · sạch</li>
+      </ul></div>
+    <div class="card"><h3>🍽 Trong giờ bán</h3>
+      <ul class="check" style="font-size:12pt">
+        <li>Có đơn mới thì bấm [Nhận đơn] ngay</li>
+        <li>Món ra thì bấm [Xong]</li>
+        <li>Dải khách gọi thì bấm [Xong] ngay</li>
+        <li>Cảnh báo đỏ → ra bàn ngay</li>
+        <li>Hết nguyên liệu thì báo hết món ngay</li>
+        <li>Khách ra về thì [Dọn bàn]</li>
+      </ul></div>
+    <div class="card"><h3>🌙 Đóng cửa</h3>
+      <ul class="check" style="font-size:12pt">
+        <li>Xử lý đơn chưa xong (Xong · Hủy)</li>
+        <li>Bỏ tích hết món · lưu</li>
+        <li>📊 Xem doanh thu hôm nay</li>
+        <li>💬 Đọc ý kiến hộp góp ý</li>
+        <li>Sạc máy tính bảng</li>
+      </ul></div>
+  </div>
+  <h2 style="margin-top:8mm"><span class="no">7-4</span>Kiểm tra hằng tuần · hằng tháng</h2>
+  <table class="t">
+    <tr><th style="width:18%">Khi nào</th><th>Việc cần làm</th></tr>
+    <tr><td>Mỗi thứ Hai</td><td>📊 7 ngày qua — gắn BEST cho món hạng 1–3 · 💬 xem số sao trung bình 7 ngày · kiểm tra số thẻ QR</td></tr>
+    <tr><td>Mùng 1 hằng tháng</td><td>📊 Doanh thu tháng trước · lưu báo cáo lượt xem · đổi hình hoặc bỏ món bán không chạy · sửa giá đã thay đổi · lên kế hoạch dải ưu đãi tháng này</td></tr>
+    <tr><td>Khi có món mới</td><td>Chụp hình (3-4) → '+ Thêm món' → gắn nhãn Món mới → báo bằng dải ưu đãi → đăng mạng xã hội (chương 9)</td></tr>
+  </table>
+</section>
+
+<!-- ───────── 8장 ───────── -->
+<section class="page chap">
+  <div class="big">08</div>
+  <h2>Lời nói với khách</h2>
+  <p class="lead">Khách lần đầu có thể còn lạ với mã QR.<br>Chỉ cần một câu ngắn gọn, thân thiện là đủ. Cứ đọc đúng như vậy.</p>
+  <div class="learn">
+    <h3>Trong chương này</h3>
+    <ol>
+      <li>Khi dẫn khách vào bàn · khách khó dùng điện thoại</li>
+      <li>Khách nước ngoài · xác nhận món · hết món</li>
+      <li>Khi món ra chậm · khi tính tiền · tem</li>
+      <li>Khi khách phàn nàn · khi tiễn khách</li>
+    </ol>
+  </div>
+  <div class="box note" style="margin-top:8mm;background:#fff"><b>📌 Cách xem</b>Dòng trên là <b>tiếng Việt</b> (cho khách và nhân viên người Việt), dòng giữa là tiếng Hàn, dòng dưới là <b>tiếng Anh</b> (cho các khách nước ngoài khác).</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">8-1</span>Dẫn vào bàn · khi gọi món</h2>
+  <div class="phrase"><h3>🪑 Khi khách vừa ngồi xuống</h3>
+    <p class="vi">"Anh/chị quét mã QR trên bàn bằng camera điện thoại là xem được thực đơn có hình. Anh/chị gọi món ngay trên đó được ạ."</p>
+    <p class="ko">"테이블의 QR을 휴대폰 카메라로 찍으시면 사진 메뉴판이 나와요. 거기서 바로 주문하실 수 있어요."</p>
+    <p class="en">"Scan the QR code on the table with your phone camera to see our photo menu. You can order right there."</p></div>
+  <div class="phrase"><h3>👵 Khách khó dùng điện thoại</h3>
+    <p class="vi">"Để em giúp anh/chị ạ. Anh/chị mở camera, hướng vào ô vuông này… Dạ, giờ bấm vào đường link màu vàng là được ạ."</p>
+    <p class="ko">"제가 도와드릴게요. 카메라를 켜서 여기 네모에 대 보세요. … 네, 이 노란 주소를 누르시면 돼요."</p>
+    <p class="en">"Let me help you. Open the camera and point it at this square… Yes, now tap the link."</p></div>
+  <div class="phrase"><h3>🌏 Khách nước ngoài</h3>
+    <p class="vi">"Anh/chị bấm nút ở góc trên bên phải là đổi được sang tiếng Anh, tiếng Trung, tiếng Nhật ạ."</p>
+    <p class="ko">"오른쪽 위 버튼을 누르시면 영어·중국어·일본어로도 보실 수 있어요."</p>
+    <p class="en">"Tap the button at the top right to change the language."</p></div>
+  <div class="phrase"><h3>🧾 Khi khách đã chọn xong món</h3>
+    <p class="vi">"Anh/chị bấm 'Xem đơn' ở phía dưới rồi bấm 'Gửi đơn vào bếp' nhé. Bếp nhận được ngay ạ."</p>
+    <p class="ko">"아래 '주문서 보기'를 누르고 '주방으로 주문 보내기'를 눌러 주세요. 바로 주방에 들어가요."</p>
+    <p class="en">"Tap 'View order' at the bottom, then 'Send order to kitchen'. The kitchen gets it right away."</p></div>
+</section>
+
+<section class="page">
+  <h2><span class="no">8-2</span>Hết món · món ra chậm · gọi nhân viên</h2>
+  <div class="phrase"><h3>🚫 Khi hết món</h3>
+    <p class="vi">"Xin lỗi anh/chị, hôm nay món đó hết rồi ạ. Anh/chị thử món ○○ nhé? Món này khách gọi nhiều lắm ạ."</p>
+    <p class="ko">"죄송해요, 오늘은 그 메뉴 재료가 다 떨어졌어요. 대신 ○○ 어떠세요? 손님들이 많이 찾으세요."</p>
+    <p class="en">"Sorry, that dish is sold out today. How about ○○? It's very popular."</p></div>
+  <div class="phrase"><h3>⏳ Khi khách hỏi bao giờ món ra</h3>
+    <p class="vi">"Bếp đang làm rồi ạ. Anh/chị bấm 'Món đã gọi' là xem được món đang làm tới đâu ạ."</p>
+    <p class="ko">"지금 만들고 있어요. '주문 내역'을 누르시면 어디까지 됐는지 보실 수 있어요."</p>
+    <p class="en">"It's being cooked now. Tap 'Our orders' to see the status."</p></div>
+  <div class="phrase"><h3>🔔 Khi cần nước, đồ ăn kèm</h3>
+    <p class="vi">"Anh/chị cần gì cứ bấm 'Gọi nhân viên' nhé. Nước, thêm đồ ăn kèm, tính tiền đều có nút bấm ạ."</p>
+    <p class="ko">"필요하신 게 있으면 '직원 호출'을 누르세요. 물, 반찬, 계산서 모두 버튼으로 부르실 수 있어요."</p>
+    <p class="en">"If you need anything, tap 'Call staff' — water, side dishes or the bill."</p></div>
+  <div class="phrase"><h3>✅ Khi xác nhận món (Đưa nhân viên xem)</h3>
+    <p class="vi">"Anh/chị cho em xem màn hình điện thoại một chút được không ạ? 2 phần canh kimchi, 1 phần canh thịt bò, đúng không ạ?"</p>
+    <p class="ko">"휴대폰 화면 한번 보여 주시겠어요? 김치찌개 2개, 설렁탕 1개 맞으시죠?"</p>
+    <p class="en">"May I see your screen? Two kimchi stews and one beef soup, right?"</p></div>
+</section>
+
+<section class="page">
+  <h2><span class="no">8-3</span>Tính tiền · tem · phàn nàn · tiễn khách</h2>
+  <div class="phrase"><h3>🎁 Khi tính tiền (tem)</h3>
+    <p class="vi">"Anh/chị quét mã này để tích tem nhé. Đủ 10 tem được tặng 1 ly nước. Không cần số điện thoại ạ."</p>
+    <p class="ko">"이 QR을 찍으시면 도장이 쌓여요. 10개 모으시면 음료 한 잔 드려요. 전화번호는 필요 없어요."</p>
+    <p class="en">"Scan this to collect a stamp. Ten stamps get you a free drink. No phone number needed."</p></div>
+  <div class="phrase"><h3>💬 Khi nhờ khách góp ý</h3>
+    <p class="vi">"Anh/chị để lại vài lời ở nút cuối thực đơn giúp quán nhé. Chỉ chủ quán đọc thôi ạ."</p>
+    <p class="ko">"오늘 식사 어떠셨는지 메뉴판 아래 버튼으로 한마디 남겨 주시면 큰 도움이 돼요. 사장님만 봐요."</p>
+    <p class="en">"We'd love your feedback — use the button at the bottom of the menu. Only the owner reads it."</p></div>
+  <div class="phrase"><h3>😟 Khi khách phàn nàn</h3>
+    <p class="vi">"Quán thành thật xin lỗi anh/chị. Anh/chị cho em biết chưa hài lòng chỗ nào, quán sẽ sửa ngay ạ."</p>
+    <p class="ko">"불편을 드려 정말 죄송합니다. 무엇이 불편하셨는지 말씀해 주시면 바로 고칠게요."</p>
+    <p class="en">"We're very sorry. Please tell us what went wrong and we'll fix it right away."</p></div>
+  <div class="phrase"><h3>👋 Khi tiễn khách</h3>
+    <p class="vi">"Cảm ơn anh/chị ạ! Anh/chị lưu lại đường link thực đơn, lần sau có thể chọn món trước khi đến."</p>
+    <p class="ko">"감사합니다! 메뉴판 주소를 저장해 두시면 다음엔 오시기 전에 미리 고르실 수 있어요."</p>
+    <p class="en">"Thank you! Save our menu link and choose your dishes before your next visit."</p></div>
+  <div class="box warn"><b>⚠️ Không được nói câu này</b>"Anh/chị viết đánh giá tốt thì quán giảm giá ạ" ✕ — vi phạm quy định của Google (6-6).</div>
+</section>
+
+<!-- ───────── 9장 ───────── -->
+<section class="page chap">
+  <div class="big">09</div>
+  <h2>Mẹo quảng bá quán</h2>
+  <p class="lead">Chỉ với một địa chỉ thực đơn là quảng bá được trong quán, ngoài quán và cả trên mạng.<br>Chúng tôi chỉ gom những cách không tốn tiền.</p>
+  <div class="learn">
+    <h3>Trong chương này</h3>
+    <ol>
+      <li>Cách dùng hình mạng xã hội</li>
+      <li>Gắn thực đơn vào Google Maps</li>
+      <li>Cách dùng Zalo · Facebook</li>
+      <li>Lịch ý tưởng cho dải ưu đãi</li>
+      <li>Những kiểu quảng bá không được làm</li>
+    </ol>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">9-1</span>Cách dùng hình mạng xã hội</h2>
+  <div class="lesson" style="grid-template-columns:1fr 1fr">
+    <div><img class="card-img" src="img/common/sns-square.jpg" alt="Hình mạng xã hội hình vuông"><p class="cap">Hình vuông — bài đăng Facebook · Instagram · Zalo</p></div>
+    <div style="display:flex;gap:5mm;align-items:flex-start">
+      <div style="width:42mm;flex:none"><img class="card-img" src="img/common/sns-story.jpg" alt="Hình mạng xã hội hình dọc"><p class="cap">Hình dọc — Story · Nhật ký</p></div>
+      <div><p>Khi ký hợp đồng, chúng tôi đã gửi hai hình này. Quét mã QR trong hình là mở được thực đơn.</p></div>
+    </div>
+  </div>
+  <h3 style="margin-top:6mm">📢 Nội dung kèm theo khi đăng (ví dụ)</h3>
+  <div class="phrase" style="margin-top:2mm">
+    <p class="vi">Thực đơn Jinmi đã có trên điện thoại! Xem hình, chọn món và gọi ngay tại bàn. 👉 jinmi.qrmenuasia.com</p>
+    <p class="ko">진미식당 메뉴판이 휴대폰으로 들어왔어요! 사진 보고 고르고, 자리에서 바로 주문하세요. 👉 jinmi.qrmenuasia.com</p></div>
+  <div class="box tip"><b>💡 Mẹo hay</b>Ngoài hình, nhớ ghi <b>cả địa chỉ thực đơn vào nội dung bài đăng</b>. Người xem bằng điện thoại không quét QR được nên phải bấm vào địa chỉ.</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">9-2</span>Gắn thực đơn vào Google Maps</h2>
+  <p>Khách chọn quán thường xem Google Maps. Anh/chị có thể làm đẹp thông tin Google của quán <b>miễn phí</b>.</p>
+  <ol class="step">
+    <li>Trên điện thoại, đăng ký làm chủ quán trong <b>Hồ sơ doanh nghiệp trên Google</b> (Google Business Profile). Tìm quán trên Google Maps theo tên rồi bấm 'Bạn là chủ sở hữu doanh nghiệp này?'.</li>
+    <li>Nhập <b>địa chỉ thực đơn</b> vào ô 'Liên kết thực đơn' hoặc 'Trang web'.</li>
+    <li>Thêm giờ mở cửa · số điện thoại · hình món ăn. <b>Hình càng nhiều</b> thì càng được hiện nhiều.</li>
+    <li>Với đánh giá của khách, <b>dù tốt hay xấu cũng trả lời ngắn gọn</b>.</li>
+  </ol>
+  <div class="box note"><b>📌 Nếu anh/chị khó tự làm</b>Hãy báo chúng tôi. Chúng tôi sẽ hướng dẫn bấm gì theo từng màn hình. (Mật khẩu thì chính anh/chị phải tự nhập)</div>
+  <div class="box tip"><b>💡 Ví dụ trả lời đánh giá</b>Đánh giá tốt: "Cảm ơn anh/chị đã ăn ngon miệng! Lần sau nhớ thử thêm món canh sườn bò (galbitang) nhé."<br>Đánh giá xấu: "Quán xin lỗi vì đã làm anh/chị không hài lòng. Điều anh/chị nói quán đã sửa ngay. Mong anh/chị cho quán thêm một cơ hội."</div>
+  <div class="box note" style="margin-top:3mm"><b>📌 Trang tìm quán</b>Quán mình cũng được giới thiệu trên trang <span class="url">qrmenuasia.com/stores</span> của chúng tôi. Khách tìm theo khu vực, loại món rồi vào xem.</div>
+</section>
+
+<section class="page">
+  <h2><span class="no">9-3</span>Zalo · Facebook</h2>
+  <div class="grid">
+    <div class="card"><div class="ic">💬</div><h3>Zalo</h3>
+      <p style="color:var(--ink)">· Ghi <b>địa chỉ thực đơn</b> vào phần giới thiệu trong hồ sơ Zalo của quán<br>· Đăng món mới, tin giảm giá vào nhóm Zalo của khách quen<br>· Khi có khách hỏi đặt bàn, gửi địa chỉ thực đơn trước<br>· Đăng hình mạng xã hội dạng dọc lên Nhật ký</p></div>
+    <div class="card"><div class="ic">📘</div><h3>Facebook</h3>
+      <p style="color:var(--ink)">· Ghi địa chỉ thực đơn vào phần 'Giới thiệu' của trang quán<br>· Mỗi tuần đăng 1–2 lần hình món ăn kèm địa chỉ<br>· Giới thiệu trong nhóm địa phương, nhóm người Hàn (tuân thủ quy định nhóm)<br>· Trả lời bình luận, tin nhắn trong vòng một ngày</p></div>
+  </div>
+  <h3 style="margin-top:6mm">📸 Bài đăng khách thích</h3>
+  <table class="t">
+    <tr><th style="width:30%">Loại</th><th>Ví dụ</th></tr>
+    <tr><td>Hình món ăn còn bốc khói</td><td>"Nước canh sườn bò hôm nay hầm 12 tiếng đó ạ"</td></tr>
+    <tr><td>Món mới</td><td>"Món mới tuần này — xem hình và gọi ngay trên thực đơn nhé"</td></tr>
+    <tr><td>Tin giảm giá</td><td>"Ngày mưa giảm 10% bánh xèo hải sản (xem dải ưu đãi trên thực đơn)"</td></tr>
+    <tr><td>Chuyện người trong quán</td><td>"Vị kimchi bếp trưởng giữ suốt 30 năm"</td></tr>
+  </table>
+</section>
+
+<section class="page">
+  <h2><span class="no">9-4</span>Lịch ý tưởng cho dải ưu đãi</h2>
+  <p>'Dải ưu đãi hôm nay' (3-6) mọi khách mở thực đơn đều thấy. Anh/chị thử viết như sau.</p>
+  <table class="t">
+    <tr><th style="width:24%">Khi nào</th><th>Ví dụ nội dung dải ưu đãi</th></tr>
+    <tr><td>Giờ vắng khách</td><td>2–5h chiều mua 1 tặng 1 đồ uống · 오후 2~5시 음료 1+1</td></tr>
+    <tr><td>Buổi trưa</td><td>Giảm 10% set trưa (11–14h) · 점심 세트 10% 할인 (11~14시)</td></tr>
+    <tr><td>Ngày mưa</td><td>Trời mưa giảm 10% bánh xèo hải sản · 비 오는 날 해물파전 10% 할인</td></tr>
+    <tr><td>Món mới</td><td>Món mới ○○ giảm 15% tuần đầu · 신메뉴 ○○ 첫 주 15% 할인</td></tr>
+    <tr><td>Lễ, Tết, ngày kỷ niệm</td><td>Tết vẫn mở cửa (○–○) · 설 연휴 영업합니다 (○일~○일)</td></tr>
+    <tr><td>Nhắc khách quen</td><td>Tích đủ 10 tem tặng 1 ly nước! Quét QR khi thanh toán · 도장 10개 = 음료 1잔!</td></tr>
+  </table>
+  <div class="box tip"><b>💡 Mẹo hay</b>Nhớ ghi ngày bắt đầu và ngày kết thúc. Ưu đãi đã hết mà vẫn hiện thì dễ cãi nhau với khách.</div>
+  <h2 style="margin-top:8mm"><span class="no">9-5</span>Những kiểu quảng bá không được làm</h2>
+  <ul style="margin:2mm 0 0;padding-left:6mm;font-size:13pt">
+    <li>Tặng giảm giá, quà để đổi lấy đánh giá ✕ (vi phạm quy định Google)</li>
+    <li>Chỉ nhờ khách chấm sao cao đánh giá ✕</li>
+    <li>Người nhà, nhân viên viết đánh giá giả ✕</li>
+    <li>Dùng hình, bài viết của quán khác khi chưa được phép ✕</li>
+    <li>Để giá trên thực đơn khác với giá tính tiền thực tế ✕ — giá thay đổi thì sửa ngay (3-3).</li>
+  </ul>
+</section>
+
+<!-- ───────── 10장 ───────── -->
+<section class="page chap">
+  <div class="big">10</div>
+  <h2>Câu hỏi thường gặp ·<br>Khi gặp sự cố</h2>
+  <p class="lead">Phần lớn chỉ mất 1 phút là xong.<br>Nếu vẫn không được, hãy báo qua liên hệ ở trang cuối.</p>
+  <div class="learn">
+    <h3>Trong chương này</h3>
+    <ol>
+      <li>Sự cố màn hình khách</li>
+      <li>Sự cố màn hình chủ quán</li>
+      <li>Sự cố màn hình bếp · máy in</li>
+      <li>Sự cố tem · hộp góp ý · doanh thu</li>
+      <li>Liên hệ</li>
+    </ol>
+  </div>
+</section>
+
+<section class="page">
+  <h2><span class="no">10-1</span>Màn hình khách · màn hình chủ quán</h2>
+  <div class="faq"><b>Hỏi: Điện thoại khách không mở được QR.</b><p>Mở camera, hướng vào mã QR 1–2 giây. Khi đường link hiện bên dưới thì bấm vào. Nếu không được, dùng chức năng quét QR của Zalo hoặc Google Lens. Thẻ bị ướt hoặc phản chiếu thì khó quét.</p></div>
+  <div class="faq"><b>Hỏi: Màn hình khách hiện "Vui lòng quét lại mã QR trên bàn".</b><p>Do thẻ QR trên bàn đã bị thay, hoặc khách quét nhầm thẻ của bàn khác. Hãy cho khách quét lại thẻ của đúng bàn đó.</p></div>
+  <div class="faq"><b>Hỏi: Không thấy nút 'Gửi đơn vào bếp' hay 'Gọi nhân viên'.</b><p>Các nút này chỉ hiện ở quán đã bật gọi món vào bếp, và chỉ với khách <b>vào bằng thẻ QR trên bàn</b>. Khách vào từ trang tìm quán hay Google chỉ thấy 'Đưa nhân viên xem'.</p></div>
+  <div class="faq"><b>Hỏi: Tôi đã sửa giá mà màn hình khách vẫn như cũ.</b><p>① Anh/chị đã bấm 'Lưu và hiển thị cho khách' chưa? ② Chờ khoảng 1 phút rồi kéo màn hình khách xuống để tải lại.</p></div>
+  <div class="faq"><b>Hỏi: Tôi quên mật khẩu màn hình chủ quán.</b><p>Hãy liên hệ chúng tôi. Chúng tôi sẽ tạo mật khẩu mới. (Chúng tôi cũng không xem được mật khẩu cũ)</p></div>
+  <div class="faq"><b>Hỏi: Hiện "Phiên đăng nhập đã hết" / không vào được.</b><p>Đóng cửa sổ hoặc quá 12 giờ thì phải nhập lại mật khẩu. Nhập sai 8 lần sẽ bị khóa 1 giờ. Hãy thử lại sau 1 giờ.</p></div>
+  <div class="faq"><b>Hỏi: Tôi sửa nhầm làm thực đơn bị lạ.</b><p>Trong 'Phiên bản cũ', chọn ngày trước lúc sửa rồi bấm 'Dùng phiên bản này' (3-5).</p></div>
+</section>
+
+<section class="page">
+  <h2><span class="no">10-2</span>Bếp · máy in · tem · doanh thu</h2>
+  <div class="faq"><b>Hỏi: Màn hình bếp không có tiếng.</b><p>① Anh/chị đã bấm '▶ Bắt đầu' chưa? ② Tăng âm lượng máy tính bảng hết cỡ, tắt chế độ im lặng ③ ⚙ → Độ lớn âm thanh 'Rất to' → Thử âm thanh.</p></div>
+  <div class="faq"><b>Hỏi: Chấm tròn ở góc trên bên trái màn hình bếp màu xám/đỏ.</b><p>Là mất mạng. Hãy kiểm tra Wi-Fi. Khi kết nối lại, chấm tự chuyển xanh lá và các đơn sẽ vào lại.</p></div>
+  <div class="faq"><b>Hỏi: Hóa đơn không in ra.</b><p>① Nguồn và giấy của máy in ② Chiều giấy (mặt giấy nhiệt hướng ra ngoài) ③ Trong app RawBT đã chọn máy in chưa ④ ⚙ → In thử. Nếu 'Tự in đơn mới' không chạy thì bấm [🖨 In].</p></div>
+  <div class="faq"><b>Hỏi: Khách nói không nhận được tem.</b><p>Mỗi khách chỉ nhận <b>1 lần mỗi ngày</b>. Ngoài ra QR đổi mỗi 1 phút nên phải quét ngay mã trên màn hình. Mã QR chụp ảnh sẵn thì không được.</p></div>
+  <div class="faq"><b>Hỏi: Khách đổi điện thoại nên mất tem.</b><p>Nhập <b>mã khôi phục</b> trên thẻ tem của điện thoại cũ vào điện thoại mới là tem quay lại. Nếu không có mã khôi phục thì không lấy lại được.</p></div>
+  <div class="faq"><b>Hỏi: Doanh thu ít hơn thực tế.</b><p>Chỉ tính đơn gửi bằng 'Gửi đơn vào bếp'. Đơn nhân viên ghi tay và đơn đã hủy không được tính (5-2).</p></div>
+  <div class="faq"><b>Hỏi: Tôi muốn đổi nhiều món / cần thêm thẻ QR.</b><p>Hãy gửi cho chúng tôi hình ảnh và danh sách. Chúng tôi sẽ đổi một lượt và làm lại thẻ cho anh/chị.</p></div>
+</section>
+
+<section class="page">
+  <h2><span class="no">10-3</span>Liên hệ · thông tin quán</h2>
+  <p>Điền vào bảng dưới rồi để ở quầy. Nhân viên có thay đổi cũng dễ tìm.</p>
+  <table class="t fill">
+    <tr><th style="width:38%">Địa chỉ thực đơn của quán</th><td>https://__________________.qrmenuasia.com</td></tr>
+    <tr><th>Địa chỉ màn hình chủ quán</th><td>qrmenuasia.com/owner/?shop=__________</td></tr>
+    <tr><th>Địa chỉ màn hình bếp</th><td>qrmenuasia.com/kitchen/?shop=__________</td></tr>
+    <tr><th>Nơi nhờ hỗ trợ (người phụ trách)</th><td>Tên: ______________</td></tr>
+    <tr><th>Cách liên hệ</th><td>Zalo / Điện thoại: ______________</td></tr>
+    <tr><th>Tên máy in · khổ giấy</th><td>______________ / 58mm · 80mm</td></tr>
+  </table>
+  <div class="box warn"><b>⚠️ Đừng ghi mật khẩu và PIN vào đây</b>Mất thì chúng tôi tạo lại cho. Ghi ra giấy thì người khác có thể thấy.</div>
+  <h3 style="margin-top:8mm">📞 Khi liên hệ, hãy gửi kèm</h3>
+  <ul class="check">
+    <li>Tên quán</li>
+    <li>Một dòng: đang làm gì thì bị lỗi</li>
+    <li>1 ảnh chụp màn hình điện thoại</li>
+  </ul>
+  <div class="box tip" style="margin-top:8mm"><b>💡 Lời cuối</b>Chỉ cần dùng mỗi ngày trong tuần đầu tiên. Quen tay rồi thì mỗi ngày 5 phút là đủ. Có gì thắc mắc cứ hỏi chúng tôi bất cứ lúc nào. Chúc quán buôn bán đắt khách! 🙌</div>
+</section>
+
+</body>
+</html>

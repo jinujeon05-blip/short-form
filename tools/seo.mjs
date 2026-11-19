@@ -1,4 +1,6 @@
-// 검색 등록용 준비: node tools/seo.mjs
+// 검색 등록용 준비: node tools/seo.mjs [가게id…]
+// 가게id 를 주면 **그 가게 파일만** 고친다(다른 가게는 읽기만, 전체 사이트맵 sales/sitemap.xml 은 같이 맞춤) — 새 가게·한 가게 수정은 항상 이렇게.
+// 가게id 없이 돌리면 전부 다시 만든다(공통 양식을 바꿨을 때만).
 // 가게마다 index.html <head> 에 대표 주소(canonical)·링크 미리보기(og)·가게 정보 구조화 데이터(JSON-LD)를 넣고
 // robots.txt·sitemap.xml 을 만든다. 소개서(sales/)에는 전체 사이트맵(qrmenuasia.com/sitemap.xml)을 만든다.
 // 메뉴·가격·주소를 고친 뒤 다시 돌리면 <!-- seo:start --> ~ <!-- seo:end --> 부분만 새로 바뀐다.
@@ -81,6 +83,35 @@ const SHOPS = {
   sigoljib: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Charcoal grill', 'Stew'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   tete: { type: 'Restaurant', cuisine: ['Korean', 'Korean street food', 'Tteokbokki', 'Kimbap'], country: 'VN', currency: 'VND', og: 'img/rose.jpg' },
   suwonyang: { type: 'Restaurant', cuisine: ['Korean', 'Lamb BBQ', 'Lamb skewers', 'Chinese'], country: 'VN', currency: 'VND', og: 'img/lambribs.jpg' },
+  suwonhanoi: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef', 'Pork'], country: 'VN', currency: 'VND', og: 'img/samgyeop.jpg' },
+  samwonjeong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Galbi', 'Beef'], country: 'VN', currency: 'VND', og: 'img/nakji.jpg' },
+  donori: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork belly', 'Duck'], country: 'VN', currency: 'VND', og: 'img/jumulleok.jpg' },
+  doya: { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Noodles', 'Jjamppong', 'Jjajangmyeon'], country: 'VN', currency: 'VND', og: 'img/jjamppong.jpg' },
+  andong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Gopchang', 'Beef'], country: 'VN', currency: 'VND', og: 'img/gopchang-modum.jpg' },
+  yukdaejang: { type: 'Restaurant', cuisine: ['Korean', 'Yukgaejang', 'Korean Soup', 'Bossam'], country: 'VN', currency: 'VND', og: 'img/yukgaejang.jpg' },
+  mokgumeong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork Belly', 'Naengmyeon'], country: 'VN', currency: 'VND', og: 'img/samgyeop.jpg' },
+  horangi: { type: 'Restaurant', cuisine: ['Korean', 'Pork Cutlet', 'Fried Chicken', 'Rice Bowl'], country: 'VN', currency: 'VND', og: 'img/cheese-katsu.jpg' },
+  myungheewon: { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Noodles', 'Jjajangmyeon', 'Jjamppong'], country: 'VN', currency: 'VND', og: 'img/jjajang.jpg' },
+  honggang: { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Chinese', 'Noodles', 'Jjajangmyeon', 'Jjamppong'], country: 'VN', currency: 'VND', og: 'img/jjajang.jpg' },
+  kkochimacha: { type: 'BarOrPub', cuisine: ['Korean', 'Skewers', 'Grilled Chicken', 'Anju'], country: 'VN', currency: 'VND', og: 'img/moodeum.jpg' },
+  thesiktak: { type: 'Restaurant', cuisine: ['Korean', 'Japanese', 'Sashimi', 'Sushi', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/moodeum_sashimi.jpg' },
+  onban: { type: 'Restaurant', cuisine: ['Korean', 'Gomtang', 'Hot Pot', 'Buckwheat Noodles'], country: 'VN', currency: 'VND', og: 'img/gomtang.jpg' },
+  ilryu: { type: 'Restaurant', cuisine: ['Korean', 'Sashimi', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/moduem.jpg' },
+  mereumil: { type: 'Restaurant', cuisine: ['Korean', 'Noodles', 'Soba'], country: 'VN', currency: 'VND', og: 'img/naeng.jpg' },
+  jenniemom: { type: 'Restaurant', cuisine: ['Vietnamese', 'Bún chả', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/buncha.jpg' },
+  saeugongjang: { type: 'Restaurant', cuisine: ['Korean', 'Seafood', 'Shrimp'], country: 'VN', currency: 'VND', og: 'img/salt.jpg' },
+  poomba: { type: 'BarOrPub', cuisine: ['Korean', 'Korean pancakes', 'Skewers'], country: 'VN', currency: 'VND', og: 'img/jeon-a.jpg' },
+  korilla: { type: 'BarOrPub', cuisine: ['Korean', 'Korean fried chicken', 'Craft beer'], country: 'VN', currency: 'VND', og: 'img/tteokbokki.jpg' },
+  cheonguk: { type: 'Restaurant', cuisine: ['Korean', 'Samgyetang', 'Galbitang'], country: 'VN', currency: 'VND', og: 'img/jeonbok-samgyetang.jpg' },
+  kobul: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Bulgogi'], country: 'VN', currency: 'VND', og: 'img/mulnaengmyeon.jpg' },
+  hwanggeumseong: { type: 'Restaurant', cuisine: ['Korean Chinese', 'Chinese', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/mapa-dubu.jpg' },
+  andongjip: { type: 'Restaurant', cuisine: ['Korean', 'Soup', 'Stew'], country: 'VN', currency: 'VND', og: 'img/gamjatang.jpg' },
+  sageori: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork Ribs'], country: 'VN', currency: 'VND', og: 'img/deungalbi.jpg' },
+  seongjeo: { type: 'Restaurant', cuisine: ['Korean', 'Pork Soup', 'Sundae'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  jungsung: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/yukhoe.jpg' },
+  torei: { type: 'Restaurant', cuisine: ['Japanese', 'Izakaya', 'Yakitori'], country: 'VN', currency: 'VND', og: 'img/yakitori.jpg' },
+  shangla: { type: 'Restaurant', cuisine: ['Chinese', 'Sichuan', 'Korean'], country: 'VN', currency: 'VND', og: 'img/malaxiangguo.jpg' },
+  smile: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork BBQ'], country: 'VN', currency: 'VND', og: 'img/daepae.jpg' },
   chachacha: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Beef', 'Pork belly'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   yonggalbi: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Galbi', 'Unlimited galbi'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   seoulbrothers: { type: 'Restaurant', cuisine: ['Korean', 'Korean pub', 'Fried chicken', 'Anju'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
@@ -124,6 +155,13 @@ const SHOPS = {
   ijang:        { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Charcoal grill'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   baba:         { type: 'BarOrPub', cuisine: ['Korean', 'Korean pub', 'Pizza', 'Cocktails', 'Craft beer'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
   orimyeongga:  { type: 'Restaurant', cuisine: ['Korean', 'Duck', 'Gamjatang', 'Bossam'], country: 'VN', currency: 'VND', og: 'img/store.jpg' },
+  daehansangho: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Pork'], country: 'VN', currency: 'VND', og: 'img/grill.jpg' },
+  kangnammyeonok: { type: 'Restaurant', cuisine: ['Korean', 'Cold Noodles', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  jinmi: { type: 'Restaurant', cuisine: ['Korean', 'Stew', 'Soup', 'Anju'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  bacninhbanjeom: { type: 'Restaurant', cuisine: ['Korean-Chinese', 'Jjajangmyeon', 'Jjamppong'], country: 'VN', currency: 'VND', og: 'img/jjajangmyeon.jpg' },
+  oshima: { type: 'Restaurant', cuisine: ['Japanese', 'Yakiniku', 'Wagyu'], country: 'VN', currency: 'VND', og: 'img/sirloin.jpg' },
+  ttomoise: { type: 'Restaurant', cuisine: ['Korean', 'Hangover Soup', 'Gukbap', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  smilebn: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Grill'], country: 'VN', currency: 'VND', og: 'img/bokkeum.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
@@ -162,9 +200,18 @@ function inject(file, html) {
   return writeIfChanged(file, s);
 }
 
+const ONLY = process.argv.slice(2);
+for (const s of ONLY) if (!SHOPS[s]) { console.error(`seo.mjs 의 SHOPS 에 없는 가게: ${s}`); process.exit(1); }
 const shopUrls = [], shopMod = {};
 for (const [shop, cfg] of Object.entries(SHOPS)) {
   const dir = `${ROOT}/restaurants/${shop}`;
+  if (ONLY.length && !ONLY.includes(shop)) {
+    // 다른 가게는 건드리지 않는다(2026-11-11 배포 멈춤 건: 뒤 가게를 만들 때 앞 가게 파일이 바뀌어 남음)
+    const u = `https://${shop}.${DOMAIN}/`;
+    shopUrls.push(u);
+    shopMod[u] = lastmodOf(`${dir}/sitemap.xml`, u) || lastmodOf(`${ROOT}/sales/sitemap.xml`, u) || today;
+    continue;
+  }
   const ctx = { window: {} };
   vm.runInNewContext(readFileSync(`${dir}/menu.js`, 'utf8'), ctx);
   const R = ctx.window.RESTAURANT, MENU = ctx.window.MENU || [];
@@ -220,7 +267,7 @@ for (const [shop, cfg] of Object.entries(SHOPS)) {
 // 소개서·가게 찾기 (qrmenuasia.com): 전체 사이트맵 하나로 모든 가게를 함께 알린다
 const sales = `${ROOT}/sales`;
 const main = `https://${DOMAIN}/`;
-const salesChanged = inject(`${sales}/index.html`, block([
+const salesChanged = ONLY.length ? false : inject(`${sales}/index.html`, block([
   `<link rel="canonical" href="${main}">`,
   `<meta name="naver-site-verification" content="373cad11eece55044bada0b3b79a8f55a2b8e00c">`, // 네이버 서치어드바이저 소유 확인 (지우지 말 것)
   `<meta property="og:type" content="website">`,

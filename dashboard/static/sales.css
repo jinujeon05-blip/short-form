@@ -1,0 +1,78 @@
+/* 영업 탭 (2026-11-19). 클래스는 모두 sl- 로 시작(기존 대시보드 스타일과 안 겹치게) */
+.sl { display: flex; flex-direction: column; gap: 12px; }
+.sl-notice { background: #f4f7ff; border: 1px solid #d5e1fb; border-radius: 12px; padding: 10px 12px; font-size: 12px; color: #2b3c5e; line-height: 1.5; }
+.sl-notice b { color: var(--text); }
+
+/* 상단 필터·검색 */
+.sl-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.sl-bar input[type="search"] { flex: 1 1 180px; min-width: 0; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.sl-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.sl-pill { border: 1px solid var(--line); background: #fff; border-radius: 99px; padding: 4px 10px; font-size: 12px; color: var(--sub); cursor: pointer; white-space: nowrap; }
+.sl-pill.on { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 700; }
+.sl-pill.warn.on { background: var(--orange); border-color: var(--orange); }
+
+/* 작업 카드 (선택한 가게 초안·복사·Zalo·보냄 표시) */
+.sl-work { background: var(--card); border: 1.5px solid #bfd2fb; border-radius: 14px; padding: 14px 16px; box-shadow: 0 4px 16px rgba(47,111,236,.08); }
+.sl-work-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+.sl-work-title { min-width: 0; flex: 1 1 200px; }
+.sl-work-title h3 { margin: 0; font-size: 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.sl-work-meta { font-size: 12px; color: var(--sub); margin-top: 3px; display: flex; flex-wrap: wrap; gap: 4px 10px; word-break: break-all; }
+.sl-work-close { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--sub); }
+
+.sl-ctrl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 10px; margin-bottom: 10px; }
+.sl-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.sl-field.full { grid-column: 1 / -1; }
+.sl-field span { font-size: 12px; color: var(--sub); font-weight: 600; }
+.sl-field select, .sl-field textarea { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; background: #fff; }
+.sl-field textarea { resize: vertical; min-height: 48px; line-height: 1.45; }
+
+.sl-act { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+.sl-zalo { display: inline-flex; align-items: center; gap: 4px; border: 1px solid #0068ff; background: #0068ff; color: #fff; border-radius: 8px; padding: 6px 12px; font-weight: 700; font-size: 13px; text-decoration: none; }
+.sl-zalo:hover { background: #0055d4; }
+.sl-zalo.off { background: #eef1f5; border-color: var(--line); color: var(--sub); pointer-events: none; font-weight: 400; }
+.sl-wait { background: #eef4ff; border: 1px solid #c5d9ff; color: #1d4ed8; border-radius: 10px; padding: 9px 12px; font-size: 13px; font-weight: 600; margin: 8px 0; }
+.sl-warn-box { background: #fff7e6; border: 1px solid #f0c97a; color: #8a5300; border-radius: 10px; padding: 8px 11px; font-size: 12px; margin: 8px 0; }
+
+/* 초안 영역 */
+.sl-drafts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+.sl-draft-box { background: #f8faff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.sl-draft-box header { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: space-between; }
+.sl-draft-box header b { font-size: 13px; }
+.sl-draft-box textarea { width: 100%; min-height: 175px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: #fff; line-height: 1.5; resize: vertical; font: inherit; font-size: 13px; }
+.sl-follow { margin-top: 10px; background: #fafbfd; border: 1px dashed #cfd6e3; border-radius: 10px; padding: 10px 12px; }
+.sl-follow h4 { margin: 0 0 6px; font-size: 12px; color: var(--sub); }
+.sl-follow-row { display: flex; gap: 8px; align-items: flex-start; justify-content: space-between; padding: 5px 0; border-top: 1px solid #eef1f5; font-size: 12px; }
+.sl-follow-row:first-of-type { border-top: 0; }
+.sl-follow-row p { margin: 0; flex: 1; min-width: 0; word-break: break-word; line-height: 1.45; }
+.sl-follow-row .btn { flex: none; padding: 3px 9px; font-size: 12px; }
+
+.sl-status-bar { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.sl-status-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.sl-btn-ok { background: var(--green); border-color: var(--green); }
+
+/* 가게 목록 */
+.sl-list { display: flex; flex-direction: column; gap: 8px; }
+.sl-row { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between; }
+.sl-row.sel { border-color: var(--blue); background: #f5f9ff; }
+.sl-row.over { border-color: #e69d35; background: #fffaf0; }
+.sl-row-main { flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.sl-row-top { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.sl-row-top b { font-size: 14px; }
+.sl-row-top small { color: var(--sub); font-size: 12px; }
+.sl-row-sub { font-size: 12px; color: var(--sub); display: flex; flex-wrap: wrap; gap: 4px 10px; word-break: break-word; }
+.sl-row-act { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; flex: none; }
+.sl-row-act .btn, .sl-row-act .sl-zalo { padding: 5px 10px; font-size: 12px; }
+.sl-landline { color: var(--orange); font-weight: 600; }
+.sl-more { display: block; margin: 6px auto 0; }
+
+/* 좁은 화면(폰 375px 포함) 대응: 가로 넘침·잘림 방지 */
+@media (max-width: 760px) {
+  .sl-ctrl { grid-template-columns: 1fr; }
+  .sl-drafts { grid-template-columns: 1fr; }
+  .sl-work { padding: 12px; }
+  .sl-row { padding: 10px; }
+  .sl-row-act { width: 100%; }
+  .sl-row-act .btn, .sl-row-act .sl-zalo { flex: 1 1 auto; text-align: center; justify-content: center; }
+  .sl-status-bar { flex-direction: column; align-items: stretch; }
+  .sl-status-btns .btn { flex: 1 1 auto; }
+}

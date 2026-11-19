@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="한식 한 상 틀린 그림 찾기 — 위아래 상차림에서 다른 곳을 찾아보세요. Tìm điểm khác nhau · Spot the difference">
+<title>틀린 그림 찾기 · 한식 한 상</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+  :root {
+    --ink: #16130f; --ink-2: #2a251f; --paper: #faf7f2; --card: #fff; --line: #e9e2d7;
+    --muted: #6f675d; --accent: #e0452b; --accent-2: #f2a03d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; background: var(--paper); color: var(--ink); }
+  body {
+    line-height: 1.45; -webkit-font-smoothing: antialiased;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "PingFang SC", "Noto Sans SC", sans-serif;
+  }
+  h1, h2, p { margin: 0; }
+  button, a { font: inherit; -webkit-tap-highlight-color: transparent; }
+  [hidden] { display: none !important; }
+
+  .topbar { background: var(--ink); color: #fff; padding: 12px 14px; border-bottom: 1px solid #2b241d; }
+  .topbar-inner { max-width: 520px; margin: 0 auto; display: flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; }
+  .back { color: #d8cfc3; text-decoration: none; font-size: 13.5px; font-weight: 700; padding: 5px 10px;
+    border-radius: 999px; border: 1px solid #473e34; white-space: nowrap; }
+  .top-title { font-size: 16.5px; font-weight: 900; letter-spacing: -.3px; white-space: nowrap; }
+  .langs { display: flex; gap: 5px; flex-wrap: wrap; margin-left: auto; }
+  .langs button { font-size: 12px; font-weight: 600; color: #d8cfc3; background: transparent;
+    border: 1px solid #5a4f43; border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: var(--ink); background: #fff; border-color: #fff; }
+
+  .wrap { max-width: 520px; margin: 0 auto; padding: 10px 12px 28px; width: 100%; }
+
+  /* 점수판 */
+  .hud { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .dots { display: flex; gap: 5px; }
+  .dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #d9cfc0; background: #fff; transition: .25s; }
+  .dots i.on { background: var(--accent); border-color: var(--accent); transform: scale(1.12); }
+  .time { flex: 1; height: 10px; border-radius: 999px; background: #ece4d8; overflow: hidden; }
+  .time b { display: block; height: 100%; width: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent-2), var(--accent)); transition: width .25s linear; }
+  .time.low b { background: #d92b1d; }
+  .sec { font-weight: 800; font-size: 14px; min-width: 30px; text-align: right; font-variant-numeric: tabular-nums; }
+  .sec.hit { animation: pen .5s; }
+  @keyframes pen { 30% { color: #d92b1d; transform: scale(1.35); } }
+  .hint { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 5px 11px;
+    font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; color: var(--ink); }
+  .hint:disabled { opacity: .4; }
+
+  /* 그림 두 장 */
+  .board { display: grid; gap: 8px; }
+  .pic { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid #7a5230;
+    box-shadow: 0 6px 18px rgba(60, 40, 20, .13); background: #c79a68; touch-action: manipulation; }
+  .pic { aspect-ratio: 6 / 5; background: #b98a55 url(spot-art/table.jpg) center / cover; cursor: pointer; user-select: none; -webkit-user-select: none; }
+  .pic svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+  .it { position: absolute; transform: translate(-50%, -50%); pointer-events: none; filter: drop-shadow(0 3px 3px rgba(40, 20, 5, .5)); }
+  .it img { display: block; width: 100%; height: auto; }
+  .pic.shake { animation: shake .3s; }
+  @keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  .ring { fill: none; stroke: #ff3b30; stroke-width: 4; stroke-dasharray: 400; stroke-dashoffset: 400;
+    animation: draw .45s ease-out forwards; filter: drop-shadow(0 1px 1px rgba(0,0,0,.35)); }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .glow { fill: none; stroke: #ffd60a; stroke-width: 5; animation: glow .5s ease-in-out 3 alternate; }
+  @keyframes glow { from { opacity: .15; } to { opacity: 1; } }
+  .miss { stroke: #fff; stroke-width: 5; stroke-linecap: round; animation: fade .6s forwards; }
+  @keyframes fade { to { opacity: 0; } }
+  .burst { fill: none; stroke: #ffd60a; stroke-width: 3.5; stroke-linecap: round; transform-box: fill-box; transform-origin: center;
+    animation: burst .55s ease-out forwards; }
+  @keyframes burst { from { transform: scale(.55); opacity: 1; } to { transform: scale(1.3); opacity: 0; } }
+  .lv { font-size: 13px; font-weight: 900; color: var(--accent); white-space: nowrap; }
+  .snd { border: 1px solid #473e34; background: transparent; border-radius: 999px; padding: 3px 8px; font-size: 14px; cursor: pointer; line-height: 1.2; }
+  .confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .confetti i { position: absolute; top: -14px; width: 9px; height: 14px; border-radius: 2px; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(105vh) rotate(540deg); } }
+  .tip { margin-top: 9px; text-align: center; font-size: 13px; color: var(--muted); }
+
+  /* 시작·결과 창 */
+  .veil { position: fixed; inset: 0; background: rgba(22, 19, 15, .62); display: grid; place-items: center; padding: 20px; z-index: 5; }
+  .sheet { position: relative; background: #fff; border-radius: 22px; padding: 24px 20px 20px; width: 100%; max-width: 340px; text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,.3); }
+  .sheet .big { font-size: 46px; line-height: 1; }
+  .sheet h2 { font-size: 21px; font-weight: 900; margin-top: 10px; letter-spacing: -.4px; }
+  .sheet p { margin-top: 7px; color: var(--muted); font-size: 14.5px; }
+  .btns { display: grid; gap: 8px; margin-top: 18px; }
+  .btn { display: block; border: 0; border-radius: 14px; padding: 13px; font-weight: 800; font-size: 15.5px;
+    cursor: pointer; text-decoration: none; background: var(--accent); color: #fff; }
+  .btn.sub { background: #f3ede4; color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-inner">
+  <a class="back" id="back" href="game.html">←</a>
+  <span class="top-title" id="title"></span>
+  <button class="snd" id="snd" type="button" aria-label="sound"></button>
+  <div class="langs" id="langs"></div>
+</div></div>
+
+<div class="wrap">
+  <div class="hud">
+    <b class="lv" id="lv"></b>
+    <div class="dots" id="dots"></div>
+    <div class="time" id="time"><b id="bar"></b></div>
+    <span class="sec" id="sec"></span>
+    <button class="hint" id="hint" type="button"></button>
+  </div>
+  <div class="board">
+    <div class="pic" id="picA"></div>
+    <div class="pic" id="picB"></div>
+  </div>
+  <p class="tip" id="tip"></p>
+</div>
+
+<div class="veil" id="veil"><div class="confetti" id="confetti"></div><div class="sheet">
+  <div class="big" id="vBig"></div>
+  <h2 id="vTitle"></h2>
+  <p id="vText"></p>
+  <div class="btns">
+    <button class="btn" id="vGo" type="button"></button>
+    <a class="btn sub" id="vStores" href="./"></a>
+  </div>
+</div></div>
+
+<script>
+(function () {
+  "use strict";
+  var T = {
+    ko: { title: "틀린 그림 찾기", back: "← 게임", hint: "💡 힌트", tip: "위아래 상차림에서 다른 곳을 찾아 눌러 주세요",
+      sT: "한식 한 상 틀린 그림 찾기", sP: "위아래 그림에서 다른 곳을 찾아요. 단계가 오를수록 어려워져요. 잘못 누르면 5초가 줄어요.", go: "시작",
+      lv: "{n}단계", wT: "{n}단계 통과!", wP: "남은 시간 {s}초 · 힌트 {h}번 사용", lT: "시간 끝!", lP: "{n}단계에서 멈췄어요 · 최고 기록 {b}단계",
+      next: "{n}단계 도전", again: "1단계부터 다시", stores: "가게 찾기로 가기" },
+    vi: { title: "Tìm điểm khác nhau", back: "← Trò chơi", hint: "💡 Gợi ý", tip: "Chạm vào những điểm khác nhau giữa hai mâm cơm",
+      sT: "Tìm điểm khác nhau · Mâm cơm Hàn", sP: "Tìm điểm khác nhau giữa hình trên và hình dưới. Càng lên màn càng khó. Chạm sai sẽ bị trừ 5 giây.", go: "Bắt đầu",
+      lv: "Màn {n}", wT: "Qua màn {n}!", wP: "Còn {s} giây · dùng {h} gợi ý", lT: "Hết giờ!", lP: "Dừng ở màn {n} · kỷ lục: màn {b}",
+      next: "Chơi màn {n}", again: "Chơi lại từ màn 1", stores: "Đến trang tìm quán" },
+    en: { title: "Spot the difference", back: "← Games", hint: "💡 Hint", tip: "Tap the differences between the two tables",
+      sT: "Spot the difference · Korean table", sP: "Find the differences between the top and bottom pictures. Each level gets harder. A wrong tap costs 5 seconds.", go: "Start",
+      lv: "Level {n}", wT: "Level {n} cleared!", wP: "{s}s left · {h} hints used", lT: "Time's up!", lP: "Stopped at level {n} · best: level {b}",
+      next: "Go to level {n}", again: "Restart from level 1", stores: "Go to store finder" },
+    zh: { title: "找不同", back: "← 游戏", hint: "💡 提示", tip: "点出上下两桌菜的不同之处",
+      sT: "找不同 · 韩式一桌菜", sP: "找出上下两张图的不同之处，关卡越高越难。点错会扣5秒。", go: "开始",
+      lv: "第{n}关", wT: "第{n}关通过！", wP: "剩余{s}秒 · 用了{h}次提示", lT: "时间到！", lP: "停在第{n}关 · 最高纪录第{b}关",
+      next: "挑战第{n}关", again: "从第1关重新开始", stores: "去找店页面" },
+    ja: { title: "まちがい探し", back: "← ゲーム", hint: "💡 ヒント", tip: "上下の食卓でちがう所をタップしてください",
+      sT: "まちがい探し · 韓国の食卓", sP: "上下の絵でちがう所を探します。ステージが進むほど難しくなります。まちがえると5秒減ります。", go: "スタート",
+      lv: "ステージ{n}", wT: "ステージ{n}クリア！", wP: "残り{s}秒 · ヒント{h}回", lT: "時間切れ！", lP: "ステージ{n}で終了 · 最高記録ステージ{b}",
+      next: "ステージ{n}に挑戦", again: "ステージ1からもう一度", stores: "お店検索へ" }
+  };
+  var LANGS = [["ko", "한국어"], ["vi", "Tiếng Việt"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"]];
+  var qs = new URLSearchParams(location.search);
+  var lang = qs.get("lang");
+  if (!T[lang]) { var nl = (navigator.language || "ko").slice(0, 2); lang = T[nl] ? nl : "ko"; }
+  var t = T[lang];
+  var $ = function (id) { return document.getElementById(id); };
+  document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+  document.title = t.sT;
+
+  /* ───── 음식 그림 (만화풍 그림 파일 spot-art/*.webp 50장, 2026-11-12) ───── */
+  // 종류: L 큰 요리 · M 그릇·뚝배기 · S 작은 접시 · X 종지·잔 · T 병 · G 맥주잔 · U 수저·소품
+  var TYPES = {
+    L: "grill dakgalbi pajeon kimchijeon jeon bossam tangsu chicken fish jjimdak tteok bulgogi japchae",
+    M: "ssam stew egg naeng kimchijjigae bibimbap jjajang jjamppong gukbap kalguksu galbitang bibimnaeng yukgaejang eomuk sundubu friedrice",
+    S: "kimchi paj rice mandu gimbap sundae gyeranmari dubukimchi oikimchi",
+    X: "jang garlic glass", T: "soju beer", G: "mug", U: "spoon chop tongs scissors gchili rchili"
+  };
+  var SIZE = { L: 106, M: 92, S: 72, X: 44, T: 96, G: 62, U: 70 };   // 긴 쪽 길이(그림 폭 360 기준)
+  var ASPECT = {"grill":0.75,"ssam":0.79,"stew":0.8,"egg":0.8,"naeng":0.88,"rice":0.95,"kimchi":0.8,"paj":0.8,"soju":3.08,"beer":3.19,"mug":1.28,"glass":1.15,"spoon":3.52,"chop":5.68,"jang":1.05,"garlic":1.02,"gchili":1.56,"rchili":1.44,"tongs":0.91,"scissors":1.25,"tteok":0.97,"pajeon":0.99,"japchae":1.0,"mandu":0.97,"gimbap":0.97,"sundae":0.97,"jjajang":0.97,"jjamppong":0.99,"tangsu":1.0,"kimchijjigae":0.91,"bibimbap":0.97,"chicken":0.97,"bulgogi":0.97,"gukbap":0.99,"friedrice":1.0,"kalguksu":0.97,"gyeranmari":0.97,"bossam":0.97,"kimchijeon":0.97,"dakgalbi":0.96,"galbitang":0.98,"bibimnaeng":0.97,"yukgaejang":0.97,"eomuk":1.05,"sundubu":0.94,"dubukimchi":0.99,"fish":0.99,"jjimdak":0.97,"jeon":0.97,"oikimchi":0.97};   // 높이/폭
+  var NOHUE = " rice glass spoon chop tongs garlic gukbap kalguksu galbitang eomuk mandu bossam ";   // 색을 바꿔도 티가 안 나는 것
+  var PLAIN = " rice glass garlic ";                                                                  // 뒤집거나 돌려도 티가 안 나는 것
+  var TYPE = {};
+  Object.keys(TYPES).forEach(function (t) { TYPES[t].split(" ").forEach(function (k) { TYPE[k] = t; }); });
+  function dims(k) { var z = SIZE[TYPE[k]], a = ASPECT[k]; return a >= 1 ? { w: z / a, h: z } : { w: z, h: z * a }; }
+  // 틀린 곳 만드는 방법: [방법, 값, 난이도(1 쉬움·2 어려움)] — hue 색 · flip 좌우 뒤집기 · rot 돌리기 · size 크기 · gone 없애기
+  function mutsFor(k) {
+    var t = TYPE[k], hue = NOHUE.indexOf(" " + k + " ") < 0, m = [];
+    if (PLAIN.indexOf(" " + k + " ") >= 0) return [["gone", 0, 1], ["size", .74, 2]];
+    if (t === "T") return [["hue", 100, 1], ["gone", 0, 1], ["rot", 24, 2], ["size", .82, 2]];
+    if (t === "G") return [["flip", 0, 1], ["hue", -45, 1], ["gone", 0, 1]];
+    if (t === "X") return [["gone", 0, 1], ["hue", 85, 1], ["size", .72, 2]];
+    if (t === "U") {
+      m = [["gone", 0, 1], ["rot", 45, 1]];
+      if (hue) m.push(["hue", k === "scissors" ? 150 : -95, 1]);
+      if (k !== "spoon" && k !== "chop") m.push(["flip", 0, 2]);
+      return m;
+    }
+    if (hue) m.push(["hue", [70, -70, 150][k.length % 3], 1]); else m.push(["gone", 0, 1]);
+    if (t === "S" && hue) m.push(["gone", 0, 1]);
+    m.push(["flip", 0, 2], ["rot", 180, 2], ["size", .8, 2]);
+    return m;
+  }
+  // 한 상 차림 자리 (그림 크기 360×300). 앞에서부터 쓰므로 쉬운 단계는 앞 6자리만 쓴다.
+  var LAYOUTS = [
+    [{ t: "L", x: 180, y: 108 }, { t: "M", x: 60, y: 62 }, { t: "M", x: 62, y: 226 }, { t: "S", x: 238, y: 248 },
+     { t: "T", x: 312, y: 152 }, { t: "S", x: 304, y: 48 }, { t: "X", x: 260, y: 114 }, { t: "U", x: 148, y: 240 }, { t: "G", x: 322, y: 256 }],
+    [{ t: "L", x: 104, y: 112 }, { t: "M", x: 250, y: 58 }, { t: "M", x: 214, y: 226 }, { t: "S", x: 60, y: 256 },
+     { t: "T", x: 322, y: 150 }, { t: "S", x: 312, y: 258 }, { t: "X", x: 174, y: 32 }, { t: "U", x: 136, y: 238 }, { t: "G", x: 30, y: 190 }]
+  ];
+  var ART = "spot-art/";
+
+  function scene(diff) {
+    var s = "";
+    cur.forEach(function (p, i) {
+      var mu = diff && diff[i], tr = "", fl = "", w = dims(p.f).w;
+      if (mu && mu[0] === "gone") return;
+      if (mu && mu[0] === "flip") tr += " scaleX(-1)";
+      if (mu && mu[0] === "rot") tr += " rotate(" + mu[1] + "deg)";
+      if (mu && mu[0] === "size") w = w * mu[1];
+      if (mu && mu[0] === "hue") fl = "filter:hue-rotate(" + mu[1] + "deg);";
+      s += '<div class="it" data-i="' + i + '" style="left:' + (p.x / 3.6).toFixed(2) + "%;top:" + (p.y / 3).toFixed(2) + "%;width:" + (w / 3.6).toFixed(2) + '%">' +
+        '<img src="' + ART + p.f + '.webp" alt="" draggable="false" style="' + fl + (tr ? "transform:" + tr : "") + '"></div>';
+    });
+    return s + '<svg class="ov" viewBox="0 0 360 300"><g class="marks"></g></svg>';
+  }
+
+  /* ───── 게임 진행 ───── */
+  var PENALTY = 5, level = 1, best = 0, cur = [], cf, sound = true;
+  var diff, found, left, hints, timer, playing = false, usedHints, nextLevel = 1;
+  var picA = $("picA"), picB = $("picB");
+  var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
+  var shuffle = function (a) { return a.slice().sort(function () { return Math.random() - .5; }); };
+  try { best = +localStorage.getItem("qm_spot_best") || 0; sound = localStorage.getItem("qm_spot_mute") !== "1"; } catch (e) {}
+
+  // 단계별 설정: 음식 수 · 틀린 곳 수 · 시간 · 어려운 차이를 쓸지(0 안 씀, 1 섞음, 2 먼저 씀)
+  function conf(lv) {
+    if (lv === 1) return { n: 6, need: 3, time: 60, hard: 0 };
+    if (lv === 2) return { n: 8, need: 4, time: 75, hard: 0 };
+    if (lv === 3) return { n: 9, need: 5, time: 90, hard: 1 };
+    return { n: 9, need: 5, time: Math.max(50, 90 - (lv - 3) * 10), hard: 2 };
+  }
+
+  // 소리 (파일 없이 브라우저가 내는 짧은 음)
+  var AC;
+  function beep(f, d, type, when, vol) {
+    if (!sound) return;
+    try {
+      AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+      var o = AC.createOscillator(), g = AC.createGain(), t0 = AC.currentTime + (when || 0);
+      o.type = type || "sine"; o.frequency.value = f;
+      g.gain.setValueAtTime(vol || .12, t0); g.gain.exponentialRampToValueAtTime(.001, t0 + d);
+      o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0 + d);
+    } catch (e) {}
+  }
+
+  function newBoard() {
+    cf = conf(level);
+    var lay = pick(LAYOUTS), mirror = Math.random() < .5, used = {};
+    cur = lay.slice(0, cf.n).map(function (sl) {
+      var names = shuffle(Object.keys(TYPE).filter(function (k) { return TYPE[k] === sl.t && !used[k]; }));
+      used[names[0]] = true;
+      var d = dims(names[0]);
+      return { f: names[0], x: mirror ? 360 - sl.x : sl.x, y: sl.y, r: Math.max(Math.max(d.w, d.h) / 2, 20) };
+    });
+    diff = {};
+    shuffle(cur.map(function (_, i) { return i; })).slice(0, cf.need).forEach(function (i) {
+      var mu = mutsFor(cur[i].f);
+      var easy = mu.filter(function (m) { return m[2] === 1; }), hard = mu.filter(function (m) { return m[2] === 2; });
+      diff[i] = pick(cf.hard === 0 ? easy : (cf.hard === 2 && hard.length ? hard : mu));
+    });
+    var flip = Math.random() < .5;   // 어느 쪽이 바뀐 그림인지 매번 다르게
+    picA.innerHTML = scene(flip ? diff : null); picB.innerHTML = scene(flip ? null : diff);
+    found = {}; left = cf.time; hints = 2; usedHints = 0; hud();
+  }
+  function hud() {
+    var n = Object.keys(found).length, d = "";
+    for (var i = 0; i < cf.need; i++) d += '<i class="' + (i < n ? "on" : "") + '"></i>';
+    $("dots").innerHTML = d;
+    $("lv").textContent = t.lv.replace("{n}", level);
+    $("bar").style.width = Math.max(0, left / cf.time * 100) + "%";
+    $("time").classList.toggle("low", left <= 15);
+    $("sec").textContent = Math.max(0, Math.ceil(left));
+    $("hint").textContent = t.hint + " " + hints;
+    $("hint").disabled = hints < 1 || !playing;
+    $("snd").textContent = sound ? "🔊" : "🔇";
+  }
+  function mark(html) {
+    [picA, picB].forEach(function (p) { p.querySelector(".marks").insertAdjacentHTML("beforeend", html); });
+  }
+  function tap(e) {
+    if (!playing) return;
+    var b = e.currentTarget.getBoundingClientRect();
+    var x = (e.clientX - b.left) * 360 / b.width, y = (e.clientY - b.top) * 300 / b.height, hit = -1;
+    Object.keys(diff).forEach(function (i) {
+      var p = cur[i];
+      if (!found[i] && Math.hypot(x - p.x, y - p.y) <= p.r + 5) hit = i;
+    });
+    if (hit < 0) {
+      left -= PENALTY; e.currentTarget.classList.remove("shake"); void e.currentTarget.offsetWidth; e.currentTarget.classList.add("shake");
+      $("sec").classList.remove("hit"); void $("sec").offsetWidth; $("sec").classList.add("hit");
+      e.currentTarget.querySelector(".marks").insertAdjacentHTML("beforeend",
+        '<path class="miss" d="M' + (x - 9) + " " + (y - 9) + "l18 18m0 -18l-18 18" + '"/>');
+      beep(150, .22, "square", 0, .06);
+      if (navigator.vibrate) navigator.vibrate(60);
+      hud(); if (left <= 0) end(false); return;
+    }
+    found[hit] = true;
+    var p = cur[hit], r = p.r + 2, rays = "";
+    for (var a = 0; a < 360; a += 45) rays += '<path d="M0 ' + (-r - 5) + "V" + (-r - 15) + '" transform="rotate(' + a + ')"/>';
+    mark('<circle class="ring" cx="' + p.x + '" cy="' + p.y + '" r="' + r + '"/><g transform="translate(' + p.x + " " + p.y + ')"><g class="burst">' + rays + "</g></g>");
+    beep(880, .12); beep(1320, .2, "sine", .09);
+    hud();
+    if (Object.keys(found).length >= cf.need) end(true);
+  }
+  function hint() {
+    if (!playing || hints < 1) return;
+    var rest = Object.keys(diff).filter(function (i) { return !found[i]; }); if (!rest.length) return;
+    hints--; usedHints++;
+    var p = cur[pick(rest)];
+    mark('<circle class="glow" cx="' + p.x + '" cy="' + p.y + '" r="' + (p.r + 7) + '"/>');
+    setTimeout(function () { document.querySelectorAll(".glow").forEach(function (g) { g.remove(); }); }, 1600);
+    beep(660, .15); hud();
+  }
+  function start() {
+    level = nextLevel; newBoard(); playing = true; $("veil").hidden = true; $("confetti").innerHTML = ""; hud();
+    clearInterval(timer);
+    timer = setInterval(function () { left -= .25; hud(); if (left <= 0) end(false); }, 250);
+  }
+  function confetti() {
+    var h = "", col = ["#e0452b", "#f2a03d", "#ffd60a", "#3f9d58", "#2f6fd4", "#fff"];
+    for (var i = 0; i < 26; i++) h += '<i style="left:' + (Math.random() * 100).toFixed(1) + "%;background:" + col[i % 6] + ";animation-delay:" + (Math.random() * .5).toFixed(2) + "s;animation-duration:" + (1.4 + Math.random()).toFixed(2) + 's"></i>';
+    $("confetti").innerHTML = h;
+  }
+  function end(win) {
+    if (!playing) return;
+    playing = false; clearInterval(timer); hud();
+    if (win) {
+      if (level > best) { best = level; try { localStorage.setItem("qm_spot_best", best); } catch (e) {} }
+      [523, 659, 784, 1047].forEach(function (f, i) { beep(f, .22, "triangle", .12 * i + .15, .13); });
+    } else {
+      Object.keys(diff).forEach(function (i) {   // 못 찾은 곳을 노란 점선 원으로 알려 줌
+        if (!found[i]) { var p = cur[i]; mark('<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (p.r + 2) + '" fill="none" stroke="#ffd60a" stroke-width="4" stroke-dasharray="7 5"/>'); }
+      });
+      beep(300, .3, "sawtooth", 0, .05); beep(200, .45, "sawtooth", .25, .05);
+    }
+    nextLevel = win ? level + 1 : 1;
+    setTimeout(function () {
+      $("vBig").textContent = win ? "🎉" : "⏰";
+      $("vTitle").textContent = win ? t.wT.replace("{n}", level) : t.lT;
+      $("vText").textContent = win ? t.wP.replace("{s}", Math.ceil(left)).replace("{h}", usedHints)
+        : t.lP.replace("{n}", level).replace("{b}", best);
+      $("vGo").textContent = win ? t.next.replace("{n}", level + 1) : t.again;
+      $("veil").hidden = false; if (win) confetti();
+    }, win ? 800 : 1700);
+  }
+
+  /* ───── 화면 글 ───── */
+  $("title").textContent = t.title; $("back").textContent = t.back; $("back").href = "game.html?lang=" + lang;
+  $("tip").textContent = t.tip;
+  $("langs").innerHTML = LANGS.map(function (l) {
+    return '<button type="button" data-lang="' + l[0] + '" aria-pressed="' + (l[0] === lang) + '">' + l[1] + "</button>";
+  }).join("");
+  $("langs").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (b) location.search = "?lang=" + b.dataset.lang;
+  });
+  $("vBig").textContent = "🔍"; $("vTitle").textContent = t.sT; $("vText").textContent = t.sP;
+  $("vGo").textContent = t.go; $("vStores").textContent = t.stores; $("vStores").href = "./?lang=" + lang;
+  $("vGo").addEventListener("click", start);
+  $("hint").addEventListener("click", hint);
+  $("snd").addEventListener("click", function () {
+    sound = !sound; try { localStorage.setItem("qm_spot_mute", sound ? "0" : "1"); } catch (e) {}
+    hud(); beep(880, .1);
+  });
+  picA.addEventListener("click", tap); picB.addEventListener("click", tap);
+  newBoard();
+})();
+</script>
+<!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
+<!-- analytics:end -->
+</body>
+</html>

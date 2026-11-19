@@ -40,7 +40,7 @@
 캡틴(사용자, 결재)
 └─ 비서실: 클로드 메인(지휘·제작·보고)
    ├─ 사진팀: finder(haiku)
-   ├─ 메뉴판팀: 안티그래비티 agy(제미나이 Pro, PC 전용) → 안 되면 menu-reader(sonnet)
+   ├─ 메뉴판팀: 안티그래비티 agy(Gemini 4 Neon, PC 전용 — 2026-11-19 '제미나이 Pro' 이름이 Neon·Hydrogen으로 바뀜) → 안 되면 menu-reader(sonnet)
    ├─ 검수팀: 운영 감찰관 = 안티그래비티 안 Claude Sonnet(PC 전용, 가격 재확인, 2026-10-30 코덱스 대신) · reviewer(sonnet)
    ├─ 디자인팀: designer(sonnet, 2026-10-27 신규 — 간판·메뉴판을 닮게 꾸미기)
    └─ 번역팀: polisher(sonnet)

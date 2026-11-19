@@ -4,8 +4,23 @@
     {
       "name": "sales-local",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8781", "--directory", "sales"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8781",
+        "--directory",
+        "sales"
+      ],
       "port": 8781,
+      "autoPort": false
+    },
+    {
+      "name": "kitchen-test",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        ".scratch/kitchen-test/server.cjs"
+      ],
+      "port": 5182,
       "autoPort": false
     }
   ]

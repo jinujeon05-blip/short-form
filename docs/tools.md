@@ -12,16 +12,20 @@
 - **QR 카드**: `node tools/card.mjs <가게>` — `print/table-card.html` → png·A6 PDF(+A4x4).
   - 넘친 요소도 알려 준다.
   - 카드는 `restaurants/<가게>/print/`에 두고, 폰트는 `public/fonts`(잘난체·G마켓 산스)를 쓴다.
+- **SNS·카드 디자인 틀**(2026-11-14): `--design photo|neon|collage|chalk|minimal`을 `sns.mjs`·`card.mjs`에 붙이면 배치·모양이 다른 틀로 만든다(안 붙이면 지금 모양). 고르기: `node tools/promo-designs.mjs --recommend <지역키> [모양 스타일] [사진 수]` — 같은 도시에서 쓴 디자인은 뒤로. 아래 'SNS·카드 디자인 틀' 참고.
 - **SNS 이미지**: `node tools/sns.mjs <가게> [vi|ko] [버튼 글자] [가게 이름]` — 정사각형·스토리.
   - 가게 이름은 `sales/content.js`의 `DEMOS`에서 가져온다.
   - QR 아래 안내는 **5개 언어 모두** 넣는다.
   - 한국 매장은 `ko`.
-- `node tools/demo.mjs <가게>` — 가게 찾기·소개서 카드 사진 `sales/img/demo-<가게>.jpg`.
+- `node tools/demo.mjs <가게>` — 가게 찾기·소개서 카드 사진 `sales/img/demo-<가게>.jpg`. `check-shop.mjs`가 끝날 때 자동으로 다시 찍는다(2026-11-12).
+- **새 가게 한 번에 도구(2026-11-11)**: `python tools/photos.py prep <가게id> "<드라이브 폴더>"`(준비) · `node tools/register-shop.mjs <가게id>`(등록, 정보는 `.scratch/<가게id>/register.json`, 예시 `--example`) · `node tools/check-shop.mjs <가게id>`(점검·캡처). 상세 `docs/new-shop.md` 맨 위.
+- `node tools/seo.mjs <가게id>`·`node tools/analytics.mjs <가게id>` — **가게id를 주면 그 가게 파일만** 고친다(전체 사이트맵은 같이 맞춤). 가게id 없이 돌리는 것은 공통 양식을 바꿨을 때만.
 - `node tools/seo.mjs` — canonical·og·JSON-LD·robots·sitemap. 메뉴·가격·주소를 바꾸거나 새 가게가 생기면 다시 돌린다. seo·analytics는 **내용이 바뀐 파일만** 쓴다(사이트맵 날짜도 바뀐 가게만, 2026-10-30) — 돌린 뒤 다른 가게가 바뀌어 있으면 그 가게 `menu.js`를 고치고 seo를 안 돌린 것이니 같이 커밋한다.
 - `sh tools/export.sh <폴더> [가게…|sales]` — 보낼 파일을 `<상호>_<파일>`로 복사한다.
 - `node tools/sales-pdf.mjs` — 소개서 PDF 5개 언어. 각각 2쪽인지 확인하고, `.demos`는 7칸이다.
 - 기타: `tools/pdf.mjs`(HTML→PDF), `tools/mockup.mjs`(포장재 시안), `tools/app-icon.mjs`(웹앱 아이콘), `tools/thumb.py`(페이지 그림에서 3:4로 자르기), `node tools/analytics.mjs`(방문 기록·점주 편집 블록)
 - **윈도우 PC(로컬 세션, `D:\qrmenu`, 2026-10-27)**: 도구 경로는 `tools/pw.mjs`의 `ROOT`·`fileUrl()`(fileURLToPath·pathToFileURL)로 만든다. `new URL(import.meta.url).pathname`·`` `file://${경로}` ``는 윈도우에서 깨지니 쓰지 않는다. `.sh`는 Git Bash로 돌린다.
+- **AI 명령창 주의(2026-11-16)**: 파일을 고치는 node·python 스크립트의 문자열 안에 `\u0000`·`\x00` 같은 이스케이프를 넣으면 스크립트가 실제 제어 문자로 바꿔 파일에 쓴다(_kitchen.js·tools.md가 '바이너리'로 보인 건). 이런 글자가 든 줄은 Edit 도구로 고치거나, 역슬래시를 `String.fromCharCode(92)`로 만든다. 고친 뒤 `git diff --stat`에 `Bin`이 뜨면 다시 본다.
 - **드라이브**:
   - **PC 로컬 세션은 드라이브가 동기화돼 있다**(`G:\내 드라이브\QR메뉴판\<가게>\`, 2026-10-28 확인). zip을 받지 말고 거기서 사진·`store_info.json`·`클로드_안내.md`를 스크래치로 바로 복사한다(다운로드 토큰 0, 작은 간판 사진도 바로 받음).
   - 10MB 넘는 파일은 못 받는다.
@@ -44,11 +48,12 @@
 저장소 루트에서 실행한다. 모두 이 클라우드 환경(Playwright 전역 설치, poppler)에서 검증했다.
 - `node tools/qr.cjs <URL> <출력.svg> [L|M|Q|H]` — QR 만들기 (기본 Q). 같은 이름의 `.json`도 생긴다.
 - `python3 tools/qr-check.py <qr.json>` — QR을 직접 해독해 URL 확인 (버전 3만 가능 → 안 되면 `M`으로 다시 만든다). 확인 후 `.json`은 지운다.
+- `node tools/card-themes.mjs` — admin 'QR 카드 인쇄'용 가게별 카드 자료(색·로고·전용 틀) 다시 만들기. 가게 추가·로고·table-card.html 변경 뒤 돌리고 qrmenu-intro 배포(상세 `docs/admin-system.md` 주방 절).
 - `node tools/card.mjs <가게>` — `print/table-card.html` → `table-card.png`·`table-card-A6.pdf`, `table-card-A4.html`이 있으면 `table-card-A4x4.pdf`. 카드 밖으로 넘친 요소도 알려 준다. **만든 PDF는 항상 사용자에게 보낸다.**
 - `node tools/sns.mjs <가게> [vi|ko…] [버튼 글자, 기본 MENU] [가게 이름]` — SNS 홍보 이미지 `print/sns-square.png`(1080×1080, 게시물·Zalo)·`sns-story.png`(1080×1920, 스토리). 메뉴판 첫 화면+QR+주소, 색은 가게 `partner-theme`. 가게 이름·종류는 `sales/content.js`의 `DEMOS`에서 가져오므로 새 가게는 DEMOS에 먼저 넣는다. 한국 매장은 `ko`, 바이오&뷰티는 `vi SHOP "Bio & Beauty"`. 기본형에 포함이라 새 가게마다 만들어 사용자에게 보낸다. QR 아래 안내 문구는 정사각형·스토리 모두 **5개 언어(베트남어·한국어·영어·중국어·일본어)를 항상 다 넣는다**(사용자 지시 2026-10-21, 예전 정사각형은 3개 언어였음 — 다른 가게는 다시 만들 때 반영).
 - `node tools/check-listing.mjs` — **가게 찾기용 점검(새 가게를 만들거나 고친 뒤, 배포 전에 항상)**: 26곳 전부 하단 '가격 단위' 줄에 5개 언어 '구글 지도에 올린 메뉴판 기준' 문구가 있는지, 별도 문구 상자가 없는지, 다산 배너·가게 더 보기·방문 기록 코드가 있는지 검사. 문제가 있으면 종료 코드 1.
 - `node tools/shot.mjs <가게> [ko,vi] [저장폴더]` — 휴대폰 크기 전체 화면 캡처 + 자바스크립트 오류·못 불러온 파일 확인.
-- `node tools/demo.mjs <가게>` — 소개서용 데모 화면 `sales/img/demo-<가게>.jpg`. 새 가게는 `sales/content.js`의 `DEMOS`에도 추가하고 QR을 `sales/img/qr-<가게>.svg`로 복사.
+- `node tools/demo.mjs <가게>` — 소개서용 데모 화면 `sales/img/demo-<가게>.jpg`. 새 가게는 `sales/content.js`의 `DEMOS`에도 추가한다. 소개서 QR `sales/img/qr-<가게>.svg`는 `check-shop.mjs`가 없으면 `print/qr.svg`에서 자동 복사(2026-11-18).
 - `node tools/sales-pdf.mjs` — 소개서 PDF 5개 언어. 각각 **2쪽**인지 출력해 준다 (데모가 늘면 인쇄용 `.demos` 칸 수 조정, 지금 7칸). `DEMOS`에 `hidden: true`를 붙이면 소개서에는 안 보이고 SNS 도구용 데이터로만 쓰인다.
 - `node tools/mockup.mjs <가게>` — 포장재 시안 그림 `print/packaging-mockup.html` → `packaging-mockup.png`(2000×1250: 로고+QR 종이컵·배달 봉투·컵 스티커). 영업용 시안(인쇄 원고 아님). 지금은 Ăn Vội만 있음, 다른 가게는 html을 복사해 로고·문구·색만 바꾼다.
 - `node tools/app-icon.mjs` — 소개서·가게 찾기 웹앱 아이콘(페이지의 주황 "QR" 로고) → `sales/icons/`(192·512·maskable·apple-touch·favicon). 웹앱 설정은 `sales/manifest.webmanifest`(소개서, 이름 QR Menu)·`sales/stores/manifest.webmanifest`(가게 찾기, 이름 QR Stores, 시작 /stores/). 가게 메뉴판에는 아직 웹앱 아이콘 없음.
@@ -57,4 +62,17 @@
 - `node tools/pdf.mjs <입력.html> <출력.pdf>` — 점주용 가이드 등 HTML → PDF.
 - `python3 -I tools/thumb.py <페이지.png> x0 y0 x1 y1 <출력.jpg>` — 카탈로그·메뉴판 페이지 그림에서 사진을 3:4로 잘라냄 (빈 곳은 배경을 흐리게 채움). 페이지 그림은 `pdftoppm -r 160 -png -f N -l N 파일.pdf 이름`으로 만든다. 투명 배경 사진은 `pdfimages -png -p`가 더 낫다.
 - `.claude/agents/`: finder(찾기, haiku)·polisher(글 다듬기, sonnet)·reviewer(검토, sonnet — 정식 가게만 opus). 양 많은 찾기·번역 초안은 맡기면 메인 대화가 덜 길어진다.
+
+## SNS·카드 디자인 틀 (2026-11-14, 캡틴 결정 가-1·나-1·다-1)
+- 왜: 가게마다 색만 바뀐 같은 틀이라 점주들이 SNS에 올리면 겹쳐 보였다. 배치·모양이 다른 틀 5개 + 기본.
+- 목록(`tools/promo-designs.mjs`의 `DESIGNS`): `basic` 기본(폰 화면) · `photo` 사진 포스터(음식 사진 크게 + 흰 QR 스티커, 사진 1장↑) · `neon` 네온 간판(벽돌 벽·빛나는 이름·QR 테두리) · `collage` 메뉴 콜라주(사진 칸 사이 QR 칸, 사진 3장↑) · `chalk` 칠판(분필 글씨·손그림 화살표·테이프 붙인 QR 종이) · `minimal` 미니멀 선(흰 바탕·얇은 선·왼쪽 정렬 큰 이름).
+- 사진형은 가게 `img/`의 **실제 음식 사진 중 가로 400px 이상**만 센다(로고·간판 제외). EROS처럼 사진이 작으면 못 고른다. AI 사진은 쓰지 않는다.
+- 만들기: `node tools/sns.mjs <가게> vi MENU --design neon` · `node tools/card.mjs <가게> --design neon`. 카드는 `print/table-card.html`을 틀로 **새로 쓴다** — 손으로 만든 카드(이미 완성된 가게)는 `--force` 없이는 거절한다. 이미 완성된 11곳은 그대로 둔다(캡틴 결정 나-1).
+- 끝나면 `tools/qr-img-check.py`(OpenCV, 없으면 건너뜀)가 그림 속 QR을 읽어 `https://<가게>.qrmenuasia.com`인지 확인하고, 안 읽히면 실패로 끝난다.
+- 기록: 쓴 디자인은 `restaurants/<가게>/print/promo.json`(`{"sns","card","at"}`). 없는 가게는 SNS·카드 파일이 있으면 `basic`으로 친다. `node tools/promo-designs.mjs --list`로 전부 본다.
+- 추천(캡틴 결정 다-1): 사진 모자람 → 못 고름, 같은 도시(`sales/stores/data.js`의 region)에서 쓴 디자인 → 뒤로, 메뉴판 모양 스타일과 어울리는 것 → 앞(`styles`), 덜 쓴 것 → 앞. 마지막 선택은 캡틴. 같은 규칙이 `dashboard/static/builder.js`의 `promoRank`에도 있다(바꾸면 둘 다).
+- 글꼴: Gmarket 하나. 단 Gmarket엔 베트남어 글자가 없어 크롬이 'Bă ́c'처럼 깨뜨렸다 → 베트남어가 든 글만 `.vn`(Segoe UI·Arial 굵게). 국기 이모지는 윈도우 크롬이 'VN' 글자로 그려서 작은 SVG 국기로 직접 그린다.
+- admin 'QR 카드 인쇄'(`card-themes.mjs`) 약속을 지킨다: QR `<img src="qr.svg">`, 테이블 번호 `data-table` 빈 요소, 사진은 `<img src="../img/…">`(CSS url() 금지 — admin이 못 바꿈).
+- 새 틀 추가: `DESIGNS`에 이름·설명·`styles`·`photos`, `snsHtml`·`cardHtml`에 같은 id 분기 → 진미(사진 있음)·EROS(사진 없음)로 정사각형·스토리·카드를 만들어 직접 보고 QR 확인 → 대시보드 견본 `dashboard/static/promo/<id>.jpg`(정사각형+카드, 420×240) 추가.
+- 시험(2026-11-14, worktree `promo-designs`): 진미 5개·EROS 3개(사진형 2개는 사진 작아 거절 확인) × 정사각형·스토리·카드 = 24장 넘침 0·글자 잘림 0·QR 24장 모두 읽힘. 시험 파일은 되돌림.
 

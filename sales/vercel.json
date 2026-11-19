@@ -9,7 +9,7 @@
   },
   "headers": [
     {
-      "source": "/(admin|owner|report)(.*)",
+      "source": "/(admin|owner|report|kitchen)(.*)",
       "headers": [
         {
           "key": "X-Robots-Tag",

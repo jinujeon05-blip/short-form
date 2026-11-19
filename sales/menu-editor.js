@@ -56,6 +56,10 @@
     const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     if (!document.getElementById('me-css')) { const s = document.createElement('style'); s.id = 'me-css'; s.textContent = CSS; document.head.appendChild(s); }
     root.classList.add('me');
+    // 같은 자리(root)에 다시 mount 하면 예전 편집기의 이벤트를 먼저 뗀다. 안 떼면 관리 화면에서 가게를 바꾼 뒤
+    // 버튼이 예전 가게 편집기에도 같이 눌려 사진이 첫 가게로 올라가고 저장도 두 번 된다(2026-11-15 진미 김치쪽갈비찜 사진 건).
+    if (root._meAbort) root._meAbort.abort();
+    const AC = new AbortController(); root._meAbort = AC; const on = { signal: AC.signal };
     let D = null, dirty = false, msg = null;
 
     const api = async (path, init = {}) => {
@@ -95,15 +99,21 @@
       const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
       inp.onchange = async () => {
         const f = inp.files[0]; if (!f) return;
+        // 실패하면 어느 단계에서 왜 막혔는지 함께 보여 준다(2026-11-15 진미 김치쪽갈비찜 사진 건)
+        let step = 'open';
         try {
           const b = await resizeToBlob(f, max);
+          if (!b || !b.size) throw new Error('empty_blob');
           if (b.size > 3_800_000) return alert(T.upBig);
+          step = 'send';
           const r = await fetch('/api/photo?shop=' + encodeURIComponent(opts.shop), { method: 'POST', headers: { ...(opts.headers() || {}), 'content-type': 'image/jpeg' }, body: b });
           if (r.status === 401) { opts.onAuthFail && opts.onAuthFail(); return; }
-          const j = await r.json();
-          if (!r.ok) throw new Error(j.error);
+          step = 'server ' + r.status;
+          const txt = await r.text();
+          let j = {}; try { j = JSON.parse(txt); } catch { throw new Error(txt.slice(0, 80) || 'no_json'); }
+          if (!r.ok) throw new Error(j.error || 'failed');
           done(j.url); touch(); paint();
-        } catch (e) { alert(T.upErr); }
+        } catch (e) { alert(T.upErr + '\n(' + step + ': ' + ((e && (e.message || e.name)) || '?') + ', ' + (f.type || '?') + ' ' + Math.round(f.size / 1024) + 'KB)'); }
       };
       inp.click();
     }
@@ -203,7 +213,7 @@
       } else if (k === 'cname') editSrc(c.name, lg, t.value);
       else if (k === 'cnote') { c.note = c.note || {}; editSrc(c.note, lg, t.value); }
       touch();
-    });
+    }, on);
 
     root.addEventListener('click', async (e) => {
       const b = e.target.closest('[data-a]'); if (!b) return;
@@ -224,7 +234,7 @@
       else if (a === 'photo') return pickPhoto(900, (u) => { D.menu[ci].items[ii].photo = u; });
       else if (a === 'cphoto') return pickPhoto(1400, (u) => { D.menu[ci].photo = u; });
       touch(); paint();
-    });
+    }, on);
 
     function fail(er) {
       if (er.message === 'auth') return setMsg(T.authErr), paint();
@@ -267,7 +277,7 @@
         dirty = false; msg = null; paint();
       } catch (er) { root.textContent = ''; setMsg(er.message === 'auth' ? T.authErr : er.message === 'blocked' ? T.blocked : T.fail); root.innerHTML = `<div class="msg">${esc(msg.text)}</div>`; }
     }
-    window.addEventListener('beforeunload', (e) => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+    window.addEventListener('beforeunload', (e) => { if (dirty) { e.preventDefault(); e.returnValue = ''; } }, on);
     load();
     return { reload: load };
   }

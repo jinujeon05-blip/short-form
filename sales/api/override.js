@@ -13,12 +13,23 @@ module.exports = async (req, res) => {
   const shop = String(req.query.shop || '');
   if (!L.validShop(shop)) return res.status(200).send('/* - */');
   try {
+    // 단골 적립·오늘의 할인 배너(2026-11-17): 켜진 가게만 설정을 붙이고 /loyal-rt.js 를 불러온다. 실패해도 메뉴판은 그대로.
+    let loyal = '';
+    try {
+      const Y = require('./loyal'), c = Y.publicCfg(await Y.readCfg(shop));
+      if (c.on || c.banner) loyal = `window.QM_LOYAL=Object.assign(${JSON.stringify({ shop, ...c }).replace(/</g, '\\u003c').replace(new RegExp('[\\u2028\\u2029]', 'g'), '')},{base:new URL(document.currentScript.src).origin});(function(){var s=document.createElement('script');s.src=window.QM_LOYAL.base+'/loyal-rt.js?v=1';s.async=true;document.head.appendChild(s)})();`;
+    } catch (e) { console.error('override loyal 실패', shop, e && e.message); }
+    // 시크릿 고객 소리함(2026-11-18): 켜진 가게만 /voice-rt.js 를 불러온다
+    try {
+      const v = await require('./loyal').readVoice(shop);
+      if (v.on) loyal += `window.QM_VOICE=Object.assign(${JSON.stringify({ shop, review: v.review }).replace(/</g, '\\u003c').replace(new RegExp('[\\u2028\\u2029]', 'g'), '')},{base:new URL(document.currentScript.src).origin});(function(){var s=document.createElement('script');s.src=window.QM_VOICE.base+'/voice-rt.js?v=1';s.async=true;document.head.appendChild(s)})();`;
+    } catch (e) { console.error('override voice 실패', shop, e && e.message); }
     const doc = await S.getJson(`menu/${shop}.json`);
-    if (!doc || !Array.isArray(doc.menu)) return res.status(200).send('/* default */');
+    if (!doc || !Array.isArray(doc.menu)) return res.status(200).send(loyal || '/* default */');
     if (!doc.v) { try { const d = await M.loadDefault(shop); doc.menu = M.restoreFromDefault(doc.menu, d.menu); } catch {} } // 예전 저장본 복구
     const info = doc.info || {};
     const safe = (o) => JSON.stringify(o).replace(/</g, '\\u003c').replace(new RegExp('[\\u2028\\u2029]', 'g'), '');
-    return res.status(200).send(`window.MENU=${safe(doc.menu)};window.RESTAURANT=Object.assign(window.RESTAURANT||{},${safe(info)});${RUNTIME}`);
+    return res.status(200).send(`window.MENU=${safe(doc.menu)};window.RESTAURANT=Object.assign(window.RESTAURANT||{},${safe(info)});${RUNTIME}${loyal}`);
   } catch (e) {
     console.error('override 실패', shop, e && e.message);
     res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=5');

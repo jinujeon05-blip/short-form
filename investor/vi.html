@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>QR MENU ASIA - Đề xuất đầu tư</title>
+<style>
+  :root {
+    --ink: #1c2233; --soft: #5d6577; --bg: #e9ecf2; --paper: #ffffff; --line: #e1e5ee;
+    --navy: #14213d; --navy2: #23345e; --main: #e8601c; --main-soft: #fdeee4;
+    --green: #1f8a5b; --green-soft: #e2f4ea; --blue: #2b6cb0; --blue-soft: #e6effa;
+    --red: #d63939; --red-soft: #fde6e6; --gold: #f2b632;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Malgun Gothic", "맑은 고딕", sans-serif; font-size: 13.5pt; line-height: 1.6; word-break: keep-all; counter-reset: pg; }
+  .page { position: relative; width: 210mm; height: 297mm; margin: 0 auto 10mm; padding: 20mm 17mm 20mm; background: var(--paper); overflow: hidden; page-break-after: always; break-after: page; counter-increment: pg; }
+  .page:not(.cover)::after { content: counter(pg); position: absolute; bottom: 9mm; right: 17mm; font-size: 10pt; color: var(--soft); }
+  .page:not(.cover)::before { content: "QR MENU ASIA · Đề xuất đầu tư"; position: absolute; bottom: 9mm; left: 17mm; font-size: 9pt; color: #9aa3b5; letter-spacing: .3px; }
+  h1, h2, h3, p { margin: 0; }
+  .kick { display: inline-block; font-size: 10pt; font-weight: 700; letter-spacing: 1.5px; color: var(--main); margin-bottom: 2mm; }
+  h2 { font-size: 22pt; line-height: 1.3; margin-bottom: 5mm; color: var(--navy); letter-spacing: -.5px; }
+  h3 { font-size: 13.5pt; margin: 0 0 1.5mm; color: var(--navy); }
+  p + p { margin-top: 2.5mm; }
+  .lead { font-size: 14.5pt; color: var(--soft); margin-bottom: 6mm; }
+  b.hl { background: linear-gradient(transparent 58%, #ffd9bf 58%); }
+  .small { font-size: 10pt; color: var(--soft); }
+  .src { position: absolute; left: 17mm; right: 17mm; bottom: 15mm; font-size: 8.5pt; color: #8a93a6; line-height: 1.45; }
+
+  /* 표지 */
+  .cover { padding: 0; background: linear-gradient(155deg, #14213d 0%, #1d2f57 55%, #23345e 100%); color: #fff; }
+  .cover .in { position: absolute; inset: 0; padding: 28mm 20mm 24mm; display: flex; flex-direction: column; }
+  .cover .brand { font-size: 14pt; font-weight: 700; letter-spacing: 3px; color: var(--gold); }
+  .cover h1 { margin-top: 16mm; font-size: 38pt; line-height: 1.22; letter-spacing: -1px; }
+  .cover h1 em { font-style: normal; color: #ffb185; }
+  .cover .sub { margin-top: 7mm; font-size: 15pt; opacity: .9; line-height: 1.6; }
+  .cover .phones { position: absolute; right: 18mm; bottom: 72mm; display: flex; gap: 5mm; align-items: flex-end; }
+  .cover .phones .phone { width: 38mm; transform: rotate(-4deg); }
+  .cover .phones .phone:nth-child(2) { width: 43mm; transform: rotate(0deg); margin-bottom: 10mm; }
+  .cover .phones .phone:nth-child(3) { width: 36mm; transform: rotate(5deg); }
+  .cover .bottom { margin-top: auto; display: flex; gap: 6mm; }
+  .cover .bottom div { flex: 1; padding: 4mm 5mm; border: 1px solid rgba(255,255,255,.25); border-radius: 3mm; }
+  .cover .bottom b { display: block; font-size: 19pt; color: #fff; }
+  .cover .bottom span { font-size: 10pt; opacity: .8; }
+  .cover .date { margin-top: 6mm; font-size: 10pt; opacity: .7; }
+
+  .phone { display: block; width: 100%; border: 2mm solid #11131a; border-radius: 5mm; overflow: hidden; background: #11131a; box-shadow: 0 2mm 6mm rgba(10,20,40,.25); }
+  .phone img { display: block; width: 100%; }
+
+  /* 상자·카드 */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4.5mm; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
+  .card { border: 1px solid var(--line); border-radius: 3mm; padding: 4.5mm 5mm; background: #fbfcfe; }
+  .card p { font-size: 12pt; color: var(--soft); line-height: 1.55; }
+  .card .ic { font-size: 18pt; line-height: 1; margin-bottom: 2mm; }
+  .box { border-radius: 3mm; padding: 5mm 6mm; margin-top: 5mm; }
+  .box.or { background: var(--main-soft); border-left: 2mm solid var(--main); }
+  .box.gr { background: var(--green-soft); border-left: 2mm solid var(--green); }
+  .box.bl { background: var(--blue-soft); border-left: 2mm solid var(--blue); }
+  .box.rd { background: var(--red-soft); border-left: 2mm solid var(--red); }
+  .box h3 { margin-bottom: 1.5mm; }
+  .box p, .box li { font-size: 12.5pt; }
+  ul.dot { margin: 1mm 0 0; padding-left: 5mm; }
+  ul.dot li { margin: 1mm 0; }
+
+  /* 큰 숫자 */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3.5mm; margin: 4mm 0; }
+  .kpi { background: var(--navy); color: #fff; border-radius: 3mm; padding: 4mm 3.5mm; }
+  .kpi b { display: block; font-size: 21pt; line-height: 1.15; color: #ffb185; }
+  .kpi span { font-size: 9.5pt; opacity: .85; line-height: 1.4; display: block; margin-top: 1mm; }
+  .kpi.light { background: var(--main-soft); color: var(--ink); }
+  .kpi.light b { color: var(--main); }
+
+  /* 표 */
+  table { width: 100%; border-collapse: collapse; font-size: 11.5pt; margin-top: 3mm; }
+  th, td { border-bottom: 1px solid var(--line); padding: 2.2mm 2.5mm; text-align: left; vertical-align: top; }
+  th { background: var(--navy); color: #fff; font-weight: 700; }
+  td.n, th.n { text-align: right; white-space: nowrap; }
+  tr.hi td { background: var(--main-soft); font-weight: 700; }
+  .tight td, .tight th { padding: 1.4mm 2.5mm; font-size: 10pt; }
+  tr.sum td { border-top: 2px solid var(--navy); font-weight: 700; }
+
+  /* 막대 그래프 */
+  .bars { display: flex; align-items: flex-end; gap: 7mm; height: 55mm; padding: 0 4mm; border-bottom: 1.5px solid var(--navy); margin-top: 6mm; }
+  .bars .g { flex: 1; display: flex; gap: 2mm; align-items: flex-end; height: 100%; }
+  .bars .b { flex: 1; border-radius: 1.5mm 1.5mm 0 0; position: relative; }
+  .bars .b i { position: absolute; top: -5.5mm; left: -3mm; right: -3mm; text-align: center; font-style: normal; font-size: 9pt; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  .bars .rev { background: var(--navy2); }
+  .bars .rec { background: var(--main); }
+  .bars .cst { background: #b8c0d0; }
+  .xl { display: flex; gap: 7mm; padding: 1.5mm 4mm 0; font-size: 10pt; font-weight: 700; }
+  .xl span { flex: 1; text-align: center; }
+  .legend { display: flex; gap: 6mm; font-size: 10pt; margin-top: 3mm; color: var(--soft); }
+  .legend i { display: inline-block; width: 4mm; height: 4mm; border-radius: 1mm; vertical-align: -2px; margin-right: 1.5mm; }
+
+  /* 흐름 */
+  .flow { display: flex; align-items: stretch; gap: 2mm; margin-top: 4mm; }
+  .flow .st { flex: 1; background: var(--blue-soft); border-radius: 3mm; padding: 4mm 3mm; text-align: center; font-size: 11.5pt; }
+  .flow .st b { display: block; font-size: 12pt; color: var(--navy); margin-bottom: 1mm; }
+  .flow .ar { align-self: center; color: var(--main); font-weight: 700; font-size: 14pt; }
+
+  .shots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-top: 4mm; }
+  .shots figure { margin: 0; }
+  .shots figcaption { font-size: 9.5pt; text-align: center; color: var(--soft); margin-top: 1.5mm; line-height: 1.35; }
+  .shots.three { grid-template-columns: repeat(3, 1fr); }
+
+  .toc { margin-top: 6mm; }
+  .toc div { display: flex; gap: 4mm; padding: 1.5mm 0; border-bottom: 1px dashed var(--line); font-size: 12pt; }
+  .toc div b { color: var(--main); min-width: 9mm; }
+  .toc div span { margin-left: auto; color: var(--soft); }
+
+  .timeline { margin-top: 4mm; border-left: 1.2mm solid var(--main); padding-left: 6mm; }
+  .timeline .t { position: relative; margin-bottom: 5mm; }
+  .timeline .t::before { content: ""; position: absolute; left: -8.8mm; top: 1.2mm; width: 4.4mm; height: 4.4mm; border-radius: 50%; background: #fff; border: 1.2mm solid var(--main); }
+  .timeline .t b { color: var(--navy); font-size: 12.5pt; }
+  .timeline .t p { font-size: 12pt; color: var(--soft); }
+
+  .end { background: linear-gradient(155deg, #14213d 0%, #23345e 100%); color: #fff; }
+  .end h2 { color: #fff; }
+  .end .lead { color: rgba(255,255,255,.8); }
+  .end .card { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); }
+  .end .card h3 { color: #ffb185; }
+  .end .card p { color: rgba(255,255,255,.85); }
+  .end::before { color: rgba(255,255,255,.4) !important; }
+  .end::after { color: rgba(255,255,255,.6) !important; }
+
+  @media screen and (max-width: 800px) {
+    .page { width: 100%; height: auto; min-height: 0; padding: 14mm 6mm 22mm; }
+    .cover { min-height: 180mm; }
+    .grid2, .grid3, .kpis, .shots { grid-template-columns: 1fr 1fr; }
+    .cover .phones { display: none; }
+    .src { position: static; margin-top: 6mm; }
+  }
+
+  /* 베트남어판: 글이 길어 글자를 한 단계 줄임 (글꼴은 그대로) */
+  body { font-size: 12.5pt; line-height: 1.5; }
+  h2 { font-size: 19pt; margin-bottom: 4mm; }
+  h3 { font-size: 12.5pt; }
+  .lead { font-size: 13pt; margin-bottom: 4.5mm; }
+  .card { padding: 3.5mm 4mm; }
+  .card p { font-size: 11pt; line-height: 1.45; }
+  .card .ic { font-size: 15pt; margin-bottom: 1.2mm; }
+  .box { padding: 4mm 5mm; margin-top: 4mm; }
+  .box p, .box li { font-size: 11.5pt; }
+  table { font-size: 10.5pt; }
+  th, td { padding: 1.7mm 2.2mm; }
+  .timeline .t p { font-size: 11pt; }
+  .timeline .t { margin-bottom: 3.5mm; }
+  .flow .st { font-size: 10.5pt; padding: 3mm 2mm; }
+  .grid2 { gap: 3.5mm; } .grid3 { gap: 3mm; }
+  .kpi b { font-size: 18pt; } .kpi span { font-size: 8.5pt; }
+</style>
+</head>
+<body>
+
+<!-- 1. 표지 -->
+<section class="page cover"><div class="in">
+  <div class="brand">QR MENU ASIA</div>
+  <h1>Công ty đưa thực đơn<br>nhà hàng Việt Nam<br><em>lên màn hình điện thoại</em></h1>
+  <p class="sub">Thực đơn QR 5 ngôn ngữ · Trang quản lý cho chủ quán · Gọi món tới bếp<br>Đề xuất đầu tư</p>
+  <div class="phones">
+    <div class="phone"><img src="../sales/img/demo-sutkkui.jpg" alt=""></div>
+    <div class="phone"><img src="../sales/img/demo-gamasot.jpg" alt=""></div>
+    <div class="phone"><img src="../sales/img/demo-chibaengi.jpg" alt=""></div>
+  </div>
+  <div class="bottom">
+    <div><b>147 quán</b><span>đã có thực đơn QR (trong 5 tuần)</span></div>
+    <div><b>5 ngôn ngữ</b><span>Hàn · Việt · Anh · Trung · Nhật, tự động chuyển</span></div>
+    <div><b>1 tỷ đồng</b><span>số vốn kêu gọi đầu tư</span></div>
+  </div>
+  <p class="date">Tháng 11/2026 · Bảo mật (dùng để thẩm định đầu tư)</p>
+</div></section>
+
+<!-- 2. 차례 -->
+<section class="page">
+  <span class="kick">CONTENTS</span>
+  <h2>Mục lục</h2>
+  <div class="toc">
+    <div><b>01</b>Tổng quan<span>3</span></div>
+    <div><b>02</b>Vấn đề các nhà hàng đang gặp<span>4</span></div>
+    <div><b>03</b>Giải pháp của chúng tôi<span>5</span></div>
+    <div><b>04</b>Xem qua sản phẩm<span>6</span></div>
+    <div><b>05</b>Thị trường: vì sao là Việt Nam, vì sao là bây giờ<span>8</span></div>
+    <div><b>06</b>Kết quả đã đạt được<span>9</span></div>
+    <div><b>07</b>Lợi thế cạnh tranh<span>10</span></div>
+    <div><b>08</b>Bảng giá và cấu trúc doanh thu<span>12</span></div>
+    <div><b>09</b>Hiệu quả kinh tế của một quán<span>13</span></div>
+    <div><b>10</b>Chiến lược bán hàng<span>14</span></div>
+    <div><b>11</b>Kế hoạch tài chính 3 năm<span>15</span></div>
+    <div><b>12</b>Kế hoạch sử dụng vốn<span>18</span></div>
+    <div><b>13</b>Điều kiện đầu tư và quyền lợi nhà đầu tư<span>19</span></div>
+    <div><b>14</b>Lộ trình phát triển và tầm nhìn<span>21</span></div>
+    <div><b>15</b>Rủi ro và cách ứng phó<span>22</span></div>
+    <div><b>16</b>Đội ngũ và cách vận hành<span>23</span></div>
+    <div><b>17</b>Cùng đồng hành<span>24</span></div>
+  </div>
+  <div class="box bl" style="margin-top:8mm">
+    <h3>Cách đọc bản đề xuất này</h3>
+    <p>Các con số chia làm hai loại. <b>Kết quả thực tế</b> (việc đã làm) là số liệu được xác nhận từ nhật ký công việc của chúng tôi. <b>Kế hoạch</b> (việc sắp làm) là số liệu tính theo các giả định ở trang 15–17. Số liệu thị trường đều có ghi nguồn ở cuối trang. Đơn vị tiền tệ là đồng Việt Nam (VND).</p>
+  </div>
+</section>
+
+<!-- 3. 요약 -->
+<section class="page">
+  <span class="kick">01 · SUMMARY</span>
+  <h2>Tổng quan</h2>
+  <p class="lead">Chúng tôi cung cấp, theo hình thức thuê bao hàng tháng, thực đơn QR tự động đổi sang ngôn ngữ trên điện thoại của khách, cùng bộ công cụ vận hành, dành cho các nhà hàng đông khách nước ngoài tại Việt Nam.</p>
+  <div class="grid2">
+    <div class="card"><div class="ic">😥</div><h3>Vấn đề</h3><p>Khách Hàn, Trung, Nhật và phương Tây không đọc được thực đơn nên gọi món chậm và dễ nhầm. Thực đơn giấy phải in lại mỗi khi đổi giá.</p></div>
+    <div class="card"><div class="ic">📱</div><h3>Giải pháp</h3><p>Khách quét mã QR trên bàn là mở được thực đơn 5 ngôn ngữ, không cần cài ứng dụng. Chủ quán đổi giá, báo hết món, thay ảnh bằng điện thoại chỉ trong 1 phút.</p></div>
+    <div class="card"><div class="ic">✅</div><h3>Kết quả</h3><p>Từ thực đơn đầu tiên ngày 14/10/2026, chỉ trong <b>5 tuần đã làm 147 quán</b> (Hà Nội 81, Bắc Ninh 63...). Chức năng gọi món tới bếp và tem tích điểm khách quen đã bắt đầu vận hành tại quán đầu tiên.</p></div>
+    <div class="card"><div class="ic">💰</div><h3>Cách kiếm tiền</h3><p>Phí thiết kế (2 – 4 triệu đồng, thu một lần) + <b>phí quản lý 300.000 đồng/tháng</b> (doanh thu lặp lại) + dịch vụ tùy chọn (gọi món, tên miền). Càng nhiều quán, dòng tiền vào mỗi tháng càng dày.</p></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><b>1 tỷ đồng</b><span>vốn kêu gọi đầu tư</span></div>
+    <div class="kpi"><b>816 quán</b><span>quán thuê bao cuối năm 3<br>(kịch bản cơ sở)</span></div>
+    <div class="kpi"><b>3,79 tỷ đồng</b><span>doanh thu năm 3<br>(kịch bản cơ sở)</span></div>
+    <div class="kpi"><b>18 tháng</b><span>bắt đầu có lãi hàng tháng<br>(kịch bản cơ sở)</span></div>
+  </div>
+  <div class="box or">
+    <h3>Đề xuất đầu tư</h3>
+    <p><b>Góp vốn cổ phần 1 tỷ đồng.</b> Số vốn dùng cho nhân sự bán hàng (1 năm), marketing và vận hành pháp nhân. Tỷ lệ cổ phần sẽ do hai bên thỏa thuận theo định giá công ty; trang 19 có ví dụ minh họa. Chúng tôi báo cáo nhanh hằng tháng và báo cáo tài chính hằng quý, và nhà đầu tư có thể tự xem doanh thu, số quán ngay trên màn hình quản lý.</p>
+  </div>
+</section>
+
+<!-- 4. 문제 -->
+<section class="page">
+  <span class="kick">02 · PROBLEM</span>
+  <h2>Vấn đề các nhà hàng gặp mỗi ngày</h2>
+  <p class="lead">Khách nước ngoài đến Việt Nam ngày càng đông, nhưng thực đơn của nhà hàng vẫn chỉ là một tờ giấy.</p>
+  <div class="grid2">
+    <div class="card"><div class="ic">🌏</div><h3>① Khách không đọc được thực đơn</h3><p>Trước thực đơn chỉ có tiếng Việt hoặc tiếng Hàn, khách nước ngoài phải chỉ tay vào hình hoặc mở ứng dụng dịch. Gọi món chậm, và những món đắt mà họ không hiểu thì họ không gọi.</p></div>
+    <div class="card"><div class="ic">🖨️</div><h3>② Đổi giá là phải in lại</h3><p>Giá nguyên liệu tăng thì phải đổi giá, nhưng in lại thực đơn vừa tốn tiền vừa mất thời gian. Vì vậy nhiều quán sửa tay bằng bút, hoặc để nguyên giá cũ.</p></div>
+    <div class="card"><div class="ic">🗣️</div><h3>③ Nhân viên và khách không hiểu nhau</h3><p>Nghe nhầm món nên ra sai món, phải làm lại, và khách để lại lời phàn nàn trên đánh giá Google.</p></div>
+    <div class="card"><div class="ic">📉</div><h3>④ Chủ quán không nắm được số liệu</h3><p>Món nào bán chạy, khách nước nào đến, giờ nào đông, tất cả chỉ biết theo cảm tính. Cũng không có công cụ nào để chăm sóc khách quen.</p></div>
+  </div>
+  <div class="box rd">
+    <h3>Những gì chúng tôi thấy tại hiện trường</h3>
+    <p>Khi làm thực đơn cho 147 quán, chúng tôi đã trực tiếp đọc ảnh thực đơn trên Google Maps. Rất thường gặp: <b>cùng một quán nhưng mỗi ảnh một giá</b>, giá từ nhiều năm trước vẫn còn treo, hoặc tên món chỉ có một ngôn ngữ. Nghĩa là khách chưa có một thực đơn chính xác để xem trước khi đến quán.</p>
+  </div>
+</section>
+
+<!-- 5. 해결 -->
+<section class="page">
+  <span class="kick">03 · SOLUTION</span>
+  <h2>Giải pháp của chúng tôi</h2>
+  <p class="lead">Chỉ cần gửi ảnh thực đơn, chúng tôi làm trọn gói thực đơn QR 5 ngôn ngữ phù hợp với phong cách quán, cùng bộ công cụ vận hành.</p>
+  <div class="flow">
+    <div class="st"><b>① Gửi ảnh</b>Chỉ cần ảnh thực đơn giấy</div><div class="ar">→</div>
+    <div class="st"><b>② Đội AI thực hiện</b>Đọc món, dịch, thiết kế</div><div class="ar">→</div>
+    <div class="st"><b>③ Chủ quán duyệt</b>Xem bản mẫu trên điện thoại</div><div class="ar">→</div>
+    <div class="st"><b>④ Lắp mã QR</b>In thẻ để bàn</div><div class="ar">→</div>
+    <div class="st"><b>⑤ Quản lý hàng tháng</b>Chỉnh sửa · báo cáo · gọi món</div>
+  </div>
+  <div class="grid3" style="margin-top:4mm">
+    <div class="card"><div class="ic">🌐</div><h3>Tự động đổi ngôn ngữ</h3><p>Nhận biết ngôn ngữ điện thoại của khách và mở ngay bằng tiếng Hàn, Việt, Anh, Trung hoặc Nhật.</p></div>
+    <div class="card"><div class="ic">📲</div><h3>Không cần cài ứng dụng</h3><p>Chỉ cần quét QR bằng camera. iPhone và Android đều dùng được.</p></div>
+    <div class="card"><div class="ic">✏️</div><h3>Chủ quán tự chỉnh sửa</h3><p>Sửa giá, báo hết món, đổi ảnh, giờ mở cửa trên điện thoại, khoảng 1 phút sau là hiện trên màn hình khách.</p></div>
+    <div class="card"><div class="ic">🧾</div><h3>Phiếu gọi món · Bếp</h3><p>Món khách chọn được hiển thị cỡ lớn bằng ngôn ngữ của nhân viên, hoặc gửi thẳng tới màn hình bếp và máy in hóa đơn.</p></div>
+    <div class="card"><div class="ic">📊</div><h3>Xem số liệu</h3><p>Báo cáo lượt xem (quốc gia, ngôn ngữ, thiết bị), lịch doanh thu, món bán chạy, giờ đông khách, tất cả trong một màn hình.</p></div>
+    <div class="card"><div class="ic">🎁</div><h3>Giữ chân khách quen</h3><p>Tem tích điểm và hộp góp ý giúp khách quay lại, đồng thời nghe trước những phàn nàn trước khi chúng thành đánh giá Google.</p></div>
+  </div>
+  <div class="box gr">
+    <h3>Điểm mấu chốt: lắp một lần, dùng mỗi ngày</h3>
+    <p>Thực đơn được dùng mỗi ngày quán mở cửa. Khi mã QR đã dán lên bàn thì rất khó đổi sang nhà cung cấp khác (phải in lại thẻ, đào tạo lại nhân viên), vì vậy chúng tôi kỳ vọng <b>thuê bao sẽ được duy trì lâu dài</b>.</p>
+  </div>
+</section>
+
+<!-- 6. 제품 1 -->
+<section class="page">
+  <span class="kick">04 · PRODUCT</span>
+  <h2>Xem qua sản phẩm ① Màn hình của khách</h2>
+  <p class="lead">Đây là các thực đơn đang hoạt động thực tế. Mỗi quán được thiết kế giống với biển hiệu và thực đơn của chính quán đó.</p>
+  <div class="shots">
+    <figure><div class="phone"><img src="../sales/img/demo-sutkkui.jpg" alt=""></div><figcaption>Sutkkui · Quán nướng · Bắc Ninh</figcaption></figure>
+    <figure><div class="phone"><img src="../sales/img/demo-gamasot.jpg" alt=""></div><figcaption>GAMASOT · Nhà hàng Hàn · Hà Nội</figcaption></figure>
+    <figure><div class="phone"><img src="../sales/img/demo-eros.jpg" alt=""></div><figcaption>EROS · Bar · Bắc Ninh</figcaption></figure>
+    <figure><div class="phone"><img src="../sales/img/demo-anvoi.jpg" alt=""></div><figcaption>Ăn Vội · Mì trộn · Quảng Ngãi</figcaption></figure>
+  </div>
+  <div class="shots" style="margin-top:6mm">
+    <figure><div class="phone"><img src="../owner-book/img/vi/g02-lang.jpg" alt=""></div><figcaption>Đổi ngôn ngữ</figcaption></figure>
+    <figure><div class="phone"><img src="../owner-book/img/vi/g05-zoom.jpg" alt=""></div><figcaption>Phóng to ảnh món</figcaption></figure>
+    <figure><div class="phone"><img src="../owner-book/img/vi/g07-sheet.jpg" alt=""></div><figcaption>Phiếu gọi món</figcaption></figure>
+    <figure><div class="phone"><img src="../owner-book/img/vi/g08-staff.jpg" alt=""></div><figcaption>Cho nhân viên xem<br>(chữ lớn, đúng ngôn ngữ nhân viên)</figcaption></figure>
+  </div>
+  <p class="small" style="margin-top:4mm">Các màn hình hàng dưới là ví dụ chụp từ dữ liệu quán thử nghiệm.</p>
+</section>
+
+<!-- 7. 제품 2 -->
+<section class="page">
+  <span class="kick">04 · PRODUCT</span>
+  <h2>Xem qua sản phẩm ② Màn hình chủ quán · Bếp</h2>
+  <p class="lead">Không dừng lại ở thực đơn. Các công cụ cần cho việc vận hành nhà hàng được nối liền thành một hệ thống.</p>
+  <div class="shots">
+    <figure><div class="phone"><img src="../owner-book/img/vi/o02-editor.jpg" alt=""></div><figcaption>Màn hình sửa thực đơn</figcaption></figure>
+    <figure><div class="phone"><img src="../owner-book/img/vi/k02-new.jpg" alt=""></div><figcaption>Màn hình bếp · Đơn mới</figcaption></figure>
+    <figure><div class="phone"><img src="../owner-book/img/vi/r02-sum.jpg" alt=""></div><figcaption>Tóm tắt doanh thu</figcaption></figure>
+    <figure><div class="phone"><img src="../owner-book/img/vi/l04-stamp.jpg" alt=""></div><figcaption>Tem tích điểm</figcaption></figure>
+  </div>
+  <table style="margin-top:6mm">
+    <tr><th>Chức năng</th><th>Tình trạng hiện nay</th></tr>
+    <tr><td>Thực đơn 5 ngôn ngữ · Thẻ QR · Hình ảnh quảng bá mạng xã hội</td><td>Đang hoạt động (147 quán)</td></tr>
+    <tr><td>Chủ quán tự sửa (giá · hết món · ảnh · giờ mở cửa) · Báo cáo lượt xem</td><td>Đang hoạt động</td></tr>
+    <tr><td>Giỏ hàng · Phiếu gọi món · Gọi món qua Zalo</td><td>Đang hoạt động (quán đã ký hợp đồng)</td></tr>
+    <tr><td>Màn hình bếp nhận đơn · Tem tích điểm · Hộp góp ý của khách</td><td>Quán đầu tiên (Jinmi Sikdang) bắt đầu vận hành · 18/11/2026</td></tr>
+    <tr><td>Gọi nhân viên · Sơ đồ bàn · Lịch doanh thu · Máy in hóa đơn</td><td>Đã phát triển xong · Đang chạy thử tại quán thực tế</td></tr>
+    <tr><td>Trang tìm quán (qrmenuasia.com) · Hiển thị trên tìm kiếm Google</td><td>Đang hoạt động</td></tr>
+  </table>
+  <p class="small" style="margin-top:3mm">Các màn hình trên là ví dụ chụp từ dữ liệu quán thử nghiệm. Chúng tôi cũng đã biên soạn sẵn sổ tay hướng dẫn cho chủ quán (bản tiếng Hàn và tiếng Việt, mỗi bản 56 trang).</p>
+</section>
+
+<!-- 8. 시장 -->
+<section class="page">
+  <span class="kick">05 · MARKET</span>
+  <h2>Thị trường: vì sao là Việt Nam, vì sao là bây giờ</h2>
+  <p class="lead">Nhà hàng thì nhiều, khách nước ngoài đạt mức cao nhất từ trước đến nay, và các quán đang tìm cách cắt giảm chi phí.</p>
+  <div class="kpis">
+    <div class="kpi"><b>329.000</b><span>nhà hàng, quán cà phê tại Việt Nam<br>(ước tính cuối 2025)</span></div>
+    <div class="kpi"><b>21,2 triệu</b><span>lượt khách quốc tế năm 2025<br>(cao nhất từ trước đến nay, +20%)</span></div>
+    <div class="kpi"><b>4,3 triệu</b><span>trong đó là người Hàn Quốc<br>(thứ 2, 20,5%)</span></div>
+    <div class="kpi"><b>1.141</b><span>dự án đầu tư của Hàn Quốc tại Bắc Ninh<br>(trên 15,7 tỷ USD)</span></div>
+  </div>
+  <div class="grid2" style="margin-top:5mm">
+    <div class="card"><h3>📈 Khách nước ngoài ngày càng đông</h3><p>Năm 2025, Việt Nam đón khoảng 21,2 triệu lượt khách quốc tế, mức cao nhất từ trước đến nay; Trung Quốc (5,3 triệu) và Hàn Quốc (4,3 triệu) đứng thứ nhất và thứ hai. Ngôn ngữ trên thực đơn gắn trực tiếp với doanh thu.</p></div>
+    <div class="card"><h3>🏭 Nơi tập trung doanh nghiệp Hàn Quốc</h3><p>Bắc Ninh là nơi Hàn Quốc là nhà đầu tư nước ngoài lớn nhất, riêng Samsung đã có hơn 45.000 lao động. Các nhà hàng phục vụ khách Hàn tập trung ở đây, nên đây là thị trường đầu tiên của chúng tôi.</p></div>
+    <div class="card"><h3>💸 Các quán đang tìm cách giảm chi phí</h3><p>Nửa đầu năm 2025, hơn 50.000 nhà hàng phải đóng cửa vì áp lực chi phí và các nguyên nhân khác. Họ cần công cụ giúp giảm chi phí in ấn, nhầm lẫn khi gọi món và nhân công.</p></div>
+    <div class="card"><h3>🎯 Ước tính quy mô thị trường</h3><p>Chỉ cần <b>1% nhà hàng, quán cà phê (khoảng 3.300 quán)</b> dùng gói quản lý hàng tháng, doanh thu lặp lại đã đạt <b>khoảng 1,07 tỷ đồng mỗi năm</b> (tính theo 270.000 đồng/tháng).</p></div>
+  </div>
+  <p class="src">Nguồn: số lượng nhà hàng — báo cáo thị trường F&amp;B Việt Nam 2025 của iPOS.vn (VIR, Vietstock đưa tin, 04/2026, số ước tính từ khảo sát mẫu) · số quán đóng cửa nửa đầu năm — báo cáo 6 tháng đầu năm của iPOS và Nestlé (SGGP, 2025) · lượt khách — thống kê Việt Nam (Vietnam News, VietnamNet, 01/2026) · đầu tư tại Bắc Ninh và số lao động Samsung — Vietnam News, The Investor (2026). Ước tính quy mô thị trường là tính toán của chúng tôi.</p>
+</section>
+
+<!-- 9. 실적 -->
+<section class="page">
+  <span class="kick">06 · TRACTION</span>
+  <h2>Kết quả đã đạt được</h2>
+  <p class="lead">Đây là thành quả của 5 tuần làm việc, không có vốn, chỉ một người cùng đội AI.</p>
+  <div class="kpis">
+    <div class="kpi light"><b>147 quán</b><span>đã làm thực đơn</span></div>
+    <div class="kpi light"><b>5 tuần</b><span>kể từ thực đơn đầu tiên (14/10)</span></div>
+    <div class="kpi light"><b>81 · 63</b><span>quán ở Hà Nội · Bắc Ninh</span></div>
+    <div class="kpi light"><b>149</b><span>địa chỉ cho tìm kiếm Google<br>(147 quán + 2 trang chính)</span></div>
+  </div>
+  <div class="timeline">
+    <div class="t"><b>14/10/2026 · Thực đơn đầu tiên</b><p>Quán nướng Sutkkui ở Bắc Ninh: 5 ngôn ngữ, tự nhận biết ngôn ngữ điện thoại, thẻ QR để bàn.</p></div>
+    <div class="t"><b>Tuần 3 tháng 10 · Quán ký hợp đồng và công cụ vận hành</b><p>Làm cho các quán do chủ quán đặt (khách sạn, quán gà, quán phở...), hoàn thiện nhật ký lượt xem, màn hình quản lý và màn hình chủ quán tự chỉnh sửa.</p></div>
+    <div class="t"><b>Cuối tháng 10 · Khung chuẩn và đội AI</b><p>Làm mọi quán theo cùng một cấu trúc (khung chuẩn), và chia các AI phụ trách đọc thực đơn, dịch, thiết kế, kiểm tra để tăng tốc độ làm việc.</p></div>
+    <div class="t"><b>Tháng 11 · Mở rộng chức năng vận hành</b><p>Màn hình gọi món tới bếp, máy in hóa đơn, lịch doanh thu, tem tích điểm, hộp góp ý của khách, sổ tay chủ quán (tiếng Hàn và tiếng Việt, mỗi bản 56 trang).</p></div>
+    <div class="t"><b>Hiện nay · Trang tìm quán</b><p>Trên qrmenuasia.com, có thể tìm 147 quán theo khu vực và loại hình. Mỗi quán đều trở thành một bản mẫu để chào bán.</p></div>
+  </div>
+  <div class="box bl">
+    <h3>Xin nói thẳng</h3>
+    <p>Phần lớn trong 147 quán là <b>bản mẫu chúng tôi làm trước để giới thiệu</b> (dạng trang tìm quán), còn số quán ký hợp đồng trả phí chính thức hiện mới là một phần. Khoản đầu tư này nhằm xây dựng <b>đội ngũ bán hàng để chuyển các bản mẫu đã làm thành hợp đồng có thu phí</b>.</p>
+  </div>
+</section>
+
+<!-- 10. 경쟁력 1 -->
+<section class="page">
+  <span class="kick">07 · WHY US</span>
+  <h2>Lợi thế cạnh tranh ① Điểm mạnh riêng của chúng tôi</h2>
+  <div class="grid2">
+    <div class="card"><div class="ic">⚡</div><h3>1. Chi phí làm thực đơn thấp</h3><p>Đọc ảnh thực đơn, dịch 5 ngôn ngữ, thiết kế, kiểm tra đều do các AI phụ trách. Nhờ vậy, một người đã làm được thực đơn đa ngôn ngữ cho 147 quán trong 5 tuần.</p></div>
+    <div class="card"><div class="ic">🎁</div><h3>2. Bán hàng kiểu "làm trước, cho xem trước"</h3><p>Trước khi ký hợp đồng, chúng tôi làm sẵn thực đơn thật của quán và cho chủ quán xem ngay trên điện thoại. Chủ quán nhìn thấy sản phẩm hoàn chỉnh chứ không phải bản giải thích nên quyết định rất nhanh.</p></div>
+    <div class="card"><div class="ic">🎨</div><h3>3. Mỗi quán một thiết kế</h3><p>Khung thì giống nhau, nhưng màu sắc, họa tiết, tiêu đề được đổi để giống biển hiệu và thực đơn của từng quán. Quán nướng thì bảng đen và chữ thư pháp, quầy bar thì vàng kim và đèn neon.</p></div>
+    <div class="card"><div class="ic">🤝</div><h3>4. Đội ngũ hiểu cả Hàn Quốc lẫn Việt Nam</h3><p>Chúng tôi hiểu khách Hàn cần gì và nhân viên Việt cần đọc gì. Phiếu gọi món hiện chữ lớn bằng ngôn ngữ nhân viên và chữ nhỏ bằng ngôn ngữ khách.</p></div>
+    <div class="card"><div class="ic">🔗</div><h3>5. Từ thực đơn đến gọi món và doanh thu, tất cả trong một</h3><p>Thực đơn, chủ quán tự sửa, gọi món tới bếp, hóa đơn, doanh thu, khách quen đều nằm trong bộ công cụ của một công ty. Càng dùng nhiều, quán càng khó rời đi.</p></div>
+    <div class="card"><div class="ic">🔍</div><h3>6. Trang tìm quán = mang khách tới quán</h3><p>Mọi quán đều xuất hiện trên qrmenuasia.com và tìm kiếm Google. Quán càng nhiều thì trang càng lớn, trang càng lớn thì càng có nhiều khách đến quán.</p></div>
+  </div>
+  <div class="box or"><p><b>7. Không tốn thiết bị, không phí lắp đặt:</b> Chỉ cần điện thoại của khách và điện thoại của chủ quán. Màn hình bếp cũng chạy được trên máy tính bảng Android hoặc máy tính sẵn có ở nhà.</p></div>
+</section>
+
+<!-- 11. 경쟁력 2 -->
+<section class="page">
+  <span class="kick">07 · COMPETITION</span>
+  <h2>Lợi thế cạnh tranh ② So sánh với các cách khác</h2>
+  <p class="lead">Đặt cạnh những lựa chọn mà chủ quán có hôm nay, vị trí của chúng tôi hiện rất rõ.</p>
+  <table>
+    <tr><th></th><th>Thực đơn giấy</th><th>Gắn QR vào<br>PDF, ảnh</th><th>Hệ thống gọi món<br>của hãng POS</th><th style="background:var(--main)">QR MENU ASIA</th></tr>
+    <tr><td><b>5 ngôn ngữ tự động</b></td><td>✕</td><td>✕ (chỉ một tệp)</td><td>△ (phần lớn Việt, Anh)</td><td>◎ Tự động theo ngôn ngữ điện thoại</td></tr>
+    <tr><td><b>Đổi giá</b></td><td>In lại</td><td>Làm lại tệp</td><td>○</td><td>◎ 1 phút trên điện thoại</td></tr>
+    <tr><td><b>Thiết kế riêng cho quán</b></td><td>○</td><td>○</td><td>✕ Cùng một khung</td><td>◎ Giống biển hiệu, thực đơn</td></tr>
+    <tr><td><b>Chi phí ban đầu</b></td><td>Tiền in</td><td>Gần như không</td><td>Thiết bị, lắp đặt</td><td>Từ 2 triệu đồng</td></tr>
+    <tr><td><b>Công sức làm thực đơn</b></td><td>Chủ quán</td><td>Chủ quán</td><td>Chủ quán nhập liệu</td><td>◎ Chỉ cần gửi ảnh</td></tr>
+    <tr><td><b>Kết nối gọi món, bếp</b></td><td>✕</td><td>✕</td><td>◎</td><td>○ Làm được với thiết bị có sẵn</td></tr>
+    <tr><td><b>Số liệu khách, khách quen</b></td><td>✕</td><td>✕</td><td>○</td><td>○ Lượt xem theo quốc gia, ngôn ngữ</td></tr>
+    <tr><td><b>Mang khách mới đến</b></td><td>✕</td><td>✕</td><td>✕</td><td>◎ Trang tìm quán</td></tr>
+  </table>
+  <p class="small" style="margin-top:2mm">◎ Rất tốt · ○ Có · △ Một phần · ✕ Không có. Đây là phần tổng hợp của chúng tôi cho các trường hợp thông thường.</p>
+  <div class="box gr">
+    <h3>Vị trí của chúng tôi</h3>
+    <p>Các hãng POS tập trung vào quầy thu ngân và gọi món, còn thực đơn đa ngôn ngữ cho khách nước ngoài và thiết kế riêng cho từng quán thì chưa mạnh. Chúng tôi tập trung vào <b>"nhà hàng có khách nước ngoài"</b>, đi vào bằng thực đơn rồi mở rộng sang gọi món, bếp khi cần. Với các hãng POS, chúng tôi có thể trở thành đối tác bổ trợ hơn là đối thủ.</p>
+  </div>
+</section>
+
+<!-- 12. 가격 -->
+<section class="page">
+  <span class="kick">08 · BUSINESS MODEL</span>
+  <h2>Bảng giá và cấu trúc doanh thu</h2>
+  <p class="lead">Phí thiết kế thu một lần để bù chi phí làm, phí quản lý thu hằng tháng để công ty lớn lên.</p>
+  <table>
+    <tr><th>Gói</th><th>Nội dung</th><th class="n">Giá (VND)</th></tr>
+    <tr><td><b>Cơ bản</b> (1 lần)</td><td>Thực đơn 5 ngôn ngữ, dùng ảnh và logo sẵn có, thẻ QR dạng PDF, 2 hình quảng bá mạng xã hội</td><td class="n">2.000.000</td></tr>
+    <tr><td><b>Cao cấp</b> (1 lần)</td><td>Gói cơ bản + thiết kế riêng cho quán, chỉnh lý ảnh món ăn, chỉnh sửa bản mẫu, 2 video quảng bá mạng xã hội</td><td class="n">4.000.000</td></tr>
+    <tr class="hi"><td><b>Phí quản lý</b> (hằng tháng)</td><td>Duy trì trang, màn hình chủ quán tự sửa, báo cáo lượt xem, 2 lần/tháng chúng tôi sửa giúp</td><td class="n">300.000 / tháng</td></tr>
+    <tr><td>Thanh toán theo năm</td><td>Phí quản lý 12 tháng (tặng 2 tháng)</td><td class="n">3.000.000 / năm</td></tr>
+    <tr><td>Tùy chọn: Giỏ hàng, phiếu gọi món</td><td>Phiếu gọi món của khách, cho nhân viên xem, gọi món qua Zalo</td><td class="n">+ 2.500.000</td></tr>
+    <tr><td>Tùy chọn: Tên miền riêng</td><td>Ví dụ: tenquan.vn</td><td class="n">Từ 500.000 / năm</td></tr>
+    <tr><td>Tùy chọn: Hệ thống gọi món tại bàn</td><td>Màn hình bếp, máy in hóa đơn, gọi nhân viên</td><td class="n">Tư vấn riêng</td></tr>
+  </table>
+  <p class="small" style="margin-top:2mm">Đây đúng là mức giá đã công bố trên trang giới thiệu (qrmenuasia.com).</p>
+  <h3 style="margin-top:6mm">Nguồn thu sẽ bổ sung</h3>
+  <div class="grid3">
+    <div class="card"><h3>🍽 Thuê bao hệ thống gọi món</h3><p>Thu thêm phí hằng tháng với các quán bật màn hình bếp, máy in, báo cáo doanh thu.</p></div>
+    <div class="card"><h3>📣 Quảng cáo trên trang tìm quán</h3><p>Bán có phí vị trí đầu trang tìm quán và huy hiệu "đề xuất".</p></div>
+    <div class="card"><h3>🤝 Phí hợp tác</h3><p>Hoa hồng khi bán trọn gói cùng hãng máy in, chân đế QR, giao hàng và thanh toán.</p></div>
+  </div>
+</section>
+
+<!-- 13. 단위 경제 -->
+<section class="page">
+  <span class="kick">09 · UNIT ECONOMICS</span>
+  <h2>Hiệu quả kinh tế của một quán</h2>
+  <p class="lead">Chúng tôi đã tính một quán ký hợp đồng mang lại cho công ty bao nhiêu tiền và tốn bao nhiêu để có được quán đó.</p>
+  <div class="grid2">
+    <div>
+      <h3>Một quán mang lại bao nhiêu tiền</h3>
+      <table>
+        <tr><td>Phí thiết kế trung bình (cơ bản 7 : cao cấp 3)</td><td class="n">2.600.000</td></tr>
+        <tr><td>Dịch vụ tùy chọn trung bình (phiếu gọi món, tên miền)</td><td class="n">400.000</td></tr>
+        <tr><td>Phí quản lý trung bình (đã tính ưu đãi theo năm)</td><td class="n">270.000 / tháng</td></tr>
+        <tr class="hi"><td>Doanh thu năm đầu</td><td class="n">6.240.000</td></tr>
+        <tr><td>Thời gian sử dụng trung bình (giả định hủy 2%/tháng)</td><td class="n">khoảng 50 tháng</td></tr>
+        <tr class="hi"><td>Tổng doanh thu trọn đời của một quán</td><td class="n">khoảng 16.500.000</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Tốn bao nhiêu để có một quán</h3>
+      <table>
+        <tr><td>Nhân sự bán hàng + marketing ÷ hợp đồng mới (năm 1)</td><td class="n">khoảng 3.400.000</td></tr>
+        <tr><td>Hoa hồng bán hàng (10% phí thiết kế)</td><td class="n">260.000</td></tr>
+        <tr><td>In thẻ QR, chân đế</td><td class="n">150.000</td></tr>
+        <tr class="hi"><td>Chi phí có được một quán</td><td class="n">khoảng 3.800.000</td></tr>
+        <tr><td>Chi phí máy chủ</td><td class="n">khoảng 5.000 / tháng</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="kpis" style="grid-template-columns: repeat(3, 1fr); margin-top:7mm">
+    <div class="kpi"><b>khoảng 4,3 lần</b><span>doanh thu trọn đời ÷ chi phí có được quán<br>(trên 3 lần thường là mô hình lành mạnh)</span></div>
+    <div class="kpi"><b>Thu hồi ngay năm đầu</b><span>phí thiết kế + tùy chọn (3 triệu) giúp<br>thu lại khoảng 80% chi phí ngay tháng đầu</span></div>
+    <div class="kpi"><b>98%+</b><span>phần còn lại của phí quản lý<br>(sau khi trừ 5.000 đồng phí máy chủ)</span></div>
+  </div>
+  <div class="box or"><p><b>Vì sao làm được:</b> Đội AI đảm nhận việc làm thực đơn nên gần như không có giá vốn, và chi phí máy chủ cho mỗi quán rất nhỏ dù số quán tăng. Phần lớn tiền dành cho <b>bán hàng</b>, vì vậy khoản đầu tư lần này cũng dùng cho đội ngũ bán hàng.</p></div>
+  <p class="small" style="margin-top:3mm">Mọi con số đều là giả định kế hoạch (giống bảng giả định ở trang 15). Chi phí có được một quán không tính lương người sáng lập, lương quản lý và thuế. Tỷ lệ hủy và tỷ lệ bán dịch vụ tùy chọn thực tế sẽ được điều chỉnh lại theo kết quả 6 tháng đầu.</p>
+</section>
+
+<!-- 14. 영업 전략 -->
+<section class="page">
+  <span class="kick">10 · GO-TO-MARKET</span>
+  <h2>Chiến lược bán hàng</h2>
+  <p class="lead">147 bản mẫu đã làm xong là tài sản bán hàng lớn nhất của chúng tôi.</p>
+  <div class="flow">
+    <div class="st"><b>① Làm trước</b>Thực đơn dạng trang tìm quán<br>từ ảnh Google Maps</div><div class="ar">→</div>
+    <div class="st"><b>② Đến gặp</b>Nhân viên bán hàng cầm điện thoại:<br>"Đây là quán của anh/chị"</div><div class="ar">→</div>
+    <div class="st"><b>③ Dùng thử miễn phí</b>Đặt thẻ QR,<br>cho xem số lượt xem</div><div class="ar">→</div>
+    <div class="st"><b>④ Ký hợp đồng</b>Phí thiết kế + phí quản lý</div>
+  </div>
+  <div class="grid2" style="margin-top:6mm">
+    <div class="card"><h3>🎯 Giai đoạn 1 (0–12 tháng) Bắc Ninh · Hà Nội</h3><p>Bắt đầu từ nhà hàng Hàn, quán nướng, bar đông khách Hàn. Mỗi tháng gặp khoảng 100 quán, gồm 144 quán mẫu (Hà Nội 81, Bắc Ninh 63) và các quán mới ở xung quanh, trong đó ký hợp đồng 10 quán (khoảng 10%). Mỗi ngôn ngữ (Hàn, Việt) có 1 nhân viên bán hàng.</p></div>
+    <div class="card"><h3>🚀 Giai đoạn 2 (12–24 tháng) Thành phố du lịch</h3><p>Các thành phố đông khách quốc tế như TP. Hồ Chí Minh, Đà Nẵng, Nha Trang, Phú Quốc. Mở rộng sang quán phục vụ khách Trung Quốc và phương Tây, và tìm đối tác bán hàng tại địa phương.</p></div>
+    <div class="card"><h3>🤝 Chương trình giới thiệu</h3><p>Quán đã ký giới thiệu quán khác sẽ được miễn phí quản lý 1 tháng. Chúng tôi hợp tác với hội người Hàn, hội tiểu thương và nhà cung cấp thực phẩm.</p></div>
+    <div class="card"><h3>📣 Trực tuyến</h3><p>Hình ảnh và video quảng bá mạng xã hội làm riêng cho từng quán, tìm kiếm Google từ trang tìm quán, tư vấn qua Zalo, Facebook, KakaoTalk.</p></div>
+  </div>
+  <div class="box gr">
+    <h3>Mục tiêu giai đoạn 1 (kịch bản cơ sở)</h3>
+    <p>Mỗi tháng <b>10 hợp đồng mới</b> → sau 1 năm có <b>khoảng 108 quán thuê bao</b>. Tức là 2 nhân viên bán hàng, mỗi người một tháng gặp khoảng 50 quán (mỗi ngày 2–3 quán) và chốt 5 quán (tỷ lệ chốt khoảng 10%).</p>
+  </div>
+</section>
+
+<!-- 15. 재무 가정 -->
+<section class="page">
+  <span class="kick">11 · FINANCIAL PLAN</span>
+  <h2>Kế hoạch tài chính 3 năm ① Giả định</h2>
+  <p class="lead">Chúng tôi tính theo ba kịch bản. Điểm khác nhau duy nhất là "số quán ký hợp đồng mới mỗi tháng".</p>
+  <table class="tight">
+    <tr><th>Hợp đồng mới (mỗi tháng)</th><th class="n">Năm 1</th><th class="n">Năm 2</th><th class="n">Năm 3</th></tr>
+    <tr><td>Thận trọng (chậm)</td><td class="n">6 quán</td><td class="n">15 quán</td><td class="n">30 quán</td></tr>
+    <tr class="hi"><td>Cơ sở (mục tiêu)</td><td class="n">10 quán</td><td class="n">25 quán</td><td class="n">50 quán</td></tr>
+    <tr><td>Tăng tốc (nhanh)</td><td class="n">15 quán</td><td class="n">40 quán</td><td class="n">80 quán</td></tr>
+  </table>
+  <h3 style="margin-top:6mm">Giả định chung</h3>
+  <table class="tight">
+    <tr><td>Phí thiết kế trung bình</td><td class="n">2.600.000 đồng</td><td>Cơ bản 7 : Cao cấp 3</td></tr>
+    <tr><td>Dịch vụ tùy chọn trung bình</td><td class="n">400.000 đồng</td><td>Tính trên mỗi quán mới</td></tr>
+    <tr><td>Phí quản lý trung bình</td><td class="n">270.000 đồng</td><td>Đã tính ưu đãi theo năm</td></tr>
+    <tr><td>Tỷ lệ hủy</td><td class="n">2% mỗi tháng</td><td>Khoảng 22% hủy trong 1 năm</td></tr>
+    <tr><td>Lương nhân viên bán hàng</td><td class="n">12.000.000 đồng/tháng</td><td>+ hoa hồng hợp đồng 10%</td></tr>
+    <tr><td>Lương thiết kế · hỗ trợ khách</td><td class="n">11.000.000 đồng/tháng</td><td></td></tr>
+    <tr><td>Lương quản lý (kế toán, vận hành)</td><td class="n">14.000.000 đồng/tháng</td><td>Từ năm 2</td></tr>
+    <tr><td>Lương người sáng lập</td><td class="n">10 → 20 triệu đồng/tháng</td><td>Năm 1 → năm 3</td></tr>
+    <tr><td>Văn phòng</td><td class="n">5 → 20 triệu đồng/tháng</td><td>Bắt đầu từ văn phòng chia sẻ</td></tr>
+    <tr><td>Marketing</td><td class="n">10 → 40 triệu đồng/tháng</td><td></td></tr>
+    <tr><td>Công cụ AI · máy chủ · tên miền</td><td class="n">5 → 12 triệu đồng/tháng</td><td>+ 5.000 đồng/tháng mỗi quán</td></tr>
+  </table>
+  <table class="tight" style="margin-top:4mm">
+    <tr><th>Nhân sự</th><th class="n">Năm 1</th><th class="n">Năm 2</th><th class="n">Năm 3</th></tr>
+    <tr><td>Bán hàng</td><td class="n">2</td><td class="n">3</td><td class="n">5</td></tr>
+    <tr><td>Thiết kế · hỗ trợ khách</td><td class="n">1</td><td class="n">2</td><td class="n">3</td></tr>
+    <tr><td>Quản lý</td><td class="n">0</td><td class="n">1</td><td class="n">1</td></tr>
+    <tr class="sum"><td>Tổng (gồm người sáng lập)</td><td class="n">4 người</td><td class="n">7 người</td><td class="n">10 người</td></tr>
+  </table>
+</section>
+
+<!-- 16. 재무 기본 -->
+<section class="page">
+  <span class="kick">11 · FINANCIAL PLAN</span>
+  <h2>Kế hoạch tài chính 3 năm ② Kịch bản cơ sở</h2>
+  <p class="lead">Khi số quán thuê bao tích lũy, sang năm 3 hơn một nửa doanh thu là doanh thu lặp lại đều đặn mỗi tháng.</p>
+  <div class="bars">
+    <div class="g"><div class="b rev" style="height:14.7%"><i>556</i></div><div class="b rec" style="height:5.2%"><i>196</i></div><div class="b cst" style="height:22%"><i>833</i></div></div>
+    <div class="g"><div class="b rev" style="height:44.8%"><i>1.696</i></div><div class="b rec" style="height:21%"><i>796</i></div><div class="b cst" style="height:43.3%"><i>1.638</i></div></div>
+    <div class="g"><div class="b rev" style="height:100%"><i>3.787</i></div><div class="b rec" style="height:52.5%"><i>1.987</i></div><div class="b cst" style="height:70.5%"><i>2.671</i></div></div>
+  </div>
+  <div class="xl"><span>Năm 1</span><span>Năm 2</span><span>Năm 3</span></div>
+  <div class="legend"><span><i style="background:var(--navy2)"></i>Tổng doanh thu</span><span><i style="background:var(--main)"></i>Trong đó phí quản lý (doanh thu lặp lại)</span><span><i style="background:#b8c0d0"></i>Tổng chi phí</span><span>(đơn vị: triệu đồng)</span></div>
+  <table style="margin-top:6mm">
+    <tr><th>Kịch bản cơ sở (triệu đồng)</th><th class="n">Năm 1</th><th class="n">Năm 2</th><th class="n">Năm 3</th></tr>
+    <tr><td>Số quán thuê bao cuối năm</td><td class="n">108 quán</td><td class="n">354 quán</td><td class="n">816 quán</td></tr>
+    <tr><td>Tổng doanh thu</td><td class="n">556</td><td class="n">1.696</td><td class="n">3.787</td></tr>
+    <tr><td>　Trong đó doanh thu phí quản lý</td><td class="n">196</td><td class="n">796</td><td class="n">1.987</td></tr>
+    <tr><td>Tổng chi phí</td><td class="n">833</td><td class="n">1.638</td><td class="n">2.671</td></tr>
+    <tr class="hi"><td>Lợi nhuận hoạt động</td><td class="n">−277</td><td class="n">+59</td><td class="n">+1.116</td></tr>
+    <tr><td>Biên lợi nhuận hoạt động</td><td class="n">−50%</td><td class="n">3%</td><td class="n">29%</td></tr>
+  </table>
+  <div class="box gr">
+    <p><b>Từ tháng thứ 18 bắt đầu có lãi hàng tháng</b>, và thời điểm dòng tiền âm sâu nhất cũng chỉ khoảng <b>350 triệu đồng</b>. Với vốn đầu tư 1 tỷ đồng, kịch bản cơ sở hoàn toàn đủ sức vượt qua, và phần dư có thể dùng để đẩy nhanh việc mở rộng sang khu vực mới ở giai đoạn 2. Đến cuối năm 3, riêng phí quản lý đã mang về <b>khoảng 220 triệu đồng mỗi tháng</b> (khoảng 2,6 tỷ đồng/năm).</p>
+  </div>
+  <p class="small" style="margin-top:3mm">Chưa tính thuế và biến động tỷ giá. Thuế doanh nghiệp, v.v. sẽ được tính lại cùng kế toán sau khi thành lập pháp nhân. Chi phí thành lập pháp nhân và tư vấn chỉ được tính trong bảng sử dụng vốn (trang 18).</p>
+</section>
+
+<!-- 17. 시나리오 비교 -->
+<section class="page">
+  <span class="kick">11 · FINANCIAL PLAN</span>
+  <h2>Kế hoạch tài chính 3 năm ③ So sánh các kịch bản</h2>
+  <p class="lead">Chúng tôi trình bày cả lúc thuận lợi và lúc khó khăn.</p>
+  <table class="tight" style="font-size:11pt">
+    <tr><th>(triệu đồng)</th><th class="n">Thận trọng</th><th class="n" style="background:var(--main)">Cơ sở</th><th class="n">Tăng tốc</th></tr>
+    <tr><td>Số quán thuê bao cuối năm 3</td><td class="n">489 quán</td><td class="n">816 quán</td><td class="n">1.298 quán</td></tr>
+    <tr><td>Doanh thu năm 1</td><td class="n">334</td><td class="n">556</td><td class="n">834</td></tr>
+    <tr><td>Doanh thu năm 2</td><td class="n">1.018</td><td class="n">1.696</td><td class="n">2.683</td></tr>
+    <tr><td>Doanh thu năm 3</td><td class="n">2.272</td><td class="n">3.787</td><td class="n">6.034</td></tr>
+    <tr><td>Lợi nhuận hoạt động năm 1</td><td class="n">−478</td><td class="n">−277</td><td class="n">−25</td></tr>
+    <tr><td>Lợi nhuận hoạt động năm 2</td><td class="n">−565</td><td class="n">+59</td><td class="n">+964</td></tr>
+    <tr class="hi"><td>Lợi nhuận hoạt động năm 3</td><td class="n">−286</td><td class="n">+1.116</td><td class="n">+3.194</td></tr>
+    <tr><td>Bắt đầu có lãi hàng tháng</td><td class="n">tháng 35</td><td class="n">tháng 18</td><td class="n">tháng 7</td></tr>
+    <tr><td>Doanh thu lặp lại hàng tháng cuối năm 3</td><td class="n">132</td><td class="n">220</td><td class="n">351</td></tr>
+    <tr><td>Lãi/lỗ lũy kế 3 năm</td><td class="n">−1.330</td><td class="n">+900</td><td class="n">+4.130</td></tr>
+  </table>
+  <div class="box rd">
+    <h3>Cam kết nếu rơi vào kịch bản thận trọng</h3>
+    <p>Nếu giữ nguyên kịch bản thận trọng, trong 3 năm cần khoảng <b>1,34 tỷ đồng, vượt quá số vốn đầu tư (1 tỷ đồng).</b> Vì vậy chúng tôi <b>rà soát kế hoạch mỗi 6 tháng</b>; nếu hợp đồng mới thấp hơn 60% kịch bản cơ sở, chúng tôi ① hoãn tuyển dụng năm 2, ② chậm mở rộng khu vực, ③ cắt giảm văn phòng và marketing để <b>điều chỉnh lại hoạt động trong phạm vi 1 tỷ đồng.</b> Ngay cả khi đó, phí quản lý đã thu vẫn tiếp tục vào mỗi tháng.</p>
+  </div>
+  <div class="box bl">
+    <h3>Chìa khóa của kịch bản tăng tốc</h3>
+    <p>Chúng tôi đã có hệ thống AI làm được nhiều thực đơn mẫu mỗi ngày, nên số nhân viên bán hàng chính là tốc độ tăng trưởng. Nếu năm 1 đạt kết quả tốt, chúng tôi sẽ kêu gọi thêm vốn để tăng nhanh đội ngũ bán hàng.</p>
+  </div>
+</section>
+
+<!-- 18. 투자금 사용 -->
+<section class="page">
+  <span class="kick">12 · USE OF FUNDS</span>
+  <h2>Kế hoạch sử dụng vốn (1 tỷ đồng)</h2>
+  <p class="lead">Khoảng 44% vốn đầu tư dùng cho bán hàng và marketing, những việc trực tiếp tạo ra doanh thu; khoảng 13% dùng cho sản xuất và chăm sóc khách hàng.</p>
+  <div style="display:flex; height:16mm; border-radius:3mm; overflow:hidden; margin:4mm 0 2mm; font-size:10pt; font-weight:700; color:#fff">
+    <div style="width:42%; background:var(--navy); display:flex; align-items:center; justify-content:center">Nhân sự 42%</div>
+    <div style="width:15%; background:var(--main); display:flex; align-items:center; justify-content:center">Marketing 15%</div>
+    <div style="width:12%; background:var(--navy2); display:flex; align-items:center; justify-content:center">Sáng lập 12%</div>
+    <div style="width:10%; background:var(--blue); display:flex; align-items:center; justify-content:center">Pháp nhân 10%</div>
+    <div style="width:6%; background:var(--green); display:flex; align-items:center; justify-content:center">Công nghệ 6%</div>
+    <div style="width:15%; background:#9aa3b5; display:flex; align-items:center; justify-content:center">Dự phòng 15%</div>
+  </div>
+  <table>
+    <tr><th>Hạng mục</th><th>Nội dung</th><th class="n">Số tiền (đồng)</th></tr>
+    <tr><td><b>Nhân sự (1 năm)</b></td><td>2 nhân viên bán hàng (tiếng Hàn, tiếng Việt) + 1 nhân viên thiết kế · hỗ trợ khách</td><td class="n">420.000.000</td></tr>
+    <tr><td><b>Marketing · công cụ bán hàng</b></td><td>Chân đế QR mẫu, in thẻ dùng thử miễn phí, quảng cáo trực tuyến, chương trình giới thiệu</td><td class="n">150.000.000</td></tr>
+    <tr><td><b>Lương người sáng lập (1 năm)</b></td><td>10 triệu đồng/tháng, toàn thời gian tập trung cho công ty</td><td class="n">120.000.000</td></tr>
+    <tr><td><b>Pháp nhân · văn phòng</b></td><td>Thành lập pháp nhân, kế toán, tư vấn pháp lý, văn phòng chia sẻ 1 năm</td><td class="n">100.000.000</td></tr>
+    <tr><td><b>Công nghệ · máy chủ</b></td><td>Thuê bao công cụ AI, máy chủ, tên miền, máy in và máy tính bảng để thử nghiệm</td><td class="n">60.000.000</td></tr>
+    <tr><td><b>Dự phòng</b></td><td>Khoản giúp cầm cự khi chậm hơn kế hoạch (chỉ dùng sau đợt rà soát 6 tháng)</td><td class="n">150.000.000</td></tr>
+    <tr class="sum"><td>Tổng cộng</td><td></td><td class="n">1.000.000.000</td></tr>
+  </table>
+  <div class="grid2" style="margin-top:6mm">
+    <div class="card"><h3>📌 Mục tiêu 6 tháng sau đầu tư</h3><p>Thành lập pháp nhân · tuyển 2 nhân viên bán hàng · từ 50 quán ký hợp đồng trở lên · từ 10 quán trở lên dùng gọi món tới bếp · doanh thu phí quản lý từ 10 triệu đồng/tháng trở lên.</p></div>
+    <div class="card"><h3>📌 Mục tiêu 12 tháng sau đầu tư</h3><p>Từ 100 quán thuê bao trở lên · thăm hết các quán mẫu ở Bắc Ninh và Hà Nội · chuẩn bị khởi động 1 thành phố ở giai đoạn 2 · cân nhắc có gọi vốn tiếp hay không.</p></div>
+  </div>
+</section>
+
+<!-- 19. 투자 조건 -->
+<section class="page">
+  <span class="kick">13 · DEAL</span>
+  <h2>Điều kiện đầu tư (đề xuất)</h2>
+  <p class="lead">Đây là hình thức góp vốn cổ phần. Nhà đầu tư trở thành một trong những chủ sở hữu của công ty và cùng chia sẻ thành quả tăng trưởng.</p>
+  <table>
+    <tr><th>Hạng mục</th><th>Đề xuất</th></tr>
+    <tr><td><b>Số vốn đầu tư</b></td><td>1 tỷ đồng, do một hoặc nhiều nhà đầu tư cùng góp</td></tr>
+    <tr><td><b>Hình thức</b></td><td>Nhận cổ phần (phần sở hữu) của pháp nhân mới thành lập</td></tr>
+    <tr><td><b>Tỷ lệ cổ phần</b></td><td>Quyết định theo thỏa thuận về định giá công ty trước đầu tư (xem ví dụ bên dưới)</td></tr>
+    <tr><td><b>Báo cáo</b></td><td>Báo cáo ngắn mỗi tháng (số quán, doanh thu), báo cáo tài chính mỗi quý, quyền xem màn hình quản lý</td></tr>
+    <tr><td><b>Tham gia</b></td><td>Các quyết định lớn (gọi vốn thêm, bán công ty, khoản chi lớn) sẽ bàn bạc với nhà đầu tư</td></tr>
+    <tr><td><b>Khi không đạt mục tiêu</b></td><td>Nếu qua đợt rà soát 6 tháng mà kết quả kém xa mục tiêu, hai bên cùng quyết định hướng sử dụng phần vốn còn lại</td></tr>
+    <tr><td><b>Thủ tục</b></td><td>Gặp gỡ → thỏa thuận điều kiện → thực hiện pháp nhân, hợp đồng cùng chuyên gia kế toán, pháp lý tại địa phương</td></tr>
+  </table>
+  <h3 style="margin-top:6mm">Ví dụ tỷ lệ cổ phần (với vốn đầu tư 1 tỷ đồng)</h3>
+  <table>
+    <tr><th>Định giá trước đầu tư</th><th class="n">Định giá sau đầu tư</th><th class="n">Cổ phần nhà đầu tư</th></tr>
+    <tr><td>3 tỷ đồng</td><td class="n">4 tỷ đồng</td><td class="n">25,0%</td></tr>
+    <tr class="hi"><td>4 tỷ đồng</td><td class="n">5 tỷ đồng</td><td class="n">20,0%</td></tr>
+    <tr><td>5 tỷ đồng</td><td class="n">6 tỷ đồng</td><td class="n">16,7%</td></tr>
+  </table>
+  <p class="small" style="margin-top:2mm">Đây chỉ là ví dụ, con số thực tế sẽ do hai bên gặp mặt thỏa thuận. Định giá trước đầu tư đã bao gồm 147 thực đơn đã làm, toàn bộ bộ công cụ vận hành (thực đơn, màn hình chủ quán, bếp, doanh thu, khách quen), trang tìm quán, hệ thống AI làm thực đơn và tên miền qrmenuasia.com.</p>
+  <div class="box bl">
+    <h3>Chào đón cả nhà đầu tư Việt Nam và Hàn Quốc</h3>
+    <p>Loại hình pháp nhân và thủ tục cần cho đầu tư nước ngoài sẽ được thực hiện sau khi chuyên gia kế toán, pháp lý tại Việt Nam xác nhận. Tùy quốc tịch của nhà đầu tư, chúng tôi sẽ cùng soạn hợp đồng song ngữ Việt - Hàn.</p>
+  </div>
+</section>
+
+<!-- 20. 투자자 이익 -->
+<section class="page">
+  <span class="kick">13 · RETURN</span>
+  <h2>Nhà đầu tư nhận được gì</h2>
+  <p class="lead">Với mô hình thuê bao, số quán càng tích lũy thì giá trị công ty càng tăng theo.</p>
+  <div class="grid3">
+    <div class="card"><div class="ic">💵</div><h3>Cổ tức</h3><p>Sau khi có lãi, một phần lợi nhuận được chia theo tỷ lệ cổ phần (chính sách cổ tức sẽ quy định trong hợp đồng).</p></div>
+    <div class="card"><div class="ic">📈</div><h3>Giá trị cổ phần tăng</h3><p>Doanh thu lặp lại hằng tháng càng lớn thì giá trị công ty càng tăng.</p></div>
+    <div class="card"><div class="ic">🚪</div><h3>Cách thu hồi vốn</h3><p>Bán một phần cổ phần trong đợt gọi vốn sau, bán công ty (cho hãng POS, giao hàng, thanh toán...), hoặc thương lượng để người sáng lập mua lại.</p></div>
+  </div>
+  <h3 style="margin-top:7mm">Ví dụ: giá trị cổ phần sau 3 năm (kịch bản cơ sở)</h3>
+  <table>
+    <tr><th>Cách định giá công ty</th><th class="n">Giá trị công ty</th><th class="n">Giá trị 20% cổ phần</th><th class="n">So với vốn đầu tư</th></tr>
+    <tr><td>Thận trọng: 2 lần doanh thu lặp lại hằng năm (1,58 tỷ đồng)</td><td class="n">3,17 tỷ đồng</td><td class="n">634 triệu đồng</td><td class="n">khoảng 0,6 lần</td></tr>
+    <tr><td>Cơ sở: 2 lần doanh thu lặp lại hằng năm (2,64 tỷ đồng)</td><td class="n">5,28 tỷ đồng</td><td class="n">1,06 tỷ đồng</td><td class="n">khoảng 1,1 lần</td></tr>
+    <tr class="hi"><td>Cơ sở: 4 lần doanh thu lặp lại hằng năm</td><td class="n">10,56 tỷ đồng</td><td class="n">2,11 tỷ đồng</td><td class="n">khoảng 2,1 lần</td></tr>
+    <tr><td>Cơ sở: 6 lần doanh thu lặp lại hằng năm</td><td class="n">15,84 tỷ đồng</td><td class="n">3,17 tỷ đồng</td><td class="n">khoảng 3,2 lần</td></tr>
+  </table>
+  <p class="small" style="margin-top:2mm">Đây là ví dụ khi định giá trước đầu tư là 4 tỷ đồng (cổ phần 20%). Doanh thu phí quản lý hàng tháng cuối năm 3 khoảng 220 triệu đồng × 12 = 2,64 tỷ đồng/năm. Công ty thuê bao thường được định giá bằng một vài lần doanh thu lặp lại hằng năm, nhưng hệ số này thay đổi rất nhiều theo thị trường và <b>đây không phải cam kết lợi nhuận.</b> Với kịch bản tăng tốc, doanh thu lặp lại hằng năm tăng lên khoảng 4,2 tỷ đồng. Nếu gọi vốn vòng sau, tỷ lệ cổ phần của nhà đầu tư có thể bị giảm (pha loãng).</p>
+  <div class="box or">
+    <h3>Những gì dành cho nhà đầu tư</h3>
+    <ul class="dot">
+      <li>Quyền xem màn hình quản lý theo thời gian thực về số quán, lượt truy cập, doanh thu</li>
+      <li>Báo cáo nhanh hằng tháng · báo cáo tài chính hằng quý · rà soát kết quả so với kế hoạch mỗi 6 tháng</li>
+      <li>Nhà đầu tư Việt Nam: hoa hồng bán hàng khi giới thiệu quán qua quan hệ tại địa phương / Nhà đầu tư Hàn Quốc: hợp tác với khu thương mại người Hàn</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 21. 로드맵 -->
+<section class="page">
+  <span class="kick">14 · VISION</span>
+  <h2>Lộ trình phát triển và tầm nhìn</h2>
+  <p class="lead">"Một thế giới mà khách nước ngoài ở châu Á vào quán nào cũng đọc được thực đơn và gọi món bằng chính ngôn ngữ của mình."</p>
+  <div class="timeline">
+    <div class="t"><b>Nửa đầu 2027 · Xây nền tảng</b><p>Thành lập pháp nhân, lập đội bán hàng, chuyển các quán mẫu ở Bắc Ninh và Hà Nội thành hợp đồng. Bật chức năng gọi món tới bếp, doanh thu, khách quen cho các quán đã ký.</p></div>
+    <div class="t"><b>Nửa cuối 2027 · 100 quán đầu tiên</b><p>Vượt 100 quán thuê bao. Chương trình giới thiệu và hợp tác với khu thương mại người Hàn. Phát triển trang tìm quán thành cẩm nang ăn uống cho du khách Hàn, Trung, Nhật.</p></div>
+    <div class="t"><b>2028 · Toàn quốc Việt Nam</b><p>Mở rộng sang TP. Hồ Chí Minh, Đà Nẵng, Nha Trang, Phú Quốc, lập chương trình đối tác bán hàng địa phương. Đưa thuê bao hệ thống gọi món và quảng cáo trên trang tìm quán thành sản phẩm chính thức.</p></div>
+    <div class="t"><b>2029 · Ra châu Á</b><p>Với cùng khung chuẩn và hệ thống AI làm thực đơn, mở rộng sang các nước Đông Nam Á đông khách du lịch (Thái Lan, Philippines...) và các nhà hàng tại điểm du lịch Hàn Quốc. Chúng tôi cũng đã cung cấp thực đơn cho một quán lươn nướng ở Gyeongsan, Hàn Quốc.</p></div>
+  </div>
+  <div class="grid2" style="margin-top:2mm">
+    <div class="card"><h3>🧭 Con đường trở thành nền tảng</h3><p>Khi số quán tăng lên, đây sẽ là "bản đồ nhà hàng mà khách nước ngoài tin tưởng". Khách xem trước thực đơn trên trang tìm quán, quán có thêm khách mới. Sự kết nối hai chiều này là giá trị lớn nhất của công ty.</p></div>
+    <div class="card"><h3>🗂 Tài sản tích lũy</h3><p>Dữ liệu thực đơn, giá 5 ngôn ngữ của hàng nghìn quán và dữ liệu lượt khách theo quốc gia. Đây là thông tin mà ngành ăn uống, du lịch và các công ty thực phẩm cần.</p></div>
+  </div>
+</section>
+
+<!-- 22. 위험 -->
+<section class="page">
+  <span class="kick">15 · RISKS</span>
+  <h2>Rủi ro và cách ứng phó</h2>
+  <p class="lead">Chúng tôi sẽ không chỉ nói về mặt tốt. Đây là những rủi ro chúng tôi thấy và cách đã chuẩn bị.</p>
+  <table style="font-size:11pt">
+    <tr><th style="width:30%">Rủi ro</th><th>Cách ứng phó</th></tr>
+    <tr><td><b>Chuyển thành hợp đồng có thể chậm</b><br><span class="small">Thích bản mẫu nhưng quyết định trả tiền là chuyện khác</span></td><td>Cho dùng thử miễn phí để chủ quán thấy số lượt xem trước. Rà soát kế hoạch mỗi 6 tháng, nếu dưới 60% kịch bản cơ sở thì cắt giảm chi phí (trang 17).</td></tr>
+    <tr><td><b>Tỷ lệ hủy có thể cao hơn giả định (2%/tháng)</b></td><td>Làm cho chủ quán dùng hằng ngày nhờ màn hình chủ quán, doanh thu, khách quen. Khuyến khích thanh toán theo năm (tặng 2 tháng). Ghi lại lý do hủy mỗi tháng.</td></tr>
+    <tr><td><b>Hãng POS lớn có thể ra chức năng tương tự</b></td><td>Thế mạnh của chúng tôi là đa ngôn ngữ, thiết kế riêng cho từng quán, chi phí làm thực đơn thấp và trang tìm quán. Cũng có thể hợp tác với POS (dùng song song).</td></tr>
+    <tr><td><b>Công ty phụ thuộc vào một người sáng lập</b></td><td>Quy trình làm, quy tắc và nhật ký lỗi đã được lưu thành văn bản. Sau đầu tư sẽ bàn giao cho nhân viên thiết kế · hỗ trợ khách và có thêm nhân viên quản lý.</td></tr>
+    <tr><td><b>Chi phí, chính sách công cụ AI có thể thay đổi</b></td><td>Dùng nhiều AI khác nhau (Claude, Gemini). Nếu một bên bị chặn thì có thể chuyển sang bên khác.</td></tr>
+    <tr><td><b>Sai giá · sai bản dịch</b></td><td>3 bước: đọc thực đơn → kiểm tra lần hai → kiểm tra cuối. Quy tắc chặn lỗi giá trước khi công bố. Với quán ký hợp đồng chính thức, chỉ công bố sau khi chủ quán xác nhận.</td></tr>
+    <tr><td><b>Đăng bản mẫu khi chưa có sự đồng ý</b></td><td>Bản mẫu được làm từ thông tin công khai trên Google Maps và ghi rõ nguồn. Nếu chủ quán không muốn, chúng tôi gỡ ngay. Khi ký hợp đồng sẽ thay bằng ảnh và logo của quán.</td></tr>
+    <tr><td><b>Thủ tục đầu tư nước ngoài · thuế</b></td><td>Thực hiện cùng chuyên gia kế toán, pháp lý tại địa phương. Công khai việc sử dụng vốn đầu tư.</td></tr>
+    <tr><td><b>Kinh tế suy thoái, nhà hàng có thể giảm</b></td><td>Sản phẩm của chúng tôi là công cụ "tiết kiệm chi phí" (giảm tiền in, giảm nhầm lẫn) nên lúc khó khăn lại càng có sức thuyết phục. Chúng tôi giúp giảm chi phí in lại và sửa thực đơn mỗi khi đổi giá.</td></tr>
+  </table>
+</section>
+
+<!-- 23. 팀 -->
+<section class="page">
+  <span class="kick">16 · TEAM</span>
+  <h2>Đội ngũ và cách vận hành</h2>
+  <p class="lead">Một người điều hành đội AI và đang làm khối lượng việc mà thường cần nhiều người trong một công ty.</p>
+  <div class="grid2">
+    <div class="card"><h3>👤 Người sáng lập</h3><p>Trực tiếp điều hành công việc tại Việt Nam. Có sẵn đầu mối tư vấn tiếng Hàn và tiếng Việt (điện thoại, Zalo, KakaoTalk) và đã trực tiếp gặp nhiều chủ quán. Phụ trách hoạch định sản phẩm, bán hàng và điều hành đội AI.</p></div>
+    <div class="card"><h3>🤖 Đội AI (hiện nay)</h3><p>Đội AI chia việc theo từng phụ trách: chọn ảnh, đọc thực đơn, thiết kế, dịch, kiểm tra. Để không lặp lại cùng một lỗi, quy tắc và nhật ký lỗi được tích lũy thành văn bản.</p></div>
+  </div>
+  <table style="margin-top:5mm">
+    <tr><th>AI phụ trách</th><th>Công việc</th></tr>
+    <tr><td>Nhóm ảnh</td><td>Chọn ảnh dùng được trong hàng trăm ảnh Google Maps</td></tr>
+    <tr><td>Nhóm thực đơn</td><td>Chuyển ảnh thực đơn thành bảng món và giá (chữ nào không đọc được thì không tự bịa)</td></tr>
+    <tr><td>Nhóm thiết kế</td><td>Trang trí màu sắc, họa tiết giống biển hiệu và thực đơn của quán</td></tr>
+    <tr><td>Nhóm dịch</td><td>Dịch 5 ngôn ngữ, câu chữ cho tài liệu giới thiệu và sổ tay</td></tr>
+    <tr><td>Nhóm kiểm tra</td><td>Đối chiếu lại giá, kiểm tra cuối cùng trước khi công bố</td></tr>
+  </table>
+  <h3 style="margin-top:6mm">Tổ chức sau khi đầu tư</h3>
+  <div class="flow">
+    <div class="st"><b>Người sáng lập</b>Chiến lược · điều hành bán hàng · báo cáo nhà đầu tư</div>
+    <div class="st"><b>2 nhân viên bán hàng</b>1 tiếng Hàn · 1 tiếng Việt<br>Thăm quán · ký hợp đồng</div>
+    <div class="st"><b>1 nhân viên thiết kế · hỗ trợ</b>Vận hành đội AI · giải đáp chủ quán<br>Lắp mã QR</div>
+    <div class="st"><b>Từ năm 2</b>1 quản lý · thêm bán hàng<br>Đối tác khu vực</div>
+  </div>
+  <div class="box gr"><p><b>Nguyên tắc làm việc:</b> Không nói "xong rồi" với việc chưa kiểm tra · Chặn lỗi giá trước khi công bố · Cùng một vấn đề xuất hiện hai lần thì sửa tận gốc · Ghi lại mọi thứ. Những nguyên tắc này cũng áp dụng nguyên vẹn cho báo cáo gửi nhà đầu tư.</p></div>
+</section>
+
+<!-- 24. 마무리 -->
+<section class="page end">
+  <span class="kick" style="color:#ffb185">17 · NEXT STEP</span>
+  <h2>Cùng đồng hành</h2>
+  <p class="lead">Sản phẩm đã chạy thực tế, và 147 quán mẫu đang chờ. Điều cần bây giờ là sức mạnh bán hàng để biến những bản mẫu này thành hợp đồng.</p>
+  <div class="grid3">
+    <div class="card"><h3>① Tự xem</h3><p>Hãy mở thử thực đơn thật của 147 quán trên điện thoại tại qrmenuasia.com.</p></div>
+    <div class="card"><h3>② Gặp và trình bày</h3><p>Chúng tôi trình diễn trực tiếp màn hình chủ quán, màn hình bếp và giải đáp mọi câu hỏi.</p></div>
+    <div class="card"><h3>③ Thỏa thuận điều kiện</h3><p>Thống nhất số vốn, cổ phần, cách báo cáo, rồi ký hợp đồng cùng chuyên gia.</p></div>
+  </div>
+  <div style="margin-top:12mm; padding:7mm 8mm; border:1px solid rgba(255,255,255,.3); border-radius:4mm">
+    <p style="font-size:11pt; opacity:.8">Liên hệ đầu tư</p>
+    <p style="font-size:20pt; font-weight:700; margin-top:2mm">QR MENU ASIA</p>
+    <p style="font-size:13pt; margin-top:3mm; line-height:1.9">🌐 qrmenuasia.com<br>📞 Tiếng Việt 0937 250 787 (điện thoại · Zalo)<br>📞 Tiếng Hàn 0917 302 200 (điện thoại · Zalo) · KakaoTalk jjw4164</p>
+  </div>
+  <p style="margin-top:12mm; font-size:15pt; line-height:1.6">"Bắt đầu từ việc đổi một tờ thực đơn,<br>chúng tôi sẽ trở thành <b style="color:#ffb185">công ty kết nối nhà hàng châu Á với khách nước ngoài</b>."</p>
+  <p class="src" style="color:rgba(255,255,255,.55)">Các con số kế hoạch trong đề xuất này là ước tính theo giả định và không đảm bảo lợi nhuận trong tương lai. Trước khi quyết định đầu tư, kính mong Quý nhà đầu tư kiểm tra tài liệu thực tế và tham vấn chuyên gia.</p>
+</section>
+
+</body>
+</html>

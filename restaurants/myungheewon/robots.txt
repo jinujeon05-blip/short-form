@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://myungheewon.qrmenuasia.com/sitemap.xml

@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#16171b">
+<title>Bếp · QR MENU</title>
+<style>
+  :root { --bg: #16171b; --card: #22242c; --ink: #f1efe9; --muted: #9a958a; --line: #353843; --new: #ff5a36; --cook: #f5b100; --done: #3fb950; --btn: #2d303a; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; -webkit-font-smoothing: antialiased; }
+  body { padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+  button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .btn { background: var(--btn); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-weight: 700; font-size: 15px; }
+  .btn.big { width: 100%; padding: 16px; font-size: 18px; }
+  .btn.primary { background: var(--new); border-color: var(--new); color: #fff; }
+  .center { max-width: 380px; margin: 14vh auto 0; padding: 0 16px; text-align: center; }
+  .center h1 { font-size: 22px; margin: 0 0 6px; }
+  .center p { color: var(--muted); margin: 0 0 16px; font-size: 15px; line-height: 1.5; }
+  .pin { width: 100%; font: inherit; font-size: 30px; letter-spacing: 10px; text-align: center; padding: 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); margin-bottom: 12px; }
+  .err { color: #ff7b72; min-height: 22px; font-size: 14px; margin-top: 8px; }
+  header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--bg); border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 17px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  header .sp { flex: 1; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex: none; }
+  .dot.ok { background: var(--done); } .dot.bad { background: var(--new); }
+  .st { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .hb { padding: 8px 11px; font-size: 14px; }
+  .off { margin: 12px 14px 0; padding: 12px 14px; border: 1px dashed var(--cook); border-radius: 12px; color: var(--cook); font-size: 14px; }
+  .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 12px 14px 40px; align-items: start; }
+  .col h2 { display: flex; align-items: center; gap: 8px; font-size: 15px; margin: 2px 2px 10px; color: var(--muted); }
+  .col h2 b { background: var(--btn); color: var(--ink); border-radius: 999px; padding: 1px 9px; font-size: 13px; }
+  .col.new h2 { color: var(--new); } .col.cook h2 { color: var(--cook); } .col.done h2 { color: var(--done); }
+  .o { background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--muted); border-radius: 14px; padding: 12px 12px 10px; margin-bottom: 10px; }
+  .o.new { border-left-color: var(--new); animation: blink 1.2s ease-in-out infinite alternate; }
+  .o.cooking { border-left-color: var(--cook); } .o.done, .o.cancel { border-left-color: var(--done); opacity: .62; }
+  .o.cancel { border-left-color: var(--muted); text-decoration: line-through; }
+  @keyframes blink { from { box-shadow: 0 0 0 0 rgba(255,90,54,0); } to { box-shadow: 0 0 0 3px rgba(255,90,54,.55); } }
+  .oh { display: flex; align-items: baseline; gap: 8px; }
+  .oh .no { font-size: 15px; color: var(--muted); font-weight: 700; }
+  .oh .tb { font-size: 26px; font-weight: 800; }
+  .oh .tm { margin-left: auto; font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .o ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  .o li { display: grid; grid-template-columns: 38px 1fr; gap: 0 6px; padding: 5px 0; border-top: 1px solid var(--line); }
+  .o li em { font-style: normal; font-weight: 800; font-size: 19px; text-align: right; }
+  .o li b { font-size: 17px; line-height: 1.3; }
+  .o li small { grid-column: 2; color: var(--muted); font-size: 13px; }
+  .o .nt { margin-top: 8px; padding: 7px 9px; border: 1.5px dashed var(--cook); border-radius: 10px; font-weight: 700; font-size: 15px; white-space: pre-wrap; }
+  .o .tot { margin-top: 6px; font-size: 13px; color: var(--muted); text-align: right; }
+  .o .tag { font-size: 11px; font-weight: 800; background: var(--cook); color: #111; border-radius: 6px; padding: 1px 6px; }
+  .acts { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .acts button { flex: 1; min-width: 80px; padding: 11px 8px; border-radius: 10px; border: 1px solid var(--line); background: var(--btn); font-weight: 800; font-size: 15px; }
+  .acts .go { background: var(--new); border-color: var(--new); color: #fff; }
+  .acts .fin { background: var(--done); border-color: var(--done); color: #08130a; }
+  .acts .sm { flex: none; min-width: 0; padding: 11px 12px; }
+  .empty { color: var(--muted); font-size: 14px; padding: 18px 4px; text-align: center; border: 1px dashed var(--line); border-radius: 12px; }
+  .sheet { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; }
+  .sheet > div { background: var(--card); width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; border-radius: 18px 18px 0 0; padding: 18px 16px calc(20px + env(safe-area-inset-bottom)); }
+  .sheet h3 { margin: 0 0 12px; font-size: 18px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+  .row small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .row select, .row input[type=text] { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 8px; max-width: 46%; }
+  .row input[type=checkbox] { width: 24px; height: 24px; flex: none; }
+  .help { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 12px 0 0; }
+  .toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 30; background: #000; color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 14px; font-weight: 700; opacity: 0; transition: opacity .2s; pointer-events: none; max-width: 92vw; text-align: center; }
+  .toast.on { opacity: .92; }
+  #printArea { display: none; }
+  /* 직원 호출 띠 (2026-11-16): 목록·배치도 어느 탭에서도 맨 위에 보인다 */
+  .calls { position: sticky; top: 59px; z-index: 4; display: grid; gap: 6px; padding: 8px 14px 0; background: var(--bg); }
+  .calls[hidden] { display: none; }
+  .cl { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: #0f3a63; border: 2px solid #3d9bff; animation: cblink 1s ease-in-out infinite alternate; }
+  .cl.bill { background: #4a1f00; border-color: #ff9d2e; }
+  @keyframes cblink { from { box-shadow: 0 0 0 0 rgba(61,155,255,0); } to { box-shadow: 0 0 0 3px rgba(61,155,255,.5); } }
+  .cl .ci { font-size: 24px; flex: none; }
+  .cl .ct { flex: 1; min-width: 0; }
+  .cl .ct b { display: block; font-size: 19px; font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
+  .cl .ct small { color: #c9d6e6; font-size: 13px; }
+  .cl button { flex: none; padding: 11px 16px; border-radius: 10px; border: 0; background: #3d9bff; color: #031627; font-weight: 800; font-size: 15px; }
+  .cl.bill button { background: #ff9d2e; color: #1d0b00; }
+  /* 소리함 불만 알림(2026-11-18): 별점 1~3 — 빨간 띠, 손님 한마디 */
+  .cl.voice { background: #5c0f14; border-color: #ff4d5a; } .cl.voice button { background: #ff4d5a; color: #2a0004; }
+  .cl .ct q { display: block; margin: 2px 0; color: #ffd6d9; font-size: 15px; overflow-wrap: anywhere; } .cl .ct q::before, .cl .ct q::after { content: '"'; }
+  @media (max-width: 600px) { .calls { top: 55px; padding: 8px 10px 0; } .cl .ct b { font-size: 17px; } }
+  @media (max-width: 860px) { .board { grid-template-columns: 1fr; } .col.done { order: 3; } }
+  @media (max-width: 600px) { header .st { display: none; } header { padding: 10px; gap: 6px; } }
+  @media print {
+    body > *:not(#printArea) { display: none !important; }
+    #printArea { display: block !important; color: #000; background: #fff; font-family: system-ui, sans-serif; }
+    #printArea img { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="center" id="vLogin" hidden>
+  <h1 id="lTitle"></h1>
+  <p id="lHelp"></p>
+  <input class="pin" id="pin" inputmode="numeric" autocomplete="one-time-code" maxlength="8">
+  <button class="btn big primary" id="lGo"></button>
+  <div class="err" id="lErr"></div>
+  <p style="margin-top:18px"><button class="btn hb" data-lang="vi">Tiếng Việt</button> <button class="btn hb" data-lang="ko">한국어</button></p>
+</div>
+
+<div class="center" id="vStart" hidden>
+  <h1 id="sTitle"></h1>
+  <p id="sHelp"></p>
+  <button class="btn big primary" id="sGo"></button>
+</div>
+
+<div id="vMain" hidden>
+  <header>
+    <span class="dot" id="dot"></span>
+    <h1 id="hName"></h1>
+    <span class="st" id="hSt"></span>
+    <span class="sp"></span>
+    <div class="seg" id="hTabs"><button data-tab="list" id="hTabL"></button><button data-tab="floor" id="hTabF"></button></div>
+    <button class="btn hb" id="hSet">⚙</button>
+  </header>
+  <div class="calls" id="callBar" hidden></div>
+  <div class="off" id="offNote" hidden></div>
+  <div id="fView" hidden>
+    <div class="fbar"><span id="fZones"></span><span class="sp"></span><button class="btn hb" id="fEdit"></button></div>
+    <div class="ftool" id="fTool" hidden></div>
+    <p class="fhint" id="fHint" hidden></p>
+    <div class="fprop" id="fProp" hidden></div>
+    <div class="fwrap" id="fWrap"><div class="floor" id="fFloor"></div></div>
+    <div class="flegend" id="fLegend"></div>
+    <div class="fextra" id="fExtra"></div>
+  </div>
+  <div class="board" id="lView">
+    <section class="col new"><h2><span id="cNew"></span><b id="nNew">0</b></h2><div id="lNew"></div></section>
+    <section class="col cook"><h2><span id="cCook"></span><b id="nCook">0</b></h2><div id="lCook"></div></section>
+    <section class="col done"><h2><span id="cDone"></span><b id="nDone">0</b></h2><div id="lDone"></div></section>
+  </div>
+</div>
+
+<div class="sheet" id="vSet" hidden><div>
+  <h3 id="tSet"></h3>
+  <div class="row"><span id="tLang"></span><select id="oLang"><option value="vi">Tiếng Việt</option><option value="ko">한국어</option></select></div>
+  <div class="row"><span><span id="tName"></span><small id="tNameH"></small></span><input type="text" id="oName" maxlength="30"></div>
+  <div class="row"><span><span id="tPrinter"></span><small id="tPrinterH"></small></span><select id="oPrinter"></select></div>
+  <div class="row"><span id="tPaper"></span><select id="oPaper"><option value="58">58mm</option><option value="80">80mm</option></select></div>
+  <div class="row"><span><span id="tAuto"></span><small id="tAutoH"></small></span><input type="checkbox" id="oAuto"></div>
+  <div class="row"><span id="tSound"></span><input type="checkbox" id="oSound"></div>
+  <div class="row"><span id="tTone"></span><select id="oTone"></select></div>
+  <div class="row"><span><span id="tVol"></span><small id="tVolH"></small></span><select id="oVol"></select></div>
+  <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+    <button class="btn" id="bTestPrint"></button><button class="btn" id="bTestSound"></button><button class="btn" id="bOut"></button>
+  </div>
+  <p class="help" id="tHelp"></p>
+  <button class="btn big" id="bClose" style="margin-top:14px"></button>
+</div></div>
+
+<div class="sheet" id="vTable" hidden><div>
+  <h3 id="tbTitle"></h3>
+  <p class="sum" id="tbSum"></p>
+  <div id="tbList"></div>
+  <div class="tacts"><button class="btn clr" id="tbClear"></button><button class="btn" id="tbClose"></button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script src="/kitchen/floor-icons.js"></script>
+<script src="/kitchen/floor.js"></script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const ls = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  const shop = (new URLSearchParams(location.search).get("shop") || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const API = "/api/kitchen?action=";
+  const K = (k) => "qk_" + shop + "_" + k;
+  const get = (k, d) => { const v = ls((s) => s.getItem(K(k))); return v == null ? d : v; };
+  // 알림 소리 종류(설정 'tone', 기기마다 저장, 2026-11-16 캡틴 가-1·나-1)
+  const TONES = ["bell", "chime", "phone", "beep", "xylo"];
+  const tone = () => (TONES.includes(get("tone", "bell")) ? get("tone", "bell") : "bell");
+  const set = (k, v) => ls((s) => s.setItem(K(k), v));
+
+  const TX = {
+    vi: { login: "Đăng nhập màn hình bếp", loginH: "Nhập mã PIN 6 số do quản lý cung cấp.", go: "Vào", wrong: "Mã PIN không đúng", blocked: "Nhập sai quá nhiều lần. Thử lại sau 1 giờ.", noShop: "Thiếu mã quán trong địa chỉ (?shop=…)",
+      start: "Bắt đầu nhận đơn", startH: "Nhấn nút để bật âm thanh báo đơn mới và giữ màn hình luôn sáng.", startGo: "▶ Bắt đầu",
+      cNew: "Đơn mới", cCook: "Đang làm", cDone: "Xong (hôm nay)", accept: "Nhận đơn", done: "Xong", print: "In", cancel: "Hủy", undo: "Hoàn tác", none: "Chưa có đơn", table: "Bàn", ago: "phút trước", now: "vừa xong",
+      total: "Tổng", market: "thời giá", test: "THỬ", ok: "Đã kết nối", bad: "Mất kết nối – đang thử lại", off: "Quán đang TẮT nhận đơn online. Khách chưa gửi đơn được (quản lý bật trong trang admin).", cancelQ: "Hủy đơn này?",
+      set: "Cài đặt máy này", lang: "Ngôn ngữ", name: "Tên máy", nameH: "VD: Bếp 1, Quầy", printer: "Máy in", printerH: "Mặc định do quản lý chọn", paper: "Khổ giấy", auto: "Tự in đơn mới", autoH: "Cần app RawBT. Nếu không tự in, nhấn nút In.", sound: "Âm thanh báo đơn", vol: "Độ lớn âm thanh", volH: "Nếu âm lượng máy nhỏ, trang web không thể to hơn. Hãy tăng âm lượng máy lên tối đa.", v1: "Vừa", v2: "To", v3: "Rất to", tone: "Kiểu âm báo", tones: ["Chuông ding-dong", "Chuông 3 nốt", "Reng reng (điện thoại)", "Bíp bíp (bếp ồn)", "Đàn gõ (nhẹ nhàng)"],
+      pRawbt: "Máy in Bluetooth (app RawBT)", pBrowser: "In qua trình duyệt", pNone: "Không in", testPrint: "In thử", testSound: "Thử âm thanh", out: "Đăng xuất", close: "Đóng", newOrder: "Đơn mới", printed: "Đã gửi lệnh in",
+      newCall: "Khách gọi", callOk: "Xong", req: { water: "Mang nước", refill: "Thêm đồ ăn kèm", ice: "Mang đá", utensils: "Thêm chén đĩa, đũa muỗng", bill: "TÍNH TIỀN", staff: "Gọi nhân viên", voice: "KHÁCH CHƯA HÀI LÒNG" }, voiceH: "Hãy đến bàn hỏi thăm ngay",
+      help: "Máy in Bluetooth: cài app “RawBT” (miễn phí) trên máy Android → ghép đôi máy in → trong RawBT chọn máy in → quay lại đây và nhấn “In thử”. iPhone/iPad dùng “In qua trình duyệt”." },
+    ko: { login: "주방 화면 로그인", loginH: "관리자에게 받은 6자리 PIN을 넣어 주세요.", go: "들어가기", wrong: "PIN이 맞지 않아요", blocked: "너무 많이 틀렸어요. 1시간 뒤에 다시 해 주세요.", noShop: "주소에 가게 아이디(?shop=…)가 없어요",
+      start: "주문 받기 시작", startH: "버튼을 누르면 새 주문 알림 소리가 켜지고 화면이 꺼지지 않아요.", startGo: "▶ 시작",
+      cNew: "새 주문", cCook: "만드는 중", cDone: "완료 (오늘)", accept: "접수", done: "완료", print: "인쇄", cancel: "취소", undo: "되돌리기", none: "주문이 없어요", table: "테이블", ago: "분 전", now: "방금",
+      total: "합계", market: "시가", test: "시험", ok: "연결됨", bad: "연결 끊김 – 다시 시도 중", off: "이 가게는 온라인 주문이 꺼져 있어요. 손님은 아직 주문을 보낼 수 없어요(admin에서 켜기).", cancelQ: "이 주문을 취소할까요?",
+      set: "이 기기 설정", lang: "언어", name: "기기 이름", nameH: "예: 주방 1, 카운터", printer: "프린터", printerH: "기본값은 관리자가 정함", paper: "용지 폭", auto: "새 주문 자동 인쇄", autoH: "RawBT 앱 필요. 자동으로 안 나오면 인쇄 버튼을 눌러 주세요.", sound: "알림 소리", vol: "소리 크기", volH: "기기 볼륨이 작으면 웹에서 더 키울 수 없어요. 기기 소리를 최대로 올려 주세요.", v1: "보통", v2: "크게", v3: "아주 크게", tone: "소리 종류", tones: ["딩동 벨", "띵띵띵 차임", "따르릉 전화벨", "삐삐삐 (시끄러운 주방)", "실로폰 (부드럽게)"],
+      pRawbt: "블루투스 프린터 (RawBT 앱)", pBrowser: "브라우저 인쇄", pNone: "인쇄 안 함", testPrint: "시험 인쇄", testSound: "소리 시험", out: "로그아웃", close: "닫기", newOrder: "새 주문", printed: "인쇄 명령을 보냈어요",
+      newCall: "손님 호출", callOk: "확인", req: { water: "물 부탁드립니다", refill: "반찬 리필", ice: "얼음 주세요", utensils: "앞접시·수저", bill: "계산서 부탁드립니다", staff: "직원 호출", voice: "불만 알림" }, voiceH: "바로 테이블에 가서 살펴 주세요",
+      help: "블루투스 프린터: 안드로이드 기기에 무료 앱 “RawBT” 설치 → 프린터 블루투스 연결 → RawBT에서 프린터 선택 → 여기서 “시험 인쇄”. 아이폰·아이패드는 “브라우저 인쇄”를 쓰세요." },
+  };
+  let lang = get("lang", (navigator.language || "").toLowerCase().startsWith("ko") ? "ko" : "vi");
+  const t = () => TX[lang];
+  let token = get("token", ""), since = 0, cfg = { on: false, poll: 15, printer: "rawbt", paper: 58 };
+  const orders = new Map(); // id → { status, data }
+  const calls = new Map(); // 직원 호출 id → { status, data }
+  const CALL_ICON = { water: "💧", refill: "🥢", ice: "🧊", utensils: "🍽️", bill: "🧾", staff: "🙋", voice: "😟" };
+  const CALL_TTL = 60 * 60e3; // 1시간 지난 호출은 띠에서 뺀다
+  let started = false, timer = null, failCount = 0, firstLoad = true;
+  const device = get("device", "") || (() => { const d = Math.random().toString(36).slice(2, 12); set("device", d); return d; })();
+
+  function toast(m) { const el = $("toast"); el.textContent = m; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2200); }
+  function view(v) { ["vLogin", "vStart", "vMain"].forEach((x) => ($(x).hidden = x !== v)); }
+
+  function paintText() {
+    document.documentElement.lang = lang;
+    const x = t();
+    $("lTitle").textContent = x.login; $("lHelp").textContent = shop ? x.loginH : x.noShop; $("lGo").textContent = x.go;
+    $("sTitle").textContent = x.start; $("sHelp").textContent = x.startH; $("sGo").textContent = x.startGo;
+    $("cNew").textContent = x.cNew; $("cCook").textContent = x.cCook; $("cDone").textContent = x.cDone;
+    $("tSet").textContent = x.set; $("tLang").textContent = x.lang; $("tName").textContent = x.name; $("tNameH").textContent = x.nameH;
+    $("tPrinter").textContent = x.printer; $("tPrinterH").textContent = x.printerH; $("tPaper").textContent = x.paper; $("tAuto").textContent = x.auto; $("tAutoH").textContent = x.autoH; $("tSound").textContent = x.sound;
+    $("tTone").textContent = x.tone; $("oTone").innerHTML = x.tones.map((t, i) => `<option value="${TONES[i]}">${esc(t)}</option>`).join(""); $("oTone").value = tone();
+    $("tVol").textContent = x.vol; $("tVolH").textContent = x.volH;
+    $("oVol").innerHTML = `<option value="1">${esc(x.v1)}</option><option value="2">${esc(x.v2)}</option><option value="3">${esc(x.v3)}</option>`;
+    $("oVol").value = get("vol", "2");
+    $("oPrinter").innerHTML = `<option value="">${esc(x.printerH)}</option><option value="rawbt">${esc(x.pRawbt)}</option><option value="browser">${esc(x.pBrowser)}</option><option value="none">${esc(x.pNone)}</option>`;
+    $("oPrinter").value = get("printer", "");
+    $("bTestPrint").textContent = x.testPrint; $("bTestSound").textContent = x.testSound; $("bOut").textContent = x.out; $("bClose").textContent = x.close; $("tHelp").textContent = x.help;
+    $("offNote").textContent = x.off;
+    if (floor) { const [a, b] = floor.tabText(); $("hTabL").innerHTML = `${esc(a)}<b id="hNewN"></b>`; $("hTabF").textContent = b; }
+    if (!$("vMain").hidden) render();
+  }
+
+  // ── 서버 ──
+  async function call(action, body) {
+    const opt = body ? { method: "POST", headers: { "content-type": "application/json", "x-kitchen-token": token }, body: JSON.stringify({ shop, ...body }) } : { headers: { "x-kitchen-token": token }, cache: "no-store" };
+    const r = await fetch(API + action + (body ? "" : "&shop=" + shop + "&since=" + since), opt);
+    if (r.status === 401) { logout(); throw new Error("auth"); }
+    if (!r.ok) throw new Error(String(r.status));
+    return r.json();
+  }
+  function logout() { token = ""; set("token", ""); stop(); orders.clear(); since = 0; view("vLogin"); }
+
+  async function login() {
+    const pin = $("pin").value.replace(/\D/g, "");
+    if (!pin || !shop) return;
+    $("lErr").textContent = "";
+    try {
+      const r = await fetch(API + "login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ shop, pin }) });
+      if (r.status === 429) return ($("lErr").textContent = t().blocked);
+      if (!r.ok) return ($("lErr").textContent = t().wrong);
+      token = (await r.json()).token; set("token", token); $("pin").value = "";
+      view("vStart");
+    } catch { $("lErr").textContent = t().bad; }
+  }
+
+  async function poll() {
+    clearTimeout(timer);
+    try {
+      const j = await call("poll");
+      failCount = 0; setConn(true);
+      cfg = j.cfg || cfg;
+      if (!j.same) {
+        since = j.ts;
+        const fresh = [];
+        for (const o of j.orders) {
+          const cur = orders.get(o.id);
+          if (!cur) {
+            try { const r = await fetch(o.url); if (!r.ok) continue; orders.set(o.id, { status: o.status, data: await r.json() }); if (o.status === "new" && !firstLoad) fresh.push(o.id); } catch {}
+          } else cur.status = o.status;
+        }
+        const freshCalls = [];
+        for (const c of j.calls || []) {
+          const cur = calls.get(c.id);
+          if (!cur) {
+            try { const r = await fetch(c.url); if (!r.ok) continue; const d = await r.json(); calls.set(c.id, { status: c.status, data: d }); if (c.status === "new" && !firstLoad && Date.now() - d.at < CALL_TTL) freshCalls.push(c.id); } catch {}
+          } else cur.status = c.status;
+        }
+        firstLoad = false;
+        if (floor) floor.update(j);
+        render();
+        if (fresh.length) onNew(fresh);
+        if (freshCalls.length) onCall(freshCalls);
+      } else if (floor && j.layoutTs && floor._state().layoutTs !== j.layoutTs) floor.update({ layoutTs: j.layoutTs }); // 배치 저장은 설정 파일로 늦게 올 수 있어 '그대로'일 때도 본다
+      $("offNote").hidden = !!cfg.on;
+    } catch (e) { if (e.message === "auth") return; failCount++; setConn(false); }
+    const wait = failCount ? Math.min(60, 5 * failCount) : (Number(cfg.poll) || 15);
+    timer = setTimeout(poll, wait * 1000);
+  }
+  function stop() { clearTimeout(timer); timer = null; }
+  function setConn(ok) { $("dot").className = "dot " + (ok ? "ok" : "bad"); $("hSt").textContent = ok ? `${t().ok} · ${new Date().toLocaleTimeString(lang === "ko" ? "ko-KR" : "vi-VN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}` : t().bad; }
+
+  async function setStatus(id, status) {
+    const o = orders.get(id) || calls.get(id); if (!o) return;
+    const prev = o.status; o.status = status; render();
+    try { await call("status", { id, status }); } catch (e) { o.status = prev; render(); if (e.message !== "auth") toast(t().bad); }
+  }
+
+  // ── 그리기 ──
+  const money = (n, cur) => Number(n || 0).toLocaleString("en-US") + (cur || "₫");
+  function ago(at) { const m = Math.floor((Date.now() - at) / 60000); return m < 1 ? t().now : `${m} ${t().ago}`; }
+  function card(id, o) {
+    const d = o.data, x = t();
+    const items = d.items.map((it) => `<li><em>${it.q}×</em><b>${esc(it.name)}</b>${it.sub && it.sub !== it.name ? `<small>${esc(it.sub)}</small>` : ""}</li>`).join("");
+    const acts = o.status === "new" ? `<button class="go" data-s="cooking" data-id="${id}">${x.accept}</button><button class="sm" data-p="${id}">🖨 ${x.print}</button><button class="sm" data-s="cancel" data-id="${id}">✕</button>`
+      : o.status === "cooking" ? `<button class="fin" data-s="done" data-id="${id}">✓ ${x.done}</button><button class="sm" data-p="${id}">🖨 ${x.print}</button><button class="sm" data-s="cancel" data-id="${id}">✕</button>`
+      : `<button class="sm" data-p="${id}">🖨 ${x.print}</button>`;
+    return `<article class="o ${o.status}"><div class="oh"><span class="no">#${d.no}</span><span class="tb">${esc(x.table)} ${esc(d.table)}</span>${d.test ? `<span class="tag">${x.test}</span>` : ""}<span class="tm">${new Date(d.at).toLocaleTimeString(lang === "ko" ? "ko-KR" : "vi-VN", { hour: "2-digit", minute: "2-digit" })} · ${ago(d.at)}</span></div>
+      <ul>${items}</ul>${d.note ? `<div class="nt">${esc(d.note)}</div>` : ""}<div class="tot">${x.total} ${money(d.total, d.currency)}${d.market ? ` + ${x.market}` : ""}</div><div class="acts">${acts}</div></article>`;
+  }
+  // 직원 호출: 아직 [확인] 안 한 것(1시간 안, 그 테이블 '자리 정리' 전 것은 뺌)
+  const norm = (v) => String(v == null ? "" : v).trim().toLowerCase();
+  function pendingCalls() {
+    const clr = floor ? floor.clearOf : () => 0;
+    return [...calls.entries()].filter(([, c]) => c.status === "new" && Date.now() - c.data.at < CALL_TTL && c.data.at > clr(norm(c.data.table))).sort((a, b) => a[1].data.at - b[1].data.at);
+  }
+  function renderCalls() {
+    const x = t(), list = pendingCalls();
+    $("callBar").hidden = !list.length;
+    $("callBar").innerHTML = list.map(([id, c]) => `<div class="cl${c.data.req === "bill" ? " bill" : c.data.req === "voice" ? " voice" : ""}"><span class="ci">${CALL_ICON[c.data.req] || "🔔"}</span><span class="ct"><b>${esc(x.table)} ${esc(c.data.table)} — ${esc(x.req[c.data.req] || c.data.req)}${c.data.req === "voice" ? " " + "★".repeat(Math.max(1, Math.min(5, c.data.stars | 0))) : ""}</b>${c.data.req === "voice" && c.data.text ? `<q>${esc(c.data.text)}</q>` : ""}<small>${esc(c.data.req === "voice" ? x.voiceH : x.newCall)} · ${esc(ago(c.data.at))}</small></span><button data-cdone="${id}">✓ ${esc(x.callOk)}</button></div>`).join("");
+    if (!list.length) stopCallAlarm();
+    return list;
+  }
+  function render() {
+    renderCalls();
+    const all = [...orders.entries()].sort((a, b) => a[1].data.at - b[1].data.at);
+    const pick = (f) => all.filter(([, o]) => f(o.status));
+    const n = pick((s) => s === "new"), c = pick((s) => s === "cooking"), d = pick((s) => s === "done" || s === "cancel").reverse().slice(0, 30);
+    const fill = (el, cnt, arr) => { $(cnt).textContent = arr.length; $(el).innerHTML = arr.map(([id, o]) => card(id, o)).join("") || `<div class="empty">${t().none}</div>`; };
+    fill("lNew", "nNew", n); fill("lCook", "nCook", c); fill("lDone", "nDone", d);
+    if ($("hNewN")) $("hNewN").textContent = n.length && tab === "floor" ? n.length : "";
+    if (floor) floor.render();
+    const pc = pendingCalls().length;
+    document.title = (n.length || pc ? `(${n.length + pc}) ` : "") + "Bếp · QR MENU";
+    if (!n.length) stopAlarm();
+  }
+
+  // ── 소리 (주방 벨 '딩–동' 3번 ≈ 2.6초, 새 주문이 '접수'될 때까지 20초마다 다시 울림) ──
+  // 소리 파일 없이 Web Audio로 직접 만든다. 크기: 보통/크게/아주 크게(설정 'vol' 1·2·3, 기본 2).
+  // 크게 해도 찢어지지 않게: 음량 제한(컴프레서) → 부드러운 상한(tanh, 최대 0.95) 순서로 지난다.
+  const VOL = { 1: 0.22, 2: 0.8, 3: 1.8 };
+  let actx = null, alarm = null, out = null;
+  function audioOut() {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === "suspended" && actx.resume) actx.resume();
+    if (!out) {
+      const comp = actx.createDynamicsCompressor();
+      comp.threshold.value = -14; comp.knee.value = 6; comp.ratio.value = 12; comp.attack.value = 0.003; comp.release.value = 0.15;
+      const shaper = actx.createWaveShaper(), n = 2048, curve = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const x = (i / (n - 1)) * 2 - 1; curve[i] = 0.95 * Math.tanh(1.5 * x) / Math.tanh(1.5); }
+      shaper.curve = curve;
+      comp.connect(shaper); shaper.connect(actx.destination);
+      out = comp;
+    }
+    return out;
+  }
+  // 벨 한 음: 기본음 + 배음(2·3배) — 사람 귀가 잘 듣는 2~4kHz 쪽에 힘을 실어 시끄러운 곳에서도 들리게.
+  function bell(dest, f, at, peak) {
+    [[1, 1], [2, 0.5], [3, 0.28]].forEach(([m, a]) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = "sine"; o.frequency.value = f * m;
+      g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(peak * a, at + 0.006);
+      g.gain.setTargetAtTime(0, at + 0.006, 0.16 / m);
+      o.connect(g); g.connect(dest); o.start(at); o.stop(at + 0.9);
+    });
+  }
+  // 짧은 음 하나(파형·길이를 정할 수 있음): 삐삐·전화벨·실로폰용
+  function note(dest, f, at, len, peak, type = "sine", decay = 0) {
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type; o.frequency.value = f;
+    g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(peak, at + 0.005);
+    if (decay) g.gain.setTargetAtTime(0, at + 0.005, decay); else { g.gain.setValueAtTime(peak, at + len - 0.01); g.gain.linearRampToValueAtTime(0, at + len); }
+    o.connect(g); g.connect(dest); o.start(at); o.stop(at + len + 0.05);
+  }
+  // 소리 종류별 만들기(TONES·tone()은 위 설정 읽기 옆에). 모두 약 2~3초, 파일 없이 만든다.
+  const PLAY = {
+    bell: (d, t, p) => [0, 0.85, 1.7].forEach((s) => { bell(d, 1319, t + s, p); bell(d, 1047, t + s + 0.32, p); }), // 딩(미6)–동(도6) ×3
+    chime: (d, t, p) => [0, 1.2].forEach((s) => [1047, 1319, 1568].forEach((f, i) => bell(d, f, t + s + i * 0.22, p))), // 도–미–솔 올라가는 3음 ×2
+    phone: (d, t, p) => [0, 1.3].forEach((s) => { for (let i = 0; i < 16; i++) note(d, i % 2 ? 1750 : 1400, t + s + i * 0.05, 0.05, p * 0.75); }), // 따르릉(두 음을 빠르게 번갈아) ×2
+    beep: (d, t, p) => [0, 0.75, 1.5].forEach((s) => [0, 0.2].forEach((b) => note(d, 2700, t + s + b, 0.13, p * 0.7, "square"))), // 삐삐 ×3 — 2.7kHz 사각파, 시끄러운 곳에서도 잘 들림
+    xylo: (d, t, p) => [0, 1.3].forEach((s) => [784, 1047, 1319, 1568, 1319, 1568].forEach((f, i) => { note(d, f, t + s + i * 0.18, 0.6, p, "sine", 0.09); note(d, f * 4, t + s + i * 0.18, 0.15, p * 0.15, "sine", 0.02); })), // 솔–도–미–솔–미–솔
+  };
+  function beep(force, which) {
+    if (!force && get("sound", "1") !== "1") return;
+    try {
+      const dest = audioOut(), now = actx.currentTime + 0.05, peak = VOL[get("vol", "2")] || VOL[2];
+      PLAY[which || tone()](dest, now, peak);
+    } catch {}
+    if (navigator.vibrate) navigator.vibrate([400, 150, 400, 150, 400]);
+  }
+  // 직원 호출 소리: 주문 벨보다 짧고 높은 '띵' 2번(솔6). [확인] 전까지 30초마다 다시.
+  let callAlarm = null;
+  function callBeep(force) {
+    if (!force && get("sound", "1") !== "1") return;
+    try { const dest = audioOut(), now = actx.currentTime + 0.05, peak = VOL[get("vol", "2")] || VOL[2]; bell(dest, 1568, now, peak); bell(dest, 1568, now + 0.42, peak); } catch {}
+    if (navigator.vibrate) navigator.vibrate([250, 120, 250]);
+  }
+  function startCallAlarm() { callBeep(); clearInterval(callAlarm); callAlarm = setInterval(() => { if (pendingCalls().length) callBeep(); else stopCallAlarm(); }, 30000); }
+  function stopCallAlarm() { clearInterval(callAlarm); callAlarm = null; }
+  function onCall(ids) {
+    startCallAlarm();
+    const c = calls.get(ids[ids.length - 1]);
+    if (c) toast(`🔔 ${t().table} ${c.data.table} — ${t().req[c.data.req] || ""}`);
+  }
+  function startAlarm() { beep(); clearInterval(alarm); alarm = setInterval(() => { if ([...orders.values()].some((o) => o.status === "new")) beep(); else stopAlarm(); }, 20000); }
+  function stopAlarm() { clearInterval(alarm); alarm = null; }
+  function onNew(ids) {
+    startAlarm(); toast(`🔔 ${t().newOrder} ×${ids.length}`);
+    if (get("auto", "0") === "1") ids.forEach((id, i) => setTimeout(() => printOrder(id), i * 2500));
+  }
+
+  // ── 인쇄 ──
+  // 영수증을 그림(캔버스)으로 그린다 → 베트남어·한국어 글자가 프린터 글꼴과 상관없이 그대로 나온다.
+  const printerMode = () => get("printer", "") || cfg.printer || "rawbt";
+  const paperPx = () => (Number(get("paper", "")) || Number(cfg.paper) || 58) === 80 ? 576 : 384;
+  function ticketCanvas(d) {
+    const W = paperPx(), pad = 8, c = document.createElement("canvas"), g = c.getContext("2d");
+    const F = "system-ui, -apple-system, Roboto, 'Noto Sans', 'Noto Sans KR', sans-serif";
+    const s = W / 384; // 58mm 기준 크기
+    const lines = [];
+    const add = (text, size, weight = 400, align = "left", gap = 4) => lines.push({ text: String(text), size: Math.round(size * s), weight, align, gap: Math.round(gap * s) });
+    const rule = () => lines.push({ rule: true, gap: Math.round(6 * s) });
+    add(`#${d.no}${d.test ? "  [TEST]" : ""}`, 22, 700, "left", 2);
+    add(`${t().table} ${d.table}`, 40, 800, "left", 4);
+    add(new Date(d.at).toLocaleString(lang === "ko" ? "ko-KR" : "vi-VN"), 18, 400, "left", 4);
+    rule();
+    d.items.forEach((it) => { add(`${it.q} × ${it.name}`, 26, 700, "left", 2); if (it.sub && it.sub !== it.name) add(`   ${it.sub}`, 18, 400, "left", 4); });
+    rule();
+    if (d.note) add(`★ ${d.note}`, 24, 700, "left", 6);
+    add(`${t().total}: ${money(d.total, d.currency)}${d.market ? " + " + t().market : ""}`, 20, 600, "right", 4);
+    // 줄 바꿈 계산
+    const rows = [];
+    for (const l of lines) {
+      if (l.rule) { rows.push(l); continue; }
+      g.font = `${l.weight} ${l.size}px ${F}`;
+      let cur = "";
+      for (const ch of l.text.split(/(\s+)/)) {
+        const test = cur + ch;
+        if (g.measureText(test).width > W - pad * 2 && cur.trim()) { rows.push({ ...l, text: cur.trimEnd() }); cur = ch.trimStart(); }
+        else cur = test;
+        while (g.measureText(cur).width > W - pad * 2 && cur.length > 1) { let k = cur.length - 1; while (k > 1 && g.measureText(cur.slice(0, k)).width > W - pad * 2) k--; rows.push({ ...l, text: cur.slice(0, k) }); cur = cur.slice(k); }
+      }
+      if (cur.trim()) rows.push({ ...l, text: cur });
+    }
+    const H = rows.reduce((h, r) => h + (r.rule ? r.gap * 2 + 2 : r.size * 1.25 + r.gap), pad * 2) + 40;
+    c.width = W; c.height = Math.ceil(H);
+    g.fillStyle = "#fff"; g.fillRect(0, 0, W, c.height); g.fillStyle = "#000"; g.textBaseline = "top";
+    let y = pad;
+    for (const r of rows) {
+      if (r.rule) { y += r.gap; g.fillRect(pad, y, W - pad * 2, 2); y += r.gap + 2; continue; }
+      g.font = `${r.weight} ${r.size}px ${F}`; g.textAlign = r.align;
+      g.fillText(r.text, r.align === "right" ? W - pad : pad, y); y += r.size * 1.25 + r.gap;
+    }
+    return c;
+  }
+  // ESC/POS 래스터 이미지(GS v 0) → RawBT 앱으로 보낸다
+  function escpos(c) {
+    const W = c.width, H = c.height, bw = W / 8, px = c.getContext("2d").getImageData(0, 0, W, H).data, out = [0x1b, 0x40];
+    for (let y0 = 0; y0 < H; y0 += 200) {
+      const h = Math.min(200, H - y0);
+      out.push(0x1d, 0x76, 0x30, 0x00, bw & 255, bw >> 8, h & 255, h >> 8);
+      for (let y = y0; y < y0 + h; y++) for (let xb = 0; xb < bw; xb++) {
+        let b = 0;
+        for (let k = 0; k < 8; k++) { const i = (y * W + xb * 8 + k) * 4; if (px[i] * 0.3 + px[i + 1] * 0.59 + px[i + 2] * 0.11 < 150) b |= 0x80 >> k; }
+        out.push(b);
+      }
+    }
+    out.push(0x1b, 0x64, 0x04, 0x1d, 0x56, 0x42, 0x00); // 4줄 띄우고 자르기
+    let bin = ""; const u = new Uint8Array(out);
+    for (let i = 0; i < u.length; i += 0x8000) bin += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000));
+    return btoa(bin);
+  }
+  function printData(d) {
+    const mode = printerMode();
+    if (mode === "none") return;
+    const c = ticketCanvas(d);
+    if (mode === "rawbt") {
+      location.href = `intent:base64,${escpos(c)}#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;`;
+    } else {
+      $("printArea").innerHTML = `<style>@page{size:${paperPx() === 576 ? 80 : 58}mm auto;margin:0}</style><img src="${c.toDataURL("image/png")}">`;
+      setTimeout(() => window.print(), 50);
+    }
+    toast(t().printed);
+  }
+  const printOrder = (id) => { const o = orders.get(id); if (o) printData(o.data); };
+
+  // ── 화면 켜 두기 ──
+  let lock = null;
+  async function keepAwake() { try { if ("wakeLock" in navigator) lock = await navigator.wakeLock.request("screen"); } catch {} }
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && started) { keepAwake(); poll(); } });
+
+  async function beat() {
+    if (!token) return;
+    try { await call("beat", { device, name: get("name", ""), printer: printerMode() }); } catch {}
+  }
+
+  function start() {
+    started = true; view("vMain"); $("hName").textContent = shop;
+    try { audioOut(); } catch {}
+    setTab(tab); keepAwake(); poll(); beat(); setInterval(beat, 5 * 60e3);
+    setInterval(() => { if (orders.size || calls.size) render(); }, 60e3); // '몇 분 전' 갱신
+  }
+
+  // ── 목록 | 배치도 탭 (기기마다 마지막 탭 기억) ──
+  let tab = get("tab", "list") === "floor" && window.QKFloor ? "floor" : "list";
+  const floor = window.QKFloor ? QKFloor.init({ $, esc, money, ago, card, call, toast, get, set, orders, lang: () => lang, t, hasCall: (key) => pendingCalls().some(([, c]) => norm(c.data.table) === key) }) : null;
+  function setTab(v) {
+    if (v === "list" && floor && floor.editing()) return toast(lang === "ko" ? "배치 편집을 먼저 저장하거나 취소해 주세요" : "Hãy Lưu hoặc Hủy sửa sơ đồ trước");
+    tab = floor ? v : "list"; set("tab", tab);
+    $("hTabs").hidden = !floor; $("hTabL").classList.toggle("on", tab === "list"); $("hTabF").classList.toggle("on", tab === "floor");
+    $("lView").hidden = tab !== "list"; $("fView").hidden = tab !== "floor";
+    render();
+  }
+
+  // ── 버튼 ──
+  document.addEventListener("click", (e) => {
+    const tb = e.target.closest("[data-tab]"); if (tb) return setTab(tb.dataset.tab);
+    const l = e.target.closest("[data-lang]"); if (l) { lang = l.dataset.lang; set("lang", lang); paintText(); return; }
+    const s = e.target.closest("[data-s]");
+    if (s) { if (s.dataset.s === "cancel" && !confirm(t().cancelQ)) return; if (s.dataset.s === "cooking") stopAlarm(); setStatus(s.dataset.id, s.dataset.s); return; }
+    const p = e.target.closest("[data-p]"); if (p) return printOrder(p.dataset.p);
+    const cd = e.target.closest("[data-cdone]"); if (cd) return setStatus(cd.dataset.cdone, "done");
+  });
+  $("lGo").onclick = login; $("pin").addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+  $("sGo").onclick = start;
+  $("hSet").onclick = () => { $("oLang").value = lang; $("oName").value = get("name", ""); $("oPrinter").value = get("printer", ""); $("oPaper").value = get("paper", "") || String(cfg.paper || 58); $("oAuto").checked = get("auto", "0") === "1"; $("oSound").checked = get("sound", "1") === "1"; $("oVol").value = get("vol", "2"); $("oTone").value = tone(); $("vSet").hidden = false; };
+  $("bClose").onclick = () => { $("vSet").hidden = true; beat(); };
+  $("vSet").addEventListener("click", (e) => { if (e.target === $("vSet")) $("vSet").hidden = true; });
+  $("oLang").onchange = () => { lang = $("oLang").value; set("lang", lang); paintText(); };
+  $("oName").onchange = () => set("name", $("oName").value.trim());
+  $("oPrinter").onchange = () => set("printer", $("oPrinter").value);
+  $("oPaper").onchange = () => set("paper", $("oPaper").value);
+  $("oAuto").onchange = () => set("auto", $("oAuto").checked ? "1" : "0");
+  $("oSound").onchange = () => set("sound", $("oSound").checked ? "1" : "0");
+  $("oVol").onchange = () => { set("vol", $("oVol").value); beep(true); };
+  $("oTone").onchange = () => { set("tone", $("oTone").value); beep(true); };
+  $("bTestSound").onclick = () => beep(true);
+  $("bTestPrint").onclick = () => printData({ no: 0, test: true, table: "TEST", at: Date.now(), note: lang === "ko" ? "시험 인쇄 · 한글 Tiếng Việt" : "In thử · Tiếng Việt 한글", currency: "₫", total: 150000, market: false, items: [{ q: 2, name: "Phở bò tái", sub: "소고기 쌀국수", price: 100000 }, { q: 1, name: "Trà đá", sub: "아이스티", price: 50000 }] });
+  $("bOut").onclick = () => { $("vSet").hidden = true; logout(); };
+  window.__qk = { orders, calls, ticketCanvas, escpos }; // 시험용
+
+  paintText();
+  if (!shop) view("vLogin"); else if (token) view("vStart"); else view("vLogin");
+})();
+</script>
+</body>
+</html>

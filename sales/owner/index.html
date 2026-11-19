@@ -13,7 +13,7 @@
   body { margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; line-height: 1.45; }
   .wrap { max-width: 760px; margin: 0 auto; padding: 14px; }
   header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
-  header h1 { font-size: 18px; margin: 0; flex: 1; }
+  header h1 { font-size: 18px; margin: 0; flex: 1; min-width: 9em; } /* 버튼이 늘어도 제목이 세로로 찌그러지지 않게(2026-11-17 단골 버튼) */
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
   .login { max-width: 380px; margin: 12vh auto 0; text-align: center; }
   .login input { width: 100%; font: inherit; font-size: 16px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; margin: 8px 0; background: var(--bg); color: var(--ink); text-align: center; }
@@ -30,6 +30,9 @@
   <header>
     <h1 id="title">메뉴 관리</h1>
     <span class="lang" id="lang"><button type="button" data-l="ko">한국어</button><button type="button" data-l="vi">Tiếng Việt</button></span>
+    <button class="btn" id="sales" type="button" hidden></button>
+    <button class="btn" id="loyal" type="button" hidden></button>
+    <button class="btn" id="voice" type="button" hidden></button>
     <button class="btn" id="visits" type="button" hidden></button>
     <button class="btn" id="out" type="button" hidden></button>
   </header>
@@ -44,15 +47,22 @@
   </div>
 
   <div id="editor" hidden></div>
+  <div id="revenue" hidden></div>
+  <div id="loyalv" hidden></div>
+  <div id="voicev" hidden></div>
 </div>
 
 <script src="/stores/data.js"></script>
 <script src="/menu-editor.js"></script>
+<script src="/revenue.js"></script>
+<script src="/admin/qr.js"></script>
+<script src="/loyal.js"></script>
+<script src="/voice.js"></script>
 <script>
   const $ = (id) => document.getElementById(id);
   const S = {
-    ko: { t: '메뉴 관리', lt: '점주 로그인', ls: '가게 비밀번호를 입력해 주세요', shop: '가게 아이디 (예: ijang)', pw: '비밀번호', go: '들어가기', visits: '방문 기록', out: '나가기', wrong: '비밀번호가 맞지 않아요', blocked: '시도가 너무 많아 한 시간 막혔어요', fail: '잠시 뒤 다시 시도해 주세요' },
-    vi: { t: 'Quản lý thực đơn', lt: 'Đăng nhập chủ quán', ls: 'Nhập mật khẩu của quán', shop: 'Mã quán (ví dụ: ijang)', pw: 'Mật khẩu', go: 'Vào', visits: 'Lượt xem', out: 'Thoát', wrong: 'Mật khẩu không đúng', blocked: 'Thử sai quá nhiều, bị khóa 1 giờ', fail: 'Vui lòng thử lại sau' },
+    ko: { t: '메뉴 관리', lt: '점주 로그인', ls: '가게 비밀번호를 입력해 주세요', shop: '가게 아이디 (예: ijang)', pw: '비밀번호', go: '들어가기', visits: '방문 기록', sales: '📊 매출', loyal: '🎁 단골', voice: '💬 소리함', menu: '✎ 메뉴', out: '나가기', wrong: '비밀번호가 맞지 않아요', blocked: '시도가 너무 많아 한 시간 막혔어요', fail: '잠시 뒤 다시 시도해 주세요' },
+    vi: { t: 'Quản lý thực đơn', lt: 'Đăng nhập chủ quán', ls: 'Nhập mật khẩu của quán', shop: 'Mã quán (ví dụ: ijang)', pw: 'Mật khẩu', go: 'Vào', visits: 'Lượt xem', sales: '📊 Doanh thu', loyal: '🎁 Khách quen', voice: '💬 Góp ý', menu: '✎ Thực đơn', out: 'Thoát', wrong: 'Mật khẩu không đúng', blocked: 'Thử sai quá nhiều, bị khóa 1 giờ', fail: 'Vui lòng thử lại sau' },
   };
   const q = new URLSearchParams(location.search);
   let ui = q.get('lang') || (() => { try { return localStorage.getItem('owner-lang'); } catch { return null; } })() || ((navigator.language || '').startsWith('vi') ? 'vi' : 'ko');
@@ -61,18 +71,42 @@
   const storeName = (id) => { const s = (window.STORES || []).find((x) => x.id === id); return s ? s.name : id; };
   const tokKey = (id) => 'qm_owner_' + id;
   const getTok = () => { try { return sessionStorage.getItem(tokKey(shop)); } catch { return null; } };
-  let ed = null;
+  let ed = null, view = 'menu'; // menu | sales(매출, revenue.js) | loyal(단골 적립·배너, loyal.js) | voice(소리함, voice.js)
+  const hideVoice = () => { $('voicev').hidden = true; $('voicev').innerHTML = ''; };
 
   function texts() {
     const t = S[ui];
     document.documentElement.lang = ui;
-    $('title').textContent = shop ? `${storeName(shop)} · ${t.t}` : t.t;
-    $('lt').textContent = t.lt; $('ls').textContent = t.ls; $('shop').placeholder = t.shop; $('pw').placeholder = t.pw; $('go').textContent = t.go; $('visits').textContent = t.visits; $('out').textContent = t.out;
+    const tt = view === 'sales' ? t.sales.replace(/^\S+\s/, '') : view === 'loyal' ? t.loyal.replace(/^\S+\s/, '') : view === 'voice' ? t.voice.replace(/^\S+\s/, '') : t.t;
+    $('title').textContent = shop ? `${storeName(shop)} · ${tt}` : tt;
+    $('lt').textContent = t.lt; $('ls').textContent = t.ls; $('shop').placeholder = t.shop; $('pw').placeholder = t.pw; $('go').textContent = t.go; $('visits').textContent = t.visits; $('sales').textContent = view === 'sales' ? t.menu : t.sales; $('loyal').textContent = view === 'loyal' ? t.menu : t.loyal; $('voice').textContent = view === 'voice' ? t.menu : t.voice; $('out').textContent = t.out;
     $('shop').hidden = !!q.get('shop');
     document.querySelectorAll('#lang button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.l === ui));
   }
-  function showLogin(msg) { $('editor').hidden = true; $('visits').hidden = true; $('out').hidden = true; $('login').hidden = false; $('err').textContent = msg || ''; ed = null; texts(); }
+  function showLogin(msg) { hideVoice(); $('voice').hidden = true; $('loyalv').hidden = true; $('loyalv').innerHTML = ''; $('loyal').hidden = true; $('editor').hidden = true; $('revenue').hidden = true; $('revenue').innerHTML = ''; $('sales').hidden = true; view = 'menu'; $('visits').hidden = true; $('out').hidden = true; $('login').hidden = false; $('err').textContent = msg || ''; ed = null; texts(); }
+  const authFail = () => { try { sessionStorage.removeItem(tokKey(shop)); } catch {} showLogin(S[ui].wrong); };
+  function showVoice() {
+    view = 'voice'; $('loyalv').hidden = true; $('loyalv').innerHTML = ''; $('login').hidden = true; $('editor').hidden = true; $('editor').innerHTML = ''; ed = null; $('revenue').hidden = true; $('revenue').innerHTML = '';
+    $('sales').hidden = false; $('loyal').hidden = false; $('voice').hidden = false; $('visits').hidden = false; $('out').hidden = false;
+    $('voicev').hidden = false; Voice.mount($('voicev'), { shop, ui, headers: () => ({ 'x-owner-token': getTok() || '' }), onAuthFail: authFail });
+    texts();
+  }
+  function showLoyal() {
+    hideVoice(); $('voice').hidden = false;
+    view = 'loyal'; $('login').hidden = true; $('editor').hidden = true; $('editor').innerHTML = ''; ed = null; $('revenue').hidden = true; $('revenue').innerHTML = '';
+    $('sales').hidden = false; $('loyal').hidden = false; $('visits').hidden = false; $('out').hidden = false;
+    $('loyalv').hidden = false; Loyal.mount($('loyalv'), { shop, ui, headers: () => ({ 'x-owner-token': getTok() || '' }), onAuthFail: authFail });
+    texts();
+  }
+  function showSales() {
+    hideVoice(); $('voice').hidden = false;
+    view = 'sales'; $('loyalv').hidden = true; $('loyalv').innerHTML = ''; $('loyal').hidden = false; $('login').hidden = true; $('editor').hidden = true; $('editor').innerHTML = ''; ed = null; $('sales').hidden = false; $('visits').hidden = false; $('out').hidden = false;
+    $('revenue').hidden = false; Revenue.mount($('revenue'), { shop, ui, headers: () => ({ 'x-owner-token': getTok() || '' }), onAuthFail: authFail });
+    texts();
+  }
   function showEditor() {
+    hideVoice(); $('voice').hidden = false;
+    view = 'menu'; $('revenue').hidden = true; $('revenue').innerHTML = ''; $('sales').hidden = false; $('loyalv').hidden = true; $('loyalv').innerHTML = ''; $('loyal').hidden = false;
     $('login').hidden = true; $('visits').hidden = false; $('out').hidden = false; $('editor').hidden = false; $('editor').innerHTML = '';
     ed = MenuEditor.mount($('editor'), { shop, ui, headers: () => ({ 'x-owner-token': getTok() || '' }), onAuthFail: () => { try { sessionStorage.removeItem(tokKey(shop)); } catch {} showLogin(S[ui].wrong); } });
     texts();
@@ -106,8 +140,11 @@
       if (w) w.opener = null; else location.href = url;
     } catch { alert(S[ui].fail); }
   };
+  $('sales').onclick = () => (view === 'sales' ? showEditor() : showSales());
+  $('loyal').onclick = () => (view === 'loyal' ? showEditor() : showLoyal());
+  $('voice').onclick = () => (view === 'voice' ? showEditor() : showVoice());
   $('out').onclick = () => { try { sessionStorage.removeItem(tokKey(shop)); } catch {} showLogin(); };
-  $('lang').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; ui = b.dataset.l; try { localStorage.setItem('owner-lang', ui); } catch {} if (getTok() && ed) showEditor(); else texts(); });
+  $('lang').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; ui = b.dataset.l; try { localStorage.setItem('owner-lang', ui); } catch {} if (getTok() && view === 'sales') showSales(); else if (getTok() && view === 'loyal') showLoyal(); else if (getTok() && view === 'voice') showVoice(); else if (getTok() && ed) showEditor(); else texts(); });
   texts();
   if (shop && getTok()) showEditor(); else showLogin();
 </script>

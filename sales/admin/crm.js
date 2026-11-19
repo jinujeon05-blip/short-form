@@ -8,8 +8,8 @@
   const nameOf = (id) => (STORES.find((s) => s.id === id) || { name: id }).name;
   const STATUS = { listing: '가게 찾기용(동의 전)', pitched: '제안함', talking: '협의 중', contracted: '정식·계약', paused: '보류' };
   const defStatus = (s) => (s.listing ? 'listing' : 'contracted');
-  const ACT = { 'menu-save': '메뉴 저장', 'menu-restore': '이전 버전으로 복원', 'menu-reset': '기본 메뉴로 초기화', photo: '사진 올림', login: '점주 로그인', 'owner-pw': '점주 비밀번호 발급', 'owner-off': '점주 로그인 끔', crm: '영업 정보 수정' };
-  const ACTOR = { admin: '관리자', owner: '점주' };
+  const ACT = { 'menu-save': '메뉴 저장', 'menu-restore': '이전 버전으로 복원', 'menu-reset': '기본 메뉴로 초기화', photo: '사진 올림', login: '점주 로그인', 'owner-pw': '점주 비밀번호 발급', 'owner-off': '점주 로그인 끔', crm: '영업 정보 수정', 'k-login': '주방 기기 로그인', 'k-set': '주방 주문 설정', 'k-pin': '주방 PIN 발급', 'k-logout': '주방 기기 모두 로그아웃', 'k-test': '시험 주문' };
+  const ACTOR = { admin: '관리자', owner: '점주', kitchen: '주방' };
   const fmtT = (ts) => new Date(ts).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   let crm = { shops: {} }, owners = {}, custom = {}, sel = null, editor = null, menuShop = null, statsCache = null;
 
@@ -60,9 +60,24 @@
       <td class="hide-m" style="text-align:left;max-width:240px;overflow:hidden;text-overflow:ellipsis">${esc((e.history[0] || {}).text || e.memo || '')}</td></tr>`; }).join('');
     box.innerHTML = `<div class="cards" style="grid-template-columns:repeat(5,1fr)">${cards}</div>
       ${due.length ? `<div class="card" style="margin-bottom:12px;border-color:var(--accent)"><b>오늘까지 연락할 곳</b>: ${due.map((s) => esc(s.name)).join(' · ')}</div>` : ''}
-      <div class="card"><div class="scroll"><table><thead><tr><th>가게</th><th>상태</th><th class="hide-m">다음 연락</th><th>점주 로그인</th><th>맞춤 메뉴</th><th class="hide-m">최근 기록·메모</th></tr></thead><tbody>${rows}</tbody></table></div></div>
+      <div class="card">${searchBox('shopQ', STORES.length)}<div class="scroll"><table><thead><tr><th>가게</th><th>상태</th><th class="hide-m">다음 연락</th><th>점주 로그인</th><th>맞춤 메뉴</th><th class="hide-m">최근 기록·메모</th></tr></thead><tbody>${rows}</tbody></table></div></div>
       <div id="shopDetail"></div>`;
+    bindSearch('shopQ', '#tab-shops tbody tr[data-id]');
     if (sel) detail(sel);
+  }
+  // 표 위 검색창(가게 이름·주소·아이디·초성). 다시 그려도 입력한 글자는 남긴다.
+  const searchQ = {};
+  function searchBox(id, n) {
+    return `<div class="tsearch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="${id}" type="search" placeholder="가게 이름·주소·초성(ㄱㅁㅅ) 검색" value="${esc(searchQ[id] || '')}" autocomplete="off"><span class="tcount" id="${id}N">${n}곳</span></div>`;
+  }
+  function bindSearch(id, rowSel) {
+    const inp = $(id); if (!inp) return;
+    const run = () => {
+      const q = (searchQ[id] = inp.value); let n = 0;
+      document.querySelectorAll(rowSel).forEach((tr) => { const ok = !window.QMShopPick || QMShopPick.match(tr.dataset.id, nameOf(tr.dataset.id), q); tr.hidden = !ok; if (ok) n++; });
+      $(id + 'N').textContent = q.trim() ? `${n}곳 찾음` : `${n}곳`;
+    };
+    inp.addEventListener('input', run); run();
   }
   function detail(id) {
     sel = id; document.querySelectorAll('#tab-shops tbody tr').forEach((r) => r.classList.toggle('sel', r.dataset.id === id));
@@ -119,6 +134,7 @@
       box.dataset.init = '1';
       box.innerHTML = `<div class="card" style="margin-bottom:12px"><div class="f"><div><label>가게</label><select id="menuShop">${STORES.map((s) => `<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select></div><div style="align-self:end;font-size:13px;color:var(--muted)">점주가 쓰는 화면과 같아요. 여기서 저장해도 손님 화면에 1분 안에 반영돼요.</div></div></div><div id="menuEd"></div>`;
       $('menuShop').addEventListener('change', () => menuTab($('menuShop').value));
+      window.QMShopPick && QMShopPick.attach($('menuShop'));
     }
     shop = shop || menuShop || STORES[0].id;
     if (shop === menuShop && editor) return;
@@ -155,14 +171,30 @@
       <p class="note">· 관리자 비밀번호를 바꾸고 싶으면 저(Claude)에게 “비밀번호 바꿔줘”라고 하세요(약 1분). · 점주 비밀번호는 위 <b>가게 관리</b> 탭에서 가게마다 새로 만들거나 끌 수 있어요.</p>`;
   }
 
+  // ───── 매출 탭(공용 revenue.js, 주방 주문 기록으로 날짜별 주문·음식별 매출) ─────
+  function salesTab() {
+    const box = $('tab-sales');
+    if (box.dataset.init) return;
+    box.dataset.init = '1';
+    const list = [{ id: 'testshop', name: 'QR 시험 식당 (시험용)' }].concat((window.STORES || []).slice().sort((a, b) => (a.listing ? 1 : 0) - (b.listing ? 1 : 0)));
+    let cur = null; try { cur = sessionStorage.getItem('qm_sales_shop'); } catch {}
+    if (!list.some((s) => s.id === cur)) cur = list[0].id;
+    box.innerHTML = `<div class="card" style="margin-bottom:12px"><label style="display:block;font-size:13px;color:var(--muted)">가게</label><select id="sShop" style="max-width:100%">${list.map((s) => `<option value="${s.id}"${s.id === cur ? ' selected' : ''}>${esc(s.name)}${s.listing ? ' · 가게 찾기용' : ''}</option>`).join('')}</select>
+      <p class="note" style="margin:8px 0 0">주방 주문을 켠 가게만 숫자가 나와요. 점주도 점주 화면의 <b>📊 매출</b> 버튼으로 같은 화면을 봅니다.</p></div><div id="sBody"></div>`;
+    const mount = () => window.Revenue && Revenue.mount($('sBody'), { shop: cur, ui: 'ko', headers: H, onAuthFail: () => { try { sessionStorage.removeItem('qm_admin'); } catch {} location.reload(); } });
+    $('sShop').addEventListener('change', () => { cur = $('sShop').value; try { sessionStorage.setItem('qm_sales_shop', cur); } catch {} mount(); });
+    window.QMShopPick && QMShopPick.attach($('sShop'));
+    mount();
+  }
+
   // ───── 탭 전환 ─────
   function show(tab, arg) {
     document.querySelectorAll('#tabs button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.t === tab));
-    ['stats', 'shops', 'menu', 'report', 'sec'].forEach((t) => { const el = $('tab-' + t); if (el) el.hidden = t !== tab; });
+    ['stats', 'shops', 'menu', 'kitchen', 'sales', 'report', 'sec'].forEach((t) => { const el = $('tab-' + t); if (el) el.hidden = t !== tab; });
     $('range').style.display = tab === 'stats' ? '' : 'none'; $('reload').style.display = tab === 'stats' ? '' : 'none';
-    if (tab === 'shops') loadShops(); else if (tab === 'menu') menuTab(arg); else if (tab === 'report') reportTab(); else if (tab === 'sec') secTab();
+    if (tab === 'shops') loadShops(); else if (tab === 'menu') menuTab(arg); else if (tab === 'kitchen') window.QMKitchen && QMKitchen.open(); else if (tab === 'sales') salesTab(); else if (tab === 'report') reportTab(); else if (tab === 'sec') secTab();
     try { history.replaceState(null, '', '#' + tab); } catch {}
   }
   $('tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) show(b.dataset.t); });
-  window.QMAdmin = { show, start() { const t = (location.hash || '').slice(1); if (['shops', 'menu', 'report', 'sec'].includes(t)) show(t); } };
+  window.QMAdmin = { show, start() { const t = (location.hash || '').slice(1); if (['shops', 'menu', 'kitchen', 'sales', 'report', 'sec'].includes(t)) show(t); } };
 })();

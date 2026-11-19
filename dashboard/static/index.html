@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jinwoo 에이전트</title>
 <link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="/static/builder.css">
+<link rel="stylesheet" href="/static/sales.css">
 </head>
 <body>
 <header class="top">
@@ -27,8 +29,13 @@
       </div>
       <p class="send-err" id="order-err" role="alert"></p>
     </section>
+    <section class="card" aria-label="새 가게 줄 세우기">
+      <h2>새 가게 <span class="badge b-na" id="ns-count">0</span><small>드라이브에 올린 사진 · 줄 세우기</small></h2>
+      <div id="newshops"><p class="muted">드라이브 폴더를 읽는 중…</p></div>
+    </section>
     <section class="card" aria-label="결재함">
       <h2>결재함 <span class="badge b-na" id="inbox-count">0</span></h2>
+      <p class="send-err" id="code-warn" role="alert" style="margin:0 0 8px"></p>
       <div id="inbox"></div>
     </section>
   </aside>
@@ -43,6 +50,9 @@
       <button role="tab" data-tab="talk">팀 대화<span class="live" id="talk-live"></span></button>
       <button role="tab" data-tab="todo">할 일</button>
       <button role="tab" data-tab="visits">방문 기록</button>
+      <button role="tab" data-tab="usage">사용량</button>
+      <button role="tab" data-tab="builder">가게 만들기</button>
+      <button role="tab" data-tab="sales">영업</button>
     </nav>
     <section class="tab" id="tab-stores">
       <div class="filters">
@@ -60,6 +70,9 @@
     </section>
     <section class="tab" id="tab-todo" hidden></section>
     <section class="tab" id="tab-visits" hidden></section>
+    <section class="tab" id="tab-usage" hidden><p class="muted">사용량 탭을 누르면 실행 기록에서 계산해요.</p></section>
+    <section class="tab" id="tab-builder" hidden><p class="muted">가게 만들기 화면을 여는 중…</p></section>
+    <section class="tab" id="tab-sales" hidden><p class="muted">영업 화면을 여는 중…</p></section>
   </main>
 
   <!-- 오른쪽: 브리핑 · 업무 기록 -->
@@ -84,5 +97,7 @@
 <div class="dim" id="dim"></div>
 <div class="toast" id="toast"></div>
 <script src="/static/app.js"></script>
+<script src="/static/builder.js"></script>
+<script src="/static/sales.js"></script>
 </body>
 </html>
