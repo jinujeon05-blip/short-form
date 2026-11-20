@@ -108,6 +108,7 @@ name() {
     ttomoise) echo "또모이세" ;;
     smilebn) echo "박닌스마일회관" ;;
     ganghodong) echo "강호동 백정" ;;
+    sangdiegopizza) echo "상디에고 피자 & 그릴" ;;
     *) echo "$1" ;;
   esac
 }

@@ -163,6 +163,7 @@ const SHOPS = {
   ttomoise: { type: 'Restaurant', cuisine: ['Korean', 'Hangover Soup', 'Gukbap', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   smilebn: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Grill'], country: 'VN', currency: 'VND', og: 'img/bokkeum.jpg' },
   ganghodong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef', 'Pork'], country: 'VN', currency: 'VND', og: 'img/lagalbi.jpg' },
+  sangdiegopizza: { type: 'Restaurant', cuisine: ['Western', 'Pizza', 'Steak', 'Pasta', 'BBQ Ribs'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

@@ -838,6 +838,12 @@ window.STORES = [
     type: { ko: "한식 고기구이 · 소·돼지 구이 · 한우 곱창 · 냉면", vi: "Nhà hàng thịt nướng Hàn Quốc · Thịt bò & thịt heo · Lòng bò Hanwoo · Mì lạnh", en: "Korean BBQ · Beef & pork · Hanwoo offal · Cold noodles", zh: "韩式烤肉 · 牛肉猪肉 · 韩牛杂碎 · 冷面", ja: "韓国焼肉・牛肉豚肉・韓牛ホルモン・冷麺" },
     keywords: "강호동 백정 강호동백정 Baek Jeong BAEK JEONG BBQ Nhà hàng thịt nướng Hàn Quốc 하노이 hà nội từ liêm đỗ đình thiện 고깃집 한식 삼겹살 생오겹살 목살 항정살 갈매기살 소고기 와규 양념갈비 LA갈비 소갈비살 차돌박이 우삼겹 안창살 우설 한우 곱창 대창 막창 냉면 물냉면 비빔냉면 갈비탕 김치찌개 된장찌개 김치전골 불고기 점심 런치 콤보 소주 막걸리"
   },
+  { id: "sangdiegopizza", name: "상디에고 피자 & 그릴 SANG DIEGO", sub: "피자 · 스테이크 · 립 · 파스타 · 버거 · 샐러드", url: "https://sangdiegopizza.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["western"], tags: ["photos"],
+    address: "25 Lê Thái Tổ, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/Sang+Diego+Pizza+%26+Grill+B%E1%BA%AFc+Ninh/@21.1713814,106.0600854,21z",
+    type: { ko: "양식 · 피자 · 스테이크 · 파스타 · 바비큐 립", vi: "Nhà hàng Âu · Pizza · Bít tết · Mỳ Ý · Sườn nướng BBQ", en: "Western grill · Pizza · Steak · Pasta · BBQ ribs", zh: "西餐 · 披萨 · 牛排 · 意面 · BBQ 烤肋排", ja: "洋食・ピザ・ステーキ・パスタ・BBQリブ" },
+    keywords: "상디에고 피자 그릴 Sang Diego Pizza Grill Bắc Ninh 박닌 피자 스테이크 파스타 립 버거 양식 Lê Thái Tổ Võ Cường"
+  },
 ];
 window.SI = {
   ko: {

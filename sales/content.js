@@ -211,6 +211,8 @@ window.DEMOS = [
     name: "박닌 스마일 회관 BAC NINH SMILE", type: { ko: "한식 숯불·돌판 고기구이 · 모듬 · 냉삼 · 양고기 · 육회 · 점심 특선", vi: "Thịt nướng Hàn Quốc · Combo · Ba chỉ đông lạnh · Thịt cừu · Gỏi bò · Suất trưa đặc biệt", en: "Korean BBQ on stone · Combos · Frozen pork belly · Lamb · Beef tartare · Lunch specials", zh: "韩式石板烤肉 · 拼盘 · 冷冻五花肉 · 羊排 · 生拌牛肉 · 午市特餐", ja: "韓国式石焼き肉・盛り合わせ・冷凍サムギョプサル・ラム・ユッケ・ランチ特選" } },
   { id: "ganghodong", hidden: true, url: "https://ganghodong.qrmenuasia.com", shot: "img/demo-ganghodong.jpg", qr: "img/qr-ganghodong.svg",
     name: "강호동 백정 BAEK JEONG", type: { ko: "한식 고기구이 · 소·돼지 구이 · 한우 곱창 · 냉면", vi: "Nhà hàng thịt nướng Hàn Quốc · Thịt bò & thịt heo · Lòng bò Hanwoo · Mì lạnh", en: "Korean BBQ · Beef & pork · Hanwoo offal · Cold noodles", zh: "韩式烤肉 · 牛肉猪肉 · 韩牛杂碎 · 冷面", ja: "韓国焼肉・牛肉豚肉・韓牛ホルモン・冷麺" } },
+  { id: "sangdiegopizza", hidden: true, url: "https://sangdiegopizza.qrmenuasia.com", shot: "img/demo-sangdiegopizza.jpg", qr: "img/qr-sangdiegopizza.svg",
+    name: "상디에고 피자 & 그릴 SANG DIEGO", type: { ko: "양식 · 피자 · 스테이크 · 파스타 · 바비큐 립", vi: "Nhà hàng Âu · Pizza · Bít tết · Mỳ Ý · Sườn nướng BBQ", en: "Western grill · Pizza · Steak · Pasta · BBQ ribs", zh: "西餐 · 披萨 · 牛排 · 意面 · BBQ 烤肋排", ja: "洋食・ピザ・ステーキ・パスタ・BBQリブ" } },
 ];
 
 window.T = {

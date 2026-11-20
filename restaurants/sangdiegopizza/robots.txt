@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sangdiegopizza.qrmenuasia.com/sitemap.xml
