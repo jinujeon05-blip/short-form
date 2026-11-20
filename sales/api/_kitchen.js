@@ -110,21 +110,26 @@ const tableNorm = (v) => String(v == null ? '' : v).trim().toLowerCase().slice(0
 const clearPath = (shop, table, at = Date.now()) => `${dir(shop)}/${L.dateOf(at)}/c-${at}-${Buffer.from(tableNorm(table), 'utf8').toString('hex')}.clr`;
 
 // 테이블 배치도. 주방 화면 '배치 편집'에서 저장, 모든 주방 기기가 같이 본다.
-const KINDS = ['table', 'kitchen', 'counter', 'wc', 'door', 'stairs', 'wall', 'plant', 'plant2', 'plant3', 'sofa', 'bar', 'fridge', 'cook', 'divwood', 'divglass', 'swing', 'slide', 'trash'];
+const KINDS = ['table', 'kitchen', 'counter', 'wc', 'door', 'stairs', 'wall', 'plant', 'plant2', 'plant3', 'sofa', 'bar', 'fridge', 'cook', 'divwood', 'divglass', 'swing', 'slide', 'trash',
+  // 게임풍 2.5D 그림 장식(2026-11-20, sales/kitchen/floor-icons.js ARTS와 같은 이름)
+  'akitchen', 'apos', 'apickup', 'aselfbar', 'abanchan', 'acoffee', 'adrinkfridge', 'ashowcase', 'aselffridge', 'abarstool', 'abench', 'awaiting',
+  'amat', 'aglassdoor', 'aautodoor', 'awindow', 'apartition', 'astairs2', 'arestroom', 'amonstera', 'aaircon', 'atv', 'arug'];
 const SHAPES = ['round', 'square', 'rect'];
+const TSTYLES = ['wood4', 'cafe2', 'bbq', 'bbq2', 'group6', 'booth', 'floor', 'plastic', 'parasol']; // 테이블 그림(floor-icons.js TSTYLES)
+const FLOORS = ['wood', 'check', 'beige']; // 구역 바닥 무늬
 function cleanLayout(v) {
   if (!v || typeof v !== 'object') return null;
   const str = (x, n) => (typeof x === 'string' ? x.replace(/[\x00-\x1f]/g, ' ').trim().slice(0, n) : '');
   const num = (x, lo, hi) => Math.min(hi, Math.max(lo, Math.round(Number(x) || 0)));
   const zones = (Array.isArray(v.zones) ? v.zones : []).slice(0, 8)
-    .map((z) => ({ id: str(z && z.id, 8).replace(/[^a-z0-9]/gi, ''), name: str(z && z.name, 20) }))
+    .map((z) => ({ id: str(z && z.id, 8).replace(/[^a-z0-9]/gi, ''), name: str(z && z.name, 20), ...(z && FLOORS.includes(z.bg) ? { bg: z.bg } : {}) }))
     .filter((z, i, a) => z.id && a.findIndex((y) => y.id === z.id) === i);
   if (!zones.length) return null;
   const zid = new Set(zones.map((z) => z.id));
   const items = (Array.isArray(v.items) ? v.items : []).slice(0, 200).filter((x) => x && KINDS.includes(x.k) && zid.has(x.z)).map((x) => {
     const o = { id: str(x.id, 12).replace(/[^a-z0-9]/gi, '') || S.rand(3), k: x.k, z: x.z, x: num(x.x, 0, 2000), y: num(x.y, 0, 2000), w: num(x.w, 10, 1000), h: num(x.h, 10, 1000), name: str(x.name, 12) };
     if (x.k === 'swing' && x.f) o.f = num(x.f, 0, 7);
-    if (x.k === 'table') { o.shape = SHAPES.includes(x.shape) ? x.shape : 'square'; o.seats = num(x.seats, 0, 16); }
+    if (x.k === 'table') { o.shape = SHAPES.includes(x.shape) ? x.shape : 'square'; o.seats = num(x.seats, 0, 16); if (TSTYLES.includes(x.st)) o.st = x.st; if (x.rv) o.rv = 1; }
     return o;
   });
   return { v: 1, zones, items };

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 110" width="120" height="110">
+  <defs>
+    <linearGradient id="fr_body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#CFD8DC"/>
+    </linearGradient>
+    <linearGradient id="fr_glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E1F5FE" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#81D4FA" stop-opacity="0.35"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="18" width="92" height="84" rx="12" fill="#3E2723" opacity="0.18"/>
+  <rect x="12" y="24" width="96" height="74" rx="12" fill="#78909C" stroke="#3E2723" stroke-width="3"/>
+  <rect x="12" y="10" width="96" height="62" rx="12" fill="url(#fr_body)" stroke="#3E2723" stroke-width="3"/>
+  <rect x="20" y="18" width="80" height="46" rx="7" fill="#37474F" stroke="#3E2723" stroke-width="2.2"/>
+  <circle cx="32" cy="30" r="6" fill="#EF5350" stroke="#3E2723" stroke-width="1.6"/>
+  <circle cx="48" cy="30" r="6" fill="#FFA726" stroke="#3E2723" stroke-width="1.6"/>
+  <circle cx="64" cy="30" r="6" fill="#66BB6A" stroke="#3E2723" stroke-width="1.6"/>
+  <circle cx="80" cy="30" r="6" fill="#29B6F6" stroke="#3E2723" stroke-width="1.6"/>
+  <circle cx="32" cy="49" r="6" fill="#FFEE58" stroke="#3E2723" stroke-width="1.6"/>
+  <circle cx="48" cy="49" r="6" fill="#AB47BC" stroke="#3E2723" stroke-width="1.6"/>
+  <circle cx="64" cy="49" r="6" fill="#EF5350" stroke="#3E2723" stroke-width="1.6"/>
+  <circle cx="80" cy="49" r="6" fill="#26A69A" stroke="#3E2723" stroke-width="1.6"/>
+  <rect x="20" y="18" width="80" height="46" rx="7" fill="url(#fr_glass)"/>
+  <path d="M26 24 L40 24 L26 38 Z" fill="#FFFFFF" opacity="0.6"/>
+  <rect x="44" y="76" width="32" height="6" rx="3" fill="#ECEFF1" stroke="#3E2723" stroke-width="1.8"/>
+</svg>

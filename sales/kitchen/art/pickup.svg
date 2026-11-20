@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 110" width="210" height="110">
+  <defs>
+    <linearGradient id="p2_pk_top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFF3E0"/>
+      <stop offset="100%" stop-color="#FFE0B2"/>
+    </linearGradient>
+    <linearGradient id="p2_pk_front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF8A65"/>
+      <stop offset="100%" stop-color="#D84315"/>
+    </linearGradient>
+  </defs>
+  <rect x="14" y="24" width="186" height="76" rx="13" fill="#3E2723" opacity="0.18"/>
+  <rect x="10" y="34" width="190" height="62" rx="12" fill="url(#p2_pk_front)" stroke="#3E2723" stroke-width="3"/>
+  <rect x="10" y="14" width="190" height="52" rx="12" fill="url(#p2_pk_top)" stroke="#3E2723" stroke-width="3"/>
+  <rect x="24" y="22" width="58" height="36" rx="6" fill="#5D4037" stroke="#3E2723" stroke-width="2.2"/>
+  <circle cx="43" cy="40" r="11" fill="#FFFFFF" stroke="#3E2723" stroke-width="1.8"/>
+  <circle cx="43" cy="40" r="7" fill="#FFAB40"/>
+  <circle cx="67" cy="34" r="6" fill="#4FC3F7" stroke="#3E2723" stroke-width="1.6"/>
+  <circle cx="67" cy="48" r="5" fill="#FFF8EE" stroke="#3E2723" stroke-width="1.6"/>
+  <rect x="94" y="22" width="52" height="36" rx="6" fill="#8D6E63" stroke="#3E2723" stroke-width="2.2"/>
+  <rect x="100" y="27" width="40" height="26" rx="3" fill="#FFF8EE" opacity="0.5"/>
+  <circle cx="172" cy="40" r="12" fill="#FFD54F" stroke="#3E2723" stroke-width="2.4"/>
+  <circle cx="172" cy="39" r="5" fill="#FFF8E1" stroke="#3E2723" stroke-width="1.6"/>
+</svg>

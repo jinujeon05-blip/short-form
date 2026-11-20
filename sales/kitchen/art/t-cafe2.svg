@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 140" width="170" height="140">
+  <defs>
+    <linearGradient id="t2_wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F0C086"/>
+      <stop offset="100%" stop-color="#D49553"/>
+    </linearGradient>
+    <linearGradient id="t2_cushion" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFAB91"/>
+      <stop offset="100%" stop-color="#E57373"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="85" cy="84" rx="68" ry="42" fill="#3E2723" opacity="0.16"/>
+  <g>
+    <circle cx="28" cy="76" r="18" fill="#8D4E2A" stroke="#3E2723" stroke-width="2.5"/>
+    <circle cx="28" cy="70" r="17" fill="url(#t2_cushion)" stroke="#3E2723" stroke-width="2.5"/>
+    <path d="M19 63 A11 11 0 0 1 35 61" stroke="#FFF8EE" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.55"/>
+  </g>
+  <g>
+    <circle cx="142" cy="76" r="18" fill="#8D4E2A" stroke="#3E2723" stroke-width="2.5"/>
+    <circle cx="142" cy="70" r="17" fill="url(#t2_cushion)" stroke="#3E2723" stroke-width="2.5"/>
+    <path d="M133 63 A11 11 0 0 1 149 61" stroke="#FFF8EE" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.55"/>
+  </g>
+  <circle cx="85" cy="76" r="42" fill="#9E622B" stroke="#3E2723" stroke-width="3"/>
+  <circle cx="85" cy="67" r="42" fill="url(#t2_wood)" stroke="#3E2723" stroke-width="3"/>
+  <circle cx="85" cy="67" r="35" fill="none" stroke="#B67638" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.6"/>
+  <path d="M58 45 A34 34 0 0 1 112 45" stroke="#FFF8EE" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.55"/>
+</svg>

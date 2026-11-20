@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="p3_pl_top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <linearGradient id="p3_pl_stool" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FB7185"/>
+      <stop offset="100%" stop-color="#E11D48"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="60" cy="66" rx="48" ry="42" fill="#2C3440" opacity="0.2"/>
+  <g>
+    <rect x="49" y="10" width="22" height="19" rx="5" fill="#9F1239" stroke="#2C3440" stroke-width="2.2"/>
+    <rect x="49" y="7" width="22" height="17" rx="5" fill="url(#p3_pl_stool)" stroke="#2C3440" stroke-width="2.2"/>
+    <rect x="56" y="13" width="8" height="4" rx="2" fill="#881337"/>
+  </g>
+  <g>
+    <rect x="49" y="95" width="22" height="19" rx="5" fill="#9F1239" stroke="#2C3440" stroke-width="2.2"/>
+    <rect x="49" y="91" width="22" height="17" rx="5" fill="url(#p3_pl_stool)" stroke="#2C3440" stroke-width="2.2"/>
+    <rect x="56" y="97" width="8" height="4" rx="2" fill="#881337"/>
+  </g>
+  <g>
+    <rect x="7" y="51" width="19" height="22" rx="5" fill="#9F1239" stroke="#2C3440" stroke-width="2.2"/>
+    <rect x="7" y="48" width="19" height="20" rx="5" fill="url(#p3_pl_stool)" stroke="#2C3440" stroke-width="2.2"/>
+    <rect x="14" y="54" width="4" height="8" rx="2" fill="#881337"/>
+  </g>
+  <g>
+    <rect x="94" y="51" width="19" height="22" rx="5" fill="#9F1239" stroke="#2C3440" stroke-width="2.2"/>
+    <rect x="94" y="48" width="19" height="20" rx="5" fill="url(#p3_pl_stool)" stroke="#2C3440" stroke-width="2.2"/>
+    <rect x="102" y="54" width="4" height="8" rx="2" fill="#881337"/>
+  </g>
+  <rect x="30" y="34" width="60" height="58" rx="10" fill="#0369A1" stroke="#2C3440" stroke-width="2.8"/>
+  <rect x="30" y="27" width="60" height="56" rx="10" fill="url(#p3_pl_top)" stroke="#2C3440" stroke-width="2.8"/>
+  <rect x="36" y="33" width="48" height="44" rx="6" fill="none" stroke="#7DD3FC" stroke-width="1.8" opacity="0.7"/>
+  <path d="M38 31 H74" stroke="#E0F2FE" stroke-width="2.4" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="60" cy="55" r="4.5" fill="#0284C7" stroke="#E0F2FE" stroke-width="1.5"/>
+</svg>

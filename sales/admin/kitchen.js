@@ -74,7 +74,7 @@
         <div class="card"><h2 style="margin:0 0 6px;font-size:16px">② 주방 기기 연결</h2>
           <p style="font-size:13px;margin:0 0 8px;color:var(--muted)">주방 태블릿·폰에서 아래 주소를 열고 PIN 6자리를 넣으면 끝이에요. 앱 설치는 필요 없어요(프린터를 쓰면 RawBT 앱만).</p>
           <div class="copy">${esc(kurl)}</div>
-          <div class="tg" style="margin-top:0"><button class="btn" data-k="copyk">주소 복사</button><a class="btn" href="${esc(kurl)}" target="_blank" rel="noopener">열어 보기</a><button class="btn primary" data-k="pin">${data.hasPin ? 'PIN 새로 만들기' : 'PIN 만들기'}</button><button class="btn" data-k="logout">모든 기기 로그아웃</button></div>
+          <div class="tg" style="margin-top:0"><button class="btn" data-k="copyk">주소 복사</button><a class="btn" href="${esc(kurl)}" target="_blank" rel="noopener">열어 보기</a><button class="btn primary" data-k="pin">${data.hasPin ? 'PIN 새로 만들기' : 'PIN 만들기'}</button><button class="btn" data-k="logout">모든 기기 로그아웃</button><button class="btn" data-k="floor" title="점주 PIN 없이 이 가게 테이블 배치도를 고쳐요(2시간, 이 창에만)">✎ 배치 편집</button></div>
           <div class="scroll" style="margin-top:10px"><table><thead><tr><th>기기</th><th>종류</th><th>프린터</th><th>마지막 신호</th></tr></thead><tbody>${data.devices.map((d) => `<tr style="cursor:default"><td class="name"><span class="dot ${Date.now() - d.at < 12 * 60e3 ? 'on' : ''}"></span> ${esc(d.name || '이름 없음')}</td><td>${devKind(d.ua || '')}</td><td>${esc({ rawbt: 'RawBT', browser: '브라우저', none: '없음' }[d.printer] || '–')}</td><td class="num">${fmtT(d.at)}</td></tr>`).join('') || '<tr><td colspan="4" class="zero">아직 연결된 기기가 없어요</td></tr>'}</tbody></table></div>
         </div>
       </div>
@@ -113,6 +113,12 @@
         const m = modal(`<h2 style="margin-top:0">주방 PIN</h2><p style="font-size:14px">이 창을 닫으면 다시 볼 수 없어요. 주방 직원에게 아래 문구를 보내 주세요.</p><div class="copy" style="font-size:20px;text-align:center;letter-spacing:6px">${j.pin}</div><div class="copy">${esc(msg)}</div><button class="btn primary" data-c="1">문구 복사</button>`);
         m.querySelector('[data-c]').onclick = (ev) => copy(msg, ev.target);
         load(shop);
+      } else if (a === 'floor') {
+        // 팝업 막힘을 피하려고 창부터 열고 열쇠를 받은 뒤 주소를 넣는다. 열쇠는 # 뒤에 둬서 서버 기록에 남지 않게 한다
+        const w = window.open('', '_blank');
+        let j; try { j = await api('k-floor', {}); } catch (er) { if (w) w.close(); throw er; }
+        const url = `/kitchen/?shop=${encodeURIComponent(shop)}#op=${encodeURIComponent(j.token)}`;
+        if (w) w.location.href = url; else location.href = url;
       } else if (a === 'logout') {
         if (!confirm('이 가게의 모든 주방 기기를 로그아웃할까요? (PIN은 그대로)')) return;
         await api('k-logout', {}); load(shop);

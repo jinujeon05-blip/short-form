@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 100" width="150" height="100">
+  <defs>
+    <linearGradient id="ent_mat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D79E63"/>
+      <stop offset="100%" stop-color="#B57B42"/>
+    </linearGradient>
+  </defs>
+  <rect x="29" y="42" width="96" height="48" rx="9" fill="#3E2723" opacity="0.16"/>
+  <rect x="26" y="42" width="98" height="44" rx="8" fill="#8D5A2B" stroke="#3E2723" stroke-width="2.5"/>
+  <rect x="26" y="38" width="98" height="42" rx="8" fill="url(#ent_mat)" stroke="#3E2723" stroke-width="2.5"/>
+  <rect x="33" y="44" width="84" height="30" rx="5" fill="none" stroke="#FFF3E0" stroke-width="1.8" stroke-dasharray="5 3" opacity="0.8"/>
+  <text x="75" y="64" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="900" letter-spacing="1" fill="#3E2723">WELCOME</text>
+  <rect x="14" y="10" width="122" height="22" rx="6" fill="#5D4037" stroke="#3E2723" stroke-width="3"/>
+  <rect x="24" y="14" width="48" height="14" rx="3" fill="#B3E5FC" stroke="#3E2723" stroke-width="2"/>
+  <rect x="78" y="14" width="48" height="14" rx="3" fill="#B3E5FC" stroke="#3E2723" stroke-width="2"/>
+  <circle cx="66" cy="21" r="3" fill="#FFD54F" stroke="#3E2723" stroke-width="1.5"/>
+  <circle cx="84" cy="21" r="3" fill="#FFD54F" stroke="#3E2723" stroke-width="1.5"/>
+</svg>

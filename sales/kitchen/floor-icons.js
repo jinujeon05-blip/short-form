@@ -85,6 +85,32 @@
     plant2: { ko: "큰 화분", vi: "Cây lớn", size: [80, 80], g: "p", draw: plant("#8aa0b0", 9, 0.5, 0.09, ["#4e8a3f", "#6fa65a", "#5d9a4b"]) },
     plant3: { ko: "잎 넓은 화분", vi: "Cây lá to", size: [90, 90], g: "p", draw: plant("#5f8fa8", 5, 0.48, 0.19, ["#3f7d3a", "#4e8a3f"]) },
   };
+  // 게임풍 2.5D 그림(2026-11-20, 캡틴이 준 SVG 묶음 → sales/kitchen/art/*.svg, 글자 배지는 지움). 그림 파일을 <img>로 띄우고 찌그러지지 않게 비율을 지킨다.
+  // [종류, 파일, 한국어, 베트남어, 묶음, 기본 크기, 그림 원래 비율, 이름표 기본 표시]
+  const ARTS = [
+    ["akitchen", "kitchen", "주방 세트", "Bếp (bộ)", "k", [260, 120], [260, 120], 1], ["apos", "pos", "POS 카운터", "Quầy thu ngân", "k", [220, 110], [220, 110], 1],
+    ["apickup", "pickup", "배식구", "Quầy ra món", "k", [210, 110], [210, 110], 1], ["aselfbar", "selfbar", "셀프바", "Quầy tự phục vụ", "k", [220, 115], [220, 115], 1],
+    ["abanchan", "banchan", "반찬 셀프바", "Quầy món phụ", "k", [160, 120], [160, 120], 1], ["acoffee", "coffee", "커피 바", "Quầy cà phê", "k", [160, 120], [160, 120], 0],
+    ["adrinkfridge", "drinkfridge", "음료 냉장고", "Tủ nước", "k", [110, 100], [130, 120], 0], ["ashowcase", "showcase", "주류 쇼케이스", "Tủ bia rượu", "k", [100, 100], [120, 120], 0],
+    ["aselffridge", "selffridge", "셀프 냉장고", "Tủ lạnh tự lấy", "k", [100, 92], [120, 110], 0],
+    ["abarstool", "barstool", "바 테이블·스툴", "Quầy bar + ghế", "s", [230, 120], [230, 120], 0], ["abench", "bench", "웨이팅 의자", "Ghế chờ", "s", [180, 95], [180, 95], 0],
+    ["awaiting", "waiting", "대기석·메뉴판", "Khu chờ + menu", "s", [160, 120], [160, 120], 0],
+    ["amat", "mat", "입구 매트", "Thảm cửa", "d", [130, 87], [150, 100], 0], ["aglassdoor", "glassdoor", "유리문 입구", "Cửa kính", "d", [160, 120], [160, 120], 0],
+    ["aautodoor", "autodoor", "자동문", "Cửa tự động", "d", [180, 120], [180, 120], 0], ["awindow", "window", "통유리 창", "Cửa sổ kính", "d", [220, 80], [220, 80], 0],
+    ["apartition", "partition", "원목 칸막이", "Vách gỗ (đẹp)", "d", [220, 80], [220, 80], 0], ["astairs2", "stairs2", "2층 계단", "Cầu thang lên tầng 2", "d", [120, 154], [140, 180], 1],
+    ["arestroom", "restroom", "화장실 세트", "WC (bộ)", "d", [150, 130], [150, 130], 1],
+    ["amonstera", "monstera", "몬스테라", "Cây monstera", "p", [80, 80], [110, 110], 0], ["aaircon", "aircon", "에어컨", "Máy lạnh", "p", [70, 70], [110, 110], 0],
+    ["atv", "tv", "벽걸이 TV", "TV treo tường", "p", [120, 90], [160, 120], 0], ["arug", "rug", "러그(카펫)", "Thảm", "p", [260, 173], [210, 140], 0],
+  ];
+  for (const [k, art, ko, vi, g, size, nat, label] of ARTS) K[k] = { ko, vi, g, size, art, nat, label: !!label };
+  // 테이블 그림 모양(의자가 그림에 들어 있음). 기본(나무 상판 + 의자)은 그대로 두고 고를 수만 있게 추가
+  const TSTYLES = {
+    wood4: { ko: "원목 4인", vi: "Gỗ 4 người", size: [150, 150], nat: [180, 180] }, cafe2: { ko: "카페 2인", vi: "Cà phê 2 người", size: [150, 124], nat: [170, 140] },
+    bbq: { ko: "불판 원형", vi: "Bếp nướng tròn", size: [150, 150], nat: [180, 180] }, bbq2: { ko: "불판 네모", vi: "Bếp nướng vuông", size: [140, 140], nat: [120, 120] },
+    group6: { ko: "6인 단체석", vi: "Bàn 6 người", size: [240, 160], nat: [240, 160] }, booth: { ko: "소파 부스석", vi: "Bàn sofa", size: [210, 150], nat: [210, 150] },
+    floor: { ko: "좌식", vi: "Bàn ngồi bệt", size: [140, 140], nat: [120, 120] }, plastic: { ko: "야외 플라스틱", vi: "Bàn nhựa vỉa hè", size: [130, 130], nat: [120, 120] },
+    parasol: { ko: "파라솔", vi: "Bàn dù ngoài trời", size: [160, 160], nat: [180, 180] },
+  };
   const GROUPS = [
     { id: "k", ko: "주방·카운터", vi: "Bếp · Quầy" },
     { id: "s", ko: "좌석·가구", vi: "Chỗ ngồi · Nội thất" },
@@ -92,7 +118,13 @@
     { id: "p", ko: "식물·소품", vi: "Cây · Đồ nhỏ" },
   ];
   window.QKIcons = {
-    kinds: K, groups: GROUPS,
+    kinds: K, groups: GROUPS, tstyles: TSTYLES,
+    // 그림 파일 <img>: 놓인 방향(가로·세로)이 그림 원래 방향과 다르면 90도 돌린다
+    art: (file, w, h, nat) => {
+      const turn = nat && Math.abs(nat[0] - nat[1]) > 8 && (w >= h) !== (nat[0] >= nat[1]);
+      return turn ? `<img class="art" src="/kitchen/art/${file}.svg" alt="" draggable="false" style="width:${n((h / w) * 100)}%;height:${n((w / h) * 100)}%;left:${n((100 - (h / w) * 100) / 2)}%;top:${n((100 - (w / h) * 100) / 2)}%;transform:rotate(90deg)">`
+        : `<img class="art" src="/kitchen/art/${file}.svg" alt="" draggable="false">`;
+    },
     // f: 여닫이 문 방향(아래 두 자리 = 90도씩 돌림, 4 = 좌우 뒤집기). 가운데를 기준으로 돌린다
     svg: (k, w, h, f) => { if (!K[k]) return ""; let g = K[k].draw(w, h); f = f | 0; if (f) { const cx = n(w / 2), cy = n(h / 2); g = `<g transform="rotate(${(f & 3) * 90} ${cx} ${cy})${f & 4 ? ` translate(${n(w)},0) scale(-1,1)` : ""}">${g}</g>`; } return `<svg class="ic" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${g}</svg>`; },
   };

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <radialGradient id="p2_para_shd" cx="50%" cy="50%" r="50%">
+      <stop offset="60%" stop-color="#3E2723" stop-opacity="0.24"/>
+      <stop offset="100%" stop-color="#3E2723" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="96" cy="100" r="72" fill="url(#p2_para_shd)"/>
+  <circle cx="90" cy="24" r="14" fill="#D7CCC8" stroke="#3E2723" stroke-width="2.4"/>
+  <circle cx="90" cy="154" r="14" fill="#D7CCC8" stroke="#3E2723" stroke-width="2.4"/>
+  <circle cx="24" cy="89" r="14" fill="#D7CCC8" stroke="#3E2723" stroke-width="2.4"/>
+  <circle cx="156" cy="89" r="14" fill="#D7CCC8" stroke="#3E2723" stroke-width="2.4"/>
+  <g stroke="#3E2723" stroke-width="2.4" stroke-linejoin="round">
+    <path d="M90 88 L90 26 A62 62 0 0 1 134 44 Z" fill="#FF7043"/>
+    <path d="M90 88 L134 44 A62 62 0 0 1 152 88 Z" fill="#FFF8EE"/>
+    <path d="M90 88 L152 88 A62 62 0 0 1 134 132 Z" fill="#FF7043"/>
+    <path d="M90 88 L134 132 A62 62 0 0 1 90 150 Z" fill="#FFF8EE"/>
+    <path d="M90 88 L90 150 A62 62 0 0 1 46 132 Z" fill="#FF7043"/>
+    <path d="M90 88 L46 132 A62 62 0 0 1 28 88 Z" fill="#FFF8EE"/>
+    <path d="M90 88 L28 88 A62 62 0 0 1 46 44 Z" fill="#FF7043"/>
+    <path d="M90 88 L46 44 A62 62 0 0 1 90 26 Z" fill="#FFF8EE"/>
+  </g>
+  <circle cx="90" cy="88" r="10" fill="#8D4E20" stroke="#3E2723" stroke-width="2.5"/>
+  <circle cx="88" cy="86" r="3" fill="#E8B072"/>
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <linearGradient id="p2_bbq_wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#A66B46"/>
+      <stop offset="100%" stop-color="#7B482B"/>
+    </linearGradient>
+    <radialGradient id="p2_bbq_fire" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF176"/>
+      <stop offset="48%" stop-color="#FF5722"/>
+      <stop offset="100%" stop-color="#B71C1C"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="90" cy="99" rx="72" ry="62" fill="#3E2723" opacity="0.18"/>
+  <g>
+    <circle cx="90" cy="23" r="15" fill="#4E342E" stroke="#3E2723" stroke-width="2.5"/>
+    <circle cx="90" cy="19" r="13" fill="#795548" stroke="#3E2723" stroke-width="2"/>
+  </g>
+  <g>
+    <circle cx="90" cy="159" r="15" fill="#4E342E" stroke="#3E2723" stroke-width="2.5"/>
+    <circle cx="90" cy="154" r="13" fill="#795548" stroke="#3E2723" stroke-width="2"/>
+  </g>
+  <g>
+    <circle cx="22" cy="92" r="15" fill="#4E342E" stroke="#3E2723" stroke-width="2.5"/>
+    <circle cx="22" cy="87" r="13" fill="#795548" stroke="#3E2723" stroke-width="2"/>
+  </g>
+  <g>
+    <circle cx="158" cy="92" r="15" fill="#4E342E" stroke="#3E2723" stroke-width="2.5"/>
+    <circle cx="158" cy="87" r="13" fill="#795548" stroke="#3E2723" stroke-width="2"/>
+  </g>
+  <rect x="40" y="48" width="100" height="92" rx="14" fill="#522D1A" stroke="#3E2723" stroke-width="3"/>
+  <rect x="40" y="38" width="100" height="88" rx="14" fill="url(#p2_bbq_wood)" stroke="#3E2723" stroke-width="3"/>
+  <path d="M52 43 H128" stroke="#E0B596" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+  <circle cx="90" cy="82" r="32" fill="#CFD8DC" stroke="#3E2723" stroke-width="2.5"/>
+  <circle cx="90" cy="82" r="27" fill="#90A4AE" stroke="#546E7A" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <circle cx="90" cy="82" r="23" fill="url(#p2_bbq_fire)"/>
+  <circle cx="90" cy="82" r="23" fill="#26262C" fill-opacity="0.72" stroke="#1E1E24" stroke-width="2.5"/>
+  <line x1="72" y1="73" x2="108" y2="73" stroke="#18181D" stroke-width="3.2" stroke-linecap="round"/>
+  <line x1="69" y1="82" x2="111" y2="82" stroke="#18181D" stroke-width="3.2" stroke-linecap="round"/>
+  <line x1="72" y1="91" x2="108" y2="91" stroke="#18181D" stroke-width="3.2" stroke-linecap="round"/>
+  <circle cx="81" cy="77" r="2.3" fill="#FFAB40"/>
+  <circle cx="98" cy="86" r="2.5" fill="#FF6E40"/>
+  <circle cx="89" cy="87" r="1.8" fill="#FFD740"/>
+</svg>

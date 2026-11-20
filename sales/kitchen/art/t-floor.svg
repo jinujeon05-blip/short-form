@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="p3_fl_wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C88246"/>
+      <stop offset="100%" stop-color="#965624"/>
+    </linearGradient>
+    <linearGradient id="p3_fl_cush" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F87171"/>
+      <stop offset="100%" stop-color="#DC2626"/>
+    </linearGradient>
+  </defs>
+  <rect x="14" y="16" width="92" height="92" rx="18" fill="#3A2A20" opacity="0.16"/>
+  <g>
+    <rect x="22" y="12" width="32" height="24" rx="7" fill="#991B1B" stroke="#3A2A20" stroke-width="2.2"/>
+    <rect x="22" y="9" width="32" height="22" rx="7" fill="url(#p3_fl_cush)" stroke="#3A2A20" stroke-width="2.2"/>
+    <circle cx="38" cy="20" r="2.2" fill="#FEE2E2" stroke="#3A2A20" stroke-width="1.2"/>
+  </g>
+  <g>
+    <rect x="66" y="12" width="32" height="24" rx="7" fill="#991B1B" stroke="#3A2A20" stroke-width="2.2"/>
+    <rect x="66" y="9" width="32" height="22" rx="7" fill="url(#p3_fl_cush)" stroke="#3A2A20" stroke-width="2.2"/>
+    <circle cx="82" cy="20" r="2.2" fill="#FEE2E2" stroke="#3A2A20" stroke-width="1.2"/>
+  </g>
+  <g>
+    <rect x="22" y="88" width="32" height="24" rx="7" fill="#991B1B" stroke="#3A2A20" stroke-width="2.2"/>
+    <rect x="22" y="84" width="32" height="22" rx="7" fill="url(#p3_fl_cush)" stroke="#3A2A20" stroke-width="2.2"/>
+    <circle cx="38" cy="95" r="2.2" fill="#FEE2E2" stroke="#3A2A20" stroke-width="1.2"/>
+  </g>
+  <g>
+    <rect x="66" y="88" width="32" height="24" rx="7" fill="#991B1B" stroke="#3A2A20" stroke-width="2.2"/>
+    <rect x="66" y="84" width="32" height="22" rx="7" fill="url(#p3_fl_cush)" stroke="#3A2A20" stroke-width="2.2"/>
+    <circle cx="82" cy="95" r="2.2" fill="#FEE2E2" stroke="#3A2A20" stroke-width="1.2"/>
+  </g>
+  <rect x="16" y="42" width="88" height="42" rx="8" fill="#6B3A14" stroke="#3A2A20" stroke-width="2.8"/>
+  <rect x="16" y="36" width="88" height="40" rx="8" fill="url(#p3_fl_wood)" stroke="#3A2A20" stroke-width="2.8"/>
+  <rect x="23" y="42" width="74" height="28" rx="4" fill="none" stroke="#E8B072" stroke-width="1.6" opacity="0.65"/>
+  <path d="M24 39 H96" stroke="#FFF3E0" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+</svg>

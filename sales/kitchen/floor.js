@@ -11,6 +11,8 @@
       kitchen: "Bếp", counter: "Quầy", wc: "WC", door: "Lối vào", stairs: "Cầu thang", wall: "Vách", plant: "Cây",
       sEmpty: "Bàn trống", sNew: "Đơn mới", sCook: "Đang làm", sDone: "Đã ra món (đang ăn)", more: "khác", extra: "Bàn chưa có trên sơ đồ",
       hint: "Kéo bàn để di chuyển. Chạm vào bàn để sửa số, hình, số ghế. Xong thì nhấn Lưu.", dirtyQ: "Bỏ các thay đổi chưa lưu?", saved: "Đã lưu sơ đồ", dup: "Số bàn bị trùng: ", saveFail: "Lưu không được – thử lại",
+      style: "Kiểu", st0: "Gỗ cơ bản (tự chọn ghế)", rv: "Bàn đặt trước", bg: "Sàn", bg0: "Cơ bản", bgwood: "Sàn gỗ", bgcheck: "Gạch caro", bgbeige: "Gạch be",
+      lCall: "Gọi nhân viên", lBill: "Gọi tính tiền", lFood: "Đang ăn", lVip: "Đặt trước",
       clear: "🧹 Dọn bàn (khách đã về)", clearQ: "Dọn bàn này? Bàn sẽ trở lại trống.", clearQ2: "Bàn này còn {n} đơn chưa xong. Vẫn dọn bàn?", cleared: "Đã dọn bàn", noOrder: "Chưa có đơn", since: "Từ", close: "Đóng", total: "Tổng",
     },
     ko: {
@@ -20,6 +22,8 @@
       kitchen: "주방", counter: "카운터", wc: "화장실", door: "입구", stairs: "계단", wall: "벽", plant: "화분",
       sEmpty: "빈 자리", sNew: "새 주문", sCook: "만드는 중", sDone: "음식 나감(식사 중)", more: "외", extra: "배치도에 없는 테이블",
       hint: "테이블을 끌어서 옮기세요. 테이블을 누르면 번호·모양·의자 수를 바꿀 수 있어요. 다 되면 저장.", dirtyQ: "저장하지 않은 변경을 버릴까요?", saved: "배치를 저장했어요", dup: "테이블 번호가 겹쳐요: ", saveFail: "저장 실패 – 다시 시도해 주세요",
+      style: "그림", st0: "기본 나무 (의자 수 고르기)", rv: "예약석", bg: "바닥", bg0: "기본", bgwood: "원목 마루", bgcheck: "체커 타일", bgbeige: "베이지 타일",
+      lCall: "직원 호출", lBill: "계산 요청", lFood: "식사 중", lVip: "예약석",
       clear: "🧹 자리 정리 (손님 나감)", clearQ: "이 테이블을 정리할까요? 빈 자리로 돌아가요.", clearQ2: "아직 안 끝난 주문이 {n}건 있어요. 그래도 정리할까요?", cleared: "자리를 정리했어요", noOrder: "주문이 없어요", since: "시작", close: "닫기", total: "합계",
     },
   };
@@ -28,6 +32,16 @@
   const DSIZE = { door: [130, 40], wall: [240, 14] };
   for (const k in IC) DSIZE[k] = IC[k].size;
   const dname = (k, x, lang) => (IC[k] ? IC[k][lang] || IC[k].vi : x[k]);
+  const TS = (window.QKIcons && window.QKIcons.tstyles) || {};
+  const BGS = ["wood", "check", "beige"];
+  const ART = (f) => `/kitchen/art/${f}.svg`;
+  // 바닥 무늬(2026-11-20, 캡틴이 준 SVG 묶음의 원목 마루·체커·베이지 타일). 구역마다 고른다. 기본은 예전 그대로
+  const svgUrl = (s) => `url("data:image/svg+xml,${encodeURIComponent(s)}")`;
+  const BG_CSS = {
+    wood: svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40"><rect width="120" height="20" fill="#DFB37E"/><rect y="20" width="120" height="20" fill="#E6BE8E"/><path d="M0 20H120M0 40H120M60 0V20M115 20V40" stroke="#C5935B" stroke-width="1.5"/><path d="M12 10Q30 7 48 11M70 30Q90 27 108 31" stroke="#D1A16B" fill="none" opacity=".7"/></svg>`),
+    check: svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="#FFF8EE"/><rect width="32" height="32" fill="#E8D8C3"/><rect x="32" y="32" width="32" height="32" fill="#E8D8C3"/></svg>`),
+    beige: svgUrl(`<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="#F3ECE1"/><rect x="2" y="2" width="76" height="76" rx="4" fill="#F7F1E7" stroke="#E2D6C5" stroke-width="1.5"/><circle cx="18" cy="22" r="1.2" fill="#DDD0BE"/><circle cx="58" cy="54" r="1.5" fill="#DDD0BE"/></svg>`),
+  };
   const norm = (v) => String(v == null ? "" : v).trim().toLowerCase().slice(0, 12);
   const rid = () => Math.random().toString(36).slice(2, 8);
   const clone = (o) => JSON.parse(JSON.stringify(o));
@@ -103,6 +117,36 @@
   #vTable .tacts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
   #vTable .tacts .btn { flex: 1; }
   #vTable .clr { background: var(--done); border-color: var(--done); color: #08130a; }
+  /* 게임풍 2.5D 그림(2026-11-20): 장식·테이블 그림, 상태 말풍선, 바닥 무늬 */
+  .it img.art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
+  .it.ia .dk { background: none; border: 0; align-items: flex-end; padding-bottom: 2px; overflow: visible; }
+  .it.ia .dk span { background: rgba(255,248,238,.95); color: #3e2723; border: 2px solid #3e2723; border-radius: 8px; padding: 0 7px; font-size: .8em; white-space: nowrap; }
+  .ftb.art .tbx2 { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.15; pointer-events: none; }
+  .ftb.art .tin { background: #fff8ee; border: 2.5px solid #3e2723; border-radius: 10px; box-shadow: 0 2px 0 rgba(62,39,35,.35); max-width: 78%; }
+  .ftb.art img.art { transition: filter .2s; }
+  .ftb.art .fm { display: none; } /* 그림을 가리지 않게 번호·시간·합계만, 메뉴는 테이블을 누르면 */
+  .ftb.art.s-new .tin { background: #ff5a36; color: #fff; }
+  .ftb.art.s-cooking .tin { background: #f5b100; color: #1d1600; }
+  .ftb.art.s-done .tin { background: #3d7be0; color: #fff; }
+  .fdish { position: relative; flex: none; pointer-events: none; }
+  .ffood { display: block; width: 100%; height: 100%; filter: drop-shadow(0 2px 2px rgba(60,35,15,.3)); }
+  .fno { position: absolute; top: 0; right: 0; z-index: 2; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 11px; background: #fff8ee; border: 2px solid #3e2723; color: #3e2723; font-weight: 900; font-size: 13px; line-height: 18px; text-align: center; }
+  .fsum { position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); z-index: 2; background: #3d7be0; color: #fff; border-radius: 8px; padding: 0 6px; font-weight: 900; font-size: 11px; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
+  .ftb.s-done .tbx { padding: 0; }
+  .ftb.art.s-new img.art { animation: fglow 1s ease-in-out infinite alternate; }
+  .ftb.art.s-cooking img.art { filter: drop-shadow(0 0 3px #f5b100) drop-shadow(0 0 6px #f5b100); }
+  .ftb.art.s-done img.art { filter: drop-shadow(0 0 3px #3d7be0) drop-shadow(0 0 6px #3d7be0); }
+  @keyframes fglow { from { filter: drop-shadow(0 0 2px #ff5a36) drop-shadow(0 0 4px #ff5a36); } to { filter: drop-shadow(0 0 5px #ff5a36) drop-shadow(0 0 12px #ff5a36); } }
+  .fbub { position: absolute; z-index: 4; pointer-events: none; width: var(--b); height: var(--b); filter: drop-shadow(0 3px 3px rgba(40,25,15,.3)); }
+  .fbub.tl { left: calc(var(--b) * -.35); top: calc(var(--b) * -.7); }
+  .fbub.tr { right: calc(var(--b) * -.35); top: calc(var(--b) * -.7); }
+  .fbub.br { right: calc(var(--b) * -.2); bottom: calc(var(--b) * -.25); width: calc(var(--b) * .85); height: calc(var(--b) * .85); }
+  .fbub.tc { left: 50%; top: calc(var(--b) * -.75); margin-left: calc(var(--b) * -.5); }
+  .fbub.bounce { animation: fbounce .9s ease-in-out infinite; }
+  @keyframes fbounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-18%); } }
+  .floor.bg-wood, .floor.bg-check, .floor.bg-beige { box-shadow: inset 0 0 0 7px #4a2e1b, inset 0 0 0 9px rgba(0,0,0,.18); }
+  .flegend img { width: 20px; height: 20px; }
+  @media (prefers-reduced-motion: reduce) { .fbub.bounce, .ftb.art.s-new img.art, .ftb.s-new .tbx { animation: none; } }
   `;
 
   window.QKFloor = { init(ctx) {
@@ -171,6 +215,10 @@
       const fx = isSel ? `<button class="fx" data-fdel="${it.id}">✕</button>` : "";
       if (it.k !== "table") {
         const ic = IC[it.k];
+        if (ic && ic.art) {
+          const nm = it.name || (ic.label ? dname(it.k, x, ctx.lang()) : "");
+          return `<div class="it ia k-${it.k}${isSel ? " sel" : ""}" data-fid="${it.id}" style="${pos}">${QKIcons.art(ic.art, it.w, it.h, ic.nat)}<div class="dk">${nm ? `<span>${esc(nm)}</span>` : ""}</div>${fx}</div>`;
+        }
         if (ic) {
           const nm = it.name || (ic.label ? dname(it.k, x, ctx.lang()) : "");
           return `<div class="it ic k-${it.k}${isSel ? " sel" : ""}" data-fid="${it.id}" style="${pos}">${QKIcons.svg(it.k, it.w, it.h, it.f)}<div class="dk">${nm ? `<span>${esc(nm)}</span>` : ""}</div>${fx}</div>`;
@@ -187,8 +235,25 @@
         body += `<div class="ft">${esc(ctx.ago(sm.first))}</div><div class="fm">${lines}</div><div class="fs">${ctx.money(sm.total, sm.cur)}${sm.market ? "+" : ""}</div>`;
       }
       const pw2 = extra ? 120 : pw, ph2 = extra ? 84 : ph;
-      const bellIcon = !edit && ctx.hasCall && ctx.hasCall(key) ? `<span class="fcall">🔔</span>` : "";
-      return `<div class="it ftb ${it.shape} s-${state}${size}${isSel ? " sel" : ""}" data-fid="${esc(it.id)}" data-ftable="${esc(key)}" style="${pos}">${chairs(it, pw2, ph2, extra ? 0.8 : s)}<div class="tbx"><div class="tin">${body}</div></div>${bellIcon}${fx}</div>`;
+      // 상태 말풍선(2026-11-20): 새 주문 = 빨간 '!'(통통), 직원 호출 = 금색 벨, 계산 요청 = 영수증, 식사 중 = 음식 세트, 빈 예약석 = VIP 팻말
+      const req = edit ? "" : ctx.callOf ? ctx.callOf(key) : ctx.hasCall && ctx.hasCall(key) ? "staff" : "";
+      const bs = `--b:${Math.round(Math.max(30, Math.min(54, 46 * (extra ? 0.8 : s))))}px`;
+      const bub = (f, cls) => `<img class="fbub ${cls}" src="${ART(f)}" alt="" style="${bs}">`;
+      let bubs = "";
+      if (!edit) {
+        if (state === "new") bubs += bub("s-new", (req ? "tl" : "tr") + " bounce");
+        if (req) bubs += bub(req === "bill" ? "s-bill" : "s-call", "tr bounce");
+      }
+      // 식사 중(2026-11-20 캡틴): 음식 세트를 테이블 위 가운데에 올리고, 번호는 모서리 배지·합계는 아래 작은 띠(시간·메뉴는 테이블을 누르면)
+      let inner = `<div class="tin">${body}</div>`;
+      if (state === "done" && !edit) {
+        const fz = Math.round(Math.min(pw2, ph2) * (it.st ? 0.62 : 0.8));
+        inner = `<div class="fdish" style="width:${fz}px;height:${fz}px"><img class="ffood" src="${ART("s-food")}" alt=""><div class="fno">${esc(it.name)}</div></div>${size ? "" : `<div class="fsum">${ctx.money(sm.total, sm.cur)}${sm.market ? "+" : ""}</div>`}`;
+      }
+      if (it.rv && state === "empty") bubs += bub("s-vip", "tc");
+      const ts = !extra && it.st && TS[it.st];
+      if (ts) return `<div class="it ftb art s-${state}${size}${isSel ? " sel" : ""}" data-fid="${esc(it.id)}" data-ftable="${esc(key)}" style="${pos}">${QKIcons.art("t-" + it.st, it.w, it.h, ts.nat)}<div class="tbx2">${inner}</div>${bubs}${fx}</div>`;
+      return `<div class="it ftb ${it.shape} s-${state}${size}${isSel ? " sel" : ""}" data-fid="${esc(it.id)}" data-ftable="${esc(key)}" style="${pos}">${chairs(it, pw2, ph2, extra ? 0.8 : s)}<div class="tbx">${inner}</div>${bubs}${fx}</div>`;
     }
 
     function decorOptions(x) {
@@ -208,7 +273,8 @@
       $("fTool").hidden = !edit; $("fHint").hidden = true;
       if (edit) {
         $("fTool").innerHTML = `<button data-fact="addTable">${x.addTable}</button><select data-fact="addDecor"><option value="">${x.addDecor}</option>${decorOptions(x)}</select>`
-          + `<button data-fact="addZone">${x.addZone}</button><button data-fact="renZone">${x.renZone}</button><button data-fact="delZone">${x.delZone}</button><span class="sp"></span>`
+          + `<button data-fact="addZone">${x.addZone}</button><button data-fact="renZone">${x.renZone}</button><button data-fact="delZone">${x.delZone}</button>`
+          + `<select data-fact="bg" title="${esc(x.bg)}">${["", ...BGS].map((b) => `<option value="${b}"${(L.zones.find((z) => z.id === zone) || {}).bg === b || (!b && !(L.zones.find((z) => z.id === zone) || {}).bg) ? " selected" : ""}>${esc(x.bg)}: ${esc(x["bg" + (b || "0")])}</option>`).join("")}</select><span class="sp"></span>`
           + `<button data-fact="cancel">${x.cancel}</button><button class="pri" data-fact="save">${x.save}</button>`;
       }
       // 선택한 것 설정 줄
@@ -219,23 +285,29 @@
         const sz = `<label>${x.size} <button data-fact="smaller">−</button><button data-fact="bigger">+</button></label><button data-fact="rot">${x.rot}</button>${it.k === "swing" ? `<button data-fact="flip">${x.flip}</button>` : ""}`;
         $("fProp").innerHTML = it.k === "table"
           ? `<label title="${esc(x.nameH)}">${x.name} <input data-fprop="name" maxlength="12" value="${esc(it.name)}"></label>`
-            + `<label>${x.shape} <select data-fprop="shape">${["square", "round", "rect"].map((k) => `<option value="${k}"${it.shape === k ? " selected" : ""}>${x[k]}</option>`).join("")}</select></label>`
-            + `<label>${x.seats} <select data-fprop="seats">${Array.from({ length: 13 }, (_, n) => `<option${it.seats === n ? " selected" : ""}>${n}</option>`).join("")}</select></label>${sz}<button data-fact="copy">${x.copy}</button><button data-fact="del">${x.del}</button>`
+            + `<label>${x.style} <select data-fprop="st"><option value="">${esc(x.st0)}</option>${Object.keys(TS).map((k) => `<option value="${k}"${it.st === k ? " selected" : ""}>${esc(TS[k][ctx.lang()] || TS[k].vi)}</option>`).join("")}</select></label>`
+            + (it.st && TS[it.st] ? "" : `<label>${x.shape} <select data-fprop="shape">${["square", "round", "rect"].map((k) => `<option value="${k}"${it.shape === k ? " selected" : ""}>${x[k]}</option>`).join("")}</select></label>`
+            + `<label>${x.seats} <select data-fprop="seats">${Array.from({ length: 13 }, (_, n) => `<option${it.seats === n ? " selected" : ""}>${n}</option>`).join("")}</select></label>`)
+            + `<label><input type="checkbox" data-fprop="rv"${it.rv ? " checked" : ""}> ${x.rv}</label>${sz}<button data-fact="copy">${x.copy}</button><button data-fact="del">${x.del}</button>`
           : `${it.k === "wall" ? "" : `<label>${x.dname} <input data-fprop="name" maxlength="12" placeholder="${esc(dname(it.k, x, ctx.lang()))}" value="${esc(it.name)}"></label>`}${sz}<button data-fact="del">${x.del}</button>`;
       }
       // 바닥
-      const items = L.items.filter((i) => i.z === zone);
+      // 러그는 맨 아래에 깔리게 먼저 그린다
+      const items = L.items.filter((i) => i.z === zone).sort((a, b) => (b.k === "arug") - (a.k === "arug"));
+      const zbg = (L.zones.find((z) => z.id === zone) || {}).bg;
       const hU = Math.max(H0, ...items.map((i) => i.y + i.h + 40));
       const wrapW = $("fWrap").clientWidth || 360;
       scale = Math.max(0.62, Math.min(1.35, (wrapW - 4) / W));
       const fl = $("fFloor");
-      fl.className = "floor" + (edit ? " ed" : "");
+      fl.className = "floor" + (edit ? " ed" : "") + (BG_CSS[zbg] ? " bg-" + zbg : "");
+      fl.style.backgroundImage = BG_CSS[zbg] || "";
       $("fView").classList.toggle("ed", edit);
       fl.style.width = W * scale + "px"; fl.style.height = hU * scale + "px";
       fl.style.fontSize = Math.max(11, Math.round(15 * Math.min(scale, 1.1))) + "px";
       fl.innerHTML = items.map((i) => itemHtml(i, scale, edit)).join("");
       // 범례
-      $("fLegend").innerHTML = [["#c8915f;border:2px solid #6e4527", x.sEmpty], ["#ff5a36", x.sNew], ["#f5b100", x.sCook], ["#3d7be0", x.sDone]].map(([c, n]) => `<span><i style="background:${c}"></i>${esc(n)}</span>`).join("");
+      $("fLegend").innerHTML = [["#c8915f;border:2px solid #6e4527", x.sEmpty], ["#ff5a36", x.sNew], ["#f5b100", x.sCook], ["#3d7be0", x.sDone]].map(([c, n]) => `<span><i style="background:${c}"></i>${esc(n)}</span>`).join("")
+        + [["s-new", x.sNew], ["s-call", x.lCall], ["s-bill", x.lBill], ["s-food", x.lFood], ["s-vip", x.lVip]].map(([f, n]) => `<span><img src="${ART(f)}" alt="">${esc(n)}</span>`).join("");
       // 배치도에 없는 테이블(주문은 있는데 배치도 번호와 안 맞음)
       const known = new Set(L.items.filter((i) => i.k === "table").map((i) => norm(i.name))), extra = new Set();
       if (!edit) for (const [, o] of ctx.orders) { const k = norm(o.data.table); if (!known.has(k) && active(k).length) extra.add(k); }
@@ -309,6 +381,7 @@
         if (!confirm(x.delZoneQ)) return;
         draft.zones = draft.zones.filter((q) => q.id !== zone); draft.items = draft.items.filter((i) => i.z !== zone); zone = draft.zones[0].id; sel = ""; return change();
       }
+      if (a === "bg") { const z = draft.zones.find((q) => q.id === zone); if (z) { if (BGS.includes(el.value)) z.bg = el.value; else delete z.bg; } return change(); }
       if (a === "cancel") { if (dirty && !confirm(x.dirtyQ)) return; return endEdit(); }
       if (a === "save") return save();
       if (!it) return;
@@ -323,7 +396,7 @@
         // 줄일 때 최솟값 때문에 오히려 커지지 않게, 최솟값은 지금 크기보다 크지 않게(2026-11-16 진미 유리 칸막이 건)
         const f = a === "bigger" ? 1.15 : 1 / 1.15, mx = it.k === "wall" ? 1000 : 600;
         const sn = (v) => Math.max(Math.min(40, v), Math.min(mx, Math.round((v * f) / SNAP) * SNAP));
-        const long = it.k !== "table" && Math.max(it.w, it.h) >= 3 * Math.min(it.w, it.h);
+        const long = it.k !== "table" && !(IC[it.k] && IC[it.k].art) && Math.max(it.w, it.h) >= 3 * Math.min(it.w, it.h);
         if (long) { if (it.w >= it.h) it.w = sn(it.w); else it.h = sn(it.h); }
         else { it.w = sn(it.w); it.h = sn(it.h); }
         it.x = Math.min(it.x, W - it.w); return change();
@@ -378,6 +451,12 @@
       const k = p.dataset.fprop, v = p.value;
       if (k === "name") it.name = v.trim().slice(0, 12);
       else if (k === "seats") it.seats = Number(v) || 0;
+      else if (k === "rv") { if (p.checked) it.rv = 1; else delete it.rv; }
+      else if (k === "st") {
+        if (TS[v]) { it.st = v; [it.w, it.h] = TS[v].size; }
+        else if (it.st) { delete it.st; it.w = 120; it.h = 100; it.shape = "square"; }
+        it.x = Math.min(it.x, W - it.w);
+      }
       else if (k === "shape") { it.shape = v; if (v === "round") { const m = Math.max(it.w, it.h); it.w = it.h = Math.min(m, 200); } else if (v === "rect" && it.w < it.h * 1.6) it.w = Math.min(W, Math.round((it.h * 1.8) / SNAP) * SNAP); }
       change();
     });

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="p3_cs_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFE082"/>
+      <stop offset="100%" stop-color="#FFB300"/>
+    </linearGradient>
+    <linearGradient id="p3_cs_bell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFF59D"/>
+      <stop offset="100%" stop-color="#F57F17"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="60" cy="107" rx="28" ry="7" fill="#3A2A20" opacity="0.24"/>
+  <path d="M60 22 C33 22 18 37 18 57 C18 71 27 83 43 87 L52 103 L66 88 C88 86 102 74 102 57 C102 37 87 22 60 22 Z" fill="#C77800" stroke="#3A2A20" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M60 15 C33 15 18 30 18 50 C18 64 27 76 43 80 L52 96 L66 81 C88 79 102 67 102 50 C102 30 87 15 60 15 Z" fill="url(#p3_cs_bg)" stroke="#3A2A20" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M34 26 C44 20 62 19 76 23" fill="none" stroke="#FFFDE7" stroke-width="3.8" stroke-linecap="round" opacity="0.85"/>
+  <path d="M31 44 C28 49 28 56 31 61" fill="none" stroke="#3A2A20" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M89 44 C92 49 92 56 89 61" fill="none" stroke="#3A2A20" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M37 36 L33 32 M83 36 L87 32" stroke="#3A2A20" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="55" y="31" width="10" height="5" rx="2.5" fill="#FFF8E1" stroke="#3A2A20" stroke-width="2.5"/>
+  <rect x="58" y="36" width="4" height="4" fill="#3A2A20"/>
+  <path d="M39 62 C39 47 47 39 60 39 C73 39 81 47 81 62 Z" fill="url(#p3_cs_bell)" stroke="#3A2A20" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M47 54 C48 47 52 44 57 43" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+  <rect x="35" y="61" width="50" height="8" rx="4" fill="#5D4037" stroke="#3A2A20" stroke-width="2.8"/>
+</svg>

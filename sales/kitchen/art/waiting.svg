@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120">
+  <defs>
+    <linearGradient id="p3_wa_cush" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5EEAD4"/>
+      <stop offset="100%" stop-color="#14B8A6"/>
+    </linearGradient>
+  </defs>
+  <rect x="12" y="42" width="90" height="52" rx="12" fill="#3A2A20" opacity="0.2"/>
+  <ellipse cx="130" cy="76" rx="22" ry="26" fill="#3A2A20" opacity="0.2"/>
+  <rect x="10" y="46" width="90" height="42" rx="10" fill="#7C441E" stroke="#3A2A20" stroke-width="2.8"/>
+  <rect x="10" y="28" width="90" height="14" rx="6" fill="#B8743B" stroke="#3A2A20" stroke-width="2.6"/>
+  <rect x="16" y="40" width="78" height="34" rx="8" fill="url(#p3_wa_cush)" stroke="#3A2A20" stroke-width="2.4"/>
+  <line x1="42" y1="42" x2="42" y2="72" stroke="#0F766E" stroke-width="1.8" opacity="0.6"/>
+  <line x1="68" y1="42" x2="68" y2="72" stroke="#0F766E" stroke-width="1.8" opacity="0.6"/>
+  <circle cx="29" cy="57" r="2.4" fill="#0F766E"/>
+  <circle cx="55" cy="57" r="2.4" fill="#0F766E"/>
+  <circle cx="81" cy="57" r="2.4" fill="#0F766E"/>
+  <rect x="112" y="28" width="36" height="12" rx="4" fill="#8C4E1C" stroke="#3A2A20" stroke-width="2.2"/>
+  <rect x="108" y="34" width="44" height="54" rx="7" fill="#D4955A" stroke="#3A2A20" stroke-width="2.6"/>
+  <rect x="113" y="40" width="34" height="42" rx="4" fill="#1E293B" stroke="#3A2A20" stroke-width="1.8"/>
+  <text x="130" y="52" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" font-weight="900" fill="#FDE047">MENU</text>
+  <line x1="118" y1="60" x2="142" y2="60" stroke="#F8FAFC" stroke-width="2" stroke-linecap="round"/>
+  <line x1="118" y1="68" x2="138" y2="68" stroke="#FCA5A5" stroke-width="2" stroke-linecap="round"/>
+  <line x1="118" y1="76" x2="134" y2="76" stroke="#86EFAC" stroke-width="2" stroke-linecap="round"/>
+</svg>

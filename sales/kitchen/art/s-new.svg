@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="p3_no_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF7043"/>
+      <stop offset="100%" stop-color="#E53935"/>
+    </linearGradient>
+    <linearGradient id="p3_no_depth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C62828"/>
+      <stop offset="100%" stop-color="#8E1616"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="60" cy="107" rx="28" ry="7" fill="#3A2A20" opacity="0.24"/>
+  <path d="M60 22 C33 22 18 37 18 57 C18 71 27 83 43 87 L52 103 L66 88 C88 86 102 74 102 57 C102 37 87 22 60 22 Z" fill="url(#p3_no_depth)" stroke="#3A2A20" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M60 15 C33 15 18 30 18 50 C18 64 27 76 43 80 L52 96 L66 81 C88 79 102 67 102 50 C102 30 87 15 60 15 Z" fill="url(#p3_no_bg)" stroke="#3A2A20" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M34 27 C44 20 62 19 76 23" fill="none" stroke="#FFCCBC" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+  <rect x="53.5" y="29" width="13" height="27" rx="6.5" fill="#FFFFFF" stroke="#3A2A20" stroke-width="3"/>
+  <circle cx="60" cy="67" r="7" fill="#FFFFFF" stroke="#3A2A20" stroke-width="3"/>
+  <path d="M97 18 L99.5 24 L105.5 26.5 L99.5 29 L97 35 L94.5 29 L88.5 26.5 L94.5 24 Z" fill="#FFE082" stroke="#3A2A20" stroke-width="1.8" stroke-linejoin="round"/>
+  <circle cx="24" cy="24" r="3.5" fill="#FFF59D" stroke="#3A2A20" stroke-width="1.5"/>
+</svg>

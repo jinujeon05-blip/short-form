@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <linearGradient id="t4_woodTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E5A968"/>
+      <stop offset="100%" stop-color="#C98340"/>
+    </linearGradient>
+    <linearGradient id="t4_chair" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#B56E37"/>
+      <stop offset="100%" stop-color="#8C4F23"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="90" cy="100" rx="68" ry="60" fill="#3E2723" opacity="0.16"/>
+  <g>
+    <rect x="68" y="14" width="44" height="24" rx="7" fill="#7D441D" stroke="#3E2723" stroke-width="2.5"/>
+    <rect x="68" y="10" width="44" height="18" rx="6" fill="url(#t4_chair)" stroke="#3E2723" stroke-width="2.5"/>
+    <rect x="74" y="13" width="32" height="5" rx="2.5" fill="#F2C694" opacity="0.45"/>
+  </g>
+  <g>
+    <rect x="68" y="144" width="44" height="24" rx="7" fill="#6B3816" stroke="#3E2723" stroke-width="2.5"/>
+    <rect x="68" y="138" width="44" height="20" rx="6" fill="url(#t4_chair)" stroke="#3E2723" stroke-width="2.5"/>
+    <rect x="73" y="149" width="34" height="6" rx="3" fill="#5D3013"/>
+  </g>
+  <g>
+    <rect x="12" y="72" width="24" height="44" rx="7" fill="#6B3816" stroke="#3E2723" stroke-width="2.5"/>
+    <rect x="12" y="66" width="24" height="42" rx="6" fill="url(#t4_chair)" stroke="#3E2723" stroke-width="2.5"/>
+    <rect x="15" y="71" width="6" height="32" rx="3" fill="#F2C694" opacity="0.4"/>
+  </g>
+  <g>
+    <rect x="144" y="72" width="24" height="44" rx="7" fill="#6B3816" stroke="#3E2723" stroke-width="2.5"/>
+    <rect x="144" y="66" width="24" height="42" rx="6" fill="url(#t4_chair)" stroke="#3E2723" stroke-width="2.5"/>
+    <rect x="159" y="71" width="6" height="32" rx="3" fill="#5D3013" opacity="0.6"/>
+  </g>
+  <rect x="42" y="48" width="96" height="92" rx="14" fill="#8C4E1C" stroke="#3E2723" stroke-width="3"/>
+  <rect x="42" y="38" width="96" height="88" rx="14" fill="url(#t4_woodTop)" stroke="#3E2723" stroke-width="3"/>
+  <path d="M54 43 H126" stroke="#FFF3E0" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+  <line x1="45" y1="62" x2="135" y2="62" stroke="#A66429" stroke-width="1.6" opacity="0.45"/>
+  <line x1="45" y1="84" x2="135" y2="84" stroke="#A66429" stroke-width="1.6" opacity="0.45"/>
+  <line x1="45" y1="106" x2="135" y2="106" stroke="#A66429" stroke-width="1.6" opacity="0.45"/>
+  <path d="M55 52 Q72 49 88 53" stroke="#9C5B24" stroke-width="1.4" fill="none" opacity="0.4"/>
+  <path d="M96 115 Q112 112 124 116" stroke="#9C5B24" stroke-width="1.4" fill="none" opacity="0.4"/>
+</svg>

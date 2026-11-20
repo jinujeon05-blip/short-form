@@ -23,6 +23,7 @@
   .err { color: #ff7b72; min-height: 22px; font-size: 14px; margin-top: 8px; }
   header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--bg); border-bottom: 1px solid var(--line); }
   header h1 { font-size: 17px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  header h1 .opb { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: #ffb020; color: #1a1a1a; vertical-align: 2px; }
   header .sp { flex: 1; }
   .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex: none; }
   .dot.ok { background: var(--done); } .dot.bad { background: var(--new); }
@@ -174,10 +175,17 @@
   const API = "/api/kitchen?action=";
   const K = (k) => "qk_" + shop + "_" + k;
   const get = (k, d) => { const v = ls((s) => s.getItem(K(k))); return v == null ? d : v; };
+  // 운영자 모드(2026-11-20, 캡틴 가-1): admin '배치 편집'이 #op=<2시간 열쇠>로 연다. 열쇠는 이 탭(sessionStorage)에만 두고,
+  // 이 기기의 점주 로그인·설정(localStorage)은 건드리지 않는다. 소리·자동 인쇄·기기 등록 없이 배치도만 연다.
+  const ss = (fn) => { try { return fn(sessionStorage); } catch { return null; } };
+  const OPK = "qk_op_" + shop;
+  const opHash = (location.hash.match(/[#&]op=([^&]+)/) || [])[1];
+  if (opHash) { ss((s) => s.setItem(OPK, decodeURIComponent(opHash))); history.replaceState(null, "", location.pathname + location.search); }
+  const OP = ss((s) => s.getItem(OPK)) || "";
   // 알림 소리 종류(설정 'tone', 기기마다 저장, 2026-11-16 캡틴 가-1·나-1)
   const TONES = ["bell", "chime", "phone", "beep", "xylo"];
   const tone = () => (TONES.includes(get("tone", "bell")) ? get("tone", "bell") : "bell");
-  const set = (k, v) => ls((s) => s.setItem(K(k), v));
+  const set = (k, v) => (OP ? null : ls((s) => s.setItem(K(k), v)));
 
   const TX = {
     vi: { login: "Đăng nhập màn hình bếp", loginH: "Nhập mã PIN 6 số do quản lý cung cấp.", go: "Vào", wrong: "Mã PIN không đúng", blocked: "Nhập sai quá nhiều lần. Thử lại sau 1 giờ.", noShop: "Thiếu mã quán trong địa chỉ (?shop=…)",
@@ -199,13 +207,13 @@
   };
   let lang = get("lang", (navigator.language || "").toLowerCase().startsWith("ko") ? "ko" : "vi");
   const t = () => TX[lang];
-  let token = get("token", ""), since = 0, cfg = { on: false, poll: 15, printer: "rawbt", paper: 58 };
+  let token = OP || get("token", ""), since = 0, cfg = { on: false, poll: 15, printer: "rawbt", paper: 58 };
   const orders = new Map(); // id → { status, data }
   const calls = new Map(); // 직원 호출 id → { status, data }
   const CALL_ICON = { water: "💧", refill: "🥢", ice: "🧊", utensils: "🍽️", bill: "🧾", staff: "🙋", voice: "😟" };
   const CALL_TTL = 60 * 60e3; // 1시간 지난 호출은 띠에서 뺀다
   let started = false, timer = null, failCount = 0, firstLoad = true;
-  const device = get("device", "") || (() => { const d = Math.random().toString(36).slice(2, 12); set("device", d); return d; })();
+  const device = OP ? "" : get("device", "") || (() => { const d = Math.random().toString(36).slice(2, 12); set("device", d); return d; })();
 
   function toast(m) { const el = $("toast"); el.textContent = m; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2200); }
   function view(v) { ["vLogin", "vStart", "vMain"].forEach((x) => ($(x).hidden = x !== v)); }
@@ -238,7 +246,10 @@
     if (!r.ok) throw new Error(String(r.status));
     return r.json();
   }
-  function logout() { token = ""; set("token", ""); stop(); orders.clear(); since = 0; view("vLogin"); }
+  function logout() {
+    token = ""; set("token", ""); stop(); orders.clear(); since = 0; view("vLogin");
+    if (OP) { ss((s) => s.removeItem(OPK)); $("lHelp").textContent = lang === "ko" ? "운영자 열쇠가 끝났어요(2시간). 관리 화면에서 [배치 편집]을 다시 눌러 주세요." : "Phiên quản lý đã hết hạn. Hãy mở lại từ trang admin."; }
+  }
 
   async function login() {
     const pin = $("pin").value.replace(/\D/g, "");
@@ -380,7 +391,7 @@
     xylo: (d, t, p) => [0, 1.3].forEach((s) => [784, 1047, 1319, 1568, 1319, 1568].forEach((f, i) => { note(d, f, t + s + i * 0.18, 0.6, p, "sine", 0.09); note(d, f * 4, t + s + i * 0.18, 0.15, p * 0.15, "sine", 0.02); })), // 솔–도–미–솔–미–솔
   };
   function beep(force, which) {
-    if (!force && get("sound", "1") !== "1") return;
+    if (!force && (OP || get("sound", "1") !== "1")) return;
     try {
       const dest = audioOut(), now = actx.currentTime + 0.05, peak = VOL[get("vol", "2")] || VOL[2];
       PLAY[which || tone()](dest, now, peak);
@@ -390,7 +401,7 @@
   // 직원 호출 소리: 주문 벨보다 짧고 높은 '띵' 2번(솔6). [확인] 전까지 30초마다 다시.
   let callAlarm = null;
   function callBeep(force) {
-    if (!force && get("sound", "1") !== "1") return;
+    if (!force && (OP || get("sound", "1") !== "1")) return;
     try { const dest = audioOut(), now = actx.currentTime + 0.05, peak = VOL[get("vol", "2")] || VOL[2]; bell(dest, 1568, now, peak); bell(dest, 1568, now + 0.42, peak); } catch {}
     if (navigator.vibrate) navigator.vibrate([250, 120, 250]);
   }
@@ -405,7 +416,7 @@
   function stopAlarm() { clearInterval(alarm); alarm = null; }
   function onNew(ids) {
     startAlarm(); toast(`🔔 ${t().newOrder} ×${ids.length}`);
-    if (get("auto", "0") === "1") ids.forEach((id, i) => setTimeout(() => printOrder(id), i * 2500));
+    if (!OP && get("auto", "0") === "1") ids.forEach((id, i) => setTimeout(() => printOrder(id), i * 2500));
   }
 
   // ── 인쇄 ──
@@ -489,20 +500,21 @@
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && started) { keepAwake(); poll(); } });
 
   async function beat() {
-    if (!token) return;
+    if (!token || OP) return;
     try { await call("beat", { device, name: get("name", ""), printer: printerMode() }); } catch {}
   }
 
   function start() {
     started = true; view("vMain"); $("hName").textContent = shop;
-    try { audioOut(); } catch {}
-    setTab(tab); keepAwake(); poll(); beat(); setInterval(beat, 5 * 60e3);
+    if (OP) { $("hName").insertAdjacentHTML("beforeend", ` <span class="opb">${lang === "ko" ? "운영자 모드" : "Quản lý"}</span>`); setTab("floor"); $("hTabs").hidden = true; poll(); }
+    else { try { audioOut(); } catch {} setTab(tab); keepAwake(); poll(); beat(); setInterval(beat, 5 * 60e3); }
     setInterval(() => { if (orders.size || calls.size) render(); }, 60e3); // '몇 분 전' 갱신
   }
 
   // ── 목록 | 배치도 탭 (기기마다 마지막 탭 기억) ──
   let tab = get("tab", "list") === "floor" && window.QKFloor ? "floor" : "list";
-  const floor = window.QKFloor ? QKFloor.init({ $, esc, money, ago, card, call, toast, get, set, orders, lang: () => lang, t, hasCall: (key) => pendingCalls().some(([, c]) => norm(c.data.table) === key) }) : null;
+  const floor = window.QKFloor ? QKFloor.init({ $, esc, money, ago, card, call, toast, get, set, orders, lang: () => lang, t, hasCall: (key) => pendingCalls().some(([, c]) => norm(c.data.table) === key),
+    callOf: (key) => { const l = pendingCalls().filter(([, c]) => norm(c.data.table) === key); return !l.length ? "" : l.some(([, c]) => c.data.req === "bill") ? "bill" : l[0][1].data.req || "staff"; } }) : null;
   function setTab(v) {
     if (v === "list" && floor && floor.editing()) return toast(lang === "ko" ? "배치 편집을 먼저 저장하거나 취소해 주세요" : "Hãy Lưu hoặc Hủy sửa sơ đồ trước");
     tab = floor ? v : "list"; set("tab", tab);
@@ -539,7 +551,7 @@
   window.__qk = { orders, calls, ticketCanvas, escpos }; // 시험용
 
   paintText();
-  if (!shop) view("vLogin"); else if (token) view("vStart"); else view("vLogin");
+  if (!shop) view("vLogin"); else if (OP) start(); else if (token) view("vStart"); else view("vLogin");
 })();
 </script>
 </body>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="p3_fr_body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#CBD5E1"/>
+    </linearGradient>
+    <linearGradient id="p3_fr_inner" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E0F2FE"/>
+      <stop offset="100%" stop-color="#7DD3FC"/>
+    </linearGradient>
+  </defs>
+  <rect x="20" y="20" width="84" height="88" rx="12" fill="#2C3440" opacity="0.24"/>
+  <rect x="16" y="24" width="88" height="82" rx="12" fill="#64748B" stroke="#2C3440" stroke-width="3"/>
+  <rect x="16" y="12" width="88" height="72" rx="12" fill="url(#p3_fr_body)" stroke="#2C3440" stroke-width="3"/>
+  <rect x="24" y="20" width="72" height="56" rx="7" fill="url(#p3_fr_inner)" stroke="#2C3440" stroke-width="2.4"/>
+  <line x1="25" y1="48" x2="95" y2="48" stroke="#0284C7" stroke-width="2" opacity="0.6"/>
+  <circle cx="36" cy="34" r="6.5" fill="#22C55E" stroke="#2C3440" stroke-width="1.8"/>
+  <circle cx="36" cy="34" r="2.5" fill="#DCFCE7"/>
+  <circle cx="52" cy="34" r="6.5" fill="#22C55E" stroke="#2C3440" stroke-width="1.8"/>
+  <circle cx="52" cy="34" r="2.5" fill="#DCFCE7"/>
+  <circle cx="68" cy="34" r="6.5" fill="#3B82F6" stroke="#2C3440" stroke-width="1.8"/>
+  <circle cx="68" cy="34" r="2.5" fill="#DBEAFE"/>
+  <circle cx="84" cy="34" r="6.5" fill="#3B82F6" stroke="#2C3440" stroke-width="1.8"/>
+  <circle cx="84" cy="34" r="2.5" fill="#DBEAFE"/>
+  <circle cx="36" cy="62" r="6.5" fill="#EF4444" stroke="#2C3440" stroke-width="1.8"/>
+  <circle cx="36" cy="62" r="2.5" fill="#FEE2E2"/>
+  <circle cx="52" cy="62" r="6.5" fill="#EF4444" stroke="#2C3440" stroke-width="1.8"/>
+  <circle cx="52" cy="62" r="2.5" fill="#FEE2E2"/>
+  <circle cx="68" cy="62" r="6.5" fill="#F59E0B" stroke="#2C3440" stroke-width="1.8"/>
+  <circle cx="68" cy="62" r="2.5" fill="#FEF3C7"/>
+  <circle cx="84" cy="62" r="6.5" fill="#10B981" stroke="#2C3440" stroke-width="1.8"/>
+  <circle cx="84" cy="62" r="2.5" fill="#D1FAE5"/>
+  <path d="M29 24 L48 24 L29 44 Z" fill="#FFFFFF" opacity="0.58"/>
+  <rect x="42" y="89" width="36" height="6" rx="3" fill="#E2E8F0" stroke="#2C3440" stroke-width="1.8"/>
+</svg>

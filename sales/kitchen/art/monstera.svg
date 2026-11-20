@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 110" width="110" height="110">
+  <defs>
+    <linearGradient id="pl_pot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E57B52"/>
+      <stop offset="100%" stop-color="#B84B27"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="56" cy="68" rx="36" ry="28" fill="#3E2723" opacity="0.18"/>
+  <circle cx="55" cy="64" r="22" fill="#9E3C1D" stroke="#3E2723" stroke-width="2.5"/>
+  <circle cx="55" cy="58" r="22" fill="url(#pl_pot)" stroke="#3E2723" stroke-width="2.5"/>
+  <circle cx="55" cy="58" r="16" fill="#5D4037" stroke="#3E2723" stroke-width="2"/>
+  <path d="M55 56 C30 58, 16 74, 28 84 C38 92, 52 78, 55 56 Z" fill="#2E7D32" stroke="#3E2723" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M55 56 C80 58, 94 74, 82 84 C72 92, 58 78, 55 56 Z" fill="#2E7D32" stroke="#3E2723" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M55 56 C26 48, 14 28, 30 22 C44 17, 54 36, 55 56 Z" fill="#43A047" stroke="#3E2723" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M55 56 C84 48, 96 28, 80 22 C66 17, 56 36, 55 56 Z" fill="#43A047" stroke="#3E2723" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M55 56 C40 34, 46 12, 55 12 C64 12, 70 34, 55 56 Z" fill="#66BB6A" stroke="#3E2723" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M55 52 L55 22 M52 54 L34 32 M58 54 L76 32 M52 58 L34 75 M58 58 L76 75" stroke="#A5D6A7" stroke-width="1.8" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="55" cy="56" r="4.5" fill="#81C784" stroke="#3E2723" stroke-width="2"/>
+</svg>

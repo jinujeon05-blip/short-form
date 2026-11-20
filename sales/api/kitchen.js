@@ -12,6 +12,7 @@
 //   POST k-set     {shop, patch}          주문 받기 켜기/끄기, 테이블 QR 열쇠, 확인 간격, 기본 프린터
 //   POST k-pin     {shop}                 주방 PIN 새로 만들기(한 번만 보여 줌, 기존 기기 모두 로그아웃)
 //   POST k-logout  {shop}                 모든 주방 기기 로그아웃
+//   POST k-floor   {shop}                 운영자 배치 편집용 주방 열쇠(2시간) → /kitchen/?shop=…#op=<열쇠>
 //   POST k-tables  {shop, from, to}       테이블별 QR 주소(열쇠 포함)
 //   POST k-test    {shop}                 시험 주문 1건 넣기
 const L = require('./_lib');
@@ -124,6 +125,12 @@ async function adminApi(req, res, action) {
     await S.remove(`${K.dir(shop)}/dev/`);
     await L.logEvent('admin', 'k-logout', shop);
     return res.json({ ok: true });
+  }
+  if (action === 'k-floor') {
+    // 운영자가 점주 PIN 없이 배치도를 고칠 때 쓰는 2시간짜리 주방 열쇠(주방 화면은 기기에 저장하지 않는다, 2026-11-20)
+    if (req.method !== 'POST') return res.status(405).end();
+    await L.logEvent('admin', 'k-floor', shop);
+    return res.json({ ok: true, token: K.kitchenToken(shop, bell.gen, 2 * 3600e3) });
   }
   if (action === 'k-tables') {
     const from = Math.max(1, parseInt(body.from, 10) || 1), to = Math.min(from + 99, Math.max(from, parseInt(body.to, 10) || from));

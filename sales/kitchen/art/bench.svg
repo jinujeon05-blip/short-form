@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 95" width="180" height="95">
+  <defs>
+    <linearGradient id="p2_wb_cush" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFE082"/>
+      <stop offset="100%" stop-color="#FFB300"/>
+    </linearGradient>
+  </defs>
+  <rect x="18" y="28" width="148" height="54" rx="12" fill="#3E2723" opacity="0.18"/>
+  <rect x="14" y="34" width="152" height="44" rx="10" fill="#7D441B" stroke="#3E2723" stroke-width="2.8"/>
+  <rect x="14" y="14" width="152" height="16" rx="6" fill="#A66429" stroke="#3E2723" stroke-width="2.8"/>
+  <rect x="20" y="28" width="140" height="38" rx="9" fill="url(#p2_wb_cush)" stroke="#3E2723" stroke-width="2.6"/>
+  <line x1="66" y1="30" x2="66" y2="64" stroke="#E69500" stroke-width="2" opacity="0.7"/>
+  <line x1="114" y1="30" x2="114" y2="64" stroke="#E69500" stroke-width="2" opacity="0.7"/>
+  <circle cx="43" cy="47" r="3" fill="#D87D00"/>
+  <circle cx="90" cy="47" r="3" fill="#D87D00"/>
+  <circle cx="137" cy="47" r="3" fill="#D87D00"/>
+  <rect x="10" y="24" width="12" height="46" rx="5" fill="#8C4E1C" stroke="#3E2723" stroke-width="2.5"/>
+  <rect x="158" y="24" width="12" height="46" rx="5" fill="#8C4E1C" stroke="#3E2723" stroke-width="2.5"/>
+</svg>
