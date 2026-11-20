@@ -107,6 +107,7 @@ name() {
     oshima) echo "오시마야키니쿠" ;;
     ttomoise) echo "또모이세" ;;
     smilebn) echo "박닌스마일회관" ;;
+    ganghodong) echo "강호동 백정" ;;
     *) echo "$1" ;;
   esac
 }

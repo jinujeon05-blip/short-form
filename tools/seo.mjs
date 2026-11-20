@@ -162,6 +162,7 @@ const SHOPS = {
   oshima: { type: 'Restaurant', cuisine: ['Japanese', 'Yakiniku', 'Wagyu'], country: 'VN', currency: 'VND', og: 'img/sirloin.jpg' },
   ttomoise: { type: 'Restaurant', cuisine: ['Korean', 'Hangover Soup', 'Gukbap', 'Korean BBQ'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   smilebn: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Grill'], country: 'VN', currency: 'VND', og: 'img/bokkeum.jpg' },
+  ganghodong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef', 'Pork'], country: 'VN', currency: 'VND', og: 'img/lagalbi.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
