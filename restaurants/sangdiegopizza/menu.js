@@ -11,7 +11,7 @@ window.RESTAURANT = {
   mapQuery: "Sang Diego Pizza & Grill Bắc Ninh 25 Lê Thái Tổ",
   mapUrl: "https://www.google.com/maps/place/Sang+Diego+Pizza+%26+Grill+B%E1%BA%AFc+Ninh/@21.1713814,106.0600854,21z",
   wifi: null,
-  hours: null, // 수집기·메뉴판에 영업시간 없음 — docs/todo.md
+  hours: "08:00 – 22:00", // 캡틴이 알려 준 시간(2026-11-20), 구글 지도 미확인
 };
 
 window.MENU = [
