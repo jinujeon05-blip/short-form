@@ -14,12 +14,15 @@ from pptx.enum.chart import XL_CHART_TYPE, XL_LEGEND_POSITION, XL_LABEL_POSITION
 from pptx.oxml.ns import qn
 
 LANG = sys.argv[1] if len(sys.argv) > 1 else 'ko'
+# 둘째 인자 = 판 이름(예: biz → content_ko_biz.json, 사업 제안서·투자금 빠진 판). 없으면 투자 제안서
+VAR = sys.argv[2] if len(sys.argv) > 2 else ''
+SUF = f'_{VAR}' if VAR else ''
 ROOT = os.getcwd()
 DECK = os.path.join(ROOT, 'investor', 'deck')
 GEN = os.path.join(DECK, 'img', 'gen')
 OUT = os.path.join(DECK, 'out')
 os.makedirs(GEN, exist_ok=True); os.makedirs(OUT, exist_ok=True)
-C = json.load(open(os.path.join(DECK, f'content_{LANG}.json'), encoding='utf-8'))
+C = json.load(open(os.path.join(DECK, f'content_{LANG}{SUF}.json'), encoding='utf-8'))
 FONT = C['font']
 W, HH = 1280, 720
 
@@ -284,9 +287,32 @@ def s_plan(d, n):
 def s_scenario(d, n):
     e = slide(WHITE); kicker(e, d['kicker']); title(e, d['title'], size=40)
     rows = [[''] + d['cols']] + d['rows']
-    table(e, x=72, y=170, w=1136, cw=[296, 280, 280, 280], rh=58, rows=rows, hl=2)
+    table(e, x=72, y=170, w=1136, cw=[296, 280, 280, 280], rh=d.get('rh', 58), rows=rows, hl=2)
     rect(e, 72, 540, 1136, 110, ACC2, r=14)
     text(e, 100, 540, 1080, 110, d['warn'], size=16, color=INK, va='m', lh=1.55)
+    footer(e, n)
+
+def s_pl(d, n):  # 항목별 매출·지출 표(1~3년차)
+    e = slide(WHITE); kicker(e, d['kicker']); title(e, d['title'], size=34)
+    rows = [[''] + d['cols']] + d['rows']
+    table(e, x=72, y=150, w=1136, cw=[476, 220, 220, 220], rh=34, rows=rows, hl=-1, bold=d.get('bold', []))
+    text(e, 72, 650, 1136, 24, d['note'], size=11, color=MUTED)
+    footer(e, n)
+
+def s_monthly(d, n):  # 첫해 한 달 지출
+    e = slide(WHITE); kicker(e, d['kicker']); title(e, d['title'], size=36)
+    cols = [INK, ACC, '4A5262', GRN, 'E8A33D', '7A8CA8', 'B9C0CC', 'DDE1E7']
+    tot = sum(v for _, v, _ in d['items'])
+    chart(e, kind='donut', x=72, y=190, w=380, h=380, items=[(a, v) for a, v, _ in d['items']], colors=cols, center=d['center'], centerSub=d['unit'])
+    for i, (nm, v, why) in enumerate(d['items']):
+        y = 176 + i * 50
+        rect(e, 500, y + 6, 16, 16, cols[i], r=4)
+        text(e, 528, y, 250, 26, nm, size=16, bold=True)
+        text(e, 528, y + 24, 420, 22, why, size=12, color=SOFT)
+        text(e, 960, y, 120, 26, f'{v:,}', size=16, bold=True, align='r')
+        text(e, 1090, y, 60, 26, f'{round(v * 100 / tot)}%', size=14, color=SOFT, align='r')
+    rect(e, 500, 584, 708, 66, ACC2, r=12)
+    text(e, 520, 584, 670, 66, d['box'], size=14, color=INK, va='m', lh=1.5)
     footer(e, n)
 
 def s_funds(d, n):
@@ -375,7 +401,7 @@ def s_closing(d, n):
 
 R = dict(cover=s_cover, letter=s_letter, problem=s_problem, solution=s_solution, product=s_product, market=s_market,
          traction=s_traction, signs=s_signs, why=s_why, compare=s_compare, pricing=s_pricing, unit=s_unit, sales=s_sales,
-         plan=s_plan, scenario=s_scenario, funds=s_funds, deal=s_deal, roadmap=s_roadmap, risk=s_risk, closing=s_closing)
+         plan=s_plan, scenario=s_scenario, pl=s_pl, monthly=s_monthly, funds=s_funds, deal=s_deal, roadmap=s_roadmap, risk=s_risk, closing=s_closing)
 for i, d in enumerate(C['slides']):
     R[d['type']](d, i + 1)
 for s in S:  # 빈 글자 상자 제거
@@ -429,6 +455,7 @@ def html_table(el):
             if ri == 0: cls.append('h')
             if ci == el['hl']: cls.append('hl')
             if ci == 0: cls.append('f')
+            if ri in el.get('bold', []): cls.append('b')
             out.append(f'<td class="{" ".join(cls)}" style="width:{el["cw"][ci]}px;height:{el["rh"]}px">{H.escape(str(c))}</td>')
         out.append('</tr>')
     return ''.join(out) + '</table>'
@@ -482,6 +509,7 @@ body {{ background: #2a2e37; font-family: "{FONT}", "Malgun Gothic", sans-serif;
 .tb td.h {{ background: #{DARK}; color: #fff; font-weight: 700; font-size: 15px; }}
 .tb td.hl {{ background: #{ACC2}; font-weight: 700; color: #{ACC}; }}
 .tb td.h.hl {{ background: #{ACC}; color: #fff; }}
+.tb td.b {{ background: #{BG2}; font-weight: 700; }}
 @media print {{ body {{ background: none; }} .wrap {{ padding: 0; }} .s {{ margin: 0; page-break-after: always; break-after: page; }} }}
 @media screen and (max-width: 1300px) {{ .s {{ margin-left: 0; }} }}
 </style></head><body><div class="wrap">{"".join(parts)}</div>
@@ -566,12 +594,12 @@ def ppt_table(sl, el):
         for ci in range(nc):
             cell = tb.cell(ri, ci); cell.margin_left = cell.margin_right = E(10); cell.margin_top = cell.margin_bottom = 0
             cell.vertical_anchor = MSO_ANCHOR.MIDDLE
-            head = ri == 0; hl = ci == el['hl']
-            fill = (ACC if hl else DARK) if head else (ACC2 if hl else WHITE)
+            head = ri == 0; hl = ci == el['hl']; bd = ri in el.get('bold', [])
+            fill = (ACC if hl else DARK) if head else (ACC2 if hl else (BG2 if bd else WHITE))
             cell.fill.solid(); cell.fill.fore_color.rgb = rgb(fill)
             color = WHITE if head else (ACC if hl else INK)
             tf = cell.text_frame; p = tf.paragraphs[0]; p.alignment = PP_ALIGN.LEFT if ci == 0 else PP_ALIGN.CENTER
-            add_runs(p, str(rows[ri][ci]), 11.5 if head else 13, color, head or hl or ci == 0)
+            add_runs(p, str(rows[ri][ci]), 11.5 if head else 13, color, head or hl or bd or ci == 0)
             # 아래쪽 선만
             tcPr = cell._tc.get_or_add_tcPr()
             for tag in ('a:lnL', 'a:lnR', 'a:lnT'):
@@ -609,9 +637,10 @@ def build_pptx(path):
     prs.save(path)
 
 NAME = {'ko': '한국어', 'vi': '베트남어'}[LANG]
-hp = os.path.join(OUT, f'deck_{LANG}.html'); open(hp, 'w', encoding='utf-8').write(build_html())
-import shutil; shutil.copy(hp, os.path.join(ROOT, 'investor', f'QR메뉴판_투자제안서_{NAME}.html')); print('HTML', hp)
-pp = os.path.join(ROOT, 'investor', f'QR메뉴판_투자제안서_{NAME}.pptx')
+DOC = C.get('docName', '투자제안서')  # 파일 이름: QR메뉴판_<DOC>_<언어>
+hp = os.path.join(OUT, f'deck_{LANG}{SUF}.html'); open(hp, 'w', encoding='utf-8').write(build_html())
+import shutil; shutil.copy(hp, os.path.join(ROOT, 'investor', f'QR메뉴판_{DOC}_{NAME}.html')); print('HTML', hp)
+pp = os.path.join(ROOT, 'investor', f'QR메뉴판_{DOC}_{NAME}.pptx')
 try:
     build_pptx(pp); print('PPTX', pp)
 except PermissionError:
