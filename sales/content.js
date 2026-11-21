@@ -213,6 +213,8 @@ window.DEMOS = [
     name: "강호동 백정 BAEK JEONG", type: { ko: "한식 고기구이 · 소·돼지 구이 · 한우 곱창 · 냉면", vi: "Nhà hàng thịt nướng Hàn Quốc · Thịt bò & thịt heo · Lòng bò Hanwoo · Mì lạnh", en: "Korean BBQ · Beef & pork · Hanwoo offal · Cold noodles", zh: "韩式烤肉 · 牛肉猪肉 · 韩牛杂碎 · 冷面", ja: "韓国焼肉・牛肉豚肉・韓牛ホルモン・冷麺" } },
   { id: "sangdiegopizza", hidden: true, url: "https://sangdiegopizza.qrmenuasia.com", shot: "img/demo-sangdiegopizza.jpg", qr: "img/qr-sangdiegopizza.svg",
     name: "상디에고 피자 & 그릴 SANG DIEGO", type: { ko: "양식 · 피자 · 스테이크 · 파스타 · 바비큐 립", vi: "Nhà hàng Âu · Pizza · Bít tết · Mỳ Ý · Sườn nướng BBQ", en: "Western grill · Pizza · Steak · Pasta · BBQ ribs", zh: "西餐 · 披萨 · 牛排 · 意面 · BBQ 烤肋排", ja: "洋食・ピザ・ステーキ・パスタ・BBQリブ" } },
+  { id: "dabangchicken", hidden: true, url: "https://dabangchicken.qrmenuasia.com", shot: "img/demo-dabangchicken.jpg", qr: "img/qr-dabangchicken.svg",
+    name: "다방치킨 박닌본점 DA BANG", type: { ko: "한국식 치킨 · 분식 · 피자", vi: "Gà rán Hàn Quốc · Đồ ăn vặt · Pizza", en: "Korean fried chicken · Snacks · Pizza", zh: "韩式炸鸡 · 小吃 · 披萨", ja: "韓国チキン・軽食・ピザ" } },
 ];
 
 window.T = {

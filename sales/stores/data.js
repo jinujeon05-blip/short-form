@@ -844,6 +844,12 @@ window.STORES = [
     type: { ko: "양식 · 피자 · 스테이크 · 파스타 · 바비큐 립", vi: "Nhà hàng Âu · Pizza · Bít tết · Mỳ Ý · Sườn nướng BBQ", en: "Western grill · Pizza · Steak · Pasta · BBQ ribs", zh: "西餐 · 披萨 · 牛排 · 意面 · BBQ 烤肋排", ja: "洋食・ピザ・ステーキ・パスタ・BBQリブ" },
     keywords: "상디에고 피자 그릴 Sang Diego Pizza Grill Bắc Ninh 박닌 피자 스테이크 파스타 립 버거 양식 Lê Thái Tổ Võ Cường"
   },
+  { id: "dabangchicken", name: "다방치킨 박닌본점 DA BANG", sub: "후라이드 · 양념치킨 · 장작통닭 · 떡볶이 · 피자", url: "https://dabangchicken.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["chicken"], tags: ["photos"],
+    address: "6 P. Bùi Thị Xuân, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%23DA+BANG+Chicken+%EB%8B%A4%EB%B0%A9%EC%B9%98%ED%82%A8+%EB%B0%95%EB%8B%8C%EB%B3%B8%EC%A0%90/@21.1713337,106.0579998,17z",
+    type: { ko: "한국식 치킨 · 분식 · 피자", vi: "Gà rán Hàn Quốc · Đồ ăn vặt · Pizza", en: "Korean fried chicken · Snacks · Pizza", zh: "韩式炸鸡 · 小吃 · 披萨", ja: "韓国チキン・軽食・ピザ" },
+    keywords: "다방치킨 다방 박닌본점 DA BANG Chicken dabang 치킨 후라이드 양념치킨 장작통닭 떡볶이 피자 Bắc Ninh gà rán Hàn Quốc Korean fried chicken 韩式炸鸡 韓国チキン"
+  },
 ];
 window.SI = {
   ko: {
