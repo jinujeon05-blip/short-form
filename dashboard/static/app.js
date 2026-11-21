@@ -4,22 +4,7 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': 
 const api = p => fetch(p, { cache: 'no-store' }).then(r => r.json());
 const S = { stores: [], todo: [], team: null, quota: null, visits: null, jobs: [], kind: '', q: '', open: null, all: false, collector: null, orders: [], feed: [] };
 
-// 사무실 사진 (사용자가 ChatGPT로 만듦, 2026-10-27). 좌표는 사진 크기 대비 % [x1, y1, x2, y2]
-// 폭 700px 이하에서는 세로 사진(phone)을 쓴다. 인력공급팀·선별팀은 인력 앱(jinwoo-hr)을 읽기만 한다(/api/hr, 2026-10-29)
-const SCENES = {
-  pc: { img: '/static/rooms/office.jpg', w: 1673, h: 940,
-    signs: [[10, 33, 32, 39, '미디어 관제실'], [36, 33, 61, 39, '디지털 메뉴 통제실'], [66, 33, 89, 39, '감사실'],
-      [7.5, 59.5, 31, 65, '통번역 통제실'], [37, 59.5, 62.5, 65, '인력 공급팀'], [68, 59.5, 92, 65, '선별팀']],
-    spots: { captain: [45, 2, 55, 14.5], claude: [45.5, 15.5, 53, 26], finder: [15, 40, 27, 54],
-      agy: [38, 40, 46, 54], 'menu-reader': [52, 40, 60, 54], codex: [67.5, 40, 76, 54], reviewer: [80, 40, 88, 54],
-      polisher: [14, 66, 24, 82], staffing: [47, 65, 57, 82], sorting: [74, 64, 83, 80] } },
-  phone: { img: '/static/rooms/office-phone.jpg', w: 940, h: 1672,
-    signs: [[31, 15, 69, 18.5, '비서실'], [9, 30, 47, 33.3, '미디어 관제실'], [52, 30, 91, 33.3, '디지털 메뉴 통제실'],
-      [5.5, 49, 46.5, 52.3, '감사실'], [53, 49, 94, 52.3, '통번역 통제실'], [5, 70.5, 46.5, 74, '인력 공급팀'], [52.5, 70.5, 94, 74, '선별팀']],
-    spots: { captain: [43, 4, 57, 10], claude: [42, 17, 55, 24], finder: [17, 34, 32, 42],
-      agy: [55, 34, 70, 42], 'menu-reader': [72, 34, 86, 42], codex: [7, 53, 25, 61], reviewer: [27, 53, 43, 61],
-      polisher: [64, 53, 80, 62], staffing: [16, 75, 32, 84], sorting: [62, 74, 78, 84] } },
-};
+// 인력공급팀·선별팀은 인력 앱(jinwoo-hr)을 읽기만 한다(/api/hr, 2026-10-29)
 const ALL_CHECKS = ['check-standard', 'check-listing', 'shot'];
 const M = {
   captain: { name: '캡틴', role: '결재' },
@@ -51,22 +36,95 @@ const PROMPTS = {
   polisher: [s => `polisher 담당에게 ${s} 메뉴 5개 언어(ko·vi·en·zh·ja) 번역 초안을 맡겨줘.`],
 };
 
-// ---------------------------------------------------------------- 사무실
-const pct = v => v + '%';
-function sceneHtml(key, busy, done, marks) {
-  const sc = SCENES[key];
-  const signs = sc.signs.map(([x1, y1, x2, y2, t]) =>
-    `<span class="sign" style="left:${pct(x1)};top:${pct(y1)};width:${pct(x2 - x1)};height:${pct(y2 - y1)}">${t}</span>`).join('');
-  const spots = Object.entries(sc.spots).map(([id, [x1, y1, x2, y2]]) => {
-    const box = `left:${pct(x1)};top:${pct(y1)};width:${pct(x2 - x1)};height:${pct(y2 - y1)}`;
-    const cls = busy.has(id) ? ' on' : done.has(id) ? ' done' : '';
-    const mk = marks[id]?.length ? `<span class="marks">${marks[id].map(([c, t]) => `<span class="${c}">${t}</span>`).join('')}</span>` : '';
-    return `<button class="spot${cls}" style="${box}" data-id="${id}" aria-label="${M[id].name} 자리 열기">
-      ${mk}<span class="tag"><b>${esc(M[id].name)}</b>${cls === ' on' ? '<em class="st">작업 중…</em>' : cls === ' done' ? '<em class="st">✔ 작업 완료</em>' : `<small>${M[id].role}</small>`}</span></button>`;
-  }).join('');
-  return `<div class="scene ${key}" style="aspect-ratio:${sc.w}/${sc.h}"><img src="${sc.img}" alt="Jinwoo 에이전트 사무실">${signs}${spots}</div>`;
+// ---------------------------------------------------------------- 사무실 (움직이는 사무실, 2026-11-21 캡틴 '가-1')
+// 그림: rooms/new/ (Google Flow로 만든 빈 사무실 + 자리 조각 tiles/ + 걷기 walk-*.webp, 만드는 법 docs/dashboard.md).
+// 실제 기록을 따른다: o.active = 작업 중 / o.active 에서 빠짐 = 걸어가 보고 / 지시 done = 비서실장이 캡틴에게 결재 건넴.
+const ROOM = '/static/rooms/new/';
+const SEAT = { captain: 'captain', claude: 'chief', finder: 'visual', agy: 'menu', 'menu-reader': 'reader', codex: 'codex',
+  reviewer: 'auditor', polisher: 'trans', staffing: 'staffing', sorting: 'sorting' };  // app M 키 → 그림 자리 이름
+const DESK = Object.fromEntries(Object.entries(SEAT).map(([d, k]) => [k, d]));
+// 누르는 자리(원본 2752×1536 좌표, tools/seat-tile.py SEATS 에서 사람 있는 곳만)
+const SEAT_BOX = { captain: [1240, 0, 1520, 150], chief: [1190, 160, 1530, 440], visual: [300, 560, 700, 880], menu: [950, 560, 1325, 880],
+  reader: [1325, 560, 1700, 880], codex: [1800, 560, 2150, 880], auditor: [2150, 560, 2510, 880], trans: [330, 960, 740, 1350],
+  staffing: [1190, 960, 1530, 1330], sorting: [1950, 940, 2310, 1330] };
+const ROOM_SIGNS = [['미디어 관제실', 18.2, 35.6], ['디지털 메뉴 통제실', 47.4, 35.6], ['감사실', 77.8, 35.6], ['통번역 통제실', 17.4, 62.3], ['인력 공급팀', 49.4, 62.3], ['선별팀', 80.4, 62.3]];
+const OF = { st: null, want: {}, away: new Set(), hand: false, prev: null, trips: [], asked: new Set(), seen: {}, last: {} };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function buildOffice() {
+  const O = window.OFFICE, P = window.TILE_POS, box = $('#office');
+  if (!O || !P) { box.innerHTML = '<p class="muted" style="padding:16px">사무실 그림 파일(rooms/new/tiles.js·routes.js)을 못 읽었어요.</p>'; return; }
+  const pc = (v, of) => v / of * 100 + '%';
+  const keys = Object.keys(SEAT_BOX);
+  box.innerHTML = `<div class="stage"><img class="bg" src="${ROOM}empty-a.jpg" alt="Jinwoo 에이전트 사무실">
+    ${ROOM_SIGNS.map(([t, x, y]) => `<span class="sign" style="left:${x}%;top:${y}%">${t}</span>`).join('')}
+    ${keys.map((k, i) => ['idle', 'work', 'ok'].map(s => `<img class="tile" data-k="${k}" data-s="${s}" src="${ROOM}tiles/${k}-${s}.webp" alt=""
+      style="left:${P[k].left}%;top:${P[k].top}%;width:${P[k].width}%;z-index:${i + 1};opacity:${s === 'idle' ? 1 : 0}">`).join('')).join('')}
+    <img class="tile hand" src="${ROOM}tiles/handoff.webp" alt="" style="left:${P.handoff.left}%;top:${P.handoff.top}%;width:${P.handoff.width}%;z-index:3;opacity:0">
+    ${Object.entries(O.ROUTES).map(([k, r]) => `<img class="walker" data-k="${k}" src="${ROOM}${r.walker}.webp" alt="">`).join('')}
+    ${keys.map(k => { const [x1, y1, x2, y2] = SEAT_BOX[k], d = DESK[k];
+      return `<button class="spot" data-id="${d}" data-k="${k}" style="left:${pc(x1, O.W)};top:${pc(y1, O.H)};width:${pc(x2 - x1, O.W)};height:${pc(y2 - y1, O.H)}" aria-label="${M[d].name} 자리 열기">
+        <span class="marks"></span><span class="tag"><b>${esc(M[d].name)}</b><em class="st"></em></span></button>`; }).join('')}</div>`;
+  OF.st = $('.stage', box);
 }
-// 자리 3단계(2026-10-30, 사용자 결정 '가-1'): 작업 중(파란 빛) → 끝나면 녹색 '작업 완료'
+function setSeat(k, s) {  // s = idle|work|ok, 'none' = 빈 의자
+  OF.st.querySelectorAll(`.tile[data-k="${k}"]`).forEach(t => { t.style.opacity = t.dataset.s === s ? 1 : 0; });
+}
+function bubble(text, x, y, ms) {
+  const O = window.OFFICE, b = document.createElement('div');
+  b.className = 'bubble'; b.textContent = text; b.style.left = x / O.W * 100 + '%'; b.style.top = y / O.H * 100 + '%';
+  OF.st.append(b); requestAnimationFrame(() => b.classList.add('on'));
+  return sleep(ms).then(() => { b.classList.remove('on'); setTimeout(() => b.remove(), 400); });
+}
+function placeWalker(im, x, y, left) {
+  const O = window.OFFICE, h = O.height(y), w = h * (im.naturalWidth / im.naturalHeight || .34);
+  Object.assign(im.style, { left: (x - w / 2) / O.W * 100 + '%', top: (y - h) / O.H * 100 + '%', height: h / O.H * 100 + '%',
+    transform: left ? 'scaleX(-1)' : 'none', zIndex: 20 + Math.round(y / 10) });
+}
+async function walkPath(im, path, speed = 300) {
+  im.classList.add('go');
+  for (let i = 0; i < path.length - 1; i++) {
+    const [x1, y1] = path[i], [x2, y2] = path[i + 1], dur = Math.hypot(x2 - x1, y2 - y1) / speed * 1000, t0 = performance.now();
+    await new Promise(res => {
+      const f = t => { const u = Math.min((t - t0) / dur, 1); placeWalker(im, x1 + (x2 - x1) * u, y1 + (y2 - y1) * u, x2 < x1); u < 1 ? requestAnimationFrame(f) : res(); };
+      requestAnimationFrame(f);
+    });
+  }
+  im.classList.remove('go');
+}
+// 담당이 맡은 일을 끝냄 → 빈 의자 → 통로 입구에서 나타나 비서실장 책상 옆에서 보고 → 돌아와 앉음 (길 routes.js, 점검 tools/check-routes.py)
+function trip(k) {  // 같은 사람이 20초 안에 두 번 보고하러 가지 않게(o.active 와 대화 '보고'가 둘 다 알려 줄 때)
+  if (Date.now() - (OF.last[k] || 0) < 20e3) return;
+  OF.last[k] = Date.now();
+  const t = report(k); OF.trips.push(t); t.finally(() => { OF.trips = OF.trips.filter(x => x !== t); });
+}
+async function report(k) {
+  const r = window.OFFICE.ROUTES[k], im = OF.st.querySelector(`.walker[data-k="${k}"]`);
+  if (!r || !im || OF.away.has(k) || document.hidden) return;  // 창이 안 보이면 걷지 않는다(돌아와서 한꺼번에 걷지 않게)
+  OF.away.add(k); paintSpots();
+  setSeat(k, 'none'); await sleep(350);
+  placeWalker(im, ...r.path[0], false); im.style.opacity = 1; await sleep(300);
+  await walkPath(im, r.path);
+  const [x, y] = r.path.at(-1); placeWalker(im, x, y, x > 1400);  // 비서실장 쪽을 봄
+  if (!OF.hand) setSeat('chief', 'ok');
+  await bubble('보고드립니다!', x, y - window.OFFICE.height(y) - 10, 1800);
+  await walkPath(im, [...r.path].reverse()); im.style.opacity = 0; await sleep(350);
+  OF.away.delete(k); setSeat(k, OF.want[k] || 'idle');
+  if (!OF.hand) setSeat('chief', OF.want.chief || 'idle');
+  paintSpots();
+}
+// 지시가 끝남 → 보고가 다 끝난 뒤 비서실장이 일어나 캡틴에게 서류를 건넴(tiles/handoff.webp). 비서실장 책상 앞은 화분이라 걷지 않는다
+async function handoff() {
+  await sleep(1500);  // 같은 때 도착한 마지막 '보고' 걷기가 먼저 시작되게
+  while (OF.trips.length) await Promise.all(OF.trips);
+  if (OF.hand || document.hidden) return;
+  OF.hand = true; setSeat('captain', 'none'); setSeat('chief', 'none');
+  OF.st.querySelector('.tile.hand').style.opacity = 1;
+  await bubble('결재 올립니다', 1640, 300, 2600);
+  OF.st.querySelector('.tile.hand').style.opacity = 0;
+  setSeat('chief', OF.want.chief || 'idle'); setSeat('captain', 'ok'); await sleep(1600);
+  OF.hand = false; setSeat('captain', OF.want.captain || 'idle');
+}
+// 자리 3단계(2026-10-30, 사용자 결정 '가-1'): 작업 중 → 끝나면 '작업 완료'(엄지척)
 // → 배포할 가게가 있는 지시는 배포 완료되면, 배포 없는 지시는 캡틴이 결재함에서 열어 보면(서버 seenAt) 사라진다
 const cleared = o => o.deploy?.length ? o.deployState === 'done' : !!o.seenAt;
 // 인력 공급팀: 오늘 daily_entries 주간·야간 보고(나-1). 9시·21시(베트남 시간)가 지나도 없으면 빨간 표시. 연결 안 되면 표시 안 함
@@ -78,23 +136,57 @@ function hrMarks() {
   if (r.night) out.push(['ok', '야간 보고 완료 ✔']); else if (h >= 21) out.push(['no', '야간 보고 없음']);
   return out;
 }
+function paintSpots() {
+  OF.st?.querySelectorAll('.spot').forEach(b => {
+    const k = b.dataset.k, s = OF.want[k], away = OF.away.has(k);
+    b.classList.toggle('on', s === 'work' && !away); b.classList.toggle('done', s === 'ok' && !away); b.classList.toggle('away', away);
+    $('.st', b).textContent = away ? '보고하러 감' : s === 'work' ? '작업 중…' : s === 'ok' ? '✔ 작업 완료' : '';
+  });
+}
 function renderOffice() {
+  if (!OF.st) buildOffice();
+  if (!OF.st) return;
   const busy = new Set(S.jobs.filter(j => j.status === 'running').map(j => j.desk));
   if (S.collector?.job?.status === 'running') busy.add('finder');  // 사진 수집기가 실제로 수집 중
-  for (const o of S.orders.filter(o => o.status === 'running')) {  // 지시 실행 중: 비서실장 + 지금 일하는 담당 자리
-    busy.add('claude');
-    (o.active || []).forEach(d => busy.add(d));
-  }
+  const live = S.orders.filter(o => o.status === 'running' || o.status === 'stopping');
+  const act = new Set(live.flatMap(o => o.active || []));
+  if (live.length) busy.add('claude');  // 지시 실행 중: 비서실장 + 지금 일하는 담당 자리
+  else OF.asked.clear();
+  act.forEach(d => busy.add(d)); OF.asked.forEach(d => busy.add(d));
   const done = new Set();
   for (const o of S.orders.filter(o => o.status === 'done' && !cleared(o))) (o.worked || []).forEach(d => done.add(d));
-  const marks = { staffing: hrMarks() };
-  $('#office').innerHTML = sceneHtml('pc', busy, done, marks) + sceneHtml('phone', busy, done, marks);
+  // 움직임: 앞서 받은 지시 목록과 비교해 새로 생긴 일만 (처음 열었을 때는 움직이지 않음)
+  const stat = Object.fromEntries(S.orders.map(o => [o.id, o.status]));
+  if (OF.prev && S.orders.length) {
+    for (const d of OF.prev.act) if (!act.has(d) && d !== 'claude' && SEAT[d]) trip(SEAT[d]);
+    if (S.orders.some(o => ['running', 'stopping'].includes(OF.prev.stat[o.id]) && o.status === 'done')) handoff();
+  }
+  if (S.orders.length) OF.prev = { act, stat };
+  for (const [d, k] of Object.entries(SEAT)) {
+    OF.want[k] = busy.has(d) ? 'work' : done.has(d) ? 'ok' : 'idle';
+    if (!OF.away.has(k) && !(OF.hand && (k === 'chief' || k === 'captain'))) setSeat(k, OF.want[k]);
+  }
+  paintSpots();
+  const mk = OF.st.querySelector('.spot[data-k="staffing"] .marks');
+  if (mk) mk.innerHTML = hrMarks().map(([c, t]) => `<span class="${c}">${t}</span>`).join('');
 }
-// 옆 창 얼굴: 큰 사진에서 그 사람 자리만 잘라 보여 준다
+// 옆 창·대화방 얼굴: tools/office-faces.py 로 만든 자리별 얼굴(faces/<자리>.webp)
+// 대화 기록으로도 움직인다(2026-11-21): 비서실장이 담당을 백그라운드로 부르면 o.active 에 잠깐도 안 잡힘(1121-182316 시험)
+// → 실행 중 지시의 새 말 중 '비서실장 → 담당' 지시 = 그 자리 작업 중, '담당 보고' = 걸어가 보고
+function talkMoves(id) {
+  const o = S.orders.find(x => x.id === id), items = S.talks[id] || [];
+  const from = OF.seen[id];
+  OF.seen[id] = items.length;
+  if (from == null || !o || !['running', 'stopping', 'done'].includes(o.status)) return;  // 처음 읽은 기록은 움직이지 않음
+  for (const t of items.slice(from)) {
+    if (t.kind === 'ask' && t.who === 'claude' && SEAT[t.to] && o.status !== 'done') OF.asked.add(t.to);
+    if (t.kind === 'report' && SEAT[t.who] && t.who !== 'claude') { OF.asked.delete(t.who); trip(SEAT[t.who]); }
+  }
+  renderOffice();
+}
+const face = id => SEAT[id] ? `${ROOM}faces/${SEAT[id]}.webp` : '';
 function avatar(id) {
-  const sc = SCENES.pc, [x1, y1, x2, y2] = sc.spots[id], w = x2 - x1, h = y2 - y1;
-  const ratio = (h * sc.h) / (w * sc.w);
-  return `<div class="avatar" style="aspect-ratio:${1 / ratio};background-image:url('${sc.img}');background-size:${100 / w * 100}% auto;background-position:${x1 / (100 - w) * 100}% ${y1 / (100 - h) * 100}%"></div>`;
+  return face(id) ? `<img class="avatar" src="${face(id)}" alt="">` : `<div class="avatar ph">${esc((M[id]?.name || WHO[id] || id || '?')[0])}</div>`;
 }
 
 // ---------------------------------------------------------------- 지시하기 · 결재함 (server.py 의 /api/order*)
@@ -131,6 +223,8 @@ function renderInbox() {
   const rest = S.orders.filter(o => !wait.includes(o) && !live.includes(o) && !sched.includes(o) && !line.includes(o)).slice(0, 8);
   $('#inbox-count').textContent = wait.length;
   $('#inbox-count').className = 'badge ' + (wait.length ? 'b-warn' : 'b-na');
+  $('#inbox-sum').textContent = [wait.length && `결재 ${wait.length}`, live.length && `실행 중 ${live.length}`, `예약 ${sched.length}`, line.length && `줄 ${line.length}`].filter(Boolean).join(' · ');
+  if (wait.length && !S.inboxAuto) { S.inboxAuto = true; $('#inbox-box').open = true; }  // 결재할 것이 있으면 처음 한 번 펼침
   const item = o => {
     const [cls, bc, bt] = orderState(o);
     const st = o.steps?.at(-1), now = st ? `${WHO[st.who] || '비서실장'} · ${st.text}` : '시작하는 중…';
@@ -148,7 +242,7 @@ function renderInbox() {
   const lineBox = line.length ? `<h5 class="muted" style="margin:0 0 6px">새 가게 줄 ${line.length}곳</h5>` + line.map(item).join('') : '';
   $('#inbox').innerHTML = schedBox + lineBox + ((wait.length || live.length || rest.length)
     ? [...wait, ...live].map(item).join('') + (rest.length ? `<h5 class="muted" style="margin:10px 0 6px">지난 지시</h5>${rest.map(item).join('')}` : '')
-    : '<p class="muted">아직 지시가 없습니다. 위에 적어 보내면 여기로 보고가 올라옵니다.</p>');
+    : '<p class="muted">아직 지시가 없습니다. 대화방 아래 칸에 적어 보내면 여기로 보고가 올라옵니다.</p>');
   const busy = live.length > 0;
   $('#order-note').textContent = busy ? '지시를 실행하는 중이에요. 지금 보내기는 끝난 뒤에, 예약은 바로 됩니다.' : '배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.';
 }
@@ -246,8 +340,8 @@ async function sendOrder() {
   ta.value = '';
   toast(w.when ? '예약했습니다. 그때 비서실장이 시작해요.' : '지시를 보냈습니다. 비서실장이 실행을 시작해요.');
   $('#order-when').value = ''; $('#order-argon').checked = false; whenHint('order');
+  S.talkSel = r.id; $('#talk-pick').dataset.key = '';
   await loadOrders();
-  openPanel('order:' + r.id);
 }
 async function replyOrder(approve) {
   const id = S.open.slice(6), text = $('#reply-text')?.value || '';
@@ -282,18 +376,41 @@ async function fetchTalk(id) {
   S.talkApprox[id] = r.approx;
 }
 const loadTalk = id => talkReq[id] ||= fetchTalk(id).catch(() => {}).finally(() => delete talkReq[id]);
-function paintTalk(box, id) {
+// 대화방(2026-11-21, 캡틴 '가-1'): 왼쪽 카톡 모양. 캡틴 말은 오른쪽 노란 말풍선, 담당은 얼굴+이름 왼쪽
+function chatHtml(t) {
+  const me = t.who === 'captain', long = t.text.length > 280 || t.text.split('\n').length > 6;
+  const to = t.to && t.to !== 'captain' ? ` <span class="to">→ ${esc(WHO[t.to] || t.to)}</span>` : '';
+  const kind = t.kind === 'report' || t.kind === 'meet' ? `<span class="kind">${KIND[t.kind]}</span>` : '';
+  const tx = `<div class="tx${long ? ' long' : ''}">${esc(t.text)}</div>`;
+  return me ? `<div class="cm me"><div>${tx}</div><time>${hm(t.at)}</time></div>`
+    : `<div class="cm k-${t.kind}">${avatar(t.who)}<div class="cb"><div class="nm">${esc(WHO[t.who] || t.who)}${to}${kind}</div>${tx}</div><time>${hm(t.at)}</time></div>`;
+}
+// 대화방 위 띠: 지금 보는 지시의 상태 + 멈추기·결재하기·자세히
+function renderChatBar(fid) {
+  const o = S.orders.find(x => x.id === fid), bar = $('#chat-bar');
+  if (!o) { bar.innerHTML = ''; return; }
+  const [, bc, bt] = orderState(o), running = o.status === 'running' || o.status === 'stopping';
+  const wait = o.status === 'done' && (o.approval || (o.deploy?.length && o.deployState !== 'done'));
+  const html = `<span class="badge ${bc}">${bt}</span><b title="${esc(o.title)}">${esc(o.title)}</b>
+    ${running && o.status === 'running' ? '<button class="btn ghost" id="chat-stop">멈추기</button>' : ''}
+    <button class="btn ${wait ? 'approve' : 'ghost'}" data-order="${o.id}">${wait ? '결재하기' : '자세히'}</button>`;
+  if (bar.dataset.html !== html) { bar.dataset.html = html; bar.innerHTML = html; }
+}
+function paintTalk(box, id, fmt = msgHtml) {
   const items = S.talks[id] || [];
   if (box.dataset.oid !== id) { box.dataset.oid = id; box.dataset.n = '0'; box.innerHTML = ''; }
   const n = +box.dataset.n;
   if (!items.length) {
-    box.innerHTML = '<p class="muted empty">아직 대화가 없습니다. 지시가 실행되면 비서실장과 담당이 주고받는 말이 여기에 실시간으로 올라옵니다.</p>';
+    const o = S.orders.find(x => x.id === id), first = o?.turns?.find(t => t.by === 'me');
+    const wait = '<p class="muted empty">아직 대화가 없습니다. 지시가 실행되면 비서실장과 담당이 주고받는 말이 여기에 실시간으로 올라옵니다.</p>';
+    box.innerHTML = fmt === chatHtml && first ? chatHtml({ who: 'captain', text: first.text, at: first.at, kind: 'ask' })
+      + (o.status === 'running' ? '<p class="muted empty">비서실장이 지시를 읽는 중…</p>' : '') : wait;
     return;
   }
   if (items.length <= n) return;
   const stick = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
   if (!n) box.innerHTML = '';
-  box.insertAdjacentHTML('beforeend', items.slice(n).map(msgHtml).join(''));
+  box.insertAdjacentHTML('beforeend', items.slice(n).map(fmt).join(''));
   box.dataset.n = String(items.length);
   if (stick || !n) box.scrollTop = box.scrollHeight;
 }
@@ -312,17 +429,19 @@ function renderTalkPick(fid) {
   }
 }
 async function refreshTalks() {
-  const tabOn = !$('#tab-talk').hidden;
+  const tabOn = true;  // 대화방은 늘 보인다(2026-11-21)
   const pid = S.open?.startsWith('order:') ? S.open.slice(6) : null;
   const fid = talkFocus();
   if (tabOn) renderTalkPick(fid);
   await Promise.all([tabOn && fid, pid].filter(Boolean).map(loadTalk));
   if (tabOn && fid) {
-    paintTalk($('#tab-talk-box'), fid);
+    paintTalk($('#chat-msgs'), fid, chatHtml);
+    talkMoves(fid);
     const o = S.orders.find(x => x.id === fid);
     $('#talk-note').textContent = (o?.status === 'running' ? '실시간 · ' : '') + (S.talkApprox[fid] ? '옛 기록에서 되살림(시각은 대략) · ' : '')
       + `기록 파일: dashboard/orders/${fid}-대화.md`;
   }
+  renderChatBar(fid);
   if (pid && $('#panel-talk')) paintTalk($('#panel-talk'), pid);
 }
 function renderFeed() {
@@ -339,7 +458,10 @@ async function loadBrief() {
   $('#brief').innerHTML = b.lines.map(l => `<li>${esc(l)}</li>`).join('');
   $('#brief-at').textContent = b.at + ' 기준';
 }
-async function loadFeed() { S.feed = (await api('/api/activity')).items; renderFeed(); }
+async function loadFeed() {
+  try { S.feed = (await api('/api/activity')).items; renderFeed(); }
+  catch { $('#feed').innerHTML = '<li class="muted">업무 기록을 못 읽었어요. 대시보드를 다시 켜면 나아질 수 있어요(start-dashboard.bat).</li>'; }
+}
 let ordTimer, wasRunning = false;
 async function loadOrders() {
   const r = await api('/api/orders');
@@ -650,7 +772,7 @@ function closePanel() { S.open = null; $('#panel').classList.remove('open'); $('
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
 
 document.addEventListener('click', async e => {
-  const msg = e.target.closest('.msg.long');  // 긴 말은 눌러서 펼치기·접기 (글자를 고르는 중이면 그대로)
+  const msg = e.target.closest('.msg.long, .cm .tx.long');  // 긴 말은 눌러서 펼치기·접기 (글자를 고르는 중이면 그대로)
   if (msg && !getSelection().toString()) return msg.classList.toggle('open');
   const hideBtn = e.target.closest('[data-hide], [data-show]');  // 새 가게 칸: 폴더 숨기기·다시 보이기
   if (hideBtn) {
@@ -678,6 +800,7 @@ document.addEventListener('click', async e => {
     toast(r.error || '배포를 시작했습니다.'); return loadOrders();
   }
   if (e.target.id === 'order-open') { const r = await post('/api/order/open', { id: S.open.slice(6) }); return toast(r.error || 'Claude Code 창을 열었습니다(새 창).'); }
+  if (e.target.id === 'chat-stop') { const r = await post('/api/order/stop', { id: talkFocus() }); return toast(r.error || '멈추는 중…'); }
   if (e.target.id === 'order-stop') { const r = await post('/api/order/stop', { id: S.open.slice(6) }); return toast(r.error || '멈추는 중…'); }
   const chip = e.target.closest('#chips button');
   if (chip) {
@@ -728,14 +851,15 @@ document.addEventListener('click', async e => {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
 $('#q').addEventListener('input', e => { S.q = e.target.value; renderStores(); });
-$('#order-text').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sendOrder(); });
+// 카톡처럼 Enter 로 보내고 Shift+Enter 는 줄바꿈(한글 조합 중 Enter 는 무시)
+$('#order-text').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendOrder(); } });
 $('#order-text').addEventListener('input', () => sendErr('order', ''));
 document.addEventListener('change', e => {
   const k = e.target.id.match(/^(order|reply)-(when|at)$/);
   if (k) sendErr(k[1], '');
   const m = e.target.id.match(/^(order|reply)-when$/);
   if (m) return whenHint(m[1]);
-  if (e.target.id === 'talk-pick') { S.talkSel = e.target.value; refreshTalks(); }
+  if (e.target.id === 'talk-pick') { S.talkSel = e.target.value; renderChatBar(S.talkSel); refreshTalks(); }
   if (e.target.dataset.folder) {  // 새 가게 고르기
     S.nsPick[e.target.checked ? 'add' : 'delete'](e.target.dataset.folder);
     const b = $('#queue-go'), n = S.nsPick.size;

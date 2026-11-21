@@ -22,6 +22,19 @@
       ],
       "port": 5182,
       "autoPort": false
+    },
+    {
+      "name": "restaurants-local",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8782",
+        "--directory",
+        "restaurants"
+      ],
+      "port": 8782,
+      "autoPort": false
     }
   ]
 }

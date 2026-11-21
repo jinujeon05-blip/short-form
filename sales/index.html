@@ -451,7 +451,7 @@
     $("plans").innerHTML = plan("basic", PRICES.basic, t.once) + plan("premium", PRICES.premium, t.once, true) + plan("monthly", PRICES.monthly, t.perMonth);
     $("opts").innerHTML = `<h3>${esc(t.optTitle)}</h3>` + t.opts.map(([a, b]) => `<div class="opt"><span>${esc(a)}</span><span>${esc(fill(b))}</span></div>`).join("");
 
-    $("faqs").innerHTML = t.faqs.map(([q, a]) => `<div class="faq"><h3>${esc(q)}</h3><p>${esc(a)}</p></div>`).join("");
+    $("faqs").innerHTML = t.faqs.map(([q, a]) => `<div class="faq"><h3>${esc(q)}</h3><p>${esc(fill(a))}</p></div>`).join("");
 
     const C = window.CONTACT, btns = [];
     const ICON = {

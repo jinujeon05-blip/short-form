@@ -41,6 +41,26 @@
   };
   const REQS = [["water", "💧"], ["refill", "🥢"], ["ice", "🧊"], ["utensils", "🍽️"], ["bill", "🧾"], ["staff", "🙋"]];
   for (const [k, byLang] of Object.entries(CFG.labels || {})) for (const [l, v] of Object.entries(byLang)) if (T[l]) T[l][k] = v;
+  // 주문서 요청 버튼(2026-11-21 캡틴 가-1): 손님이 누르면 직원 화면·주방에는 직원 언어로 나간다(손님이 현지어를 몰라도 됨)
+  const ASK = {
+    ko: { asks: "자주 하는 요청", herb: "고수 빼 주세요", mild: "안 맵게 해 주세요", msg: "조미료(MSG) 빼 주세요", ice: "얼음은 따로 주세요", plate: "앞접시 더 주세요", togo: "포장해 주세요" },
+    en: { asks: "Common requests", herb: "No cilantro, please", mild: "Not spicy, please", msg: "No MSG, please", ice: "Ice on the side, please", plate: "Extra small plates, please", togo: "To go, please" },
+    zh: { asks: "常用要求", herb: "不要香菜", mild: "不要辣", msg: "不要味精", ice: "冰块另外放", plate: "多拿几个小碟", togo: "打包带走" },
+    ja: { asks: "よくあるご要望", herb: "パクチー抜きで", mild: "辛くしないでください", msg: "化学調味料なしで", ice: "氷は別でください", plate: "取り皿をください", togo: "持ち帰りでお願いします" },
+    vi: { asks: "Yêu cầu thường gặp", herb: "Không cho rau mùi", mild: "Không cay", msg: "Không bột ngọt", ice: "Để đá riêng", plate: "Cho thêm chén đĩa nhỏ", togo: "Gói mang về" },
+  };
+  const ASKS = [["herb", "🌿"], ["mild", "🌶️"], ["msg", "🧂"], ["ice", "🧊"], ["plate", "🍽️"], ["togo", "🥡"]];
+  // 손님 돈으로 대략 환산(2026-11-21 캡틴 가-2): 동(₫) 가게에서 손님 언어가 ko·en·ja·zh일 때만. 환율은 고정값 —
+  // 바꿀 때 FX_DATE·FX 를 같이 고치고 tools 로 11곳에 복사한다(출처 open.er-api.com, 1단위 = 몇 동). 가게에서 끄려면 ORDER.fx = false
+  const FX_DATE = "2026-11-20";
+  const FX = {
+    ko: { per: 19.31, step: 100, f: (n) => n.toLocaleString("en-US") + "원", note: "환율 " + FX_DATE + " 기준, 대략" },
+    en: { per: 25641, step: 0.1, f: (n) => "$" + (n >= 10 ? Math.round(n).toLocaleString("en-US") : n.toFixed(1)), note: "Approx. rate as of " + FX_DATE },
+    ja: { per: 161.11, step: 10, f: (n) => n.toLocaleString("en-US") + "円", note: FX_DATE + " 時点の概算レート" },
+    zh: { per: 3846.15, step: 1, f: (n) => n.toLocaleString("en-US") + "元", note: "约按 " + FX_DATE + " 汇率" },
+  };
+  const fxOf = (l) => (CFG.fx !== false && CFG.currency === "₫" && FX[l]) || null;
+  const fx = (vnd, l) => { const r = fxOf(l); if (!r || !vnd) return ""; const n = Math.max(r.step, Math.round(vnd / r.per / r.step) * r.step); return r.f(r.step < 1 ? Math.round(n * 10) / 10 : n); };
   // 직원에게 보여주는 주문서 머리말 (직원 언어)
   const HEAD = { vi: "ĐƠN GỌI MÓN", ko: "주문서", en: "ORDER", zh: "点餐单", ja: "注文書" };
 
@@ -71,11 +91,14 @@
   const soGone = kept.length - cart.size; // 지난번에 담았는데 그사이 품절된 메뉴 수
   const qTable = new URLSearchParams(location.search).get("t") || new URLSearchParams(location.search).get("table");
   let table = (qTable || (fresh && saved.table) || "").slice(0, 12), note = (fresh && saved.note) || "";
+  let asks = new Set(((fresh && saved.asks) || []).filter((k) => ASK.ko[k]));
+  // 직원이 읽을 요청 = 고른 버튼(직원 언어) + 손님이 쓴 글
+  const noteFor = (l) => [...ASKS.filter(([k]) => asks.has(k)).map(([k]) => ASK[l][k]), note.trim()].filter(Boolean).join(" · ");
   // 테이블 QR 열쇠(&k=)는 그 QR의 테이블 번호와 짝으로만 쓴다(손님이 번호를 바꾸면 안 보냄)
   const qKey = new URLSearchParams(location.search).get("k");
   let tkey = qTable && qKey ? { table: qTable.slice(0, 12), k: qKey.slice(0, 20) } : (fresh && saved.tkey) || null;
   let kitchenOn = null, sending = false; // null = 아직 안 물어봄
-  const save = () => storage((s) => s.setItem(KEY, JSON.stringify({ t: Date.now(), items: [...cart], table, note, tkey })));
+  const save = () => storage((s) => s.setItem(KEY, JSON.stringify({ t: Date.now(), items: [...cart], table, note, asks: [...asks], tkey })));
   const count = () => [...cart.values()].reduce((a, b) => a + b, 0);
   const total = () => [...cart].reduce((n, [k, q]) => n + (ITEMS.get(k).opt.price || 0) * q, 0);
   const hasMarket = () => [...cart.keys()].some((k) => ITEMS.get(k).opt.price == null);
@@ -88,7 +111,7 @@
       rows.push(`• ${lineName(k, l)} × ${q} — ${p == null ? t.market : money(p * q)}`);
     }
     rows.push("", `${t.total}: ${money(total())}${hasMarket() ? ` ${t.plus}` : ""}`);
-    if (note.trim()) rows.push(`${t.note}: ${note.trim()}`);
+    if (noteFor(l)) rows.push(`${t.note}: ${noteFor(l)}`);
     return rows.join("\n");
   }
 
@@ -103,10 +126,11 @@
       <div class="hd"><b>🧾 ${esc(HEAD[l] || HEAD.en)}</b>${table ? `<span>${esc(t.table)} ${esc(table)}</span>` : ""}</div>
       <ul>${lines}</ul>
       <div class="ft"><span>${esc(t.total)}</span><span>${money(total())}${hasMarket() ? ` ${esc(t.plus)}` : ""}</span></div>
-      ${note.trim() ? `<div class="nt">${esc(t.note)}: ${esc(note.trim())}</div>` : ""}`;
+      ${noteFor(l) ? `<div class="nt">${esc(t.note)}: ${esc(noteFor(l))}${me !== l && asks.size ? `<small>${esc(noteFor(me))}</small>` : ""}</div>` : ""}`;
   }
 
   const css = `
+    .qo-fx { margin-top: 3px; text-align: right; font-size: 12px; font-weight: 600; color: var(--pt-muted, #888); font-variant-numeric: tabular-nums; }
     .qo-add { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
     .qo-add button { position: relative; font: inherit; font-size: 12.5px; font-weight: 800; line-height: 1; letter-spacing: 0; text-transform: none; color: var(--pt-ink, #222); background: transparent; border: 1.5px solid var(--pt-line, #ddd); border-radius: 999px; padding: 6px 11px 6px 9px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
     .qo-add button::before { content: "+ "; color: var(--pt-accent, #e0452b); }
@@ -161,6 +185,12 @@
     .qo-staff li small { font-size: 14px; color: #666; }
     .qo-staff .ft { display: flex; justify-content: space-between; font-size: 20px; font-weight: 800; padding: 12px 0 0; }
     .qo-staff .nt { margin: 12px 0 0; padding: 10px 12px; border: 2px dashed #111; border-radius: 12px; font-size: 18px; font-weight: 700; white-space: pre-wrap; }
+    .qo-staff .nt small { display: block; margin-top: 6px; font-size: 13px; font-weight: 600; color: #666; }
+    .qo-asks { margin: 0 0 10px; }
+    .qo-asks > span { display: block; font-size: 13px; font-weight: 700; color: var(--pt-muted, #888); margin-bottom: 6px; }
+    .qo-asks div { display: flex; flex-wrap: wrap; gap: 6px; }
+    .qo-asks button { font: inherit; font-size: 13.5px; font-weight: 700; line-height: 1.2; letter-spacing: 0; text-transform: none; color: var(--pt-ink, #222); background: transparent; border: 1.5px solid var(--pt-line, #ddd); border-radius: 999px; padding: 7px 11px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .qo-asks button[aria-pressed="true"] { border-color: var(--pt-accent, #e0452b); background: var(--pt-accent, #e0452b); color: #fff; }
     .qo-staff button { display: block; width: 100%; max-width: 560px; margin: 20px auto 0; font: inherit; font-size: 16px; font-weight: 800; padding: 14px; border-radius: 14px; border: 2px solid #111; background: #fff; color: #111; cursor: pointer; }
     .qo-toast { position: fixed; left: 50%; top: calc(14px + env(safe-area-inset-top)); transform: translateX(-50%); z-index: 1200; background: rgba(0,0,0,.85); color: #fff; font-size: 14px; font-weight: 700; padding: 9px 16px; border-radius: 999px; opacity: 0; transition: opacity .2s; pointer-events: none; max-width: 90vw; text-align: center; }
     .qo-toast.on { opacity: 1; }
@@ -206,6 +236,15 @@
       const lis = sec.querySelectorAll(":scope > ul > li");
       cat.items.forEach((it, i) => {
         const li = lis[i];
+        if (li && fxOf(l) && !li.querySelector(".qo-fx")) {
+          const ps = options(it).map((o) => o.price).filter((p) => p != null);
+          if (ps.length) {
+            const lo = Math.min(...ps), hi = Math.max(...ps), el = document.createElement("div");
+            el.className = "qo-fx";
+            el.textContent = "≈ " + fx(lo, l) + (hi > lo ? " ~ " + fx(hi, l) : "");
+            (li.querySelector(":scope > .info") || li).appendChild(el);
+          }
+        }
         if (!li || it.soldOut || li.querySelector(".qo-add")) return;
         const box = document.createElement("div");
         box.className = "qo-add";
@@ -249,9 +288,12 @@
         <div class="pr">${p == null ? esc(t.market) : money(p * q)}</div></li>`;
     }).join("");
     $("qoTotal").innerHTML = `<span>${esc(t.total)}</span><span>${money(total())}${hasMarket() ? ` <small>${esc(t.plus)}</small>` : ""}</span>`;
-    $("qoHint").textContent = t.hint;
+    $("qoHint").textContent = t.hint + (fxOf(l) && total() ? ` · ≈ ${fx(total(), l)} (${FX[l].note})` : "");
     $("qoTableL").firstChild.textContent = t.table;
     $("qoTable").placeholder = t.tablePh;
+    const a = ASK[l] || ASK.en;
+    $("qoAsks").innerHTML = `<span>${esc(a.asks)}</span><div>${ASKS.map(([k, ic]) =>
+      `<button type="button" data-ask="${k}" aria-pressed="${asks.has(k)}">${ic} ${esc(a[k])}</button>`).join("")}</div>`;
     $("qoNoteL").firstChild.textContent = t.note;
     $("qoNote").placeholder = t.notePh;
     $("qoKitchen").hidden = !kitchenOn;
@@ -369,7 +411,7 @@
     if (sending) return;
     if (!table.trim()) { toast(t.needTable); $("qoTable").focus(); return; }
     const items = [...cart].map(([k, q]) => { const p = ITEMS.get(k).opt.price; return { name: lineName(k, l), sub: me === l ? "" : lineName(k, me), key: k, q, price: p == null ? null : p * q }; });
-    const body = { shop: CFG.shop, table: table.trim(), note: note.trim(), lang: me, currency: CFG.currency, items, k: tkey && tkey.table === table.trim() ? tkey.k : "" };
+    const body = { shop: CFG.shop, table: table.trim(), note: noteFor(T[CFG.staff] ? CFG.staff : "vi").slice(0, 200), lang: me, currency: CFG.currency, items, k: tkey && tkey.table === table.trim() ? tkey.k : "" };
     sending = true; renderSheet();
     let res = null, err = "";
     try {
@@ -380,7 +422,7 @@
     if (!res) { renderSheet(); toast(err === "key" ? t.badKey : t.sendFail); return; }
     // 보낸 내용을 직원 화면 모양으로 보여 주고 장바구니를 비운다(두 번 보내기 방지)
     $("qoStaffBody").innerHTML = `<p class="say" style="color:#1a7f37;font-size:17px">✅ ${esc(t.sent)}<br>${esc(t.sentNo)} #${res.no}</p>` + staffHtml().replace(/^\s*<p class="say">[^<]*<\/p>/, "");
-    cart.clear(); note = ""; update(); closeSheet();
+    cart.clear(); note = ""; asks.clear(); update(); closeSheet();
     $("qoStaff").hidden = false; $("qoStaff").scrollTop = 0;
   }
   function closeSheet() { $("qoSheet").hidden = true; document.body.style.overflow = ""; }
@@ -416,6 +458,7 @@
             <label id="qoTableL">.<input id="qoTable" maxlength="12" autocomplete="off"></label>
             <label id="qoNoteL">.<input id="qoNote" maxlength="200" autocomplete="off"></label>
           </div>
+          <div class="qo-asks" id="qoAsks"></div>
           <div class="qo-acts">
             <button type="button" class="qo-main" id="qoKitchen" hidden></button>
             <button type="button" class="qo-main" id="qoShow"></button>
@@ -460,6 +503,8 @@
       const el = e.target;
       if (el.closest("[data-close]")) return closeSheet();
       const inc = el.closest("[data-inc]")?.dataset.inc, dec = el.closest("[data-dec]")?.dataset.dec;
+      const ask = el.closest("[data-ask]")?.dataset.ask;
+      if (ask) { asks.has(ask) ? asks.delete(ask) : asks.add(ask); renderSheet(); save(); return; }
       if (inc) { cart.set(inc, cart.get(inc) + 1); update(); }
       if (dec) { const q = cart.get(dec) - 1; q > 0 ? cart.set(dec, q) : cart.delete(dec); update(); }
     });
@@ -469,7 +514,7 @@
       $("qoPrev").textContent = orderText();
       save();
     });
-    $("qoClear").addEventListener("click", () => { cart.clear(); note = ""; update(); });
+    $("qoClear").addEventListener("click", () => { cart.clear(); note = ""; asks.clear(); update(); });
     $("qoShow").addEventListener("click", () => {
       $("qoToast").classList.remove("on");
       $("qoStaffBody").innerHTML = staffHtml();

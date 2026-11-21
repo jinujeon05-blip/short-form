@@ -255,37 +255,47 @@
         </article>`;
     }).join('') : '<p class="muted">조건에 맞는 가게가 없어요.</p>';
 
-    box.innerHTML = `
-      <div class="sl">
-        <div class="sl-notice">
-          <b>반자동 Zalo 영업</b> — 추가 비용 0원(안티그래비티 Gemini). 보낸 지 <b>3일 넘고 답 없는 가게</b>는 자동으로 맨 위에 올라옵니다.
-          ${overdueInKind ? ` · 지금 <b>${overdueInKind}곳</b>이 3일 넘게 답을 기다리고 있어요.` : ''}
-        </div>
-
-        <div class="sl-bar">
-          <input id="sl-q" type="search" placeholder="가게 이름·전화·지역 찾기" value="${esc(ST.q)}">
-          <div class="seg" id="sl-kind">
-            <button data-k="listing" class="${ST.kind === 'listing' ? 'on' : ''}">가게 찾기용 (${ST.counts.listing || 0})</button>
-            <button data-k="full" class="${ST.kind === 'full' ? 'on' : ''}">정식 (${ST.counts.full || 0})</button>
-            <button data-k="" class="${ST.kind === '' ? 'on' : ''}">전체 (${ST.stores.length})</button>
+    // 검색창(#sl-q)은 한 번만 만들고 유지한다 — 매 글자마다 다시 그리면 한글 입력기(IME) 조합이 끊겨 초성만 입력된다
+    if (!$('#sl-q', box)) {
+      box.innerHTML = `
+        <div class="sl">
+          <div class="sl-notice" id="sl-notice"></div>
+          <div class="sl-bar">
+            <input id="sl-q" type="search" placeholder="가게 이름·전화·지역 찾기">
+            <div class="seg" id="sl-kind"></div>
           </div>
-        </div>
+          <div class="sl-pills" id="sl-status"></div>
+          <div id="sl-work-wrap"></div>
+          <div id="sl-list-wrap"></div>
+        </div>`;
+    }
 
-        <div class="sl-pills" id="sl-status">
-          <button class="sl-pill ${ST.status === '' ? 'on' : ''}" data-st="">전체 ${list.length}곳</button>
-          <button class="sl-pill warn ${ST.status === 'overdue' ? 'on' : ''}" data-st="overdue">3일+ 답 없음 (${overdueInKind})</button>
-          <button class="sl-pill ${ST.status === 'unsent' ? 'on' : ''}" data-st="unsent">안 보냄</button>
-          <button class="sl-pill ${ST.status === 'sent' ? 'on' : ''}" data-st="sent">보냄</button>
-          <button class="sl-pill ${ST.status === 'replied' ? 'on' : ''}" data-st="replied">답장 받음</button>
-        </div>
+    const qEl = $('#sl-q', box);
+    if (qEl && document.activeElement !== qEl && qEl.value !== ST.q) qEl.value = ST.q;
 
-        ${renderWork()}
+    $('#sl-notice', box).innerHTML = `
+      <b>반자동 Zalo 영업</b> — 추가 비용 0원(안티그래비티 Gemini). 보낸 지 <b>3일 넘고 답 없는 가게</b>는 자동으로 맨 위에 올라옵니다.
+      ${overdueInKind ? ` · 지금 <b>${overdueInKind}곳</b>이 3일 넘게 답을 기다리고 있어요.` : ''}`;
 
-        <div class="sl-list">${rowsHtml}</div>
-        ${list.length > shown.length
-          ? `<button class="btn ghost sl-more" id="sl-more">전체 ${list.length}곳 보기</button>`
-          : (ST.showAll && list.length > 25 ? `<button class="btn ghost sl-more" id="sl-more">25곳만 보기</button>` : '')}
-      </div>`;
+    $('#sl-kind', box).innerHTML = `
+      <button data-k="listing" class="${ST.kind === 'listing' ? 'on' : ''}">가게 찾기용 (${ST.counts.listing || 0})</button>
+      <button data-k="full" class="${ST.kind === 'full' ? 'on' : ''}">정식 (${ST.counts.full || 0})</button>
+      <button data-k="" class="${ST.kind === '' ? 'on' : ''}">전체 (${ST.stores.length})</button>`;
+
+    $('#sl-status', box).innerHTML = `
+      <button class="sl-pill ${ST.status === '' ? 'on' : ''}" data-st="">전체 ${list.length}곳</button>
+      <button class="sl-pill warn ${ST.status === 'overdue' ? 'on' : ''}" data-st="overdue">3일+ 답 없음 (${overdueInKind})</button>
+      <button class="sl-pill ${ST.status === 'unsent' ? 'on' : ''}" data-st="unsent">안 보냄</button>
+      <button class="sl-pill ${ST.status === 'sent' ? 'on' : ''}" data-st="sent">보냄</button>
+      <button class="sl-pill ${ST.status === 'replied' ? 'on' : ''}" data-st="replied">답장 받음</button>`;
+
+    $('#sl-work-wrap', box).innerHTML = renderWork();
+
+    $('#sl-list-wrap', box).innerHTML = `
+      <div class="sl-list">${rowsHtml}</div>
+      ${list.length > shown.length
+        ? `<button class="btn ghost sl-more" id="sl-more">전체 ${list.length}곳 보기</button>`
+        : (ST.showAll && list.length > 25 ? `<button class="btn ghost sl-more" id="sl-more">25곳만 보기</button>` : '')}`;
   }
 
   async function load() {
@@ -379,10 +389,7 @@
     if (!tab || !tab.contains(e.target)) return;
     if (e.target.id === 'sl-q') {
       ST.q = e.target.value;
-      const pos = e.target.selectionStart;
       render();
-      const inp = $('#sl-q');
-      if (inp) { inp.focus(); inp.setSelectionRange(pos, pos); }
     }
     if (e.target.id === 'sl-msg') ST.form.ownerMsg = e.target.value;
   });

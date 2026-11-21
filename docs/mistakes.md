@@ -142,3 +142,9 @@ CLAUDE.md의 '절대 규칙'은 이 사건들에서 나왔다. 규칙만 지키�
 - 원인: `register-shop.mjs`는 `DEMOS`에 `qr:` 경로만 적고 파일은 안 만들었다. `docs/tools.md`에 "손으로 복사"라고만 있어 두 번 빠짐(같은 종류 두 번 → 구조로 고침).
 - 고침: `check-shop.mjs`에 '소개서 QR 그림' 점검 추가 — 없으면 `print/qr.svg`를 복사하고, 그것도 없으면 실패.
 - 규칙: 소개서·가게 찾기에 새 경로를 적는 도구는 그 파일이 실제로 있는지까지 점검한다.
+
+## 2026-11-21 숯꾸이 주소에 숏폼 화면이 약 8분 뜸(요청 버튼 10곳 배포)
+- 무엇: 요청 버튼 10곳을 Vercel MCP `create_deployment`로 배포하면서 `projectSettings.rootDirectory`를 빼먹었다. 9곳은 프로젝트에 폴더 설정이 저장돼 있어 괜찮았지만 `sutkkui-menu`만 설정이 비어 있어(153곳 중 1곳) 저장소 맨 위(예전 숏폼 앱)가 빌드돼 sutkkui.qrmenuasia.com에 숏폼 화면이 떴다.
+- 알아챈 방법: 배포 뒤 실제 주소에서 `order.js`를 받아 보니 숯꾸이만 404 → 첫 화면 제목이 '숏폼 리퍼포징'.
+- 고침: `rootDirectory: "restaurants/sutkkui"`를 넣어 다시 배포 → 메뉴판·요청 버튼 정상, 콘솔 오류 0. 같은 날 캡틴 결정 다-1로 `sutkkui-menu` 프로젝트 폴더 설정을 `restaurants/sutkkui`로 저장(153곳 모두 설정 있음 확인).
+- 규칙: 배포할 때는 `docs/deploy.md` '방법' 그대로 **매번** `projectSettings.rootDirectory`를 넘기고, 배포 뒤엔 실제 주소의 **첫 화면 제목·메뉴 파일**까지 본다(200만 보지 않음).

@@ -15,28 +15,33 @@
 </header>
 
 <div class="layout">
-  <!-- 왼쪽: 지시하기 · 결재함 -->
+  <!-- 왼쪽: 대화방(지시·팀 대화·결재함) · 새 가게 -->
   <aside class="col left">
-    <section class="card cmd" aria-label="지시하기">
-      <h2>지시하기 <small>비서실장이 이 PC에서 바로 실행</small></h2>
-      <textarea id="order-text" rows="3" placeholder="예: 바보아저씨 사진 수집기로 올렸어. 가게 찾기용으로 만들어줘"></textarea>
-      <div class="chips" id="chips"></div>
-      <div class="when"><select id="order-when" aria-label="언제 실행"><option value="">지금 실행</option><option value="reset">한도 풀리면 실행</option><option value="time">시각 정해서 실행</option></select>
-        <input type="datetime-local" id="order-at" hidden><label class="argon" title="메뉴판 읽기를 제미나이 4 Argon으로(정식 가게는 체크 안 해도 자동)"><input type="checkbox" id="order-argon"> Argon 사용</label><small class="muted" id="order-hint"></small></div>
-      <div class="cmd-foot">
-        <span class="muted" id="order-note">배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.</span>
-        <button class="btn" id="order-send">보내기</button>
+    <!-- 대화방 (2026-11-21, 캡틴 '가-1'): 지시하기 + 팀 대화 + 결재함을 카톡 모양 하나로 -->
+    <section class="card chat" aria-label="팀 대화방">
+      <div class="chat-head"><b>팀 대화방</b><span class="live" id="talk-live"></span>
+        <select id="talk-pick" aria-label="볼 지시 고르기"></select></div>
+      <p class="send-err" id="code-warn" role="alert"></p>
+      <details class="inbox-box" id="inbox-box"><summary>결재함 <span class="badge b-na" id="inbox-count">0</span><small class="muted" id="inbox-sum"></small></summary>
+        <div id="inbox"></div></details>
+      <div class="chat-bar" id="chat-bar"></div>
+      <div class="chat-msgs" id="chat-msgs"></div>
+      <small class="muted chat-note" id="talk-note"></small>
+      <div class="chat-in">
+        <div class="chips" id="chips"></div>
+        <textarea id="order-text" rows="2" placeholder="지시를 적고 Enter (줄바꿈은 Shift+Enter) · 예: 바보아저씨 사진 수집기로 올렸어. 가게 찾기용으로 만들어줘"></textarea>
+        <div class="when"><select id="order-when" aria-label="언제 실행"><option value="">지금 실행</option><option value="reset">한도 풀리면 실행</option><option value="time">시각 정해서 실행</option></select>
+          <input type="datetime-local" id="order-at" hidden><label class="argon" title="메뉴판 읽기를 제미나이 4 Argon으로(정식 가게는 체크 안 해도 자동)"><input type="checkbox" id="order-argon"> Argon 사용</label><small class="muted" id="order-hint"></small></div>
+        <div class="cmd-foot">
+          <span class="muted" id="order-note">배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.</span>
+          <button class="btn send" id="order-send">보내기</button>
+        </div>
+        <p class="send-err" id="order-err" role="alert"></p>
       </div>
-      <p class="send-err" id="order-err" role="alert"></p>
     </section>
     <section class="card" aria-label="새 가게 줄 세우기">
       <h2>새 가게 <span class="badge b-na" id="ns-count">0</span><small>드라이브에 올린 사진 · 줄 세우기</small></h2>
       <div id="newshops"><p class="muted">드라이브 폴더를 읽는 중…</p></div>
-    </section>
-    <section class="card" aria-label="결재함">
-      <h2>결재함 <span class="badge b-na" id="inbox-count">0</span></h2>
-      <p class="send-err" id="code-warn" role="alert" style="margin:0 0 8px"></p>
-      <div id="inbox"></div>
     </section>
   </aside>
 
@@ -47,7 +52,6 @@
 
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="stores" class="on">가게 현황</button>
-      <button role="tab" data-tab="talk">팀 대화<span class="live" id="talk-live"></span></button>
       <button role="tab" data-tab="todo">할 일</button>
       <button role="tab" data-tab="visits">방문 기록</button>
       <button role="tab" data-tab="usage">사용량</button>
@@ -63,10 +67,6 @@
       </div>
       <div class="cards" id="stores"></div>
       <button class="btn ghost more" id="more" hidden></button>
-    </section>
-    <section class="tab" id="tab-talk" hidden>
-      <div class="talk-head"><select id="talk-pick" aria-label="볼 지시 고르기"></select><small class="muted" id="talk-note"></small></div>
-      <div class="talk" id="tab-talk-box"></div>
     </section>
     <section class="tab" id="tab-todo" hidden></section>
     <section class="tab" id="tab-visits" hidden></section>
@@ -96,6 +96,8 @@
 </aside>
 <div class="dim" id="dim"></div>
 <div class="toast" id="toast"></div>
+<script src="/static/rooms/new/tiles.js"></script>
+<script src="/static/rooms/new/routes.js"></script>
 <script src="/static/app.js"></script>
 <script src="/static/builder.js"></script>
 <script src="/static/sales.js"></script>

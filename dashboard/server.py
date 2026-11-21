@@ -919,6 +919,39 @@ def settle_deployed(src, shops):
             save_order(o)
 
 
+def settle_outside_deploys():
+    """대시보드 밖(Claude 앱 등)에서 배포를 끝낸 카드를 닫는다(2026-11-21 박닌 스마일 회관 건).
+    [배포 확정]이 멈춘 뒤 비서실장이 따로 배포하면 대시보드는 몰라서 '배포 멈춤'이 계속 남았다.
+    Vercel 의 마지막 production 배포가 READY 이고, 그 커밋의 가게 폴더가 지금 저장소(HEAD)와 같으면 배포된 것으로 본다.
+    토큰이 없거나 조회가 실패하면 아무것도 바꾸지 않는다. 2주 지난 카드는 보지 않는다."""
+    with ORDER_LOCK:
+        todo = [o for o in ORDERS.values() if o.get("status") == "done" and o.get("deploy")
+                and o.get("deployState") in (None, "fail") and time.time() - (o.get("createdAt") or 0) < 14 * 86400]
+    for o in todo:
+        try:
+            ok = []
+            for shop in o["deploy"]:
+                code, lst = vapi("GET", f"/v6/deployments?projectId={shop}-menu&target=production&limit=1", tries=1)
+                last = (lst.get("deployments") or [{}])[0] if code == 200 else {}
+                sha = (last.get("meta") or {}).get("githubCommitSha")
+                if (last.get("readyState") or last.get("state")) != "READY" or not sha:
+                    break
+                if sh(["git", "diff", "--quiet", sha, "HEAD", "--", f"restaurants/{shop}"])[0] != 0:
+                    break  # 저장소에 아직 배포 안 된 수정이 있음(또는 그 커밋이 이 PC에 없음) → 그대로 둠
+                ok.append(f"{shop}({sha[:7]})")
+            else:
+                with ORDER_LOCK:
+                    o["deployState"] = "done"
+                    o["deployErr"] = None
+                    o["turns"].append({"by": "system", "at": time.time(), "text":
+                        "대시보드 밖(Claude 앱 등)에서 배포가 끝난 것을 Vercel 에서 확인해 이 카드를 닫았어요: " + ", ".join(ok)
+                        + "\n실서버 내용 = 지금 저장소 내용."})
+                    save_order(o)
+                settle_deployed(o, o["deploy"])
+        except Exception as e:  # 토큰 없음·인터넷 끊김 등 — 카드는 그대로 두고 다음에 다시 본다
+            print("settle_outside_deploys:", o.get("id"), e)
+
+
 def step_text(block):
     """도구 사용 한 번을 한 줄로 (진행 상황 표시용)."""
     name, inp = block.get("name", ""), (block.get("input") if isinstance(block.get("input"), dict) else {})
@@ -1187,6 +1220,14 @@ def end_watch_loop(o, p, watch, every=5):
             return
 
 
+def done_report(result, report="", last=""):
+    """끝난 지시의 비서실장 보고 글. 담당을 백그라운드로 부르면 실행 끝에 init + 빈 result 가 한 번 더 와서
+    빈 글이 보고가 되고 '결재:'·'배포 준비:'·'캡처:' 줄을 못 읽었다(2026-11-21 시험 지시 1121-182441·182316).
+    마지막 result 가 비면 → 앞의 비어 있지 않은 result(report) → 마지막 말(o['last'], 400자까지) 순으로 쓴다."""
+    return (str((result or {}).get("result") or "").strip() or str(report or "").strip()
+            or str(last or "").strip())
+
+
 def run_order(o, prompt):
     try:
         cached("hr", 120, build_hr)  # 비서실장이 읽을 out/hr.json 을 새로 만든다
@@ -1207,7 +1248,7 @@ def run_order(o, prompt):
     env.update(PYTHONUTF8="1", PYTHONIOENCODING="utf-8")  # 한글 경로·출력에서 python 도구가 죽지 않게
     env["PATH"] = os.pathsep.join([d for d in extra if Path(d).is_dir()] + [env.get("PATH", "")])
     log = ORDERS_DIR / f"{o['id']}.jsonl"
-    result, err, used, t0 = None, None, 0, time.time()
+    result, report, err, used, t0 = None, "", None, 0, time.time()
     owners = {}  # 도구 호출 id → 그 일을 하는 담당 (담당 안에서 부른 도구도 그 담당 몫)
     o["active"] = []
     with ORDER_LOCK:
@@ -1238,6 +1279,8 @@ def run_order(o, prompt):
                     watch.feed(ev)
                     if ev.get("type") == "result":
                         result = ev
+                        if str(ev.get("result") or "").strip():
+                            report = str(ev["result"]).strip()  # 빈 result 가 뒤에 와도 진짜 보고를 남긴다(done_report)
                         # 담당이 백그라운드로 일하면 한 실행에 result 가 여러 번 온다 → 모두 더한다(마지막 것만 세면 0으로 나왔다, 2026-11-01)
                         u = ev.get("usage") if isinstance(ev.get("usage"), dict) else {}
                         used += sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
@@ -1257,7 +1300,7 @@ def run_order(o, prompt):
         if o.get("status") == "stopping":
             o["status"], text = "stopped", "사용자가 멈췄습니다."
         elif result and not result.get("is_error"):
-            o["status"], text = "done", (result.get("result") or "").strip()
+            o["status"], text = "done", done_report(result, report, o.get("last"))
         else:
             o["status"] = "fail"
             text = (result or {}).get("result") or err or "실행이 끝났지만 결과가 없습니다(시간 초과 또는 로그인 문제). 기록: dashboard/orders/" + log.name
@@ -1353,8 +1396,15 @@ def schedule(o, text, when):
 
 def scheduler():
     """20초마다: 시각이 된 예약을 하나씩 시작한다. 앞 지시가 실행 중이거나 한도가 막혀 있으면 기다린다."""
+    tick = 0
     while True:
         time.sleep(20)
+        tick += 1
+        if tick % 30 == 1:  # 켠 뒤 20초, 그 뒤 10분마다: 대시보드 밖에서 배포된 카드 닫기
+            try:
+                settle_outside_deploys()
+            except Exception as e:
+                print("밖 배포 확인 오류:", e)
         try:
             due = None
             with ORDER_LOCK:
@@ -2133,7 +2183,8 @@ def build_activity():
             items.append({"at": int(t), "who": who, "kind": "commit", "text": msg, "ref": sha})
     for o in orders_view():
         for tr in o["turns"]:
-            if tr["by"] == "system":
+            # 빈 보고(백그라운드 담당을 쓰면 마지막 result 가 빈 글로 한 번 더 옴, 2026-11-21)는 건너뛴다 — 한 줄 때문에 업무 기록 전체가 죽지 않게
+            if tr["by"] == "system" or not str(tr.get("text") or "").strip():
                 continue
             items.append({"at": tr["at"], "who": "captain" if tr["by"] == "me" else "claude", "kind": "order", "ref": o["id"],
                           "text": ("지시: " if tr["by"] == "me" else "보고: ") + tr["text"].strip().splitlines()[0][:120]})
