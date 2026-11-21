@@ -50,6 +50,17 @@
     vi: { asks: "Yêu cầu thường gặp", herb: "Không cho rau mùi", mild: "Không cay", msg: "Không bột ngọt", ice: "Để đá riêng", plate: "Cho thêm chén đĩa nhỏ", togo: "Gói mang về" },
   };
   const ASKS = [["herb", "🌿"], ["mild", "🌶️"], ["msg", "🧂"], ["ice", "🧊"], ["plate", "🍽️"], ["togo", "🥡"]];
+  // 손님 돈으로 대략 환산(2026-11-21 캡틴 가-2): 동(₫) 가게에서 손님 언어가 ko·en·ja·zh일 때만. 환율은 고정값 —
+  // 바꿀 때 FX_DATE·FX 를 같이 고치고 tools 로 11곳에 복사한다(출처 open.er-api.com, 1단위 = 몇 동). 가게에서 끄려면 ORDER.fx = false
+  const FX_DATE = "2026-11-20";
+  const FX = {
+    ko: { per: 19.31, step: 100, f: (n) => n.toLocaleString("en-US") + "원", note: "환율 " + FX_DATE + " 기준, 대략" },
+    en: { per: 25641, step: 0.1, f: (n) => "$" + (n >= 10 ? Math.round(n).toLocaleString("en-US") : n.toFixed(1)), note: "Approx. rate as of " + FX_DATE },
+    ja: { per: 161.11, step: 10, f: (n) => n.toLocaleString("en-US") + "円", note: FX_DATE + " 時点の概算レート" },
+    zh: { per: 3846.15, step: 1, f: (n) => n.toLocaleString("en-US") + "元", note: "约按 " + FX_DATE + " 汇率" },
+  };
+  const fxOf = (l) => (CFG.fx !== false && CFG.currency === "₫" && FX[l]) || null;
+  const fx = (vnd, l) => { const r = fxOf(l); if (!r || !vnd) return ""; const n = Math.max(r.step, Math.round(vnd / r.per / r.step) * r.step); return r.f(r.step < 1 ? Math.round(n * 10) / 10 : n); };
   // 직원에게 보여주는 주문서 머리말 (직원 언어)
   const HEAD = { vi: "ĐƠN GỌI MÓN", ko: "주문서", en: "ORDER", zh: "点餐单", ja: "注文書" };
 
@@ -119,6 +130,7 @@
   }
 
   const css = `
+    .qo-fx { margin-top: 3px; text-align: right; font-size: 12px; font-weight: 600; color: var(--pt-muted, #888); font-variant-numeric: tabular-nums; }
     .qo-add { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
     .qo-add button { position: relative; font: inherit; font-size: 12.5px; font-weight: 800; line-height: 1; letter-spacing: 0; text-transform: none; color: var(--pt-ink, #222); background: transparent; border: 1.5px solid var(--pt-line, #ddd); border-radius: 999px; padding: 6px 11px 6px 9px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
     .qo-add button::before { content: "+ "; color: var(--pt-accent, #e0452b); }
@@ -224,6 +236,15 @@
       const lis = sec.querySelectorAll(":scope > ul > li");
       cat.items.forEach((it, i) => {
         const li = lis[i];
+        if (li && fxOf(l) && !li.querySelector(".qo-fx")) {
+          const ps = options(it).map((o) => o.price).filter((p) => p != null);
+          if (ps.length) {
+            const lo = Math.min(...ps), hi = Math.max(...ps), el = document.createElement("div");
+            el.className = "qo-fx";
+            el.textContent = "≈ " + fx(lo, l) + (hi > lo ? " ~ " + fx(hi, l) : "");
+            (li.querySelector(":scope > .info") || li).appendChild(el);
+          }
+        }
         if (!li || it.soldOut || li.querySelector(".qo-add")) return;
         const box = document.createElement("div");
         box.className = "qo-add";
@@ -267,7 +288,7 @@
         <div class="pr">${p == null ? esc(t.market) : money(p * q)}</div></li>`;
     }).join("");
     $("qoTotal").innerHTML = `<span>${esc(t.total)}</span><span>${money(total())}${hasMarket() ? ` <small>${esc(t.plus)}</small>` : ""}</span>`;
-    $("qoHint").textContent = t.hint;
+    $("qoHint").textContent = t.hint + (fxOf(l) && total() ? ` · ≈ ${fx(total(), l)} (${FX[l].note})` : "");
     $("qoTableL").firstChild.textContent = t.table;
     $("qoTable").placeholder = t.tablePh;
     const a = ASK[l] || ASK.en;
