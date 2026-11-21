@@ -2,6 +2,7 @@
 // 가격·비용 가정은 model.mjs(2026-11-19)와 같다: 기본 250만·프리미엄 500만(7:3) / 월 35만(연결제 섞어 31.5만) / 대표 3,000만 / 차량+기사 3,000만
 // 캡틴 '2년차부터 흑자가 오르는 구조'(2026-11-21): 1년차는 영업사원 1명 = 매달 5곳(보수와 같음),
 // 2년차부터 소개·한인 상권 제휴·가게 찾기 문의로 1명당 7~8곳 → 기본 새 계약 10→30→50곳, 영업 2→4→6명
+// 2026-11-21 캡틴: 대표도 손님을 만나 영업 → 모든 시나리오에 대표 계약 매달 5곳(CEO)을 더함. 대표 계약엔 영업 수당 없음(대표 급여에 포함)
 // 사용: node investor/model2.mjs
 const A = { setupAvg: 3_250_000, optAvg: 400_000, monthly: 315_000, churn: 0.02 };
 const S = {
@@ -9,6 +10,7 @@ const S = {
   기본: { per: [10, 30, 50], staff: [[2,1,0],[4,2,1],[6,3,1]], office: [5e6,8e6,15e6], ads: [10e6,15e6,30e6] },
   공격: { per: [15, 40, 80], staff: [[3,1,0],[5,2,1],[10,3,1]], office: [5e6,8e6,15e6], ads: [15e6,20e6,40e6] },
 };
+const CEO = 5; // 대표가 직접 맺는 새 계약(매달)
 const PAY = [12e6, 11e6, 14e6]; // 영업, 제작·고객지원, 관리 (월 급여)
 const out = {};
 for (const [name, sc] of Object.entries(S)) {
@@ -19,11 +21,11 @@ for (const [name, sc] of Object.entries(S)) {
     const C = { 직원급여: 0, 대표급여: 0, 차량기사: 0, 사무실: 0, 광고마케팅: 0, 영업수당: 0, 인쇄: 0, 서버도구: 0 };
     let first = null;
     for (let m = 0; m < 12; m++) {
-      const n = sc.per[y]; active = active * (1 - A.churn) + n;
+      const n = sc.per[y] + CEO; active = active * (1 - A.churn) + n;
       const r = { 제작비: n * A.setupAvg, 옵션: n * A.optAvg, 월관리: active * A.monthly };
       const st = sc.staff[y];
       const c = { 직원급여: st[0]*PAY[0] + st[1]*PAY[1] + st[2]*PAY[2], 대표급여: 30e6, 차량기사: 30e6, 사무실: sc.office[y],
-        광고마케팅: sc.ads[y], 영업수당: n * A.setupAvg * 0.10, 인쇄: n * 150_000, 서버도구: [5e6,8e6,12e6][y] + active * 5_000 };
+        광고마케팅: sc.ads[y], 영업수당: sc.per[y] * A.setupAvg * 0.10, 인쇄: n * 150_000, 서버도구: [5e6,8e6,12e6][y] + active * 5_000 };
       if (y === 0 && m === 0) first = { r, c };
       for (const k in r) R[k] += r[k]; for (const k in c) C[k] += c[k];
       const v = Object.values(r).reduce((a, b) => a + b) - Object.values(c).reduce((a, b) => a + b);
