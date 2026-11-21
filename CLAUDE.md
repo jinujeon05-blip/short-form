@@ -115,6 +115,7 @@
 - 윈도우에서 경로는 `tools/pw.mjs`의 `ROOT`·`fileUrl()`로 만든다. `.sh`는 Git Bash로 돌린다.
 
 ## 8. 상세 기록 (`docs/`, 필요할 때만 읽음)
+- **`AGENTS.md`** = 클로드가 아닌 AI(안티그래비티 등)용 입구(2026-11-21 캡틴 마-1). 이 파일 2장 규칙·배포 순서가 크게 바뀌면 그 4장도 한 줄 고친다.
 - `team-plan.md` 기획서(30문항·조직도, 팀·대시보드 일 전에 읽음) · `standard.md` 가마솥 표준(새 가게마다) · `new-shop.md` 새 가게 체크리스트 상세 · `deploy.md` 배포·머지 순서
 - `shop-builder.md` 대시보드 '가게 만들기' 탭(캡틴이 화면에서 가게를 직접 만들기·AI 번역, `tools/build-shop.mjs`·`dashboard/builder.py`)
 - `tools.md` 도구 상세 · `team-test.md` 담당 명령·시험 기록 · `mistakes.md` 실수 사건 · `stores.md` 가게 목록·기록(`grep -n "가게이름"`) · `todo.md` 남은 할 일(말한 가게 줄만)
