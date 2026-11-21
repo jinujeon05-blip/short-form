@@ -919,6 +919,39 @@ def settle_deployed(src, shops):
             save_order(o)
 
 
+def settle_outside_deploys():
+    """대시보드 밖(Claude 앱 등)에서 배포를 끝낸 카드를 닫는다(2026-11-21 박닌 스마일 회관 건).
+    [배포 확정]이 멈춘 뒤 비서실장이 따로 배포하면 대시보드는 몰라서 '배포 멈춤'이 계속 남았다.
+    Vercel 의 마지막 production 배포가 READY 이고, 그 커밋의 가게 폴더가 지금 저장소(HEAD)와 같으면 배포된 것으로 본다.
+    토큰이 없거나 조회가 실패하면 아무것도 바꾸지 않는다. 2주 지난 카드는 보지 않는다."""
+    with ORDER_LOCK:
+        todo = [o for o in ORDERS.values() if o.get("status") == "done" and o.get("deploy")
+                and o.get("deployState") in (None, "fail") and time.time() - (o.get("createdAt") or 0) < 14 * 86400]
+    for o in todo:
+        try:
+            ok = []
+            for shop in o["deploy"]:
+                code, lst = vapi("GET", f"/v6/deployments?projectId={shop}-menu&target=production&limit=1", tries=1)
+                last = (lst.get("deployments") or [{}])[0] if code == 200 else {}
+                sha = (last.get("meta") or {}).get("githubCommitSha")
+                if (last.get("readyState") or last.get("state")) != "READY" or not sha:
+                    break
+                if sh(["git", "diff", "--quiet", sha, "HEAD", "--", f"restaurants/{shop}"])[0] != 0:
+                    break  # 저장소에 아직 배포 안 된 수정이 있음(또는 그 커밋이 이 PC에 없음) → 그대로 둠
+                ok.append(f"{shop}({sha[:7]})")
+            else:
+                with ORDER_LOCK:
+                    o["deployState"] = "done"
+                    o["deployErr"] = None
+                    o["turns"].append({"by": "system", "at": time.time(), "text":
+                        "대시보드 밖(Claude 앱 등)에서 배포가 끝난 것을 Vercel 에서 확인해 이 카드를 닫았어요: " + ", ".join(ok)
+                        + "\n실서버 내용 = 지금 저장소 내용."})
+                    save_order(o)
+                settle_deployed(o, o["deploy"])
+        except Exception as e:  # 토큰 없음·인터넷 끊김 등 — 카드는 그대로 두고 다음에 다시 본다
+            print("settle_outside_deploys:", o.get("id"), e)
+
+
 def step_text(block):
     """도구 사용 한 번을 한 줄로 (진행 상황 표시용)."""
     name, inp = block.get("name", ""), (block.get("input") if isinstance(block.get("input"), dict) else {})
@@ -1353,8 +1386,15 @@ def schedule(o, text, when):
 
 def scheduler():
     """20초마다: 시각이 된 예약을 하나씩 시작한다. 앞 지시가 실행 중이거나 한도가 막혀 있으면 기다린다."""
+    tick = 0
     while True:
         time.sleep(20)
+        tick += 1
+        if tick % 30 == 1:  # 켠 뒤 20초, 그 뒤 10분마다: 대시보드 밖에서 배포된 카드 닫기
+            try:
+                settle_outside_deploys()
+            except Exception as e:
+                print("밖 배포 확인 오류:", e)
         try:
             due = None
             with ORDER_LOCK:
