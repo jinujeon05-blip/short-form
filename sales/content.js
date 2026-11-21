@@ -275,6 +275,7 @@ window.T = {
     faqs: [
       ["음식 사진이 없어도 되나요?", "네, 메뉴판 사진만 있으면 돼요. 음식 사진이 있으면 더 보기 좋아져요."],
       ["번역은 누가 하나요?", "저희가 5개 언어로 번역하고, 사장님이 확인하신 뒤에 올려요."],
+      ["직접 만드는 QR 메뉴 앱과 무엇이 다른가요?", "사장님이 가입·메뉴 입력·번역 설정을 하실 필요 없이 저희가 다 만들어 드려요. 첫해는 {basic} + 연 관리 {yearly}, 다음 해부터는 연 {yearly}이고, QR 메뉴판 가게 찾기에도 가게가 함께 나와요."],
       ["손님이 바로 주문할 수도 있나요?", "기본은 메뉴 보기예요. 장바구니 주문서 화면이나 테이블 주문 시스템을 옵션으로 추가할 수 있어요."],
       ["월 관리를 그만두면 어떻게 되나요?", "월 관리비가 끊기면 메뉴판 사이트 운영이 중단돼요."],
     ],
@@ -350,6 +351,7 @@ window.T = {
     faqs: [
       ["Không có ảnh món ăn có được không?", "Được, chỉ cần ảnh thực đơn. Có ảnh món ăn thì trang sẽ đẹp hơn."],
       ["Ai dịch thực đơn?", "Chúng tôi dịch sang 5 ngôn ngữ, chủ quán kiểm tra xong mới đăng."],
+      ["Khác gì so với ứng dụng thực đơn QR tự làm?", "Chủ quán không cần đăng ký, nhập món hay cài đặt dịch — chúng tôi làm hết. Năm đầu {basic} + bảo trì năm {yearly}, từ năm sau chỉ {yearly}/năm, và quán còn được hiện trong trang Tìm quán của QR Menu."],
       ["Khách có gọi món trực tiếp được không?", "Gói cơ bản là xem thực đơn. Có thể thêm màn hình giỏ hàng hoặc hệ thống gọi món tại bàn."],
       ["Nếu ngừng gói bảo trì thì sao?", "Khi ngừng thanh toán phí hàng tháng, trang thực đơn sẽ tạm ngừng hoạt động."],
     ],
@@ -425,6 +427,7 @@ window.T = {
     faqs: [
       ["Do I need food photos?", "No, a photo of your menu is enough. Food photos make it look even better."],
       ["Who does the translation?", "We translate into 5 languages, and it goes live after you check it."],
+      ["How is this different from DIY QR menu apps?", "You don't sign up, type in dishes or set up translation — we build everything for you. The first year is {basic} + {yearly} yearly care, then {yearly} a year, and your restaurant is also listed in the QR Menu store finder."],
       ["Can guests order from the menu?", "The basic plan is for viewing. You can add a cart screen or a table ordering system."],
       ["What if I stop the monthly plan?", "If the monthly fee stops, the menu site is taken offline."],
     ],
@@ -500,6 +503,7 @@ window.T = {
     faqs: [
       ["没有菜品照片可以吗？", "可以，有菜单照片就够了。有菜品照片的话效果会更好。"],
       ["谁来翻译？", "我们负责翻译成5种语言，老板确认后再上线。"],
+      ["和自己动手做的QR菜单应用有什么不同？", "老板不用注册、录入菜品或设置翻译，全部由我们来做。第一年 {basic} + 年度维护 {yearly}，之后每年 {yearly}，店铺还会出现在QR菜单的找店页面。"],
       ["客人可以直接点餐吗？", "基础版用于浏览菜单。可以加购购物车点单页面或桌边点餐系统。"],
       ["停止月度维护会怎样？", "停止支付月费后，菜单网站将暂停运行。"],
     ],
@@ -575,6 +579,7 @@ window.T = {
     faqs: [
       ["料理の写真がなくても大丈夫？", "はい、メニューの写真だけで作れます。料理の写真があれば、さらに見栄えが良くなります。"],
       ["翻訳は誰がしますか？", "私たちが5言語に翻訳し、オーナー様の確認後に公開します。"],
+      ["自分で作るQRメニューアプリと何が違いますか？", "登録・メニュー入力・翻訳設定は不要で、すべて私たちが作ります。初年度は {basic} + 年間サポート {yearly}、翌年からは年 {yearly} で、QRメニューのお店探しにもお店が載ります。"],
       ["お客様がそのまま注文できますか？", "基本はメニューの閲覧です。カート注文画面やテーブル注文システムをオプションで追加できます。"],
       ["月額サポートをやめるとどうなりますか？", "月額料金のお支払いが止まると、メニューサイトの運用は停止します。"],
     ],
