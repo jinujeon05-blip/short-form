@@ -8,7 +8,7 @@
   2. 모든 원격 브랜치의 가게 수를 비교한다: `for b in $(git branch -r | grep -v HEAD); do echo "$b $(git show $b:sales/stores/data.js | grep -c '^  { id:')"; done`
   3. `list_deployments`로 직전 배포의 브랜치·커밋을 본다. 거기에 내 브랜치에 없는 가게가 있으면 먼저 합친다. **가게 수만 보지 말고 최근 배포 5개의 커밋이 모두 내 브랜치에 들어 있는지 `git merge-base --is-ancestor <sha> HEAD`로 본다**(빠진 것은 그 브랜치를 합친 뒤 배포, 2026-11-16 주방 소리 덮어쓰기 건).
   4. 배포 뒤 `https://qrmenuasia.com/sitemap.xml`의 주소 수가 가게 수+2인지 확인한다.
-- **방법**: 커밋·푸시 후 Vercel MCP `create_deployment`에 `gitSource`(github, org `jinujeon05-blip`, repo `short-form`, 브랜치·커밋 sha)와 `projectSettings.rootDirectory: "restaurants/<가게>"`를 넘긴다.
+- **방법**: 커밋·푸시 후 Vercel MCP `create_deployment`에 `gitSource`(github, org `jinujeon05-blip`, repo `short-form`, 브랜치·커밋 sha)와 `projectSettings.rootDirectory: "restaurants/<가게>"`를 넘긴다. **기존 가게도 매번 넘긴다**(프로젝트에 폴더 설정이 비어 있으면 저장소 맨 위가 빌드됨 — 2026-11-21 숯꾸이). 배포 뒤엔 첫 화면 `<title>`이 그 가게인지 본다.
 - **새 가게 첫 배포**:
   1. `name`·`project`를 `<가게>-menu`로, `target: "production"`, `projectSettings`(framework 등 null)를 주면 프로젝트도 같이 생긴다.
   2. `update_project`로 `ssoProtection.deploymentType: "prod_deployment_urls_and_all_previews"`로 바꾼다(팀 기본값이 로그인 보호라서).
