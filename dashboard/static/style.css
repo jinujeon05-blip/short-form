@@ -48,7 +48,7 @@ a { color: var(--blue); text-decoration: none; }
 .src { font-size: 11px; color: var(--sub); margin-top: 4px; word-break: break-all; }
 
 /* 3단 배치 (2026-10-28): 왼쪽 지시·결재함 / 가운데 한도·사무실·탭 / 오른쪽 브리핑·업무 기록 */
-.layout { display: grid; grid-template-columns: 340px minmax(0, 1fr) 320px; gap: 18px; max-width: 1920px; margin: 0 auto; padding: 16px 24px 40px; align-items: start; }
+.layout { display: grid; grid-template-columns: 380px minmax(0, 1fr) 320px; gap: 18px; max-width: 1920px; margin: 0 auto; padding: 16px 24px 40px; align-items: start; }
 .col.left, .col.right { position: sticky; top: 78px; display: flex; flex-direction: column; gap: 14px; max-height: calc(100vh - 94px); overflow-y: auto; scrollbar-width: thin; }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; box-shadow: 0 1px 2px rgba(20,30,50,.04), 0 6px 18px rgba(20,30,50,.04); }
 .card h2 { margin: 0 0 10px; font-size: 15px; display: flex; align-items: center; gap: 8px; }
@@ -94,43 +94,44 @@ a { color: var(--blue); text-decoration: none; }
 .shots { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
 .shots img { width: 170px; height: 340px; object-fit: cover; object-position: top; border: 1px solid var(--line); border-radius: 12px; display: block; }
 
-/* 사무실 (사진 위에 간판 글자·누르는 자리를 % 좌표로 올림) */
-.office { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: #fff; box-shadow: 0 8px 28px rgba(20,30,50,.08); }
-.scene { position: relative; width: 100%; container-type: inline-size; }
-.scene > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.scene.phone { display: none; }
-.sign { position: absolute; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 1.5cqw;
-  text-shadow: 0 1px 2px rgba(0,0,0,.25); pointer-events: none; white-space: nowrap; }
-.spot { position: absolute; background: none; border: 0; padding: 0; border-radius: 14px; cursor: pointer; transition: box-shadow .15s, background .15s; }
+/* 사무실 (움직이는 사무실, 2026-11-21): 빈 사무실 그림 위에 자리 조각·걷는 사람·말풍선·누르는 자리를 % 좌표로 올림 */
+.office { position: relative; isolation: isolate; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: #1b1d22; box-shadow: 0 8px 28px rgba(20,30,50,.08); }
+.stage { position: relative; width: 100%; aspect-ratio: 2752 / 1536; container-type: inline-size; overflow: hidden; }
+.stage > img.bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.stage .tile, .stage .walker { position: absolute; pointer-events: none; transition: opacity .45s ease; }
+.stage .walker { opacity: 0; z-index: 20; transform-origin: 50% 100%; }
+.stage .walker.go { animation: bob .42s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -1.5%; } }
+.stage .bubble { position: absolute; z-index: 60; padding: .35em .8em; border-radius: 999px; background: #fff; color: #222; font-size: clamp(10px, 1.1cqw, 15px); font-weight: 700;
+  box-shadow: 0 2px 8px #0004; white-space: nowrap; translate: -50% -100%; opacity: 0; transition: opacity .3s; pointer-events: none; }
+.stage .bubble.on { opacity: 1; }
+.sign { position: absolute; z-index: 15; color: #fff; font-weight: 800; font-size: clamp(8px, 1.25cqw, 20px); translate: -50% -50%; text-shadow: 0 1px 2px #0005;
+  letter-spacing: .05em; white-space: nowrap; pointer-events: none; }
+.spot { position: absolute; z-index: 40; background: none; border: 0; padding: 0; border-radius: 14px; cursor: pointer; transition: box-shadow .15s, background .15s; }
 .spot:hover, .spot:focus-visible { background: rgba(47,111,236,.12); box-shadow: 0 0 0 2px rgba(47,111,236,.6); outline: none; }
-/* 이름표 (2026-10-28 다듬음): 어두운 유리 알약 + 굵은 이름 + 작은 맡은 일 */
-.spot .tag { position: absolute; left: 50%; top: 100%; transform: translate(-50%, -12%); display: inline-flex; align-items: center; gap: .45em;
-  background: rgba(22, 30, 48, .82); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); color: #fff;
-  border: 1px solid rgba(255,255,255,.18); border-radius: 12px; padding: .2em .8em .22em; font-size: max(12.5px, 1.15cqw); line-height: 1.15; flex-direction: column; gap: 0;
-  white-space: nowrap; box-shadow: 0 4px 14px rgba(10, 18, 35, .28); letter-spacing: -.01em; transition: transform .15s, background .15s; }
-/* 캡틴 이름표는 아래에 두면 비서실장 얼굴을 가려서 책상 오른쪽 옆에 둔다 */
-.spot[data-id="captain"] .tag { left: 100%; top: 62%; transform: translate(6px, -50%); }
-.spot[data-id="captain"]:hover .tag, .spot[data-id="captain"]:focus-visible .tag { transform: translate(4px, -50%); }
+/* 이름표: 자리 아래 어두운 유리 알약 + 굵은 이름 + 상태 줄(작업 중… / ✔ 작업 완료 / 보고하러 감) */
+.spot .tag { position: absolute; left: 50%; top: 100%; transform: translate(-50%, -70%); display: inline-flex; flex-direction: column; align-items: center;
+  background: rgba(22, 30, 48, .78); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); color: #fff;
+  border: 1px solid rgba(255,255,255,.18); border-radius: 10px; padding: .15em .7em .18em; font-size: clamp(10px, 1.05cqw, 15px); line-height: 1.15;
+  white-space: nowrap; box-shadow: 0 4px 14px rgba(10, 18, 35, .28); letter-spacing: -.01em; transition: background .15s; }
+.spot[data-k="captain"] .tag { left: 100%; top: 55%; transform: translate(6px, -50%); }
+.spot[data-k="chief"] .tag { top: 92%; }
 .tag b { font-weight: 700; }
-.tag small { font-size: .74em; font-weight: 500; color: #cfdaff; }
-.spot:hover .tag, .spot:focus-visible .tag { background: rgba(47, 111, 236, .92); transform: translate(-50%, calc(-12% - 2px)); }
-.spot:hover .tag small { color: #e3ebff; }
-.spot.on { box-shadow: 0 0 0 3px #4da3ff, 0 0 28px 8px rgba(77,163,255,.75); background: rgba(143,208,255,.18); animation: glow 1.4s ease-in-out infinite; }
-.spot.on .tag, .spot.on:hover .tag { background: rgba(47, 111, 236, .95); border-color: #9cc4ff; }
-@keyframes glow { 50% { box-shadow: 0 0 0 3px #4da3ff, 0 0 12px 2px rgba(77,163,255,.4); } }
-@media (prefers-reduced-motion: reduce) { .spot.on { animation: none; } }
-/* 일이 끝난 자리: 녹색 테두리 + 이름표 아래 줄 '✔ 작업 완료' (말풍선은 간판과 겹쳐서 이름표 안에 씀) */
-.spot.done { box-shadow: 0 0 0 3px #2fb36b, 0 0 18px 4px rgba(47,179,107,.55); background: rgba(120,220,160,.16); }
-.spot.done .tag, .spot.done:hover .tag { background: rgba(31, 138, 80, .95); border-color: #8fe0b3; }
-/* 작업 중·작업 완료는 말풍선 대신 이름표 아래 줄에 (말풍선은 위 간판과 겹쳤음, 2026-10-30) */
-.spot.on .tag .st { color: #fff; }
-.tag .st { font-style: normal; font-size: .74em; font-weight: 700; color: #e6ffef; line-height: 1.1; }
-/* 인력 공급팀 보고 표시: 자리 오른쪽에 세로로 (위쪽 부서 간판을 가리지 않게) */
+.tag .st { font-style: normal; font-size: .78em; font-weight: 700; color: #e6ffef; line-height: 1.1; }
+.tag .st:empty { display: none; }
+.spot:hover .tag, .spot:focus-visible .tag { background: rgba(47, 111, 236, .92); }
+.spot.on .tag { background: rgba(47, 111, 236, .95); border-color: #9cc4ff; animation: glow 1.4s ease-in-out infinite; }
+@keyframes glow { 50% { box-shadow: 0 0 0 2px #4da3ff, 0 0 14px 3px rgba(77,163,255,.55); } }
+@media (prefers-reduced-motion: reduce) { .spot.on .tag, .stage .walker.go { animation: none; } }
+.spot.done .tag { background: rgba(31, 138, 80, .95); border-color: #8fe0b3; }
+.spot.away .tag { background: rgba(196, 106, 0, .92); }
+/* 인력 공급팀 보고 표시: 자리 오른쪽에 세로로 */
 .marks { position: absolute; left: 100%; top: 4%; display: flex; flex-direction: column; gap: 3px; margin-left: 4px; pointer-events: none; }
-.marks span { border-radius: 99px; padding: .05em .65em; font-size: max(11px, .85cqw); font-weight: 700; white-space: nowrap; background: #fff; }
+.marks span { border-radius: 99px; padding: .05em .65em; font-size: clamp(9px, .85cqw, 13px); font-weight: 700; white-space: nowrap; background: #fff; }
 .marks .ok { color: #1f8a50; border: 1px solid #2fb36b; }
 .marks .no { color: #fff; background: #d93636; border: 1px solid #b52222; }
-.avatar { width: 72px; border-radius: 12px; background-repeat: no-repeat; flex: none; border: 1px solid var(--line); }
+.avatar { width: 72px; height: 72px; border-radius: 22px; object-fit: cover; flex: none; border: 1px solid var(--line); background: #e9edf3; }
+.avatar.ph { display: grid; place-items: center; font-weight: 800; color: var(--sub); font-size: 26px; }
 
 /* 탭 */
 .tabs { display: flex; gap: 6px; margin: 18px 0 10px; border-bottom: 1px solid var(--line); }
@@ -190,7 +191,7 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
 
 /* 화면이 좁으면: 오른쪽 칸을 가운데 아래로, 더 좁으면 한 줄로 쌓기 */
 @media (max-width: 1500px) {
-  .layout { grid-template-columns: 320px minmax(0, 1fr); }
+  .layout { grid-template-columns: 360px minmax(0, 1fr); }
   .col.right { grid-column: 2; position: static; max-height: none; flex-direction: row; }
   .col.right > .card { flex: 1; min-width: 0; }
   .col.right .feed { max-height: 360px; overflow-y: auto; }
@@ -206,17 +207,11 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
   .top { padding: 10px 16px; }
   .counts span:nth-child(n+4) { display: none; }
   .counts span.sched { display: inline-block; }  /* 예약은 폰에서도 보이게(2026-11-01) */
-  .spot .tag small { display: none; }
   .cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .sc .bd { padding: 8px; }
   .panel { top: auto; height: 82vh; width: 100%; border-radius: 16px 16px 0 0; transform: translateY(105%); }
 }
 @media (max-width: 380px) { .cards { grid-template-columns: 1fr; } }
-@media (max-width: 700px) {
-  .scene.pc { display: none; }
-  .scene.phone { display: block; }
-  .sign { font-size: 3.6cqw; }
-}
 /* 인력공급팀·선별팀 옆 창 숫자 칸 */
 .hr-kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
 .hr-kpi div { background: #f4f6f9; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 2px; }
@@ -224,14 +219,6 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
 .hr-kpi b { font-size: 20px; }
 .hr-days th small, .hr-days td small { display: block; font-size: 11px; color: var(--sub); font-weight: 400; white-space: nowrap; }
 .hr-days td b { font-size: 15px; }
-/* 폰 사진: 붙어 앉은 두 쌍은 이름표가 겹쳐서 오른쪽 사람 이름표를 한 줄 아래로 */
-@media (max-width: 700px) {
-  .scene.phone .spot .tag { font-size: 11px; padding: .25em .6em; }
-  /* 붙어 앉은 두 쌍은 왼쪽 사람 이름표를 책상 위로 올려 엇갈리게 */
-  .scene.phone .spot[data-id="agy"] .tag, .scene.phone .spot[data-id="codex"] .tag { transform: translate(-50%, -110%); }
-  /* 폰은 맡은 일 줄을 숨겨서 '✔ 작업 완료' 줄만큼 이름표가 높아진다 → 오른쪽 사람은 아래로 붙여 위 이름표와 안 닿게 */
-  .scene.phone .spot:is(.done, .on):not([data-id="agy"]):not([data-id="codex"]) .tag { transform: translate(-50%, 0); }
-}
 
 /* 예약 실행 (2026-11-01, '가-1·가-2') */
 .when { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 4px 0 8px; }
@@ -304,3 +291,59 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
 .lg { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin: 0 3px 0 6px; }
 .tabs { overflow-x: auto; scrollbar-width: none; } .tabs button { white-space: nowrap; flex: none; }
 @media (max-width: 700px) { .hr-kpi b { font-size: 16px; } }
+
+/* 대화방 (2026-11-21, '가-1'): 지시하기 + 팀 대화 + 결재함을 카톡 모양 하나로 */
+.chat { padding: 0; overflow: hidden; display: flex; flex-direction: column; border-color: #b6c9dc; }
+.chat-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #a9c0d6; color: #1d2733; }
+.chat-head b { font-size: 15px; flex: none; }
+.chat-head .live { color: #1f6fd6; font-size: 10px; }
+.chat-head select { margin-left: auto; min-width: 0; flex: 1 1 auto; max-width: 70%; border: 0; border-radius: 8px; padding: 4px 6px; font-size: 12px; background: rgba(255,255,255,.85); }
+.chat > .send-err { margin: 6px 12px 0; }
+.inbox-box { background: #fff; border-bottom: 1px solid #d5e0ea; }
+.inbox-box summary { cursor: pointer; padding: 7px 12px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; list-style: none; }
+.inbox-box summary::-webkit-details-marker { display: none; }
+.inbox-box summary::after { content: '▾'; margin-left: auto; color: var(--sub); }
+.inbox-box[open] summary::after { content: '▴'; }
+.inbox-box summary small { font-weight: 400; }
+.inbox-box #inbox { padding: 0 10px 8px; max-height: 260px; overflow-y: auto; }
+.chat-bar { display: flex; align-items: center; gap: 6px; padding: 6px 10px; background: #c7d8e8; font-size: 12px; }
+.chat-bar:empty { display: none; }
+.chat-bar b { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chat-bar .btn { padding: 3px 9px; font-size: 12px; flex: none; }
+.chat-msgs { background: #b9cfe4; height: min(52vh, 560px); min-height: 220px; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 9px; }
+.chat-msgs .empty { margin: 4px; font-size: 12px; color: #3d4f63; }
+.chat-note { padding: 3px 12px; background: #b9cfe4; font-size: 10px; color: #4b5d70; word-break: break-all; }
+.chat-note:empty { display: none; }
+.cm { display: flex; gap: 7px; align-items: flex-start; animation: cmIn .3s ease; }
+@keyframes cmIn { from { opacity: 0; translate: 0 6px; } }
+.cm .avatar { width: 36px; height: 36px; border-radius: 13px; border: 1px solid rgba(0,0,0,.06); font-size: 15px; }
+.cm .cb { min-width: 0; max-width: calc(100% - 86px); }
+.cm .nm { font-size: 11px; color: #2c3a49; margin-bottom: 3px; }
+.cm .nm .to { color: #556779; }
+.cm .nm .kind { margin-left: 4px; font-size: 10px; border-radius: 99px; padding: 0 6px; background: rgba(255,255,255,.6); }
+.cm.k-report .nm .kind { background: #dff3e7; color: #1f8a50; }
+.cm .tx { background: #fff; color: #1d1d1f; padding: 7px 10px; border-radius: 4px 14px 14px 14px; font-size: 13px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
+.cm .tx.long { max-height: 8.2em; overflow: hidden; position: relative; cursor: pointer; }
+.cm .tx.long::after { content: '눌러서 더 보기'; position: absolute; right: 0; bottom: 0; padding: 0 8px 0 30px; font-size: 11px; color: var(--blue); background: linear-gradient(90deg, transparent, #fff 35%); }
+.cm .tx.long.open { max-height: none; } .cm .tx.long.open::after { content: none; }
+.cm time { font-size: 10px; color: #4b5d70; align-self: flex-end; flex: none; }
+.cm.me { flex-direction: row-reverse; }
+.cm.me > div { max-width: calc(100% - 44px); }
+.cm.me .tx { background: #ffe14d; border-radius: 14px 4px 14px 14px; }
+.cm.me .tx.long::after { background: linear-gradient(90deg, transparent, #ffe14d 35%); }
+.chat-in { background: #fff; padding: 8px 10px 10px; border-top: 1px solid #d5e0ea; }
+.chat-in .chips { margin: 0 0 6px; }
+.chat-in textarea { width: 100%; resize: vertical; min-height: 54px; border: 1px solid var(--line); border-radius: 14px; padding: 8px 11px; background: #f5f6f8; line-height: 1.45; }
+.chat-in textarea:focus { outline: 2px solid rgba(47,111,236,.3); background: #fff; }
+.chat-in .when { margin: 6px 0 4px; }
+.chat-in .cmd-foot { display: flex; gap: 10px; align-items: flex-end; justify-content: space-between; }
+.chat-in .cmd-foot .muted { font-size: 11px; line-height: 1.4; }
+.btn.send { background: #ffe14d; border-color: #e8c800; color: #1d1d1f; font-weight: 800; padding: 8px 18px; border-radius: 18px; flex: none; }
+@media (max-width: 1100px) { .chat-msgs { height: 46vh; } }
+@media (max-width: 700px) {
+  .spot:not(.on, .done, .away) .tag { display: none; }  /* 폰은 일하는 자리만 이름표(쉬는 자리는 눌러서 옆 창) */
+  .spot .tag { font-size: 9px; padding: .1em .45em; border-radius: 7px; top: 72%; }  /* 아래 부서 간판을 덮지 않게 자리 안쪽에 */
+  .spot .tag .st { font-size: .85em; }
+  .sign { font-size: 2.1cqw; }
+  .marks span { font-size: 8px; }
+}

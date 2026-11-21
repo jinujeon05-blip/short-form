@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>움직이는 사무실 시험</title>
+<style>
+:root{--bg:#14161a;--panel:#b9cfe4;--me:#ffe14d;--txt:#1d1d1f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:"Malgun Gothic",system-ui,sans-serif;color:#eee;display:flex;gap:16px;padding:16px;flex-wrap:wrap;align-items:flex-start}
+.stage{position:relative;flex:1 1 900px;aspect-ratio:2752/1536;border-radius:14px;overflow:hidden;background:#000;container-type:inline-size}
+.stage>img.bg{position:absolute;inset:0;width:100%;height:100%}
+.tile,.walker{position:absolute;transition:opacity .45s ease;pointer-events:none}
+.walker{opacity:0;z-index:20;transform-origin:50% 100%}
+.walker.go{animation:bob .42s ease-in-out infinite}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -1.5%}}
+.bubble{position:absolute;z-index:30;padding:.35em .8em;border-radius:999px;background:#fff;color:#222;font-size:clamp(9px,1.05cqi,15px);font-weight:700;box-shadow:0 2px 8px #0004;white-space:nowrap;translate:-50% -100%;opacity:0;transition:opacity .3s}
+.bubble.on{opacity:1}
+.label{position:absolute;z-index:15;color:#fff;font-weight:800;font-size:clamp(8px,1.25cqi,20px);translate:-50% -50%;text-shadow:0 1px 2px #0005;letter-spacing:.05em;white-space:nowrap}
+.chat{flex:0 1 360px;min-width:280px;height:min(82vh,660px);background:var(--panel);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;color:var(--txt)}
+.chat header{background:#a9c0d6;padding:12px 14px;font-weight:800}
+.chat header small{font-weight:400;color:#456;margin-left:6px}
+.msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+.m{display:flex;gap:8px;align-items:flex-start;animation:in .3s ease}
+.m .av{width:38px;height:38px;border-radius:14px;background:#fff no-repeat;flex:none;border:1px solid #0001}
+.m .nm{font-size:12px;margin-bottom:3px;color:#333}
+.m .tx{background:#fff;padding:8px 11px;border-radius:4px 14px 14px 14px;font-size:14px;line-height:1.4;max-width:230px}
+.m .tm{font-size:10px;color:#556;align-self:flex-end}
+.m.me{flex-direction:row-reverse}.m.me .tx{background:var(--me);border-radius:14px 4px 14px 14px}
+@keyframes in{from{opacity:0;translate:0 8px}}
+.input{display:flex;gap:8px;padding:10px;background:#fff}
+.input div{flex:1;border-radius:18px;background:#f1f1f1;padding:8px 12px;color:#999;font-size:14px}
+.input b{background:var(--me);border-radius:18px;padding:8px 14px;font-size:14px}
+@media (max-width:700px){body{padding:8px}.chat{height:60vh;flex-basis:100%}}
+</style>
+<script src="tiles.js"></script><script src="routes.js"></script>
+</head><body>
+<div class="stage" id="st"><img class="bg" src="empty-a.jpg" alt=""></div>
+<div class="chat"><header>Jinwoo 에이전트 팀<small>10명</small></header><div class="msgs" id="msgs"></div>
+<div class="input"><div>지시를 입력하세요</div><b>보내기</b></div></div>
+<script>
+const O=window.OFFICE, P=window.TILE_POS, st=document.getElementById('st'), $=id=>document.getElementById(id);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const NAME={captain:'캡틴',chief:'비서실장',visual:'시각 정보 비서',menu:'메뉴 검사관',reader:'자료 해석 비서',codex:'운영 감찰관',auditor:'데이터 감사관',trans:'수석 번역관',staffing:'인력 공급팀',sorting:'선별팀'};
+const ORDER=['captain','chief','visual','menu','reader','codex','auditor','trans','staffing','sorting'];
+const LABELS=[['미디어 관제실',18.2,35.6],['디지털 메뉴 통제실',47.4,35.6],['감사실',77.8,35.6],['통번역 통제실',17.4,62.3],['인력 공급팀',49.4,62.3],['선별팀',80.4,62.3]];
+for(const [t,x,y] of LABELS){const d=document.createElement('div');d.className='label';d.textContent=t;d.style.left=x+'%';d.style.top=y+'%';st.append(d)}
+// 자리 조각: 사람마다 대기·일함·완료 3장, 하나만 보이게
+const state={};
+ORDER.forEach((k,i)=>{for(const s of['idle','work','ok']){const im=document.createElement('img');im.className='tile';im.id=`t-${k}-${s}`;im.src=`tiles/${k}-${s}.webp`;
+ Object.assign(im.style,{left:P[k].left+'%',top:P[k].top+'%',width:P[k].width+'%',zIndex:i+1,opacity:s==='idle'?1:0});st.append(im)}state[k]='idle'});
+const hand=document.createElement('img');hand.className='tile';hand.src='tiles/handoff.webp';Object.assign(hand.style,{left:P.handoff.left+'%',top:P.handoff.top+'%',width:P.handoff.width+'%',zIndex:3,opacity:0});st.append(hand);
+function seat(k,s){for(const x of['idle','work','ok'])$(`t-${k}-${x}`).style.opacity=(x===s)?1:0;state[k]=s}
+// 말풍선
+function bubble(text,xo,yo){const b=document.createElement('div');b.className='bubble';b.textContent=text;b.style.left=xo/O.W*100+'%';b.style.top=yo/O.H*100+'%';st.append(b);requestAnimationFrame(()=>b.classList.add('on'));return b}
+async function pop(text,xo,yo,ms){const b=bubble(text,xo,yo);await sleep(ms);b.classList.remove('on');setTimeout(()=>b.remove(),400)}
+function seatTop(k){const p=P[k];return [(p.left+p.width/2)/100*O.W,p.top/100*O.H+(p.top>50?150:40)]}   // 아래 줄은 간판을 피해 머리 위에
+// 걷는 사람
+const walkers={};
+for(const [k,r] of Object.entries(O.ROUTES)){const im=document.createElement('img');im.className='walker';im.src=r.walker+'.webp';st.append(im);walkers[k]=im}
+function place(im,x,y,left){const h=O.height(y),w=h*(im.naturalWidth/im.naturalHeight||.34);
+ Object.assign(im.style,{left:(x-w/2)/O.W*100+'%',top:(y-h)/O.H*100+'%',height:h/O.H*100+'%',transform:left?'scaleX(-1)':'none',zIndex:20+Math.round(y/10)})}
+async function walk(k,path,speed=300){const im=walkers[k];im.classList.add('go');
+ for(let i=0;i<path.length-1;i++){const [x1,y1]=path[i],[x2,y2]=path[i+1],len=Math.hypot(x2-x1,y2-y1),dur=len/speed*1000,t0=performance.now();
+  await new Promise(res=>{const f=t=>{const u=Math.min((t-t0)/dur,1);place(im,x1+(x2-x1)*u,y1+(y2-y1)*u,x2<x1);u<1?requestAnimationFrame(f):res()};requestAnimationFrame(f)})}
+ im.classList.remove('go')}
+// 보고하러 가기: 자리에서 일어남 → 통로 입구에서 나타남 → 보고 자리 → 보고 → 돌아와 앉음
+async function report(k,text){const r=O.ROUTES[k],im=walkers[k],path=r.path;
+ for(const x of['idle','work','ok'])$(`t-${k}-${x}`).style.opacity=0;       // 빈 의자
+ await sleep(350);place(im,...path[0],false);im.style.opacity=1;await sleep(300);
+ await walk(k,path);
+ const [x,y]=path[path.length-1];place(im,x,y,x>1400);                        // 비서실장 쪽을 봄
+ say(k,text);seat('chief','ok');await pop('보고드립니다!',x,y-O.height(y)-10,1800);
+ await walk(k,[...path].reverse());im.style.opacity=0;await sleep(350);seat(k,'idle');seat('chief','work')}
+async function handoff(text){for(const x of['idle','work','ok']){$(`t-captain-${x}`).style.opacity=0;$(`t-chief-${x}`).style.opacity=0}
+ hand.style.opacity=1;say('chief',text);await pop('결재 올립니다',1640,300,2600);hand.style.opacity=0;seat('captain','ok');seat('chief','idle');await sleep(1600);seat('captain','idle')}
+// 대화방
+const AV={};for(const k of ORDER)AV[k]=[`faces/${k}.webp`,'cover','center'];   // tools/office-faces.py 로 만든 얼굴
+function say(k,text){const t=new Date().toTimeString().slice(0,5),d=document.createElement('div'),me=k==='captain';d.className='m'+(me?' me':'');
+ const a=AV[k];d.innerHTML=me?`<div class="tx">${text}</div><div class="tm">${t}</div>`:`<div class="av" style="background-image:url(${a[0]});background-size:${a[1]};background-position:${a[2]}"></div><div><div class="nm">${NAME[k]}</div><div class="tx">${text}</div></div><div class="tm">${t}</div>`;
+ $('msgs').append(d);$('msgs').scrollTop=1e9}
+async function work(k,ms){seat(k,'work');const [x,y]=seatTop(k);await pop('작업 중…',x,y,ms);seat(k,'ok');await pop('완료!',x,y,1200)}
+async function loop(){for(;;){$('msgs').innerHTML='';
+ say('captain','바보아저씨 메뉴판 가격 다시 점검하고 번역도 확인해 줘');await sleep(900);
+ seat('chief','work');say('chief','네 캡틴. 메뉴 검사관·수석 번역관·선별팀에 나눠 맡길게요.');await sleep(900);
+ await Promise.all([
+  (async()=>{await work('menu',3000);await report('menu','메뉴 42개 중 가격 다른 곳 1곳 찾았습니다.')})(),
+  (async()=>{await sleep(1200);await work('trans',3600);await report('trans','5개 언어 번역 확인했습니다. 고칠 곳 2곳 표시했어요.')})(),
+  (async()=>{await sleep(2600);await work('sorting',3000);await report('sorting','사진 6장 골라 두었습니다.')})(),
+  (async()=>{await sleep(500);seat('auditor','work');await sleep(5000);seat('auditor','idle')})(),
+ ]);
+ await handoff('정리해서 결재함에 올렸어요 ✅ 확인해 주세요.');
+ await sleep(3500);}}
+Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(loop);
+</script></body></html>

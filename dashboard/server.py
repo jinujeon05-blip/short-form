@@ -2173,7 +2173,8 @@ def build_activity():
             items.append({"at": int(t), "who": who, "kind": "commit", "text": msg, "ref": sha})
     for o in orders_view():
         for tr in o["turns"]:
-            if tr["by"] == "system":
+            # 빈 보고(백그라운드 담당을 쓰면 마지막 result 가 빈 글로 한 번 더 옴, 2026-11-21)는 건너뛴다 — 한 줄 때문에 업무 기록 전체가 죽지 않게
+            if tr["by"] == "system" or not str(tr.get("text") or "").strip():
                 continue
             items.append({"at": tr["at"], "who": "captain" if tr["by"] == "me" else "claude", "kind": "order", "ref": o["id"],
                           "text": ("지시: " if tr["by"] == "me" else "보고: ") + tr["text"].strip().splitlines()[0][:120]})
