@@ -1220,6 +1220,14 @@ def end_watch_loop(o, p, watch, every=5):
             return
 
 
+def done_report(result, report="", last=""):
+    """끝난 지시의 비서실장 보고 글. 담당을 백그라운드로 부르면 실행 끝에 init + 빈 result 가 한 번 더 와서
+    빈 글이 보고가 되고 '결재:'·'배포 준비:'·'캡처:' 줄을 못 읽었다(2026-11-21 시험 지시 1121-182441·182316).
+    마지막 result 가 비면 → 앞의 비어 있지 않은 result(report) → 마지막 말(o['last'], 400자까지) 순으로 쓴다."""
+    return (str((result or {}).get("result") or "").strip() or str(report or "").strip()
+            or str(last or "").strip())
+
+
 def run_order(o, prompt):
     try:
         cached("hr", 120, build_hr)  # 비서실장이 읽을 out/hr.json 을 새로 만든다
@@ -1240,7 +1248,7 @@ def run_order(o, prompt):
     env.update(PYTHONUTF8="1", PYTHONIOENCODING="utf-8")  # 한글 경로·출력에서 python 도구가 죽지 않게
     env["PATH"] = os.pathsep.join([d for d in extra if Path(d).is_dir()] + [env.get("PATH", "")])
     log = ORDERS_DIR / f"{o['id']}.jsonl"
-    result, err, used, t0 = None, None, 0, time.time()
+    result, report, err, used, t0 = None, "", None, 0, time.time()
     owners = {}  # 도구 호출 id → 그 일을 하는 담당 (담당 안에서 부른 도구도 그 담당 몫)
     o["active"] = []
     with ORDER_LOCK:
@@ -1271,6 +1279,8 @@ def run_order(o, prompt):
                     watch.feed(ev)
                     if ev.get("type") == "result":
                         result = ev
+                        if str(ev.get("result") or "").strip():
+                            report = str(ev["result"]).strip()  # 빈 result 가 뒤에 와도 진짜 보고를 남긴다(done_report)
                         # 담당이 백그라운드로 일하면 한 실행에 result 가 여러 번 온다 → 모두 더한다(마지막 것만 세면 0으로 나왔다, 2026-11-01)
                         u = ev.get("usage") if isinstance(ev.get("usage"), dict) else {}
                         used += sum(int(u.get(k) or 0) for k in ("input_tokens", "output_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
@@ -1290,7 +1300,7 @@ def run_order(o, prompt):
         if o.get("status") == "stopping":
             o["status"], text = "stopped", "사용자가 멈췄습니다."
         elif result and not result.get("is_error"):
-            o["status"], text = "done", (result.get("result") or "").strip()
+            o["status"], text = "done", done_report(result, report, o.get("last"))
         else:
             o["status"] = "fail"
             text = (result or {}).get("result") or err or "실행이 끝났지만 결과가 없습니다(시간 초과 또는 로그인 문제). 기록: dashboard/orders/" + log.name
