@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jinwoo 에이전트 — 3D 사무실 (별도 시험 공간)</title>
+<link rel="stylesheet" href="/static/office-3d/office-3d.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body class="o3-page">
+<header class="o3-topbar">
+  <h1>Jinwoo 에이전트 · 3D 사무실 <span class="o3-pill">별도 시험 공간 · 기존 대시보드 무변경</span></h1>
+  <div class="o3-controls">
+    <button class="o3-btn green" id="btn-demo">▶ 새 가게 제작 시연</button>
+    <button class="o3-btn" id="btn-coffee">☕ 캡틴 커피 타러 가기</button>
+    <button class="o3-btn" id="btn-report">📋 비서실장 보고</button>
+    <button class="o3-btn" id="btn-view">🎥 시점 바꾸기</button>
+    <a class="o3-btn" href="/">← 기존 대시보드로</a>
+  </div>
+</header>
+<main class="o3-wrap">
+  <div id="o3-root" class="o3-root"></div>
+  <div class="o3-grid">
+    <section class="o3-card"><h2>움직임 기록</h2><ul class="o3-log" id="o3-log"></ul></section>
+    <section class="o3-card"><h2>선택한 직원</h2><div id="o3-detail" class="o3-muted">사무실 안의 사람을 누르면 여기에 나옵니다. 화면을 끌면 돌려 보고, 휠·두 손가락으로 확대합니다.</div></section>
+  </div>
+</main>
+<script type="module">
+import { create } from '/static/office-3d/office-3d.js';
+const $ = s => document.querySelector(s);
+const logEl = $('#o3-log');
+const log = t => { const li = document.createElement('li'); li.textContent = `${new Date().toLocaleTimeString('ko-KR', { hour12: false })} ${t}`; logEl.prepend(li); while (logEl.children.length > 30) logEl.lastChild.remove(); };
+const office = await create($('#o3-root'), {
+  onLog: log,
+  onSelect: (id, info) => { $('#o3-detail').innerHTML = `<b>${info.name}</b> · ${info.role}<br>지금: ${info.state}`; },
+});
+$('#btn-demo').onclick = () => office.demo();
+$('#btn-coffee').onclick = () => office.captainCoffee();
+$('#btn-report').onclick = () => office.walkReport('claude', '보고드립니다!');
+$('#btn-view').onclick = () => office.nextView();
+// 실제 대시보드 데이터(읽기만): 2D 사무실과 같은 형식으로 넘긴다
+const get = p => fetch(p, { cache: 'no-store' }).then(r => r.json()).catch(() => null);
+async function poll() {
+  const [o, j, c, h] = await Promise.all([get('/api/orders'), get('/api/jobs'), get('/api/collector'), get('/api/hr')]);
+  office.syncReal({ orders: o?.orders || [], jobs: j?.jobs || [], collector: c, hr: h });
+}
+poll(); setInterval(poll, 5000);
+</script>
+</body>
+</html>
