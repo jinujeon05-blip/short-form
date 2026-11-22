@@ -43,7 +43,7 @@
       imgs.walk[id] = { east: [], front: [], back: [] };
       for (const dir of ['east', 'front', 'back']) {
         for (let i = 1; i <= 12; i++) {
-          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${id}-${dir}-${i}.webp`));
+          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${id}-${dir}-${i}.webp?v=rembg2`));
         }
       }
       if (cfg.mask) {
