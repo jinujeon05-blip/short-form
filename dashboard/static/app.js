@@ -603,7 +603,25 @@ function quotaCard(key) {
       <b>${b.used}% 사용</b><span class="rst">${b.stale ? '기록 뒤 초기화됨' : '초기화까지 ' + dur(b.resetIn)}</span></div>`; }).join('')}
     <div class="src" title="${esc(q.source)}">출처: ${esc(q.source)}${q.note ? ' · ' + esc(q.note) : ''}</div></div>`;
 }
-function renderQuota() { $('#quota').innerHTML = ['claude', 'gemini', 'agy'].map(quotaCard).join(''); }
+// 2026-11-22 캡틴 '가-1·나-1': Gemini·안티그래비티 칸은 앱 업데이트로 읽을 수 없어 화면에서 뺐다(서버 계산은 그대로).
+// Claude만 맨 위 막대 오른쪽에 작은 알약으로 보이고, 누르면 원래 카드가 펼쳐진다.
+function renderQuota() {
+  const box = $('#quota'), q = S.quota?.claude;
+  if (!q) { box.innerHTML = ''; return; }
+  const wasOpen = box.open;
+  let pill;
+  if (q.status !== 'ok') pill = '<span class="qn">Claude</span><span class="muted">확인 불가</span>';
+  else {
+    const worst = Math.max(0, ...q.bars.filter(b => !b.spare).map(b => b.used));
+    pill = `<i class="dot"></i><span class="qn">Claude</span>` + q.bars.filter(b => !b.spare).map(b => {
+      const [lv] = level(b.used);
+      return `<span class="qb ${lv}">${esc(b.label)}<span class="mt"><span style="width:${Math.max(2, Math.min(100, b.used))}%"></span></span><b>${b.used}%</b></span>`;
+    }).join('');
+    box.className = 'qmini ' + level(worst)[0];
+  }
+  box.innerHTML = `<summary title="눌러서 자세히">${pill}</summary><div class="qpop">${quotaCard('claude')}</div>`;
+  box.open = wasOpen;
+}
 
 // ---------------------------------------------------------------- 탭
 // 할 일 수 = docs/todo.md 의 '- **…**' 줄 수 (한 줄 안의 문장 수가 아님)
@@ -686,7 +704,7 @@ function renderPanel() {
     ${id === 'finder' ? collectorHtml() : ''}
     <h5>맡은 일 · CLAUDE.md 5장</h5><p>${esc(teamJob(id).replace(/\*\*|`/g, ''))}</p>
     <h5>최근 한 일 · git log</h5>${recent.length ? `<ul class="recent">${recent.map(c => `<li>${esc(c.msg)} <code>${c.date} ${c.sha}</code></li>`).join('')}</ul>` : '<p class="muted">기록 없음</p>'}
-    ${m.quota ? `<h5>할당량</h5>${quotaCard(m.quota)}${m.quota === 'claude' && id !== 'claude' ? '<p class="muted">담당은 Claude 한도를 같이 씁니다.</p>' : ''}` : ''}
+    ${m.quota === 'claude' ? `<h5>할당량</h5>${quotaCard(m.quota)}${m.quota === 'claude' && id !== 'claude' ? '<p class="muted">담당은 Claude 한도를 같이 씁니다.</p>' : ''}` : ''}
     ${id === 'captain' ? '' : `<h5>일 시키기</h5>
       ${m.safe ? `<div class="act">${sel}${m.safe.map(c => `<button class="btn run" data-tool="${c}">${CHECK_LABEL[c]}</button>`).join('')}</div>
         <p class="muted">위 점검은 파일을 고치지 않아 바로 실행합니다. 가게 찾기용 전체 점검은 가게 선택과 상관없이 전부 봅니다.</p>` : ''}
