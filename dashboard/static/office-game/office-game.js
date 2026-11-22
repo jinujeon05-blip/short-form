@@ -6,44 +6,18 @@
 (() => {
   const W = 1376, H = 768;
 
-  // bg_v3_grid.jpg 기준 각 의자·책상 앞판 마스크(% 좌표)
+  // bg_v3_grid.jpg 기준 각 의자·책상 위 착석 정중앙 % 좌표 (허리 위 손이 책상 상판 위에 자연스럽게 놓이도록 맞춤)
   const CHARS = {
-    captain: {
-      name: '캡틴', role: '결재', home: [50.0, 14.5], seatFacing: 'down', scale: 0.92,
-      deskMask: [43.5, 11.4, 56.5, 24.0],
-    },
-    claude: {
-      name: '비서실장', role: '지휘', home: [50.0, 38.8], seatFacing: 'down', scale: 0.92,
-      deskMask: [43.5, 35.6, 56.5, 48.2],
-    },
-    finder: {
-      name: '시각 정보 비서', role: '사진 고르기', home: [15.2, 46.5], seatFacing: 'down', scale: 0.90,
-      deskMask: [10.0, 43.3, 20.5, 54.0],
-    },
-    agy: {
-      name: '메뉴 검사관', role: '메뉴판 읽기', home: [82.2, 49.5], seatFacing: 'up', scale: 0.90,
-    },
-    'menu-reader': {
-      name: '자료 해석 비서', role: '메뉴판 읽기', home: [93.5, 49.5], seatFacing: 'up', scale: 0.90,
-    },
-    codex: {
-      name: '운영 감찰관', role: '두 번째 검토', home: [7.8, 91.8], seatFacing: 'up', scale: 0.90,
-    },
-    reviewer: {
-      name: '데이터 감사관', role: '마지막 점검', home: [19.5, 91.8], seatFacing: 'up', scale: 0.90,
-    },
-    polisher: {
-      name: '수석 번역관', role: '번역·글', home: [38.2, 84.8], seatFacing: 'down', scale: 0.90,
-      deskMask: [33.2, 81.6, 43.5, 92.6],
-    },
-    staffing: {
-      name: '인력 공급팀', role: '인력 현황', home: [63.2, 84.8], seatFacing: 'down', scale: 0.90,
-      deskMask: [58.0, 81.6, 68.5, 92.6],
-    },
-    sorting: {
-      name: '선별팀', role: '선별 실적', home: [83.2, 84.8], seatFacing: 'down', scale: 0.90,
-      deskMask: [78.0, 81.6, 88.5, 92.6],
-    },
+    captain:       { name: '캡틴',          role: '결재',        home: [50.0, 15.8], seatFacing: 'down', scale: 0.94 },
+    claude:        { name: '비서실장',      role: '지휘',        home: [50.0, 39.8], seatFacing: 'down', scale: 0.94 },
+    finder:        { name: '시각 정보 비서', role: '사진 고르기', home: [15.2, 47.4], seatFacing: 'down', scale: 0.92 },
+    agy:           { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.2, 48.2], seatFacing: 'up',   scale: 0.92 },
+    'menu-reader': { name: '자료 해석 비서', role: '메뉴판 읽기', home: [93.5, 48.2], seatFacing: 'up',   scale: 0.92 },
+    codex:         { name: '운영 감찰관',   role: '두 번째 검토', home: [7.8,  90.6], seatFacing: 'up',   scale: 0.92 },
+    reviewer:      { name: '데이터 감사관', role: '마지막 점검', home: [19.5, 90.6], seatFacing: 'up',   scale: 0.92 },
+    polisher:      { name: '수석 번역관',   role: '번역·글',     home: [38.2, 85.8], seatFacing: 'down', scale: 0.92 },
+    staffing:      { name: '인력 공급팀',   role: '인력 현황',   home: [63.2, 85.8], seatFacing: 'down', scale: 0.92 },
+    sorting:       { name: '선별팀',        role: '선별 실적',   home: [83.2, 85.8], seatFacing: 'down', scale: 0.92 },
   };
 
   // 각 부서 벽 상단 간판
@@ -56,17 +30,16 @@
     { text: '선별팀',           x: 87.5, y: 61.5, bg: '#ea580c' },
   ];
 
-  // 100% 직교(동서남북) 문·복도 동선 (bg_v3_grid.jpg 기준 — 벽·책상·화분 통과 0)
-  // 각 방의 넓은 문 → 중앙 복도([50.0, 55.5]) 합류
+  // 100% 직교(동서남북) 문·복도 동선 — 책상 뒤에서 옆으로 먼저 빠져나온 뒤 복도로 이동 (책상·벽·화분 통과 0, verify_routes.jpg 검증)
   const TO_HALL = {
-    finder:        [[15.2, 46.5], [15.2, 55.5], [26.2, 55.5], [50.0, 55.5]],
-    agy:           [[82.2, 49.5], [82.2, 55.5], [73.8, 55.5], [50.0, 55.5]],
-    'menu-reader': [[93.5, 49.5], [93.5, 55.5], [73.8, 55.5], [50.0, 55.5]],
-    codex:         [[7.8,  91.8], [7.8,  95.8], [26.2, 95.8], [26.2, 55.5], [50.0, 55.5]],
-    reviewer:      [[19.5, 91.8], [26.2, 91.8], [26.2, 55.5], [50.0, 55.5]],
-    polisher:      [[38.2, 84.8], [38.2, 95.2], [50.0, 95.2], [50.0, 55.5]],
-    staffing:      [[63.2, 84.8], [63.2, 95.2], [50.0, 95.2], [50.0, 55.5]],
-    sorting:       [[83.2, 84.8], [83.2, 95.2], [73.8, 95.2], [73.8, 55.5], [50.0, 55.5]],
+    finder:        [[15.2, 41.5], [22.2, 41.5], [22.2, 55.5], [50.0, 55.5]],
+    agy:           [[82.2, 51.5], [82.2, 55.5], [50.0, 55.5]],
+    'menu-reader': [[93.5, 51.5], [93.5, 55.5], [50.0, 55.5]],
+    codex:         [[7.8,  94.5], [7.8,  96.8], [26.2, 96.8], [26.2, 55.5], [50.0, 55.5]],
+    reviewer:      [[19.5, 94.5], [26.2, 94.5], [26.2, 55.5], [50.0, 55.5]],
+    polisher:      [[38.2, 79.5], [44.8, 79.5], [44.8, 86.5], [50.0, 86.5], [50.0, 55.5]],
+    staffing:      [[63.2, 79.5], [56.5, 79.5], [56.5, 86.5], [50.0, 86.5], [50.0, 55.5]],
+    sorting:       [[83.2, 79.5], [73.8, 79.5], [73.8, 55.5], [50.0, 55.5]],
   };
 
   function routeToChief(id) {
@@ -78,19 +51,18 @@
   function routeToCoffee(id) {
     const base = TO_HALL[id];
     if (!base) return [];
-    // 중앙 복도 → 비서실장 왼쪽 통로(x=34.5) → 왼쪽 위 커피 머신 앞(x=16.5, y=22.5)
     return [...base, [34.5, 55.5], [34.5, 22.5], [16.5, 22.5]];
   }
 
-  // 캡틴 전용: 의자 뒤(y=11.0)로 빠져나와 오른쪽 계단 → 오른쪽 창가 데크에서 창밖 감상 후 복귀! (책상 절대 안 밟음)
-  const CAP_TO_WINDOW = [[50.0, 11.2], [61.0, 11.2], [61.0, 21.8], [82.0, 21.8]];
-  const CAP_TO_DESK   = [[82.0, 21.8], [61.0, 21.8], [61.0, 11.2], [50.0, 11.2], [50.0, 14.5]];
+  // 캡틴 전용: 의자 뒤 → 화분 사이 통로(y=15.8) → 오른쪽 계단 → 오른쪽 창가 데크 → 복귀 (책상·화분 절대 안 밟음)
+  const CAP_TO_WINDOW = [[50.0, 10.5], [55.2, 10.5], [55.2, 15.8], [65.5, 15.8], [65.5, 22.0], [82.0, 22.0]];
+  const CAP_TO_DESK   = [[82.0, 22.0], [65.5, 22.0], [65.5, 15.8], [55.2, 15.8], [55.2, 10.5], [50.0, 10.5], [50.0, 15.8]];
 
-  // 비서실장 전용: 왼쪽 통로로 커피 머신 → 캡틴 단상 왼쪽 계단으로 서빙 → 자리 복귀
-  const CHIEF_TO_COFFEE   = [[50.0, 38.8], [34.5, 38.8], [34.5, 22.5], [16.5, 22.5]];
-  const COFFEE_TO_CAPTAIN = [[16.5, 22.5], [35.5, 22.5], [35.5, 17.0], [41.5, 17.0]];
-  const CAPTAIN_TO_CHIEF  = [[41.5, 17.0], [35.5, 17.0], [35.5, 38.8], [50.0, 38.8]];
-  const CHIEF_TO_CAPTAIN  = [[50.0, 38.8], [35.5, 38.8], [35.5, 17.0], [41.5, 17.0]];
+  // 비서실장 전용: 의자 뒤(y=34.0)에서 왼쪽으로 빠져나와 화분 밖 통로(x=34.5)로 이동
+  const CHIEF_TO_COFFEE   = [[50.0, 34.0], [34.5, 34.0], [34.5, 22.5], [16.5, 22.5]];
+  const COFFEE_TO_CAPTAIN = [[16.5, 22.5], [34.5, 22.5], [34.5, 16.5], [40.2, 16.5]];
+  const CAPTAIN_TO_CHIEF  = [[40.2, 16.5], [34.5, 16.5], [34.5, 34.0], [50.0, 34.0], [50.0, 39.8]];
+  const CHIEF_TO_CAPTAIN  = [[50.0, 34.0], [34.5, 34.0], [34.5, 16.5], [40.2, 16.5]];
 
   function loadImages() {
     const imgs = { walk: {}, seated: {}, cap: {} };
@@ -110,11 +82,11 @@
     }
     for (const id of Object.keys(CHARS)) {
       jobs.push(load(imgs, id, `/static/office-game/assets/${id}.webp`));
+      imgs.seated[id] = {};
+      jobs.push(load(imgs.seated[id], 'idle', `/static/office-game/assets/seated/${id}-idle.webp`));
+      jobs.push(load(imgs.seated[id], 'w1',   `/static/office-game/assets/seated/${id}-w1.webp`));
+      jobs.push(load(imgs.seated[id], 'w2',   `/static/office-game/assets/seated/${id}-w2.webp`));
       if (id !== 'captain') {
-        imgs.seated[id] = {};
-        jobs.push(load(imgs.seated[id], 'idle', `/static/office-game/assets/seated/${id}-idle.webp`));
-        jobs.push(load(imgs.seated[id], 'w1',   `/static/office-game/assets/seated/${id}-w1.webp`));
-        jobs.push(load(imgs.seated[id], 'w2',   `/static/office-game/assets/seated/${id}-w2.webp`));
         imgs.walk[id] = { side: [], up: [], down: [] };
         for (let f = 1; f <= 4; f++) {
           jobs.push(load(imgs.walk[id].side, f - 1, `/static/office-game/assets/walk/${id}-${f}.webp`));
@@ -293,7 +265,8 @@
       const n = npcs[id];
       if (!n || id === 'captain' || id === 'claude') return;
       const toChief = routeToChief(id);
-      const backHome = toChief.slice().reverse();
+      // 도착 후 원래 앉는 자리(home)로 자연스럽게 착석
+      const backHome = [...toChief.slice().reverse(), CHARS[id].home];
       log(`${CHARS[id].name} → 비서실장에게 보고 이동 (${text})`);
       sendPath(id, toChief, {
         mode: 'walk', carry: 'doc', bubble: text, bubbleType: 'ok',
@@ -354,7 +327,7 @@
         setTimeout(() => {
           if (npcs[id].mode !== 'idle') return;
           const toCaf = routeToCoffee(id);
-          const back = toCaf.slice().reverse();
+          const back = [...toCaf.slice().reverse(), CHARS[id].home];
           log(`${CHARS[id].name} 커피 휴식 이동`);
           sendPath(id, toCaf, {
             mode: 'coffee-walk', carry: null, bubble: '☕ 커피 한 잔…', bubbleType: 'idle',
@@ -561,9 +534,14 @@
           im = (cw && cw[frameIdx]) ? cw[frameIdx] : (imgs.cap.idle || imgs.captain);
           flipX = (n.dir === 'left');
           isFullBody = true;
+        } else if (n.capPose === 'window') {
+          im = imgs.cap.window || imgs.captain;
+          isFullBody = true;
+        } else if (n.capPose === 'coffee' || n.capPose === 'thumbs') {
+          im = imgs.cap[n.capPose] || imgs.seated.captain?.idle;
         } else {
-          im = imgs.cap[n.capPose] || imgs.cap.idle || imgs.captain;
-          isFullBody = (n.capPose === 'window');
+          // 평소 캡틴은 정면 책상에 앉아 대기/작업
+          im = imgs.seated.captain?.idle || imgs.cap.idle;
         }
       } else if (walking) {
         const wset = imgs.walk[n.id];
@@ -572,12 +550,8 @@
           else if (n.dir === 'down' && wset.down[frameIdx]) im = wset.down[frameIdx];
           else if (wset.side[frameIdx]) { im = wset.side[frameIdx]; flipX = (n.dir === 'left'); }
         }
-      } else if (isNorthSeated) {
-        // 감사실·디지털 메뉴 통제실: 모니터를 바라보고 앉은 뒷모습! (작업 시 어깨/팔 미세 타이핑 움직임)
-        const upSet = imgs.walk[n.id]?.up;
-        im = (upSet && upSet[1]) ? (working ? upSet[typeIdx === 0 ? 1 : 3] : upSet[1]) : imgs[n.id];
       } else {
-        // 정면 책상(비서실장·미디어·번역·인력·선별): 앉은 자세 / 타이핑 2프레임
+        // 정면 책상(hands-on-desk) + 북향 책상(back-view seated) 모두 전용 착석·타이핑 스프라이트 사용!
         const sset = imgs.seated[n.id];
         if (sset) {
           im = working ? (typeIdx === 0 ? sset.w1 : sset.w2) || sset.idle : sset.idle;
@@ -587,15 +561,15 @@
 
       const cx = (n.x / 100) * W;
       const cy = (n.y / 100) * H;
-      // 의자·책상 비율에 딱 맞춘 캐릭터 크기
-      const targetH = (isFullBody ? 102 : isNorthSeated ? 88 : (n.id === 'captain' ? 104 : 84)) * cfg.scale;
+      const isCapActionCrop = (n.id === 'captain' && !isFullBody && (n.capPose === 'coffee' || n.capPose === 'thumbs'));
+      const targetH = (isFullBody ? 102 : isCapActionCrop ? 116 : isNorthSeated ? 70 : 72) * cfg.scale;
       const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
       const bob = walking ? ((frameIdx % 2 === 1) ? -1.5 : 0)
-        : working ? (typeIdx === 0 ? -1.2 : 0.8)
-        : (n.id === 'captain' && n.capPose === 'coffee') ? Math.sin(t * 3.5) * 1.1
-        : done ? -Math.abs(Math.sin(t * 5)) * 2.0
-        : Math.sin(t * 2.0 + cx * 0.01) * 0.7;
+        : working ? (typeIdx === 0 ? -0.9 : 0.7)
+        : (n.id === 'captain' && n.capPose === 'coffee') ? Math.sin(t * 3.5) * 1.0
+        : done ? -Math.abs(Math.sin(t * 5)) * 1.8
+        : Math.sin(t * 2.0 + cx * 0.01) * 0.6;
 
       ctx.save();
       if (isFullBody) {
@@ -609,13 +583,13 @@
         const pulse = 0.24 + 0.12 * Math.sin(t * 6);
         ctx.fillStyle = `rgba(56, 189, 248, ${pulse})`;
         ctx.beginPath();
-        ctx.ellipse(cx, cy - targetH * 0.45, targetW * 0.62, targetH * 0.48, 0, 0, Math.PI * 2);
+        ctx.ellipse(cx, cy - targetH * 0.45, targetW * 0.56, targetH * 0.48, 0, 0, Math.PI * 2);
         ctx.fill();
       } else if (done && n.id !== 'captain') {
         const pulse = 0.18 + 0.09 * Math.sin(t * 4);
         ctx.fillStyle = `rgba(74, 222, 128, ${pulse})`;
         ctx.beginPath();
-        ctx.ellipse(cx, cy - targetH * 0.45, targetW * 0.54, targetH * 0.42, 0, 0, Math.PI * 2);
+        ctx.ellipse(cx, cy - targetH * 0.45, targetW * 0.52, targetH * 0.42, 0, 0, Math.PI * 2);
         ctx.fill();
       }
 
@@ -624,17 +598,14 @@
 
       if (isFullBody) {
         ctx.drawImage(im, -targetW / 2, -targetH + 6, targetW, targetH);
-      } else if (isNorthSeated) {
-        // 모니터를 보며 의자에 앉은 뒷모습 (하반신 65%만 그려 의자에 착석한 느낌)
-        const sh = im.naturalHeight * 0.68;
-        const dh = targetH * 0.68;
-        ctx.drawImage(im, 0, 0, im.naturalWidth, sh, -targetW / 2, -dh + 4, targetW, dh);
-      } else if (n.id === 'captain') {
-        const sh = im.naturalHeight * 0.65;
-        const dh = targetH * 0.65;
-        ctx.drawImage(im, 0, 0, im.naturalWidth, sh, -targetW / 2, -dh + 8, targetW, dh);
+      } else if (isCapActionCrop) {
+        // 캡틴 커피 마시기·엄지척은 상반신 55%를 책상 상판에 딱 맞춰 표시
+        const sh = im.naturalHeight * 0.55;
+        const dh = targetH * 0.55;
+        ctx.drawImage(im, 0, 0, im.naturalWidth, sh, -targetW / 2, -dh, targetW, dh);
       } else {
-        ctx.drawImage(im, -targetW / 2, -targetH + 10, targetW, targetH);
+        // 전용 착석(hands-on-desk / back-view seated) 스프라이트 — 손이 책상 상판 위에 자연스럽게 놓임!
+        ctx.drawImage(im, -targetW / 2, -targetH, targetW, targetH);
       }
 
       if (n.carry === 'doc') {
@@ -656,14 +627,6 @@
       }
 
       ctx.restore();
-
-      // 핵심: 정면 책상에 앉아 있을 때 책상 앞판(deskMask)을 캐릭터 하반신 위에 덮어 '진짜 책상 뒤에 앉은' 입체감 구현!
-      if (!isFullBody && cfg.deskMask && imgs.bg) {
-        const [x1, y1, x2, y2] = cfg.deskMask;
-        const sx = (x1 / 100) * W, sy = (y1 / 100) * H;
-        const sw = ((x2 - x1) / 100) * W, sh = ((y2 - y1) / 100) * H;
-        ctx.drawImage(imgs.bg, sx, sy, sw, sh, sx, sy, sw, sh);
-      }
     }
 
     // ---------------------------------------------------------------- 60fps 메인 루프
