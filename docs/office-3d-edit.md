@@ -19,11 +19,16 @@ claude: { name: '비서실장', short: '비서실장', role: '지휘', home: [50
 | `name` | 이름표(PC) | 아무 글 |
 | `short` | 이름표(폰, 짧게) | 아무 글(4글자 이하 추천) |
 | `body` | 몸 | `'man'` 남자 · `'woman'` 여자 |
-| `hair` | 머리 모양 | `'simpleparted'` 옆 가르마 · `'buzzed'` 짧은 머리 · `'long'` 긴 머리 · `'buns'` 올림머리 |
+| `hair` | 머리 모양 | `'simpleparted'` 옆 가르마 · `'buzzed'` 짧은 머리 · `'long'` 긴 머리 · `'buns'` 올림머리 · `'buzzedfemale'` 여자 짧은 머리 |
 | `hairC` | 머리 색 | `0x` + 색 번호 6자리 |
 | `suit` | 자켓 색 | `0x` + 색 번호 6자리 |
 | `pants` | 바지 색 | `0x` + 색 번호 6자리 |
 | `tie` | 넥타이 색 | `0x` + 색 번호, 또는 `null`(넥타이 없음, 여자는 자동으로 없음) |
+| `skirt` | (여자) 치마 색 | `0x` + 색 번호 |
+| `skirtLen` | (여자) 치마 길이 | `'short'` 무릎 위 · `'mini'` 더 짧게 |
+| `blouse` | (여자) 블라우스 색 | `0x` + 색 번호 |
+| `legs` · `sheer` | (여자) 스타킹 색 · 진하기 | `legs`를 빼면 맨다리, `sheer`는 0(연함)~1(진함) |
+| `shoes` | (여자) 구두 색 | `0x` + 색 번호 |
 
 ## 3. 색 번호 찾기
 1. 구글에서 `color picker`를 검색합니다(구글 색 고르기 상자가 나옵니다).

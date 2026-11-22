@@ -12,20 +12,21 @@ const pct = (x, y) => [(x - 50) * ROOM.w / 100, (y - 50) * ROOM.d / 100];
 
 // ★ 캐릭터 꾸미기는 여기만 고치면 된다(저장 → 브라우저 F5). 안내: docs/office-3d-edit.md
 //   body : 'man'(남자) / 'woman'(여자)
-//   hair : 'simpleparted'(옆 가르마) / 'buzzed'(짧은 머리) / 'long'(긴 머리) / 'buns'(올림머리)
+//   hair : 'simpleparted'(옆 가르마) / 'buzzed'(짧은 머리) / 'long'(긴 머리) / 'buns'(올림머리) / 'buzzedfemale'(여자 짧은 머리)
+//   여자만: skirt 치마 색, skirtLen 'short'(무릎 위)·'mini'(더 짧게), blouse 블라우스 색, legs 스타킹 색(없으면 맨다리), sheer 스타킹 진하기 0~1, shoes 구두 색
 //   hairC: 머리 색, suit: 자켓 색, pants: 바지 색, tie: 넥타이 색(null = 넥타이 없음, 여자는 항상 없음)
 //   색은 0x + 6자리 색 번호(예: 0x1f2f5c = 남색). 구글에서 'color picker' 검색 → HEX 값의 # 뒤 6자리
 //   name: 이름표, short: 폰 이름표, home·face: 자리(2D와 같은 % 좌표)·보는 방향(s=앞, n=뒤)
 export const CHARS = {
   captain:       { name: '캡틴', short: '캡틴',          role: '결재',        home: [50.0, 12.0], face: 's', body: 'man',   hair: 'simpleparted', hairC: 0x15120f, suit: 0x1f2f5c, pants: 0x1b2850, tie: 0x8b1a2b },
-  claude:        { name: '비서실장', short: '비서실장',      role: '지휘',        home: [50.0, 36.0], face: 's', body: 'woman', hair: 'long',         hairC: 0x2b1d14, suit: 0x3a3f47, pants: 0x30343b, tie: null },
-  finder:        { name: '시각 정보 비서', short: '시각비서', role: '사진 고르기', home: [17.0, 44.8], face: 's', body: 'woman', hair: 'buns',         hairC: 0x1c1410, suit: 0x2f6f73, pants: 0x24474a, tie: null },
+  claude:        { name: '비서실장', short: '비서실장',      role: '지휘',        home: [50.0, 36.0], face: 's', body: 'woman', hair: 'long',         hairC: 0x14100d, suit: 0x1e1e24, pants: 0x1e1e24, tie: null, skirt: 0x1e1e24, skirtLen: 'short', blouse: 0xf6f4ef, legs: 0x2a2424, sheer: 0.5, shoes: 0x111111 },  // 검정 정장 + 흰 블라우스 + 검은 스타킹
+  finder:        { name: '시각 정보 비서', short: '시각비서', role: '사진 고르기', home: [17.0, 44.8], face: 's', body: 'woman', hair: 'buns',         hairC: 0x3a2618, suit: 0x2f6f73, pants: 0x24474a, tie: null, skirt: 0x2f6f73, skirtLen: 'mini',  blouse: 0xf4ead5, shoes: 0x2a1d14 },  // 청록 정장 + 크림 블라우스 + 갈색 구두
   agy:           { name: '메뉴 검사관', short: '메뉴검사',   role: '메뉴판 읽기', home: [72.0, 50.0], face: 'n', body: 'man',   hair: 'buzzed',       hairC: 0x18130f, suit: 0x3559a8, pants: 0x27407a, tie: 0xf2c84b },
   'menu-reader': { name: '자료 해석 비서', short: '자료해석', role: '메뉴판 읽기', home: [86.0, 50.0], face: 'n', body: 'man',   hair: 'simpleparted', hairC: 0x3a2a1c, suit: 0x3f7a4a, pants: 0x2c5534, tie: 0xe9e2cf },
   codex:         { name: '운영 감찰관', short: '감찰관',   role: '두 번째 검토', home: [10.0, 92.0], face: 'n', body: 'man',   hair: 'buzzed',       hairC: 0x0f0d0c, suit: 0x55595f, pants: 0x3d4045, tie: 0x2a2a2a },
   reviewer:      { name: '데이터 감사관', short: '감사관', role: '마지막 점검', home: [24.0, 92.0], face: 'n', body: 'man',   hair: 'simpleparted', hairC: 0x15120f, suit: 0x6d2633, pants: 0x3a2a2e, tie: 0xd9c9a3 },
-  polisher:      { name: '수석 번역관', short: '번역관',   role: '번역·글',     home: [42.0, 80.0], face: 's', body: 'woman', hair: 'long',         hairC: 0x2a1a12, suit: 0x5b3f86, pants: 0x3c2a5c, tie: null },
-  staffing:      { name: '인력 공급팀', short: '인력팀',   role: '인력 현황',   home: [62.0, 80.0], face: 's', body: 'woman', hair: 'long',         hairC: 0x120e0c, suit: 0x7a5a3a, pants: 0x4c3a28, tie: null },
+  polisher:      { name: '수석 번역관', short: '번역관',   role: '번역·글',     home: [42.0, 80.0], face: 's', body: 'woman', hair: 'long',         hairC: 0x6b4226, suit: 0x5b3f86, pants: 0x3c2a5c, tie: null, skirt: 0x2b2733, skirtLen: 'short', blouse: 0xf2d4dc, shoes: 0x6d2633 },  // 보라 자켓 + 짙은 회색 치마 + 분홍 블라우스
+  staffing:      { name: '인력 공급팀', short: '인력팀',   role: '인력 현황',   home: [62.0, 80.0], face: 's', body: 'woman', hair: 'buzzedfemale', hairC: 0x120e0c, suit: 0x7b2d3a, pants: 0x4c3a28, tie: null, skirt: 0x1c1a1d, skirtLen: 'mini',  blouse: 0xffffff, legs: 0x3a3030, sheer: 0.4, shoes: 0x1c1a1d },  // 와인색 자켓 + 검정 치마 + 회색 스타킹
   sorting:       { name: '선별팀', short: '선별팀',        role: '선별 실적',   home: [80.0, 80.0], face: 's', body: 'man',   hair: 'buzzed',       hairC: 0x1a1410, suit: 0x5d6a35, pants: 0x3f4824, tie: 0xb6452c },
 };
 const SKIN = 0xf1c9a5;
@@ -74,15 +75,16 @@ export async function create(root, opts = {}) {
   // ------------------------------------------------------------ 에셋 불러오기
   const loader = new GLTFLoader();
   const load = f => loader.loadAsync(BASE + f);
+  const HAIRS = ['simpleparted', 'long', 'buns', 'buzzed', 'buzzedfemale'];
   const FURN = ['desk', 'chairDesk', 'computerScreen', 'computerKeyboard', 'laptop', 'kitchenCoffeeMachine', 'kitchenBar',
     'pottedPlant', 'plantSmall1', 'bookcaseOpen', 'loungeSofa', 'tableCoffee', 'rugRectangle', 'lampSquareFloor', 'trashcan', 'cardboardBoxClosed'];
   const [man, woman, anims, ...rest] = await Promise.all([
     load('man.glb'), load('woman.glb'), load('anims.glb'),
-    ...['simpleparted', 'long', 'buns', 'buzzed'].map(h => load(`hair-${h}.glb`)),
+    ...HAIRS.map(h => load(`hair-${h}.glb`)),
     ...FURN.map(f => load(`furniture/${f}.glb`)),
   ]);
-  const hairs = { simpleparted: rest[0], long: rest[1], buns: rest[2], buzzed: rest[3] };
-  const furn = Object.fromEntries(FURN.map((f, i) => [f, rest[4 + i].scene]));
+  const hairs = Object.fromEntries(HAIRS.map((h, i) => [h, rest[i]]));
+  const furn = Object.fromEntries(FURN.map((f, i) => [f, rest[HAIRS.length + i].scene]));
   const clips = Object.fromEntries(anims.animations.map(a => [a.name, a]));
   root.querySelector('.o3-loading')?.remove();
 
@@ -233,29 +235,88 @@ export async function create(root, opts = {}) {
     }
     geo.setAttribute('aReg', new THREE.BufferAttribute(reg, 4));
   }
+  // 여자 치마 정장: 치마 길이(무릎 0.53m 기준, 'mini' 0.80 · 'short' 0.74), 다리(살색/스타킹), 구두
+  const SKIRT_Y = { mini: 0.80, short: 0.74 };
+  const W = c => ({
+    skirt: c.skirt ?? c.suit, blouse: c.blouse ?? 0xf3f1ec, legs: c.legs ?? SKIN, legMix: c.legs == null ? 0 : (c.sheer ?? 0.55),
+    shoes: c.shoes ?? 0x1a1a1a, y: SKIRT_Y[c.skirtLen || 'short'],
+  });
   function dressMaterial(mat, c) {
     const m = mat.clone();
-    const cols = [SKIN, c.suit, c.pants, 0x151515, 0xf3f1ec, c.tie ?? 0xf3f1ec].map(h => new THREE.Color(h));
+    const isW = c.body === 'woman', w = W(c);
+    const cols = [SKIN, c.suit, isW ? w.skirt : c.pants, isW ? w.shoes : 0x151515, isW ? w.blouse : 0xf3f1ec, c.tie ?? 0xf3f1ec].map(h => new THREE.Color(h));
     m.onBeforeCompile = sh => {
       sh.uniforms.uCol = { value: cols };
-      sh.uniforms.uTie = { value: c.tie == null ? 0 : 1 };
+      sh.uniforms.uTie = { value: c.tie == null || isW ? 0 : 1 };
+      sh.uniforms.uWoman = { value: isW ? 1 : 0 };
+      sh.uniforms.uSkirtY = { value: w.y };
+      sh.uniforms.uLegs = { value: new THREE.Color(w.legs) };
+      sh.uniforms.uLegMix = { value: w.legMix };
       sh.vertexShader = 'attribute vec4 aReg;\nvarying vec4 vReg;\nvarying vec3 vBind;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvReg = aReg; vBind = position;');
-      // 셔츠 V자·넥타이는 앉기 전 자세(bind) 좌표로 그려서 움직여도 따라간다
-      sh.fragmentShader = 'uniform vec3 uCol[6];\nuniform float uTie;\nvarying vec4 vReg;\nvarying vec3 vBind;\n' + sh.fragmentShader.replace('#include <map_fragment>', `#include <map_fragment>
+      // 셔츠 V자·넥타이·블라우스·치마 길이는 앉기 전 자세(bind) 좌표로 그려서 움직여도 따라간다
+      sh.fragmentShader = 'uniform vec3 uCol[6];\nuniform float uTie, uWoman, uSkirtY, uLegMix;\nuniform vec3 uLegs;\nvarying vec4 vReg;\nvarying vec3 vBind;\n' + sh.fragmentShader.replace('#include <map_fragment>', `#include <map_fragment>
         float lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
         int rg = 0; float bv = vReg.x;
         if (vReg.y > bv) { rg = 1; bv = vReg.y; }
         if (vReg.z > bv) { rg = 2; bv = vReg.z; }
         if (vReg.w > bv) { rg = 3; }
-        if (rg == 1 && uTie > 0.5 && vBind.z > 0.04 && vBind.y > 1.17 && vBind.y < 1.56) {
+        bool legSkin = false;
+        if (uWoman > 0.5) {
+          if (rg == 1 && vBind.z > -0.01 && vBind.y > 1.2 && vBind.y < 1.47 && abs(vBind.x) < 0.006 + (vBind.y - 1.2) * 0.3) rg = 4;  // 블라우스 V
+          if (rg == 2 && vBind.y < uSkirtY) legSkin = true;                                                                       // 치마 아래 다리
+        } else if (rg == 1 && uTie > 0.5 && vBind.z > 0.04 && vBind.y > 1.17 && vBind.y < 1.56) {
           float hw = 0.012 + (vBind.y - 1.17) * 0.24;
-          if (abs(vBind.x) < hw) rg = (uTie > 0.5 && abs(vBind.x) < 0.022 && vBind.y < 1.52) ? 5 : 4;
+          if (abs(vBind.x) < hw) rg = (abs(vBind.x) < 0.022 && vBind.y < 1.52) ? 5 : 4;
         }
-        if (rg == 0) diffuseColor.rgb = mix(diffuseColor.rgb, uCol[0] * (0.62 + 0.6 * lum), 0.7);
+        vec3 skin = mix(diffuseColor.rgb, uCol[0] * (0.62 + 0.6 * lum), uWoman > 0.5 ? 0.9 : 0.7);  // 여자 원본 피부 텍스처가 어두워서 더 밝게
+        if (rg == 0) diffuseColor.rgb = skin;
+        else if (legSkin) diffuseColor.rgb = mix(skin, uLegs * (0.8 + 0.3 * lum), uLegMix);
         else diffuseColor.rgb = uCol[rg] * (0.78 + 0.3 * lum);`);
     };
     m.customProgramCacheKey = () => 'o3dress';
     return m;
+  }
+
+  // 치마: 허리~치마 끝까지 몸을 감싸는 원뿔 천. 위는 골반, 아래는 양 허벅지 뼈를 따라 움직인다(앉으면 앞으로 접힘)
+  const skirtFit = new WeakMap();
+  function makeSkirt(body, c) {
+    const geo = body.geometry, w = W(c);
+    if (!skirtFit.has(geo)) {
+      const pos = geo.getAttribute('position'), reg = geo.getAttribute('aReg');
+      const rows = 7, top = 1.02, fit = [];
+      for (let r = 0; r < rows; r++) {
+        const y = top - (top - w.y) * r / (rows - 1); let xm = 0, z0 = 9, z1 = -9;
+        for (let v = 0; v < pos.count; v++) {
+          if (reg.getX(v) > 0.5 || Math.abs(pos.getY(v) - y) > 0.03 || Math.abs(pos.getX(v)) > 0.4) continue;
+          xm = Math.max(xm, Math.abs(pos.getX(v))); z0 = Math.min(z0, pos.getZ(v)); z1 = Math.max(z1, pos.getZ(v));
+        }
+        fit.push({ y, rx: xm + 0.018, cz: (z0 + z1) / 2, rz: (z1 - z0) / 2 + 0.02 });
+      }
+      skirtFit.set(geo, fit);
+    }
+    const fit = skirtFit.get(geo), seg = 36, names = body.skeleton.bones.map(b => b.name);
+    const bi = n => names.indexOf(n), P = bi('pelvis'), L = bi('thigh_l'), R = bi('thigh_r');
+    const vtx = [], idx = [], si = [], sw = [];
+    fit.forEach((f, r) => {
+      const t = r / (fit.length - 1), flare = 1 + t * 0.12, tw = Math.min(1, t * 1.25);
+      for (let s = 0; s <= seg; s++) {
+        const a = s / seg * Math.PI * 2, x = Math.sin(a) * f.rx * flare, z = f.cz + Math.cos(a) * f.rz * flare;
+        vtx.push(x, f.y, z);
+        const wl = Math.min(1, Math.max(0, 0.5 + x / (f.rx * 1.4)));
+        si.push(P, L, R, 0); sw.push(1 - tw, tw * wl, tw * (1 - wl), 0);
+      }
+    });
+    for (let r = 0; r < fit.length - 1; r++) for (let s = 0; s < seg; s++) {
+      const a = r * (seg + 1) + s, b = a + seg + 1; idx.push(a, b, a + 1, b, b + 1, a + 1);
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(vtx, 3)); g.setIndex(idx);
+    g.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(si, 4)); g.setAttribute('skinWeight', new THREE.Float32BufferAttribute(sw, 4));
+    g.computeVertexNormals();
+    const mesh = new THREE.SkinnedMesh(g, new THREE.MeshStandardMaterial({ color: w.skirt, roughness: 0.75, side: THREE.DoubleSide }));
+    mesh.castShadow = true; mesh.frustumCulled = false;
+    body.parent.add(mesh); mesh.bind(body.skeleton, body.bindMatrix);
+    return mesh;
   }
 
   const npcs = {};
@@ -271,6 +332,7 @@ export async function create(root, opts = {}) {
         if (/superhero/i.test(n.material.name)) { addRegions(n.geometry, n.skeleton); n.material = dressMaterial(n.material, c); body = n; }
       }
     });
+    if (c.body === 'woman' && body) makeSkirt(body, c);
     // 머리카락: 같은 이름 뼈대에 다시 묶는다
     hairs[c.hair].scene.traverse(n => {
       if (!n.isSkinnedMesh) return;
