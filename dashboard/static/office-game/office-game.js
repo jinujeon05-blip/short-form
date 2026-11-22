@@ -212,7 +212,7 @@
       npcs[id] = {
         id, x: cfg.home[0], y: cfg.home[1],
         mode: 'idle', dir: cfg.seatFacing || 's', capPose: 'idle', capCoffeeStart: 0,
-        action: null, bubble: '', bubbleType: 'work', progress: null,
+        action: null, hiddenOut: false, bubble: '', bubbleType: 'work', progress: null,
         carry: null, path: [], speed: 11.2, walkDist: 0, onArrive: null,
       };
     }
@@ -298,21 +298,66 @@
       });
     }
 
+    function captainOuting() {
+      const cap = npcs.captain;
+      if (cap.mode === 'walk' || cap.mode === 'done' || cap.hiddenOut) return false;
+      const outPath = [[50.0, 13.0], [55.0, 13.0], [55.0, 16.8], [67.5, 16.8], [67.5, 55.5], [50.0, 55.5], [50.0, 96.5]];
+      const inPath  = [[50.0, 96.5], [50.0, 55.5], [67.5, 55.5], [67.5, 16.8], [55.0, 16.8], [55.0, 13.0], [50.0, 13.0]];
+      const msgs = ['🚗 거래처 미팅 다녀올게요!', '🚗 새 가게 사장님 뵙고 올게요!'];
+      log('🚗 캡틴이 외근 나가는 중');
+      sendPath('captain', outPath, {
+        mode: 'walk', carry: null, bubble: msgs[Math.floor(Math.random() * msgs.length)], bubbleType: 'idle',
+        onArrive: () => {
+          cap.hiddenOut = true;
+          cap.mode = 'action';
+          cap.action = 'outing';
+          cap.bubble = '';
+          log('🚗 캡틴 외근 중… (잠시 뒤 복귀)');
+          setTimeout(() => {
+            if (isDemo) { cap.hiddenOut = false; return; }
+            cap.hiddenOut = false;
+            cap.action = null;
+            log('👋 캡틴이 외근에서 사무실로 복귀');
+            sendPath('captain', inPath, {
+              mode: 'walk', carry: null, bubble: '👋 외근 다녀왔습니다!', bubbleType: 'ok',
+              onArrive: () => {
+                cap.mode = 'idle';
+                cap.capPose = 'idle';
+                cap.dir = 's';
+                if (isFree(npcs.claude)) {
+                  npcs.claude.bubble = '캡틴, 다녀오셨어요! 😊';
+                  npcs.claude.bubbleType = 'ok';
+                  setTimeout(() => { if (npcs.claude.bubble.includes('다녀오셨어요')) npcs.claude.bubble = ''; }, 2600);
+                }
+                setTimeout(() => { if (cap.bubble.includes('다녀왔습니다')) cap.bubble = ''; }, 2400);
+                nextCapActAt = Date.now() + 12000;
+              },
+            });
+          }, 11000);
+        },
+      });
+      return true;
+    }
+
     function updateCaptainLife(now) {
       const cap = npcs.captain;
-      if (cap.mode === 'done' || cap.mode === 'walk' || isDemo) return;
+      if (cap.mode === 'done' || cap.mode === 'walk' || cap.hiddenOut || isDemo) return;
       if (now < nextCapActAt) return;
       if (cap.capPose === 'idle') {
-        if (Math.random() < 0.55) {
+        const r = Math.random();
+        if (r < 0.45) {
           cap.capPose = 'coffee';
           cap.capCoffeeStart = performance.now();
           cap.bubble = '☕ 커피 한 잔…';
           cap.bubbleType = 'idle';
           log('캡틴이 자리에서 커피를 마시는 중');
           nextCapActAt = now + 6800;
-        } else {
+        } else if (r < 0.80) {
           nextCapActAt = now + 15000;
           captainWindowWalk();
+        } else {
+          nextCapActAt = now + 28000;
+          captainOuting();
         }
       } else if (cap.capPose === 'coffee') {
         cap.capPose = 'idle';
@@ -677,10 +722,124 @@
       return true;
     }
 
+    // 7) 시각 정보 비서 → 미디어 관제실 안 조명·카메라 점검
+    function finderCheckGear() {
+      const n = npcs.finder;
+      if (!isFree(n)) return false;
+      const prevMode = n.mode;
+      const toLight  = [[15.2, 41.5], [20.8, 41.5]];
+      const toCamera = [[20.8, 41.5], [8.6, 41.5], [8.6, 46.8]];
+      const backHome = [[8.6, 46.8], [8.6, 41.5], [15.2, 41.5], CHARS.finder.home];
+      log('📷 시각 정보 비서가 미디어 관제실 조명·카메라 점검 시작');
+      sendPath('finder', toLight, {
+        mode: 'coffee-walk', bubble: '💡 조명 점검하러…', bubbleType: 'idle',
+        onArrive: () => {
+          n.mode = 'action'; n.action = 'gear'; n.dir = 'e';
+          n.bubble = '💡 스튜디오 조명 밝기 점검 중…'; n.bubbleType = 'work';
+          setTimeout(() => {
+            n.action = null;
+            sendPath('finder', toCamera, {
+              mode: 'coffee-walk', bubble: '📷 카메라 확인 중…', bubbleType: 'idle',
+              onArrive: () => {
+                n.mode = 'action'; n.action = 'gear'; n.dir = 'w';
+                n.bubble = '📷 카메라 렌즈·초점 점검 중…'; n.bubbleType = 'ok';
+                setTimeout(() => {
+                  n.action = null;
+                  sendPath('finder', backHome, {
+                    mode: 'coffee-walk', bubble: '',
+                    onArrive: () => { n.mode = prevMode; n.dir = 's'; },
+                  });
+                }, 2600);
+              },
+            });
+          }, 2400);
+        },
+      });
+      return true;
+    }
+
+    // 8) 운영 감찰관 + 데이터 감사관 → 감사실 안에서 업무 대화
+    const AUDIT_SCRIPTS = [
+      ['방금 메뉴판 가격표 숫자 한 번 더 대조해 볼까요?', '네, 0 빠진 곳 없는지 제가 마지막까지 볼게요 🔍', '좋아요! 오류 0건으로 깔끔하게 올립시다 👍'],
+      ['표준 점검 통과율 요즘 계속 100%네요!', '맞아요, 사진이랑 번역 품질도 훨씬 좋아졌어요 ✔', '다음 가게도 꼼꼼히 체크해 봐요!'],
+    ];
+    function auditDiscuss() {
+      const a = npcs.codex, b = npcs.reviewer;
+      if (!isFree(a) || !isFree(b)) return false;
+      const prevA = a.mode, prevB = b.mode;
+      const sc = AUDIT_SCRIPTS[Math.floor(Math.random() * AUDIT_SCRIPTS.length)];
+      let ready = 0;
+      function talk() {
+        a.dir = 'e'; b.dir = 'w';
+        a.bubble = sc[0]; a.bubbleType = 'meet';
+        setTimeout(() => {
+          a.bubble = ''; b.bubble = sc[1]; b.bubbleType = 'meet';
+          setTimeout(() => {
+            b.bubble = ''; a.bubble = sc[2]; a.bubbleType = 'ok';
+            setTimeout(() => {
+              a.action = null; b.action = null;
+              sendPath('codex', [[11.6, 95.8], [7.8, 95.8], CHARS.codex.home], {
+                mode: 'coffee-walk', bubble: '', onArrive: () => { a.mode = prevA; a.dir = 'n'; },
+              });
+              sendPath('reviewer', [[15.8, 95.8], [19.5, 95.8], CHARS.reviewer.home], {
+                mode: 'coffee-walk', bubble: '', onArrive: () => { b.mode = prevB; b.dir = 'n'; },
+              });
+            }, 2200);
+          }, 2500);
+        }, 2500);
+      }
+      log('🔍 운영 감찰관 · 데이터 감사관이 감사실에서 업무 협의');
+      sendPath('codex', [[7.8, 95.8], [11.6, 95.8]], {
+        mode: 'coffee-walk', bubble: '',
+        onArrive: () => { a.mode = 'action'; a.action = 'chat'; a.dir = 'e'; if (++ready === 2) talk(); },
+      });
+      sendPath('reviewer', [[19.5, 95.8], [15.8, 95.8]], {
+        mode: 'coffee-walk', bubble: '',
+        onArrive: () => { b.mode = 'action'; b.action = 'chat'; b.dir = 'w'; if (++ready === 2) talk(); },
+      });
+      return true;
+    }
+
+    // 9) 수석 번역관 → 비서실장에게 가서 번역 이야기 나누기
+    function polisherTalkChief() {
+      const p = npcs.polisher, c = npcs.claude;
+      if (!isFree(p) || !isFree(c)) return false;
+      const prevP = p.mode;
+      const toChief = routeToChief('polisher');
+      const backHome = [...toChief.slice().reverse(), CHARS.polisher.home];
+      log('🌐 수석 번역관이 비서실장에게 번역 상의하러 이동');
+      sendPath('polisher', toChief, {
+        mode: 'coffee-walk', carry: 'doc', bubble: '🌐 번역 톤 상의하러…', bubbleType: 'idle',
+        onArrive: () => {
+          p.mode = 'action'; p.action = 'chat'; p.dir = 'n';
+          p.bubble = '베트남어·일본어 메뉴 설명 톤 괜찮을까요? 🌐'; p.bubbleType = 'meet';
+          setTimeout(() => {
+            c.bubble = '자연스럽고 손님들이 읽기 딱 좋아요! 👌'; c.bubbleType = 'ok';
+            setTimeout(() => {
+              c.bubble = '';
+              p.bubble = '감사합니다! 같은 톤으로 정리할게요 😊'; p.bubbleType = 'ok';
+              setTimeout(() => {
+                p.action = null;
+                sendPath('polisher', backHome, {
+                  mode: 'coffee-walk', carry: 'doc', bubble: '',
+                  onArrive: () => { p.mode = prevP; p.dir = 's'; p.carry = null; },
+                });
+              }, 2000);
+            }, 2500);
+          }, 2200);
+        },
+      });
+      return true;
+    }
+
     function updateOfficeLife(now) {
       if (isDemo || hasActiveWork) return;
       if (now < nextLifeActAt) return;
-      const acts = [chiefAskCaptain, sortingConveyor, staffChat, staffingTidyCaptain, sortingWaterPlants, staffingSweepOffice, serveCoffeeToCaptain];
+      const acts = [
+        chiefAskCaptain, finderCheckGear, auditDiscuss, sortingConveyor,
+        polisherTalkChief, staffChat, staffingTidyCaptain, sortingWaterPlants,
+        staffingSweepOffice, serveCoffeeToCaptain,
+      ];
       for (let tries = 0; tries < acts.length; tries++) {
         const fn = acts[(lifeSeqIdx + tries) % acts.length];
         if (fn()) {
@@ -688,7 +847,7 @@
           break;
         }
       }
-      nextLifeActAt = now + 17000 + Math.random() * 8000;
+      nextLifeActAt = now + 15000 + Math.random() * 7000;
     }
 
     // ---------------------------------------------------------------- 가상 22초 시연
@@ -698,8 +857,8 @@
       isDemo = false;
       for (const [id, cfg] of Object.entries(CHARS)) {
         Object.assign(npcs[id], {
-          x: cfg.home[0], y: cfg.home[1], mode: 'idle', dir: cfg.seatFacing || 'down', capPose: 'idle',
-          bubble: '', carry: null, path: [], progress: null, onArrive: null,
+          x: cfg.home[0], y: cfg.home[1], mode: 'idle', dir: cfg.seatFacing || 's', capPose: 'idle',
+          action: null, hiddenOut: false, bubble: '', carry: null, path: [], progress: null, onArrive: null,
         });
       }
     }
@@ -859,6 +1018,7 @@
 
     // ---------------------------------------------------------------- 고화질 8방향 스프라이트 렌더링
     function drawNpc(n, t) {
+      if (n.hiddenOut) return;
       const cfg = CHARS[n.id];
       const walking = n.mode === 'walk' || n.mode === 'coffee-walk';
       const acting = n.mode === 'action';
@@ -1053,6 +1213,13 @@
             ctx.fillRect(targetW * 0.58, -targetH * 0.52, 3, 3);
             ctx.globalAlpha = 1;
           }
+        } else if (n.action === 'gear') {
+          // 카메라·조명 점검 시 부드러운 플래시 반짝임 이펙트
+          const flash = Math.max(0, Math.sin(t * 6));
+          ctx.fillStyle = `rgba(254, 240, 138, ${0.25 + flash * 0.55})`;
+          ctx.beginPath();
+          ctx.arc(targetW * 0.42, -targetH * 0.56, 5 + flash * 4, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
 
@@ -1143,6 +1310,12 @@
         if (n.mode === 'work' || n.mode === 'walk') workingCount++;
         const tag = tagEls[id];
         const bub = bubEls[id];
+        if (n.hiddenOut) {
+          tag.style.display = 'none';
+          bub.hidden = true;
+          continue;
+        }
+        tag.style.display = '';
         const walking = n.mode === 'walk' || n.mode === 'coffee-walk';
 
         tag.style.left = `${n.x}%`;
@@ -1167,7 +1340,7 @@
 
       modeChip.textContent = isDemo ? '▶ 가상 시연 중' : '● 실시간 연동';
       modeChip.className = `og-chip ${isDemo ? 'demo' : 'live'}`;
-      workChip.textContent = workingCount ? `일하는 직원 ${workingCount}명` : '전원 대기 중';
+      workChip.textContent = npcs.captain.hiddenOut ? '🚗 캡틴 외근 중' : (workingCount ? `일하는 직원 ${workingCount}명` : '전원 대기 중');
 
       const hrHtml = hrMarks.map(([c, txt]) => `<span class="${c}">${txt}</span>`).join('');
       if (hrBox.dataset.h !== hrHtml) { hrBox.innerHTML = hrHtml; hrBox.dataset.h = hrHtml; }
@@ -1454,7 +1627,11 @@
       coffeeStroll: () => coffeeStroll(),
       serveCoffeeToCaptain,
       captainWindowWalk,
+      captainOuting,
       chiefAskCaptain,
+      finderCheckGear,
+      auditDiscuss,
+      polisherTalkChief,
       sortingConveyor,
       sortingWaterPlants,
       staffingTidyCaptain,
