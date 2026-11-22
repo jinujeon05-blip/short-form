@@ -143,7 +143,37 @@ function paintSpots() {
     $('.st', b).textContent = away ? '보고하러 감' : s === 'work' ? '작업 중…' : s === 'ok' ? '✔ 작업 완료' : '';
   });
 }
+// 2D 픽셀 게임 사무실 ↔ 사진 사무실 전환 (2026-11-22 캡틴 '다-1')
+let OG = null;
+let officeMode = localStorage.getItem('jinwoo_office_mode') || 'game';
+function setOfficeMode(mode) {
+  officeMode = (mode === 'photo') ? 'photo' : 'game';
+  try { localStorage.setItem('jinwoo_office_mode', officeMode); } catch {}
+  const gBox = $('#office-game'), pBox = $('#office'), acts = $('#of-game-acts');
+  const bGame = $('#of-mode-game'), bPhoto = $('#of-mode-photo');
+  if (gBox) gBox.hidden = officeMode !== 'game';
+  if (pBox) pBox.hidden = officeMode !== 'photo';
+  if (acts) acts.hidden = officeMode !== 'game';
+  if (bGame) bGame.classList.toggle('on', officeMode === 'game');
+  if (bPhoto) bPhoto.classList.toggle('on', officeMode === 'photo');
+  if (officeMode === 'game' && !OG && gBox && window.OfficeGame) {
+    OG = window.OfficeGame.create(gBox, { onSelect: id => openPanel(id) });
+  }
+  renderOffice();
+}
+
 function renderOffice() {
+  if (officeMode === 'game' && $('#office-game') && window.OfficeGame) {
+    if (!OG) OG = window.OfficeGame.create($('#office-game'), { onSelect: id => openPanel(id) });
+    const fid = typeof talkFocus === 'function' ? talkFocus() : null;
+    OG.syncReal({
+      orders: S.orders || [],
+      jobs: S.jobs || [],
+      collector: S.collector,
+      hr: S.hr,
+      talk: (fid && S.talks?.[fid]) ? S.talks[fid] : [],
+    });
+  }
   if (!OF.st) buildOffice();
   if (!OF.st) return;
   const busy = new Set(S.jobs.filter(j => j.status === 'running').map(j => j.desk));
@@ -826,6 +856,10 @@ document.addEventListener('click', async e => {
     const at = ta.value.indexOf('<'); if (at >= 0) ta.setSelectionRange(at, ta.value.indexOf('>', at) + 1);
     return;
   }
+  if (e.target.id === 'of-mode-game') return setOfficeMode('game');
+  if (e.target.id === 'of-mode-photo') return setOfficeMode('photo');
+  if (e.target.id === 'of-game-coffee') { if (OG) OG.serveCoffeeToCaptain(); return; }
+  if (e.target.id === 'of-game-stroll') { if (OG) OG.coffeeStroll(); return; }
   const spot = e.target.closest('button.spot');
   if (spot) return openPanel(spot.dataset.id);
   if (e.target.closest('#close') || e.target.id === 'dim') return closePanel();
@@ -920,7 +954,7 @@ async function loadAll() {
   loadNewshops();
   S.visits = await api('/api/visits'); renderVisits();
 }
-renderOffice();
+setOfficeMode(officeMode);
 loadAll();
 setInterval(() => api('/api/quota').then(q => { S.quota = q; renderQuota(); }), 60000);
 setInterval(() => { loadFeed(); loadBrief(); loadHr(); loadNewshops(); }, 120000);

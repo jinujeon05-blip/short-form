@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/static/style.css">
 <link rel="stylesheet" href="/static/builder.css">
 <link rel="stylesheet" href="/static/sales.css">
+<link rel="stylesheet" href="/static/office-game/office-game.css">
 </head>
 <body>
 <header class="top">
@@ -47,7 +48,19 @@
 
   <!-- 가운데: 한도 · 사무실 · 탭 -->
   <main class="col center">
-    <section class="office" id="office" aria-label="사무실"></section>
+    <div class="office-bar">
+      <div class="office-sw" role="group" aria-label="사무실 보기 방식">
+        <button type="button" id="of-mode-game" class="on">🎮 게임 사무실</button>
+        <button type="button" id="of-mode-photo">🖼 사진 사무실</button>
+      </div>
+      <div class="office-acts" id="of-game-acts">
+        <button type="button" id="of-game-coffee" title="비서실장이 캡틴에게 커피 서빙">☕ 커피 서빙</button>
+        <button type="button" id="of-game-stroll" title="대기 중인 직원 커피 휴식 이동">🚶 휴식 이동</button>
+        <a href="/static/office-game/index.html" target="_blank" rel="noopener" title="별도 시연 창에서 크게 보기">↗ 크게 보기</a>
+      </div>
+    </div>
+    <section class="office office-game-wrap" id="office-game" aria-label="2D 픽셀 게임 사무실"></section>
+    <section class="office" id="office" aria-label="사진 사무실" hidden></section>
 
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="stores" class="on">가게 현황</button>
@@ -97,6 +110,7 @@
 <div class="toast" id="toast"></div>
 <script src="/static/rooms/new/tiles.js"></script>
 <script src="/static/rooms/new/routes.js"></script>
+<script src="/static/office-game/office-game.js"></script>
 <script src="/static/app.js"></script>
 <script src="/static/builder.js"></script>
 <script src="/static/sales.js"></script>
