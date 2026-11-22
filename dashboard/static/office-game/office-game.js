@@ -1,72 +1,97 @@
-// Jinwoo 에이전트 2D 고화질 4방향 RPG 픽셀 NPC 사무실 v2 (별도 작업 공간: dashboard/static/office-game/)
-// - 넓은 복도·문이 확보된 새 사무실 배경(bg-office.webp) — 벽·책상·화분 통과 0
-// - 전 직원: 앉아서 대기(seated-idle) · 앉아서 타이핑(seated-w1/w2 2프레임) · 4방향 걷기(북 뒷통수·남 정면·동서 옆모습 4프레임)
-// - 캡틴: 자리에서 커피 마시기 · 오른쪽 계단으로 걸어나가 오른쪽 창가 데크에서 창밖 바라보기 · 자리로 걸어 복귀 · 결재 엄지척
-// - 비서실장: 커피 코너로 걸어가 커피를 타서 캡틴 단상 왼쪽 계단으로 가져다주기 + 보고 받기 + 결재 올리기
+// Jinwoo 에이전트 2D 고화질 4방향 RPG 픽셀 NPC 사무실 v3 (별도 작업 공간: dashboard/static/office-game/)
+// - 큼직한 책상·의자 + 캡틴 검정 가죽 의자 + 오른쪽 창가 발코니 데크 + 워터마크 제거 완료(bg-office.webp)
+// - 진짜 '책상 뒤에 앉기' 레이어 처리(deskMask): 정면 책상 앞판을 캐릭터 하반신 위에 덮어 자연스럽게 착석
+// - 감사실(보라)·디지털 메뉴 통제실(빨강)은 모니터를 바라보는 '앉은 뒷모습'으로 자연스럽게 표시
+// - 전 직원 4방향 걷기(북 뒷통수·남 정면·동서 옆모습 4프레임) + 벽·책상·화분 통과 0 동선
 (() => {
   const W = 1376, H = 768;
 
-  // bg_v2_grid.jpg 기준 각 의자 정중앙 % 좌표
+  // bg_v3_grid.jpg 기준 각 의자·책상 앞판 마스크(% 좌표)
   const CHARS = {
-    captain:       { name: '캡틴',          role: '결재',        home: [50.0, 14.8], scale: 1.00 },
-    claude:        { name: '비서실장',      role: '지휘',        home: [50.0, 33.0], scale: 1.00 },
-    finder:        { name: '시각 정보 비서', role: '사진 고르기', home: [15.8, 49.0], scale: 1.00 },
-    agy:           { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [80.8, 54.0], scale: 1.00 },
-    'menu-reader': { name: '자료 해석 비서', role: '메뉴판 읽기', home: [89.0, 54.0], scale: 1.00 },
-    codex:         { name: '운영 감찰관',   role: '두 번째 검토', home: [9.4,  88.5], scale: 0.98 },
-    reviewer:      { name: '데이터 감사관', role: '마지막 점검', home: [16.5, 88.5], scale: 0.98 },
-    polisher:      { name: '수석 번역관',   role: '번역·글',     home: [36.0, 84.5], scale: 1.00 },
-    staffing:      { name: '인력 공급팀',   role: '인력 현황',   home: [65.5, 84.5], scale: 1.00 },
-    sorting:       { name: '선별팀',        role: '선별 실적',   home: [86.2, 84.5], scale: 1.00 },
+    captain: {
+      name: '캡틴', role: '결재', home: [50.0, 14.5], seatFacing: 'down', scale: 0.92,
+      deskMask: [43.5, 11.4, 56.5, 24.0],
+    },
+    claude: {
+      name: '비서실장', role: '지휘', home: [50.0, 38.8], seatFacing: 'down', scale: 0.92,
+      deskMask: [43.5, 35.6, 56.5, 48.2],
+    },
+    finder: {
+      name: '시각 정보 비서', role: '사진 고르기', home: [15.2, 46.5], seatFacing: 'down', scale: 0.90,
+      deskMask: [10.0, 43.3, 20.5, 54.0],
+    },
+    agy: {
+      name: '메뉴 검사관', role: '메뉴판 읽기', home: [82.2, 49.5], seatFacing: 'up', scale: 0.90,
+    },
+    'menu-reader': {
+      name: '자료 해석 비서', role: '메뉴판 읽기', home: [93.5, 49.5], seatFacing: 'up', scale: 0.90,
+    },
+    codex: {
+      name: '운영 감찰관', role: '두 번째 검토', home: [7.8, 91.8], seatFacing: 'up', scale: 0.90,
+    },
+    reviewer: {
+      name: '데이터 감사관', role: '마지막 점검', home: [19.5, 91.8], seatFacing: 'up', scale: 0.90,
+    },
+    polisher: {
+      name: '수석 번역관', role: '번역·글', home: [38.2, 84.8], seatFacing: 'down', scale: 0.90,
+      deskMask: [33.2, 81.6, 43.5, 92.6],
+    },
+    staffing: {
+      name: '인력 공급팀', role: '인력 현황', home: [63.2, 84.8], seatFacing: 'down', scale: 0.90,
+      deskMask: [58.0, 81.6, 68.5, 92.6],
+    },
+    sorting: {
+      name: '선별팀', role: '선별 실적', home: [83.2, 84.8], seatFacing: 'down', scale: 0.90,
+      deskMask: [78.0, 81.6, 88.5, 92.6],
+    },
   };
 
-  // 각 부서 벽 상단에 맞춘 선명한 한국어 간판
+  // 각 부서 벽 상단 간판
   const SIGNS = [
-    { text: '미디어 관제실',     x: 15.2, y: 36.2, bg: '#15803d' },
-    { text: '디지털 메뉴 통제실', x: 84.8, y: 36.2, bg: '#dc2626' },
-    { text: '감사실',           x: 12.8, y: 71.2, bg: '#7c3aed' },
-    { text: '통번역 통제실',     x: 35.5, y: 71.2, bg: '#2563eb' },
-    { text: '인력 공급팀',       x: 65.0, y: 71.2, bg: '#0284c7' },
-    { text: '선별팀',           x: 87.5, y: 71.2, bg: '#ea580c' },
+    { text: '미디어 관제실',     x: 15.2, y: 29.0, bg: '#15803d' },
+    { text: '디지털 메뉴 통제실', x: 84.8, y: 29.0, bg: '#dc2626' },
+    { text: '감사실',           x: 12.6, y: 61.5, bg: '#7c3aed' },
+    { text: '통번역 통제실',     x: 38.0, y: 61.5, bg: '#2563eb' },
+    { text: '인력 공급팀',       x: 63.0, y: 61.5, bg: '#0284c7' },
+    { text: '선별팀',           x: 87.5, y: 61.5, bg: '#ea580c' },
   ];
 
-  // 100% 직교(동서남북) 문·복도 동선 — 벽·책상·화분을 절대 통과하지 않음 (bg_v2_grid.jpg 기준)
+  // 100% 직교(동서남북) 문·복도 동선 (bg_v3_grid.jpg 기준 — 벽·책상·화분 통과 0)
+  // 각 방의 넓은 문 → 중앙 복도([50.0, 55.5]) 합류
   const TO_HALL = {
-    finder:        [[15.8, 49.0], [15.8, 66.5], [50.0, 66.5]],
-    agy:           [[80.8, 54.0], [80.8, 66.5], [50.0, 66.5]],
-    'menu-reader': [[89.0, 54.0], [89.0, 66.5], [50.0, 66.5]],
-    codex:         [[9.4,  88.5], [9.4,  84.0], [15.5, 84.0], [15.5, 66.5], [50.0, 66.5]],
-    reviewer:      [[16.5, 88.5], [16.5, 66.5], [50.0, 66.5]],
-    polisher:      [[36.0, 84.5], [36.0, 66.5], [50.0, 66.5]],
-    staffing:      [[65.5, 84.5], [65.5, 66.5], [50.0, 66.5]],
-    sorting:       [[86.2, 84.5], [86.2, 66.5], [50.0, 66.5]],
+    finder:        [[15.2, 46.5], [15.2, 55.5], [26.2, 55.5], [50.0, 55.5]],
+    agy:           [[82.2, 49.5], [82.2, 55.5], [73.8, 55.5], [50.0, 55.5]],
+    'menu-reader': [[93.5, 49.5], [93.5, 55.5], [73.8, 55.5], [50.0, 55.5]],
+    codex:         [[7.8,  91.8], [7.8,  95.8], [26.2, 95.8], [26.2, 55.5], [50.0, 55.5]],
+    reviewer:      [[19.5, 91.8], [26.2, 91.8], [26.2, 55.5], [50.0, 55.5]],
+    polisher:      [[38.2, 84.8], [38.2, 95.2], [50.0, 95.2], [50.0, 55.5]],
+    staffing:      [[63.2, 84.8], [63.2, 95.2], [50.0, 95.2], [50.0, 55.5]],
+    sorting:       [[83.2, 84.8], [83.2, 95.2], [73.8, 95.2], [73.8, 55.5], [50.0, 55.5]],
   };
 
   function routeToChief(id) {
     const base = TO_HALL[id];
     if (!base) return [];
-    // 중앙 목재 통로(x=50.0)를 따라 북쪽으로 올라가 비서실장 책상 앞(y=45.0)에 도착
-    return [...base, [50.0, 45.0]];
+    return [...base, [50.0, 51.0]];
   }
 
   function routeToCoffee(id) {
     const base = TO_HALL[id];
     if (!base) return [];
-    // 중앙 통로 → 비서실장 왼쪽 넓은 목재 바닥(x=36.0) → 왼쪽 위 커피 코너(x=24.5, y=26.5)
-    return [...base, [50.0, 45.0], [36.0, 45.0], [36.0, 26.5], [24.5, 26.5]];
+    // 중앙 복도 → 비서실장 왼쪽 통로(x=34.5) → 왼쪽 위 커피 머신 앞(x=16.5, y=22.5)
+    return [...base, [34.5, 55.5], [34.5, 22.5], [16.5, 22.5]];
   }
 
-  // 캡틴 전용: 책상 위로 올라가지 않고 오른쪽 계단으로 걸어나가 오른쪽 창가 데크에서 창밖 감상 후 복귀!
-  const CAP_TO_WINDOW = [[50.0, 14.8], [56.8, 14.8], [56.8, 22.5], [63.5, 22.5], [79.0, 22.5]];
-  const CAP_TO_DESK   = [[79.0, 22.5], [63.5, 22.5], [56.8, 22.5], [56.8, 14.8], [50.0, 14.8]];
+  // 캡틴 전용: 의자 뒤(y=11.0)로 빠져나와 오른쪽 계단 → 오른쪽 창가 데크에서 창밖 감상 후 복귀! (책상 절대 안 밟음)
+  const CAP_TO_WINDOW = [[50.0, 11.2], [61.0, 11.2], [61.0, 21.8], [82.0, 21.8]];
+  const CAP_TO_DESK   = [[82.0, 21.8], [61.0, 21.8], [61.0, 11.2], [50.0, 11.2], [50.0, 14.5]];
 
-  // 비서실장 전용: 커피 타기 → 캡틴 단상 왼쪽 계단으로 서빙 → 자리 복귀
-  const CHIEF_TO_COFFEE   = [[50.0, 33.0], [36.0, 33.0], [36.0, 26.5], [24.5, 26.5]];
-  const COFFEE_TO_CAPTAIN = [[24.5, 26.5], [36.5, 26.5], [36.5, 21.5], [43.0, 21.5], [43.0, 16.5]];
-  const CAPTAIN_TO_CHIEF  = [[43.0, 16.5], [43.0, 21.5], [36.5, 21.5], [36.5, 33.0], [50.0, 33.0]];
-  const CHIEF_TO_CAPTAIN  = [[50.0, 33.0], [36.5, 33.0], [36.5, 21.5], [43.0, 21.5], [43.0, 16.5]];
+  // 비서실장 전용: 왼쪽 통로로 커피 머신 → 캡틴 단상 왼쪽 계단으로 서빙 → 자리 복귀
+  const CHIEF_TO_COFFEE   = [[50.0, 38.8], [34.5, 38.8], [34.5, 22.5], [16.5, 22.5]];
+  const COFFEE_TO_CAPTAIN = [[16.5, 22.5], [35.5, 22.5], [35.5, 17.0], [41.5, 17.0]];
+  const CAPTAIN_TO_CHIEF  = [[41.5, 17.0], [35.5, 17.0], [35.5, 38.8], [50.0, 38.8]];
+  const CHIEF_TO_CAPTAIN  = [[50.0, 38.8], [35.5, 38.8], [35.5, 17.0], [41.5, 17.0]];
 
-  // 이미지 사전 불러오기 (배경 + 캡틴 4동작/걷기 + 직원 9명 앉기·타이핑·4방향 걷기)
   function loadImages() {
     const imgs = { walk: {}, seated: {}, cap: {} };
     const load = (target, key, url) => new Promise(res => {
@@ -119,7 +144,7 @@
     for (const [id, cfg] of Object.entries(CHARS)) {
       npcs[id] = {
         id, x: cfg.home[0], y: cfg.home[1],
-        mode: 'idle', dir: 'down', capPose: 'idle',
+        mode: 'idle', dir: cfg.seatFacing || 'down', capPose: 'idle',
         bubble: '', bubbleType: 'work', progress: null,
         carry: null, path: [], speed: 15.0, onArrive: null,
       };
@@ -149,7 +174,7 @@
       </div>
       ${signsHtml}
       ${npcHudHtml}
-      <div class="og-hr" data-hr-box style="left:65.0%;top:75.5%"></div>`;
+      <div class="og-hr" data-hr-box style="left:63.2%;top:72.0%"></div>`;
 
     const tagEls = {}, bubEls = {};
     for (const id of Object.keys(CHARS)) {
@@ -174,11 +199,10 @@
       n.onArrive = onArrive;
     }
 
-    // 캡틴이 오른쪽 계단으로 걸어나가 오른쪽 창가 데크에서 창밖을 보고 자리로 걸어 복귀!
     function captainWindowWalk() {
       const cap = npcs.captain;
       if (cap.mode === 'walk' || cap.mode === 'done') return;
-      log('캡틴이 자리에서 일어나 오른쪽 창가 데크로 산책 이동');
+      log('캡틴이 의자에서 일어나 오른쪽 창가 데크로 산책 이동');
       sendPath('captain', CAP_TO_WINDOW, {
         mode: 'walk', carry: null, bubble: '잠시 바람 좀 쐬야지…', bubbleType: 'idle',
         onArrive: () => {
@@ -202,7 +226,6 @@
       });
     }
 
-    // 캡틴 자연 행동 (대부분 앉아 있으며 수시로 커피 마시기 또는 오른쪽 창가 산책)
     function updateCaptainLife(now) {
       const cap = npcs.captain;
       if (cap.mode === 'done' || cap.mode === 'walk' || isDemo) return;
@@ -225,7 +248,6 @@
       }
     }
 
-    // 비서실장이 커피를 타서 캡틴 단상 왼쪽 계단으로 서빙!
     function serveCoffeeToCaptain() {
       const chief = npcs.claude;
       const cap = npcs.captain;
@@ -284,7 +306,7 @@
             if (chief.bubble === '확인했어요! ✔') chief.bubble = '';
             sendPath(id, backHome, {
               mode: 'walk', carry: null, bubble: '',
-              onArrive: () => { n.mode = 'done'; n.dir = 'down'; n.bubble = ''; },
+              onArrive: () => { n.mode = 'done'; n.dir = CHARS[id].seatFacing || 'down'; n.bubble = ''; },
             });
           }, 1100);
         },
@@ -342,7 +364,7 @@
               setTimeout(() => {
                 sendPath(id, back, {
                   mode: 'coffee-walk', carry: 'coffee', bubble: '',
-                  onArrive: () => { npcs[id].mode = 'idle'; npcs[id].dir = 'down'; npcs[id].carry = null; },
+                  onArrive: () => { npcs[id].mode = 'idle'; npcs[id].dir = CHARS[id].seatFacing || 'down'; npcs[id].carry = null; },
                 });
               }, 1300);
             },
@@ -358,7 +380,7 @@
       isDemo = false;
       for (const [id, cfg] of Object.entries(CHARS)) {
         Object.assign(npcs[id], {
-          x: cfg.home[0], y: cfg.home[1], mode: 'idle', dir: 'down', capPose: 'idle',
+          x: cfg.home[0], y: cfg.home[1], mode: 'idle', dir: cfg.seatFacing || 'down', capPose: 'idle',
           bubble: '', carry: null, path: [], progress: null, onArrive: null,
         });
       }
@@ -377,7 +399,6 @@
       npcs.claude.bubble = '지시 접수! 팀 배정 중…';
 
       at(1600, () => {
-        // 캡틴이 책상 위가 아닌 오른쪽 계단으로 걸어나가 오른쪽 창가 데크에서 창밖을 봄!
         captainWindowWalk();
         npcs.claude.bubble = '사진·메뉴판 읽기 시작해 주세요!';
         npcs.finder.mode = 'work';
@@ -520,7 +541,7 @@
       }
     }
 
-    // ---------------------------------------------------------------- 고화질 스프라이트 렌더링 (앉기·타이핑·4방향 걷기)
+    // ---------------------------------------------------------------- 고화질 스프라이트 렌더링
     function drawNpc(n, t) {
       const cfg = CHARS[n.id];
       const walking = n.mode === 'walk' || n.mode === 'coffee-walk';
@@ -532,6 +553,7 @@
       let im = imgs[n.id];
       let flipX = false;
       let isFullBody = walking;
+      let isNorthSeated = (!walking && cfg.seatFacing === 'up');
 
       if (n.id === 'captain') {
         if (walking) {
@@ -541,7 +563,7 @@
           isFullBody = true;
         } else {
           im = imgs.cap[n.capPose] || imgs.cap.idle || imgs.captain;
-          isFullBody = (n.capPose === 'window'); // 오른쪽 창가 데크에 서 있을 때는 전신!
+          isFullBody = (n.capPose === 'window');
         }
       } else if (walking) {
         const wset = imgs.walk[n.id];
@@ -550,8 +572,12 @@
           else if (n.dir === 'down' && wset.down[frameIdx]) im = wset.down[frameIdx];
           else if (wset.side[frameIdx]) { im = wset.side[frameIdx]; flipX = (n.dir === 'left'); }
         }
+      } else if (isNorthSeated) {
+        // 감사실·디지털 메뉴 통제실: 모니터를 바라보고 앉은 뒷모습! (작업 시 어깨/팔 미세 타이핑 움직임)
+        const upSet = imgs.walk[n.id]?.up;
+        im = (upSet && upSet[1]) ? (working ? upSet[typeIdx === 0 ? 1 : 3] : upSet[1]) : imgs[n.id];
       } else {
-        // 자리에 앉아 있을 때: 작업 중이면 타이핑 2프레임(w1/w2), 평소엔 앉아 대기(idle)
+        // 정면 책상(비서실장·미디어·번역·인력·선별): 앉은 자세 / 타이핑 2프레임
         const sset = imgs.seated[n.id];
         if (sset) {
           im = working ? (typeIdx === 0 ? sset.w1 : sset.w2) || sset.idle : sset.idle;
@@ -561,34 +587,35 @@
 
       const cx = (n.x / 100) * W;
       const cy = (n.y / 100) * H;
-      const targetH = (isFullBody ? 118 : (n.id === 'captain' ? 128 : 96)) * cfg.scale;
+      // 의자·책상 비율에 딱 맞춘 캐릭터 크기
+      const targetH = (isFullBody ? 102 : isNorthSeated ? 88 : (n.id === 'captain' ? 104 : 84)) * cfg.scale;
       const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
-      const bob = walking ? ((frameIdx % 2 === 1) ? -1.8 : 0)
-        : working ? (typeIdx === 0 ? -1.0 : 0.8)
-        : (n.id === 'captain' && n.capPose === 'coffee') ? Math.sin(t * 3.5) * 1.2
-        : done ? -Math.abs(Math.sin(t * 5)) * 2.5
-        : Math.sin(t * 2.0 + cx * 0.01) * 0.9;
+      const bob = walking ? ((frameIdx % 2 === 1) ? -1.5 : 0)
+        : working ? (typeIdx === 0 ? -1.2 : 0.8)
+        : (n.id === 'captain' && n.capPose === 'coffee') ? Math.sin(t * 3.5) * 1.1
+        : done ? -Math.abs(Math.sin(t * 5)) * 2.0
+        : Math.sin(t * 2.0 + cx * 0.01) * 0.7;
 
       ctx.save();
-      // 그림자
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.30)';
-      ctx.beginPath();
-      ctx.ellipse(cx, cy + (isFullBody ? 6 : 2), isFullBody ? 24 : 26, isFullBody ? 7 : 6, 0, 0, Math.PI * 2);
-      ctx.fill();
+      if (isFullBody) {
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.30)';
+        ctx.beginPath();
+        ctx.ellipse(cx, cy + 5, 20, 6, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
-      // 작업 중 빛나는 파란 아우라 / 완료 시 초록 반짝임
       if (working) {
-        const pulse = 0.25 + 0.14 * Math.sin(t * 6);
+        const pulse = 0.24 + 0.12 * Math.sin(t * 6);
         ctx.fillStyle = `rgba(56, 189, 248, ${pulse})`;
         ctx.beginPath();
-        ctx.ellipse(cx, cy - targetH * 0.42, targetW * 0.62, targetH * 0.50, 0, 0, Math.PI * 2);
+        ctx.ellipse(cx, cy - targetH * 0.45, targetW * 0.62, targetH * 0.48, 0, 0, Math.PI * 2);
         ctx.fill();
       } else if (done && n.id !== 'captain') {
-        const pulse = 0.20 + 0.10 * Math.sin(t * 4);
+        const pulse = 0.18 + 0.09 * Math.sin(t * 4);
         ctx.fillStyle = `rgba(74, 222, 128, ${pulse})`;
         ctx.beginPath();
-        ctx.ellipse(cx, cy - targetH * 0.42, targetW * 0.56, targetH * 0.44, 0, 0, Math.PI * 2);
+        ctx.ellipse(cx, cy - targetH * 0.45, targetW * 0.54, targetH * 0.42, 0, 0, Math.PI * 2);
         ctx.fill();
       }
 
@@ -596,37 +623,47 @@
       if (flipX) ctx.scale(-1, 1);
 
       if (isFullBody) {
-        ctx.drawImage(im, -targetW / 2, -targetH + 8, targetW, targetH);
-      } else if (n.id === 'captain') {
-        // 캡틴이 의자에 앉아 있을 때 책상 위로 상반신 표시
-        const sh = im.naturalHeight * 0.55;
-        const dh = targetH * 0.55;
+        ctx.drawImage(im, -targetW / 2, -targetH + 6, targetW, targetH);
+      } else if (isNorthSeated) {
+        // 모니터를 보며 의자에 앉은 뒷모습 (하반신 65%만 그려 의자에 착석한 느낌)
+        const sh = im.naturalHeight * 0.68;
+        const dh = targetH * 0.68;
         ctx.drawImage(im, 0, 0, im.naturalWidth, sh, -targetW / 2, -dh + 4, targetW, dh);
+      } else if (n.id === 'captain') {
+        const sh = im.naturalHeight * 0.65;
+        const dh = targetH * 0.65;
+        ctx.drawImage(im, 0, 0, im.naturalWidth, sh, -targetW / 2, -dh + 8, targetW, dh);
       } else {
-        // 직원 전용 앉아 있는/타이핑 스프라이트 (의자 위에 자연스럽게 착석!)
-        ctx.drawImage(im, -targetW / 2, -targetH + 14, targetW, targetH);
+        ctx.drawImage(im, -targetW / 2, -targetH + 10, targetW, targetH);
       }
 
-      // 들고 있는 소품 (보고서 / 커피컵)
       if (n.carry === 'doc') {
-        const dx = 14;
+        const dx = 12;
         ctx.fillStyle = 'rgba(250, 204, 21, 0.38)';
-        ctx.beginPath(); ctx.arc(dx + 8, -targetH * 0.50, 14, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(dx + 7, -targetH * 0.50, 12, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#fef08a';
         ctx.strokeStyle = '#b45309';
         ctx.lineWidth = 2;
-        ctx.fillRect(dx, -targetH * 0.58, 16, 20);
-        ctx.strokeRect(dx, -targetH * 0.58, 16, 20);
+        ctx.fillRect(dx, -targetH * 0.58, 14, 18);
+        ctx.strokeRect(dx, -targetH * 0.58, 14, 18);
       } else if (n.carry === 'coffee') {
-        const dx = 14;
+        const dx = 12;
         ctx.fillStyle = '#ffffff';
         ctx.strokeStyle = '#78350f';
         ctx.lineWidth = 2;
-        ctx.fillRect(dx, -targetH * 0.48, 12, 14);
-        ctx.strokeRect(dx, -targetH * 0.48, 12, 14);
+        ctx.fillRect(dx, -targetH * 0.48, 10, 12);
+        ctx.strokeRect(dx, -targetH * 0.48, 10, 12);
       }
 
       ctx.restore();
+
+      // 핵심: 정면 책상에 앉아 있을 때 책상 앞판(deskMask)을 캐릭터 하반신 위에 덮어 '진짜 책상 뒤에 앉은' 입체감 구현!
+      if (!isFullBody && cfg.deskMask && imgs.bg) {
+        const [x1, y1, x2, y2] = cfg.deskMask;
+        const sx = (x1 / 100) * W, sy = (y1 / 100) * H;
+        const sw = ((x2 - x1) / 100) * W, sh = ((y2 - y1) / 100) * H;
+        ctx.drawImage(imgs.bg, sx, sy, sw, sh, sx, sy, sw, sh);
+      }
     }
 
     // ---------------------------------------------------------------- 60fps 메인 루프
@@ -679,7 +716,7 @@
         const walking = n.mode === 'walk' || n.mode === 'coffee-walk';
 
         tag.style.left = `${n.x}%`;
-        tag.style.top = `${n.y + (walking ? 1.5 : 1.0)}%`;
+        tag.style.top = `${n.y + (walking ? 1.5 : 2.2)}%`;
         tag.className = 'og-tag' + (n.mode === 'work' ? ' work' : n.mode === 'done' ? ' done' : n.mode === 'walk' ? ' walk' : '');
         tag.querySelector('small').textContent =
           n.mode === 'work' ? '작업 중…' : n.mode === 'walk' ? '이동 중' : n.mode === 'done' ? '✔ 작업 완료' : CHARS[id].role;
@@ -688,7 +725,7 @@
           bub.hidden = false;
           const isCapTop = (id === 'captain' && n.x < 65);
           bub.style.left = `${isCapTop ? n.x + 11 : n.x}%`;
-          bub.style.top = `${isCapTop ? 12.0 : Math.max(7, n.y - (walking ? 15.5 : 11.5))}%`;
+          bub.style.top = `${isCapTop ? 12.0 : Math.max(7, n.y - (walking ? 14.5 : 10.5))}%`;
           bub.className = `og-bubble ${n.bubbleType || ''}`;
           const prog = n.progress != null ? `<div class="og-prog"><i style="width:${n.progress}%"></i></div>` : '';
           const html = `${n.bubble}${prog}`;
