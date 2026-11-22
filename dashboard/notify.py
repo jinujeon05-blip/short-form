@@ -8,6 +8,8 @@
 
 import json
 import os
+import ssl
+import subprocess
 import threading
 import time
 import urllib.error
@@ -47,6 +49,25 @@ def _load_cfg() -> dict:
     return cfg
 
 
+def _tg_call_curl(url: str, payload: dict | None = None, timeout: int = 12) -> tuple[dict | None, str]:
+    """Windows 기본 curl.exe(OS 인증서 저장소 SChannel 사용)로 텔레그램 API 호출."""
+    cmd = ["curl.exe", "-sS", "--max-time", str(timeout)]
+    if payload is not None:
+        cmd += ["-X", "POST", "-H", "Content-Type: application/json", "-d", json.dumps(payload)]
+    cmd.append(url)
+    flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout + 3, creationflags=flags)
+        if r.returncode != 0:
+            return None, (r.stderr or f"curl 오류({r.returncode})").strip()[:180]
+        res = json.loads(r.stdout or "{}")
+        if not res.get("ok"):
+            return None, str(res.get("description") or "텔레그램 응답 오류")
+        return res, ""
+    except Exception as e:
+        return None, str(e)[:180]
+
+
 def _tg_call(token: str, method: str, payload: dict | None = None, timeout: int = 10) -> tuple[dict | None, str]:
     url = f"https://api.telegram.org/bot{token}/{method}"
     data = json.dumps(payload).encode("utf-8") if payload is not None else None
@@ -65,6 +86,9 @@ def _tg_call(token: str, method: str, payload: dict | None = None, timeout: int 
         except Exception:
             return None, f"HTTP {e.code}"
     except Exception as e:
+        # Windows에서 파이썬 기본 인증서 저장소가 시스템 인증서를 못 읽을 때 Windows 기본 curl.exe로 안전하게 재시도
+        if "CERTIFICATE_VERIFY_FAILED" in str(e) or isinstance(getattr(e, "reason", None), ssl.SSLCertVerificationError):
+            return _tg_call_curl(url, payload, timeout=timeout + 2)
         return None, str(e)[:180]
 
 
