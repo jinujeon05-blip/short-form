@@ -13,9 +13,10 @@
     <span class="og-pill">별도 시연 공간 · 기존 대시보드 무변경</span>
   </h1>
   <div class="og-controls">
-    <button class="og-btn green" id="btn-demo">▶ 새 가게 제작 시연 (20초)</button>
-    <button class="og-btn ghost" id="btn-coffee">☕ 휴식·커피 이동 보기</button>
-    <button class="og-btn ghost" id="btn-live">● 실시간 대시보드 연동</button>
+    <button class="og-btn green" id="btn-demo">▶ 새 가게 제작 시연 (22초)</button>
+    <button class="og-btn ghost" id="btn-serve">☕ 비서 커피 서빙 보기</button>
+    <button class="og-btn ghost" id="btn-coffee">🚶 직원 휴식 이동</button>
+    <button class="og-btn ghost" id="btn-live">● 실시간 연동</button>
     <a class="og-btn ghost" href="/" style="text-decoration:none">← 기존 대시보드로</a>
   </div>
 </header>
@@ -85,6 +86,7 @@
   }
 
   document.getElementById('btn-demo').addEventListener('click', () => game.runDemo());
+  document.getElementById('btn-serve').addEventListener('click', () => game.serveCoffeeToCaptain());
   document.getElementById('btn-coffee').addEventListener('click', () => game.coffeeStroll());
   document.getElementById('btn-live').addEventListener('click', () => {
     game.stopDemo();
