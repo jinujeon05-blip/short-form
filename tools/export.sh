@@ -112,6 +112,7 @@ name() {
     dabangchicken) echo "다방치킨" ;;
     fujiro) echo "후지로 판께빈" ;;
     okonomiyakimiyakoya) echo "미야코야" ;;
+    sumibaozi) echo "수미보오즈" ;;
     *) echo "$1" ;;
   esac
 }

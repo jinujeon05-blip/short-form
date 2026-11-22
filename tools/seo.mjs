@@ -167,6 +167,7 @@ const SHOPS = {
   dabangchicken: { type: 'Restaurant', cuisine: ['Korean', 'Fried Chicken', 'Pizza'], country: 'VN', currency: 'VND', og: 'img/fried.jpg' },
   fujiro: { type: 'Restaurant', cuisine: ['Japanese', 'Tonkatsu', 'Curry Rice'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   okonomiyakimiyakoya: { type: 'Restaurant', cuisine: ['Japanese', 'Okonomiyaki', 'Monjayaki', 'Teppanyaki'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  sumibaozi: { type: 'Restaurant', cuisine: ['Japanese', 'Yakitori', 'Izakaya'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

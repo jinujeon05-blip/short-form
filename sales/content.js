@@ -219,6 +219,8 @@ window.DEMOS = [
     name: "후지로 판께빈 FUJIRO Phan Kế Bính", type: { ko: "일식 · 돈카츠 · 카츠토지 · 카레", vi: "Nhà hàng Nhật · Tonkatsu · Katsutoji · Cơm cà ri", en: "Japanese tonkatsu · Katsutoji · Curry rice", zh: "日式炸猪排 · 鸡蛋炸排锅 · 咖喱饭", ja: "とんかつ・カツとじ・カレーライス" } },
   { id: "okonomiyakimiyakoya", hidden: true, url: "https://okonomiyakimiyakoya.qrmenuasia.com", shot: "img/demo-okonomiyakimiyakoya.jpg", qr: "img/qr-okonomiyakimiyakoya.svg",
     name: "미야코야 MIYAKOYA", type: { ko: "일식 · 오코노미야키 · 몬자 · 철판구이", vi: "Món Nhật · Okonomiyaki · Monjayaki · Teppanyaki", en: "Japanese okonomiyaki · Monja · Teppanyaki", zh: "日料 · 大阪烧 · 文字烧 · 铁板烧", ja: "お好み焼き・もんじゃ・鉄板焼き" } },
+  { id: "sumibaozi", hidden: true, url: "https://sumibaozi.qrmenuasia.com", shot: "img/demo-sumibaozi.jpg", qr: "img/qr-sumibaozi.svg",
+    name: "수미보오즈 SUMIBOZU 炭ぼうず", type: { ko: "일식 · 숯불 꼬치구이 · 이자카야", vi: "Nhà hàng Nhật · Gà nướng than · Izakaya", en: "Japanese charcoal yakitori · Izakaya", zh: "日式炭火烤鸡肉串 · 居酒屋", ja: "炭火焼き鳥・串焼き・居酒屋" } },
 ];
 
 window.T = {

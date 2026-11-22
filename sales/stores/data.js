@@ -862,6 +862,12 @@ window.STORES = [
     type: { ko: "일식 · 오코노미야키 · 몬자 · 철판구이", vi: "Món Nhật · Okonomiyaki · Monjayaki · Teppanyaki", en: "Japanese okonomiyaki · Monja · Teppanyaki", zh: "日料 · 大阪烧 · 文字烧 · 铁板烧", ja: "お好み焼き・もんじゃ・鉄板焼き" },
     keywords: "미야코야 오코노미야키 미야코야 하노이 お好み本舗みやこ屋 Okonomiyaki Miyakoya 몬자 몬자야키 철판구이 야키소바 호르몬 Linh Lang Hanoi 일식 일본 음식 monjayaki teppanyaki bánh xèo Nhật"
   },
+  { id: "sumibaozi", name: "수미보오즈 SUMIBOZU 炭ぼうず", sub: "숯불 꼬치구이 · 닭꼬치 · 츠쿠네 · 가라아게 · 일본식 안주", url: "https://sumibaozi.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese","bar"], tags: ["photos"],
+    address: "ngõ 535 P. Kim Mã, Giảng Võ, Hà Nội", map: "https://www.google.com/maps/place/%EC%88%98%EB%AF%B8%EB%B3%B4%EC%98%A4%EC%A6%88/@21.0291465,105.810392,17z",
+    type: { ko: "일식 · 숯불 꼬치구이 · 이자카야", vi: "Nhà hàng Nhật · Gà nướng than · Izakaya", en: "Japanese charcoal yakitori · Izakaya", zh: "日式炭火烤鸡肉串 · 居酒屋", ja: "炭火焼き鳥・串焼き・居酒屋" },
+    keywords: "수미보오즈 스미보즈 SUMIBOZU 炭ぼうず Sumibozu Gà nướng than 꼬치구이 야키토리 닭꼬치 츠쿠네 가라아게 이자카야 일식 하노이 Kim Mã Giảng Võ Hà Nội"
+  },
 ];
 window.SI = {
   ko: {
