@@ -146,6 +146,44 @@ function paintSpots() {
 // 2D 픽셀 게임 사무실 ↔ 사진 사무실 전환 (2026-11-22 캡틴 '다-1')
 let OG = null;
 let officeMode = localStorage.getItem('jinwoo_office_mode') || 'game';
+function gameNpcInfo(id) {
+  const m = M[id] || {}, t = S.team || {};
+  const info = { sub: AKA[id] || '', job: teamJob(id).replace(/\*\*|`/g, ''), recent: [], kpis: [] };
+  if (id !== 'captain') {
+    info.recent = (t.recent?.[id] || []).slice(0, 3).map(c => `${c.msg} (${c.date})`);
+  }
+  if (id === 'staffing' && S.hr?.status === 'ok') {
+    const T = S.hr.today, Mo = S.hr.month;
+    info.kpis = [
+      { label: '오늘 투입', value: `${n0(T.total)}명` },
+      { label: '오늘 계획', value: `${n0(T.plan)}명` },
+      { label: '이번 달 달성', value: Mo.pct == null ? '–' : `${Mo.pct}%` },
+    ];
+  } else if (id === 'sorting' && S.hr?.status === 'ok') {
+    const s = S.hr.sorting;
+    info.kpis = [
+      { label: '오늘 검사', value: n0(s.todayInspected) },
+      { label: '이번 달 검사', value: n0(s.monthInspected) },
+      { label: '불량률', value: rt(s.monthRate) },
+    ];
+  } else if (id === 'finder' && S.collector) {
+    info.kpis = [
+      { label: '수집기', value: S.collector.running ? '켜짐' : '꺼짐' },
+      { label: '최근 사진', value: `${S.collector.job?.photos || 0}장` },
+      { label: '이력', value: `${S.collector.history?.length || 0}건` },
+    ];
+  }
+  return info;
+}
+function mountOfficeGame() {
+  const gBox = $('#office-game');
+  if (!OG && gBox && window.OfficeGame) {
+    OG = window.OfficeGame.create(gBox, {
+      getInfo: gameNpcInfo,
+      onOpenDetail: id => openPanel(id),
+    });
+  }
+}
 function setOfficeMode(mode) {
   officeMode = (mode === 'photo') ? 'photo' : 'game';
   try { localStorage.setItem('jinwoo_office_mode', officeMode); } catch {}
@@ -156,15 +194,13 @@ function setOfficeMode(mode) {
   if (acts) acts.hidden = officeMode !== 'game';
   if (bGame) bGame.classList.toggle('on', officeMode === 'game');
   if (bPhoto) bPhoto.classList.toggle('on', officeMode === 'photo');
-  if (officeMode === 'game' && !OG && gBox && window.OfficeGame) {
-    OG = window.OfficeGame.create(gBox, { onSelect: id => openPanel(id) });
-  }
+  if (officeMode === 'game') mountOfficeGame();
   renderOffice();
 }
 
 function renderOffice() {
   if (officeMode === 'game' && $('#office-game') && window.OfficeGame) {
-    if (!OG) OG = window.OfficeGame.create($('#office-game'), { onSelect: id => openPanel(id) });
+    mountOfficeGame();
     const fid = typeof talkFocus === 'function' ? talkFocus() : null;
     OG.syncReal({
       orders: S.orders || [],

@@ -55,6 +55,13 @@ body.og-page {
 }
 
 /* 게임 캔버스 + 선명한 한국어 HUD 오버레이 컨테이너 (대시보드에 그대로 이식 가능) */
+.og-shell {
+  position: relative;
+  width: 100%;
+  background: #0b101b;
+  border-radius: 16px;
+  overflow: hidden;
+}
 .og-stage {
   position: relative;
   width: 100%;
@@ -67,6 +74,221 @@ body.og-page {
   user-select: none;
   container-type: inline-size;
 }
+
+/* 유튜브 스타일 전체화면 게임 모드 (네이티브 Fullscreen + 모바일 가로 회전 폴백) */
+.og-shell:fullscreen,
+.og-shell.is-fs {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100dvh;
+  border-radius: 0;
+  background: #070b14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.og-shell.is-fs-rot {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 9999;
+  width: 100dvh;
+  height: 100dvw;
+  transform: translate(-50%, -50%) rotate(90deg);
+  border-radius: 0;
+  background: #070b14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.og-shell:fullscreen .og-stage,
+.og-shell.is-fs .og-stage,
+.og-shell.is-fs-rot .og-stage {
+  width: min(100%, calc(100% * 16 / 9));
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  border-radius: 0;
+  border: 0;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+}
+.og-shell:fullscreen .og-stage { width: min(100vw, calc(100vh * 16 / 9)); }
+.og-shell.is-fs .og-stage { width: min(100vw, calc(100dvh * 16 / 9)); }
+.og-shell.is-fs-rot .og-stage { width: min(100dvh, calc(100dvw * 16 / 9)); }
+/* 네이티브 전체화면에서도 폰이 세로로 유지되면 내부 스테이지를 90° 가로 회전해 화면을 꽉 채움 */
+.og-shell.og-rot-stage .og-stage {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: min(100dvh, calc(100dvw * 16 / 9));
+  max-width: none;
+  max-height: none;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* 우측 하단 유튜브 스타일 전체보기 버튼 */
+.og-fs-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 15;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(15, 23, 42, 0.82);
+  color: #f8fafc;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-radius: 9px;
+  padding: 5px 10px;
+  font: 700 12px/1 var(--og-font);
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: background 0.15s, transform 0.12s, border-color 0.15s;
+}
+.og-fs-btn:hover { background: rgba(37, 99, 235, 0.92); border-color: #93c5fd; transform: scale(1.04); }
+.og-fs-btn svg { width: 15px; height: 15px; flex: none; }
+
+/* 전체화면 게임 모드 우측 상단 퀵 액션 바 */
+.og-fs-bar {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  z-index: 15;
+  pointer-events: auto;
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+.og-shell:fullscreen .og-fs-bar,
+.og-shell.is-fs .og-fs-bar,
+.og-shell.is-fs-rot .og-fs-bar { display: flex; }
+.og-fs-bar button {
+  background: rgba(15, 23, 42, 0.84);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font: 700 11.5px/1.2 var(--og-font);
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+.og-fs-bar button:hover { background: rgba(37, 99, 235, 0.9); border-color: #93c5fd; }
+.og-fs-bar button.og-exit { background: rgba(185, 28, 28, 0.86); border-color: #fca5a5; }
+
+/* RPG 스타일 별도 캐릭터 상태창 (일반·전체화면 모두 작동) */
+.og-modal-back {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  pointer-events: auto;
+  background: rgba(7, 11, 20, 0.56);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+.og-modal-back[hidden] { display: none; }
+.og-modal {
+  width: min(410px, 92%);
+  max-height: 88%;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #1b2436 0%, #121826 100%);
+  color: #f1f5f9;
+  border: 2px solid #f59e0b;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  padding: 14px 16px;
+  font: 13px/1.45 var(--og-font);
+  animation: ogPop 0.16s ease-out;
+}
+@keyframes ogPop { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+.og-m-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.og-m-ava {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  background: #0f172a;
+  border: 2px solid #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex: none;
+}
+.og-m-ava img { width: 48px; height: 48px; object-fit: contain; image-rendering: pixelated; }
+.og-m-title { flex: 1; min-width: 0; }
+.og-m-title h3 { margin: 0; font-size: 16px; color: #fff; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.og-m-title small { color: #94a3b8; font-size: 12px; }
+.og-m-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: #334155;
+  color: #e2e8f0;
+}
+.og-m-badge.work { background: #2563eb; color: #fff; }
+.og-m-badge.done { background: #16a34a; color: #fff; }
+.og-m-badge.walk { background: #d97706; color: #fff; }
+.og-m-x {
+  border: 0;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  flex: none;
+}
+.og-m-x:hover { background: rgba(239, 68, 68, 0.8); color: #fff; }
+.og-m-now {
+  margin: 10px 0;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 10px;
+  padding: 8px 11px;
+  font-size: 12.5px;
+  color: #e2e8f0;
+}
+.og-m-now b { color: #fde68a; font-size: 11px; display: block; margin-bottom: 2px; }
+.og-m-sec { margin-top: 9px; font-size: 12px; color: #cbd5e1; }
+.og-m-sec h4 { margin: 0 0 4px; font-size: 11px; color: #94a3b8; letter-spacing: 0.02em; }
+.og-m-sec p { margin: 0; line-height: 1.45; }
+.og-m-list { margin: 0; padding-left: 16px; }
+.og-m-list li { margin: 2px 0; }
+.og-m-kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px; }
+.og-m-kpi div { background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 6px 8px; text-align: center; }
+.og-m-kpi small { display: block; font-size: 10px; color: #94a3b8; }
+.og-m-kpi strong { font-size: 14px; color: #fff; }
+.og-m-foot {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.og-m-foot button {
+  border-radius: 8px;
+  padding: 6px 12px;
+  font: 700 12px/1.2 var(--og-font);
+  cursor: pointer;
+}
+.og-m-foot .og-m-detail { background: #2563eb; border: 1px solid #60a5fa; color: #fff; }
+.og-m-foot .og-m-detail:hover { background: #1d4ed8; }
+.og-m-foot .og-m-close { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #e2e8f0; }
 .og-canvas {
   position: absolute;
   inset: 0;

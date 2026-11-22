@@ -168,12 +168,34 @@
 
   function create(container, opts = {}) {
     container.innerHTML = `
-      <div class="og-stage">
-        <canvas class="og-canvas" width="${W}" height="${H}"></canvas>
-        <div class="og-hud"></div>
+      <div class="og-shell">
+        <div class="og-stage">
+          <canvas class="og-canvas" width="${W}" height="${H}"></canvas>
+          <div class="og-hud"></div>
+          <div class="og-fs-bar">
+            <button type="button" data-og-act="coffee">☕ 커피 서빙</button>
+            <button type="button" data-og-act="stroll">🚶 휴식</button>
+            <button type="button" data-og-act="exit" class="og-exit">✕ 나가기</button>
+          </div>
+          <button type="button" class="og-fs-btn" data-og-fs aria-label="전체화면 게임 모드" title="전체화면 (폰 자동 가로 전환)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+            <span data-og-fs-lbl>전체화면</span>
+          </button>
+          <div class="og-modal-back" data-og-modal hidden>
+            <div class="og-modal" role="dialog" aria-modal="true" data-og-modal-body></div>
+          </div>
+        </div>
       </div>`;
+    const shell = container.querySelector('.og-shell');
     const canvas = container.querySelector('.og-canvas');
     const hud = container.querySelector('.og-hud');
+    const fsBtn = container.querySelector('[data-og-fs]');
+    const fsLbl = container.querySelector('[data-og-fs-lbl]');
+    const modalBack = container.querySelector('[data-og-modal]');
+    const modalBody = container.querySelector('[data-og-modal-body]');
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = true;
 
@@ -826,16 +848,164 @@
     }
     rafId = requestAnimationFrame(tick);
 
+    // ---------------------------------------------------------------- 전체화면(유튜브 스타일 + 폰 가로 전환) & RPG 상태창
+    let isFs = false;
+    let selectedId = null;
+
+    function syncFsUi() {
+      const nativeFs = (document.fullscreenElement === shell || document.webkitFullscreenElement === shell);
+      isFs = nativeFs || shell.classList.contains('is-fs') || shell.classList.contains('is-fs-rot');
+      const stillPortrait = isFs && window.innerHeight > window.innerWidth && window.innerWidth <= 900;
+      shell.classList.toggle('og-rot-stage', nativeFs && stillPortrait);
+      if (!isFs) shell.classList.remove('is-fs', 'is-fs-rot', 'og-rot-stage');
+      if (fsLbl) fsLbl.textContent = isFs ? '축소' : '전체화면';
+      if (fsBtn) {
+        const svg = fsBtn.querySelector('svg');
+        if (svg) {
+          svg.innerHTML = isFs
+            ? '<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>'
+            : '<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>';
+        }
+      }
+    }
+
+    async function enterFullscreen() {
+      let nativeOk = false;
+      try {
+        if (shell.requestFullscreen) { await shell.requestFullscreen(); nativeOk = true; }
+        else if (shell.webkitRequestFullscreen) { shell.webkitRequestFullscreen(); nativeOk = true; }
+      } catch {}
+      try {
+        if (screen.orientation && screen.orientation.lock) {
+          await screen.orientation.lock('landscape');
+        }
+      } catch {}
+      if (!nativeOk) {
+        const isPortraitPhone = window.innerHeight > window.innerWidth && window.innerWidth <= 900;
+        shell.classList.toggle('is-fs-rot', isPortraitPhone);
+        shell.classList.toggle('is-fs', !isPortraitPhone);
+      }
+      syncFsUi();
+    }
+
+    async function exitFullscreen() {
+      shell.classList.remove('is-fs', 'is-fs-rot', 'og-rot-stage');
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitFullscreenElement && document.webkitExitFullscreen) document.webkitExitFullscreen();
+      } catch {}
+      try {
+        if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+      } catch {}
+      syncFsUi();
+    }
+
+    function toggleFullscreen() {
+      if (isFs) exitFullscreen();
+      else enterFullscreen();
+    }
+
+    document.addEventListener('fullscreenchange', syncFsUi);
+    document.addEventListener('webkitfullscreenchange', syncFsUi);
+    window.addEventListener('resize', syncFsUi);
+
+    function escH(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function openStatusModal(id) {
+      const cfg = CHARS[id], n = npcs[id];
+      if (!cfg || !n) return;
+      selectedId = id;
+      const modeText = n.mode === 'work' ? '작업 중…' : n.mode === 'done' ? '✔ 작업 완료'
+        : (n.mode === 'walk' || n.mode === 'coffee-walk') ? '이동 중'
+        : (id === 'captain' && n.capPose === 'coffee') ? '☕ 커피 마시는 중'
+        : (id === 'captain' && n.capPose === 'window') ? '창밖 보는 중' : '대기 중';
+      const badgeCls = n.mode === 'work' ? 'work' : n.mode === 'done' ? 'done'
+        : (n.mode === 'walk' || n.mode === 'coffee-walk') ? 'walk' : '';
+      const info = opts.getInfo ? opts.getInfo(id) : null;
+      const avaSrc = `/static/office-game/assets/seated/${id}-idle.webp`;
+      const nowMsg = n.bubble || (info?.liveText) || (n.mode === 'idle' ? '자리에서 다음 지시를 기다리는 중입니다.' : modeText);
+
+      let extraHtml = '';
+      if (info?.job) {
+        extraHtml += `<div class="og-m-sec"><h4>맡은 일</h4><p>${escH(info.job)}</p></div>`;
+      }
+      if (info?.kpis?.length) {
+        extraHtml += `<div class="og-m-sec"><h4>실시간 현황</h4><div class="og-m-kpi">${info.kpis.map(k =>
+          `<div><small>${escH(k.label)}</small><strong>${escH(k.value)}</strong></div>`
+        ).join('')}</div></div>`;
+      }
+      if (info?.recent?.length) {
+        extraHtml += `<div class="og-m-sec"><h4>최근 작업 기록</h4><ul class="og-m-list">${info.recent.slice(0, 3).map(r =>
+          `<li>${escH(r)}</li>`
+        ).join('')}</ul></div>`;
+      }
+
+      modalBody.innerHTML = `
+        <div class="og-m-head">
+          <div class="og-m-ava"><img src="${avaSrc}" alt="${escH(cfg.name)}"></div>
+          <div class="og-m-title">
+            <h3>${escH(cfg.name)} <span class="og-m-badge ${badgeCls}">${escH(modeText)}</span></h3>
+            <small>${escH(cfg.role)}${info?.sub ? ' · ' + escH(info.sub) : ''}</small>
+          </div>
+          <button type="button" class="og-m-x" data-og-mclose aria-label="닫기">×</button>
+        </div>
+        <div class="og-m-now">
+          <b>현재 상태</b>
+          <div>${escH(nowMsg)}</div>
+          ${n.progress != null ? `<div class="og-prog" style="margin-top:6px"><i style="width:${n.progress}%"></i></div>` : ''}
+        </div>
+        ${extraHtml}
+        <div class="og-m-foot">
+          ${opts.onOpenDetail ? `<button type="button" class="og-m-detail" data-og-mdetail>📋 상세·점검 창 열기</button>` : ''}
+          <button type="button" class="og-m-close" data-og-mclose>닫기</button>
+        </div>`;
+      modalBack.hidden = false;
+    }
+
+    function closeStatusModal() {
+      selectedId = null;
+      modalBack.hidden = true;
+    }
+
+    fsBtn.addEventListener('click', e => { e.stopPropagation(); toggleFullscreen(); });
+    shell.querySelector('.og-fs-bar').addEventListener('click', e => {
+      const act = e.target.closest('[data-og-act]')?.dataset.ogAct;
+      if (act === 'coffee') serveCoffeeToCaptain();
+      else if (act === 'stroll') coffeeStroll();
+      else if (act === 'exit') exitFullscreen();
+    });
+    modalBack.addEventListener('click', e => {
+      if (e.target === modalBack || e.target.closest('[data-og-mclose]')) return closeStatusModal();
+      if (e.target.closest('[data-og-mdetail]')) {
+        const id = selectedId;
+        closeStatusModal();
+        if (isFs) exitFullscreen();
+        if (id && opts.onOpenDetail) opts.onOpenDetail(id);
+      }
+    });
+
     canvas.addEventListener('click', e => {
       const rect = canvas.getBoundingClientRect();
-      const px = ((e.clientX - rect.left) / rect.width) * 100;
-      const py = ((e.clientY - rect.top) / rect.height) * 100;
-      let hit = null, best = 7.5;
+      let px, py;
+      if (shell.classList.contains('is-fs-rot') || shell.classList.contains('og-rot-stage')) {
+        // 90° 시계방향 CSS 회전 상태의 터치 좌표 보정
+        px = ((e.clientY - rect.top) / rect.height) * 100;
+        py = (1 - (e.clientX - rect.left) / rect.width) * 100;
+      } else {
+        px = ((e.clientX - rect.left) / rect.width) * 100;
+        py = ((e.clientY - rect.top) / rect.height) * 100;
+      }
+      let hit = null, best = 8.0;
       for (const n of Object.values(npcs)) {
         const d = Math.hypot(px - n.x, py - (n.y - 4));
         if (d < best) { best = d; hit = n.id; }
       }
-      if (hit && opts.onSelect) opts.onSelect(hit, npcs[hit], CHARS[hit]);
+      if (hit) {
+        openStatusModal(hit);
+        if (opts.onSelect) opts.onSelect(hit, npcs[hit], CHARS[hit]);
+      }
     });
 
     return {
@@ -845,7 +1015,12 @@
       coffeeStroll: () => coffeeStroll(),
       serveCoffeeToCaptain,
       captainWindowWalk,
-      destroy: () => { stopDemo(); cancelAnimationFrame(rafId); },
+      toggleFullscreen,
+      enterFullscreen,
+      exitFullscreen,
+      openStatusModal,
+      closeStatusModal,
+      destroy: () => { stopDemo(); exitFullscreen(); cancelAnimationFrame(rafId); },
       CHARS,
     };
   }
