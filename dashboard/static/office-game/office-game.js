@@ -6,18 +6,18 @@
 (() => {
   const W = 1376, H = 768;
 
-  // bg_v3_grid.jpg 기준 각 의자·책상 위 착석 정중앙 % 좌표 (허리 위 손이 책상 상판 위에 자연스럽게 놓이도록 맞춤)
+  // bg_v3_grid.jpg 기준 각 의자·책상 위쪽 가장자리 정중앙 % 좌표 (책상 가운데를 덮지 않고 의자 등받이에 딱 맞게 착석!)
   const CHARS = {
-    captain:       { name: '캡틴',          role: '결재',        home: [50.0, 15.8], seatFacing: 'down', scale: 0.94 },
-    claude:        { name: '비서실장',      role: '지휘',        home: [50.0, 39.8], seatFacing: 'down', scale: 0.94 },
-    finder:        { name: '시각 정보 비서', role: '사진 고르기', home: [15.2, 47.4], seatFacing: 'down', scale: 0.92 },
+    captain:       { name: '캡틴',          role: '결재',        home: [50.0, 12.6], seatFacing: 'down', scale: 0.90 },
+    claude:        { name: '비서실장',      role: '지휘',        home: [50.0, 36.8], seatFacing: 'down', scale: 0.90 },
+    finder:        { name: '시각 정보 비서', role: '사진 고르기', home: [15.2, 44.4], seatFacing: 'down', scale: 0.88 },
     agy:           { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.2, 48.2], seatFacing: 'up',   scale: 0.92 },
     'menu-reader': { name: '자료 해석 비서', role: '메뉴판 읽기', home: [93.5, 48.2], seatFacing: 'up',   scale: 0.92 },
     codex:         { name: '운영 감찰관',   role: '두 번째 검토', home: [7.8,  90.6], seatFacing: 'up',   scale: 0.92 },
     reviewer:      { name: '데이터 감사관', role: '마지막 점검', home: [19.5, 90.6], seatFacing: 'up',   scale: 0.92 },
-    polisher:      { name: '수석 번역관',   role: '번역·글',     home: [38.2, 85.8], seatFacing: 'down', scale: 0.92 },
-    staffing:      { name: '인력 공급팀',   role: '인력 현황',   home: [63.2, 85.8], seatFacing: 'down', scale: 0.92 },
-    sorting:       { name: '선별팀',        role: '선별 실적',   home: [83.2, 85.8], seatFacing: 'down', scale: 0.92 },
+    polisher:      { name: '수석 번역관',   role: '번역·글',     home: [38.2, 82.6], seatFacing: 'down', scale: 0.88 },
+    staffing:      { name: '인력 공급팀',   role: '인력 현황',   home: [63.2, 82.6], seatFacing: 'down', scale: 0.88 },
+    sorting:       { name: '선별팀',        role: '선별 실적',   home: [83.2, 82.6], seatFacing: 'down', scale: 0.88 },
   };
 
   // 각 부서 벽 상단 간판
@@ -54,15 +54,15 @@
     return [...base, [34.5, 55.5], [34.5, 22.5], [16.5, 22.5]];
   }
 
-  // 캡틴 전용: 의자 뒤 → 화분 사이 통로(y=15.8) → 오른쪽 계단 → 오른쪽 창가 데크 → 복귀 (책상·화분 절대 안 밟음)
-  const CAP_TO_WINDOW = [[50.0, 10.5], [55.2, 10.5], [55.2, 15.8], [65.5, 15.8], [65.5, 22.0], [82.0, 22.0]];
-  const CAP_TO_DESK   = [[82.0, 22.0], [65.5, 22.0], [65.5, 15.8], [55.2, 15.8], [55.2, 10.5], [50.0, 10.5], [50.0, 15.8]];
+  // 캡틴 전용: 의자 옆 → 두 화분 사이 중앙 계단(y=16.8)으로 똑바로 내려와 바닥(x=67.5) → 오른쪽 창가 데크(x=82.0, y=22.5)
+  const CAP_TO_WINDOW = [[50.0, 12.6], [55.0, 12.6], [55.0, 16.8], [67.5, 16.8], [67.5, 22.5], [82.0, 22.5]];
+  const CAP_TO_DESK   = [[82.0, 22.5], [67.5, 22.5], [67.5, 16.8], [55.0, 16.8], [55.0, 12.6], [50.0, 12.6]];
 
   // 비서실장 전용: 의자 뒤(y=34.0)에서 왼쪽으로 빠져나와 화분 밖 통로(x=34.5)로 이동
   const CHIEF_TO_COFFEE   = [[50.0, 34.0], [34.5, 34.0], [34.5, 22.5], [16.5, 22.5]];
-  const COFFEE_TO_CAPTAIN = [[16.5, 22.5], [34.5, 22.5], [34.5, 16.5], [40.2, 16.5]];
-  const CAPTAIN_TO_CHIEF  = [[40.2, 16.5], [34.5, 16.5], [34.5, 34.0], [50.0, 34.0], [50.0, 39.8]];
-  const CHIEF_TO_CAPTAIN  = [[50.0, 34.0], [34.5, 34.0], [34.5, 16.5], [40.2, 16.5]];
+  const COFFEE_TO_CAPTAIN = [[16.5, 22.5], [34.5, 22.5], [34.5, 16.8], [41.5, 16.8]];
+  const CAPTAIN_TO_CHIEF  = [[41.5, 16.8], [34.5, 16.8], [34.5, 34.0], [50.0, 34.0], [50.0, 36.8]];
+  const CHIEF_TO_CAPTAIN  = [[50.0, 34.0], [34.5, 34.0], [34.5, 16.8], [41.5, 16.8]];
 
   function loadImages() {
     const imgs = { walk: {}, seated: {}, cap: {} };
@@ -679,7 +679,7 @@
         const walking = n.mode === 'walk' || n.mode === 'coffee-walk';
 
         tag.style.left = `${n.x}%`;
-        tag.style.top = `${n.y + (walking ? 1.5 : 2.2)}%`;
+        tag.style.top = `${n.y + (walking ? 1.5 : (CHARS[id].seatFacing === 'down' ? 4.6 : 2.2))}%`;
         tag.className = 'og-tag' + (n.mode === 'work' ? ' work' : n.mode === 'done' ? ' done' : n.mode === 'walk' ? ' walk' : '');
         tag.querySelector('small').textContent =
           n.mode === 'work' ? '작업 중…' : n.mode === 'walk' ? '이동 중' : n.mode === 'done' ? '✔ 작업 완료' : CHARS[id].role;
