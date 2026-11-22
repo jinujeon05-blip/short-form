@@ -121,22 +121,21 @@
     const jobs = [
       load(imgs, 'bg', '/static/office-game/assets/bg-office.webp'),
       load(imgs, 'laptop', '/static/office-game/assets/laptop.webp'),
+      load(imgs, 'propMug', '/static/office-game/assets/prop-mug.webp'),
+      load(imgs, 'propTray', '/static/office-game/assets/prop-tray.webp'),
+      load(imgs, 'propDoc', '/static/office-game/assets/prop-doc.webp'),
     ];
     for (const pose of ['idle', 'coffee', 'window', 'thumbs']) {
       jobs.push(load(imgs.cap, pose, `/static/office-game/assets/captain-${pose}.webp`));
     }
-    for (const d8 of ['s', 'se', 'e', 'ne', 'n', 'nw', 'w', 'sw']) {
-      jobs.push(load(imgs.cap.dir8, d8, `/static/office-game/assets/dir8/captain-${d8}.webp`));
-    }
     for (let f = 1; f <= 4; f++) {
       jobs.push(load(imgs.cap.coffeeSeq, f - 1, `/static/office-game/assets/captain-coffee-${f}.webp`));
     }
-    imgs.walk.captain = { side: [], se: [], ne: [], up: [], down: [] };
+    imgs.walk.captain = { se: [], ne: [], up: [] };
     for (let f = 1; f <= 4; f++) {
-      jobs.push(load(imgs.walk.captain.side, f - 1, `/static/office-game/assets/walk/captain-${f}.webp`));
-      jobs.push(load(imgs.walk.captain.se,   f - 1, `/static/office-game/assets/walk/captain-se-${f}.webp`));
-      jobs.push(load(imgs.walk.captain.ne,   f - 1, `/static/office-game/assets/walk/captain-ne-${f}.webp`));
-      jobs.push(load(imgs.walk.captain.up,   f - 1, `/static/office-game/assets/walk/captain-up-${f}.webp`));
+      jobs.push(load(imgs.walk.captain.se, f - 1, `/static/office-game/assets/walk/captain-se-${f}.webp`));
+      jobs.push(load(imgs.walk.captain.ne, f - 1, `/static/office-game/assets/walk/captain-ne-${f}.webp`));
+      jobs.push(load(imgs.walk.captain.up, f - 1, `/static/office-game/assets/walk/captain-up-${f}.webp`));
     }
     for (const id of Object.keys(CHARS)) {
       jobs.push(load(imgs, id, `/static/office-game/assets/${id}.webp`));
@@ -145,13 +144,11 @@
       jobs.push(load(imgs.seated[id], 'w1',   `/static/office-game/assets/seated/${id}-w1.webp`));
       jobs.push(load(imgs.seated[id], 'w2',   `/static/office-game/assets/seated/${id}-w2.webp`));
       if (id !== 'captain') {
-        imgs.walk[id] = { side: [], side6: [], se: [], ne: [], coffee: [], doc: [], up: [], down: [] };
+        imgs.walk[id] = { side: [], side6: [], se: [], ne: [], up: [], down: [] };
         for (let f = 1; f <= 4; f++) {
-          jobs.push(load(imgs.walk[id].side,   f - 1, `/static/office-game/assets/walk/${id}-${f}.webp`));
-          jobs.push(load(imgs.walk[id].up,     f - 1, `/static/office-game/assets/walk/${id}-up-${f}.webp`));
-          jobs.push(load(imgs.walk[id].down,   f - 1, `/static/office-game/assets/walk/${id}-down-${f}.webp`));
-          jobs.push(load(imgs.walk[id].coffee, f - 1, `/static/office-game/assets/walk/${id}-coffee-${f}.webp`));
-          jobs.push(load(imgs.walk[id].doc,    f - 1, `/static/office-game/assets/walk/${id}-doc-${f}.webp`));
+          jobs.push(load(imgs.walk[id].side, f - 1, `/static/office-game/assets/walk/${id}-${f}.webp`));
+          jobs.push(load(imgs.walk[id].up,   f - 1, `/static/office-game/assets/walk/${id}-up-${f}.webp`));
+          jobs.push(load(imgs.walk[id].down, f - 1, `/static/office-game/assets/walk/${id}-down-${f}.webp`));
         }
         if (SMOOTH6_IDS.has(id)) {
           for (let f = 1; f <= 6; f++) {
@@ -608,23 +605,18 @@
 
       if (n.id === 'captain') {
         if (walking) {
+          // 100% 동일 외형·동일 크기의 통일 시트(se/ne/up)만 사용해 방향 전환 시 크기 변화·얼굴 변형 0!
           const cw = imgs.walk.captain;
           if (d === 'n' && cw?.up?.[frame4]) {
             im = cw.up[frame4];
-          } else if ((d === 'se' || d === 'sw') && cw?.se?.[frame4]) {
-            im = cw.se[frame4]; flipX = (d === 'sw');
           } else if ((d === 'ne' || d === 'nw') && cw?.ne?.[frame4]) {
             im = cw.ne[frame4]; flipX = (d === 'nw');
-          } else if (d === 's' && imgs.cap.dir8?.s) {
-            im = imgs.cap.dir8.s;
-          } else if (cw?.side?.[frame4]) {
-            im = cw.side[frame4]; flipX = (d === 'w' || d === 'sw' || d === 'nw');
-          } else {
-            im = imgs.cap.dir8?.[d] || imgs.cap.idle || imgs.captain;
+          } else if (cw?.se?.[frame4]) {
+            im = cw.se[frame4]; flipX = (d === 'w' || d === 'sw');
           }
           isFullBody = true;
         } else if (n.capPose === 'window') {
-          im = imgs.walk.captain?.up?.[0] || imgs.cap.dir8?.n || imgs.cap.window || imgs.captain;
+          im = imgs.walk.captain?.up?.[0] || imgs.cap.window || imgs.captain;
           isFullBody = true;
         } else if (n.capPose === 'coffee') {
           // 4단계 자연스러운 커피 마시기 시퀀스: 컵 잡기(0.7s) → 들기(0.7s) → 눈 감고 한 모금(2.4s) → 미소 내려놓기(1.2s) → 반복
@@ -638,24 +630,17 @@
           im = imgs.seated.captain?.idle || imgs.cap.idle;
         }
       } else if (walking) {
+        // 커피·서류를 들고 있어도 항상 실제 팔·다리 보폭이 살아있는 8방향 걷기 애니메이션을 재생!
         const wset = imgs.walk[n.id];
         if (wset) {
-          if (n.carry === 'coffee' && wset.coffee?.[frame4]) {
-            // 전 직원 100%: 쟁반·머그컵을 손에 자연스럽게 들고 걷는 전용 스프라이트!
-            im = wset.coffee[frame4];
-            flipX = (d === 'w' || d === 'sw' || d === 'nw');
-          } else if (n.carry === 'doc' && wset.doc?.[frame4]) {
-            // 전 직원 100%: 베이지 서류철을 팔에 자연스럽게 끼고 걷는 전용 스프라이트!
-            im = wset.doc[frame4];
-            flipX = (d === 'w' || d === 'sw' || d === 'nw');
+          if (d === 'n' && wset.up?.[frame4]) {
+            im = wset.up[frame4];
+          } else if (d === 's' && wset.down?.[frame4]) {
+            im = wset.down[frame4];
           } else if ((d === 'se' || d === 'sw') && wset.se?.[frame4]) {
             im = wset.se[frame4]; flipX = (d === 'sw');
           } else if ((d === 'ne' || d === 'nw') && wset.ne?.[frame4]) {
             im = wset.ne[frame4]; flipX = (d === 'nw');
-          } else if (d === 'n' && wset.up?.[frame4]) {
-            im = wset.up[frame4];
-          } else if (d === 's' && wset.down?.[frame4]) {
-            im = wset.down[frame4];
           } else if (wset.side6?.[frame6]) {
             im = wset.side6[frame6];
             flipX = (d === 'w' || d === 'sw' || d === 'nw');
@@ -677,13 +662,13 @@
       const isCapCoffee = (n.id === 'captain' && !isFullBody && n.capPose === 'coffee');
       const isCapActionCrop = (n.id === 'captain' && !isFullBody && n.capPose === 'thumbs');
       const cy = (n.y / 100) * H + (isCapCoffee ? -6 : 0);
-      // 북향 착석은 의자 일체형이므로 82px로 배경 의자를 깔끔히 덮음 / 남향 착석은 74px로 책상 위쪽 가장자리에 딱 안착!
-      const targetH = (isFullBody ? 100 : isCapActionCrop ? 114 : isCapCoffee ? 70 : isNorthSeated ? 82 : 74) * cfg.scale;
+      // 모든 걷기 스프라이트를 여백 0으로 정확히 정규화했으므로 84px 고정 높이 = 방향 전환 시 크기 변화 0%!
+      const targetH = (isFullBody ? 84 : isCapActionCrop ? 114 : isCapCoffee ? 70 : isNorthSeated ? 82 : 74) * cfg.scale;
       const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
-      // 타이핑·착석 시 어깨 흔들림 0, 걷기 시에만 아주 부드러운 0.6px 보폭 리듬
+      // 타이핑·착석 시 어깨 흔들림 0, 걷기 시에만 아주 부드러운 보폭 리듬
       const bob = walking
-        ? (using6 ? ((frame6 === 1 || frame6 === 4) ? -0.6 : 0) : ((frame4 % 2 === 1) ? -0.6 : 0))
+        ? (using6 ? ((frame6 === 1 || frame6 === 4) ? -1.0 : 0) : ((frame4 % 2 === 1) ? -1.0 : 0))
         : done ? -Math.abs(Math.sin(t * 3.2)) * 0.9
         : 0;
 
@@ -691,7 +676,7 @@
       if (isFullBody) {
         ctx.fillStyle = 'rgba(15, 23, 42, 0.28)';
         ctx.beginPath();
-        ctx.ellipse(cx, cy + 5, 19, 5.5, 0, 0, Math.PI * 2);
+        ctx.ellipse(cx, cy + 5, 18, 5, 0, 0, Math.PI * 2);
         ctx.fill();
       }
 
@@ -720,6 +705,28 @@
         ctx.drawImage(im, 0, 0, im.naturalWidth, sh, -targetW / 2, -dh, targetW, dh);
       } else {
         ctx.drawImage(im, -targetW / 2, -targetH, targetW, targetH);
+      }
+
+      // 걷기 애니메이션 위에 픽셀 아트 커피 쟁반·머그컵·서류철을 손 위치에 자연스럽게 합성 (북쪽 뒷모습일 때는 가려짐)
+      if (walking && n.carry && d !== 'n') {
+        const swayY = Math.sin(n.walkDist * 1.4) * 1.1;
+        const isFront = (d === 's');
+        if (n.carry === 'coffee') {
+          const prop = (n.id === 'claude' && imgs.propTray) ? imgs.propTray : imgs.propMug;
+          if (prop) {
+            const pw = (n.id === 'claude') ? 26 : 16;
+            const ph = pw * (prop.naturalHeight / prop.naturalWidth);
+            const px = isFront ? 4 : (targetW * 0.24);
+            const py = -targetH * 0.54 + swayY;
+            ctx.drawImage(prop, px, py, pw, ph);
+          }
+        } else if (n.carry === 'doc' && imgs.propDoc) {
+          const pw = 16;
+          const ph = pw * (imgs.propDoc.naturalHeight / imgs.propDoc.naturalWidth);
+          const px = isFront ? 5 : (targetW * 0.16);
+          const py = -targetH * 0.50 + swayY;
+          ctx.drawImage(imgs.propDoc, px, py, pw, ph);
+        }
       }
 
       ctx.restore();
