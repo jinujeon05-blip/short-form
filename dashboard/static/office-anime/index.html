@@ -17,6 +17,10 @@
   .btn.green { background: #15803d; border-color: #22c55e; }
   .wrap { max-width: 1320px; margin: 14px auto 28px; padding: 0 14px; display: flex; flex-direction: column; gap: 12px; }
   .oa-stage { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 16px; overflow: hidden; border: 2px solid #334155; background: #0b101d; box-shadow: 0 16px 40px rgba(0,0,0,0.45); container-type: inline-size; }
+  .oa-stage:fullscreen { width: 100vw; height: 100vh; max-width: none; border: 0; border-radius: 0; display: flex; align-items: center; justify-content: center; background: #050811; }
+  .oa-stage:fullscreen .oa-canvas, .oa-stage:fullscreen .oa-hud { width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); inset: auto; }
+  .oa-fs-btn { position: absolute; right: 12px; bottom: 12px; z-index: 15; border: 1px solid rgba(255,255,255,0.28); background: rgba(15,23,42,0.78); color: #f8fafc; border-radius: 8px; padding: 6px 11px; font: 700 12px var(--f); cursor: pointer; backdrop-filter: blur(4px); }
+  .oa-fs-btn:hover { background: rgba(37,99,235,0.9); border-color: #93c5fd; }
   .oa-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: pointer; }
   .oa-hud { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
   .oa-sign { position: absolute; transform: translate(-50%, -50%); padding: 2px 9px; border-radius: 6px; color: #fff; font-weight: 800; font-size: clamp(9px, 1.15cqw, 13.5px); white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
@@ -55,7 +59,7 @@
   <div id="root"></div>
   <div class="log-box"><b>실시간 움직임 기록</b> (캐릭터를 클릭하면 웹툰 고화질 프로필 상태창이 열립니다)<ul id="log"></ul></div>
 </main>
-<script src="/static/office-anime/office-anime.js?v=2"></script>
+<script src="/static/office-anime/office-anime.js?v=3"></script>
 <script>
 const ul = document.getElementById('log');
 const app = window.OfficeAnime.create(document.getElementById('root'), {
