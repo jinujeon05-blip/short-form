@@ -119,6 +119,70 @@
   .ins-box ol { margin: 14px 0 0; padding-left: 20px; font-size: 16px; line-height: 1.6; }
   .ins-box li { margin-bottom: 4px; }
   .ins-box .ins-close { width: 100%; margin-top: 16px; font: inherit; font-size: 16px; font-weight: 800; color: #fff; background: var(--ink); border: 0; border-radius: 12px; padding: 12px; cursor: pointer; }
+
+  /* QR 메뉴판 상담·제작 문의 배너 (2026-11-21 캡틴 지시) — 정식 가게 다음 목록 사이, 검색·종류를 고르면 목록 아래 */
+  .qrcta { position: relative; grid-column: 1 / -1; margin: 6px 0 4px; border-radius: 24px; padding: 2px; isolation: isolate; overflow: hidden;
+    background: conic-gradient(from var(--spin, 0deg), #e0452b, #f2a03d, #ffe28a, #f2a03d, #e0452b 60%, #7a2a14, #e0452b); animation: qrSpin 6s linear infinite; box-shadow: 0 18px 44px rgba(224,69,43,.28); }
+  @property --spin { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+  @keyframes qrSpin { to { --spin: 360deg; } }
+  .qrcta-in { position: relative; border-radius: 22px; padding: 26px 26px 22px; color: #fff; display: grid; grid-template-columns: 1fr 190px; gap: 22px; align-items: center; overflow: hidden;
+    background: radial-gradient(90% 120% at 100% 0%, rgba(240,102,47,.45), transparent 60%), radial-gradient(60% 80% at 0% 100%, rgba(242,160,61,.18), transparent 70%), #16130f; }
+  .qrcta-in::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .5;
+    background-image: radial-gradient(rgba(255,255,255,.09) 1px, transparent 1.4px); background-size: 16px 16px; }
+  .qrcta-in::after { content: ""; position: absolute; top: -40%; left: -30%; width: 40%; height: 180%; transform: rotate(20deg); pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent); animation: qrShine 4.5s ease-in-out infinite; }
+  @keyframes qrShine { 0%, 55% { left: -40%; } 100% { left: 130%; } }
+  .qrcta .kick { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 800; color: #16130f; background: linear-gradient(135deg, #ffe28a, #f2a03d); border-radius: 999px; padding: 5px 12px 5px 8px; }
+  .qrcta .kick i { font-style: normal; width: 8px; height: 8px; border-radius: 50%; background: #e0452b; box-shadow: 0 0 0 0 rgba(224,69,43,.7); animation: qrPulse 1.6s infinite; }
+  @keyframes qrPulse { 70% { box-shadow: 0 0 0 9px rgba(224,69,43,0); } 100% { box-shadow: 0 0 0 0 rgba(224,69,43,0); } }
+  .qrcta h2 { margin-top: 12px; font-size: clamp(23px, 3.6vw, 32px); font-weight: 900; line-height: 1.22; letter-spacing: -.5px; }
+  .qrcta h2 em { font-style: normal; background: linear-gradient(90deg, #ffd36b, #ff8a4c); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .qrcta .qsub { margin: 10px 0 0; color: #e6dccf; font-size: 15px; max-width: 34em; }
+  .qrcta .pts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; padding: 0; list-style: none; }
+  .qrcta .pts li { font-size: 13px; font-weight: 700; color: #ffe9c7; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); border-radius: 999px; padding: 5px 11px; }
+  .qrcta .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .qrcta .qb { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; font: inherit; font-size: 15px; font-weight: 800; text-decoration: none; border-radius: 14px; padding: 11px 16px; cursor: pointer; border: 0; white-space: nowrap; transition: transform .15s, box-shadow .15s; }
+  .qrcta .qb:hover { transform: translateY(-2px); }
+  .qrcta .qb svg { width: 20px; height: 20px; flex: none; }
+  .qrcta .qb.zalo { color: #fff; background: #0068ff; box-shadow: 0 8px 22px rgba(0,104,255,.4); }
+  .qrcta .qb.call { color: #16130f; background: linear-gradient(135deg, #ffe28a, #f2a03d); box-shadow: 0 8px 22px rgba(242,160,61,.35); }
+  .qrcta .qb.kakao { color: #3a1d1d; background: #fee500; }
+  .qrcta .qb.more { color: #fff; background: transparent; border: 1px solid rgba(255,255,255,.35); }
+  .qrcta .qnote { margin: 12px 0 0; font-size: 12.5px; color: #b9ae9f; }
+  .qrcta .qnote b { color: #ffd36b; font-weight: 800; }
+  /* 오른쪽 휴대폰 그림: 메뉴 이름이 5개 언어로 돌아가며 바뀜 */
+  .qrcta .phone { position: relative; justify-self: center; width: 150px; height: 262px; border-radius: 28px; padding: 9px; background: #2b2620; border: 2px solid #4a4036; box-shadow: 0 20px 40px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.06); transform: rotate(4deg); animation: qrFloat 5s ease-in-out infinite; }
+  @keyframes qrFloat { 50% { transform: rotate(4deg) translateY(-8px); } }
+  .qrcta .scr { height: 100%; border-radius: 20px; background: #faf7f2; overflow: hidden; color: #16130f; padding: 12px 10px; display: flex; flex-direction: column; gap: 7px; }
+  .qrcta .scr .hd { font-size: 12px; font-weight: 900; display: flex; justify-content: space-between; align-items: center; }
+  .qrcta .scr .hd span { font-size: 9px; font-weight: 800; color: #fff; background: #e0452b; border-radius: 999px; padding: 2px 6px; }
+  .qrcta .scr .ph { height: 62px; border-radius: 10px; background: linear-gradient(135deg, #f0662f, #f2a03d 60%, #ffe28a); position: relative; overflow: hidden; }
+  .qrcta .scr .ph::after { content: "🍲"; position: absolute; right: 8px; bottom: 2px; font-size: 34px; }
+  .qrcta .scr .row { display: flex; justify-content: space-between; font-size: 10.5px; font-weight: 700; border-bottom: 1px dashed #e9e2d7; padding-bottom: 5px; }
+  .qrcta .scr .row b { color: #e0452b; }
+  .qrcta .scr .ln { height: 6px; border-radius: 3px; background: #ece4d8; }
+  .qrcta .qrbadge { position: absolute; left: -26px; bottom: 22px; width: 64px; height: 64px; border-radius: 14px; background: #fff; padding: 7px; box-shadow: 0 10px 24px rgba(0,0,0,.45); transform: rotate(-8deg); }
+  .qrcta .qrbadge svg { width: 100%; height: 100%; display: block; }
+  .qrcta .bub { position: absolute; right: -18px; top: 26px; font-size: 12px; font-weight: 900; color: #fff; background: #e0452b; border-radius: 12px 12px 12px 3px; padding: 6px 10px; box-shadow: 0 8px 18px rgba(224,69,43,.5); white-space: nowrap; transform: rotate(-4deg); }
+  /* 화면 오른쪽 아래 떠 있는 작은 상담 버튼 (배너가 화면에 보이면 숨김) */
+  .qrfab { position: fixed; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 30; display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 14px; font-weight: 800; color: #fff; text-decoration: none;
+    background: linear-gradient(135deg, #e0452b, #f2a03d); border: 2px solid #fff; border-radius: 999px; padding: 10px 15px; box-shadow: 0 10px 26px rgba(224,69,43,.45); cursor: pointer; transition: opacity .25s, transform .25s; }
+  .qrfab.off { opacity: 0; transform: translateY(20px); pointer-events: none; }
+  @media (max-width: 760px) {
+    .qrcta { border-radius: 20px; margin: 2px 0; }
+    .qrcta-in { grid-template-columns: 1fr; padding: 22px 18px 18px; border-radius: 18px; }
+    .qrcta .phone { display: none; }
+    .qrcta .qsub { font-size: 14.5px; }
+    .qrcta .pts { gap: 5px; }
+    .qrcta .pts li { font-size: 11.5px; padding: 4px 8px; }
+    .qrcta .qnote b { white-space: nowrap; }
+    .qrcta .acts { display: grid; grid-template-columns: 1fr 1fr; }
+    .qrcta .qb { padding: 11px 10px; font-size: 14.5px; }
+    .qrcta .qb.more:nth-child(odd) { grid-column: 1 / -1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .qrcta, .qrcta-in::after, .qrcta .kick i, .qrcta .phone { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -161,12 +225,37 @@
   </ul></noscript>
   <div class="empty" id="empty"><p data-t="empty"></p><button type="button" id="reset" data-t="reset"></button></div>
 
+  <section class="qrcta" id="qrcta" aria-labelledby="qrctaTitle"><div class="qrcta-in">
+    <div>
+      <span class="kick"><i></i><span id="qrKick"></span></span>
+      <h2 id="qrctaTitle"></h2>
+      <p class="qsub" id="qrSub"></p>
+      <ul class="pts" id="qrPts"></ul>
+      <div class="acts" id="qrActs"></div>
+      <p class="qnote" id="qrNote"></p>
+    </div>
+    <div class="phone" aria-hidden="true">
+      <div class="scr">
+        <div class="hd"><span id="qrLangTag">KO</span>QR MENU</div>
+        <div class="ph"></div>
+        <div class="row"><span id="qrDish">김치찌개</span><b>120k</b></div>
+        <div class="ln"></div><div class="ln" style="width:70%"></div>
+        <div class="row"><span>🍺 Beer</span><b>35k</b></div>
+        <div class="ln" style="width:85%"></div>
+      </div>
+      <div class="bub" id="qrBub">한국어</div>
+      <div class="qrbadge"><svg viewBox="0 0 29 29" shape-rendering="crispEdges"><path fill="#16130f" d="M0 0h7v7H0zM22 0h7v7h-7zM0 22h7v7H0z"/><path fill="#fff" d="M1 1h5v5H1zM23 1h5v5h-5zM1 23h5v5H1z"/><path fill="#16130f" d="M2 2h3v3H2zM24 2h3v3h-3zM2 24h3v3H2zM9 0h2v2H9zM13 1h3v2h-3zM9 4h4v2H9zM15 5h3v3h-3zM9 9h3v3H9zM14 9h2v4h-2zM18 10h3v2h-3zM23 9h3v3h-3zM0 9h3v2H0zM4 12h3v2H4zM10 14h3v3h-3zM17 14h4v2h-4zM24 14h5v2h-5zM0 15h2v4H0zM5 17h3v3H5zM12 19h3v2h-3zM18 18h2v4h-2zM22 18h3v3h-3zM9 22h2v4H9zM13 23h4v2h-4zM20 23h3v3h-3zM25 23h4v2h-4zM14 27h3v2h-3zM21 27h4v2h-4zM26 26h3v3h-3z"/></svg></div>
+    </div>
+  </div></section>
+
   <section class="owner">
     <div><h2 data-t="ownerTitle"></h2><p data-t="ownerSub"></p></div>
     <a id="ownerBtn" href="/" data-t="ownerBtn"></a>
   </section>
 </main>
 <footer>© QR Menu</footer>
+<a class="qrfab off" id="qrFab" href="#qrcta"><span aria-hidden="true">💬</span><span id="qrFabText"></span></a>
+<script src="/content.js"></script>
 <script src="/stores/dasan.js"></script>
 <script>
 // 다산 배너: 처음 화면과 지역(하노이·박닌 등)만 고른 화면은 정식 계약 가게 바로 다음(목록 사이), 검색·종류를 고르면 맨 아래(footer 다음)
@@ -258,6 +347,7 @@
     $("count").textContent = list.length === 1 && t.count1 ? t.count1 : t.count.replace("{n}", list.length);
     $("empty").style.display = list.length ? "none" : "block";
     const keep = document.querySelector("aside.dasan"); if (keep) document.querySelector("footer").after(keep); // 목록을 다시 그려도 배너가 지워지지 않게
+    $("grid").after($("qrcta")); // 상담 배너도 목록을 다시 그리기 전에 밖으로 빼 둠
     const lastFormal = list.reduce((m, s, i) => s.listing ? m : i, -1);
     $("grid").innerHTML = list.map((s, i) => {
       const menuUrl = `${s.url}/?lang=${lang}`;
@@ -279,6 +369,9 @@
       </article>` + (i === lastFormal ? '<div id="dasanSlot" style="grid-column:1/-1"></div>' : "");
     }).join("");
     if (window.dasanPlace) window.dasanPlace();
+    // 상담 배너: 처음 화면·지역만 고른 화면은 정식 가게 바로 다음, 검색·종류를 고르면 목록 아래
+    const slot = $("dasanSlot");
+    if (slot && !(state.q || state.cat)) slot.appendChild($("qrcta"));
     chips($("regionChips"), "region", REGIONS, t.region);
     chips($("catChips"), "cat", CATS, t.cat);
     $("searchBox").classList.toggle("has", !!state.q);
@@ -298,8 +391,71 @@
     $("q").setAttribute("aria-label", t.search);
     $("clear").setAttribute("aria-label", t.clear);
     $("langs").innerHTML = LANGS.map(([c, label]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+    renderCta();
     renderList();
   }
+
+  // ── QR 메뉴판 상담·제작 문의 배너 (연락처는 /content.js 의 CONTACT 하나만 씀) ──
+  const CTA = {
+    ko: { kick: "사장님 전용 · 상담 무료", title: "우리 가게도 <em>QR 메뉴판</em>,<br>지금 만들어 드려요", sub: "손님 휴대폰 언어로 저절로 바뀌는 5개 언어 메뉴판. 메뉴판 사진만 보내 주시면 제작부터 테이블 QR 카드까지 해 드립니다.",
+      pts: ["🌏 한·베·영·중·일 5개 언어", "📸 사진만 보내면 제작", "✏️ 메뉴·가격 수정 간편", "🖨️ 테이블 QR 카드 제공"],
+      zalo: "Zalo 상담", call: "전화 상담", kakao: "카카오톡 ID 복사", copied: "복사됨! 카톡에서 친구 추가", more: "소개·가격 보기", note: "한국어 상담 <b>{ko}</b> · 베트남어 상담 <b>{vi}</b>", fab: "QR메뉴 상담" },
+    vi: { kick: "Dành cho chủ quán · Tư vấn miễn phí", title: "Làm <em>thực đơn QR</em><br>cho quán của bạn ngay", sub: "Thực đơn 5 ngôn ngữ tự đổi theo ngôn ngữ điện thoại của khách. Chỉ cần gửi ảnh thực đơn, chúng tôi làm từ A đến Z, kèm thẻ QR để bàn.",
+      pts: ["🌏 5 ngôn ngữ: Việt·Hàn·Anh·Trung·Nhật", "📸 Chỉ cần gửi ảnh", "✏️ Sửa món·giá dễ dàng", "🖨️ Có thẻ QR để bàn"],
+      zalo: "Tư vấn Zalo", call: "Gọi tư vấn", kakao: "Sao chép KakaoTalk", copied: "Đã sao chép!", more: "Xem giới thiệu·bảng giá", note: "Tư vấn tiếng Việt <b>{vi}</b> · tiếng Hàn <b>{ko}</b>", fab: "Tư vấn QR menu" },
+    en: { kick: "For owners · Free consultation", title: "Get a <em>QR menu</em><br>for your restaurant", sub: "A 5-language menu that switches to each customer's phone language. Just send photos of your menu — we build everything, table QR cards included.",
+      pts: ["🌏 5 languages: KO·VI·EN·ZH·JA", "📸 Just send photos", "✏️ Easy menu & price edits", "🖨️ Table QR cards included"],
+      zalo: "Chat on Zalo", call: "Call us", kakao: "Copy KakaoTalk ID", copied: "Copied!", more: "Details & pricing", note: "Korean <b>{ko}</b> · Vietnamese <b>{vi}</b>", fab: "QR menu inquiry" },
+    zh: { kick: "店主专属 · 免费咨询", title: "为您的店制作<br><em>二维码菜单</em>", sub: "自动切换为顾客手机语言的5种语言菜单。只需发送菜单照片，从制作到桌面二维码卡片全部为您搞定。",
+      pts: ["🌏 韩·越·英·中·日 5种语言", "📸 发照片即可制作", "✏️ 菜品·价格轻松修改", "🖨️ 提供桌面二维码卡"],
+      zalo: "Zalo 咨询", call: "电话咨询", kakao: "复制 KakaoTalk ID", copied: "已复制！", more: "查看介绍·价格", note: "韩语咨询 <b>{ko}</b> · 越南语咨询 <b>{vi}</b>", fab: "二维码菜单咨询" },
+    ja: { kick: "オーナー様専用 · 相談無料", title: "あなたのお店にも<br><em>QRメニュー</em>を", sub: "お客様のスマホの言語に自動で切り替わる5か国語メニュー。メニューの写真を送るだけで、制作からテーブル用QRカードまでお任せください。",
+      pts: ["🌏 韓・越・英・中・日の5か国語", "📸 写真を送るだけ", "✏️ メニュー・価格の修正も簡単", "🖨️ テーブルQRカード付き"],
+      zalo: "Zaloで相談", call: "電話で相談", kakao: "KakaoTalk IDをコピー", copied: "コピーしました！", more: "紹介・料金を見る", note: "韓国語 <b>{ko}</b> · ベトナム語 <b>{vi}</b>", fab: "QRメニュー相談" },
+  };
+  const CTA_DEMO = [["KO", "한국어", "김치찌개"], ["VI", "Tiếng Việt", "Canh kimchi"], ["EN", "English", "Kimchi stew"], ["ZH", "中文", "泡菜汤"], ["JA", "日本語", "キムチチゲ"]];
+  const CTA_ICON = {
+    zalo: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.5 3 2 6.8 2 11.5c0 2.6 1.4 4.9 3.6 6.5L5 21.5l4-2.1c.9.2 1.9.4 3 .4 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/></svg>',
+    call: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>',
+    kakao: '<svg viewBox="0 0 24 24"><path fill="#3a1d1d" d="M12 3.5C6.8 3.5 2.6 6.8 2.6 10.9c0 2.6 1.7 4.9 4.3 6.2l-1 3.7c-.1.3.3.6.6.4l4.4-2.9c.4 0 .7.1 1.1.1 5.2 0 9.4-3.3 9.4-7.5S17.2 3.5 12 3.5z"/></svg>',
+  };
+  function renderCta() {
+    const t = CTA[lang] || CTA.ko, C = window.CONTACT || {};
+    const ko = C.phone || "", vi = (C.vi && C.vi.phone) || "";
+    const main = lang === "vi" && C.vi ? C.vi : C; // 베트남어 화면은 베트남어 상담 번호로
+    $("qrKick").textContent = t.kick;
+    $("qrctaTitle").innerHTML = t.title; // 고정 문구(위 CTA)만 넣음
+    $("qrSub").textContent = t.sub;
+    $("qrPts").innerHTML = t.pts.map((p) => `<li>${esc(p)}</li>`).join("");
+    const a = [];
+    if (main.zalo) a.push(`<a class="qb zalo" href="https://zalo.me/${esc(main.zalo.replace(/\D/g, ""))}" target="_blank" rel="noopener">${CTA_ICON.zalo}${esc(t.zalo)}</a>`);
+    if (main.phone) a.push(`<a class="qb call" href="tel:${esc(main.phone.replace(/\s/g, ""))}">${CTA_ICON.call}${esc(t.call)}</a>`);
+    if (C.kakao && lang !== "vi") a.push(`<button type="button" class="qb kakao" id="qrKakao">${CTA_ICON.kakao}<span>${esc(t.kakao)}</span></button>`);
+    a.push(`<a class="qb more" href="/?lang=${lang}#contact">${esc(t.more)} →</a>`);
+    $("qrActs").innerHTML = a.join("");
+    $("qrNote").innerHTML = ko || vi ? t.note.replace("{ko}", esc(ko)).replace("{vi}", esc(vi)) : "";
+    $("qrFabText").textContent = t.fab;
+    const kb = $("qrKakao");
+    if (kb) kb.addEventListener("click", () => {
+      const done = () => { kb.querySelector("span").textContent = t.copied; };
+      try { navigator.clipboard.writeText(C.kakao).then(done, done); } catch (e) { done(); }
+    });
+  }
+  // 휴대폰 그림: 2초마다 언어가 바뀜
+  (function () {
+    let i = 0;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setInterval(() => { i = (i + 1) % CTA_DEMO.length; const [tag, name, dish] = CTA_DEMO[i]; $("qrLangTag").textContent = tag; $("qrBub").textContent = name; $("qrDish").textContent = dish; }, 2000);
+  })();
+  // 떠 있는 상담 버튼: 조금 내려야 보이고, 배너가 화면에 있으면 숨김
+  (function () {
+    const fab = $("qrFab");
+    let seen = false;
+    const upd = () => fab.classList.toggle("off", seen || scrollY < 500);
+    if ("IntersectionObserver" in window) new IntersectionObserver((es) => { seen = es[0].isIntersecting; upd(); }).observe($("qrcta"));
+    addEventListener("scroll", upd, { passive: true });
+    fab.addEventListener("click", (e) => { e.preventDefault(); $("qrcta").scrollIntoView({ behavior: "smooth", block: "center" }); });
+  })();
 
   $("langs").addEventListener("click", (e) => {
     const c = e.target.closest("button")?.dataset.lang;

@@ -844,6 +844,30 @@ window.STORES = [
     type: { ko: "양식 · 피자 · 스테이크 · 파스타 · 바비큐 립", vi: "Nhà hàng Âu · Pizza · Bít tết · Mỳ Ý · Sườn nướng BBQ", en: "Western grill · Pizza · Steak · Pasta · BBQ ribs", zh: "西餐 · 披萨 · 牛排 · 意面 · BBQ 烤肋排", ja: "洋食・ピザ・ステーキ・パスタ・BBQリブ" },
     keywords: "상디에고 피자 그릴 Sang Diego Pizza Grill Bắc Ninh 박닌 피자 스테이크 파스타 립 버거 양식 Lê Thái Tổ Võ Cường"
   },
+  { id: "dabangchicken", name: "다방치킨 박닌본점 DA BANG", sub: "후라이드 · 양념치킨 · 장작통닭 · 떡볶이 · 피자", url: "https://dabangchicken.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["chicken"], tags: ["photos"],
+    address: "6 P. Bùi Thị Xuân, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%23DA+BANG+Chicken+%EB%8B%A4%EB%B0%A9%EC%B9%98%ED%82%A8+%EB%B0%95%EB%8B%8C%EB%B3%B8%EC%A0%90/@21.1713337,106.0579998,17z",
+    type: { ko: "한국식 치킨 · 분식 · 피자", vi: "Gà rán Hàn Quốc · Đồ ăn vặt · Pizza", en: "Korean fried chicken · Snacks · Pizza", zh: "韩式炸鸡 · 小吃 · 披萨", ja: "韓国チキン・軽食・ピザ" },
+    keywords: "다방치킨 다방 박닌본점 DA BANG Chicken dabang 치킨 후라이드 양념치킨 장작통닭 떡볶이 피자 Bắc Ninh gà rán Hàn Quốc Korean fried chicken 韩式炸鸡 韓国チキン"
+  },
+  { id: "fujiro", name: "후지로 판께빈 FUJIRO Phan Kế Bính", sub: "돈카츠 · 카츠토지 · 카레라이스 · 덮밥 · 굴튀김", url: "https://fujiro.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese"], tags: ["photos"],
+    address: "47 P. Phan Kế Bính, Giảng Võ, Hà Nội", map: "https://www.google.com/maps/place/FUJIRO%E3%80%90Phan+K%E1%BA%BF+B%C3%ADnh%E3%80%91/@21.0359958,105.8084057,17z",
+    type: { ko: "일식 · 돈카츠 · 카츠토지 · 카레", vi: "Nhà hàng Nhật · Tonkatsu · Katsutoji · Cơm cà ri", en: "Japanese tonkatsu · Katsutoji · Curry rice", zh: "日式炸猪排 · 鸡蛋炸排锅 · 咖喱饭", ja: "とんかつ・カツとじ・カレーライス" },
+    keywords: "후지로 판께빈 FUJIRO Phan Kế Bính フジロ とんかつ 돈카츠 豚カツ 카츠토지 가츠토지 카레라이스 굴튀김 일식 하노이 Giảng Võ Hà Nội"
+  },
+  { id: "okonomiyakimiyakoya", name: "미야코야 MIYAKOYA", sub: "오코노미야키 · 몬자야키 · 철판구이 · 야키니쿠", url: "https://okonomiyakimiyakoya.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese"], tags: ["photos"],
+    address: "25 Linh Lang, Ngọc Hà, Hà Nội", map: "https://www.google.com/maps/place/%E3%81%8A%E5%A5%BD%E3%81%BF%E6%9C%AC%E8%88%97%E3%81%BF%E3%82%84%E3%81%93%E5%B1%8B+%E3%83%8F%E3%83%8E%E3%82%A4%E5%BA%97Okonomiyaki+Miyakoya/@21.0358143,105.8090686,18z/data=!4m6!3m5!1s0x3135ab058f86fa01:0x388ccb390aee34d6!8m2!3d21.0359097!4d105.8106163",
+    type: { ko: "일식 · 오코노미야키 · 몬자 · 철판구이", vi: "Món Nhật · Okonomiyaki · Monjayaki · Teppanyaki", en: "Japanese okonomiyaki · Monja · Teppanyaki", zh: "日料 · 大阪烧 · 文字烧 · 铁板烧", ja: "お好み焼き・もんじゃ・鉄板焼き" },
+    keywords: "미야코야 오코노미야키 미야코야 하노이 お好み本舗みやこ屋 Okonomiyaki Miyakoya 몬자 몬자야키 철판구이 야키소바 호르몬 Linh Lang Hanoi 일식 일본 음식 monjayaki teppanyaki bánh xèo Nhật"
+  },
+  { id: "sumibaozi", name: "수미보오즈 SUMIBOZU 炭ぼうず", sub: "숯불 꼬치구이 · 닭꼬치 · 츠쿠네 · 가라아게 · 일본식 안주", url: "https://sumibaozi.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese","bar"], tags: ["photos"],
+    address: "ngõ 535 P. Kim Mã, Giảng Võ, Hà Nội", map: "https://www.google.com/maps/place/%EC%88%98%EB%AF%B8%EB%B3%B4%EC%98%A4%EC%A6%88/@21.0291465,105.810392,17z",
+    type: { ko: "일식 · 숯불 꼬치구이 · 이자카야", vi: "Nhà hàng Nhật · Gà nướng than · Izakaya", en: "Japanese charcoal yakitori · Izakaya", zh: "日式炭火烤鸡肉串 · 居酒屋", ja: "炭火焼き鳥・串焼き・居酒屋" },
+    keywords: "수미보오즈 스미보즈 SUMIBOZU 炭ぼうず Sumibozu Gà nướng than 꼬치구이 야키토리 닭꼬치 츠쿠네 가라아게 이자카야 일식 하노이 Kim Mã Giảng Võ Hà Nội"
+  },
 ];
 window.SI = {
   ko: {
