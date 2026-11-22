@@ -868,6 +868,12 @@ window.STORES = [
     type: { ko: "일식 · 숯불 꼬치구이 · 이자카야", vi: "Nhà hàng Nhật · Gà nướng than · Izakaya", en: "Japanese charcoal yakitori · Izakaya", zh: "日式炭火烤鸡肉串 · 居酒屋", ja: "炭火焼き鳥・串焼き・居酒屋" },
     keywords: "수미보오즈 스미보즈 SUMIBOZU 炭ぼうず Sumibozu Gà nướng than 꼬치구이 야키토리 닭꼬치 츠쿠네 가라아게 이자카야 일식 하노이 Kim Mã Giảng Võ Hà Nội"
   },
+  { id: "jeilnaengsam", name: "제일냉삼 JEIL NAENGSAM", sub: "냉동삼겹살 · 항정살 · 우삼겹 · 냉면 · 김치찜", url: "https://jeilnaengsam.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["bbq","korean"], tags: [],
+    address: "272 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%A0%9C%EC%9D%BC%EB%83%89%EC%82%BC/@21.1714655,106.0574095,21z",
+    type: { ko: "한식 · 냉동삼겹살 전문점 · 고기구이", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ đông lạnh", en: "Korean BBQ · Frozen pork belly specialist", zh: "韩式烤肉 · 冷冻五花肉专门店", ja: "韓国焼肉・冷凍サムギョプサル専門店" },
+    keywords: "제일냉삼 Jeil Naengsam Nhà hàng Jeil 냉동삼겹살 냉삼 박닌 Bắc Ninh 삼겹살 항정살 김치찜 냉면 Ngọc Hân Công Chúa"
+  },
 ];
 window.SI = {
   ko: {
