@@ -537,10 +537,128 @@ async function loadFeed() {
   try { S.feed = (await api('/api/activity')).items; renderFeed(); }
   catch { $('#feed').innerHTML = '<li class="muted">업무 기록을 못 읽었어요. 대시보드를 다시 켜면 나아질 수 있어요(start-dashboard.bat).</li>'; }
 }
+// ---------------------------------------------------------------- PC 브라우저 알림·딩동 소리 + 휴대폰 텔레그램 설정 (2026-11-22 캡틴 '가-1')
+const prevOrdMap = {};
+S.notify = null;
+function playChime(isFail = false) {
+  if (localStorage.getItem('jinwoo_pc_sound') === '0') return;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    const ac = new AC();
+    const notes = isFail ? [440, 330] : [587.33, 880];
+    notes.forEach((freq, i) => {
+      const osc = ac.createOscillator(), g = ac.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
+      const t0 = ac.currentTime + i * 0.16;
+      g.gain.setValueAtTime(0.001, t0);
+      g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.34);
+      osc.connect(g); g.connect(ac.destination);
+      osc.start(t0); osc.stop(t0 + 0.36);
+    });
+  } catch {}
+}
+function firePcNotify(title, body, orderId) {
+  playChime(title.includes('중단') || title.includes('실패') || title.includes('멈춤'));
+  if (localStorage.getItem('jinwoo_pc_notify') === '0') return;
+  if ('Notification' in window && Notification.permission === 'granted') {
+    try {
+      const n = new Notification(title, { body });
+      n.onclick = () => { window.focus(); if (orderId) openPanel('order:' + orderId); n.close(); };
+    } catch {}
+  }
+}
+function checkOrderNotifications(orders) {
+  const firstRun = Object.keys(prevOrdMap).length === 0;
+  for (const o of orders) {
+    const p = prevOrdMap[o.id];
+    if (!firstRun && p) {
+      const wasRun = (p.status === 'running' || p.status === 'stopping');
+      if (wasRun && o.status === 'done') {
+        const head = o.deploy?.length ? `🚀 [배포 대기] ${o.title}` : o.approval ? `🙋 [결재 대기] ${o.title}` : `✅ [업무 완료] ${o.title}`;
+        firePcNotify(head, lastText(o).split('\n')[0] || '결재함에서 결과를 확인해 주세요.', o.id);
+      } else if (wasRun && o.status === 'fail') {
+        firePcNotify(`⚠️ [업무 중단·실패] ${o.title}`, lastText(o).split('\n')[0] || '오류 또는 한도로 중단되었습니다.', o.id);
+      } else if (wasRun && o.status === 'stopped') {
+        firePcNotify(`⏹️ [업무 중지됨] ${o.title}`, '요청에 따라 작업을 멈췄습니다.', o.id);
+      }
+      if (p.deployState === 'running' && o.deployState === 'done') {
+        firePcNotify(`🎉 [배포 완료] ${(o.deploy || []).join(', ') || o.title}`, '손님 주소가 열리는 것까지 확인했습니다.', o.id);
+      } else if (p.deployState === 'running' && o.deployState === 'fail') {
+        firePcNotify(`⚠️ [배포 멈춤] ${o.title}`, deployErr(o), o.id);
+      }
+    }
+    prevOrdMap[o.id] = { status: o.status, deployState: o.deployState };
+  }
+}
+async function loadNotifyStatus() {
+  try { S.notify = await api('/api/notify'); } catch { S.notify = null; }
+  const btn = $('#notify-btn');
+  if (btn) {
+    const on = !!(S.notify?.configured && S.notify?.enabled);
+    btn.classList.toggle('on', on);
+    btn.textContent = on ? '🔔 알림 켜짐' : '🔔 알림';
+  }
+}
+function renderNotifyPanel() {
+  const n = S.notify || {};
+  const pcSound = localStorage.getItem('jinwoo_pc_sound') !== '0';
+  const pcPop = localStorage.getItem('jinwoo_pc_notify') !== '0';
+  const perm = ('Notification' in window) ? Notification.permission : 'unsupported';
+  const permBadge = perm === 'granted' ? '<span class="badge b-ok">허용됨</span>'
+    : perm === 'denied' ? '<span class="badge b-stop">차단됨(브라우저 주소창에서 허용)</span>'
+    : '<span class="badge b-na">권한 요청 필요</span>';
+  const tgBadge = (n.configured && n.enabled) ? '<span class="badge b-ok">연결됨</span>'
+    : n.configured ? '<span class="badge b-na">일시 꺼짐</span>' : '<span class="badge b-warn">연결 필요</span>';
+  const defaultDash = location.origin.includes('127.0.0.1') ? '' : location.origin;
+
+  $('#panel-body').innerHTML = `
+    <h2>🔔 PC · 휴대폰 알림 설정</h2>
+    <p class="muted">업무 지시가 <b>완료·실패·중단·결재 대기</b> 상태가 되면 바로 알려드립니다.</p>
+
+    <div class="ntf-box">
+      <h4>💻 PC 알림 (브라우저 팝업 + 딩동 소리) ${permBadge}</h4>
+      <div class="ntf-row">
+        <label><input type="checkbox" id="ntf-pc-sound" ${pcSound ? 'checked' : ''}> 딩동 소리 켜기</label>
+        <label><input type="checkbox" id="ntf-pc-pop" ${pcPop ? 'checked' : ''}> 윈도우 팝업 켜기</label>
+      </div>
+      <div class="ntf-row">
+        ${perm !== 'granted' && perm !== 'unsupported' ? '<button class="btn" id="ntf-pc-perm">브라우저 알림 허용하기</button>' : ''}
+        <button class="btn ghost" id="ntf-pc-test">🔊 PC 알림 테스트</button>
+      </div>
+    </div>
+
+    <div class="ntf-box">
+      <h4>📱 휴대폰 알림 (텔레그램 봇 · 무료) ${tgBadge}</h4>
+      <p class="muted" style="margin:0 0 6px">휴대폰 화면이 꺼져 있어도 카톡처럼 바로 푸시 알림이 옵니다.</p>
+      <ol class="ntf-steps">
+        <li>텔레그램에서 <code>@BotFather</code> 검색 → <code>/newbot</code> 보내고 봇 이름 정하기 → 받은 <b>토큰</b> 복사</li>
+        <li>방금 만든 <b>내 봇 대화방</b>을 열어 <code>시작</code>(또는 아무 말) 한 번 보내기</li>
+        <li>아래 칸에 토큰을 붙여 넣고 <b>[연결하고 테스트 보내기]</b> 클릭 (Chat ID는 자동 인식!)</li>
+      </ol>
+      <label class="muted">텔레그램 봇 토큰 ${n.hasToken ? '(이미 저장됨 — 바꿀 때만 입력)' : ''}</label>
+      <input class="ntf-in" id="ntf-tg-token" type="password" placeholder="${n.hasToken ? '저장된 토큰 사용 중' : '예: 123456789:AAH...'}">
+      <label class="muted">대시보드 휴대폰 주소 (선택 — 알림 메시지에 바로가기 링크 표시)</label>
+      <input class="ntf-in" id="ntf-tg-url" type="text" value="${esc(n.dashUrl || defaultDash)}" placeholder="예: http://100.x.x.x:8900">
+      <div class="ntf-row">
+        <label><input type="checkbox" id="ntf-tg-en" ${n.enabled !== false ? 'checked' : ''}> 텔레그램 알림 사용</label>
+        ${n.chatId ? `<span class="muted">연결된 채팅: <code>${esc(n.chatId)}</code></span>` : ''}
+      </div>
+      <div class="ntf-row">
+        <button class="btn" id="ntf-tg-save">연결하고 테스트 보내기</button>
+        ${n.configured ? '<button class="btn ghost" id="ntf-tg-test">📱 테스트 알림 보내기</button>' : ''}
+      </div>
+      <p class="send-err" id="ntf-err" role="alert">${esc(n.lastError || '')}</p>
+      ${n.lastSentAt ? `<p class="muted" style="margin:6px 0 0">마지막 발송: ${hm(n.lastSentAt)}</p>` : ''}
+    </div>`;
+}
+
 let ordTimer, wasRunning = false;
 async function loadOrders() {
   const r = await api('/api/orders');
   S.orders = r.orders; S.vercel = r.vercel;
+  checkOrderNotifications(S.orders);
   // 서버 파이썬 코드가 켠 뒤 바뀌었으면 '다시 켜야 적용' 경고(2026-11-07 안동곱창·육대장 건)
   $('#code-warn').textContent = r.codeChanged?.length ? `대시보드 코드가 바뀌었어요(${r.codeChanged.join(', ')}) — 다시 켜야 적용돼요(start-dashboard.bat)` : '';
   const running = S.orders.some(o => o.status === 'running' || o.status === 'stopping' || o.deployState === 'running');
@@ -766,6 +884,7 @@ function teamJob(id) {
 function renderPanel() {
   const id = S.open;
   if (!id) return;
+  if (id === 'notify') return renderNotifyPanel();
   if (id.startsWith('order:')) return renderOrderPanel(id.slice(6));
   const m = M[id], t = S.team || {};
   if (m.hr) return renderHrPanel(id);
@@ -901,6 +1020,42 @@ document.addEventListener('click', async e => {
     const at = ta.value.indexOf('<'); if (at >= 0) ta.setSelectionRange(at, ta.value.indexOf('>', at) + 1);
     return;
   }
+  if (e.target.id === 'notify-btn') { await loadNotifyStatus(); return openPanel('notify'); }
+  if (e.target.id === 'ntf-pc-perm' && 'Notification' in window) {
+    const p = await Notification.requestPermission();
+    toast(p === 'granted' ? 'PC 브라우저 알림이 허용되었습니다!' : '브라우저 알림이 허용되지 않았습니다.');
+    return renderNotifyPanel();
+  }
+  if (e.target.id === 'ntf-pc-test') {
+    if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission();
+    firePcNotify('🔔 Jinwoo 에이전트 PC 테스트 알림', '업무가 끝나거나 중단되면 이렇게 알려드립니다!');
+    toast('PC 테스트 알림을 보냈습니다.');
+    return renderNotifyPanel();
+  }
+  if (e.target.id === 'ntf-tg-save') {
+    e.target.disabled = true;
+    const r = await post('/api/notify/setup', {
+      token: $('#ntf-tg-token').value.trim(),
+      dashUrl: $('#ntf-tg-url').value.trim(),
+      enabled: $('#ntf-tg-en').checked,
+      sendTest: true,
+    }).catch(() => ({ error: '서버를 다시 켜야 알림 설정이 작동해요(start-dashboard.bat)' }));
+    e.target.disabled = false;
+    if (r.error) { $('#ntf-err').textContent = r.error; return toast(r.error); }
+    S.notify = r;
+    toast('텔레그램 알림 연결 및 테스트 발송 완료!');
+    await loadNotifyStatus();
+    return renderNotifyPanel();
+  }
+  if (e.target.id === 'ntf-tg-test') {
+    e.target.disabled = true;
+    const r = await post('/api/notify/test', {}).catch(() => ({ error: '서버에 닿지 않았어요' }));
+    e.target.disabled = false;
+    if (r.error) { $('#ntf-err').textContent = r.error; return toast(r.error); }
+    toast('텔레그램 테스트 알림을 보냈습니다! 휴대폰을 확인하세요.');
+    await loadNotifyStatus();
+    return renderNotifyPanel();
+  }
   if (e.target.id === 'of-mode-game') return setOfficeMode('game');
   if (e.target.id === 'of-mode-photo') return setOfficeMode('photo');
   if (e.target.id === 'of-game-coffee') { if (OG) OG.serveCoffeeToCaptain(); return; }
@@ -956,6 +1111,8 @@ document.addEventListener('change', e => {
   if (k) sendErr(k[1], '');
   const m = e.target.id.match(/^(order|reply)-when$/);
   if (m) return whenHint(m[1]);
+  if (e.target.id === 'ntf-pc-sound') { localStorage.setItem('jinwoo_pc_sound', e.target.checked ? '1' : '0'); return; }
+  if (e.target.id === 'ntf-pc-pop') { localStorage.setItem('jinwoo_pc_notify', e.target.checked ? '1' : '0'); return; }
   if (e.target.id === 'talk-pick') { S.talkSel = e.target.value; renderChatBar(S.talkSel); refreshTalks(); }
   if (e.target.dataset.folder) {  // 새 가게 고르기
     S.nsPick[e.target.checked ? 'add' : 'delete'](e.target.dataset.folder);
@@ -997,6 +1154,7 @@ async function loadAll() {
   loadCollector();
   loadHr();
   loadNewshops();
+  loadNotifyStatus();
   S.visits = await api('/api/visits'); renderVisits();
 }
 setOfficeMode(officeMode);

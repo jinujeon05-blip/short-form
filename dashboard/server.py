@@ -30,6 +30,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, quote, urlparse
 
 import builder  # 운영자 모드 '가게 만들기' (dashboard/builder.py)
+import notify   # 텔레그램 알림 발송 (dashboard/notify.py)
 import sales    # 영업 탭 (dashboard/sales.py)
 
 HERE = Path(__file__).resolve().parent
@@ -1337,6 +1338,12 @@ def run_order(o, prompt):
         write_talk_md(o)
         if o.get("queue"):
             queue_after(o, text, o["endedAt"] - t0)
+        notify_kind = o["status"]
+        notify_snap = dict(o)
+    try:
+        notify.notify_order(notify_kind, notify_snap, text)
+    except Exception as e:
+        print("notify_order:", e)
     _cache.pop("recent", None)
     _cache.pop("stores", None)
     _cache.pop("newshops", None)
@@ -1766,6 +1773,15 @@ def run_deploy(o, shops):
             o["turns"].append({"by": "system", "text": "배포 멈춤: " + str(e)[:300] + "\n" + "\n".join(o.get("deployLog") or []), "at": time.time()})
     with ORDER_LOCK:
         save_order(o)
+        dep_state = o.get("deployState")
+        dep_snap = dict(o)
+    try:
+        if dep_state == "done":
+            notify.notify_order("deploy_done", dep_snap)
+        elif dep_state == "fail":
+            notify.notify_order("deploy_fail", dep_snap, dep_snap.get("deployErr") or "")
+    except Exception as e:
+        print("notify_deploy:", e)
     if o.get("deployState") == "done":
         try:
             settle_deployed(o, shops)
@@ -2321,6 +2337,9 @@ class Handler(BaseHTTPRequestHandler):
         # 영업 탭 (sales.py)
         if p == "/api/sales":
             return self.json(sales.build_sales())
+        # 알림 설정 상태 (notify.py)
+        if p == "/api/notify":
+            return self.json(notify.status())
         if p.startswith("/builder-img/"):  # /builder-img/<가게>/<사진>
             parts = p.split("/")
             if len(parts) == 4 and builder.SHOP_RE.match(parts[2]) and builder.IMG_RE.match(parts[3]):
@@ -2388,6 +2407,18 @@ class Handler(BaseHTTPRequestHandler):
         if urlparse(self.path).path == "/api/sales/sent":
             res, err = sales.mark_sent(body.get("id", ""), str(body.get("action") or "sent"))
             return self.json({"error": err} if err else res, 400 if err else 200)
+        if urlparse(self.path).path == "/api/notify/setup":
+            res, err = notify.setup(
+                token=str(body.get("token") or ""),
+                chat_id=str(body.get("chatId") or ""),
+                enabled=bool(body.get("enabled", True)),
+                dash_url=body.get("dashUrl"),
+                send_test=bool(body.get("sendTest", True)),
+            )
+            return self.json({"error": err} if err else res, 400 if err else 200)
+        if urlparse(self.path).path == "/api/notify/test":
+            ok, err = notify.send_sync("🔔 Jinwoo 에이전트 테스트 알림", "휴대폰·PC 알림이 정상 연결되었습니다!")
+            return self.json({"error": err} if not ok else {"ok": True, **notify.status()}, 400 if not ok else 200)
         if urlparse(self.path).path == "/api/collector/launch":
             err = launch_collector()
             _cache.pop("collector", None)
