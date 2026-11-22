@@ -850,6 +850,12 @@ window.STORES = [
     type: { ko: "한국식 치킨 · 분식 · 피자", vi: "Gà rán Hàn Quốc · Đồ ăn vặt · Pizza", en: "Korean fried chicken · Snacks · Pizza", zh: "韩式炸鸡 · 小吃 · 披萨", ja: "韓国チキン・軽食・ピザ" },
     keywords: "다방치킨 다방 박닌본점 DA BANG Chicken dabang 치킨 후라이드 양념치킨 장작통닭 떡볶이 피자 Bắc Ninh gà rán Hàn Quốc Korean fried chicken 韩式炸鸡 韓国チキン"
   },
+  { id: "fujiro", name: "후지로 판께빈 FUJIRO Phan Kế Bính", sub: "돈카츠 · 카츠토지 · 카레라이스 · 덮밥 · 굴튀김", url: "https://fujiro.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese"], tags: ["photos"],
+    address: "47 P. Phan Kế Bính, Giảng Võ, Hà Nội", map: "https://www.google.com/maps/place/FUJIRO%E3%80%90Phan+K%E1%BA%BF+B%C3%ADnh%E3%80%91/@21.0359958,105.8084057,17z",
+    type: { ko: "일식 · 돈카츠 · 카츠토지 · 카레", vi: "Nhà hàng Nhật · Tonkatsu · Katsutoji · Cơm cà ri", en: "Japanese tonkatsu · Katsutoji · Curry rice", zh: "日式炸猪排 · 鸡蛋炸排锅 · 咖喱饭", ja: "とんかつ・カツとじ・カレーライス" },
+    keywords: "후지로 판께빈 FUJIRO Phan Kế Bính フジロ とんかつ 돈카츠 豚カツ 카츠토지 가츠토지 카레라이스 굴튀김 일식 하노이 Giảng Võ Hà Nội"
+  },
 ];
 window.SI = {
   ko: {

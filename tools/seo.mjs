@@ -165,6 +165,7 @@ const SHOPS = {
   ganghodong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef', 'Pork'], country: 'VN', currency: 'VND', og: 'img/lagalbi.jpg' },
   sangdiegopizza: { type: 'Restaurant', cuisine: ['Western', 'Pizza', 'Steak', 'Pasta', 'BBQ Ribs'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   dabangchicken: { type: 'Restaurant', cuisine: ['Korean', 'Fried Chicken', 'Pizza'], country: 'VN', currency: 'VND', og: 'img/fried.jpg' },
+  fujiro: { type: 'Restaurant', cuisine: ['Japanese', 'Tonkatsu', 'Curry Rice'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

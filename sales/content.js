@@ -215,6 +215,8 @@ window.DEMOS = [
     name: "상디에고 피자 & 그릴 SANG DIEGO", type: { ko: "양식 · 피자 · 스테이크 · 파스타 · 바비큐 립", vi: "Nhà hàng Âu · Pizza · Bít tết · Mỳ Ý · Sườn nướng BBQ", en: "Western grill · Pizza · Steak · Pasta · BBQ ribs", zh: "西餐 · 披萨 · 牛排 · 意面 · BBQ 烤肋排", ja: "洋食・ピザ・ステーキ・パスタ・BBQリブ" } },
   { id: "dabangchicken", hidden: true, url: "https://dabangchicken.qrmenuasia.com", shot: "img/demo-dabangchicken.jpg", qr: "img/qr-dabangchicken.svg",
     name: "다방치킨 박닌본점 DA BANG", type: { ko: "한국식 치킨 · 분식 · 피자", vi: "Gà rán Hàn Quốc · Đồ ăn vặt · Pizza", en: "Korean fried chicken · Snacks · Pizza", zh: "韩式炸鸡 · 小吃 · 披萨", ja: "韓国チキン・軽食・ピザ" } },
+  { id: "fujiro", hidden: true, url: "https://fujiro.qrmenuasia.com", shot: "img/demo-fujiro.jpg", qr: "img/qr-fujiro.svg",
+    name: "후지로 판께빈 FUJIRO Phan Kế Bính", type: { ko: "일식 · 돈카츠 · 카츠토지 · 카레", vi: "Nhà hàng Nhật · Tonkatsu · Katsutoji · Cơm cà ri", en: "Japanese tonkatsu · Katsutoji · Curry rice", zh: "日式炸猪排 · 鸡蛋炸排锅 · 咖喱饭", ja: "とんかつ・カツとじ・カレーライス" } },
 ];
 
 window.T = {
