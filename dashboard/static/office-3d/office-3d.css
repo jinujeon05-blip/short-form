@@ -28,3 +28,25 @@
 .o3-card h2 { margin: 0 0 6px; font-size: 14px; }
 .o3-log { margin: 0; padding: 0; list-style: none; max-height: 180px; overflow: auto; font-size: 12px; color: #c3cbe0; }
 .o3-muted { color: #9aa5bf; font-size: 13px; }
+
+/* 🎨 꾸미기 창 (2026-11-22) */
+.o3-edit-btn { position: absolute; right: 10px; top: 10px; z-index: 5; padding: 6px 12px; border: 0; border-radius: 18px; background: rgba(255,255,255,.92); color: #1d2230; font: 700 13px system-ui, 'Malgun Gothic', sans-serif; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+.o3-edit-btn.on { background: #c8a24a; }
+.o3-editor { margin-top: 10px; padding: 12px 14px; border-radius: 12px; background: #1a2030; color: #e7ebf3; font: 13px/1.4 system-ui, 'Malgun Gothic', sans-serif; }
+.o3e-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px; }
+.o3e-who { padding: 5px 8px; border-radius: 8px; border: 1px solid #3a4560; background: #10141f; color: #e7ebf3; font: inherit; }
+.o3e-tip { color: #9aa5bf; font-size: 12px; }
+.o3e-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; border-top: 1px solid #262e42; }
+.o3e-lb { flex: 0 0 74px; color: #c3cbe0; }
+.o3e-ctl { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; min-width: 0; }
+.o3e-chip { padding: 4px 10px; border-radius: 14px; border: 1px solid #3a4560; background: #10141f; color: #e7ebf3; font: inherit; cursor: pointer; }
+.o3e-chip.on { background: #2f7d4f; border-color: #2f7d4f; }
+.o3e-sw { width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(255,255,255,.25); cursor: pointer; padding: 0; }
+.o3e-sw.on { border-color: #ffd76a; box-shadow: 0 0 0 2px #ffd76a; }
+.o3e-pick { position: relative; display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 2px dashed #6b7690; color: #c3cbe0; cursor: pointer; overflow: hidden; }
+.o3e-pick input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.o3e-foot { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 10px; }
+.o3e-foot button { padding: 6px 12px; border-radius: 8px; border: 1px solid #3a4560; background: #1e2638; color: #e7ebf3; font: inherit; cursor: pointer; }
+.o3e-foot .o3e-save { background: #2f7d4f; border-color: #2f7d4f; font-weight: 700; }
+.o3e-msg { color: #ffd76a; font-size: 12px; }
+@media (max-width: 640px) { .o3e-lb { flex-basis: 60px; font-size: 12px; } .o3e-sw, .o3e-pick { width: 26px; height: 26px; } .o3-edit-btn { top: 6px; right: 6px; padding: 5px 10px; font-size: 12px; } }

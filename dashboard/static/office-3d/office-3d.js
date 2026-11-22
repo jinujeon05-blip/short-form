@@ -321,38 +321,70 @@ export async function create(root, opts = {}) {
 
   const npcs = {};
   const clickables = [];
-  for (const [id, c] of Object.entries(CHARS)) {
+  // 꾸미기 창에서 바꾼 모습(이 브라우저에 저장). CHARS 기본값 위에 덮어쓴다
+  const LOOK_KEY = 'jinwoo_office3d_looks';
+  const LOOK_FIELDS = ['body', 'hair', 'hairC', 'suit', 'pants', 'tie', 'skirt', 'skirtLen', 'blouse', 'legs', 'sheer', 'shoes'];
+  let savedLooks = {};
+  try { savedLooks = JSON.parse(localStorage.getItem(LOOK_KEY) || '{}') || {}; } catch { savedLooks = {}; }
+  const baseLook = id => Object.fromEntries(LOOK_FIELDS.map(k => [k, CHARS[id][k]]));
+  const lookOf = id => ({ ...CHARS[id], ...(savedLooks[id] || {}) });
+
+  // 사람 한 명의 3D 모습(몸·옷·머리·치마)을 만든다. 꾸미기에서 바꾸면 이것만 다시 부른다
+  function buildAvatar(id, c) {
     const src = c.body === 'woman' ? woman.scene : man.scene;
     const o = SkeletonUtils.clone(src);
+    const own = [];   // 이 사람만 쓰는 재질·모양(다시 만들 때 버림)
     let body = null; const bones = {};
     o.traverse(n => {
       if (n.isBone) bones[n.name] = n;
       if (n.isSkinnedMesh) {
         n.castShadow = true; n.frustumCulled = false;
-        if (/superhero/i.test(n.material.name)) { addRegions(n.geometry, n.skeleton); n.material = dressMaterial(n.material, c); body = n; }
+        if (/superhero/i.test(n.material.name)) { addRegions(n.geometry, n.skeleton); n.material = dressMaterial(n.material, c); own.push(n.material); body = n; }
       }
     });
-    if (c.body === 'woman' && body) makeSkirt(body, c);
+    if (c.body === 'woman' && body) { const sk = makeSkirt(body, c); own.push(sk.geometry, sk.material); }
     // 머리카락: 같은 이름 뼈대에 다시 묶는다
-    hairs[c.hair].scene.traverse(n => {
+    (hairs[c.hair] || hairs.simpleparted).scene.traverse(n => {
       if (!n.isSkinnedMesh) return;
-      const mat = n.material.clone(); mat.color = new THREE.Color(c.hairC); mat.roughness = 0.7;
+      const mat = n.material.clone(); mat.color = new THREE.Color(c.hairC); mat.roughness = 0.7; own.push(mat);
       const hm = new THREE.SkinnedMesh(n.geometry, mat); hm.castShadow = true; hm.frustumCulled = false;
       const sk = new THREE.Skeleton(n.skeleton.bones.map(b => bones[b.name] || b), n.skeleton.boneInverses);
       (body?.parent || o).add(hm); hm.bind(sk, n.bindMatrix);
     });
-    const s = seats[id];
-    o.position.set(s.x, 0, s.z); o.rotation.y = s.r; scene.add(o);
     const mixer = new THREE.AnimationMixer(o);
     const act = {}; for (const [k, clip] of Object.entries(clips)) act[k] = mixer.clipAction(clip);
     for (const k of ['Sitting_Enter', 'Sitting_Exit', 'Interact']) { act[k].setLoop(THREE.LoopOnce, 1); act[k].clampWhenFinished = true; }
     const hit = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 1.8, 8), new THREE.MeshBasicMaterial({ visible: false }));
-    hit.position.y = 0.9; hit.userData.id = id; o.add(hit); clickables.push(hit);
+    hit.position.y = 0.9; hit.userData.id = id; o.add(hit); own.push(hit.geometry, hit.material);
+    return { o, mixer, act, hit, own };
+  }
+
+  for (const id of Object.keys(CHARS)) {
+    const c = lookOf(id);
+    const av = buildAvatar(id, c);
+    const s = seats[id];
+    av.o.position.set(s.x, 0, s.z); av.o.rotation.y = s.r; scene.add(av.o); clickables.push(av.hit);
     const tag = document.createElement('div'); tag.className = 'o3-tag' + (id === 'captain' ? ' me' : '');
     tag.innerHTML = '<span class="bb"></span><span class="nm"></span>'; tag.querySelector('.nm').textContent = c.name; tagsEl.appendChild(tag);  // 좁은 화면은 drawTags에서 짧은 이름
-    npcs[id] = { id, c, o, mixer, act, cur: null, state: 'seated', mode: 'idle', path: null, queue: [], tag, bubble: '', bubbleType: '', busyUntil: 0, wait: 0 };
+    npcs[id] = { id, c, o: av.o, mixer: av.mixer, act: av.act, hit: av.hit, own: av.own, cur: null, state: 'seated', mode: 'idle', path: null, queue: [], tag, bubble: '', bubbleType: '' };
     play(npcs[id], 'Sitting_Idle_Loop', 0);
-    mixer.update(Math.random() * 3);
+    av.mixer.update(Math.random() * 3);
+  }
+
+  // 모습만 바꿔 끼운다(자리·하던 동작·걷던 길은 그대로)
+  function relook(id, look) {
+    const n = npcs[id]; if (!n) return;
+    n.c = { ...CHARS[id], ...look };
+    const old = { o: n.o, hit: n.hit, own: n.own, name: n.cur?.getClip().name || 'Idle_Loop', time: n.cur?.time || 0 };
+    const av = buildAvatar(id, n.c);
+    av.o.position.copy(old.o.position); av.o.rotation.y = old.o.rotation.y;
+    scene.remove(old.o); old.own.forEach(d => d.dispose?.());
+    clickables.splice(clickables.indexOf(old.hit), 1, av.hit);
+    scene.add(av.o);
+    Object.assign(n, { o: av.o, mixer: av.mixer, act: av.act, hit: av.hit, own: av.own, cur: null });
+    const a = play(n, old.name, 0); if (a) a.time = old.time;
+    watchOnce(n);   // 일어서기·앉기 도중이면 새 모습에서 끝날 때를 다시 기다린다
+    av.mixer.update(0);
   }
 
   function play(n, name, fade = 0.35) {
@@ -361,12 +393,19 @@ export async function create(root, opts = {}) {
     if (n.cur && fade > 0) n.cur.crossFadeTo(a, fade, false); else if (n.cur) n.cur.stop();
     n.cur = a; return a;
   }
+  // 한 번만 하는 동작(앉기·일어서기·커피)이 끝날 때까지 기다린다. 모습을 바꾸면 새 몸에서 다시 기다린다
   function once(n, name, fade = 0.25) {
-    return new Promise(res => {
-      const a = play(n, name, fade);
-      const done = e => { if (e.action === a) { n.mixer.removeEventListener('finished', done); res(); } };
-      n.mixer.addEventListener('finished', done);
-    });
+    return new Promise(res => { n.onceWait = { name, res }; play(n, name, fade); watchOnce(n); });
+  }
+  function watchOnce(n) {
+    const w = n.onceWait; if (!w) return;
+    const a = n.act[w.name], mx = n.mixer;
+    const done = e => {
+      if (e.action !== a) return;
+      mx.removeEventListener('finished', done);
+      if (n.onceWait === w) { n.onceWait = null; w.res(); }
+    };
+    mx.addEventListener('finished', done);
   }
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const say = (n, text, type = 'talk', ms = 0) => { n.bubble = text; n.bubbleType = type; if (ms) setTimeout(() => { if (n.bubble === text) n.bubble = ''; }, ms); };
@@ -546,7 +585,11 @@ export async function create(root, opts = {}) {
     mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(mouse, camera);
     const h = ray.intersectObjects(clickables, false)[0];
-    if (h) { const n = npcs[h.object.userData.id]; onSelect(n.id, { name: n.c.name, role: n.c.role, state: stateText(n) }); }
+    if (h) {
+      const n = npcs[h.object.userData.id];
+      if (editor.open) editor.pick(n.id);
+      onSelect(n.id, { name: n.c.name, role: n.c.role, state: stateText(n) });
+    }
   };
   const stateText = n => n.bubble || ({ seated: '자리에 앉아 있음', walking: '걷는 중', standing: '서 있음', sitting: '앉는 중' }[n.state] || n.state);
   renderer.domElement.addEventListener('pointerdown', onDown);
@@ -605,7 +648,113 @@ export async function create(root, opts = {}) {
   loop();
   onLog('3D 사무실 준비 완료');
 
+  // ------------------------------------------------------------ 🎨 꾸미기 창(캡틴이 화면에서 직접 고침, 2026-11-22 '마-2')
+  const editor = makeEditor();
+  function makeEditor() {
+    const PAL = [0x1e1e24, 0x3a3f47, 0x55595f, 0x8c8f99, 0xf3f1ec, 0x1f2f5c, 0x3559a8, 0x2f6f73, 0x3f7a4a, 0x5d6a35,
+      0x5b3f86, 0xd98aa0, 0x6d2633, 0x8b1a2b, 0xd97757, 0xf2c84b, 0xc8b391, 0x7a5a3a];
+    const HAIR_PAL = [0x0f0d0c, 0x2b1d14, 0x3a2618, 0x5a3a22, 0x6b4226, 0x8a5a2b, 0xb08850, 0xd8c07a, 0x9a9a9a, 0x7a1f1f, 0x3b4a7a];
+    const HAIR_NAMES = { simpleparted: '옆 가르마', buzzed: '짧은 머리', long: '긴 머리', buns: '올림머리', buzzedfemale: '여자 단발' };
+    const hex = v => '#' + (v >>> 0).toString(16).padStart(6, '0');
+    const num = s => parseInt(String(s).replace('#', ''), 16);
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'o3-edit-btn'; btn.textContent = '🎨 꾸미기';
+    root.appendChild(btn);
+    const panel = document.createElement('section');
+    panel.className = 'o3-editor'; panel.hidden = true;
+    root.insertAdjacentElement('afterend', panel);
+    let cur = 'captain', draft = null, timer = 0;
+    const st = { open: false, pick, close };
+
+    function row(label, inner) { return `<div class="o3e-row"><span class="o3e-lb">${label}</span><div class="o3e-ctl">${inner}</div></div>`; }
+    function chips(key, opts, val) { return opts.map(([v, t]) => `<button type="button" class="o3e-chip${v === val ? ' on' : ''}" data-k="${key}" data-v="${v}">${t}</button>`).join(''); }
+    function swatches(key, pal, val, extra = '') {
+      return pal.map(v => `<button type="button" class="o3e-sw${v === val ? ' on' : ''}" style="background:${hex(v)}" data-k="${key}" data-c="${v}" title="${hex(v)}"></button>`).join('')
+        + `<label class="o3e-pick" title="직접 고르기"><input type="color" data-k="${key}" value="${hex(val ?? 0x888888)}"><span>＋</span></label>` + extra;
+    }
+    function render() {
+      const c = draft, w = c.body === 'woman';
+      const opts = Object.keys(CHARS).map(id => `<option value="${id}"${id === cur ? ' selected' : ''}>${CHARS[id].name}</option>`).join('');
+      panel.innerHTML = `
+        <div class="o3e-head"><b>🎨 꾸미기</b>
+          <select class="o3e-who">${opts}</select>
+          <span class="o3e-tip">사무실 안의 사람을 눌러도 바뀝니다</span></div>
+        ${row('몸', chips('body', [['man', '남자'], ['woman', '여자']], c.body))}
+        ${row('머리 모양', chips('hair', Object.entries(HAIR_NAMES), c.hair))}
+        ${row('머리 색', swatches('hairC', HAIR_PAL, c.hairC))}
+        ${row('자켓', swatches('suit', PAL, c.suit))}
+        ${w ? row('치마', swatches('skirt', PAL, c.skirt ?? c.suit)) + row('치마 길이', chips('skirtLen', [['short', '무릎 위'], ['mini', '미니']], c.skirtLen || 'short'))
+              + row('블라우스', swatches('blouse', PAL, c.blouse ?? 0xf3f1ec))
+              + row('스타킹', swatches('legs', [0x1e1e24, 0x3a3030, 0x8c8f99, 0xd9b89a], c.legs, `<button type="button" class="o3e-chip${c.legs == null ? ' on' : ''}" data-k="legs" data-v="none">맨다리</button>`))
+              + row('구두', swatches('shoes', [0x111111, 0x2a1d14, 0x4a2f1e, 0x6d2633, 0xc8a27a, 0xf3f1ec, 0x8b1a2b], c.shoes ?? 0x1a1a1a))
+            : row('바지', swatches('pants', PAL, c.pants))
+              + row('넥타이', swatches('tie', PAL, c.tie, `<button type="button" class="o3e-chip${c.tie == null ? ' on' : ''}" data-k="tie" data-v="none">없음</button>`))}
+        <div class="o3e-foot">
+          <button type="button" class="o3e-save">💾 저장</button>
+          <button type="button" class="o3e-cancel">되돌리기</button>
+          <button type="button" class="o3e-reset">이 사람 처음 모습</button>
+          <button type="button" class="o3e-close">닫기</button>
+          <span class="o3e-msg"></span>
+        </div>`;
+    }
+    const savedOf = id => ({ ...baseLook(id), ...(savedLooks[id] || {}) });
+    function pick(id) {
+      if (draft && cur !== id && dirty()) relook(cur, savedOf(cur));   // 저장 안 한 사람은 저장된 모습으로 돌린다
+      cur = id; draft = { ...savedOf(id) }; render();
+    }
+    const dirty = () => JSON.stringify(draft) !== JSON.stringify(savedOf(cur));
+    function apply(now = false) {
+      clearTimeout(timer);
+      const go = () => { relook(cur, draft); msg(dirty() ? '저장 안 됨 — 💾 저장을 누르세요' : ''); };
+      if (now) go(); else timer = setTimeout(go, 120);
+    }
+    function msg(t) { const m = panel.querySelector('.o3e-msg'); if (m) m.textContent = t; }
+    function setVal(k, v) {
+      draft[k] = v;
+      if (k === 'body') {   // 남녀를 바꾸면 머리·넥타이를 어울리게 맞춘다
+        if (v === 'woman') { draft.tie = null; if (draft.hair === 'buzzed' || draft.hair === 'simpleparted') draft.hair = 'long'; draft.skirt ??= draft.suit; draft.skirtLen ??= 'short'; }
+        else { if (draft.hair === 'long' || draft.hair === 'buns' || draft.hair === 'buzzedfemale') draft.hair = 'simpleparted'; }
+      }
+      render(); apply(k === 'body' || k === 'hair');
+    }
+    panel.addEventListener('click', e => {
+      const t = e.target.closest('button'); if (!t) return;
+      if (t.classList.contains('o3e-save')) {
+        const diff = {}; const base = baseLook(cur);
+        for (const k of LOOK_FIELDS) if (draft[k] !== base[k]) diff[k] = draft[k] ?? null;
+        if (Object.keys(diff).length) savedLooks[cur] = diff; else delete savedLooks[cur];
+        try { localStorage.setItem(LOOK_KEY, JSON.stringify(savedLooks)); msg('저장했어요 ✔ (이 브라우저)'); onLog(`🎨 ${CHARS[cur].name} 모습 저장`); }
+        catch { msg('저장 실패: 브라우저 저장소를 못 씀(시크릿 창?)'); }
+        return;
+      }
+      if (t.classList.contains('o3e-cancel')) { draft = { ...savedOf(cur) }; render(); apply(true); msg('저장된 모습으로 되돌렸어요'); return; }
+      if (t.classList.contains('o3e-reset')) { draft = baseLook(cur); render(); apply(true); msg('처음 모습 — 💾 저장을 눌러야 굳어요'); return; }
+      if (t.classList.contains('o3e-close')) { close(); return; }
+      const k = t.dataset.k; if (!k) return;
+      if (t.dataset.c) setVal(k, Number(t.dataset.c));
+      else setVal(k, t.dataset.v === 'none' ? null : t.dataset.v);
+    });
+    panel.addEventListener('input', e => {
+      const el = e.target;
+      if (el.matches('input[type=color]')) { draft[el.dataset.k] = num(el.value); apply(); }
+    });
+    panel.addEventListener('change', e => {
+      const el = e.target;
+      if (el.matches('.o3e-who')) pick(el.value);
+      if (el.matches('input[type=color]')) render();
+    });
+    function open() { st.open = true; panel.hidden = false; btn.classList.add('on'); pick(cur); panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    function close() {
+      if (draft && dirty()) relook(cur, savedOf(cur));
+      st.open = false; panel.hidden = true; btn.classList.remove('on'); draft = null;
+    }
+    btn.addEventListener('click', () => (st.open ? close() : open()));
+    st.destroy = () => { clearTimeout(timer); panel.remove(); };
+    return st;
+  }
+
   function destroy() {
+    editor.destroy();
     alive = false; cancelAnimationFrame(raf); ro.disconnect();
     renderer.domElement.removeEventListener('pointerdown', onDown);
     renderer.domElement.removeEventListener('pointerup', onUp);
