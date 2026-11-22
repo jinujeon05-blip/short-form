@@ -856,6 +856,12 @@ window.STORES = [
     type: { ko: "일식 · 돈카츠 · 카츠토지 · 카레", vi: "Nhà hàng Nhật · Tonkatsu · Katsutoji · Cơm cà ri", en: "Japanese tonkatsu · Katsutoji · Curry rice", zh: "日式炸猪排 · 鸡蛋炸排锅 · 咖喱饭", ja: "とんかつ・カツとじ・カレーライス" },
     keywords: "후지로 판께빈 FUJIRO Phan Kế Bính フジロ とんかつ 돈카츠 豚カツ 카츠토지 가츠토지 카레라이스 굴튀김 일식 하노이 Giảng Võ Hà Nội"
   },
+  { id: "okonomiyakimiyakoya", name: "미야코야 MIYAKOYA", sub: "오코노미야키 · 몬자야키 · 철판구이 · 야키니쿠", url: "https://okonomiyakimiyakoya.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese"], tags: ["photos"],
+    address: "25 Linh Lang, Ngọc Hà, Hà Nội", map: "https://www.google.com/maps/place/%E3%81%8A%E5%A5%BD%E3%81%BF%E6%9C%AC%E8%88%97%E3%81%BF%E3%82%84%E3%81%93%E5%B1%8B+%E3%83%8F%E3%83%8E%E3%82%A4%E5%BA%97Okonomiyaki+Miyakoya/@21.0358143,105.8090686,18z/data=!4m6!3m5!1s0x3135ab058f86fa01:0x388ccb390aee34d6!8m2!3d21.0359097!4d105.8106163",
+    type: { ko: "일식 · 오코노미야키 · 몬자 · 철판구이", vi: "Món Nhật · Okonomiyaki · Monjayaki · Teppanyaki", en: "Japanese okonomiyaki · Monja · Teppanyaki", zh: "日料 · 大阪烧 · 文字烧 · 铁板烧", ja: "お好み焼き・もんじゃ・鉄板焼き" },
+    keywords: "미야코야 오코노미야키 미야코야 하노이 お好み本舗みやこ屋 Okonomiyaki Miyakoya 몬자 몬자야키 철판구이 야키소바 호르몬 Linh Lang Hanoi 일식 일본 음식 monjayaki teppanyaki bánh xèo Nhật"
+  },
 ];
 window.SI = {
   ko: {
