@@ -64,17 +64,32 @@
   const CAPTAIN_TO_CHIEF  = [[41.5, 16.8], [34.5, 16.8], [34.5, 34.0], [50.0, 34.0], [50.0, 36.8]];
   const CHIEF_TO_CAPTAIN  = [[50.0, 34.0], [34.5, 34.0], [34.5, 16.8], [41.5, 16.8]];
 
+  // 남향 직원 5명 책상 위에 올려둘 노트북 위치 (% 좌표 — 캡틴은 배경에 이미 노트북 2대가 있음)
+  const DESK_LAPTOPS = [
+    { id: 'claude',   x: 50.0, y: 40.2, w: 46 },
+    { id: 'finder',   x: 15.2, y: 47.6, w: 42 },
+    { id: 'polisher', x: 38.2, y: 85.8, w: 44 },
+    { id: 'staffing', x: 63.2, y: 85.8, w: 44 },
+    { id: 'sorting',  x: 83.2, y: 85.8, w: 44 },
+  ];
+
   function loadImages() {
-    const imgs = { walk: {}, seated: {}, cap: {} };
+    const imgs = { walk: {}, seated: {}, cap: { coffeeSeq: [] } };
     const load = (target, key, url) => new Promise(res => {
       const im = new Image();
       im.onload = () => { target[key] = im; res(); };
       im.onerror = () => res();
       im.src = url;
     });
-    const jobs = [load(imgs, 'bg', '/static/office-game/assets/bg-office.webp')];
+    const jobs = [
+      load(imgs, 'bg', '/static/office-game/assets/bg-office.webp'),
+      load(imgs, 'laptop', '/static/office-game/assets/laptop.webp'),
+    ];
     for (const pose of ['idle', 'coffee', 'window', 'thumbs']) {
       jobs.push(load(imgs.cap, pose, `/static/office-game/assets/captain-${pose}.webp`));
+    }
+    for (let f = 1; f <= 4; f++) {
+      jobs.push(load(imgs.cap.coffeeSeq, f - 1, `/static/office-game/assets/captain-coffee-${f}.webp`));
     }
     imgs.walk.captain = { side: [], up: [], down: [] };
     for (let f = 1; f <= 4; f++) {
@@ -109,14 +124,14 @@
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = true;
 
-    let imgs = { walk: {}, seated: {}, cap: {} };
+    let imgs = { walk: {}, seated: {}, cap: { coffeeSeq: [] } };
     loadImages().then(loaded => { imgs = loaded; });
 
     const npcs = {};
     for (const [id, cfg] of Object.entries(CHARS)) {
       npcs[id] = {
         id, x: cfg.home[0], y: cfg.home[1],
-        mode: 'idle', dir: cfg.seatFacing || 'down', capPose: 'idle',
+        mode: 'idle', dir: cfg.seatFacing || 'down', capPose: 'idle', capCoffeeStart: 0,
         bubble: '', bubbleType: 'work', progress: null,
         carry: null, path: [], speed: 15.0, onArrive: null,
       };
@@ -205,10 +220,11 @@
       if (cap.capPose === 'idle') {
         if (Math.random() < 0.55) {
           cap.capPose = 'coffee';
+          cap.capCoffeeStart = performance.now();
           cap.bubble = '☕ 커피 한 잔…';
           cap.bubbleType = 'idle';
           log('캡틴이 자리에서 커피를 마시는 중');
-          nextCapActAt = now + 6500;
+          nextCapActAt = now + 6800;
         } else {
           nextCapActAt = now + 15000;
           captainWindowWalk();
@@ -237,6 +253,7 @@
                 chief.dir = 'right';
                 if (cap.mode !== 'walk') {
                   cap.capPose = 'coffee';
+                  cap.capCoffeeStart = performance.now();
                   cap.bubble = '☕ 고마워요! 잘 마실게요';
                   cap.bubbleType = 'ok';
                 }
@@ -537,10 +554,15 @@
         } else if (n.capPose === 'window') {
           im = imgs.cap.window || imgs.captain;
           isFullBody = true;
-        } else if (n.capPose === 'coffee' || n.capPose === 'thumbs') {
-          im = imgs.cap[n.capPose] || imgs.seated.captain?.idle;
+        } else if (n.capPose === 'coffee') {
+          // 4단계 자연스러운 커피 마시기 시퀀스: 컵 잡기(0.7s) → 들기(0.7s) → 눈 감고 한 모금(2.4s) → 미소 내려놓기(1.2s) → 반복
+          const seq = imgs.cap.coffeeSeq;
+          const el = ((performance.now() - (n.capCoffeeStart || 0)) / 1000) % 5.6;
+          const ci = el < 0.7 ? 0 : el < 1.4 ? 1 : el < 3.8 ? 2 : el < 5.0 ? 3 : 0;
+          im = (seq && seq[ci]) ? seq[ci] : (imgs.cap.coffee || imgs.seated.captain?.idle);
+        } else if (n.capPose === 'thumbs') {
+          im = imgs.cap.thumbs || imgs.seated.captain?.idle;
         } else {
-          // 평소 캡틴은 정면 책상에 앉아 대기/작업
           im = imgs.seated.captain?.idle || imgs.cap.idle;
         }
       } else if (walking) {
@@ -551,7 +573,6 @@
           else if (wset.side[frameIdx]) { im = wset.side[frameIdx]; flipX = (n.dir === 'left'); }
         }
       } else {
-        // 정면 책상(hands-on-desk) + 북향 책상(back-view seated) 모두 전용 착석·타이핑 스프라이트 사용!
         const sset = imgs.seated[n.id];
         if (sset) {
           im = working ? (typeIdx === 0 ? sset.w1 : sset.w2) || sset.idle : sset.idle;
@@ -561,7 +582,7 @@
 
       const cx = (n.x / 100) * W;
       const cy = (n.y / 100) * H;
-      const isCapActionCrop = (n.id === 'captain' && !isFullBody && (n.capPose === 'coffee' || n.capPose === 'thumbs'));
+      const isCapActionCrop = (n.id === 'captain' && !isFullBody && n.capPose === 'thumbs');
       const targetH = (isFullBody ? 102 : isCapActionCrop ? 116 : isNorthSeated ? 70 : 72) * cfg.scale;
       const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
@@ -670,6 +691,24 @@
 
       const list = Object.values(npcs).sort((a, b) => a.y - b.y);
       for (const n of list) drawNpc(n, t);
+
+      // 남향 직원 5명 책상 위 오픈 노트북 소품 그리기 (앉은 직원 손 바로 앞에 배치 → 진짜 노트북으로 일하는 모습!)
+      if (imgs.laptop) {
+        const lwRatio = imgs.laptop.naturalHeight / imgs.laptop.naturalWidth;
+        for (const lp of DESK_LAPTOPS) {
+          const lx = (lp.x / 100) * W;
+          const ly = (lp.y / 100) * H;
+          const lh = lp.w * lwRatio;
+          ctx.drawImage(imgs.laptop, lx - lp.w / 2, ly - lh, lp.w, lh);
+          if (npcs[lp.id]?.mode === 'work') {
+            // 작업 중일 때 노트북 화면 쪽으로 부드러운 파란 반사광
+            ctx.fillStyle = `rgba(56, 189, 248, ${0.18 + 0.08 * Math.sin(t * 7)})`;
+            ctx.beginPath();
+            ctx.ellipse(lx, ly - lh * 0.9, lp.w * 0.45, lh * 0.35, 0, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      }
 
       let workingCount = 0;
       for (const [id, n] of Object.entries(npcs)) {
