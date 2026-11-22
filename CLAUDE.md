@@ -117,6 +117,7 @@
 ## 8. 상세 기록 (`docs/`, 필요할 때만 읽음)
 - **`AGENTS.md`** = 클로드가 아닌 AI(안티그래비티 등)용 입구(2026-11-21 캡틴 마-1). 이 파일 2장 규칙·배포 순서가 크게 바뀌면 그 4장도 한 줄 고친다.
 - `team-plan.md` 기획서(30문항·조직도, 팀·대시보드 일 전에 읽음) · `standard.md` 가마솥 표준(새 가게마다) · `new-shop.md` 새 가게 체크리스트 상세 · `deploy.md` 배포·머지 순서
+- `office-3d-edit.md` 3D 사무실 캐릭터 직접 고치기(캡틴용, 메모장으로 `CHARS` 색·머리·남녀)
 - `shop-builder.md` 대시보드 '가게 만들기' 탭(캡틴이 화면에서 가게를 직접 만들기·AI 번역, `tools/build-shop.mjs`·`dashboard/builder.py`)
 - `tools.md` 도구 상세 · `team-test.md` 담당 명령·시험 기록 · `mistakes.md` 실수 사건 · `stores.md` 가게 목록·기록(`grep -n "가게이름"`) · `todo.md` 남은 할 일(말한 가게 줄만)
 - `seo.md` 도메인·검색 · `maps-photos.md` 사진 수집기 · `admin-system.md` 방문 기록·점주 편집·주방 주문(주방 화면·프린터) · `qr-home.md` QR MENU 버튼(지구본 배지 재시도 안 함) · `shared-features.md` 공통 기능 · `dashboard.md` 대시보드 'Jinwoo 에이전트'(127.0.0.1:8899) · `google-profile-manager.md` 구글 지도에 QR 주소 넣기(정식 가게만, 사장님이 관리자 추가) · `video-benchmark.md` 홍보 영상 벤치마킹 모음(새 영상 기획 전에 읽음) · `gem-sales.md` 제미나이 영업 Gem 지침(소개서 가격을 바꾸면 같이 고침) · `gem-research.md` 제미나이 리서치·블로그 Gem 지침(출처 필수)

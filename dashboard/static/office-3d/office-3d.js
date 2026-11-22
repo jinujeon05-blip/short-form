@@ -10,10 +10,15 @@ const BASE = '/static/office-3d/assets/';
 const ROOM = { w: 18, d: 12 };                       // 가로(X) 18m, 세로(Z) 12m. 북쪽 = -Z(화면 위)
 const pct = (x, y) => [(x - 50) * ROOM.w / 100, (y - 50) * ROOM.d / 100];
 
-// 2D 사무실 CHARS와 같은 자리(% 좌표)·방향. 옷 색: 자켓·바지·셔츠·넥타이, 머리 모양·색
+// ★ 캐릭터 꾸미기는 여기만 고치면 된다(저장 → 브라우저 F5). 안내: docs/office-3d-edit.md
+//   body : 'man'(남자) / 'woman'(여자)
+//   hair : 'simpleparted'(옆 가르마) / 'buzzed'(짧은 머리) / 'long'(긴 머리) / 'buns'(올림머리)
+//   hairC: 머리 색, suit: 자켓 색, pants: 바지 색, tie: 넥타이 색(null = 넥타이 없음, 여자는 항상 없음)
+//   색은 0x + 6자리 색 번호(예: 0x1f2f5c = 남색). 구글에서 'color picker' 검색 → HEX 값의 # 뒤 6자리
+//   name: 이름표, short: 폰 이름표, home·face: 자리(2D와 같은 % 좌표)·보는 방향(s=앞, n=뒤)
 export const CHARS = {
   captain:       { name: '캡틴', short: '캡틴',          role: '결재',        home: [50.0, 12.0], face: 's', body: 'man',   hair: 'simpleparted', hairC: 0x15120f, suit: 0x1f2f5c, pants: 0x1b2850, tie: 0x8b1a2b },
-  claude:        { name: '비서실장', short: '비서실장',      role: '지휘',        home: [50.0, 36.0], face: 's', body: 'man',   hair: 'simpleparted', hairC: 0x2b1d14, suit: 0x3a3f47, pants: 0x30343b, tie: 0xd97757 },
+  claude:        { name: '비서실장', short: '비서실장',      role: '지휘',        home: [50.0, 36.0], face: 's', body: 'woman', hair: 'long',         hairC: 0x2b1d14, suit: 0x3a3f47, pants: 0x30343b, tie: null },
   finder:        { name: '시각 정보 비서', short: '시각비서', role: '사진 고르기', home: [17.0, 44.8], face: 's', body: 'woman', hair: 'buns',         hairC: 0x1c1410, suit: 0x2f6f73, pants: 0x24474a, tie: null },
   agy:           { name: '메뉴 검사관', short: '메뉴검사',   role: '메뉴판 읽기', home: [72.0, 50.0], face: 'n', body: 'man',   hair: 'buzzed',       hairC: 0x18130f, suit: 0x3559a8, pants: 0x27407a, tie: 0xf2c84b },
   'menu-reader': { name: '자료 해석 비서', short: '자료해석', role: '메뉴판 읽기', home: [86.0, 50.0], face: 'n', body: 'man',   hair: 'simpleparted', hairC: 0x3a2a1c, suit: 0x3f7a4a, pants: 0x2c5534, tie: 0xe9e2cf },
@@ -143,7 +148,7 @@ export async function create(root, opts = {}) {
     const dx = x + fx * DESK_GAP, dz = z + fz * DESK_GAP;
     const d = place('desk', dx, dz, r + Math.PI, id === 'captain' ? 1.25 : 1);
     const top = d.size.y;
-    if (c.body === 'woman') place('laptop', dx, dz - fz * 0.05, r, 1, top);
+    if (c.body === 'woman') place('laptop', dx, dz - fz * 0.05, r + Math.PI, 1, top);  // 화면이 앉은 사람 쪽(2026-11-22 캡틴 지적)
     else { place('computerScreen', dx, dz + fz * 0.2, r + Math.PI, 0.8, top); place('computerKeyboard', dx, dz - fz * 0.27, r + Math.PI, 1, top); }  // 화면이 앉은 사람 쪽을 본다
     const chair = place('chairDesk', x - fx * SEAT_BACK, z - fz * SEAT_BACK, r);
     block(dx, dz, d.size.x, d.size.z, 0.18);  // 책상은 0°/180°만 돌리므로 가로·세로 그대로
