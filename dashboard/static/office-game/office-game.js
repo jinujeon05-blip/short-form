@@ -124,6 +124,10 @@
       load(imgs, 'propMug', '/static/office-game/assets/prop-mug.webp'),
       load(imgs, 'propTray', '/static/office-game/assets/prop-tray.webp'),
       load(imgs, 'propDoc', '/static/office-game/assets/prop-doc.webp'),
+      load(imgs, 'propCan', '/static/office-game/assets/prop-can.webp'),
+      load(imgs, 'propBroom', '/static/office-game/assets/prop-broom.webp'),
+      load(imgs, 'propDuster', '/static/office-game/assets/prop-duster.webp'),
+      load(imgs, 'propBox', '/static/office-game/assets/prop-box.webp'),
     ];
     for (const pose of ['idle', 'coffee', 'window', 'thumbs']) {
       jobs.push(load(imgs.cap, pose, `/static/office-game/assets/captain-${pose}.webp`));
@@ -208,13 +212,15 @@
       npcs[id] = {
         id, x: cfg.home[0], y: cfg.home[1],
         mode: 'idle', dir: cfg.seatFacing || 's', capPose: 'idle', capCoffeeStart: 0,
-        bubble: '', bubbleType: 'work', progress: null,
+        action: null, bubble: '', bubbleType: 'work', progress: null,
         carry: null, path: [], speed: 11.2, walkDist: 0, onArrive: null,
       };
     }
 
     let demoTimers = [];
     let isDemo = false;
+    let conveyorActive = false;
+    let conveyorPhase = 0;
     let hrMarks = [];
     let seenReports = new Set();
     let prevActive = new Set();
@@ -222,6 +228,9 @@
     let lastCoffeeAt = Date.now();
     let lastChiefCoffeeAt = Date.now() - 20000;
     let nextCapActAt = Date.now() + 6000;
+    let nextLifeActAt = Date.now() + 5500;
+    let lifeSeqIdx = 0;
+    let hasActiveWork = false;
 
     const signsHtml = SIGNS.map(s =>
       `<span class="og-sign" style="left:${s.x}%;top:${s.y}%;background:${s.bg}">${s.text}</span>`
@@ -439,6 +448,249 @@
       });
     }
 
+    // ---------------------------------------------------------------- 살아있는 사무실 자율 행동 (2026-11-22 캡틴 요청)
+    const isFree = n => n && (n.mode === 'idle' || n.mode === 'done');
+
+    // 1) 비서실장 → 캡틴에게 시키실 일 묻기
+    function chiefAskCaptain() {
+      const chief = npcs.claude, cap = npcs.captain;
+      if (!isFree(chief) || !isFree(cap) || cap.capPose === 'window') return false;
+      const prevMode = chief.mode;
+      const asks = ['캡틴, 시키실 일 있으실까요?', '새로 진행할 가게 있을까요?', '오늘 추가로 챙길 업무 있으신가요?'];
+      const replies = ['지금은 괜찮아요, 수고해요! ☕', '조금 있다가 지시할게요! 👍', '덕분에 잘 돌아가고 있어요 😊'];
+      const qi = Math.floor(Math.random() * asks.length);
+      log('💬 비서실장이 캡틴에게 업무 지시 여부를 여쭤보러 이동');
+      sendPath('claude', CHIEF_TO_CAPTAIN, {
+        mode: 'coffee-walk', carry: null, bubble: '', bubbleType: 'idle',
+        onArrive: () => {
+          chief.mode = 'action';
+          chief.action = 'ask';
+          chief.dir = 'e';
+          chief.bubble = asks[qi];
+          chief.bubbleType = 'meet';
+          setTimeout(() => {
+            if (isFree(cap)) {
+              cap.bubble = replies[qi];
+              cap.bubbleType = 'ok';
+            }
+            setTimeout(() => {
+              if (cap.bubble === replies[qi]) cap.bubble = '';
+              chief.action = null;
+              sendPath('claude', CAPTAIN_TO_CHIEF, {
+                mode: 'coffee-walk', carry: null, bubble: '',
+                onArrive: () => { chief.mode = prevMode; chief.dir = 's'; },
+              });
+            }, 2400);
+          }, 1800);
+        },
+      });
+      return true;
+    }
+
+    // 2) 선별팀 → 일어나서 컨베이어 벨트 돌려보기
+    function sortingConveyor() {
+      const n = npcs.sorting;
+      if (!isFree(n)) return false;
+      const prevMode = n.mode;
+      const toBelt = [[83.2, 79.5], [89.6, 79.5], [89.6, 86.2]];
+      const back = [[89.6, 86.2], [89.6, 79.5], [83.2, 79.5], CHARS.sorting.home];
+      log('📦 선별팀이 컨베이어 벨트 가동·점검 시작');
+      sendPath('sorting', toBelt, {
+        mode: 'coffee-walk', carry: null, bubble: '📦 컨베이어 점검하러…', bubbleType: 'idle',
+        onArrive: () => {
+          n.mode = 'action';
+          n.action = 'conveyor';
+          n.dir = 'e';
+          n.bubble = '📦 컨베이어 벨트 가동 점검 중…';
+          n.bubbleType = 'work';
+          conveyorActive = true;
+          setTimeout(() => {
+            conveyorActive = false;
+            n.action = null;
+            n.bubble = '✔ 선별 컨베이어 정상!';
+            n.bubbleType = 'ok';
+            setTimeout(() => {
+              sendPath('sorting', back, {
+                mode: 'coffee-walk', carry: null, bubble: '',
+                onArrive: () => { n.mode = prevMode; n.dir = 's'; },
+              });
+            }, 900);
+          }, 5200);
+        },
+      });
+      return true;
+    }
+
+    // 3) 선별팀 → 복도 화분에 물 주기
+    function sortingWaterPlants() {
+      const n = npcs.sorting;
+      if (!isFree(n)) return false;
+      const prevMode = n.mode;
+      const toPlant = [[83.2, 79.5], [73.8, 79.5], [73.8, 55.5], [64.4, 55.5], [64.4, 44.5]];
+      const back = [...toPlant.slice().reverse(), CHARS.sorting.home];
+      log('🌱 선별팀이 복도 화분에 물 주러 이동');
+      sendPath('sorting', toPlant, {
+        mode: 'coffee-walk', carry: 'can', bubble: '🌱 화분에 물 주러 가는 중…', bubbleType: 'idle',
+        onArrive: () => {
+          n.mode = 'action';
+          n.action = 'water';
+          n.carry = 'can';
+          n.dir = 'e';
+          n.bubble = '🌱 화분에 물 주는 중…';
+          n.bubbleType = 'ok';
+          setTimeout(() => {
+            n.action = null;
+            sendPath('sorting', back, {
+              mode: 'coffee-walk', carry: 'can', bubble: '',
+              onArrive: () => { n.mode = prevMode; n.dir = 's'; n.carry = null; },
+            });
+          }, 4800);
+        },
+      });
+      return true;
+    }
+
+    // 4) 인력 공급팀 → 캡틴 책상 정리 정돈
+    function staffingTidyCaptain() {
+      const n = npcs.staffing, cap = npcs.captain;
+      if (!isFree(n)) return false;
+      const prevMode = n.mode;
+      const toCap = [[63.2, 79.5], [56.5, 79.5], [56.5, 86.5], [50.0, 86.5], [50.0, 55.5], [34.5, 55.5], [34.5, 16.8], [41.5, 16.8]];
+      const back = [...toCap.slice().reverse(), CHARS.staffing.home];
+      log('✨ 인력 공급팀이 캡틴 책상 정리 정돈하러 이동');
+      sendPath('staffing', toCap, {
+        mode: 'coffee-walk', carry: 'duster', bubble: '✨ 캡틴 책상 정리하러…', bubbleType: 'idle',
+        onArrive: () => {
+          n.mode = 'action';
+          n.action = 'tidy';
+          n.carry = 'duster';
+          n.dir = 'e';
+          n.bubble = '✨ 캡틴 책상 정리 정돈 중…';
+          n.bubbleType = 'ok';
+          if (isFree(cap) && cap.capPose !== 'window') {
+            setTimeout(() => {
+              cap.bubble = '고마워요, 아주 깔끔하네요! 👍';
+              cap.bubbleType = 'ok';
+              setTimeout(() => { if (cap.bubble.includes('깔끔')) cap.bubble = ''; }, 2600);
+            }, 1400);
+          }
+          setTimeout(() => {
+            n.action = null;
+            sendPath('staffing', back, {
+              mode: 'coffee-walk', carry: 'duster', bubble: '',
+              onArrive: () => { n.mode = prevMode; n.dir = 's'; n.carry = null; },
+            });
+          }, 4600);
+        },
+      });
+      return true;
+    }
+
+    // 5) 인력 공급팀 → 사무실 바닥 빗자루 청소
+    function staffingSweepOffice() {
+      const n = npcs.staffing;
+      if (!isFree(n)) return false;
+      const prevMode = n.mode;
+      const toHall = [[63.2, 79.5], [56.5, 79.5], [56.5, 86.5], [50.0, 86.5], [50.0, 55.5], [44.2, 55.5]];
+      const back = [[54.5, 55.5], [50.0, 55.5], [50.0, 86.5], [56.5, 86.5], [56.5, 79.5], [63.2, 79.5], CHARS.staffing.home];
+      log('🧹 인력 공급팀이 사무실 바닥 청소 시작');
+      sendPath('staffing', toHall, {
+        mode: 'coffee-walk', carry: 'broom', bubble: '🧹 사무실 청소 시작!', bubbleType: 'idle',
+        onArrive: () => {
+          n.mode = 'action';
+          n.action = 'sweep';
+          n.carry = 'broom';
+          n.dir = 'e';
+          n.bubble = '🧹 중앙 복도 쓸고 닦는 중…';
+          n.bubbleType = 'idle';
+          setTimeout(() => {
+            sendPath('staffing', [[44.2, 55.5], [54.5, 55.5]], {
+              mode: 'coffee-walk', carry: 'broom', bubble: '🧹 바닥 청소 중…', bubbleType: 'idle',
+              onArrive: () => {
+                n.mode = 'action';
+                n.action = 'sweep';
+                n.dir = 'w';
+                setTimeout(() => {
+                  n.action = null;
+                  sendPath('staffing', back, {
+                    mode: 'coffee-walk', carry: 'broom', bubble: '',
+                    onArrive: () => { n.mode = prevMode; n.dir = 's'; n.carry = null; },
+                  });
+                }, 2200);
+              },
+            });
+          }, 1800);
+        },
+      });
+      return true;
+    }
+
+    // 6) 할 일 없을 때 직원 2명이 중앙 복도에서 만나 업무 대화 & 수다
+    const CHAT_SCRIPTS = [
+      ['요즘 가게 찾기용 메뉴판 사진 퀄리티 좋아졌죠?', '맞아요! 손님들이 훨씬 보기 편해졌대요 😊', '다음 가게도 깔끔하게 뽑아봐요!'],
+      ['베트남어·영어 번역 자연스러운지 이따 같이 볼까요?', '좋아요! 5개 국어 톤 맞춰서 확인해요 👍', '네, 준비되면 바로 부를게요!'],
+      ['오늘 사무실 커피 원두 향이 유독 좋네요 ☕', '저도 아까 한 잔 마셨는데 딱 좋더라고요 😄', '잠시 쉬었으니 다시 화이팅해요!'],
+      ['새 가게 사진 올라오면 바로 분류 시작할게요!', '저도 메뉴판 가격표 대조 대기 중이에요 💪', '오늘도 완벽하게 끝내봅시다!'],
+    ];
+    function staffChat() {
+      const pool = ['finder', 'agy', 'menu-reader', 'codex', 'reviewer', 'polisher'].filter(id => isFree(npcs[id]));
+      if (pool.length < 2) return false;
+      const a = pool[Math.floor(Math.random() * pool.length)];
+      const rest = pool.filter(x => x !== a);
+      const b = rest[Math.floor(Math.random() * rest.length)];
+      const prevA = npcs[a].mode, prevB = npcs[b].mode;
+      const script = CHAT_SCRIPTS[Math.floor(Math.random() * CHAT_SCRIPTS.length)];
+      const spotA = [46.8, 55.5], spotB = [53.2, 55.5];
+      const pathA = [...TO_HALL[a], spotA], pathB = [...TO_HALL[b], spotB];
+      const backA = [...pathA.slice().reverse(), CHARS[a].home];
+      const backB = [...pathB.slice().reverse(), CHARS[b].home];
+      let arrived = 0;
+
+      function startBanter() {
+        const na = npcs[a], nb = npcs[b];
+        na.dir = 'e'; nb.dir = 'w';
+        na.bubble = script[0]; na.bubbleType = 'meet';
+        setTimeout(() => {
+          na.bubble = '';
+          nb.bubble = script[1]; nb.bubbleType = 'meet';
+          setTimeout(() => {
+            nb.bubble = '';
+            na.bubble = script[2]; na.bubbleType = 'ok';
+            setTimeout(() => {
+              na.action = null; nb.action = null;
+              sendPath(a, backA, { mode: 'coffee-walk', bubble: '', onArrive: () => { na.mode = prevA; na.dir = CHARS[a].seatFacing || 's'; } });
+              sendPath(b, backB, { mode: 'coffee-walk', bubble: '', onArrive: () => { nb.mode = prevB; nb.dir = CHARS[b].seatFacing || 's'; } });
+            }, 2200);
+          }, 2600);
+        }, 2600);
+      }
+
+      log(`💬 ${CHARS[a].name} · ${CHARS[b].name} 복도에서 업무 수다`);
+      sendPath(a, pathA, {
+        mode: 'coffee-walk', bubble: '',
+        onArrive: () => { npcs[a].mode = 'action'; npcs[a].action = 'chat'; npcs[a].dir = 'e'; if (++arrived === 2) startBanter(); },
+      });
+      sendPath(b, pathB, {
+        mode: 'coffee-walk', bubble: '',
+        onArrive: () => { npcs[b].mode = 'action'; npcs[b].action = 'chat'; npcs[b].dir = 'w'; if (++arrived === 2) startBanter(); },
+      });
+      return true;
+    }
+
+    function updateOfficeLife(now) {
+      if (isDemo || hasActiveWork) return;
+      if (now < nextLifeActAt) return;
+      const acts = [chiefAskCaptain, sortingConveyor, staffChat, staffingTidyCaptain, sortingWaterPlants, staffingSweepOffice, serveCoffeeToCaptain];
+      for (let tries = 0; tries < acts.length; tries++) {
+        const fn = acts[(lifeSeqIdx + tries) % acts.length];
+        if (fn()) {
+          lifeSeqIdx = (lifeSeqIdx + tries + 1) % acts.length;
+          break;
+        }
+      }
+      nextLifeActAt = now + 17000 + Math.random() * 8000;
+    }
+
     // ---------------------------------------------------------------- 가상 22초 시연
     function stopDemo() {
       demoTimers.forEach(clearTimeout);
@@ -581,8 +833,9 @@
       if (latestDone) prevDoneOrder = latestDone.id;
       prevActive = new Set(active.keys());
 
+      hasActiveWork = active.size > 0;
       for (const [id, n] of Object.entries(npcs)) {
-        if (id === 'captain' || n.mode === 'walk' || n.mode === 'coffee-walk') continue;
+        if (id === 'captain' || n.mode === 'walk' || n.mode === 'coffee-walk' || n.mode === 'action') continue;
         if (active.has(id)) {
           n.mode = 'work';
           n.bubble = active.get(id);
@@ -597,10 +850,7 @@
       }
 
       const now = Date.now();
-      if (!active.size && npcs.claude.mode === 'idle' && now - lastChiefCoffeeAt > 45000) {
-        lastChiefCoffeeAt = now;
-        serveCoffeeToCaptain();
-      } else if (!active.size && now - lastCoffeeAt > 26000) {
+      if (!active.size && now - lastCoffeeAt > 36000) {
         lastCoffeeAt = now;
         const idleIds = Object.keys(CHARS).filter(id => id !== 'captain' && id !== 'claude' && npcs[id].mode === 'idle');
         if (idleIds.length) coffeeStroll([idleIds[Math.floor(Math.random() * idleIds.length)]]);
@@ -611,6 +861,7 @@
     function drawNpc(n, t) {
       const cfg = CHARS[n.id];
       const walking = n.mode === 'walk' || n.mode === 'coffee-walk';
+      const acting = n.mode === 'action';
       const working = n.mode === 'work';
       const done = n.mode === 'done';
       // 실제 걸음 보폭(1.15~1.25보/초)에 정확히 맞춘 느긋한 프레임 속도 — 팔·다리·어깨 빠른 떨림 완전 제거!
@@ -620,8 +871,8 @@
 
       let im = imgs[n.id];
       let flipX = false;
-      let isFullBody = walking;
-      let isNorthSeated = (!walking && cfg.seatFacing === 'n');
+      let isFullBody = walking || acting;
+      let isNorthSeated = (!isFullBody && cfg.seatFacing === 'n');
       let using6 = false;
 
       const d = n.dir || 's';
@@ -652,24 +903,26 @@
         } else {
           im = imgs.seated.captain?.idle || imgs.cap.idle;
         }
-      } else if (walking) {
-        // 커피·서류를 들고 있어도 항상 실제 팔·다리 보폭이 살아있는 8방향 걷기 애니메이션을 재생!
+      } else if (walking || acting) {
+        // 커피·서류·청소도구·물뿌리개를 들고 있어도 항상 자연스러운 전신 8방향 스프라이트 사용!
         const wset = imgs.walk[n.id];
+        const fUse = acting ? 0 : frame4;
+        const f6Use = acting ? 0 : frame6;
         if (wset) {
-          if (d === 'n' && wset.up?.[frame4]) {
-            im = wset.up[frame4];
-          } else if (d === 's' && wset.down?.[frame4]) {
-            im = wset.down[frame4];
-          } else if ((d === 'se' || d === 'sw') && wset.se?.[frame4]) {
-            im = wset.se[frame4]; flipX = (d === 'sw');
-          } else if ((d === 'ne' || d === 'nw') && wset.ne?.[frame4]) {
-            im = wset.ne[frame4]; flipX = (d === 'nw');
-          } else if (wset.side6?.[frame6]) {
-            im = wset.side6[frame6];
+          if (d === 'n' && wset.up?.[fUse]) {
+            im = wset.up[fUse];
+          } else if (d === 's' && wset.down?.[fUse]) {
+            im = wset.down[fUse];
+          } else if ((d === 'se' || d === 'sw') && wset.se?.[fUse]) {
+            im = wset.se[fUse]; flipX = (d === 'sw');
+          } else if ((d === 'ne' || d === 'nw') && wset.ne?.[fUse]) {
+            im = wset.ne[fUse]; flipX = (d === 'nw');
+          } else if (wset.side6?.[f6Use]) {
+            im = wset.side6[f6Use];
             flipX = (d === 'w' || d === 'sw' || d === 'nw');
-            using6 = true;
-          } else if (wset.side?.[frame4]) {
-            im = wset.side[frame4];
+            using6 = !acting;
+          } else if (wset.side?.[fUse]) {
+            im = wset.side[fUse];
             flipX = (d === 'w' || d === 'sw' || d === 'nw');
           }
         }
@@ -730,9 +983,9 @@
         ctx.drawImage(im, -targetW / 2, -targetH, targetW, targetH);
       }
 
-      // 걷기 애니메이션 위에 픽셀 아트 커피 쟁반·머그컵·서류철을 손 위치에 자연스럽게 합성 (북쪽 뒷모습일 때는 가려짐)
-      if (walking && n.carry && d !== 'n') {
-        const swayY = Math.sin(n.walkDist * 1.4) * 1.1;
+      // 걷기·행동 애니메이션 위에 픽셀 아트 소품(쟁반·머그컵·서류철·물뿌리개·빗자루·먼지털이)과 이펙트 합성
+      if ((walking || acting) && (n.carry || n.action) && d !== 'n') {
+        const swayY = Math.sin(walking ? n.walkDist * 1.4 : t * 5.0) * 1.1;
         const isFront = (d === 's');
         if (n.carry === 'coffee') {
           const prop = (n.id === 'claude' && imgs.propTray) ? imgs.propTray : imgs.propMug;
@@ -749,6 +1002,57 @@
           const px = isFront ? 5 : (targetW * 0.16);
           const py = -targetH * 0.50 + swayY;
           ctx.drawImage(imgs.propDoc, px, py, pw, ph);
+        } else if ((n.carry === 'can' || n.action === 'water') && imgs.propCan) {
+          const pw = 24;
+          const ph = pw * (imgs.propCan.naturalHeight / imgs.propCan.naturalWidth);
+          const tilt = n.action === 'water' ? 0.28 + Math.sin(t * 5) * 0.08 : 0;
+          ctx.save();
+          ctx.translate(targetW * 0.28, -targetH * 0.44 + swayY);
+          ctx.rotate(tilt);
+          ctx.drawImage(imgs.propCan, -4, -ph * 0.5, pw, ph);
+          ctx.restore();
+          if (n.action === 'water') {
+            // 반짝이는 파란 물방울 이펙트
+            ctx.fillStyle = '#38bdf8';
+            for (let k = 0; k < 4; k++) {
+              const p = (t * 2.8 + k * 0.25) % 1;
+              ctx.beginPath();
+              ctx.arc(targetW * 0.28 + 20 + k * 2.5, -targetH * 0.44 + 4 + p * 22, 1.8, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        } else if ((n.carry === 'broom' || n.action === 'sweep') && imgs.propBroom) {
+          const pw = 20;
+          const ph = pw * (imgs.propBroom.naturalHeight / imgs.propBroom.naturalWidth);
+          const swing = Math.sin(t * 6.5) * 0.28;
+          ctx.save();
+          ctx.translate(targetW * 0.24, -targetH * 0.46);
+          ctx.rotate(swing);
+          ctx.drawImage(imgs.propBroom, -pw * 0.4, -ph * 0.25, pw, ph);
+          ctx.restore();
+          if (n.action === 'sweep') {
+            ctx.fillStyle = 'rgba(254, 240, 138, 0.85)';
+            const sp = (t * 3.5) % 1;
+            ctx.fillRect(targetW * 0.35 + sp * 10, -4 - sp * 8, 3, 3);
+            ctx.fillRect(targetW * 0.22 - sp * 8, -6 - sp * 6, 2.5, 2.5);
+          }
+        } else if ((n.carry === 'duster' || n.action === 'tidy') && imgs.propDuster) {
+          const pw = 22;
+          const ph = pw * (imgs.propDuster.naturalHeight / imgs.propDuster.naturalWidth);
+          const wave = n.action === 'tidy' ? Math.sin(t * 8.0) * 0.42 : 0;
+          ctx.save();
+          ctx.translate(targetW * 0.26, -targetH * 0.48);
+          ctx.rotate(wave);
+          ctx.drawImage(imgs.propDuster, -2, -ph * 0.7, pw, ph);
+          ctx.restore();
+          if (n.action === 'tidy') {
+            ctx.fillStyle = '#fde047';
+            const alpha = 0.5 + 0.5 * Math.sin(t * 9);
+            ctx.globalAlpha = alpha;
+            ctx.fillRect(targetW * 0.45, -targetH * 0.65, 4, 4);
+            ctx.fillRect(targetW * 0.58, -targetH * 0.52, 3, 3);
+            ctx.globalAlpha = 1;
+          }
         }
       }
 
@@ -764,7 +1068,10 @@
       lastTs = now;
       const t = now / 1000;
 
-      updateCaptainLife(Date.now());
+      const nowMs = Date.now();
+      updateCaptainLife(nowMs);
+      updateOfficeLife(nowMs);
+      if (conveyorActive) conveyorPhase = (conveyorPhase + dt * 0.42) % 1;
 
       for (const n of Object.values(npcs)) {
         if (!n.path.length) continue;
@@ -795,6 +1102,26 @@
       if (imgs.bg) ctx.drawImage(imgs.bg, 0, 0, W, H);
       else { ctx.fillStyle = '#1e293b'; ctx.fillRect(0, 0, W, H); }
 
+      // 선별팀 컨베이어 벨트 가동 시 상자가 L자 벨트를 따라 부드럽게 이동 + 초록 가동 LED 깜빡임
+      if (conveyorActive && imgs.propBox) {
+        for (let b = 0; b < 2; b++) {
+          const u = (conveyorPhase + b * 0.5) % 1;
+          let bx, by;
+          if (u < 0.65) {
+            bx = 96.4;
+            by = 75.5 + (u / 0.65) * 14.5;
+          } else {
+            bx = 96.4 - ((u - 0.65) / 0.35) * 5.2;
+            by = 90.0;
+          }
+          ctx.drawImage(imgs.propBox, (bx / 100) * W - 11, (by / 100) * H - 11, 22, 20);
+        }
+        ctx.fillStyle = Math.sin(t * 10) > 0 ? '#22c55e' : '#86efac';
+        ctx.beginPath();
+        ctx.arc(0.916 * W, 0.875 * H, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       const list = Object.values(npcs).sort((a, b) => a.y - b.y);
       for (const n of list) drawNpc(n, t);
 
@@ -803,7 +1130,7 @@
         const lwRatio = imgs.laptop.naturalHeight / imgs.laptop.naturalWidth;
         for (const lp of DESK_LAPTOPS) {
           const st = npcs[lp.id];
-          if (st && st.mode !== 'walk' && st.mode !== 'coffee-walk') continue;
+          if (st && st.mode !== 'walk' && st.mode !== 'coffee-walk' && st.mode !== 'action') continue;
           const lx = (lp.x / 100) * W;
           const ly = (lp.y / 100) * H;
           const lh = lp.w * lwRatio;
@@ -1127,6 +1454,12 @@
       coffeeStroll: () => coffeeStroll(),
       serveCoffeeToCaptain,
       captainWindowWalk,
+      chiefAskCaptain,
+      sortingConveyor,
+      sortingWaterPlants,
+      staffingTidyCaptain,
+      staffingSweepOffice,
+      staffChat,
       toggleFullscreen,
       enterFullscreen,
       exitFullscreen,
