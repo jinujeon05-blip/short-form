@@ -181,6 +181,15 @@ function mountOfficeGame() {
     OG = window.OfficeGame.create(gBox, {
       getInfo: gameNpcInfo,
       onOpenDetail: id => openPanel(id),
+      onSendOrder: async ({ text, when, argon }) => {
+        const r = await post('/api/order', { text, when, argon });
+        if (r.error) return r;
+        toast(when ? '예약했습니다. 그때 비서실장이 시작해요.' : '지시를 보냈습니다. 비서실장이 실행을 시작해요.');
+        S.talkSel = r.id;
+        $('#talk-pick').dataset.key = '';
+        await loadOrders();
+        return r;
+      },
     });
   }
 }

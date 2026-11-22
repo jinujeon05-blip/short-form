@@ -173,6 +173,7 @@
           <canvas class="og-canvas" width="${W}" height="${H}"></canvas>
           <div class="og-hud"></div>
           <div class="og-fs-bar">
+            <button type="button" data-og-act="order" style="background:rgba(250,204,21,0.92);color:#111827;border-color:#fde047">📣 업무 지시</button>
             <button type="button" data-og-act="coffee">☕ 커피 서빙</button>
             <button type="button" data-og-act="stroll">🚶 휴식</button>
             <button type="button" data-og-act="exit" class="og-exit">✕ 나가기</button>
@@ -913,7 +914,24 @@
       return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
 
-    function openStatusModal(id) {
+    const ORDER_CHIPS = [
+      ['새 가게', '<가게> 사진 수집기로 올렸어. 가게 찾기용(무동의·무료)으로 새 메뉴판 만들어줘.'],
+      ['할 일 정리', '남은 할 일(docs/todo.md) 정리하고, 내가 정해야 할 것만 번호 보기로 알려줘.'],
+      ['가격 고치기', '<가게> 메뉴 <메뉴이름> 가격을 <가격>으로 고쳐줘.'],
+      ['점검', '<가게> 배포 전 점검(check-standard·check-listing·shot)하고 문제만 3줄로 알려줘.'],
+    ];
+
+    function openCaptainOrderForm() {
+      const box = modalBody.querySelector('[data-og-ord-wrap]');
+      if (!box) return;
+      box.hidden = false;
+      const btn = modalBody.querySelector('[data-og-morder]');
+      if (btn) btn.hidden = true;
+      const ta = box.querySelector('[data-og-ord-ta]');
+      if (ta) setTimeout(() => ta.focus(), 40);
+    }
+
+    function openStatusModal(id, autoOrder = false) {
       const cfg = CHARS[id], n = npcs[id];
       if (!cfg || !n) return;
       selectedId = id;
@@ -942,6 +960,29 @@
         ).join('')}</ul></div>`;
       }
 
+      const canOrder = (id === 'captain' && typeof opts.onSendOrder === 'function');
+      const orderHtml = canOrder ? `
+        <div class="og-ord-box" data-og-ord-wrap hidden>
+          <div class="og-ord-chips">
+            ${ORDER_CHIPS.map(([label], i) => `<button type="button" data-og-chip="${i}">${escH(label)}</button>`).join('')}
+          </div>
+          <textarea class="og-ord-ta" data-og-ord-ta rows="3" placeholder="지시를 적고 Enter (줄바꿈은 Shift+Enter) · 예: 바보아저씨 사진 수집기로 올렸어. 가게 찾기용으로 만들어줘"></textarea>
+          <div class="og-ord-row">
+            <select data-og-ord-when aria-label="언제 실행">
+              <option value="">지금 실행</option>
+              <option value="reset">한도 풀리면 실행</option>
+              <option value="time">시각 정해서 실행</option>
+            </select>
+            <input type="datetime-local" data-og-ord-at hidden>
+            <label><input type="checkbox" data-og-ord-argon> Argon 사용</label>
+          </div>
+          <div class="og-ord-foot">
+            <span class="og-ord-note">배포·push·삭제는 하지 않고, 끝나면 결재함에 보고가 올라옵니다.</span>
+            <button type="button" class="og-ord-send" data-og-ord-send>보내기</button>
+          </div>
+          <p class="og-ord-err" data-og-ord-err role="alert"></p>
+        </div>` : '';
+
       modalBody.innerHTML = `
         <div class="og-m-head">
           <div class="og-m-ava"><img src="${avaSrc}" alt="${escH(cfg.name)}"></div>
@@ -957,11 +998,69 @@
           ${n.progress != null ? `<div class="og-prog" style="margin-top:6px"><i style="width:${n.progress}%"></i></div>` : ''}
         </div>
         ${extraHtml}
+        ${orderHtml}
         <div class="og-m-foot">
+          ${canOrder ? `<button type="button" class="og-m-order" data-og-morder>📣 업무 지시하기</button>` : ''}
           ${opts.onOpenDetail ? `<button type="button" class="og-m-detail" data-og-mdetail>📋 상세·점검 창 열기</button>` : ''}
           <button type="button" class="og-m-close" data-og-mclose>닫기</button>
         </div>`;
       modalBack.hidden = false;
+
+      if (canOrder) {
+        const ta = modalBody.querySelector('[data-og-ord-ta]');
+        const sel = modalBody.querySelector('[data-og-ord-when]');
+        const atIn = modalBody.querySelector('[data-og-ord-at]');
+        const argonIn = modalBody.querySelector('[data-og-ord-argon]');
+        const sendBtn = modalBody.querySelector('[data-og-ord-send]');
+        const errEl = modalBody.querySelector('[data-og-ord-err]');
+        const setErr = msg => { errEl.textContent = msg ? '안 됐어요: ' + msg : ''; };
+
+        sel.addEventListener('change', () => {
+          atIn.hidden = (sel.value !== 'time');
+          setErr('');
+        });
+        async function doSend() {
+          const text = ta.value.trim();
+          if (!text) return setErr('지시를 적어 주세요');
+          if (/<[^>]+>/.test(text)) return setErr('<가게> 같은 빈칸을 채워 주세요');
+          let when = null;
+          if (sel.value === 'reset') when = { kind: 'reset' };
+          else if (sel.value === 'time') {
+            if (!atIn.value) return setErr('실행할 시각을 골라 주세요');
+            const ts = Math.floor(new Date(atIn.value).getTime() / 1000);
+            if (!ts || ts <= Math.floor(Date.now() / 1000)) return setErr('앞으로 올 시각을 골라 주세요');
+            when = { kind: 'time', at: ts };
+          }
+          sendBtn.disabled = true;
+          setErr('');
+          try {
+            const res = await opts.onSendOrder({ text, when, argon: !!argonIn.checked });
+            if (res?.error) {
+              setErr(res.error);
+              sendBtn.disabled = false;
+              return;
+            }
+            closeStatusModal();
+            npcs.captain.bubble = when ? '📅 지시 예약 완료!' : '📣 지시 전달! 실행 시작!';
+            npcs.captain.bubbleType = 'ok';
+            setTimeout(() => {
+              if (npcs.captain.bubble.includes('지시')) npcs.captain.bubble = '';
+            }, 3500);
+          } catch {
+            setErr('대시보드 서버에 닿지 않았어요');
+            sendBtn.disabled = false;
+          }
+        }
+        sendBtn.addEventListener('click', doSend);
+        ta.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+            e.preventDefault();
+            doSend();
+          }
+        });
+        ta.addEventListener('input', () => setErr(''));
+        if (autoOrder) openCaptainOrderForm();
+      }
     }
 
     function closeStatusModal() {
@@ -972,12 +1071,25 @@
     fsBtn.addEventListener('click', e => { e.stopPropagation(); toggleFullscreen(); });
     shell.querySelector('.og-fs-bar').addEventListener('click', e => {
       const act = e.target.closest('[data-og-act]')?.dataset.ogAct;
-      if (act === 'coffee') serveCoffeeToCaptain();
+      if (act === 'order') openStatusModal('captain', true);
+      else if (act === 'coffee') serveCoffeeToCaptain();
       else if (act === 'stroll') coffeeStroll();
       else if (act === 'exit') exitFullscreen();
     });
     modalBack.addEventListener('click', e => {
       if (e.target === modalBack || e.target.closest('[data-og-mclose]')) return closeStatusModal();
+      if (e.target.closest('[data-og-morder]')) return openCaptainOrderForm();
+      const chipBtn = e.target.closest('[data-og-chip]');
+      if (chipBtn) {
+        const ta = modalBody.querySelector('[data-og-ord-ta]');
+        if (ta) {
+          ta.value = ORDER_CHIPS[Number(chipBtn.dataset.ogChip)][1];
+          ta.focus();
+          const at = ta.value.indexOf('<');
+          if (at >= 0) ta.setSelectionRange(at, ta.value.indexOf('>', at) + 1);
+        }
+        return;
+      }
       if (e.target.closest('[data-og-mdetail]')) {
         const id = selectedId;
         closeStatusModal();
