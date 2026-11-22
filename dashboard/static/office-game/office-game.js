@@ -56,18 +56,24 @@
     return out;
   }
 
-  // 이미지 사전 불러오기
+  // 이미지 사전 불러오기 (배경 1장 + 정면 10장 + 9명 4프레임 걷기 36장)
   function loadImages() {
-    const imgs = {};
-    const load = (key, url) => new Promise(res => {
+    const imgs = { walk: {} };
+    const load = (target, key, url) => new Promise(res => {
       const im = new Image();
-      im.onload = () => { imgs[key] = im; res(); };
+      im.onload = () => { target[key] = im; res(); };
       im.onerror = () => res();
       im.src = url;
     });
-    const jobs = [load('bg', '/static/office-game/assets/bg-office.webp')];
+    const jobs = [load(imgs, 'bg', '/static/office-game/assets/bg-office.webp')];
     for (const id of Object.keys(CHARS)) {
-      jobs.push(load(id, `/static/office-game/assets/${id}.webp`));
+      jobs.push(load(imgs, id, `/static/office-game/assets/${id}.webp`));
+      if (id !== 'captain') {
+        imgs.walk[id] = [];
+        for (let f = 1; f <= 4; f++) {
+          jobs.push(load(imgs.walk[id], f - 1, `/static/office-game/assets/walk/${id}-${f}.webp`));
+        }
+      }
     }
     return Promise.all(jobs).then(() => imgs);
   }
@@ -385,37 +391,40 @@
       }
     }
 
-    // ---------------------------------------------------------------- 고화질 스프라이트 렌더링
+    // ---------------------------------------------------------------- 고화질 스프라이트 렌더링 (진짜 4프레임 걷기!)
     function drawNpc(n, t) {
-      const im = imgs[n.id];
-      if (!im) return;
       const cfg = CHARS[n.id];
       const walking = n.mode === 'walk' || n.mode === 'coffee-walk';
       const working = n.mode === 'work';
       const done = n.mode === 'done';
 
+      // 걷기 중이면 4프레임 팔·다리 교차 걷기 시트 사용 (7.5fps), 앉아 있으면 정면 스프라이트 사용
+      const walkFrames = imgs.walk && imgs.walk[n.id];
+      const frameIdx = Math.floor(t * 7.5) % 4;
+      const im = (walking && walkFrames && walkFrames[frameIdx]) ? walkFrames[frameIdx] : imgs[n.id];
+      if (!im) return;
+
       const cx = (n.x / 100) * W;
       const cy = (n.y / 100) * H;
-      const targetH = 188 * cfg.scale;
+      const targetH = (walking ? 176 : 188) * cfg.scale;
       const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
-      // 자연스러운 움직임 (걷기 통통 + 살짝 좌우 흔들림, 타이핑 진동, 완료 기쁨 바운스, 대기 숨쉬기)
-      const bob = walking ? -Math.abs(Math.sin(t * 11)) * 10
-        : working ? Math.sin(t * 16) * 2.2
-        : done ? -Math.abs(Math.sin(t * 5.5)) * 5
-        : Math.sin(t * 2.2 + cx * 0.01) * 1.5;
-      const tilt = walking ? Math.sin(t * 11) * 0.06 : 0;
+      // 걷기: 발 디딤(frame 1,3은 약간 낮고 0,2는 살짝 올라감) — 억지 통통 튐·기울임 제거!
+      const bob = walking ? ((frameIdx % 2 === 1) ? -2.5 : 0)
+        : working ? Math.sin(t * 14) * 1.8
+        : done ? -Math.abs(Math.sin(t * 5)) * 4
+        : Math.sin(t * 2.1 + cx * 0.01) * 1.2;
 
       ctx.save();
       // 바닥 그림자
       ctx.fillStyle = 'rgba(15, 23, 42, 0.34)';
       ctx.beginPath();
-      ctx.ellipse(cx, cy + (walking ? 12 : -4), targetW * 0.42, walking ? 12 : 9, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx, cy + (walking ? 10 : -4), walking ? 40 : targetW * 0.42, walking ? 11 : 9, 0, 0, Math.PI * 2);
       ctx.fill();
 
       // 작업 중 빛나는 파란 아우라 / 완료 시 초록 반짝임
       if (working) {
-        const pulse = 0.28 + 0.14 * Math.sin(t * 6);
+        const pulse = 0.26 + 0.14 * Math.sin(t * 6);
         ctx.fillStyle = `rgba(56, 189, 248, ${pulse})`;
         ctx.beginPath();
         ctx.ellipse(cx, cy - targetH * 0.35, targetW * 0.72, targetH * 0.48, 0, 0, Math.PI * 2);
@@ -429,11 +438,10 @@
       }
 
       ctx.translate(cx, cy + bob);
-      ctx.rotate(tilt);
       if (walking && n.facing < 0) ctx.scale(-1, 1);
 
       if (walking) {
-        // 걸을 때는 전신 2K 스프라이트 표시
+        // 진짜 4프레임 팔·다리 걷기 스프라이트
         ctx.drawImage(im, -targetW / 2, -targetH + 14, targetW, targetH);
       } else {
         // 자리에 앉아 있을 때는 책상 위로 상반신만 자연스럽게 표시
@@ -445,19 +453,21 @@
 
       // 들고 있는 아이콘 (빛나는 황금 보고서 / 커피컵)
       if (n.carry === 'doc') {
+        const dx = walking ? 24 : targetW * 0.38;
         ctx.fillStyle = 'rgba(250, 204, 21, 0.38)';
-        ctx.beginPath(); ctx.arc(targetW * 0.38, -targetH * 0.48, 22, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(dx + 12, -targetH * 0.52, 20, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#fef08a';
         ctx.strokeStyle = '#b45309';
         ctx.lineWidth = 3;
-        ctx.fillRect(targetW * 0.24, -targetH * 0.58, 26, 32);
-        ctx.strokeRect(targetW * 0.24, -targetH * 0.58, 26, 32);
+        ctx.fillRect(dx, -targetH * 0.61, 24, 30);
+        ctx.strokeRect(dx, -targetH * 0.61, 24, 30);
       } else if (n.carry === 'coffee') {
+        const dx = walking ? 24 : targetW * 0.26;
         ctx.fillStyle = '#ffffff';
         ctx.strokeStyle = '#78350f';
         ctx.lineWidth = 3;
-        ctx.fillRect(targetW * 0.26, -targetH * 0.48, 18, 20);
-        ctx.strokeRect(targetW * 0.26, -targetH * 0.48, 18, 20);
+        ctx.fillRect(dx, -targetH * 0.50, 16, 18);
+        ctx.strokeRect(dx, -targetH * 0.50, 16, 18);
       }
 
       ctx.restore();
