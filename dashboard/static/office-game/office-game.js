@@ -20,10 +20,9 @@
     sorting:       { name: '선별팀',        role: '선별 실적',   home: [83.2, 83.0], seatFacing: 's', scale: 0.86 },
   };
 
-  // 에셋 보유 목록
+  // 에셋 보유 목록 (전 직원 9명 100% 커피·서류 들고 걷기 전용 스프라이트 완비!)
   const SMOOTH6_IDS = new Set(['claude', 'finder', 'agy', 'menu-reader', 'codex', 'reviewer']);
   const DIAG8_IDS   = new Set(['captain', 'claude', 'finder', 'reviewer']);
-  const COFFEE_IDS  = new Set(['claude', 'finder', 'reviewer', 'codex']);
 
   // 이동 방향 벡터 → 8방향 코드(e, se, s, sw, w, nw, n, ne)
   function angleToDir8(dx, dy) {
@@ -137,6 +136,7 @@
       jobs.push(load(imgs.walk.captain.side, f - 1, `/static/office-game/assets/walk/captain-${f}.webp`));
       jobs.push(load(imgs.walk.captain.se,   f - 1, `/static/office-game/assets/walk/captain-se-${f}.webp`));
       jobs.push(load(imgs.walk.captain.ne,   f - 1, `/static/office-game/assets/walk/captain-ne-${f}.webp`));
+      jobs.push(load(imgs.walk.captain.up,   f - 1, `/static/office-game/assets/walk/captain-up-${f}.webp`));
     }
     for (const id of Object.keys(CHARS)) {
       jobs.push(load(imgs, id, `/static/office-game/assets/${id}.webp`));
@@ -145,11 +145,13 @@
       jobs.push(load(imgs.seated[id], 'w1',   `/static/office-game/assets/seated/${id}-w1.webp`));
       jobs.push(load(imgs.seated[id], 'w2',   `/static/office-game/assets/seated/${id}-w2.webp`));
       if (id !== 'captain') {
-        imgs.walk[id] = { side: [], side6: [], se: [], ne: [], coffee: [], up: [], down: [] };
+        imgs.walk[id] = { side: [], side6: [], se: [], ne: [], coffee: [], doc: [], up: [], down: [] };
         for (let f = 1; f <= 4; f++) {
-          jobs.push(load(imgs.walk[id].side, f - 1, `/static/office-game/assets/walk/${id}-${f}.webp`));
-          jobs.push(load(imgs.walk[id].up,   f - 1, `/static/office-game/assets/walk/${id}-up-${f}.webp`));
-          jobs.push(load(imgs.walk[id].down, f - 1, `/static/office-game/assets/walk/${id}-down-${f}.webp`));
+          jobs.push(load(imgs.walk[id].side,   f - 1, `/static/office-game/assets/walk/${id}-${f}.webp`));
+          jobs.push(load(imgs.walk[id].up,     f - 1, `/static/office-game/assets/walk/${id}-up-${f}.webp`));
+          jobs.push(load(imgs.walk[id].down,   f - 1, `/static/office-game/assets/walk/${id}-down-${f}.webp`));
+          jobs.push(load(imgs.walk[id].coffee, f - 1, `/static/office-game/assets/walk/${id}-coffee-${f}.webp`));
+          jobs.push(load(imgs.walk[id].doc,    f - 1, `/static/office-game/assets/walk/${id}-doc-${f}.webp`));
         }
         if (SMOOTH6_IDS.has(id)) {
           for (let f = 1; f <= 6; f++) {
@@ -160,11 +162,6 @@
           for (let f = 1; f <= 4; f++) {
             jobs.push(load(imgs.walk[id].se, f - 1, `/static/office-game/assets/walk/${id}-se-${f}.webp`));
             jobs.push(load(imgs.walk[id].ne, f - 1, `/static/office-game/assets/walk/${id}-ne-${f}.webp`));
-          }
-        }
-        if (COFFEE_IDS.has(id)) {
-          for (let f = 1; f <= 4; f++) {
-            jobs.push(load(imgs.walk[id].coffee, f - 1, `/static/office-game/assets/walk/${id}-coffee-${f}.webp`));
           }
         }
       }
@@ -606,19 +603,20 @@
       let isFullBody = walking;
       let isNorthSeated = (!walking && cfg.seatFacing === 'n');
       let using6 = false;
-      let usingCoffeeSprite = false;
 
       const d = n.dir || 's';
 
       if (n.id === 'captain') {
         if (walking) {
           const cw = imgs.walk.captain;
-          if ((d === 'se' || d === 'sw') && cw?.se?.[frame4]) {
+          if (d === 'n' && cw?.up?.[frame4]) {
+            im = cw.up[frame4];
+          } else if ((d === 'se' || d === 'sw') && cw?.se?.[frame4]) {
             im = cw.se[frame4]; flipX = (d === 'sw');
           } else if ((d === 'ne' || d === 'nw') && cw?.ne?.[frame4]) {
             im = cw.ne[frame4]; flipX = (d === 'nw');
-          } else if ((d === 'n' || d === 's') && imgs.cap.dir8?.[d]) {
-            im = imgs.cap.dir8[d];
+          } else if (d === 's' && imgs.cap.dir8?.s) {
+            im = imgs.cap.dir8.s;
           } else if (cw?.side?.[frame4]) {
             im = cw.side[frame4]; flipX = (d === 'w' || d === 'sw' || d === 'nw');
           } else {
@@ -626,7 +624,7 @@
           }
           isFullBody = true;
         } else if (n.capPose === 'window') {
-          im = imgs.cap.dir8?.n || imgs.cap.window || imgs.captain;
+          im = imgs.walk.captain?.up?.[0] || imgs.cap.dir8?.n || imgs.cap.window || imgs.captain;
           isFullBody = true;
         } else if (n.capPose === 'coffee') {
           // 4단계 자연스러운 커피 마시기 시퀀스: 컵 잡기(0.7s) → 들기(0.7s) → 눈 감고 한 모금(2.4s) → 미소 내려놓기(1.2s) → 반복
@@ -643,10 +641,13 @@
         const wset = imgs.walk[n.id];
         if (wset) {
           if (n.carry === 'coffee' && wset.coffee?.[frame4]) {
-            // 쟁반·머그컵을 손에 자연스럽게 들고 걷는 전용 스프라이트!
+            // 전 직원 100%: 쟁반·머그컵을 손에 자연스럽게 들고 걷는 전용 스프라이트!
             im = wset.coffee[frame4];
             flipX = (d === 'w' || d === 'sw' || d === 'nw');
-            usingCoffeeSprite = true;
+          } else if (n.carry === 'doc' && wset.doc?.[frame4]) {
+            // 전 직원 100%: 베이지 서류철을 팔에 자연스럽게 끼고 걷는 전용 스프라이트!
+            im = wset.doc[frame4];
+            flipX = (d === 'w' || d === 'sw' || d === 'nw');
           } else if ((d === 'se' || d === 'sw') && wset.se?.[frame4]) {
             im = wset.se[frame4]; flipX = (d === 'sw');
           } else if ((d === 'ne' || d === 'nw') && wset.ne?.[frame4]) {
@@ -719,28 +720,6 @@
         ctx.drawImage(im, 0, 0, im.naturalWidth, sh, -targetW / 2, -dh, targetW, dh);
       } else {
         ctx.drawImage(im, -targetW / 2, -targetH, targetW, targetH);
-      }
-
-      if (n.carry === 'doc') {
-        const dx = 10;
-        ctx.fillStyle = '#fef9c3';
-        ctx.strokeStyle = '#92400e';
-        ctx.lineWidth = 1.6;
-        ctx.fillRect(dx, -targetH * 0.52, 11, 14);
-        ctx.strokeRect(dx, -targetH * 0.52, 11, 14);
-        ctx.fillStyle = '#d97706';
-        ctx.fillRect(dx + 2, -targetH * 0.52 + 4, 7, 1.5);
-        ctx.fillRect(dx + 2, -targetH * 0.52 + 8, 5, 1.5);
-      } else if (n.carry === 'coffee' && !usingCoffeeSprite) {
-        // 전용 커피 스프라이트가 없는 직원용: 손 위치에 작은 머그컵 + 김
-        const dx = 9, dy = -targetH * 0.46;
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#78350f';
-        ctx.lineWidth = 1.5;
-        ctx.fillRect(dx, dy, 8, 9);
-        ctx.strokeRect(dx, dy, 8, 9);
-        ctx.strokeStyle = 'rgba(255,255,255,0.75)';
-        ctx.beginPath(); ctx.moveTo(dx + 4, dy - 2); ctx.lineTo(dx + 4, dy - 6); ctx.stroke();
       }
 
       ctx.restore();
