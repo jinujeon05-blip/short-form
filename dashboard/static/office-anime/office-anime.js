@@ -594,11 +594,13 @@
     function resetJoy() {
       joyPtr = null;
       joyVec = { x: 0, y: 0 };
+      joyEl.classList.remove('active');
       joyKnob.style.transform = 'translate(0px, 0px)';
     }
     joyEl.addEventListener('pointerdown', e => {
       e.preventDefault(); e.stopPropagation();
       joyPtr = e.pointerId;
+      joyEl.classList.add('active');
       joyEl.setPointerCapture?.(e.pointerId);
       updateJoy(e.clientX, e.clientY);
     });
