@@ -899,6 +899,12 @@ window.STORES = [
     type: { ko: "한식 치킨 · 중화요리 호프", vi: "Gà rán Hàn Quốc · Món Hoa kiểu Hàn · Quán nhậu", en: "Korean fried chicken · Korean-Chinese · Pub", zh: "韩式炸鸡 · 韩式中餐 · 啤酒屋", ja: "韓国チキン・韓国式中華・パブ" },
     keywords: "치뱅이 민짬뽕 치뱅이&민짬뽕 Chibaengi Minjjamppong 하노이 미딩 Mỹ Đình 윙봉 치킨 짬뽕 짜장면 탕수육 야끼우동 살얼음 생맥주 한식당 호프"
   },
+  { id: "donchicken", name: "돈치킨 박닌점 DON CHICKEN", sub: "후라이드 · 구운 치킨 · 피자 · 떡볶이 · 부대찌개", url: "https://donchicken.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["chicken","korean","western"], tags: ["photos"],
+    address: "Đ. Lý Thái Tổ, Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/%EB%8F%88%EC%B9%98%ED%82%A8+%EB%B0%95%EB%8B%8C/@21.1766619,106.06815,20z/data=!4m6!3m5!1s0x31350dc892da0329:0x1ceb62f5f0ea9cb7!8m2!3d21.1766949!4d106.0681503!16s%2Fg%2F11ptzvpv9p",
+    type: { ko: "한국식 치킨 · 피자 · 떡볶이 · 한식", vi: "Gà rán Hàn Quốc · Pizza · Tteok-bokki · Món Hàn", en: "Korean fried chicken · Pizza · Tteok-bokki · Korean dishes", zh: "韩式炸鸡 · 披萨 · 辣炒年糕 · 韩餐", ja: "韓国チキン・ピザ・トッポッキ・韓国料理" },
+    keywords: "돈치킨 DON CHICKEN Don Chicken 돈치킨 박닌 Gà rán Hàn Quốc Bắc Ninh 치킨 구운치킨 양념치킨 피자 떡볶이 부대찌개 Lý Thái Tổ Kinh Bắc 박닌"
+  },
 ];
 window.SI = {
   ko: {

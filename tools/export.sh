@@ -118,6 +118,7 @@ name() {
     nolowachicken) echo "놀로와치킨" ;;
     bunchadakkim) echo "분짜닥킴" ;;
     chibaengimin) echo "치뱅이 & 민짬뽕" ;;
+    donchicken) echo "돈치킨" ;;
     *) echo "$1" ;;
   esac
 }

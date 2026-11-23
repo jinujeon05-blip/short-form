@@ -231,6 +231,8 @@ window.DEMOS = [
     name: "분짜닥킴 Bún Chả Đắc Kim", type: { ko: "베트남 하노이 분짜 · 게살 춘권 (1966년부터)", vi: "Bún chả Hà Nội · Nem cua bể (từ năm 1966)", en: "Hanoi bún chả · Crab spring rolls (since 1966)", zh: "河内烤肉米线 · 蟹肉春卷（始于1966年）", ja: "ハノイ名物ブンチャー・蟹春巻き（1966年創業）" } },
   { id: "chibaengimin", url: "https://chibaengimin.qrmenuasia.com", shot: "img/demo-chibaengimin.jpg", qr: "img/qr-chibaengimin.svg",
     name: "치뱅이 & 민짬뽕 CHIBAENGI & MINJJAMPPONG", type: { ko: "한식 치킨 · 중화요리 호프", vi: "Gà rán Hàn Quốc · Món Hoa kiểu Hàn · Quán nhậu", en: "Korean fried chicken · Korean-Chinese · Pub", zh: "韩式炸鸡 · 韩式中餐 · 啤酒屋", ja: "韓国チキン・韓国式中華・パブ" } },
+  { id: "donchicken", hidden: true, url: "https://donchicken.qrmenuasia.com", shot: "img/demo-donchicken.jpg", qr: "img/qr-donchicken.svg",
+    name: "돈치킨 박닌점 DON CHICKEN", type: { ko: "한국식 치킨 · 피자 · 떡볶이 · 한식", vi: "Gà rán Hàn Quốc · Pizza · Tteok-bokki · Món Hàn", en: "Korean fried chicken · Pizza · Tteok-bokki · Korean dishes", zh: "韩式炸鸡 · 披萨 · 辣炒年糕 · 韩餐", ja: "韓国チキン・ピザ・トッポッキ・韓国料理" } },
 ];
 
 window.T = {
