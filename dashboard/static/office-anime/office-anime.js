@@ -1779,13 +1779,14 @@
       return n && n.mode === 'idle' && !realBusySet.has(id) && (!activeTalkNpc || activeTalkNpc.id !== id);
     };
 
-    function doChore(id, tx, ty, workDir, goMsg, workMsg, workMs, returnMsg = '', emoteKey = null) {
+    function doChore(id, tx, ty, workDir, goMsg, workMsg, workMs, returnMsg = '', emoteKey = null, exactPos = null) {
       if (briefingActive || !isFree(id)) return false;
       return walkNpcSafe(id, tx, ty, {
         bubble: goMsg,
         onArrive: () => {
           if (briefingActive) return;
           const n = npcs[id];
+          if (exactPos) { n.x = exactPos[0]; n.y = exactPos[1]; }
           n.dir = workDir; n.bubble = workMsg; n.bubbleType = 'ok';
           if (emoteKey && imgs.walk[id]?.[emoteKey]?.length) {
             n.mode = 'emote'; n.emote = emoteKey; n.emoteLoop = true; n.emoteStart = performance.now() / 1000;
@@ -1830,18 +1831,20 @@
     }
 
     const LIFE_EVENTS = [
-      // 1. 선별팀 팀장: 중앙 복도 좌/우 화분 물주기 (물뿌리개 전용 12프레임 애니메이션!)
+      // 1. 선별팀 팀장: 중앙 복도 좌/우 화분 물주기 (화분 바로 옆 밀착 + 물뿌리개 12프레임 애니메이션!)
       () => {
         const leftPlant = Math.random() < 0.5;
-        return doChore('sorter', leftPlant ? 32.5 : 67.2, 40.5, leftPlant ? 'west' : 'east',
-          '🪴 물뿌리개 들고 화분 관리 가는 중…', '💧 화분에 물 주는 중… 쑥쑥 자라라!', 3800, '', 'water');
+        return doChore('sorter', leftPlant ? 32.5 : 67.2, 41.0, leftPlant ? 'west' : 'east',
+          '🪴 물뿌리개 들고 화분 관리 가는 중…', '💧 화분에 물 주는 중… 쑥쑥 자라라!', 3800, '', 'water',
+          leftPlant ? [31.9, 41.4] : [68.1, 41.4]);
       },
       // 2. 인력 공급팀 팀장: 중앙 복도 빗자루 청소
       () => doChore('staffing', 49.5, 48.0, 'front',
         '🧹 복도 청소하러 나왔어요!', '🧹 중앙 복도 빗자루질 중… 반짝반짝!', 3200),
-      // 3. 인력 공급팀 팀장: 캡틴 책상 먼지 털기 (걸레·먼지털이 전용 12프레임 애니메이션!)
-      () => doChore('staffing', 39.5, 21.0, 'east',
-        '🪶 캡틴 책상 정돈하러 올라가는 중…', '✨ 캡틴 책상 먼지 닦아드렸습니다!', 3600, '', 'clean'),
+      // 3. 인력 공급팀 팀장: 캡틴 책상 먼지 털기 (캡틴 책상 바로 앞 밀착 + 먼지털이 12프레임 애니메이션!)
+      () => doChore('staffing', 41.0, 21.4, 'east',
+        '🪶 캡틴 책상 정돈하러 올라가는 중…', '✨ 캡틴 책상 먼지 닦아드렸습니다!', 3600, '', 'clean',
+        [41.9, 21.5]),
       // 4. 비서실장: 캡틴 커피 서빙 & 안부 여쭙기
       () => {
         if (!isFree('claude')) return false;
