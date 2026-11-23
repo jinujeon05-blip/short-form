@@ -16,6 +16,8 @@
 .oa-stage.oa-fs-rot .oa-ctrl-hint, .oa-stage.oa-fs-mock .oa-ctrl-hint, .oa-stage:fullscreen .oa-ctrl-hint { left: 116px; }
 .oa-b-btn.cof { background: rgba(15,23,42,0.84); color: #fde68a; border-color: rgba(250,204,21,0.45); }
 .oa-b-btn.cof:hover { background: rgba(180,83,9,0.92); color: #fff; }
+.oa-b-btn.dance { background: linear-gradient(135deg, rgba(236,72,153,0.92), rgba(147,51,234,0.92)); color: #fff; border-color: rgba(249,168,212,0.75); }
+.oa-b-btn.dance:hover { background: linear-gradient(135deg, #db2777, #7e22ce); }
 /* 전체화면 전용 우측 상단 캡틴 액션 버튼 모음 (인사 · 커피 · 착석) */
 .oa-cap-acts { position: absolute; right: 12px; top: 12px; z-index: 16; display: none; gap: 6px; }
 .oa-stage:fullscreen .oa-cap-acts, .oa-stage.oa-fs-mock .oa-cap-acts, .oa-stage.oa-fs-rot .oa-cap-acts { display: flex; }

@@ -77,15 +77,17 @@
     });
     const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=cutaway1')];
     for (const [id, cfg] of Object.entries(CHARS)) {
-      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], water: [], clean: [] };
+      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], water: [], clean: [], dance: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee']
+        : id === 'claude' ? ['east', 'front', 'back', 'dance']
+        : id === 'reader' ? ['east', 'front', 'back', 'dance']
         : id === 'sorter' ? ['east', 'front', 'back', 'water']
         : id === 'staffing' ? ['east', 'front', 'back', 'clean']
         : ['east', 'front', 'back'];
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = id === 'captain' ? 'cap8dir' : (dir === 'water' || dir === 'clean') ? 'act1' : 'orig2k';
+          const v = id === 'captain' ? 'cap8dir' : (dir === 'water' || dir === 'clean' || dir === 'dance') ? 'act2' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
         }
       }
@@ -115,6 +117,7 @@
           </div>
           <div class="oa-ctrl-hint">🎮 캡틴 조작: 방향키 / WASD 이동 · 바닥 클릭 · 1 인사 · 2 커피 · E 자리 복귀</div>
           <div class="oa-brief-bar">
+            <button type="button" class="oa-b-btn dance" data-brief-dance>💃 댄스</button>
             <button type="button" class="oa-b-btn cof" data-brief-cof>☕ 서빙</button>
             <button type="button" class="oa-b-btn start" data-brief-start>📋 보고해</button>
             <button type="button" class="oa-b-btn stop" data-brief-stop hidden>✋ 오늘은 여기까지 하지</button>
@@ -1628,6 +1631,7 @@
     }
 
     const briefCofBtn   = root.querySelector('[data-brief-cof]');
+    root.querySelector('[data-brief-dance]')?.addEventListener('click', () => danceParty());
     root.querySelector('[data-cap-greet]')?.addEventListener('click', () => playCaptainAction('greet'));
     root.querySelector('[data-cap-coffee]')?.addEventListener('click', () => playCaptainAction('coffee'));
     root.querySelector('[data-cap-sit]')?.addEventListener('click', sitCaptainBack);
@@ -1899,7 +1903,47 @@
       // 12. 선별팀 팀장: 방 안 컨베이어 옆 박스 점검
       () => doChore('sorter', 85.0, 76.0, 'east',
         '📦 컨베이어 분류 상태 확인 중…', '✅ 포장 라인·분류함 이상 없음!', 2800),
+      // 13. 비서실장 + 자료 해석 비서: 중앙 홀 합동 아이돌 댄스 타임!
+      () => (isFree('claude') && isFree('reader')) ? danceParty() : false,
     ];
+
+    function danceParty() {
+      if (briefingActive) return false;
+      const dancers = [
+        { id: 'claude', tx: 46.8, ty: 49.0, go: '💃 무대로 나가는 중…', msg: '💃✨ 신나는 아이돌 댄스 타임!' },
+        { id: 'reader', tx: 53.2, ty: 49.0, go: '🎶 같이 춤추러 가요!', msg: '🎶 같이 춤춰요 캡틴! ✨' },
+      ];
+      let burstDone = false;
+      log('💃 비서실장 · 자료 해석 비서 합동 아이돌 댄스 타임!');
+      for (const d of dancers) {
+        const n = npcs[d.id];
+        if (!n) continue;
+        n.emote = null; n.emoteLoop = false;
+        walkNpcSafe(d.id, d.tx, d.ty, {
+          bubble: d.go,
+          onArrive: () => {
+            if (briefingActive) return;
+            n.dir = 'front';
+            n.mode = 'emote'; n.emote = 'dance'; n.emoteLoop = true;
+            n.emoteStart = performance.now() / 1000;
+            n.bubble = d.msg; n.bubbleType = 'meet';
+            if (!burstDone) {
+              burstDone = true;
+              SFX.fanfare();
+              spawnBurst(50.0, 47.0, '💃 아이돌 댄스! +20 EXP', 20);
+            }
+            setTimeout(() => {
+              if (briefingActive || (activeTalkNpc && activeTalkNpc.id === d.id)) return;
+              n.emote = null; n.emoteLoop = false; n.bubble = '';
+              walkNpcSafe(d.id, CHARS[d.id].home[0], CHARS[d.id].home[1], {
+                onArrive: () => seatNpc(d.id)
+              });
+            }, 7200);
+          }
+        });
+      }
+      return true;
+    }
 
     let lastLifeIdx = -1;
     function scheduleIdleLife() {
@@ -1920,7 +1964,7 @@
     scheduleIdleLife();
 
     if (opts.autoDemo !== false) setTimeout(runDemo, 1500);
-    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing, syncReal, stroll };
+    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing, syncReal, stroll, danceParty };
   }
 
   window.OfficeAnime = { create };

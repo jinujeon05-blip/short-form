@@ -1085,6 +1085,7 @@ document.addEventListener('click', async e => {
   if (e.target.id === 'of-mode-photo') return setOfficeMode('photo');
   if (e.target.id === 'of-game-brief') { if (OG) OG.startBriefing(); return; }
   if (e.target.id === 'of-game-coffee') { if (OG) OG.serveCoffee(); return; }
+  if (e.target.id === 'of-game-dance') { if (OG) OG.danceParty(); return; }
   if (e.target.id === 'of-game-stroll') { if (OG) OG.stroll(); return; }
   const spot = e.target.closest('button.spot');
   if (spot) return openPanel(spot.dataset.id);
