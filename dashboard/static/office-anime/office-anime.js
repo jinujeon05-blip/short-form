@@ -38,16 +38,16 @@
       im.onerror = () => res();
       im.src = url;
     });
-    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hd2k')];
+    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=orig2k')];
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [] };
       for (const dir of ['east', 'front', 'back']) {
         for (let i = 1; i <= 12; i++) {
-          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${id}-${dir}-${i}.webp?v=rembg3`));
+          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${id}-${dir}-${i}.webp?v=orig2k`));
         }
       }
       if (cfg.mask) {
-        jobs.push(load(imgs.masks, cfg.mask.key, `/static/office-anime/assets/masks/${cfg.mask.key}.webp?v=hd2k`));
+        jobs.push(load(imgs.masks, cfg.mask.key, `/static/office-anime/assets/masks/${cfg.mask.key}.webp?v=orig2k`));
       }
     }
     return Promise.all(jobs).then(() => imgs);
