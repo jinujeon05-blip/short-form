@@ -2,12 +2,12 @@
 (() => {
   const W = 2560, H = 1440; // 16:9 QHD 2K 고화질 (전체화면 선명도 보장)
 
-  // bg-office.webp (1024x576) 기준 정확한 착석 좌표 + 전경 책상/의자 마스크 좌표
+  // bg-office.webp (2560x1440) 픽셀 실측 착석 좌표 (headTopY=머리 꼭대기, clipY=책상 상단 경계선)
   const CHARS = {
-    captain: { name: '캡틴',          role: '결재',        home: [50.0, 16.0], facing: 'front', scale: 1.0,  mask: { key: 'captain-desk', x0: 41.5, y0: 9.5,  x1: 58.5, y1: 21.5 } },
-    claude:  { name: '비서실장',      role: '지휘',        home: [50.0, 38.0], facing: 'front', scale: 0.96, mask: { key: 'claude-desk',  x0: 42.8, y0: 32.0, x1: 57.2, y1: 43.5 } },
-    finder:  { name: '시각 정보 비서', role: '사진 고르기', home: [14.7, 45.0], facing: 'front', scale: 0.94, mask: { key: 'finder-desk',  x0: 9.2,  y0: 38.8, x1: 20.0, y1: 48.8 } },
-    agy:     { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [83.0, 49.0], facing: 'back',  scale: 0.96, mask: { key: 'agy-chair',    x0: 80.2, y0: 40.2, x1: 85.8, y1: 50.2 } },
+    captain: { name: '캡틴',          role: '결재',        home: [49.8, 15.2], facing: 'front', scale: 1.0,  seat: { x: 49.8, headTopY: 1.8,  clipY: 9.4,  h: 255 } },
+    claude:  { name: '비서실장',      role: '지휘',        home: [50.0, 38.0], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 26.3, clipY: 32.3, h: 235 } },
+    finder:  { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.1, h: 235 } },
+    agy:     { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [83.0, 49.0], facing: 'back',  scale: 0.96, seat: { x: 83.0, headTopY: 34.4, clipY: 45.2, h: 225 }, mask: { key: 'agy-chair', x0: 80.8, y0: 39.1, x1: 85.2, y1: 49.5 } },
   };
 
   const SIGNS = [
@@ -47,7 +47,7 @@
         }
       }
       if (cfg.mask) {
-        jobs.push(load(imgs.masks, cfg.mask.key, `/static/office-anime/assets/masks/${cfg.mask.key}.webp?v=orig2k`));
+        jobs.push(load(imgs.masks, cfg.mask.key, `/static/office-anime/assets/masks/${cfg.mask.key}.webp?v=seatfix1`));
       }
     }
     return Promise.all(jobs).then(() => imgs);
@@ -89,7 +89,7 @@
     for (const [id, cfg] of Object.entries(CHARS)) {
       npcs[id] = {
         id, x: cfg.home[0], y: cfg.home[1],
-        mode: 'idle', dir: cfg.facing, path: [], speed: 12.0, walkDist: 0,
+        mode: 'idle', dir: cfg.facing, path: [], speed: 6.5, walkDist: 0,
         bubble: '', bubbleType: '', onArrive: null,
       };
     }
@@ -197,13 +197,13 @@
       setTimeout(captainWalk, 6500);
     }
 
-    // ---------------------------------------------------------------- 렌더링 (진짜 책상·의자 전경 마스크!)
+    // ---------------------------------------------------------------- 렌더링 (실측 책상 경계 클리핑 + 의자 실루엣 마스크!)
     function drawNpc(n, t) {
       const cfg = CHARS[n.id];
       const wset = imgs.walk[n.id];
       if (!wset) return;
       const walking = (n.mode === 'walk');
-      const fIdx = walking ? (Math.floor(n.walkDist * 1.15) % 12) : 0;
+      const fIdx = walking ? (Math.floor(n.walkDist * 1.05) % 12) : 0;
 
       let dirKey = 'front', flipX = false;
       if (n.dir === 'east') { dirKey = 'east'; }
@@ -214,33 +214,50 @@
       const im = wset[dirKey]?.[fIdx] || wset.front?.[0];
       if (!im) return;
 
+      const seated = (n.mode === 'idle' || n.mode === 'work');
+
+      if (seated && cfg.seat) {
+        const s = cfg.seat;
+        const sx = (s.x / 100) * W;
+        const topY = (s.headTopY / 100) * H;
+        const clipY = (s.clipY / 100) * H;
+        const bob = Math.sin(t * 1.8 + sx * 0.01) * 1.1;
+        const targetH = s.h;
+        const targetW = targetH * (im.naturalWidth / im.naturalHeight);
+
+        ctx.save();
+        // 책상 상단 경계선(남향) 또는 의자 좌판 하단(북향)에서 깔끔하게 클리핑하여 다리·치마가 책상 위로 튀어나오지 않음!
+        ctx.beginPath();
+        ctx.rect(0, 0, W, clipY);
+        ctx.clip();
+        ctx.drawImage(im, sx - targetW / 2, topY + bob, targetW, targetH);
+        ctx.restore();
+
+        // 북향(메뉴 검사관): 의자 등받이만 정확히 따낸 실루엣을 등 뒤에 덮어 100% 자연 착석!
+        if (cfg.mask && imgs.masks[cfg.mask.key]) {
+          const m = cfg.mask;
+          ctx.drawImage(
+            imgs.masks[m.key],
+            (m.x0 / 100) * W, (m.y0 / 100) * H,
+            ((m.x1 - m.x0) / 100) * W, ((m.y1 - m.y0) / 100) * H
+          );
+        }
+        return;
+      }
+
       const cx = (n.x / 100) * W;
       const cy = (n.y / 100) * H;
-      const seated = (n.mode === 'idle' || n.mode === 'work');
-      // 2K(1440px) 기준: 배경 의자·문틀 비율에 맞춘 자연스러운 크기 (~11.4% 높이, 기존 대비 약 20% 축소)
-      const targetH = (seated ? 174 : 164) * cfg.scale;
+      const targetH = 164 * cfg.scale;
       const targetW = targetH * (im.naturalWidth / im.naturalHeight);
-      const bob = walking ? Math.sin(n.walkDist * 1.2) * 2.0 : Math.sin(t * 2.0 + cx * 0.01) * 1.0;
+      const bob = walking ? Math.sin(n.walkDist * 1.1) * 1.8 : 0;
 
       ctx.save();
-      if (!seated) {
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.28)';
-        ctx.beginPath(); ctx.ellipse(cx, cy + 6, 28, 8, 0, 0, Math.PI * 2); ctx.fill();
-      }
-      ctx.translate(cx, cy + (seated ? 42 : 0) + bob);
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.28)';
+      ctx.beginPath(); ctx.ellipse(cx, cy + 6, 26, 7.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.translate(cx, cy + bob);
       if (flipX) ctx.scale(-1, 1);
       ctx.drawImage(im, -targetW / 2, -targetH, targetW, targetH);
       ctx.restore();
-
-      // 앉아 있을 때: 배경에서 잘라낸 실제 책상+노트북(남향) 또는 의자 등받이(북향)를 캐릭터 앞쪽에 덮어 100% 자연 착석!
-      if (seated && cfg.mask && imgs.masks[cfg.mask.key]) {
-        const m = cfg.mask;
-        ctx.drawImage(
-          imgs.masks[m.key],
-          (m.x0 / 100) * W, (m.y0 / 100) * H,
-          ((m.x1 - m.x0) / 100) * W, ((m.y1 - m.y0) / 100) * H
-        );
-      }
     }
 
     let last = performance.now();
