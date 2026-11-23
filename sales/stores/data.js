@@ -893,6 +893,12 @@ window.STORES = [
     type: { ko: "베트남 하노이 분짜 · 게살 춘권 (1966년부터)", vi: "Bún chả Hà Nội · Nem cua bể (từ năm 1966)", en: "Hanoi bún chả · Crab spring rolls (since 1966)", zh: "河内烤肉米线 · 蟹肉春卷（始于1966年）", ja: "ハノイ名物ブンチャー・蟹春巻き（1966年創業）" },
     keywords: "분짜닥킴 분짜 닥킴 Bún Chả Đắc Kim Bun Cha Dac Kim 하노이 분짜 맛집 넴꾸어베 구시가지 항망 미쉐린"
   },
+  { id: "chibaengimin", name: "치뱅이 & 민짬뽕 CHIBAENGI & MINJJAMPPONG", sub: "윙봉 치킨 · 순살 치킨 · 야끼우동 · 짬뽕 · 짜장면 · 탕수육 · 살얼음 생맥주", url: "https://chibaengimin.qrmenuasia.com",
+    region: "hanoi", cats: ["chicken","chinese","korean"], tags: ["zalo","photos"],
+    address: "TT1/Lô 26 Đ. Mỹ Đình, Khu đô thị, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EC%B9%98%EB%B1%85%EC%9D%B4+%26+%EB%AF%BC%EC%A7%AC%EB%BD%95/@21.0173263,105.7761082,17z/data=!3m1!4b1!4m6!3m5!1s0x3134550072f694e3:0x4f7b401269e949ff!8m2!3d21.0173263!4d105.7761082!16s%2Fg%2F11nw6gjx2n?entry=ttu&g_ep=EgoyMDI2MTExOC4xIKXMDSoASAFQAw%3D%3D",
+    type: { ko: "한식 치킨 · 중화요리 호프", vi: "Gà rán Hàn Quốc · Món Hoa kiểu Hàn · Quán nhậu", en: "Korean fried chicken · Korean-Chinese · Pub", zh: "韩式炸鸡 · 韩式中餐 · 啤酒屋", ja: "韓国チキン・韓国式中華・パブ" },
+    keywords: "치뱅이 민짬뽕 치뱅이&민짬뽕 Chibaengi Minjjamppong 하노이 미딩 Mỹ Đình 윙봉 치킨 짬뽕 짜장면 탕수육 야끼우동 살얼음 생맥주 한식당 호프"
+  },
 ];
 window.SI = {
   ko: {

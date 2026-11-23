@@ -229,6 +229,8 @@ window.DEMOS = [
     name: "놀로와 치킨 NOLLOWA CHICKEN", type: { ko: "한식 · 치킨 · 분식 · 전골", vi: "Gà rán Hàn Quốc · Món ăn vặt · Lẩu Hàn", en: "Korean fried chicken · Snacks · Hot pot", zh: "韩式炸鸡 · 小吃 · 火锅", ja: "韓国チキン・粉食・チョンゴル" } },
   { id: "bunchadakkim", hidden: true, url: "https://bunchadakkim.qrmenuasia.com", shot: "img/demo-bunchadakkim.jpg", qr: "img/qr-bunchadakkim.svg",
     name: "분짜닥킴 Bún Chả Đắc Kim", type: { ko: "베트남 하노이 분짜 · 게살 춘권 (1966년부터)", vi: "Bún chả Hà Nội · Nem cua bể (từ năm 1966)", en: "Hanoi bún chả · Crab spring rolls (since 1966)", zh: "河内烤肉米线 · 蟹肉春卷（始于1966年）", ja: "ハノイ名物ブンチャー・蟹春巻き（1966年創業）" } },
+  { id: "chibaengimin", url: "https://chibaengimin.qrmenuasia.com", shot: "img/demo-chibaengimin.jpg", qr: "img/qr-chibaengimin.svg",
+    name: "치뱅이 & 민짬뽕 CHIBAENGI & MINJJAMPPONG", type: { ko: "한식 치킨 · 중화요리 호프", vi: "Gà rán Hàn Quốc · Món Hoa kiểu Hàn · Quán nhậu", en: "Korean fried chicken · Korean-Chinese · Pub", zh: "韩式炸鸡 · 韩式中餐 · 啤酒屋", ja: "韓国チキン・韓国式中華・パブ" } },
 ];
 
 window.T = {
