@@ -112,8 +112,8 @@
     root.innerHTML = `
       <div class="oa-stage">
         <div class="oa-rot-wrap">
+          <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
           <div class="oa-cam" data-cam>
-            <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
             <div class="oa-hud"></div>
           </div>
           <div class="oa-joy" data-joy aria-label="캡틴 이동 조이스틱"><div class="oa-joy-knob" data-joy-knob></div></div>
@@ -285,20 +285,19 @@
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    // ---- 화질: 그림판 실제 픽셀을 '화면 픽셀 × 카메라 확대'에 맞춤 (2026-11-23 가-1)
-    // 예전엔 2560 그림판을 CSS로 1.85배 늘려 흐렸음. 그리는 좌표는 그대로 2560×1440 기준(setTransform)이라 다른 코드는 안 바뀜.
-    // 폰 발열을 막으려고 그림판은 1.6배(4096×2304)까지만(화면 배율 DPR은 폰 기본 3까지 반영).
-    let resScale = 1, resCheckAt = 0;
-    function updateCanvasRes(zoom) {
+    // ---- 화질·속도: 그림판은 '화면에 보이는 부분'만 화면 실제 픽셀 크기로 그림 (2026-11-23)
+    // 카메라 확대·이동은 CSS가 아니라 그림판 안(setTransform)에서 함 → 선명하고, 안 보이는 곳은 안 그려서 빠름.
+    // 그리는 좌표는 그대로 2560×1440 기준. 이름표·말풍선(HUD)만 .oa-cam에서 CSS로 같이 움직임.
+    // (11-23 첫 시도는 전체를 3584로 그려 PC 전체화면이 16.6ms→34ms로 끊겼음)
+    let resCheckAt = 0;
+    function updateCanvasRes() {
       const wrap = root.querySelector('.oa-rot-wrap');
       const cssW = wrap?.clientWidth || W;
       const dpr = Math.min(3, window.devicePixelRatio || 1);
-      const want = Math.max(1, Math.min(1.6, cssW * dpr * zoom / W));
-      const s = Math.round(want * 10) / 10; // 0.1 단위로만 바꿔 자꾸 다시 만들지 않게
-      if (s === resScale && canvas.width === Math.round(W * s)) return;
-      resScale = s;
-      canvas.width = Math.round(W * s);
-      canvas.height = Math.round(H * s);
+      const bw = Math.max(640, Math.min(3200, Math.round(cssW * dpr / 16) * 16)); // 16px 단위로만 바꿈
+      if (canvas.width === bw) return;
+      canvas.width = bw;
+      canvas.height = Math.round(bw * H / W);
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
     }
@@ -1209,12 +1208,27 @@
         }
       }
 
-      if (now - resCheckAt > 500) {
-        resCheckAt = now;
-        updateCanvasRes((camMode === 'follow' && !briefingActive) ? 1.85 : 1.0);
+      // 캡틴 중심 부드러운 게임 카메라 추적 (1.85배 확대 ↔ 보고 시·전체 보기 1.0배 자동 보간!)
+      if (camEl) {
+        const targetZ = (camMode === 'follow' && !briefingActive) ? 1.85 : 1.0;
+        const targetFx = cap.x;
+        const targetFy = Math.max(10, Math.min(90, cap.y - 2));
+        const k = Math.min(1, dt * 6.5);
+        cam.z += (targetZ - cam.z) * k;
+        cam.fx += (targetFx - cam.fx) * k;
+        cam.fy += (targetFy - cam.fy) * k;
+        const tx = Math.max(100 - 100 * cam.z, Math.min(0, 50 - cam.fx * cam.z));
+        const ty = Math.max(100 - 100 * cam.z, Math.min(0, 50 - cam.fy * cam.z));
+        cam.tx = tx; cam.ty = ty;
+        camEl.style.transform = `translate(${tx.toFixed(2)}%, ${ty.toFixed(2)}%) scale(${cam.z.toFixed(4)})`;
       }
-      ctx.setTransform(resScale, 0, 0, resScale, 0, 0);
-      ctx.clearRect(0, 0, W, H);
+      if (now - resCheckAt > 500) { resCheckAt = now; updateCanvasRes(); }
+      {
+        const s = canvas.width / W, z = cam.z || 1;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.setTransform(s * z, 0, 0, s * z, (cam.tx || 0) / 100 * W * s, (cam.ty || 0) / 100 * H * s);
+      }
       if (imgs.bg) ctx.drawImage(imgs.bg, 0, 0, W, H);
 
       // 바닥 클릭 이동 시 황금 링 피드백
@@ -1325,20 +1339,6 @@
         }
       }
 
-      // 캡틴 중심 부드러운 게임 카메라 추적 (1.85배 확대 ↔ 보고 시·전체 보기 1.0배 자동 보간!)
-      if (camEl) {
-        const targetZ = (camMode === 'follow' && !briefingActive) ? 1.85 : 1.0;
-        const targetFx = cap.x;
-        const targetFy = Math.max(10, Math.min(90, cap.y - 2));
-        const k = Math.min(1, dt * 6.5);
-        cam.z += (targetZ - cam.z) * k;
-        cam.fx += (targetFx - cam.fx) * k;
-        cam.fy += (targetFy - cam.fy) * k;
-        const tx = Math.max(100 - 100 * cam.z, Math.min(0, 50 - cam.fx * cam.z));
-        const ty = Math.max(100 - 100 * cam.z, Math.min(0, 50 - cam.fy * cam.z));
-        cam.tx = tx; cam.ty = ty;
-        camEl.style.transform = `translate(${tx.toFixed(2)}%, ${ty.toFixed(2)}%) scale(${cam.z.toFixed(4)})`;
-      }
       // 대화창이 열려 있으면 0.2초마다 캐릭터(카메라 확대 반영) 화면 위치를 다시 보고, 가리면 다른 자리로 옮김
       if (!modalBack.hidden && now - modalPlaceAt > 200) { modalPlaceAt = now; placeModal(); }
       requestAnimationFrame(tick);
@@ -1637,6 +1637,9 @@
         px = ((e.clientX - r.left) / r.width) * 100;
         py = ((e.clientY - r.top) / r.height) * 100;
       }
+      // 화면 위치 → 사무실(확대 전) 좌표로 바꿈 (카메라 확대·이동은 그림판 안에서 하므로)
+      px = (px - (cam.tx || 0)) / (cam.z || 1);
+      py = (py - (cam.ty || 0)) / (cam.z || 1);
       let hit = null, best = 6.2;
       for (const n of Object.values(npcs)) {
         const d = Math.hypot(px - n.x, py - (n.y - 4));
