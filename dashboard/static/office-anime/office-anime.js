@@ -8,69 +8,69 @@
   const standPx = id => STAND_H_MALE * (MALE_IDS.has(id) ? 1 : FEMALE_RATIO);
   const standPct = id => standPx(id) / H * 100; // 화면 세로 % (말풍선·퀘스트 표시 위치용) // 16:9 QHD 2K 고화질 (전체화면 선명도 보장)
 
-  // bg-office.webp (cutaway 2560x1440) 픽셀 실측 착석 좌표 (headTopY=머리 꼭대기, clipY=책상 상단 경계선, standPos=대화 시 의자 옆 바닥에 서는 위치!)
+  // bg-office.webp (2026-11-24 새 배경 '입체 오피스 평면도' 2560x1440) 픽셀 실측 착석 좌표
+  // (headTopY=머리 꼭대기, clipY=책상 상단 경계선(남향)·의자 좌판(북향), standPos=일어설 때 서는 책상 옆 바닥 — 반드시 걸을 수 있는 칸)
+  // 옛 배경과 책상을 자동 대조(템플릿 비교)해 옮긴 뒤 합성 캡처로 확인함
   const CHARS = {
-    captain:    { name: '캡틴',          role: '결재',        home: [50.0, 18.5], standPos: [55.5, 18.5], facing: 'front', scale: 1.0,  seat: { x: 50.0, headTopY: 6.4,  clipY: 13.0, h: 240 } },
-    claude:     { name: '비서실장',      role: '지휘',        home: [50.0, 39.0], standPos: [44.2, 36.5], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 27.6, clipY: 33.4, h: 225 } },
-    finder:     { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], standPos: [21.0, 42.0], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.2, h: 225 } },
-    agy:        { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.4, 49.0], standPos: [77.2, 49.8], facing: 'back',  scale: 0.96, seat: { x: 82.4, headTopY: 35.8, clipY: 46.2, h: 220 } },
-    translator: { name: '수석 번역관',   role: '4개국어 번역', home: [36.8, 76.8], standPos: [42.6, 76.8], facing: 'front', scale: 0.95, seat: { x: 36.8, headTopY: 67.4, clipY: 74.4, h: 235 } },
-    sorter:     { name: '선별팀 팀장',   role: '자료 선별',   home: [83.4, 77.0], standPos: [77.2, 77.0], facing: 'front', scale: 0.95, seat: { x: 83.4, headTopY: 68.2, clipY: 74.7, h: 230 } },
-    inspector:  { name: '운영 감찰관',   role: '두 번째 검토', home: [7.7,  86.2], standPos: [13.2, 86.8], facing: 'back',  scale: 0.95, seat: { x: 7.7,  headTopY: 72.2, clipY: 83.0, h: 220 } },
-    staffing:   { name: '인력 공급팀',   role: '인력·일정 관리', home: [64.4, 76.8], standPos: [58.0, 76.8], facing: 'front', scale: 0.95, seat: { x: 64.4, headTopY: 67.6, clipY: 74.4, h: 230 } },
-    reader:     { name: '자료 해석 비서', role: '메뉴판 해석',  asset: 'auditor', home: [92.2, 49.0], standPos: [87.2, 50.0], facing: 'back',  scale: 0.96, seat: { x: 92.2, headTopY: 35.8, clipY: 46.2, h: 220 } },
-    auditor:    { name: '데이터 감사관', role: '마지막 점검',  asset: 'reader',  home: [18.6, 86.2], standPos: [24.5, 87.2], facing: 'back',  scale: 0.95, seat: { x: 18.6, headTopY: 72.2, clipY: 83.0, h: 220 } },
+    captain:    { name: '캡틴',          role: '결재',        home: [50.0, 16.4], standPos: [55.5, 16.4], facing: 'front', scale: 1.0,  seat: { x: 50.0, headTopY: 5.9,  clipY: 12.45, h: 240 } },
+    claude:     { name: '비서실장',      role: '지휘',        home: [50.0, 37.7], standPos: [44.0, 35.2], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 26.1, clipY: 31.9, h: 225 } },
+    finder:     { name: '시각 정보 비서', role: '사진 고르기', home: [14.6, 43.3], standPos: [20.6, 43.2], facing: 'front', scale: 0.94, seat: { x: 14.6, headTopY: 31.6, clipY: 37.6, h: 225 } },
+    agy:        { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [83.0, 46.6], standPos: [79.6, 48.0], facing: 'back',  scale: 0.96, seat: { x: 83.0, headTopY: 33.5, clipY: 43.9, h: 220 } },
+    translator: { name: '수석 번역관',   role: '4개국어 번역', home: [37.6, 71.5], standPos: [43.4, 71.5], facing: 'front', scale: 0.95, seat: { x: 37.6, headTopY: 62.4, clipY: 69.4, h: 235 } },
+    sorter:     { name: '선별팀 팀장',   role: '자료 선별',   home: [85.0, 70.9], standPos: [79.2, 70.6], facing: 'front', scale: 0.95, seat: { x: 85.0, headTopY: 62.2, clipY: 68.7, h: 230 } },
+    inspector:  { name: '운영 감찰관',   role: '두 번째 검토', home: [7.2,  80.4], standPos: [11.2, 82.6], facing: 'back',  scale: 0.95, seat: { x: 7.2,  headTopY: 66.3, clipY: 77.1, h: 220 } },
+    staffing:   { name: '인력 공급팀',   role: '인력·일정 관리', home: [64.5, 71.6], standPos: [58.2, 71.4], facing: 'front', scale: 0.95, seat: { x: 64.5, headTopY: 62.6, clipY: 69.4, h: 230 } },
+    reader:     { name: '자료 해석 비서', role: '메뉴판 해석',  asset: 'auditor', home: [92.5, 46.5], standPos: [89.4, 48.0], facing: 'back',  scale: 0.96, seat: { x: 92.5, headTopY: 33.5, clipY: 43.9, h: 220 } },
+    auditor:    { name: '데이터 감사관', role: '마지막 점검',  asset: 'reader',  home: [17.2, 80.4], standPos: [20.0, 82.6], facing: 'back',  scale: 0.95, seat: { x: 17.2, headTopY: 66.3, clipY: 77.1, h: 220 } },
   };
 
   // Y-깊이(앞/뒤 가림) 전경 가구 목록 (7개 방 모든 책상·의자 완비!):
   // 캐릭터의 발 위치(y)가 sortY보다 위(뒤)면 가구가 다리를 가리고, 아래(앞)면 캐릭터가 가구 앞에 서게 됨!
   const PROPS = [
-    { key: 'captain-desk',      x0: 42.6, y0: 12.8, x1: 58.0, y1: 22.8, sortY: 22.4 },
-    { key: 'claude-desk',       x0: 42.8, y0: 33.2, x1: 57.5, y1: 43.8, sortY: 43.4 },
-    { key: 'finder-desk',       x0:  9.2, y0: 39.0, x1: 19.6, y1: 47.6, sortY: 47.2 },
-    { key: 'red-left-desk',     x0: 77.2, y0: 39.2, x1: 86.4, y1: 46.8, sortY: 46.4 },
-    { key: 'red-right-desk',    x0: 87.5, y0: 39.2, x1: 96.7, y1: 46.8, sortY: 46.4 },
-    { key: 'agy-chair',         x0: 80.5, y0: 40.5, x1: 84.3, y1: 50.2, sortY: 49.5 },
-    { key: 'red-right-chair',   x0: 90.2, y0: 40.5, x1: 94.2, y1: 50.2, sortY: 49.5 },
-    { key: 'purple-left-desk',  x0:  3.5, y0: 74.5, x1: 12.6, y1: 84.2, sortY: 83.8 },
-    { key: 'purple-right-desk', x0: 14.4, y0: 74.5, x1: 23.4, y1: 84.2, sortY: 83.8 },
-    { key: 'purple-left-chair', x0:  5.8, y0: 76.5, x1:  9.8, y1: 87.5, sortY: 87.0 },
-    { key: 'purple-right-chair',x0: 16.6, y0: 76.5, x1: 20.6, y1: 87.5, sortY: 87.0 },
-    { key: 'navy-desk',         x0: 31.3, y0: 74.2, x1: 42.3, y1: 84.5, sortY: 84.0 },
-    { key: 'sky-desk',          x0: 59.3, y0: 74.2, x1: 69.8, y1: 84.5, sortY: 84.0 },
-    { key: 'orange-desk',       x0: 79.1, y0: 74.5, x1: 88.2, y1: 84.5, sortY: 84.0 },
+    { key: 'captain-desk',       x0: 42.77, y0: 12.26, x1: 57.78, y1: 22.01, sortY: 21.62 },
+    { key: 'claude-desk',        x0: 42.41, y0: 31.66, x1: 57.84, y1: 42.79, sortY: 42.37 },
+    { key: 'finder-desk',        x0:  9.14, y0: 37.45, x1: 19.29, y1: 45.83, sortY: 45.44 },
+    { key: 'red-left-desk',      x0: 78.04, y0: 37.28, x1: 86.78, y1: 44.50, sortY: 44.12 },
+    { key: 'red-right-desk',     x0: 88.05, y0: 37.21, x1: 96.80, y1: 44.43, sortY: 44.05 },
+    { key: 'agy-chair',          x0: 81.17, y0: 38.52, x1: 84.78, y1: 47.73, sortY: 47.06 },
+    { key: 'red-right-chair',    x0: 90.62, y0: 38.45, x1: 94.42, y1: 47.66, sortY: 46.99 },
+    { key: 'purple-left-desk',   x0:  2.85, y0: 68.42, x1: 12.18, y1: 78.36, sortY: 77.95 },
+    { key: 'purple-right-desk',  x0: 12.87, y0: 68.42, x1: 22.09, y1: 78.36, sortY: 77.95 },
+    { key: 'purple-left-chair',  x0:  5.21, y0: 70.47, x1:  9.31, y1: 81.74, sortY: 81.23 },
+    { key: 'purple-right-chair', x0: 15.13, y0: 70.47, x1: 19.23, y1: 81.74, sortY: 81.23 },
+    { key: 'navy-desk',          x0: 32.69, y0: 69.18, x1: 42.59, y1: 78.45, sortY: 78.00 },
+    { key: 'sky-desk',           x0: 59.92, y0: 69.25, x1: 69.37, y1: 78.52, sortY: 78.07 },
+    { key: 'orange-desk',        x0: 80.99, y0: 68.56, x1: 89.41, y1: 77.81, sortY: 77.34 },
   ];
 
   const SIGNS = [
-    { text: '미디어 관제실',     x: 14.8, y: 25.8, bg: '#15803d' },
-    { text: '디지털 메뉴 통제실', x: 85.2, y: 25.8, bg: '#dc2626' },
-    { text: '감사실',           x: 13.0, y: 53.5, bg: '#7c3aed' },
-    { text: '통번역 통제실',     x: 36.2, y: 53.5, bg: '#2563eb' },
-    { text: '인력 공급팀',       x: 63.8, y: 53.5, bg: '#0284c7' },
-    { text: '선별팀',           x: 88.2, y: 53.5, bg: '#ea580c' },
+    { text: '미디어 관제실',     x: 14.5, y: 23.9, bg: '#15803d' },
+    { text: '디지털 메뉴 통제실', x: 85.0, y: 23.9, bg: '#dc2626' },
+    { text: '감사실',           x: 11.5, y: 49.3, bg: '#7c3aed' },
+    { text: '통번역 통제실',     x: 36.8, y: 49.4, bg: '#2563eb' },
+    { text: '인력 공급팀',       x: 63.6, y: 49.4, bg: '#0284c7' },
+    { text: '선별팀',           x: 88.5, y: 49.4, bg: '#ea580c' },
   ];
 
-  // 벽·책상·화분 0% 통과 동선
+  // 동선 경유점(2026-11-24 새 배경): 실제 이동은 safeRoute()가 점과 점 사이를 A* 길찾기로 이어 벽·문짝을 절대 뚫지 않음
   const ROUTES = {
-    capToWindow:  [[50.0, 18.5], [58.0, 18.5], [64.0, 21.5], [70.0, 22.5], [82.0, 22.5]],
-    capToDesk:    [[82.0, 22.5], [70.0, 22.5], [64.0, 21.5], [58.0, 18.5], [50.0, 18.5]],
-    chiefToCof:   [[50.0, 35.5], [34.5, 35.5], [34.5, 22.5], [15.5, 22.5]],
-    cofToCap:     [[15.5, 22.5], [34.5, 22.5], [34.5, 20.5], [39.5, 20.5]],
-    capToChief:   [[39.5, 20.5], [34.5, 20.5], [34.5, 35.5], [50.0, 35.5], [50.0, 39.0]],
-    finderToHall: [[14.8, 41.0], [20.6, 41.0], [20.6, 49.5], [46.5, 49.5]],
-    agyToHall:    [[82.4, 51.0], [74.5, 51.0], [53.5, 50.0]],
-    transToHall:  [[36.8, 76.8], [43.2, 76.8], [43.2, 81.2], [49.8, 81.2], [49.8, 56.0]],
-    hallToTrans:  [[49.8, 56.0], [49.8, 81.2], [43.2, 81.2], [43.2, 76.8], [36.8, 76.8]],
-    sorterToHall: [[83.4, 77.0], [76.5, 77.0], [76.5, 51.0], [66.0, 51.0]],
-    hallToSorter: [[66.0, 51.0], [76.5, 51.0], [76.5, 77.0], [83.4, 77.0]],
-    inspToHall:   [[7.7,  88.0], [24.6, 88.0], [24.6, 50.5], [34.0, 50.5]],
-    hallToInsp:   [[34.0, 50.5], [24.6, 50.5], [24.6, 88.0], [7.7,  88.0]],
-    staffToHall:  [[64.4, 76.8], [57.2, 76.8], [57.2, 81.2], [50.2, 81.2], [50.2, 59.0]],
-    hallToStaff:  [[50.2, 59.0], [50.2, 81.2], [57.2, 81.2], [57.2, 76.8], [64.4, 76.8]],
-    readerToHall: [[92.2, 50.8], [74.5, 50.8], [58.5, 50.8]],
-    hallToReader: [[58.5, 50.8], [74.5, 50.8], [92.2, 50.8]],
-    auditToHall:  [[18.6, 88.0], [24.6, 88.0], [24.6, 50.5], [38.5, 50.5]],
-    hallToAudit:  [[38.5, 50.5], [24.6, 50.5], [24.6, 88.0], [18.6, 88.0]],
+    chiefToCof:   [[44.0, 35.2], [34.5, 35.2], [34.5, 21.0], [15.5, 17.8]],
+    cofToCap:     [[15.5, 17.8], [27.5, 20.5], [39.5, 21.0]],
+    capToChief:   [[39.5, 21.0], [34.5, 22.0], [34.5, 35.2], [44.0, 35.2], [50.0, 37.7]],
+    finderToHall: [[20.6, 43.2], [24.0, 46.5], [28.5, 46.6], [40.5, 45.5]],
+    agyToHall:    [[79.6, 48.0], [73.5, 47.2], [53.5, 45.5]],
+    transToHall:  [[43.4, 71.5], [46.6, 78.0], [50.5, 78.0], [50.5, 56.0]],
+    hallToTrans:  [[50.5, 56.0], [50.5, 78.0], [46.6, 78.0], [43.4, 71.5], [37.6, 71.5]],
+    sorterToHall: [[79.2, 70.6], [75.0, 70.5], [75.0, 47.5], [66.0, 45.5]],
+    hallToSorter: [[66.0, 45.5], [75.0, 47.5], [75.0, 70.5], [79.2, 70.6], [85.0, 70.9]],
+    inspToHall:   [[11.2, 82.6], [24.5, 80.5], [24.5, 50.0], [34.0, 46.5]],
+    hallToInsp:   [[34.0, 46.5], [24.5, 50.0], [24.5, 80.5], [11.2, 82.6], [7.2, 80.4]],
+    staffToHall:  [[58.2, 71.4], [57.5, 78.0], [51.0, 78.0], [51.0, 59.0]],
+    hallToStaff:  [[51.0, 59.0], [51.0, 78.0], [57.5, 78.0], [58.2, 71.4], [64.5, 71.6]],
+    readerToHall: [[89.4, 48.0], [73.5, 47.2], [58.5, 45.5]],
+    hallToReader: [[58.5, 45.5], [73.5, 47.2], [89.4, 48.0], [92.5, 46.5]],
+    auditToHall:  [[20.0, 82.6], [24.5, 80.5], [24.5, 50.0], [38.5, 46.5]],
+    hallToAudit:  [[38.5, 46.5], [24.5, 50.0], [24.5, 80.5], [20.0, 82.6], [17.2, 80.4]],
   };
 
   function loadAll() {
@@ -81,7 +81,7 @@
       im.onerror = () => res();
       im.src = url;
     });
-    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=cutaway1')];
+    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq2')];
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], water: [], clean: [], dance: [], sweep: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee']
@@ -100,7 +100,7 @@
       }
     }
     for (const p of PROPS) {
-      jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=ysort1`));
+      jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq2`));
     }
     return Promise.all(jobs).then(() => imgs);
   }
@@ -605,18 +605,18 @@
       if (cl.mode === 'walk') return;
       SFX.coffee();
       log('☕ 비서실장이 12프레임으로 커피를 타러 이동');
-      sendPath('claude', ROUTES.chiefToCof, {
+      sendPath('claude', safeRoute(ROUTES.chiefToCof), {
         bubble: '☕ 캡틴 커피 타러 가는 중…',
         onArrive: () => {
           cl.dir = 'back'; cl.bubble = '☕ 원두 커피 추출 중…';
           setTimeout(() => {
-            sendPath('claude', ROUTES.cofToCap, {
+            sendPath('claude', safeRoute(ROUTES.cofToCap), {
               bubble: '☕ 캡틴, 커피 가져왔습니다!', bubbleType: 'ok',
               onArrive: () => {
                 cl.dir = 'east';
                 cap.bubble = '☕ 고마워요! 잘 마실게요'; cap.bubbleType = 'ok';
                 setTimeout(() => {
-                  sendPath('claude', ROUTES.capToChief, {
+                  sendPath('claude', safeRoute(ROUTES.capToChief), {
                     bubble: '',
                     onArrive: () => {
                       cl.mode = 'idle'; cl.dir = 'front';
@@ -636,7 +636,7 @@
       const cap = npcs.captain;
       if (cap.mode === 'walk') return;
       log('🚶 캡틴이 계단·통로를 따라 오른쪽 테라스로 산책');
-      walkCaptainSafe(82.0, 22.5, {
+      walkCaptainSafe(82.0, 18.5, {
         bubble: '잠시 바람 좀 쐬어야지…',
         onArrive: () => {
           cap.mode = 'stand'; cap.dir = 'back'; cap.bubble = '창밖을 바라보는 중…';
@@ -663,17 +663,17 @@
           f.bubble = ''; a.bubble = '좋아요! 가격표 바로 대조할게요 🔍'; a.bubbleType = 'ok';
           setTimeout(() => {
             a.bubble = '';
-            sendPath('finder', [...ROUTES.finderToHall.slice().reverse(), CHARS.finder.home], {
+            sendPath('finder', safeRoute([...ROUTES.finderToHall.slice().reverse(), CHARS.finder.home]), {
               onArrive: () => seatNpc('finder'),
             });
-            sendPath('agy', [...ROUTES.agyToHall.slice().reverse(), CHARS.agy.home], {
+            sendPath('agy', safeRoute([...ROUTES.agyToHall.slice().reverse(), CHARS.agy.home]), {
               onArrive: () => seatNpc('agy'),
             });
           }, 2500);
         }, 2500);
       };
-      sendPath('finder', ROUTES.finderToHall, { onArrive: () => { if (++ready === 2) talk(); } });
-      sendPath('agy', ROUTES.agyToHall, { onArrive: () => { if (++ready === 2) talk(); } });
+      sendPath('finder', safeRoute(ROUTES.finderToHall), { onArrive: () => { if (++ready === 2) talk(); } });
+      sendPath('agy', safeRoute(ROUTES.agyToHall), { onArrive: () => { if (++ready === 2) talk(); } });
     }
 
     function transConsult() {
@@ -681,12 +681,12 @@
       const tr = npcs.translator;
       if (!tr || tr.mode === 'walk') return;
       log('🌐 수석 번역관이 번역 톤 상의를 위해 중앙 복도로 이동');
-      sendPath('translator', ROUTES.transToHall, {
+      sendPath('translator', safeRoute(ROUTES.transToHall), {
         bubble: '🌐 메뉴 번역 톤 상의하러 가는 중…',
         onArrive: () => {
           tr.dir = 'back'; tr.bubble = '💬 베트남어·영어 메뉴 표현 확인 완료!'; tr.bubbleType = 'ok';
           setTimeout(() => {
-            sendPath('translator', ROUTES.hallToTrans, {
+            sendPath('translator', safeRoute(ROUTES.hallToTrans), {
               bubble: '↩ 통번역 통제실 복귀',
               onArrive: () => { tr.mode = 'idle'; tr.dir = 'front'; tr.bubble = ''; }
             });
@@ -700,12 +700,12 @@
       const sr = npcs.sorter;
       if (!sr || sr.mode === 'walk') return;
       log('📦 선별팀 팀장이 자료 분류 보고를 위해 중앙 복도로 이동');
-      sendPath('sorter', ROUTES.sorterToHall, {
+      sendPath('sorter', safeRoute(ROUTES.sorterToHall), {
         bubble: '📦 메뉴 원본 자료 선별 완료 보고 중…',
         onArrive: () => {
           sr.dir = 'west'; sr.bubble = '✅ 1차 자료 선별 완료! 바로 전달했습니다'; sr.bubbleType = 'ok';
           setTimeout(() => {
-            sendPath('sorter', ROUTES.hallToSorter, {
+            sendPath('sorter', safeRoute(ROUTES.hallToSorter), {
               bubble: '↩ 선별팀 복귀',
               onArrive: () => { sr.mode = 'idle'; sr.dir = 'front'; sr.bubble = ''; }
             });
@@ -719,13 +719,13 @@
       const ins = npcs.inspector;
       if (!ins || ins.mode === 'walk') return;
       log('🛡️ 운영 감찰관이 배포 전 교차 검토 보고를 위해 복도로 이동');
-      sendPath('inspector', ROUTES.inspToHall, {
+      sendPath('inspector', safeRoute(ROUTES.inspToHall), {
         bubble: '🛡️ 배포 전 최종 교차 감찰 진행 중…',
         onArrive: () => {
           ins.dir = 'east'; ins.bubble = '✅ 2차 운영 감찰 이상 없음! 통과입니다'; ins.bubbleType = 'ok';
           setTimeout(() => {
             if (briefingActive) return;
-            sendPath('inspector', ROUTES.hallToInsp, {
+            sendPath('inspector', safeRoute(ROUTES.hallToInsp), {
               bubble: '↩ 감사실 복귀',
               onArrive: () => seatNpc('inspector')
             });
@@ -739,13 +739,13 @@
       const st = npcs.staffing;
       if (!st || st.mode === 'walk') return;
       log('📅 인력 공급팀 팀장이 주·야간 인력 보고를 위해 복도로 이동');
-      sendPath('staffing', ROUTES.staffToHall, {
+      sendPath('staffing', safeRoute(ROUTES.staffToHall), {
         bubble: '📅 오늘 주·야간 출근 인력 현황 보고 중…',
         onArrive: () => {
           st.dir = 'back'; st.bubble = '✅ 거래처 14명 배치 완료! 이상 없습니다'; st.bubbleType = 'ok';
           setTimeout(() => {
             if (briefingActive) return;
-            sendPath('staffing', ROUTES.hallToStaff, {
+            sendPath('staffing', safeRoute(ROUTES.hallToStaff), {
               bubble: '↩ 인력 공급팀 복귀',
               onArrive: () => { st.mode = 'idle'; st.dir = 'front'; st.bubble = ''; }
             });
@@ -759,13 +759,13 @@
       const rd = npcs.reader;
       if (!rd || rd.mode === 'walk') return;
       log('📑 자료 해석 비서가 메뉴판 텍스트 추출 결과를 들고 복도로 이동');
-      sendPath('reader', ROUTES.readerToHall, {
+      sendPath('reader', safeRoute(ROUTES.readerToHall), {
         bubble: '📑 메뉴판 원문·가격 데이터 해석 완료!',
         onArrive: () => {
           rd.dir = 'west'; rd.bubble = '✅ JSON 메뉴 데이터 번역팀에 전달했습니다'; rd.bubbleType = 'ok';
           setTimeout(() => {
             if (briefingActive) return;
-            sendPath('reader', ROUTES.hallToReader, {
+            sendPath('reader', safeRoute(ROUTES.hallToReader), {
               bubble: '↩ 디지털 메뉴 통제실 복귀',
               onArrive: () => seatNpc('reader')
             });
@@ -779,13 +779,13 @@
       const au = npcs.auditor;
       if (!au || au.mode === 'walk') return;
       log('📊 데이터 감사관이 최종 품질 점검 보고를 위해 복도로 이동');
-      sendPath('auditor', ROUTES.auditToHall, {
+      sendPath('auditor', safeRoute(ROUTES.auditToHall), {
         bubble: '📊 전 가게 데이터·링크 무결성 최종 감사 중…',
         onArrive: () => {
           au.dir = 'east'; au.bubble = '✅ 최종 데이터 감사 100% 통과! 배포 가능'; au.bubbleType = 'ok';
           setTimeout(() => {
             if (briefingActive) return;
-            sendPath('auditor', ROUTES.hallToAudit, {
+            sendPath('auditor', safeRoute(ROUTES.hallToAudit), {
               bubble: '↩ 감사실 복귀',
               onArrive: () => seatNpc('auditor')
             });
@@ -935,67 +935,81 @@
     joyEl.addEventListener('pointerup', e => { if (joyPtr === e.pointerId) resetJoy(); });
     joyEl.addEventListener('pointercancel', resetJoy);
 
-    // 사무실 전체 벽·책상·화분·가구 실측 충돌 박스 (절대 통과 불가! 열린 문·계단·복도만 통과)
+    // 사무실 전체 벽·책상·화분·가구 실측 충돌 박스 (2026-11-24 새 배경 실측. 열린 문 아래·위 틈·계단·복도·맨 아래 나무 바닥만 통과)
+    // 주의: A* 격자가 1.5% 간격이라 벽 상자는 폭 1.5% 이상으로 둔다(얇으면 격자가 건너뜀).
+    // 문짝: 방마다 열린 나무 문짝이 벽에서 튀어나와 있어 문짝 바닥(아래쪽 끝) 자리를 막고, 문짝 위·아래 틈으로만 드나듦.
     const BLOCKERS = [
-      // 상단 창가·커피바·테라스 난간·화분
-      { x0:  0.0, y0:  0.0, x1: 23.5, y1: 21.8 }, // 커피바 + 정수기 + 좌측 상단 화분
-      { x0: 71.5, y0:  0.0, x1: 100., y1: 19.5 }, // 우측 테라스 난간
-      { x0: 91.2, y0: 18.0, x1: 97.5, y1: 22.2 }, // 우측 상단 화분
-      { x0: 42.3, y0: 18.8, x1: 58.2, y1: 23.0 }, // 캡틴 대표 책상
-      { x0: 36.8, y0: 24.8, x1: 63.2, y1: 28.5 }, // 단상 앞쪽 턱 (좌우 계단으로만 내려오게)
+      // 상단 창가·커피바·테라스 난간·화분·단상
+      { x0:  0.0, y0:  0.0, x1:  7.8, y1: 18.3 }, // 좌측 상단 화분
+      { x0:  7.8, y0:  0.0, x1: 23.8, y1: 16.6 }, // 커피바 + 정수기
+      { x0: 71.5, y0:  0.0, x1: 100., y1: 15.6 }, // 우측 테라스 난간
+      { x0: 91.5, y0:  0.0, x1: 100., y1: 18.0 }, // 우측 상단 화분
+      { x0: 42.3, y0: 17.2, x1: 58.0, y1: 21.8 }, // 캡틴 대표 책상
+      { x0: 36.8, y0: 23.4, x1: 63.2, y1: 27.8 }, // 단상 앞쪽 턱 (좌우 계단으로만 내려오게)
       // 중앙 복도 책상·화분
-      { x0: 42.3, y0: 38.5, x1: 57.7, y1: 44.0 }, // 비서실장 책상
-      { x0: 27.6, y0: 37.5, x1: 31.8, y1: 42.8 }, // 복도 좌측 화분
-      { x0: 68.2, y0: 37.5, x1: 72.4, y1: 42.8 }, // 복도 우측 화분
-      // 좌측 중단: 미디어 관제실(초록) 윗벽·뒷벽(크로마키)·가구
-      { x0:  0.0, y0: 24.2, x1: 28.6, y1: 38.8 }, // 윗벽 + 초록 뒷벽(걸레받이까지)
-      { x0:  0.0, y0: 24.2, x1:  9.2, y1: 52.0 }, // 좌벽 + 카메라 삼각대
-      { x0: 26.6, y0: 24.2, x1: 28.8, y1: 47.4 }, // 우측 칸막이벽 (문 y=47.4~51.5 개방)
-      { x0:  9.0, y0: 44.2, x1: 19.8, y1: 48.0 }, // 시각 정보 비서 책상
-      { x0: 22.2, y0: 38.0, x1: 27.5, y1: 43.2 }, // 우측 조명·휴지통 (x=21.0 통로 개방 보장!)
-      // 우측 중단: 디지털 메뉴 통제실(빨강) 윗벽·뒷벽·가구
-      { x0: 71.4, y0: 24.2, x1: 100., y1: 39.2 }, // 윗벽 + 빨강 뒷벽(걸레받이까지)
-      { x0: 95.5, y0: 24.2, x1: 100., y1: 52.0 }, // 우벽 + 화분
-      { x0: 71.2, y0: 24.2, x1: 73.4, y1: 47.4 }, // 좌측 칸막이벽 (문 y=47.4~51.5 개방)
-      { x0: 73.0, y0: 39.5, x1: 76.2, y1: 43.8 }, // 휴지통
-      { x0: 76.8, y0: 40.5, x1: 86.6, y1: 48.2 }, // 좌측 책상·의자
-      { x0: 87.0, y0: 40.5, x1: 96.5, y1: 48.2 }, // 우측 책상·의자
-      // 하단 좌측: 감사실(보라) 벽·가구 (우측 끝 통로 x=23.8~25.6만 개방 — 책상·쓰레기통·윗벽 완전 차단!)
-      { x0:  0.0, y0: 51.4, x1: 23.7, y1: 71.2 }, // 윗벽 + 보라 뒷벽·책장 + 우측 쓰레기통까지 완전 차단
-      { x0: 25.8, y0: 51.4, x1: 27.0, y1: 93.0 }, // 우측 칸막이벽 (통번역실과 분리)
-      { x0:  3.2, y0: 74.5, x1: 12.8, y1: 86.2 }, // 좌측 감사 책상·의자
-      { x0: 14.2, y0: 74.5, x1: 23.6, y1: 86.2 }, // 우측 감사 책상·의자
-      { x0:  0.0, y0: 89.2, x1: 27.0, y1: 100. }, // 아랫벽
-      // 하단 중좌: 통번역 통제실(남색) 벽·가구 (우측 중앙복도 문 y=77.5~85.0 개방)
-      { x0: 26.2, y0: 51.4, x1: 46.4, y1: 68.8 }, // 윗벽 + 남색 뒷벽(걸레받이까지)
-      { x0: 26.2, y0: 51.4, x1: 28.4, y1: 93.0 }, // 좌벽
-      { x0: 44.4, y0: 51.4, x1: 46.6, y1: 77.2 }, // 우측 윗벽
-      { x0: 44.4, y0: 85.2, x1: 46.6, y1: 93.0 }, // 우측 아랫벽
-      { x0: 26.2, y0: 89.2, x1: 46.6, y1: 100. }, // 아랫벽
-      { x0: 31.2, y0: 78.5, x1: 42.4, y1: 84.5 }, // 수석 번역관 책상
-      { x0: 27.8, y0: 66.5, x1: 31.8, y1: 73.2 }, // 좌측 화분
-      { x0: 39.0, y0: 65.5, x1: 44.8, y1: 73.5 }, // 우측 책장
-      { x0: 27.5, y0: 83.8, x1: 31.2, y1: 90.0 }, // 좌하단 화분
-      // 하단 중우: 인력 공급팀(하늘) 벽·가구 (좌측 중앙복도 문 y=77.5~85.0 개방)
-      { x0: 53.6, y0: 51.4, x1: 73.8, y1: 68.8 }, // 윗벽 + 하늘 뒷벽(걸레받이까지)
-      { x0: 71.6, y0: 51.4, x1: 73.8, y1: 93.0 }, // 우벽
-      { x0: 53.4, y0: 51.4, x1: 55.6, y1: 77.2 }, // 좌측 윗벽
-      { x0: 53.4, y0: 85.2, x1: 55.6, y1: 93.0 }, // 좌측 아랫벽
-      { x0: 53.4, y0: 89.2, x1: 73.8, y1: 100. }, // 아랫벽
-      { x0: 59.2, y0: 78.5, x1: 69.9, y1: 84.5 }, // 인력 공급팀 책상
-      { x0: 55.2, y0: 67.0, x1: 59.2, y1: 73.2 }, // 좌측 화분
-      { x0: 68.5, y0: 67.5, x1: 72.0, y1: 73.2 }, // 휴지통
-      // 하단 우측: 선별팀(주황) 벽·가구 (상단 좌측 통로 x=75.0~77.6 개방, 주황 뒷벽 전체 완전 차단!)
-      { x0: 77.6, y0: 51.4, x1: 100., y1: 69.2 }, // 윗벽 + 주황 뒷벽 전체(걸레받이 y=69.2까지) 완전 차단!
-      { x0: 73.2, y0: 51.4, x1: 75.0, y1: 93.0 }, // 좌측 칸막이벽 완전 차단
-      { x0: 96.8, y0: 51.4, x1: 100., y1: 93.0 }, // 우측 외벽 완전 차단
-      { x0: 73.2, y0: 89.2, x1: 100., y1: 100. }, // 아랫벽
-      { x0: 79.0, y0: 78.5, x1: 88.3, y1: 84.5 }, // 선별팀 책상
-      { x0: 85.8, y0: 68.0, x1: 100., y1: 74.0 }, // 포장 기계 테이블
-      { x0: 88.8, y0: 64.5, x1: 100., y1: 90.0 }, // 컨베이어·선반
+      { x0: 42.2, y0: 38.0, x1: 58.0, y1: 42.6 }, // 비서실장 책상
+      { x0: 28.3, y0: 33.8, x1: 31.9, y1: 38.0 }, // 복도 좌측 화분
+      { x0: 68.2, y0: 33.8, x1: 71.9, y1: 38.0 }, // 복도 우측 화분
+      // 미디어 관제실(초록): 문짝 아래 틈(y 46~47.4)으로 드나듦
+      { x0:  0.0, y0: 22.8, x1: 28.8, y1: 39.6 }, // 윗벽 + 크로마키 뒷벽
+      { x0:  0.0, y0: 22.8, x1:  8.6, y1: 49.0 }, // 좌벽 + 카메라 삼각대
+      { x0: 25.6, y0: 22.8, x1: 28.8, y1: 46.0 }, // 우측 벽 + 문짝
+      { x0: 20.8, y0: 36.0, x1: 26.5, y1: 41.8 }, // 우측 조명·휴지통
+      { x0:  9.0, y0: 41.0, x1: 19.6, y1: 44.8 }, // 시각 정보 비서 책상
+      { x0:  0.0, y0: 47.4, x1: 23.0, y1: 50.5 }, // 초록방 앞벽 + 보라방 윗벽
+      // 디지털 메뉴 통제실(빨강): 문짝 아래 틈(y 46~48.4)으로 드나듦
+      { x0: 71.6, y0: 22.8, x1: 100., y1: 38.8 }, // 윗벽 + 빨강 뒷벽 + 벽에 붙은 책상 상판(책상 뒤로 못 걷게)
+      { x0: 71.6, y0: 22.8, x1: 75.4, y1: 46.0 }, // 좌측 벽 + 문짝
+      { x0: 74.0, y0: 37.0, x1: 77.2, y1: 43.6 }, // 휴지통
+      { x0: 77.6, y0: 38.5, x1: 87.2, y1: 47.6 }, // 좌측 책상·의자
+      { x0: 87.6, y0: 38.5, x1: 97.6, y1: 47.6 }, // 우측 책상·의자
+      { x0: 96.6, y0: 22.8, x1: 100., y1: 50.0 }, // 우벽 + 화분
+      // 감사실(보라): 오른쪽 문짝 아래 틈(y 78.3~83.4)으로 드나듦
+      { x0:  0.0, y0: 48.2, x1: 23.0, y1: 71.8 }, // 윗벽 + 책장 + 휴지통 + 벽에 붙은 책상 상판
+      { x0:  0.0, y0: 48.0, x1:  2.0, y1: 90.0 }, // 좌벽
+      { x0: 20.6, y0: 48.2, x1: 22.9, y1: 78.3 }, // 우측 벽
+      { x0: 21.6, y0: 75.2, x1: 24.9, y1: 78.3 }, // 우측 문짝(복도로 튀어나옴)
+      { x0:  2.6, y0: 71.5, x1: 12.4, y1: 81.9 }, // 좌측 감사 책상·의자
+      { x0: 12.6, y0: 71.5, x1: 21.0, y1: 81.9 }, // 우측 감사 책상·의자
+      { x0:  0.0, y0: 77.0, x1:  4.4, y1: 84.0 }, // 좌하단 화분
+      { x0:  0.0, y0: 83.4, x1: 22.0, y1: 90.0 }, // 앞벽
+      // 통번역 통제실(남색): 좌우 문짝 위(y 73~74)·아래(y 77~79) 틈으로 드나듦
+      { x0: 26.2, y0: 48.3, x1: 47.2, y1: 67.2 }, // 윗벽 + 뒷벽 + 화분·책장
+      { x0: 26.2, y0: 48.3, x1: 29.2, y1: 73.0 }, // 좌벽
+      { x0: 26.4, y0: 74.2, x1: 28.9, y1: 77.0 }, // 좌측 문짝
+      { x0: 26.2, y0: 79.0, x1: 28.6, y1: 90.0 }, // 좌측 기둥
+      { x0: 27.5, y0: 79.0, x1: 31.8, y1: 85.0 }, // 좌하단 화분
+      { x0: 44.6, y0: 48.3, x1: 46.0, y1: 72.6 }, // 우벽
+      { x0: 45.0, y0: 74.4, x1: 47.6, y1: 77.4 }, // 우측 문짝(복도로 튀어나옴)
+      { x0: 44.2, y0: 79.0, x1: 46.2, y1: 90.0 }, // 우측 기둥
+      { x0: 26.2, y0: 84.6, x1: 47.2, y1: 89.8 }, // 앞벽
+      { x0: 31.8, y0: 73.6, x1: 42.8, y1: 78.8 }, // 수석 번역관 책상
+      // 인력 공급팀(하늘): 좌우 문짝 위(y 72~74)·아래(y 77~78.6) 틈으로 드나듦
+      { x0: 53.6, y0: 48.4, x1: 73.4, y1: 65.4 }, // 윗벽 + 뒷벽
+      { x0: 55.6, y0: 65.0, x1: 59.8, y1: 68.6 }, // 좌측 화분
+      { x0: 68.6, y0: 65.0, x1: 72.0, y1: 68.6 }, // 휴지통
+      { x0: 53.4, y0: 48.4, x1: 55.4, y1: 72.4 }, // 좌벽
+      { x0: 53.8, y0: 74.0, x1: 56.4, y1: 76.8 }, // 좌측 문짝
+      { x0: 54.8, y0: 78.9, x1: 57.0, y1: 85.0 }, // 좌측 기둥
+      { x0: 71.8, y0: 48.4, x1: 73.4, y1: 72.0 }, // 우벽
+      { x0: 72.4, y0: 74.3, x1: 74.6, y1: 77.0 }, // 우측 문짝(선별팀 옆 좁은 통로로 튀어나옴)
+      { x0: 73.0, y0: 78.6, x1: 76.0, y1: 85.0 }, // 우측 기둥
+      { x0: 53.4, y0: 84.6, x1: 76.0, y1: 89.8 }, // 앞벽
+      { x0: 59.4, y0: 73.6, x1: 69.8, y1: 78.9 }, // 인력 공급팀 책상
+      // 선별팀(주황): 하늘방 옆 좁은 통로(x 73.4~76.6) → 왼쪽 벽 아래 틈(y 69~73)으로 드나듦
+      { x0: 77.0, y0: 48.4, x1: 100., y1: 65.2 }, // 윗벽 + 주황 뒷벽
+      { x0: 76.6, y0: 48.4, x1: 78.4, y1: 69.0 }, // 좌벽
+      { x0: 78.2, y0: 73.0, x1: 81.2, y1: 75.8 }, // 문짝(방 안쪽으로 열림)
+      { x0: 80.6, y0: 73.0, x1: 89.8, y1: 78.2 }, // 선별팀 책상
+      { x0: 86.8, y0: 64.0, x1: 92.6, y1: 68.6 }, // 포장 기계 테이블
+      { x0: 91.6, y0: 48.4, x1: 100., y1: 85.0 }, // 선반·세로 컨베이어·우벽
+      { x0: 86.2, y0: 73.6, x1: 100., y1: 84.0 }, // 가로 컨베이어
+      { x0: 75.4, y0: 78.4, x1: 79.2, y1: 85.0 }, // 좌하단 화분
+      { x0: 74.0, y0: 84.6, x1: 100., y1: 89.8 }, // 앞벽
+      // 맨 아래 넓은 나무 바닥(y 89.8~97.5)은 전부 걸을 수 있음
     ];
     function canWalk(x, y) {
-      if (x < 3.5 || x > 96.5 || y < 16.5 || y > 95.5) return false;
+      if (x < 2.0 || x > 98.0 || y < 15.6 || y > 97.5) return false;
       for (const b of BLOCKERS) {
         if (x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1) return false;
       }
@@ -1096,6 +1110,20 @@
         }
       }
       return null;
+    }
+
+    // 경유점 목록을 A* 길찾기로 이어 붙임: 경유점 사이를 직선으로 가다 벽·문짝을 뚫지 않게 (2026-11-24 새 배경)
+    function safeRoute(pts) {
+      if (!pts || pts.length < 2) return pts || [];
+      const out = [[pts[0][0], pts[0][1]]];
+      for (let i = 1; i < pts.length; i++) {
+        const [cx, cy] = out[out.length - 1];
+        const [tx, ty] = pts[i];
+        const seg = findPath(cx, cy, tx, ty);
+        if (seg) out.push(...seg);
+        if (canWalk(tx, ty) || i === pts.length - 1) out.push([tx, ty]);
+      }
+      return out;
     }
 
     function walkCaptainSafe(tx, ty, opts2 = {}) {
@@ -2013,7 +2041,7 @@
       if (prevReal && !briefingActive && !document.hidden) {
         for (const id of prevReal.busy) {
           if (!busy.has(id) && id !== 'claude' && id !== 'captain' && npcs[id]?.mode === 'idle') {
-            walkNpcSafe(id, 48 + (Math.random() * 6 - 3), 48, {
+            walkNpcSafe(id, 50 + (Math.random() * 6 - 3), 46.5, {
               bubble: '✅ 작업 완료 보고드립니다!',
               bubbleType: 'ok',
               onArrive: () => {
@@ -2039,7 +2067,7 @@
       const idleIds = Object.keys(CHARS).filter(id => id !== 'captain' && id !== 'claude' && npcs[id]?.mode === 'idle');
       if (!idleIds.length) return;
       const pick = idleIds[Math.floor(Math.random() * idleIds.length)];
-      walkNpcSafe(pick, 15.5, 22.5, {
+      walkNpcSafe(pick, 15.5, 17.8, {
         bubble: '☕ 잠시 커피 휴식 중…',
         onArrive: () => {
           npcs[pick].mode = 'stand'; npcs[pick].dir = 'back';
@@ -2114,9 +2142,9 @@
       // 1. 선별팀 팀장: 중앙 복도 좌/우 화분 물주기 (화분 바로 옆 밀착 + 물뿌리개 12프레임 애니메이션!)
       () => {
         const leftPlant = Math.random() < 0.5;
-        return doChore('sorter', leftPlant ? 32.5 : 67.2, 41.0, leftPlant ? 'west' : 'east',
+        return doChore('sorter', leftPlant ? 32.8 : 67.4, 37.4, leftPlant ? 'west' : 'east',
           '🪴 물뿌리개 들고 화분 관리 가는 중…', '💧 화분에 물 주는 중… 쑥쑥 자라라!', 3800, '', 'water',
-          leftPlant ? [31.9, 41.4] : [68.1, 41.4]);
+          leftPlant ? [32.4, 37.4] : [67.7, 37.4]);
       },
       // 2. 운영 감찰관: 복도 화분과 비서실장 책상 사이 공간 바닥 빗자루 청소
       () => {
@@ -2125,23 +2153,23 @@
           '🧹 화분 옆 복도 청소하러 나왔습니다!', '🧹 복도 바닥 빗자루질 중… 깔끔하게!', 3600, '', 'sweep');
       },
       // 3. 인력 공급팀 팀장: 캡틴 책상 먼지 털기 (책상 좌측 앞쪽 y=23.0 밀착 → 먼지털이가 책상 상판 위를 직접 닦음!)
-      () => doChore('staffing', 41.0, 23.0, 'east',
+      () => doChore('staffing', 41.0, 22.4, 'east',
         '🪶 캡틴 책상 정돈하러 올라가는 중…', '✨ 캡틴 책상 먼지 닦아드렸습니다!', 3600, '', 'clean',
-        [43.8, 23.0]),
+        [43.8, 22.2]),
       // 4. 비서실장: 캡틴 커피 서빙 & 안부 여쭙기
       () => {
         if (!isFree('claude')) return false;
         serveCoffee(); return true;
       },
       // 5. 시각 정보 비서: 스튜디오 조명·카메라 점검
-      () => doChore('finder', 20.0, 42.0, 'west',
+      () => doChore('finder', 20.6, 43.2, 'east',
         '💡 스튜디오 조명 점검 중…', '📷 크로마키 조명·카메라 각도 완벽!', 2800),
       // 6. 감사실 2인방(운영 감찰관 + 데이터 감사관): 좌측 복도 또는 커피 라운지 교차 토론
       () => {
         const atLounge = Math.random() < 0.5;
         return doPairChat('inspector', 'auditor',
-          atLounge ? 26.5 : 29.0, atLounge ? 22.8 : 49.5,
-          atLounge ? 32.0 : 34.5, atLounge ? 22.8 : 49.5,
+          atLounge ? 22.5 : 31.0, atLounge ? 20.0 : 45.5,
+          atLounge ? 27.5 : 36.5, atLounge ? 20.0 : 45.5,
           '🛡️ 방금 검수한 가격표 교차 확인했나요?', '📊 네! 오타 0건, 100% 일치합니다!');
       },
       // 7. 수석 번역관 + 비서실장: 번역 톤 상의
@@ -2154,8 +2182,8 @@
       () => {
         const atTerrace = Math.random() < 0.5;
         return doPairChat('reader', 'agy',
-          atTerrace ? 75.5 : 62.5, atTerrace ? 22.2 : 49.5,
-          atTerrace ? 81.5 : 68.0, atTerrace ? 22.2 : 49.5,
+          atTerrace ? 75.5 : 60.5, atTerrace ? 19.8 : 45.5,
+          atTerrace ? 81.5 : 66.0, atTerrace ? 19.8 : 45.5,
           '📑 방금 해석한 메뉴 JSON 넘겼어요!', '🔍 좋아요, 모바일 화면 바로 대조할게요!');
       },
       // 9. 랜덤 대기 직원: 커피바 휴식 & 스트레칭 (위치 분산)
@@ -2165,16 +2193,16 @@
         const pick = pool[Math.floor(Math.random() * pool.length)];
         const hr = new Date().getHours();
         const msg = (hr >= 11 && hr <= 13) ? '☕ 점심 식후 아아 한 잔 추출 중…' : '☕ 시원한 커피 한 잔 하며 스트레칭 중…';
-        const cx = [15.5, 20.5, 26.0][Math.floor(Math.random() * 3)];
-        return doChore(pick, cx, 22.8, 'back', '☕ 커피바 휴식 가는 중…', msg, 3000);
+        const cx = [10.5, 15.0, 19.5][Math.floor(Math.random() * 3)];
+        return doChore(pick, cx, 17.8, 'back', '☕ 커피바 휴식 가는 중…', msg, 3000);
       },
       // 10. 랜덤 대기 직원: 우측 테라스 창밖 구경(환기, 위치 분산)
       () => {
         const pool = ['finder', 'agy', 'translator', 'sorter', 'inspector', 'staffing', 'reader', 'auditor'].filter(isFree);
         if (!pool.length) return false;
         const pick = pool[Math.floor(Math.random() * pool.length)];
-        const tx = [74.5, 80.5, 86.5][Math.floor(Math.random() * 3)];
-        return doChore(pick, tx, 22.2, 'back', '🌤️ 테라스 바람 좀 쐬러 가는 중…', '🌤️ 창밖 풍경이 좋네요… 잠시 환기 중!', 3200);
+        const tx = [76.5, 82.5, 88.5][Math.floor(Math.random() * 3)];
+        return doChore(pick, tx, 17.2, 'back', '🌤️ 테라스 바람 좀 쐬러 가는 중…', '🌤️ 창밖 풍경이 좋네요… 잠시 환기 중!', 3200);
       },
       // 11. 서로 다른 부서 2명 사무실 전역 빈 공간 분산 수다(Banter)
       () => {
@@ -2189,18 +2217,20 @@
           ['📁 오늘 새 가게 메뉴 깔끔하네요!', '👍 사진이 잘 나와서 작업이 빨라요!'],
         ];
         const spots = [
-          [26.5, 22.8, 32.0, 22.8], // 좌측 커피 라운지
-          [75.5, 22.2, 81.5, 22.2], // 우측 햇살 테라스
-          [34.5, 48.5, 40.0, 48.5], // 좌측 복도
-          [60.0, 48.5, 65.5, 48.5], // 우측 복도
-          [49.8, 63.0, 49.8, 70.0], // 중앙 하단 남북 복도
+          [22.5, 20.0, 27.5, 20.0], // 좌측 커피 라운지
+          [75.5, 19.8, 81.5, 19.8], // 우측 햇살 테라스
+          [34.5, 45.5, 40.0, 45.5], // 좌측 복도
+          [60.0, 45.5, 65.5, 45.5], // 우측 복도
+          [50.5, 63.0, 50.5, 70.0], // 중앙 하단 남북 복도
+          [31.0, 93.5, 37.0, 93.5], // 맨 아래 나무 바닥(왼쪽)
+          [62.0, 93.5, 68.0, 93.5], // 맨 아래 나무 바닥(오른쪽)
         ];
         const [m1, m2] = pairs[Math.floor(Math.random() * pairs.length)];
         const [ax, ay, bx, by] = spots[Math.floor(Math.random() * spots.length)];
         return doPairChat(a, b, ax, ay, bx, by, m1, m2);
       },
       // 12. 선별팀 팀장: 방 안 컨베이어 옆 박스 점검
-      () => doChore('sorter', 85.0, 76.0, 'east',
+      () => doChore('sorter', 85.4, 80.8, 'east',
         '📦 컨베이어 분류 상태 확인 중…', '✅ 포장 라인·분류함 이상 없음!', 2800),
       // 13. 비서실장 + 자료 해석 비서: 분산 무대 합동 아이돌 댄스 타임!
       () => (isFree('claude') && isFree('reader')) ? danceParty() : false,
@@ -2210,11 +2240,12 @@
     function danceParty() {
       if (briefingActive) return false;
       const stages = [
-        { name: '우측 햇살 테라스', a: [75.5, 22.2], b: [81.5, 22.2], bx: 78.5, by: 20.5 },
-        { name: '좌측 복도 라운지', a: [34.5, 47.5], b: [40.0, 47.5], bx: 37.2, by: 45.5 },
-        { name: '우측 복도 라운지', a: [60.0, 47.5], b: [65.5, 47.5], bx: 62.7, by: 45.5 },
-        { name: '좌측 커피바 앞',   a: [26.5, 22.8], b: [32.0, 22.8], bx: 29.2, by: 21.0 },
-        { name: '중앙 홀',          a: [46.8, 49.0], b: [53.2, 49.0], bx: 50.0, by: 47.0 },
+        { name: '우측 햇살 테라스', a: [75.5, 19.8], b: [81.5, 19.8], bx: 78.5, by: 18.2 },
+        { name: '좌측 복도 라운지', a: [34.5, 46.5], b: [40.0, 46.5], bx: 37.2, by: 44.5 },
+        { name: '우측 복도 라운지', a: [60.0, 46.5], b: [65.5, 46.5], bx: 62.7, by: 44.5 },
+        { name: '좌측 커피바 앞',   a: [22.5, 20.0], b: [27.5, 20.0], bx: 25.0, by: 18.4 },
+        { name: '중앙 홀',          a: [46.5, 46.0], b: [53.5, 46.0], bx: 50.0, by: 44.5 },
+        { name: '맨 아래 나무 바닥', a: [46.0, 93.5], b: [54.0, 93.5], bx: 50.0, by: 91.5 },
       ];
       let sIdx = Math.floor(Math.random() * stages.length);
       if (sIdx === lastDanceStage) sIdx = (sIdx + 1) % stages.length;
