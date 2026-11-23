@@ -13,6 +13,7 @@
     inspector:  { name: '운영 감찰관',   role: '두 번째 검토', home: [7.7,  86.2], standPos: [13.2, 86.8], facing: 'back',  scale: 0.95, seat: { x: 7.7,  headTopY: 72.2, clipY: 83.0, h: 220 } },
     staffing:   { name: '인력 공급팀',   role: '인력·일정 관리', home: [64.4, 76.8], standPos: [58.0, 76.8], facing: 'front', scale: 0.95, seat: { x: 64.4, headTopY: 67.6, clipY: 74.4, h: 230 } },
     reader:     { name: '자료 해석 비서', role: '메뉴판 해석',  home: [92.2, 49.0], standPos: [87.2, 50.0], facing: 'back',  scale: 0.96, seat: { x: 92.2, headTopY: 35.8, clipY: 46.2, h: 220 } },
+    auditor:    { name: '데이터 감사관', role: '마지막 점검',  home: [18.6, 86.2], standPos: [23.2, 86.8], facing: 'back',  scale: 0.95, seat: { x: 18.6, headTopY: 72.2, clipY: 83.0, h: 220 } },
   };
 
   // Y-깊이(앞/뒤 가림) 전경 가구 목록 (7개 방 모든 책상·의자 완비!):
@@ -62,6 +63,8 @@
     hallToStaff:  [[50.2, 59.0], [50.2, 81.2], [57.2, 81.2], [57.2, 76.8], [64.4, 76.8]],
     readerToHall: [[92.2, 50.8], [74.5, 50.8], [58.5, 50.8]],
     hallToReader: [[58.5, 50.8], [74.5, 50.8], [92.2, 50.8]],
+    auditToHall:  [[18.6, 87.5], [23.2, 87.5], [23.2, 50.5], [38.5, 50.5]],
+    hallToAudit:  [[38.5, 50.5], [23.2, 50.5], [23.2, 87.5], [18.6, 87.5]],
   };
 
   function loadAll() {
@@ -333,6 +336,26 @@
       });
     }
 
+    function auditorCheck() {
+      if (briefingActive) return;
+      const au = npcs.auditor;
+      if (!au || au.mode === 'walk') return;
+      log('📊 데이터 감사관이 최종 품질 점검 보고를 위해 복도로 이동');
+      sendPath('auditor', ROUTES.auditToHall, {
+        bubble: '📊 전 가게 데이터·링크 무결성 최종 감사 중…',
+        onArrive: () => {
+          au.dir = 'east'; au.bubble = '✅ 최종 데이터 감사 100% 통과! 배포 가능'; au.bubbleType = 'ok';
+          setTimeout(() => {
+            if (briefingActive) return;
+            sendPath('auditor', ROUTES.hallToAudit, {
+              bubble: '↩ 감사실 복귀',
+              onArrive: () => { au.mode = 'idle'; au.dir = 'back'; au.bubble = ''; }
+            });
+          }, 2600);
+        }
+      });
+    }
+
     function runDemo() {
       serveCoffee();
       setTimeout(hallChat, 1200);
@@ -341,7 +364,8 @@
       setTimeout(inspCheck, 4200);
       setTimeout(staffCheck, 5200);
       setTimeout(readerCheck, 5800);
-      setTimeout(captainWalk, 6500);
+      setTimeout(auditorCheck, 6200);
+      setTimeout(captainWalk, 6800);
     }
 
     // ---------------------------------------------------------------- 렌더링 (실측 책상 경계 클리핑 + 의자 실루엣 마스크!)
@@ -772,6 +796,7 @@
       inspector:  { greet: '캡틴! 배포 전 2차 교차 감찰이 필요한 가게나 메뉴판이 있으신가요?', quick: ['🛡️ 배포 예정 가게 2차 교차 감찰', '🔎 오타·링크 깨짐 최종 확인', '📋 감찰 통과 현황 보고'] },
       staffing:   { greet: '캡틴! 오늘 거래처 주·야간 인력 배치나 근태 현황 확인하실까요?', quick: ['📅 오늘 주·야간 인력 배치 보고', '📊 이번 달 거래처 실적 확인', '📋 미보고 거래처 점검'] },
       reader:     { greet: '캡틴! 새로 들어온 메뉴판 사진에서 글자·가격 데이터를 추출할까요?', quick: ['📑 신규 메뉴판 원문 해석 시작', '💰 가격·옵션 누락 정밀 대조', '📋 해석 완료 리스트 보고'] },
+      auditor:    { greet: '캡틴! 배포 전 마지막 데이터 감사·오류 점검을 진행할까요?', quick: ['📊 전체 메뉴 데이터 최종 감사', '🔗 배포 링크·이미지 깨짐 점검', '📋 감사 완료 보고서 제출'] },
     };
 
     function faceEachOther(a, b) {
@@ -986,6 +1011,7 @@
       inspector:  '🛡️ 전일 배포 예정 메뉴판 2차 교차 감찰 100% 통과 확인했습니다!',
       staffing:   '📅 전일 거래처 주·야간 인력 배치 및 출근 보고 100% 마감했습니다!',
       reader:     '📑 전일 신규 가게 메뉴판 4곳 텍스트·가격 데이터 해석 완료했습니다!',
+      auditor:    '📊 전일 전체 가게 데이터·이미지·링크 최종 감사 100% 통과했습니다!',
     };
 
     function clearBriefTimers() {
