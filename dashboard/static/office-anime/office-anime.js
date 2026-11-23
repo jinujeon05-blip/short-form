@@ -313,8 +313,8 @@
       if (bgmBuf) return bgmBuf;
       const probe = document.createElement('audio');
       const urls = probe.canPlayType('audio/ogg; codecs="vorbis"')
-        ? ['/static/office-anime/assets/bgm-office.ogg?v=1', '/static/office-anime/assets/bgm-office.m4a?v=1']
-        : ['/static/office-anime/assets/bgm-office.m4a?v=1', '/static/office-anime/assets/bgm-office.ogg?v=1'];
+        ? ['/static/office-anime/assets/bgm-office.ogg?v=2', '/static/office-anime/assets/bgm-office.m4a?v=2']
+        : ['/static/office-anime/assets/bgm-office.m4a?v=2', '/static/office-anime/assets/bgm-office.ogg?v=2'];
       for (const u of urls) {
         try {
           const res = await fetch(u);
