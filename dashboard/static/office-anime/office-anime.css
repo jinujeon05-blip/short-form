@@ -119,17 +119,25 @@
 }
 @media (max-width: 720px), (max-height: 540px) {
   .oa-ctrl-hint { display: none; }
-  .oa-modal { width: min(400px, 60%); min-width: 260px; max-height: 90%; padding: 9px 11px; border-radius: 12px; top: 50% !important; }
-  .oa-m-head { gap: 9px; }
-  .oa-m-head img { width: 52px; height: 62px; border-radius: 9px; }
-  .oa-m-head h3 { font-size: 13px; margin: 0 0 2px; }
-  .oa-m-say { font-size: 11px; line-height: 1.32; }
-  .oa-m-quick { gap: 4px; margin-top: 7px; }
-  .oa-q-btn { padding: 4px 7px; font-size: 10.5px; border-radius: 6px; }
-  .oa-m-form { margin-top: 7px; gap: 5px; }
-  .oa-m-form input { padding: 5px 8px; font-size: 11.5px; }
-  .oa-m-form button { padding: 5px 9px; font-size: 11px; }
+  /* 폰: 대화창을 작게(폭 40% 안팎) — 자리는 JS(placeModal)가 캐릭터를 피해서 정함 */
+  .oa-modal { width: min(320px, 42%); min-width: 230px; max-height: 80%; padding: 7px 9px; border-radius: 10px; border-width: 1.5px; }
+  .oa-m-head { gap: 7px; align-items: center; }
+  .oa-m-head img { width: 36px; height: 42px; border-radius: 7px; border-width: 1.5px; }
+  .oa-m-head h3 { font-size: 12px; margin: 0 0 1px; gap: 4px; }
+  .oa-m-role { font-size: 9px; padding: 1px 5px; }
+  .oa-m-say { font-size: 10px; line-height: 1.3; margin: 1px 0 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .oa-m-head button { width: 22px; height: 22px; font-size: 13px; border-radius: 6px; }
+  .oa-m-quest { margin-top: 6px; padding: 5px 7px; }
+  .oa-m-quest-txt { font-size: 10px; min-width: 100px; }
+  .oa-m-quest-btn { font-size: 10px; padding: 4px 8px; }
+  .oa-m-quick { gap: 3px; margin-top: 5px; }
+  .oa-q-btn { padding: 3px 6px; font-size: 9.5px; border-radius: 6px; }
+  .oa-m-form { margin-top: 5px; gap: 4px; }
+  .oa-m-form input { padding: 4px 7px; font-size: 10.5px; }
+  .oa-m-form button { padding: 4px 8px; font-size: 10px; }
+  .oa-m-res { margin-top: 5px; font-size: 10.5px; }
 }
-@media (max-width: 560px) {
-  .oa-modal { width: 92%; left: 50% !important; }
+/* 화면(회전 포함) 실제 폭이 아주 좁을 때만 넓게 — 가로 회전 전체화면은 여기에 안 걸림 */
+@container (max-width: 520px) {
+  .oa-modal { width: 88%; min-width: 0; }
 }

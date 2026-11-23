@@ -155,7 +155,8 @@
     });
     // 캡틴 확대 추적 게임 카메라 (기본값: follow 1.85배 확대 추적, 보고 중엔 자동 전체 보기!)
     let camMode = 'follow';
-    const cam = { z: 1.85, fx: CHARS.captain.home[0], fy: CHARS.captain.home[1] + 5 };
+    const cam = { z: 1.85, fx: CHARS.captain.home[0], fy: CHARS.captain.home[1] + 5, tx: 0, ty: 0 };
+    let modalTargets = [], modalSlot = null, modalPlaceAt = 0; // 대화창 자리 정하기(placeModal)용
     camBtn?.addEventListener('click', () => {
       camMode = (camMode === 'follow') ? 'overview' : 'follow';
       camBtn.classList.toggle('on', camMode === 'follow');
@@ -1312,8 +1313,11 @@
         cam.fy += (targetFy - cam.fy) * k;
         const tx = Math.max(100 - 100 * cam.z, Math.min(0, 50 - cam.fx * cam.z));
         const ty = Math.max(100 - 100 * cam.z, Math.min(0, 50 - cam.fy * cam.z));
+        cam.tx = tx; cam.ty = ty;
         camEl.style.transform = `translate(${tx.toFixed(2)}%, ${ty.toFixed(2)}%) scale(${cam.z.toFixed(4)})`;
       }
+      // 대화창이 열려 있으면 0.2초마다 캐릭터(카메라 확대 반영) 화면 위치를 다시 보고, 가리면 다른 자리로 옮김
+      if (!modalBack.hidden && now - modalPlaceAt > 200) { modalPlaceAt = now; placeModal(); }
       requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -1377,6 +1381,45 @@
         if (canWalk(tx, ty)) return [tx, ty];
       }
       return [50.0, 29.8];
+    }
+
+    // ---- 대화창 자리 정하기: 확대 카메라까지 반영한 '실제 화면 위치'로 캡틴·대화 상대(말풍선 포함)를 피함
+    function charScreenBox(p) {
+      const z = cam.z || 1, tx = cam.tx || 0, ty = cam.ty || 0;
+      // 머리 위 말풍선까지 가리지 않게 위쪽 여유를 넉넉히(-21)
+      return { x0: tx + (p.x - 5) * z, x1: tx + (p.x + 5) * z, y0: ty + (p.y - 21) * z, y1: ty + (p.y + 4) * z };
+    }
+    function placeModal() {
+      if (modalBack.hidden || !modalTargets.length) return;
+      const wrap = root.querySelector('.oa-rot-wrap');
+      const W = wrap.clientWidth || 1, H = wrap.clientHeight || 1;
+      const mw = modal.offsetWidth / W * 100, mh = modal.offsetHeight / H * 100;
+      // 위 HUD(레벨·전체 보기)·아래 직원 바를 되도록 피하되, 자리가 모자라면 여백을 줄임
+      let padT = 9, padB = 12;
+      if (mh + padT + padB > 98) { padT = 1; padB = 1; }
+      const padX = 1;
+      const span = (lo, hi) => lo <= hi ? [lo, (lo + hi) / 2, hi] : [50];
+      const xs = span(mw / 2 + padX, 100 - mw / 2 - padX);
+      const ys = span(mh / 2 + padT, 100 - mh / 2 - padB);
+      const boxes = modalTargets.map(charScreenBox);
+      const overlap = (cx, cy) => boxes.reduce((s, b) => {
+        const ox = Math.max(0, Math.min(cx + mw / 2, b.x1) - Math.max(cx - mw / 2, b.x0));
+        const oy = Math.max(0, Math.min(cy + mh / 2, b.y1) - Math.max(cy - mh / 2, b.y0));
+        return s + ox * oy;
+      }, 0);
+      // 지금 자리가 아무도 안 가리면 그대로 둠(창이 이리저리 흔들리지 않게)
+      if (modalSlot && overlap(modalSlot.x, modalSlot.y) === 0
+          && xs.some(x => Math.abs(x - modalSlot.x) < 0.5) && ys.some(y => Math.abs(y - modalSlot.y) < 0.5)) return;
+      let best = null, bestScore = Infinity;
+      for (const x of xs) for (const y of ys) {
+        let minDist = Infinity;
+        for (const b of boxes) minDist = Math.min(minDist, Math.hypot(x - (b.x0 + b.x1) / 2, y - (b.y0 + b.y1) / 2));
+        const score = overlap(x, y) * 1000 - minDist;
+        if (score < bestScore) { bestScore = score; best = { x, y }; }
+      }
+      modalSlot = best;
+      modal.style.left = `${best.x}%`;
+      modal.style.top = `${best.y}%`;
     }
 
     function closeTalkModal(keepOrderBubble = false) {
@@ -1552,43 +1595,10 @@
         const val = e.target.msg.value.trim();
         if (val) sendOrder(val);
       });
-      // 캡틴과 대화 상대 캐릭터를 절대 가리지 않는 최적 위치 자동 계산!
-      function placeModalAvoiding(a, b) {
-        const mw = 36, mh = 34; // 모달 대략 폭/높이 (%)
-        const charBox = p => ({ x0: p.x - 4.5, y0: p.y - 15.5, x1: p.x + 4.5, y1: p.y + 4.0 });
-        const targets = (a && b && a !== b) ? [charBox(a), charBox(b)] : [charBox(a || b)];
-        const slots = [
-          { x: 50, y: 76 }, { x: 23, y: 76 }, { x: 77, y: 76 },
-          { x: 23, y: 24 }, { x: 77, y: 24 }, { x: 50, y: 24 },
-          { x: 23, y: 50 }, { x: 77, y: 50 },
-        ];
-        const overlapArea = (sx, sy, box) => {
-          const ox = Math.max(0, Math.min(sx + mw / 2, box.x1) - Math.max(sx - mw / 2, box.x0));
-          const oy = Math.max(0, Math.min(sy + mh / 2, box.y1) - Math.max(sy - mh / 2, box.y0));
-          return ox * oy;
-        };
-        let best = slots[0], bestScore = Infinity;
-        for (const s of slots) {
-          let ov = 0, minDist = Infinity;
-          for (const tb of targets) {
-            ov += overlapArea(s.x, s.y, tb);
-            const cx = (tb.x0 + tb.x1) / 2, cy = (tb.y0 + tb.y1) / 2;
-            minDist = Math.min(minDist, Math.hypot(s.x - cx, s.y - cy));
-          }
-          // 겹침 면적이 0인 칸을 최우선, 그중 두 캐릭터와 가장 여유 있게 떨어진 칸 선택
-          const score = ov * 1000 - minDist;
-          if (score < bestScore) { bestScore = score; best = s; }
-        }
-        // 모바일 가로 등 화면 높이가 낮은 환경에서는 대화창이 위/아래로 절대 잘리지 않도록 세로 중앙(50%) 고정!
-        const rotH = root.querySelector('.oa-rot-wrap')?.clientHeight || 600;
-        const safeY = rotH < 520 ? 50 : Math.max(30, Math.min(70, best.y));
-        const safeX = rotH < 520 ? (best.x < 50 ? 28 : 72) : Math.max(24, Math.min(76, best.x));
-        modal.style.left = `${safeX}%`;
-        modal.style.top  = `${safeY}%`;
-      }
-
+      modalTargets = (hit === 'captain') ? [cap] : [cap, n];
+      modalSlot = null;
       modalBack.hidden = false;
-      placeModalAvoiding(cap, n);
+      placeModal();
       // 모바일에서 캐릭 터치 시 키보드가 자동 팝업되지 않도록 자동 focus 제거 (입력창을 직접 터치할 때만 자판 열림!)
     }
 
