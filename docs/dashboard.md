@@ -226,3 +226,20 @@
 - **원인**: 13:42에 켠 대시보드가 꺼지지 않은 채 16:07에 또 켜졌다. 윈도우에서 파이썬 기본값(`SO_REUSEADDR`)은 같은 포트(8899)에 두 서버가 함께 켜지게 해서, 사진 수집기의 줄 넣기 요청이 옛 서버로 갔다. 옛 서버가 분짜닥킴을 만들고(`1123-161652-q1`, 356만 토큰) 꺼진 뒤, 새 서버는 그 지시를 몰라 결재함이 0으로 보였다.
 - **고침**: ① `OneServer`(`allow_reuse_address = False`) — 두 번째로 켜면 포트를 못 잡고 '이미 켜져 있어요'를 쓰고 끝난다(8899·8900 둘 다). ② `scheduler`가 20초마다 `load_orders(only_new=True)`로 `dashboard/orders/`에서 모르는 지시 파일만 더 읽는다(아는 지시는 덮어쓰지 않음).
 - **확인**: 임시 포트 8913에서 첫 서버를 켠 채 두 번째를 켜면 종료 코드 1·안내 글. 새로 켠 서버 `/api/orders` 맨 위에 `1123-161652-q1`(분짜닥킴) 보임, `/api/newshops`·`/api/queue` 404, 브리핑 정상. `server.py`를 고쳤으니 **다시 켜야** 적용된다.
+
+## 2026-11-22 ~ 11-23 안티그래비티 작업 인계 기록 (클로드 공유용)
+- **작업 범위**: `dashboard/static/` 화면 파일만 수정(`server.py` 미수정, 서버 재시작 불필요 · `owner-panel` 브랜치 커밋 `3a601e9` ~ `c012f3e`).
+- **1) 10명 완전체 2K 12프레임 애니 사무실 (`dashboard/static/office-anime/`)**:
+  - 배경 `bg-office.webp`(2560×1440) + 7개 방 14개 책상·의자 전경 마스크(`assets/masks/*.webp`) 통합 Y-깊이 정렬(`PROPS`).
+  - 전 캐릭터 12프레임 투명 스프라이트(`assets/walk/`, `rembg isnet-anime` 추출) + 10명 고화질 초상화(`assets/portraits/*.webp`). **주의**: `reader`(자료 해석 비서)는 `asset: 'auditor'`, `auditor`(데이터 감사관)는 `asset: 'reader'`로 외형이 맞바뀌어 있으므로 초상화·스프라이트 파일명 매핑 시 반드시 유지한다.
+  - **캡틴 8방향 조작**: WASD/방향키/바닥 클릭 A* 이동/모바일 엄지 조이스틱. 앞대각선(`captain-se-1..12`)·뒤대각선(`captain-ne-1..12`) 24프레임 + 좌우 반전으로 8방향 완성 + `1` 인사(`greet`) / `2` 커피(`coffee`) / `E` 착석. 입력창·한글 조합·대화창·상세패널 열림 시 키 조작 완전 차단.
+  - **전용 생활·이벤트 동작**: 선별팀 팀장 화분 물주기(`sorter-water-1..12`, 좌/우 화분 밀착 `[31.9,41.4]`/`[68.1,41.4]`), 인력 공급팀 팀장 캡틴 책상 먼지 닦기(`staffing-clean-1..12`, `[43.8,23.0]`), 운영 감찰관 복도 빗자루 청소(`inspector-sweep-1..12`, 화분·비서실장 책상 사이 `[37.0,41.2]`/`[63.0,41.2]`), 비서실장·자료 해석 비서 합동 아이돌 댄스(`claude-dance-1..12`, `auditor-dance-1..12`, `[💃 댄스]` 버튼 + 5곳 분산 무대).
+  - **길찾기·보폭·호출 규칙**: 모든 이동은 `BLOCKERS` 기반 1.5% 격자 A*(`findPath`, 직선 벽 통과 폴백 금지). `finder` 초록 방 우측 조명 박스는 `x0: 22.2`로 두어 `x=21.0` 격자 통로를 반드시 유지한다(`c012f3e`). NPC 이동 속도는 `4.2`(보폭 `stride 1.65`)로 바닥 미끄러짐 제거. 직원 클릭 시 무조건 캡틴 앞(`getSpotNearCaptain()`)으로 걸어오고, 대화창을 닫으면 자기 자리로 A* 안전 복귀(`ef5ac55`).
+- **2) RPG·모바일 전체화면·사운드**:
+  - 실시간 데이터 연동(`syncReal`): 작업 중/완료 배지, RPG 퀘스트 마커(`!`/`?`), 현장 결재·새 가게 제작 지시 템플릿, 황금 파티클·`+EXP`·레벨 HUD(`Lv.N 캡틴 · N호점`).
+  - 모바일 전체화면: 가로 자동 회전(`orientation.lock` + `.oa-rot-wrap` 90° 폴백), 화면 꺼짐 방지(Wake Lock + NoSleep 무음 MP4), 뒤로가기 키 종료, 투명 엄지 조이스틱(감사실 위쪽 책장 `left: 2.2%, bottom: 32%`), 세로 중앙 컴팩트 대화창(잘림 방지), 컴팩트 오버레이 버튼(효과음·BGM 좌측 하단, 캡틴 액션 우측 상단).
+  - 사운드: 캡틴 제공 2곡(`bgm-office.ogg/.m4a`, `bgm-office-2.ogg/.m4a`) 자동 교대 재생(`🎵 BGM 1 ↔ 2`) + 12종 Web Audio 게임 효과음(`tap·close·walkClick·send·fanfare·brief·greet·coffee·sit·water·sweep·dance`).
+- **3) 메인 대시보드 프로필 & 팀 대화방 개편 (`app.js`, `style.css`, `index.html`)**:
+  - `face()`/`avatar()` 전체를 `/static/office-anime/assets/portraits/*.webp`로 통일(`reader↔auditor` 매핑 일치).
+  - 왼쪽 팀 대화방(`chatHtml`)은 `toHumanChat()`으로 짧은 카톡 일상 대화체 + `[원문 보기]` 토글로 표시하고, 상단 `[자세히]` 옆 창(`renderOrderPanel`)에는 참여한 직원(애니 프로필)·전체 `진행 상황(N단계)`·상세 보고 원문·팀 대화 원문을 모두 표시한다(`50898c7`).
+  - **수정 시 주의**: `dashboard/static/index.html`의 `?v=` 캐시 버스터를 같이 올려야 브라우저에 즉시 반영된다. `dashboard/static/office-anime/assets/` 안의 미추적 원본 PNG·MP4 파일은 캡틴 원본 자산이므로 삭제하지 않는다.
