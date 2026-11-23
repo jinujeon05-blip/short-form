@@ -10,6 +10,7 @@
     agy:        { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.4, 49.0], standPos: [77.2, 49.8], facing: 'back',  scale: 0.96, seat: { x: 82.4, headTopY: 35.8, clipY: 46.2, h: 220 } },
     translator: { name: '수석 번역관',   role: '4개국어 번역', home: [36.8, 76.8], standPos: [42.6, 76.8], facing: 'front', scale: 0.95, seat: { x: 36.8, headTopY: 67.4, clipY: 74.4, h: 235 } },
     sorter:     { name: '선별팀 팀장',   role: '자료 선별',   home: [83.4, 77.0], standPos: [77.2, 77.0], facing: 'front', scale: 0.95, seat: { x: 83.4, headTopY: 68.2, clipY: 74.7, h: 230 } },
+    inspector:  { name: '운영 감찰관',   role: '두 번째 검토', home: [7.7,  86.2], standPos: [13.2, 86.8], facing: 'back',  scale: 0.95, seat: { x: 7.7,  headTopY: 72.2, clipY: 83.0, h: 220 } },
   };
 
   // Y-깊이(앞/뒤 가림) 전경 가구 목록 (7개 방 모든 책상·의자 완비!):
@@ -53,6 +54,8 @@
     hallToTrans:  [[49.8, 56.0], [49.8, 81.2], [43.2, 81.2], [43.2, 76.8], [36.8, 76.8]],
     sorterToHall: [[83.4, 77.0], [76.5, 77.0], [76.5, 51.0], [66.0, 51.0]],
     hallToSorter: [[66.0, 51.0], [76.5, 51.0], [76.5, 77.0], [83.4, 77.0]],
+    inspToHall:   [[7.7,  87.5], [23.2, 87.5], [23.2, 50.5], [34.0, 50.5]],
+    hallToInsp:   [[34.0, 50.5], [23.2, 50.5], [23.2, 87.5], [7.7,  87.5]],
   };
 
   function loadAll() {
@@ -264,11 +267,32 @@
       });
     }
 
+    function inspCheck() {
+      if (briefingActive) return;
+      const ins = npcs.inspector;
+      if (!ins || ins.mode === 'walk') return;
+      log('🛡️ 운영 감찰관이 배포 전 교차 검토 보고를 위해 복도로 이동');
+      sendPath('inspector', ROUTES.inspToHall, {
+        bubble: '🛡️ 배포 전 최종 교차 감찰 진행 중…',
+        onArrive: () => {
+          ins.dir = 'east'; ins.bubble = '✅ 2차 운영 감찰 이상 없음! 통과입니다'; ins.bubbleType = 'ok';
+          setTimeout(() => {
+            if (briefingActive) return;
+            sendPath('inspector', ROUTES.hallToInsp, {
+              bubble: '↩ 감사실 복귀',
+              onArrive: () => { ins.mode = 'idle'; ins.dir = 'back'; ins.bubble = ''; }
+            });
+          }, 2600);
+        }
+      });
+    }
+
     function runDemo() {
       serveCoffee();
       setTimeout(hallChat, 1200);
       setTimeout(transConsult, 2200);
       setTimeout(sorterCheck, 3200);
+      setTimeout(inspCheck, 4200);
       setTimeout(captainWalk, 6500);
     }
 
@@ -697,6 +721,7 @@
       agy:        { greet: '캡틴! 어떤 가게의 디지털 메뉴판을 점검할까요?', quick: ['🔍 메뉴판 가격·오타 전수 점검', '📱 모바일 화면 깨짐 확인', '📋 검수 완료 리스트 보고'] },
       translator: { greet: '캡틴! 베트남어·영어·한국어 메뉴 번역 지시하실 내용이 있으신가요?', quick: ['🌐 새 메뉴 4개국어 번역 시작', '✍️ 베트남어 현지 표현 자연스럽게 다듬기', '📋 번역 완료 현황 보고'] },
       sorter:     { greet: '캡틴! 새로 들어온 가게 메뉴 사진·자료를 어떤 기준으로 선별할까요?', quick: ['📦 신규 가게 자료 1차 선별 시작', '🗂️ 중복·흐린 파일 자동 정리', '📋 선별 완료 목록 보고'] },
+      inspector:  { greet: '캡틴! 배포 전 2차 교차 감찰이 필요한 가게나 메뉴판이 있으신가요?', quick: ['🛡️ 배포 예정 가게 2차 교차 감찰', '🔎 오타·링크 깨짐 최종 확인', '📋 감찰 통과 현황 보고'] },
     };
 
     function faceEachOther(a, b) {
@@ -908,6 +933,7 @@
       agy:        '🔍 전일 디지털 메뉴판 3곳 가격·오타 전수 검수 마쳤습니다!',
       translator: '🌐 전일 한·베·영·중 4개국어 메뉴 번역 48건 검수 완료했습니다!',
       sorter:     '📦 전일 신규 가게 원본 메뉴·사진 자료 1차 선별 끝냈습니다!',
+      inspector:  '🛡️ 전일 배포 예정 메뉴판 2차 교차 감찰 100% 통과 확인했습니다!',
     };
 
     function clearBriefTimers() {
