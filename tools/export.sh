@@ -115,6 +115,7 @@ name() {
     sumibaozi) echo "수미보오즈" ;;
     jeilnaengsam) echo "제일냉삼" ;;
     quananngonhdt) echo "꽌안응온" ;;
+    nolowachicken) echo "놀로와치킨" ;;
     *) echo "$1" ;;
   esac
 }

@@ -225,6 +225,8 @@ window.DEMOS = [
     name: "제일냉삼 JEIL NAENGSAM", type: { ko: "한식 · 냉동삼겹살 전문점 · 고기구이", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ đông lạnh", en: "Korean BBQ · Frozen pork belly specialist", zh: "韩式烤肉 · 冷冻五花肉专门店", ja: "韓国焼肉・冷凍サムギョプサル専門店" } },
   { id: "quananngonhdt", hidden: true, url: "https://quananngonhdt.qrmenuasia.com", shot: "img/demo-quananngonhdt.jpg", qr: "img/qr-quananngonhdt.svg",
     name: "꽌안응온 Quán Ăn Ngon", type: { ko: "베트남 전통 요리 · 전골 · 해산물 · 쌀국수", vi: "Ẩm thực Việt · Lẩu · Hải sản · Bún phở", en: "Vietnamese cuisine · Hotpot · Seafood · Noodles", zh: "越南传统美食 · 火锅 · 海鲜 · 米粉", ja: "ベトナム伝統料理・鍋・海鮮・麺料理" } },
+  { id: "nolowachicken", hidden: true, url: "https://nolowachicken.qrmenuasia.com", shot: "img/demo-nolowachicken.jpg", qr: "img/qr-nolowachicken.svg",
+    name: "놀로와 치킨 NOLLOWA CHICKEN", type: { ko: "한식 · 치킨 · 분식 · 전골", vi: "Gà rán Hàn Quốc · Món ăn vặt · Lẩu Hàn", en: "Korean fried chicken · Snacks · Hot pot", zh: "韩式炸鸡 · 小吃 · 火锅", ja: "韓国チキン・粉食・チョンゴル" } },
 ];
 
 window.T = {

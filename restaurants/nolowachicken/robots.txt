@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nolowachicken.qrmenuasia.com/sitemap.xml

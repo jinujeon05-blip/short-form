@@ -881,6 +881,12 @@ window.STORES = [
     type: { ko: "베트남 전통 요리 · 전골 · 해산물 · 쌀국수", vi: "Ẩm thực Việt · Lẩu · Hải sản · Bún phở", en: "Vietnamese cuisine · Hotpot · Seafood · Noodles", zh: "越南传统美食 · 火锅 · 海鲜 · 米粉", ja: "ベトナム伝統料理・鍋・海鮮・麺料理" },
     keywords: "꽌안응온 Quán Ăn Ngon Hoàng Đạo Thúy 하노이 베트남 음식 쌀국수 반쎄오 넴루이 전골 해산물 반꾸온 분보후에 껌땀 Hanoi Vietnamese restaurant hotpot seafood banh xeo"
   },
+  { id: "nolowachicken", name: "놀로와 치킨 NOLLOWA CHICKEN", sub: "후라이드 · 양념 · 바삭치킨 · 떡볶이 · 비빔밥 · 전골", url: "https://nolowachicken.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["chicken","korean"], tags: ["photos"],
+    address: "BT 01 11, Khu đô thị Mỗ Lao, Hà Đông, Hà Nội", map: "https://www.google.com/maps/place/Nollowa+Chicken/@20.9876768,105.7847243,20z/data=!4m6!3m5!1s0x3135ad8859e6c851:0x9d2a98cca7dc95fc!8m2!3d20.9873619!4d105.7843375!16s%2Fg%2F11trf_s07y",
+    type: { ko: "한식 · 치킨 · 분식 · 전골", vi: "Gà rán Hàn Quốc · Món ăn vặt · Lẩu Hàn", en: "Korean fried chicken · Snacks · Hot pot", zh: "韩式炸鸡 · 小吃 · 火锅", ja: "韓国チキン・粉食・チョンゴル" },
+    keywords: "놀로와 치킨 놀로와치킨 Nollowa Chicken NOLLOWA CHICKEN Mo Lao Ha Dong Hanoi 하노이 하동 모라오 후라이드 양념치킨 뿌링클 바삭치킨 떡볶이 로제떡볶이 돌솥비빔밥 막국수 짬뽕 전골 부대찌개 Korean fried chicken gà rán Hàn Quốc"
+  },
 ];
 window.SI = {
   ko: {
