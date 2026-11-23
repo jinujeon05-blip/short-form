@@ -6,6 +6,7 @@
 - 메뉴판 `restaurants/testshop`(가마솥 구조, 정식=장바구니·주문서, 맨 위 그림은 'QR TEST' 글자 로고). `robots.txt` 전체 막음 + `<meta name="robots" content="noindex">`.
 - **일부러 뺀 등록**: `sales/stores/data.js`·sync-lang/dasan/stores·seo·export·DEMOS·demo·analytics(방문 기록 블록). 그래서 `check-standard.mjs testshop`은 '등록 없음' 오류를 내는 것이 정상(구조 항목은 통과).
 - admin '주문·주방 기기' 탭은 가게 목록을 `data.js`에서 읽으므로, `sales/admin/kitchen.js`의 `TEST` 한 줄로 이 탭에서만 **맨 앞에 'QR 시험 식당 (시험용)'** 이 보이게 했다(이 탭 기본 선택도 시험 가게가 됨).
+- **2026-11-23부터**: QR을 찍으면 '자리 표'가 1시간만 유효(주문하면 다시 1시간), 주방 [자리 정리]를 누르면 바로 끝 → 그 뒤엔 주문 안 되는 기본 메뉴판. 다시 주문하려면 **QR을 다시 찍는다**(주소창에서 `?t=`가 지워지므로 새로 고침으로는 안 됨). 보낸 주문은 접수 전까지 [🧾 주문 내역]에서 수정·취소.
 - 테이블 QR(열쇠 없음): `restaurants/testshop/print/test-qr.pdf`(A4 한 장에 1·2·3번), 주소 `https://testshop.qrmenuasia.com/?t=1`~`3`. QR은 해독해 주소 일치 확인함.
 - 새 `order.js`는 `new-shop.mjs`가 `_shared/order.js`에서 이 가게에만 복사(같은 파일 확인). `sync-order.sh`는 다른 8곳에 한꺼번에 복사하는 스크립트라 돌리지 않았다.
 
