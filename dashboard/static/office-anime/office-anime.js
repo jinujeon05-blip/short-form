@@ -306,38 +306,65 @@
       step:    () => { tone(190, 0.03, 'sine', 0.018); },
     };
 
-    // 잔잔한 로파이 4코드 사무실 BGM (추가 파일·비용 0원!)
-    const BGM_CHORDS = [
-      [261.63, 329.63, 392.00, 493.88], // Cmaj7
-      [220.00, 261.63, 329.63, 392.00], // Am7
-      [174.61, 220.00, 261.63, 329.63], // Fmaj7
-      [196.00, 246.94, 293.66, 392.00], // G6
-    ];
-    let bgmStep = 0;
-    function toggleBgm() {
+    // 20초 무이음 루프 애니 오피스·카페 Lo-Fi BGM (bgm-office.ogg, 사파리용 .m4a 폴백 — Web Audio 완전 무이음 루프!)
+    let bgmBuf = null, bgmSrc = null, bgmGain = null, bgmLoading = false;
+    async function loadBgmBuffer(c) {
+      if (bgmBuf) return bgmBuf;
+      const probe = document.createElement('audio');
+      const urls = probe.canPlayType('audio/ogg; codecs="vorbis"')
+        ? ['/static/office-anime/assets/bgm-office.ogg?v=1', '/static/office-anime/assets/bgm-office.m4a?v=1']
+        : ['/static/office-anime/assets/bgm-office.m4a?v=1', '/static/office-anime/assets/bgm-office.ogg?v=1'];
+      for (const u of urls) {
+        try {
+          const res = await fetch(u);
+          if (!res.ok) continue;
+          const ab = await res.arrayBuffer();
+          bgmBuf = await c.decodeAudioData(ab);
+          return bgmBuf;
+        } catch {}
+      }
+      return null;
+    }
+    function stopBgmNode() {
+      if (bgmGain && actx) {
+        try {
+          const now = actx.currentTime;
+          bgmGain.gain.cancelScheduledValues(now);
+          bgmGain.gain.setValueAtTime(bgmGain.gain.value, now);
+          bgmGain.gain.linearRampToValueAtTime(0.0001, now + 0.25);
+        } catch {}
+      }
+      const oldSrc = bgmSrc;
+      bgmSrc = null;
+      if (oldSrc) setTimeout(() => { try { oldSrc.stop(); oldSrc.disconnect(); } catch {} }, 280);
+    }
+    async function toggleBgm() {
       bgmOn = !bgmOn;
       bgmBtn?.classList.toggle('on', bgmOn);
-      if (bgmTimer) { clearInterval(bgmTimer); bgmTimer = null; }
-      if (!bgmOn) return;
-      const playBar = () => {
-        if (!bgmOn || document.hidden) return;
-        const c = ensureAudio();
-        if (!c) return;
-        const chord = BGM_CHORDS[bgmStep++ % BGM_CHORDS.length];
-        chord.forEach((f, i) => {
-          const now = c.currentTime + i * 0.06;
-          const o = c.createOscillator(), g = c.createGain();
-          o.type = 'sine'; o.frequency.setValueAtTime(f, now);
-          g.gain.setValueAtTime(0.0001, now);
-          g.gain.exponentialRampToValueAtTime(0.022, now + 0.25);
-          g.gain.exponentialRampToValueAtTime(0.0001, now + 2.3);
-          o.connect(g); g.connect(c.destination);
-          o.start(now); o.stop(now + 2.4);
-        });
-      };
-      playBar();
-      bgmTimer = setInterval(playBar, 2400);
+      if (!bgmOn) { stopBgmNode(); return; }
+      const c = ensureAudio();
+      if (!c || bgmLoading) return;
+      bgmLoading = true;
+      const buf = await loadBgmBuffer(c);
+      bgmLoading = false;
+      if (!buf || !bgmOn) return;
+      stopBgmNode();
+      const src = c.createBufferSource();
+      src.buffer = buf;
+      src.loop = true;
+      const g = c.createGain();
+      const now = c.currentTime;
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.linearRampToValueAtTime(0.42, now + 0.4);
+      src.connect(g); g.connect(c.destination);
+      src.start(0);
+      bgmSrc = src; bgmGain = g;
     }
+    document.addEventListener('visibilitychange', () => {
+      if (!bgmGain || !actx || !bgmOn) return;
+      const now = actx.currentTime;
+      bgmGain.gain.setTargetAtTime(document.hidden ? 0.0001 : 0.42, now, 0.15);
+    });
     sfxBtn?.addEventListener('click', () => {
       sfxOn = !sfxOn;
       try { localStorage.setItem('jinwoo_oa_sfx', sfxOn ? '1' : '0'); } catch {}
