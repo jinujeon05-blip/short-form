@@ -6,7 +6,7 @@
   const CHARS = {
     captain:    { name: '캡틴',          role: '결재',        home: [50.0, 18.5], standPos: [55.5, 18.5], facing: 'front', scale: 1.0,  seat: { x: 50.0, headTopY: 6.4,  clipY: 13.0, h: 240 } },
     claude:     { name: '비서실장',      role: '지휘',        home: [50.0, 39.0], standPos: [44.2, 36.5], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 27.6, clipY: 33.4, h: 225 } },
-    finder:     { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], standPos: [19.8, 41.5], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.2, h: 225 } },
+    finder:     { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], standPos: [21.0, 42.0], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.2, h: 225 } },
     agy:        { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.4, 49.0], standPos: [77.2, 49.8], facing: 'back',  scale: 0.96, seat: { x: 82.4, headTopY: 35.8, clipY: 46.2, h: 220 } },
     translator: { name: '수석 번역관',   role: '4개국어 번역', home: [36.8, 76.8], standPos: [42.6, 76.8], facing: 'front', scale: 0.95, seat: { x: 36.8, headTopY: 67.4, clipY: 74.4, h: 235 } },
     sorter:     { name: '선별팀 팀장',   role: '자료 선별',   home: [83.4, 77.0], standPos: [77.2, 77.0], facing: 'front', scale: 0.95, seat: { x: 83.4, headTopY: 68.2, clipY: 74.7, h: 230 } },
@@ -854,7 +854,7 @@
       { x0:  0.0, y0: 24.2, x1:  9.2, y1: 52.0 }, // 좌벽 + 카메라 삼각대
       { x0: 26.6, y0: 24.2, x1: 28.8, y1: 47.4 }, // 우측 칸막이벽 (문 y=47.4~51.5 개방)
       { x0:  9.0, y0: 44.2, x1: 19.8, y1: 48.0 }, // 시각 정보 비서 책상
-      { x0: 21.0, y0: 38.0, x1: 27.5, y1: 44.0 }, // 우측 조명·휴지통
+      { x0: 22.2, y0: 38.0, x1: 27.5, y1: 43.2 }, // 우측 조명·휴지통 (x=21.0 통로 개방 보장!)
       // 우측 중단: 디지털 메뉴 통제실(빨강) 윗벽·뒷벽·가구
       { x0: 71.4, y0: 24.2, x1: 100., y1: 39.2 }, // 윗벽 + 빨강 뒷벽(걸레받이까지)
       { x0: 95.5, y0: 24.2, x1: 100., y1: 52.0 }, // 우벽 + 화분
