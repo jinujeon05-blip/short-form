@@ -1293,34 +1293,45 @@
       n.pausedState = null;
       if (!st) return;
 
-      if (st.mode === 'walk' && st.path.length) {
-        // 걷던 중 대화가 끝났으면 멈췄던 동선 그대로 즉시 재개!
-        n.path = st.path;
-        n.onArrive = st.onArrive;
-        n.mode = 'walk';
-        if (!keepOrderBubble) { n.bubble = st.bubble; n.bubbleType = st.bubbleType; }
-      } else if (st.wasSeated) {
-        // 의자 옆 바닥(standPos)에서 대화했던 직원은 대화창 닫으면 의자 자리(home)로 자연스럽게 복귀·착석!
-        const c = CHARS[n.id];
-        n.x = c.home[0];
-        n.y = c.home[1];
-        n.mode = 'idle';
-        n.dir = c.facing;
-        if (!keepOrderBubble) { n.bubble = ''; n.bubbleType = ''; }
+      // 대화창을 닫으면 직원이 캡틴 앞에서 A* 안전 동선으로 자기 자리로 걸어 돌아가 착석!
+      const c = CHARS[n.id];
+      n.emote = null; n.emoteLoop = false;
+      n.path = []; n.onArrive = null;
+      if (Math.hypot(n.x - c.home[0], n.y - c.home[1]) < 3.5) {
+        seatNpc(n.id);
+        if (keepOrderBubble) { n.bubble = st.orderBubble || n.bubble; }
       } else {
-        n.mode = st.mode || 'stand';
-        n.dir = st.dir || 'front';
-        if (!keepOrderBubble) { n.bubble = ''; n.bubbleType = ''; }
+        walkNpcSafe(n.id, c.home[0], c.home[1], {
+          bubble: keepOrderBubble ? n.bubble : '↩ 자리로 돌아가겠습니다!',
+          bubbleType: keepOrderBubble ? n.bubbleType : '',
+          onArrive: () => seatNpc(n.id)
+        });
       }
     }
 
+    function getSpotNearCaptain() {
+      const cap = npcs.captain;
+      const atDesk = (cap.mode === 'idle') || Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]) < 4.5;
+      if (atDesk) return [50.0, 29.8]; // 캡틴이 대표석에 앉아 있으면 단상 앞 정중앙 보고 위치!
+      const cands = [
+        [cap.x, cap.y + 4.8], [cap.x + 5.0, cap.y], [cap.x - 5.0, cap.y],
+        [cap.x, cap.y - 4.8], [cap.x + 4.0, cap.y + 4.0], [cap.x - 4.0, cap.y + 4.0],
+        [cap.x + 4.0, cap.y - 4.0], [cap.x - 4.0, cap.y - 4.0],
+      ];
+      for (const [tx, ty] of cands) {
+        if (canWalk(tx, ty)) return [tx, ty];
+      }
+      return [50.0, 29.8];
+    }
+
     function closeTalkModal(keepOrderBubble = false) {
+      if (!modalBack.hidden) SFX.close();
       modalBack.hidden = true;
       resumeTalkNpc(keepOrderBubble);
     }
 
     function openTalkModal(hit) {
-      // 이전 대화 중인 직원이 있었다면 먼저 자연스럽게 복귀
+      // 이전 대화 중인 직원이 있었다면 먼저 자기 자리로 복귀
       if (activeTalkNpc && activeTalkNpc.id !== hit) resumeTalkNpc(false);
 
       const c = CHARS[hit], n = npcs[hit], cap = npcs.captain;
@@ -1328,7 +1339,6 @@
 
       if (hit !== 'captain') {
         const wasSeated = (n.mode === 'idle' || n.mode === 'work');
-        // 현재 상태(걷던 경로·콜백·착석 여부)를 그대로 보관해 두고 일시정지!
         if (!n.pausedState) {
           n.pausedState = {
             mode: n.mode,
@@ -1340,18 +1350,32 @@
             bubbleType: n.bubbleType,
           };
         }
-        n.path = [];
-        n.onArrive = null;
-        // 앉아 있던 직원은 의자 위로 올라서지 않고 의자 옆 바닥(standPos)으로 비켜 서서 캡틴을 바라봄!
-        if (wasSeated && c.standPos) {
-          n.x = c.standPos[0];
-          n.y = c.standPos[1];
-        }
-        n.mode = 'stand';
-        faceEachOther(n, cap);
-        n.bubble = '💬 캡틴, 지시하실 게 있으신가요?';
-        n.bubbleType = 'meet';
+        n.emote = null; n.emoteLoop = false;
+        n.path = []; n.onArrive = null;
         activeTalkNpc = n;
+
+        // 직원을 클릭하면 무조건 캡틴 앞으로 걸어와서 마주 보고 대기!
+        const [tx, ty] = getSpotNearCaptain();
+        const alreadyClose = !wasSeated && Math.hypot(n.x - tx, n.y - ty) < 3.2;
+        if (alreadyClose) {
+          n.mode = 'stand';
+          faceEachOther(n, cap);
+          n.bubble = '💬 캡틴, 지시하실 게 있으신가요?';
+          n.bubbleType = 'meet';
+        } else {
+          if (wasSeated && c.standPos) { n.x = c.standPos[0]; n.y = c.standPos[1]; }
+          walkNpcSafe(hit, tx, ty, {
+            bubble: '🏃 네 캡틴, 바로 가겠습니다!',
+            bubbleType: 'meet',
+            onArrive: () => {
+              if (activeTalkNpc !== n) return;
+              n.mode = 'stand';
+              faceEachOther(n, cap);
+              n.bubble = '💬 캡틴, 지시하실 게 있으신가요?';
+              n.bubbleType = 'meet';
+            }
+          });
+        }
       }
 
       const detailBtn = opts.onOpenDetail
