@@ -208,9 +208,6 @@ def notify_order(kind: str, order: dict, extra: str = ""):
     elif kind == "deploy_fail":
         head = f"⚠️ [배포 멈춤] {title_o}"
         body = summary or str(order.get("deployErr") or "배포 중 문제가 생겼습니다.")
-    elif kind == "queue_hold":
-        head = f"⏸️ [새 가게 줄 멈춤] {title_o}"
-        body = summary or "줄 세우기 진행 중 멈췄습니다."
     else:
         head = f"🔔 [알림] {title_o}"
         body = summary
