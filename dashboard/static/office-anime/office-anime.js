@@ -77,12 +77,12 @@
     });
     const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=cutaway1')];
     for (const [id, cfg] of Object.entries(CHARS)) {
-      imgs.walk[id] = { east: [], front: [], back: [], greet: [], coffee: [] };
-      const dirs = id === 'captain' ? ['east', 'front', 'back', 'greet', 'coffee'] : ['east', 'front', 'back'];
+      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [] };
+      const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee'] : ['east', 'front', 'back'];
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = id === 'captain' ? 'cap4act' : 'orig2k';
+          const v = id === 'captain' ? 'cap8dir' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
         }
       }
@@ -640,6 +640,10 @@
       if (emoting) { dirKey = n.emote; }
       else if (n.dir === 'east') { dirKey = 'east'; }
       else if (n.dir === 'west') { dirKey = 'east'; flipX = true; }
+      else if (n.dir === 'se' && wset.se?.length) { dirKey = 'se'; }
+      else if (n.dir === 'sw' && wset.se?.length) { dirKey = 'se'; flipX = true; }
+      else if (n.dir === 'ne' && wset.ne?.length) { dirKey = 'ne'; }
+      else if (n.dir === 'nw' && wset.ne?.length) { dirKey = 'ne'; flipX = true; }
       else if (n.dir === 'back') { dirKey = 'back'; }
       else { dirKey = 'front'; }
 
@@ -986,6 +990,22 @@
     });
     window.addEventListener('blur', () => keys.clear());
 
+    // 8방향(캡틴: se/sw/ne/nw 포함) · 4방향(직원) 벡터 → 방향 변환
+    function vecToDir(dx, dy, has8) {
+      if (has8) {
+        const deg = Math.atan2(dy, dx) * 180 / Math.PI;
+        if (deg >= -22.5 && deg < 22.5) return 'east';
+        if (deg >= 22.5 && deg < 67.5) return 'se';
+        if (deg >= 67.5 && deg < 112.5) return 'front';
+        if (deg >= 112.5 && deg < 157.5) return 'sw';
+        if (deg >= 157.5 || deg < -157.5) return 'west';
+        if (deg >= -157.5 && deg < -112.5) return 'nw';
+        if (deg >= -112.5 && deg < -67.5) return 'back';
+        return 'ne';
+      }
+      return Math.abs(dy) > Math.abs(dx) * 1.15 ? (dy < 0 ? 'back' : 'front') : (dx >= 0 ? 'east' : 'west');
+    }
+
     let last = performance.now();
     function tick(now) {
       const dt = Math.min(0.05, (now - last) / 1000);
@@ -1009,7 +1029,7 @@
         if (canWalk(cap.x, ny)) { cap.y = ny; moved = true; }
         cap.mode = 'walk';
         if (moved) cap.walkDist += spd;
-        cap.dir = Math.abs(ky) >= Math.abs(kx) ? (ky < 0 ? 'back' : 'front') : (kx > 0 ? 'east' : 'west');
+        cap.dir = vecToDir(kx, ky, true);
       } else if (cap.mode === 'emote' && t >= (cap.emoteUntil || 0)) {
         cap.emote = null;
         cap.bubble = '';
@@ -1045,7 +1065,7 @@
             n.x = nx; n.y = ny;
           }
           n.walkDist += step;
-          n.dir = Math.abs(dy) >= Math.abs(dx) ? (dy < 0 ? 'back' : 'front') : (dx >= 0 ? 'east' : 'west');
+          n.dir = vecToDir(dx, dy, n.id === 'captain');
         }
       }
 
