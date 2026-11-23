@@ -6,7 +6,7 @@
 //   POST beat      {shop, device, name, printer}  5분마다 "켜져 있어요"
 //   GET  layout    ?shop=                 → { layout, layoutTs }  테이블 배치도(없으면 layout:null → 화면이 기본 배치를 그림)
 //   POST layout    {shop, layout}         배치도 저장(모든 주방 기기가 같이 봄)
-//   POST clear     {shop, table}          '자리 정리'(손님 나감) → 그 테이블 지난 주문을 배치도에서 뺀다
+//   POST clear     {shop, table}          '자리 정리'(손님 나감) → 그 테이블 지난 주문을 배치도에서 빼고, 손님 폰의 '자리 표'를 끝낸다
 // 관리자 (헤더 x-admin-key):
 //   GET  k-get     ?shop=                 → 설정·PIN 여부·기기 목록·오늘 주문 수
 //   POST k-set     {shop, patch}          주문 받기 켜기/끄기, 테이블 QR 열쇠, 확인 간격, 기본 프린터
@@ -70,6 +70,7 @@ async function kitchenApi(req, res, action) {
     if (!table) return res.status(400).json({ error: 'bad_request' });
     const at = Date.now();
     await K.putFile(K.clearPath(shop, table, at), '1', 'text/plain');
+    await K.markClear(shop, table); // 그 테이블 손님 '자리 표'도 끝(가게 밖에서 주문 못 하게, 2026-11-23)
     await K.bump(shop);
     return res.json({ ok: true, at });
   }

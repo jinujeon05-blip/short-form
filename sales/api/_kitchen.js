@@ -12,6 +12,8 @@
 //   kq/<가게>/<열쇠>/<날짜>/c-<시각>-<테이블hex>.clr  '자리 정리'(손님 나감) 표시. 그 시각 전 주문은 배치도에서 빠진다
 //   kq/<가게>/<열쇠>/<날짜>/r-<id>.json       직원 호출 1건(물·반찬 리필·계산서 등). 주방이 [확인]하면 s-<id>.done
 //   kq/<가게>/<열쇠>/bill/<테이블hex>.json     손님용 '우리 테이블 주문 내역' 임시 저장(tick 시각이 같으면 다시 계산하지 않음)
+//   kq/<가게>/<열쇠>/clr/<테이블hex>.txt       그 테이블 마지막 '자리 정리' 시각(head 의 올린 시각으로 읽음). 그 전에 받은 손님 '자리 표'는 무효
+//   kq/<가게>/<열쇠>/<날짜>/x-<주문id>.g|.e     손님이 직접 취소(g)·수정(e)해서 생긴 취소. 상태 파일 s-<id>.cancel 과 같이 쓴다
 // tick 시각이 바뀌었을 때만 목록(list, 비싼 읽기)을 읽는다 → 주문이 없을 땐 head 1번뿐.
 const { put, head, BlobNotFoundError } = require('@vercel/blob');
 const L = require('./_lib');
@@ -87,7 +89,7 @@ const putFile = (p, body, type = 'application/json') =>
 
 // 오늘·어제(베트남 시간) 주문과 상태 + '자리 정리' 기록. 자정을 넘겨 영업하는 가게도 있어서 이틀을 본다.
 async function listState(shop) {
-  const base = dir(shop), out = new Map(), calls = new Map(), stat = new Map(), clears = [];
+  const base = dir(shop), out = new Map(), calls = new Map(), stat = new Map(), by = new Map(), clears = [];
   for (const d of [L.dateOf(Date.now() - 86400000), L.dateOf()]) {
     for (const b of await S.listAll(`${base}/${d}/`)) {
       const name = b.pathname.slice(base.length + d.length + 2);
@@ -97,11 +99,14 @@ async function listState(shop) {
       if (m) { calls.set(m[1], { id: m[1], status: 'new', url: b.url }); continue; }
       m = name.match(/^s-([0-9]+-[a-f0-9]+)\.([a-z]+)$/);
       if (m && RANK[m[2]] != null) { if (RANK[m[2]] > RANK[stat.get(m[1]) || 'new']) stat.set(m[1], m[2]); continue; }
+      m = name.match(/^x-([0-9]+-[a-f0-9]+)\.([ge])$/);
+      if (m) { by.set(m[1], m[2]); continue; }
       m = name.match(/^c-([0-9]+)-([0-9a-f]{2,96})\.clr$/);
       if (m) clears.push({ table: Buffer.from(m[2], 'hex').toString('utf8'), at: Number(m[1]) });
     }
   }
   for (const [id, st] of stat) { const o = out.get(id) || calls.get(id); if (o) o.status = st; } // 상태 파일(s-)은 주문(o-)·호출(r-) 어느 쪽에도 붙는다
+  for (const [id, b] of by) { const o = out.get(id); if (o) o.by = b; } // 손님 취소(g)·수정(e) 표시
   const sorted = (m) => [...m.values()].filter((o) => o.url).sort((a, b) => a.id.localeCompare(b.id));
   return { orders: sorted(out), calls: sorted(calls), clears };
 }
@@ -163,6 +168,47 @@ function verifyKitchen(tok, shop, gen) {
 // 테이블 QR 열쇠: 손님이 가게 안 테이블 QR로 들어왔는지 확인(설정 needKey 가 켜진 가게만 검사)
 const tableKey = (shop, table) => L.hmac('tbl', `${shop}|${String(table).trim().toLowerCase()}`, 10);
 
+// ── 손님 '자리 표'(2026-11-23 캡틴 가-1) ── 테이블 QR(?t=5&k=)을 찍으면 서버가 시간이 붙은 표를 준다.
+// 주문·호출·주문 내역·수정·취소는 이 표가 있어야 된다. 표는 받은 뒤(또는 마지막 주문 뒤) 1시간이 지나거나,
+// 주방에서 그 테이블 [자리 정리]를 누르면 끝난다 → 가게를 나간 손님 폰에 남은 정보로는 주문이 안 들어간다.
+// 표 = "<받은 시각>.<서명>". 서명은 가게·테이블·시각을 묶어서 다른 테이블·다른 시각으로 바꾸면 틀린다.
+const TICKET_MS = 60 * 60e3;
+const ticketSig = (shop, table, at) => L.hmac('tix', `${shop}|${tableNorm(table)}|${at}`, 16);
+const makeTicket = (shop, table, at = Date.now()) => ({ table: String(table).trim().slice(0, 12), tk: `${at}.${ticketSig(shop, table, at)}`, exp: at + TICKET_MS });
+const clrFile = (shop, table) => `${dir(shop)}/clr/${Buffer.from(tableNorm(table), 'utf8').toString('hex')}.txt`;
+// 마지막 자리 정리 시각: 덮어쓰는 파일이지만 내용이 아니라 head(저장소 API, CDN 캐시 없음)의 올린 시각을 본다
+async function lastClear(shop, table) {
+  try { const h = await head(clrFile(shop, table)); return new Date(h.uploadedAt).getTime() || 0; }
+  catch (e) { if (notFound(e)) return 0; throw e; }
+}
+const markClear = (shop, table) => put(clrFile(shop, table), String(Date.now()), { access: 'public', addRandomSuffix: false, allowOverwrite: true, contentType: 'text/plain', cacheControlMaxAge: 60 });
+// 'ok' | 'bad'(없음·위조·다른 테이블) | 'expired'(1시간 지남·자리 정리됨)
+async function checkTicket(shop, table, tk) {
+  const m = String(tk || '').match(/^([0-9]{12,14})\.([0-9a-f]{16})$/);
+  if (!m || !tableNorm(table) || !L.safeEq(m[2], ticketSig(shop, table, m[1]))) return 'bad';
+  const at = Number(m[1]), now = Date.now();
+  if (at > now + 60e3) return 'bad';
+  if (now - at > TICKET_MS) return 'expired';
+  if (at <= await lastClear(shop, table)) return 'expired';
+  return 'ok';
+}
+// 손님 수정·취소 열쇠: 주문을 보낸 폰에만 준다(같은 테이블 일행도 남의 주문은 못 고침)
+const editKey = (shop, id) => L.hmac('oed', `${shop}|${id}`, 16);
+// 손님이 고칠 수 있는지: 그 주문의 상태 파일이 하나도 없어야(주방이 아직 '접수' 안 함). 주문 파일 정보도 돌려준다
+async function guestEditable(shop, id) {
+  const day = dateOfId(id), base = `${dir(shop)}/${day}/`;
+  const [o, st] = await Promise.all([S.listAll(`${base}o-${id}.json`), S.listAll(`${base}s-${id}.`)]);
+  const file = o.find((b) => b.pathname === `${base}o-${id}.json`);
+  if (!file) return { ok: false, error: 'gone' };
+  if (st.length) return { ok: false, error: st.some((b) => /\.cancel$/.test(b.pathname)) ? 'gone' : 'taken' };
+  return { ok: true, day, url: file.url };
+}
+async function guestCancel(shop, id, kind) {
+  const day = dateOfId(id);
+  await putFile(`${dir(shop)}/${day}/s-${id}.cancel`, '1', 'text/plain');
+  await putFile(`${dir(shop)}/${day}/x-${id}.${kind}`, '1', 'text/plain');
+}
+
 const newId = () => `${Date.now()}-${S.rand(3)}`;
 const dateOfId = (id) => L.dateOf(Number(String(id).split('-')[0]));
 
@@ -184,7 +230,7 @@ const CALLS = ['water', 'refill', 'ice', 'utensils', 'bill', 'staff'];
 // ── 손님용 '우리 테이블 주문 내역' ── 같은 테이블에서 보낸 주문(마지막 '자리 정리' 뒤, 취소 제외)과 합계.
 // 손님 폰이 10초마다 묻기 때문에, 새 소식(tick 시각)이 그대로면 저장해 둔 결과를 돌려준다(목록 읽기 = 비싼 읽기를 피함).
 // 파일 이름에 새 소식 시각을 넣는다 → 한 번 쓰고 안 바뀌는 파일이라 CDN 옛 내용 문제가 없다. 같은 기기 메모리에도 둔다.
-const billPath = (shop, table, ts) => `${dir(shop)}/bill/${Buffer.from(tableNorm(table), 'utf8').toString('hex')}-${ts}.json`;
+const billPath = (shop, table, ts) => `${dir(shop)}/bill/${Buffer.from(tableNorm(table), 'utf8').toString('hex')}-${ts}-v2.json`; // v2 = 주문 id 포함(손님 수정·취소)
 const billMem = new Map();
 async function readPublic(p, v) {
   try {
@@ -207,7 +253,7 @@ async function tableBill(shop, ts, table) {
       const r = await fetch(o.url); if (!r.ok) continue;
       const d = await r.json();
       if (tableNorm(d.table) !== key || d.at <= clearAt) continue;
-      orders.push({ no: d.no, at: d.at, status: o.status, lang: d.lang, currency: d.currency, total: d.total || 0, market: !!d.market, items: (d.items || []).map((x) => ({ name: x.name, sub: x.sub, key: x.key || '', q: x.q, price: x.price })) });
+      orders.push({ id: o.id, no: d.no, at: d.at, status: o.status, lang: d.lang, currency: d.currency, total: d.total || 0, market: !!d.market, items: (d.items || []).map((x) => ({ name: x.name, sub: x.sub, key: x.key || '', q: x.q, price: x.price })) });
     } catch {}
   }
   orders.sort((a, b) => a.at - b.at);
@@ -273,4 +319,5 @@ async function salesRange(shop, from, to) {
   return res;
 }
 
-module.exports = { salesRange, CALLS, tableBill, bump, stamp, nextNo, DEFAULT, STATUSES, dir, readBell, writeBell, touch, putFile, listOrders, listState, tableNorm, clearPath, cleanLayout, readLayout, writeLayout, kitchenToken, verifyKitchen, tableKey, newId, dateOfId, cleanOrder };
+module.exports = { salesRange, CALLS, tableBill, bump, stamp, nextNo, DEFAULT, STATUSES, dir, readBell, writeBell, touch, putFile, listOrders, listState, tableNorm, clearPath, cleanLayout, readLayout, writeLayout, kitchenToken, verifyKitchen, tableKey, newId, dateOfId, cleanOrder,
+  TICKET_MS, makeTicket, checkTicket, markClear, editKey, guestEditable, guestCancel };
