@@ -1414,6 +1414,7 @@
       polisher: 'translator', staffing: 'staffing', sorting: 'sorter'
     };
     let prevReal = null;
+    let realBusySet = new Set();
 
     function syncReal({ orders = [], jobs = [], collector = null, hr = null, talk = [] } = {}) {
       const busy = new Set();
@@ -1426,6 +1427,7 @@
       for (const o of liveOrders) {
         for (const d of (o.active || [])) if (DASH_TO_OA[d]) busy.add(DASH_TO_OA[d]);
       }
+      realBusySet = busy;
 
       const done = new Set();
       const cleared = o => o.deployState === 'done' || (!o.deployable && o.seenAt);
@@ -1502,6 +1504,143 @@
         }
       });
     }
+
+    // ---------------------------------------------------------------- 대기 중 자율 사무실 생활 엔진 (12종: 화분 물주기·청소·책상 닦기·커피·테라스 환기·부서 수다 등!)
+    const isFree = id => {
+      const n = npcs[id];
+      return n && n.mode === 'idle' && !realBusySet.has(id) && (!activeTalkNpc || activeTalkNpc.id !== id);
+    };
+
+    function doChore(id, tx, ty, workDir, goMsg, workMsg, workMs, returnMsg = '') {
+      if (briefingActive || !isFree(id)) return false;
+      return walkNpcSafe(id, tx, ty, {
+        bubble: goMsg,
+        onArrive: () => {
+          if (briefingActive) return;
+          const n = npcs[id];
+          n.mode = 'stand'; n.dir = workDir; n.bubble = workMsg; n.bubbleType = 'ok';
+          setTimeout(() => {
+            if (briefingActive || (activeTalkNpc && activeTalkNpc.id === id)) return;
+            walkNpcSafe(id, CHARS[id].home[0], CHARS[id].home[1], {
+              bubble: returnMsg,
+              onArrive: () => seatNpc(id)
+            });
+          }, workMs);
+        }
+      });
+    }
+
+    function doPairChat(idA, idB, ax, ay, bx, by, msgA, msgB) {
+      if (briefingActive || !isFree(idA) || !isFree(idB)) return false;
+      let ready = 0;
+      const onMeet = () => {
+        if (briefingActive || ++ready < 2) return;
+        const a = npcs[idA], b = npcs[idB];
+        a.mode = 'stand'; b.mode = 'stand';
+        a.dir = 'east'; b.dir = 'west';
+        a.bubble = msgA; a.bubbleType = 'meet';
+        setTimeout(() => {
+          if (briefingActive) return;
+          a.bubble = ''; b.bubble = msgB; b.bubbleType = 'ok';
+          setTimeout(() => {
+            if (briefingActive) return;
+            b.bubble = '';
+            walkNpcSafe(idA, CHARS[idA].home[0], CHARS[idA].home[1], { onArrive: () => seatNpc(idA) });
+            walkNpcSafe(idB, CHARS[idB].home[0], CHARS[idB].home[1], { onArrive: () => seatNpc(idB) });
+          }, 2600);
+        }, 2500);
+      };
+      walkNpcSafe(idA, ax, ay, { onArrive: onMeet });
+      walkNpcSafe(idB, bx, by, { onArrive: onMeet });
+      return true;
+    }
+
+    const LIFE_EVENTS = [
+      // 1. 선별팀 팀장: 중앙 복도 좌/우 화분 물주기
+      () => {
+        const leftPlant = Math.random() < 0.5;
+        return doChore('sorter', leftPlant ? 32.5 : 67.2, 40.5, leftPlant ? 'west' : 'east',
+          '🪴 물뿌리개 들고 화분 관리 가는 중…', '💧 화분에 물 주는 중… 쑥쑥 자라라!', 3000);
+      },
+      // 2. 인력 공급팀 팀장: 중앙 복도 빗자루 청소
+      () => doChore('staffing', 49.5, 48.0, 'front',
+        '🧹 복도 청소하러 나왔어요!', '🧹 중앙 복도 빗자루질 중… 반짝반짝!', 3200),
+      // 3. 인력 공급팀 팀장: 캡틴 책상 먼지 털기
+      () => doChore('staffing', 39.5, 21.0, 'east',
+        '🪶 캡틴 책상 정돈하러 올라가는 중…', '✨ 캡틴 책상 먼지 닦아드렸습니다!', 2800),
+      // 4. 비서실장: 캡틴 커피 서빙 & 안부 여쭙기
+      () => {
+        if (!isFree('claude')) return false;
+        serveCoffee(); return true;
+      },
+      // 5. 시각 정보 비서: 스튜디오 조명·카메라 점검
+      () => doChore('finder', 20.0, 42.0, 'west',
+        '💡 스튜디오 조명 점검 중…', '📷 크로마키 조명·카메라 각도 완벽!', 2800),
+      // 6. 감사실 2인방(운영 감찰관 + 데이터 감사관): 복도 교차 토론
+      () => doPairChat('inspector', 'auditor', 36.0, 48.5, 41.5, 48.5,
+        '🛡️ 방금 검수한 가격표 교차 확인했나요?', '📊 네! 오타 0건, 100% 일치합니다!'),
+      // 7. 수석 번역관 + 비서실장: 번역 톤 상의
+      () => {
+        if (!isFree('translator')) return false;
+        return doChore('translator', 49.8, 46.5, 'back',
+          '🌐 번역 톤 상의하러 가는 중…', '💬 베트남어·영어 메뉴 표현 자연스럽게 다듬었어요!', 3000);
+      },
+      // 8. 디지털 메뉴 통제실 2인방(메뉴 검사관 + 자료 해석 비서): 복도 데이터 수다
+      () => doPairChat('reader', 'agy', 58.0, 48.5, 63.5, 48.5,
+        '📑 방금 해석한 메뉴 JSON 넘겼어요!', '🔍 좋아요, 모바일 화면 바로 대조할게요!'),
+      // 9. 랜덤 대기 직원: 커피바 휴식 & 스트레칭
+      () => {
+        const pool = ['finder', 'agy', 'translator', 'sorter', 'inspector', 'staffing', 'reader', 'auditor'].filter(isFree);
+        if (!pool.length) return false;
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        const hr = new Date().getHours();
+        const msg = (hr >= 11 && hr <= 13) ? '☕ 점심 식후 아아 한 잔 추출 중…' : '☕ 시원한 커피 한 잔 하며 스트레칭 중…';
+        return doChore(pick, 15.5, 22.5, 'back', '☕ 커피바 휴식 가는 중…', msg, 3000);
+      },
+      // 10. 랜덤 대기 직원: 우측 테라스 창밖 구경(환기)
+      () => {
+        const pool = ['finder', 'agy', 'translator', 'sorter', 'inspector', 'staffing', 'reader', 'auditor'].filter(isFree);
+        if (!pool.length) return false;
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        return doChore(pick, 82.0, 22.5, 'back', '🌤️ 테라스 바람 좀 쐬러 가는 중…', '🌤️ 창밖 풍경이 좋네요… 잠시 환기 중!', 3200);
+      },
+      // 11. 서로 다른 부서 2명 복도 우연한 인사(Banter)
+      () => {
+        const pool = ['finder', 'translator', 'sorter', 'staffing', 'inspector', 'auditor'].filter(isFree);
+        if (pool.length < 2) return false;
+        const a = pool[Math.floor(Math.random() * pool.length)];
+        const rest = pool.filter(x => x !== a);
+        const b = rest[Math.floor(Math.random() * rest.length)];
+        const pairs = [
+          ['😊 오늘 점심 쌀국수 어때요?', '🍜 좋아요! 일 끝나고 같이 가요!'],
+          ['☕ 커피 한 잔 하셨어요?', '😄 방금 마셨어요! 오후도 파이팅!'],
+          ['📁 오늘 새 가게 메뉴 깔끔하네요!', '👍 사진이 잘 나와서 작업이 빨라요!'],
+        ];
+        const [m1, m2] = pairs[Math.floor(Math.random() * pairs.length)];
+        return doPairChat(a, b, 46.5, 49.0, 52.5, 49.0, m1, m2);
+      },
+      // 12. 선별팀 팀장: 방 안 컨베이어 옆 박스 점검
+      () => doChore('sorter', 85.0, 76.0, 'east',
+        '📦 컨베이어 분류 상태 확인 중…', '✅ 포장 라인·분류함 이상 없음!', 2800),
+    ];
+
+    let lastLifeIdx = -1;
+    function scheduleIdleLife() {
+      const waitMs = 6500 + Math.floor(Math.random() * 4500);
+      setTimeout(() => {
+        scheduleIdleLife();
+        if (document.hidden || briefingActive || !modalBack.hidden) return;
+        // 동시에 너무 많이 돌아다니지 않도록 현재 걷고 있는 직원이 3명 이하일 때만 새 생활 이벤트 시작!
+        const walkingCount = Object.values(npcs).filter(n => n.id !== 'captain' && n.mode !== 'idle').length;
+        if (walkingCount >= 3) return;
+        for (let tries = 0; tries < 5; tries++) {
+          const idx = Math.floor(Math.random() * LIFE_EVENTS.length);
+          if (idx === lastLifeIdx) continue;
+          if (LIFE_EVENTS[idx]()) { lastLifeIdx = idx; break; }
+        }
+      }, waitMs);
+    }
+    scheduleIdleLife();
 
     if (opts.autoDemo !== false) setTimeout(runDemo, 1500);
     return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing, syncReal, stroll };
