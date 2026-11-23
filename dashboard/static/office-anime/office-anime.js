@@ -154,6 +154,17 @@
 
     const log = m => { if (opts.onLog) opts.onLog(m); };
 
+    // 착석 시 항상 정확한 home 좌표(의자 등받이 sortY 뒤쪽!)로 안착시켜 의자가 등을 완벽하게 가리도록 보장!
+    function seatNpc(id) {
+      const n = npcs[id], c = CHARS[id];
+      if (!n || !c) return;
+      n.x = c.home[0];
+      n.y = c.home[1];
+      n.mode = 'idle';
+      n.dir = c.facing;
+      n.bubble = '';
+    }
+
     function sendPath(id, pts, { bubble = '', bubbleType = '', onArrive = null } = {}) {
       const n = npcs[id];
       n.path = pts.map(p => [p[0], p[1]]);
@@ -227,10 +238,10 @@
           setTimeout(() => {
             a.bubble = '';
             sendPath('finder', [...ROUTES.finderToHall.slice().reverse(), CHARS.finder.home], {
-              onArrive: () => { f.mode = 'idle'; f.dir = 'front'; },
+              onArrive: () => seatNpc('finder'),
             });
             sendPath('agy', [...ROUTES.agyToHall.slice().reverse(), CHARS.agy.home], {
-              onArrive: () => { a.mode = 'idle'; a.dir = 'back'; },
+              onArrive: () => seatNpc('agy'),
             });
           }, 2500);
         }, 2500);
@@ -290,7 +301,7 @@
             if (briefingActive) return;
             sendPath('inspector', ROUTES.hallToInsp, {
               bubble: '↩ 감사실 복귀',
-              onArrive: () => { ins.mode = 'idle'; ins.dir = 'back'; ins.bubble = ''; }
+              onArrive: () => seatNpc('inspector')
             });
           }, 2600);
         }
@@ -330,7 +341,7 @@
             if (briefingActive) return;
             sendPath('reader', ROUTES.hallToReader, {
               bubble: '↩ 디지털 메뉴 통제실 복귀',
-              onArrive: () => { rd.mode = 'idle'; rd.dir = 'back'; rd.bubble = ''; }
+              onArrive: () => seatNpc('reader')
             });
           }, 2600);
         }
@@ -350,7 +361,7 @@
             if (briefingActive) return;
             sendPath('auditor', ROUTES.hallToAudit, {
               bubble: '↩ 감사실 복귀',
-              onArrive: () => { au.mode = 'idle'; au.dir = 'back'; au.bubble = ''; }
+              onArrive: () => seatNpc('auditor')
             });
           }, 2600);
         }
@@ -772,13 +783,15 @@
         tagEls[id].style.left = `${n.x}%`;
         tagEls[id].style.top  = `${n.y + (walking ? 1.4 : (CHARS[id].facing === 'front' ? 4.8 : 1.5))}%`;
         if (n.bubble) {
+          tagEls[id].classList.add('speaking');
           bubEls[id].hidden = false;
           bubEls[id].textContent = n.bubble;
           bubEls[id].className = `oa-bub ${n.bubbleType}`;
           bubEls[id].style.left = `${n.x}%`;
           const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
-          bubEls[id].style.top  = `${Math.max(3.5, n.y - (standing ? 13.0 : 9.0))}%`;
+          bubEls[id].style.top  = `${Math.max(3.5, n.y - (standing ? 13.5 : 9.2))}%`;
         } else {
+          tagEls[id].classList.remove('speaking');
           bubEls[id].hidden = true;
         }
       }
@@ -1158,7 +1171,7 @@
             const c = CHARS[sid];
             n.bubble = '';
             walkNpcSafe(sid, c.home[0], c.home[1], {
-              onArrive: () => { n.mode = 'idle'; n.dir = c.facing; n.bubble = ''; }
+              onArrive: () => seatNpc(sid)
             });
           }
         }, 1800));
