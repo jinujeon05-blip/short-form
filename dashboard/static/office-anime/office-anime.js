@@ -1854,7 +1854,8 @@
         if (briefingActive || ++ready < 2) return;
         const a = npcs[idA], b = npcs[idB];
         a.mode = 'stand'; b.mode = 'stand';
-        a.dir = 'east'; b.dir = 'west';
+        if (Math.abs(ax - bx) < 2) { a.dir = 'front'; b.dir = 'back'; }
+        else { a.dir = 'east'; b.dir = 'west'; }
         a.bubble = msgA; a.bubbleType = 'meet';
         setTimeout(() => {
           if (briefingActive) return;
@@ -1898,35 +1899,47 @@
       // 5. 시각 정보 비서: 스튜디오 조명·카메라 점검
       () => doChore('finder', 20.0, 42.0, 'west',
         '💡 스튜디오 조명 점검 중…', '📷 크로마키 조명·카메라 각도 완벽!', 2800),
-      // 6. 감사실 2인방(운영 감찰관 + 데이터 감사관): 복도 교차 토론
-      () => doPairChat('inspector', 'auditor', 36.0, 48.5, 41.5, 48.5,
-        '🛡️ 방금 검수한 가격표 교차 확인했나요?', '📊 네! 오타 0건, 100% 일치합니다!'),
+      // 6. 감사실 2인방(운영 감찰관 + 데이터 감사관): 좌측 복도 또는 커피 라운지 교차 토론
+      () => {
+        const atLounge = Math.random() < 0.5;
+        return doPairChat('inspector', 'auditor',
+          atLounge ? 26.5 : 29.0, atLounge ? 22.8 : 49.5,
+          atLounge ? 32.0 : 34.5, atLounge ? 22.8 : 49.5,
+          '🛡️ 방금 검수한 가격표 교차 확인했나요?', '📊 네! 오타 0건, 100% 일치합니다!');
+      },
       // 7. 수석 번역관 + 비서실장: 번역 톤 상의
       () => {
         if (!isFree('translator')) return false;
         return doChore('translator', 49.8, 46.5, 'back',
           '🌐 번역 톤 상의하러 가는 중…', '💬 베트남어·영어 메뉴 표현 자연스럽게 다듬었어요!', 3000);
       },
-      // 8. 디지털 메뉴 통제실 2인방(메뉴 검사관 + 자료 해석 비서): 복도 데이터 수다
-      () => doPairChat('reader', 'agy', 58.0, 48.5, 63.5, 48.5,
-        '📑 방금 해석한 메뉴 JSON 넘겼어요!', '🔍 좋아요, 모바일 화면 바로 대조할게요!'),
-      // 9. 랜덤 대기 직원: 커피바 휴식 & 스트레칭
+      // 8. 디지털 메뉴 통제실 2인방(메뉴 검사관 + 자료 해석 비서): 우측 테라스 또는 우측 복도 데이터 수다
+      () => {
+        const atTerrace = Math.random() < 0.5;
+        return doPairChat('reader', 'agy',
+          atTerrace ? 75.5 : 62.5, atTerrace ? 22.2 : 49.5,
+          atTerrace ? 81.5 : 68.0, atTerrace ? 22.2 : 49.5,
+          '📑 방금 해석한 메뉴 JSON 넘겼어요!', '🔍 좋아요, 모바일 화면 바로 대조할게요!');
+      },
+      // 9. 랜덤 대기 직원: 커피바 휴식 & 스트레칭 (위치 분산)
       () => {
         const pool = ['finder', 'agy', 'translator', 'sorter', 'inspector', 'staffing', 'reader', 'auditor'].filter(isFree);
         if (!pool.length) return false;
         const pick = pool[Math.floor(Math.random() * pool.length)];
         const hr = new Date().getHours();
         const msg = (hr >= 11 && hr <= 13) ? '☕ 점심 식후 아아 한 잔 추출 중…' : '☕ 시원한 커피 한 잔 하며 스트레칭 중…';
-        return doChore(pick, 15.5, 22.5, 'back', '☕ 커피바 휴식 가는 중…', msg, 3000);
+        const cx = [15.5, 20.5, 26.0][Math.floor(Math.random() * 3)];
+        return doChore(pick, cx, 22.8, 'back', '☕ 커피바 휴식 가는 중…', msg, 3000);
       },
-      // 10. 랜덤 대기 직원: 우측 테라스 창밖 구경(환기)
+      // 10. 랜덤 대기 직원: 우측 테라스 창밖 구경(환기, 위치 분산)
       () => {
         const pool = ['finder', 'agy', 'translator', 'sorter', 'inspector', 'staffing', 'reader', 'auditor'].filter(isFree);
         if (!pool.length) return false;
         const pick = pool[Math.floor(Math.random() * pool.length)];
-        return doChore(pick, 82.0, 22.5, 'back', '🌤️ 테라스 바람 좀 쐬러 가는 중…', '🌤️ 창밖 풍경이 좋네요… 잠시 환기 중!', 3200);
+        const tx = [74.5, 80.5, 86.5][Math.floor(Math.random() * 3)];
+        return doChore(pick, tx, 22.2, 'back', '🌤️ 테라스 바람 좀 쐬러 가는 중…', '🌤️ 창밖 풍경이 좋네요… 잠시 환기 중!', 3200);
       },
-      // 11. 서로 다른 부서 2명 복도 우연한 인사(Banter)
+      // 11. 서로 다른 부서 2명 사무실 전역 빈 공간 분산 수다(Banter)
       () => {
         const pool = ['finder', 'translator', 'sorter', 'staffing', 'inspector', 'auditor'].filter(isFree);
         if (pool.length < 2) return false;
@@ -1938,24 +1951,44 @@
           ['☕ 커피 한 잔 하셨어요?', '😄 방금 마셨어요! 오후도 파이팅!'],
           ['📁 오늘 새 가게 메뉴 깔끔하네요!', '👍 사진이 잘 나와서 작업이 빨라요!'],
         ];
+        const spots = [
+          [26.5, 22.8, 32.0, 22.8], // 좌측 커피 라운지
+          [75.5, 22.2, 81.5, 22.2], // 우측 햇살 테라스
+          [34.5, 48.5, 40.0, 48.5], // 좌측 복도
+          [60.0, 48.5, 65.5, 48.5], // 우측 복도
+          [49.8, 63.0, 49.8, 70.0], // 중앙 하단 남북 복도
+        ];
         const [m1, m2] = pairs[Math.floor(Math.random() * pairs.length)];
-        return doPairChat(a, b, 46.5, 49.0, 52.5, 49.0, m1, m2);
+        const [ax, ay, bx, by] = spots[Math.floor(Math.random() * spots.length)];
+        return doPairChat(a, b, ax, ay, bx, by, m1, m2);
       },
       // 12. 선별팀 팀장: 방 안 컨베이어 옆 박스 점검
       () => doChore('sorter', 85.0, 76.0, 'east',
         '📦 컨베이어 분류 상태 확인 중…', '✅ 포장 라인·분류함 이상 없음!', 2800),
-      // 13. 비서실장 + 자료 해석 비서: 중앙 홀 합동 아이돌 댄스 타임!
+      // 13. 비서실장 + 자료 해석 비서: 분산 무대 합동 아이돌 댄스 타임!
       () => (isFree('claude') && isFree('reader')) ? danceParty() : false,
     ];
 
+    let lastDanceStage = -1;
     function danceParty() {
       if (briefingActive) return false;
+      const stages = [
+        { name: '우측 햇살 테라스', a: [75.5, 22.2], b: [81.5, 22.2], bx: 78.5, by: 20.5 },
+        { name: '좌측 복도 라운지', a: [34.5, 47.5], b: [40.0, 47.5], bx: 37.2, by: 45.5 },
+        { name: '우측 복도 라운지', a: [60.0, 47.5], b: [65.5, 47.5], bx: 62.7, by: 45.5 },
+        { name: '좌측 커피바 앞',   a: [26.5, 22.8], b: [32.0, 22.8], bx: 29.2, by: 21.0 },
+        { name: '중앙 홀',          a: [46.8, 49.0], b: [53.2, 49.0], bx: 50.0, by: 47.0 },
+      ];
+      let sIdx = Math.floor(Math.random() * stages.length);
+      if (sIdx === lastDanceStage) sIdx = (sIdx + 1) % stages.length;
+      lastDanceStage = sIdx;
+      const st = stages[sIdx];
       const dancers = [
-        { id: 'claude', tx: 46.8, ty: 49.0, go: '💃 무대로 나가는 중…', msg: '💃✨ 신나는 아이돌 댄스 타임!' },
-        { id: 'reader', tx: 53.2, ty: 49.0, go: '🎶 같이 춤추러 가요!', msg: '🎶 같이 춤춰요 캡틴! ✨' },
+        { id: 'claude', tx: st.a[0], ty: st.a[1], go: `💃 ${st.name} 무대로 이동 중…`, msg: '💃✨ 신나는 아이돌 댄스 타임!' },
+        { id: 'reader', tx: st.b[0], ty: st.b[1], go: '🎶 같이 춤추러 가요!', msg: '🎶 같이 춤춰요 캡틴! ✨' },
       ];
       let burstDone = false;
-      log('💃 비서실장 · 자료 해석 비서 합동 아이돌 댄스 타임!');
+      log(`💃 비서실장 · 자료 해석 비서 — ${st.name} 합동 아이돌 댄스 타임!`);
       for (const d of dancers) {
         const n = npcs[d.id];
         if (!n) continue;
@@ -1971,7 +2004,7 @@
             if (!burstDone) {
               burstDone = true;
               SFX.fanfare();
-              spawnBurst(50.0, 47.0, '💃 아이돌 댄스! +20 EXP', 20);
+              spawnBurst(st.bx, st.by, '💃 아이돌 댄스! +20 EXP', 20);
             }
             setTimeout(() => {
               if (briefingActive || (activeTalkNpc && activeTalkNpc.id === d.id)) return;
