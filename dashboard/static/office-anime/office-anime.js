@@ -66,6 +66,7 @@
       <div class="oa-stage">
         <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
         <div class="oa-hud"></div>
+        <div class="oa-ctrl-hint">🎮 캡틴 조작: 방향키 / WASD 이동 · 바닥 클릭 이동 · E 자리 복귀</div>
         <button type="button" class="oa-fs-btn" title="전체화면 전환">⛶ 전체화면</button>
         <div class="oa-modal-back" hidden><div class="oa-modal"></div></div>
       </div>`;
@@ -258,11 +259,84 @@
       ctx.restore();
     }
 
+    // ---------------------------------------------------------------- 캡틴 직접 게임 조작 (WASD / 방향키 / 바닥 클릭 / E 착석)
+    const keys = new Set();
+    let clickRing = null; // { x, y, born }
+
+    // 책상·벽 장애물 충돌 판정 (캡틴이 가구 위를 뚫고 지나가지 않도록 부드럽게 막음)
+    const BLOCKERS = [
+      { x0: 42.8, y0: 19.2, x1: 57.6, y1: 22.8 }, // 캡틴 책상 앞면
+      { x0: 42.8, y0: 39.8, x1: 57.2, y1: 43.8 }, // 비서실장 책상 앞면
+      { x0:  9.2, y0: 45.2, x1: 19.6, y1: 47.6 }, // 시각 정보 비서 책상
+      { x0:  6.0, y0: 14.0, x1: 23.0, y1: 20.5 }, // 커피바 캐비닛
+    ];
+    function canWalk(x, y) {
+      if (x < 4.5 || x > 95.5 || y < 16.5 || y > 93.5) return false;
+      for (const b of BLOCKERS) {
+        if (x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1) return false;
+      }
+      return true;
+    }
+
+    function sitCaptainBack() {
+      const cap = npcs.captain;
+      cap.path = [];
+      cap.onArrive = null;
+      cap.x = CHARS.captain.home[0];
+      cap.y = CHARS.captain.home[1];
+      cap.dir = 'front';
+      cap.mode = 'idle';
+      cap.bubble = '';
+      log('🪑 캡틴이 대표 책상 자리에 착석했습니다');
+    }
+
+    window.addEventListener('keydown', e => {
+      if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+      const k = e.key.toLowerCase();
+      if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd'].includes(k)) {
+        e.preventDefault();
+        keys.add(k);
+        const cap = npcs.captain;
+        if (cap.path.length) { cap.path = []; cap.onArrive = null; }
+        cap.bubble = '';
+      } else if (k === 'e') {
+        e.preventDefault();
+        sitCaptainBack();
+      }
+    });
+    window.addEventListener('keyup', e => {
+      keys.delete(e.key.toLowerCase());
+    });
+    window.addEventListener('blur', () => keys.clear());
+
     let last = performance.now();
     function tick(now) {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const t = now / 1000;
+
+      // 캡틴 키보드 실시간 게임 조작
+      const cap = npcs.captain;
+      let kx = 0, ky = 0;
+      if (keys.has('arrowleft')  || keys.has('a')) kx -= 1;
+      if (keys.has('arrowright') || keys.has('d')) kx += 1;
+      if (keys.has('arrowup')    || keys.has('w')) ky -= 1;
+      if (keys.has('arrowdown')  || keys.has('s')) ky += 1;
+      if (kx !== 0 || ky !== 0) {
+        const len = Math.hypot(kx, ky);
+        const spd = 8.2 * dt;
+        const nx = cap.x + (kx / len) * spd;
+        const ny = cap.y + (ky / len) * spd * 1.15;
+        let moved = false;
+        if (canWalk(nx, cap.y)) { cap.x = nx; moved = true; }
+        if (canWalk(cap.x, ny)) { cap.y = ny; moved = true; }
+        cap.mode = 'walk';
+        if (moved) cap.walkDist += spd;
+        cap.dir = Math.abs(ky) >= Math.abs(kx) ? (ky < 0 ? 'back' : 'front') : (kx > 0 ? 'east' : 'west');
+      } else if (!cap.path.length && cap.mode === 'walk') {
+        // 키를 떼면 그 자리에 자연스럽게 서서 대기 (의자로 텔레포트하지 않음!)
+        cap.mode = 'stand';
+      }
 
       for (const n of Object.values(npcs)) {
         if (!n.path.length) continue;
@@ -273,7 +347,10 @@
         if (dist <= step + 0.2) {
           n.walkDist += dist;
           n.x = tx; n.y = ty; n.path.shift();
-          if (!n.path.length && n.onArrive) { const cb = n.onArrive; n.onArrive = null; cb(); }
+          if (!n.path.length) {
+            if (n.onArrive) { const cb = n.onArrive; n.onArrive = null; cb(); }
+            else if (n.id === 'captain') { n.mode = 'stand'; }
+          }
         } else {
           n.x += (dx / dist) * step; n.y += (dy / dist) * step;
           n.walkDist += step;
@@ -283,6 +360,21 @@
 
       ctx.clearRect(0, 0, W, H);
       if (imgs.bg) ctx.drawImage(imgs.bg, 0, 0, W, H);
+
+      // 바닥 클릭 이동 시 황금 링 피드백
+      if (clickRing) {
+        const age = (now - clickRing.born) / 600;
+        if (age >= 1) clickRing = null;
+        else {
+          ctx.save();
+          ctx.strokeStyle = `rgba(250, 204, 21, ${1 - age})`;
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.ellipse((clickRing.x / 100) * W, (clickRing.y / 100) * H, 14 + age * 28, 5 + age * 10, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
 
       // 통합 Y-깊이(앞/뒤 가림) 정렬: 모든 캐릭터와 모든 책상·의자 전경 마스크를 발 위치(y) 순으로 그림!
       const drawList = [
@@ -316,17 +408,23 @@
     }
     requestAnimationFrame(tick);
 
-    // 캐릭터 클릭 → 고화질 웹툰 클로즈업 프로필 상태창!
+    // 캐릭터 클릭 → 프로필 상태창 / 빈 바닥 클릭 → 캡틴이 그 위치로 걸어감!
     canvas.addEventListener('click', e => {
       const r = canvas.getBoundingClientRect();
       const px = ((e.clientX - r.left) / r.width) * 100;
       const py = ((e.clientY - r.top) / r.height) * 100;
-      let hit = null, best = 8.5;
+      let hit = null, best = 6.0;
       for (const n of Object.values(npcs)) {
         const d = Math.hypot(px - n.x, py - (n.y - 4));
         if (d < best) { best = d; hit = n.id; }
       }
-      if (!hit) return;
+      if (!hit) {
+        if (canWalk(px, py)) {
+          clickRing = { x: px, y: py, born: performance.now() };
+          sendPath('captain', [[px, py]], { bubble: '' });
+        }
+        return;
+      }
       const c = CHARS[hit], n = npcs[hit];
       modal.innerHTML = `
         <div class="oa-m-head">
@@ -342,7 +440,7 @@
     });
 
     setTimeout(runDemo, 1500);
-    return { runDemo, serveCoffee, captainWalk, hallChat };
+    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack };
   }
 
   window.OfficeAnime = { create };

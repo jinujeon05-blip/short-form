@@ -21,6 +21,7 @@
   .oa-stage:fullscreen .oa-canvas, .oa-stage:fullscreen .oa-hud { width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); inset: auto; }
   .oa-fs-btn { position: absolute; right: 12px; bottom: 12px; z-index: 15; border: 1px solid rgba(255,255,255,0.28); background: rgba(15,23,42,0.78); color: #f8fafc; border-radius: 8px; padding: 6px 11px; font: 700 12px var(--f); cursor: pointer; backdrop-filter: blur(4px); }
   .oa-fs-btn:hover { background: rgba(37,99,235,0.9); border-color: #93c5fd; }
+  .oa-ctrl-hint { position: absolute; left: 12px; bottom: 12px; z-index: 15; background: rgba(15,23,42,0.78); border: 1px solid rgba(255,255,255,0.2); color: #e2e8f0; border-radius: 8px; padding: 5px 11px; font: 700 11.5px var(--f); backdrop-filter: blur(4px); pointer-events: none; }
   .oa-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: pointer; }
   .oa-hud { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
   .oa-sign { position: absolute; transform: translate(-50%, -50%); padding: 2px 9px; border-radius: 6px; color: #fff; font-weight: 800; font-size: clamp(9px, 1.15cqw, 13.5px); white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
@@ -52,6 +53,7 @@
     <button type="button" class="btn" id="b-cof">☕ 비서 커피 서빙</button>
     <button type="button" class="btn" id="b-chat">💬 복도 수다</button>
     <button type="button" class="btn" id="b-cap">🚶 캡틴 산책</button>
+    <button type="button" class="btn" id="b-sit">🪑 자리 복귀(E)</button>
     <a class="btn" href="/">← 메인 대시보드로</a>
   </div>
 </header>
@@ -59,7 +61,7 @@
   <div id="root"></div>
   <div class="log-box"><b>실시간 움직임 기록</b> (캐릭터를 클릭하면 웹툰 고화질 프로필 상태창이 열립니다)<ul id="log"></ul></div>
 </main>
-<script src="/static/office-anime/office-anime.js?v=8"></script>
+<script src="/static/office-anime/office-anime.js?v=9"></script>
 <script>
 const ul = document.getElementById('log');
 const app = window.OfficeAnime.create(document.getElementById('root'), {
@@ -69,6 +71,7 @@ document.getElementById('b-demo').onclick = () => app.runDemo();
 document.getElementById('b-cof').onclick  = () => app.serveCoffee();
 document.getElementById('b-chat').onclick = () => app.hallChat();
 document.getElementById('b-cap').onclick  = () => app.captainWalk();
+document.getElementById('b-sit').onclick  = () => app.sitCaptainBack();
 </script>
 </body>
 </html>
