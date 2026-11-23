@@ -177,8 +177,9 @@ function gameNpcInfo(id) {
 }
 function mountOfficeGame() {
   const gBox = $('#office-game');
-  if (!OG && gBox && window.OfficeGame) {
-    OG = window.OfficeGame.create(gBox, {
+  if (!OG && gBox && window.OfficeAnime) {
+    OG = window.OfficeAnime.create(gBox, {
+      autoDemo: false,
       getInfo: gameNpcInfo,
       onOpenDetail: id => openPanel(id),
       onSendOrder: async ({ text, when, argon }) => {
@@ -208,7 +209,7 @@ function setOfficeMode(mode) {
 }
 
 function renderOffice() {
-  if (officeMode === 'game' && $('#office-game') && window.OfficeGame) {
+  if (officeMode === 'game' && $('#office-game') && window.OfficeAnime) {
     mountOfficeGame();
     const fid = typeof talkFocus === 'function' ? talkFocus() : null;
     OG.syncReal({
@@ -1058,8 +1059,9 @@ document.addEventListener('click', async e => {
   }
   if (e.target.id === 'of-mode-game') return setOfficeMode('game');
   if (e.target.id === 'of-mode-photo') return setOfficeMode('photo');
-  if (e.target.id === 'of-game-coffee') { if (OG) OG.serveCoffeeToCaptain(); return; }
-  if (e.target.id === 'of-game-stroll') { if (OG) OG.coffeeStroll(); return; }
+  if (e.target.id === 'of-game-brief') { if (OG) OG.startBriefing(); return; }
+  if (e.target.id === 'of-game-coffee') { if (OG) OG.serveCoffee(); return; }
+  if (e.target.id === 'of-game-stroll') { if (OG) OG.stroll(); return; }
   const spot = e.target.closest('button.spot');
   if (spot) return openPanel(spot.dataset.id);
   if (e.target.closest('#close') || e.target.id === 'dim') return closePanel();

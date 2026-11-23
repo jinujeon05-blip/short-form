@@ -890,6 +890,8 @@
         activeTalkNpc = n;
       }
 
+      const detailBtn = opts.onOpenDetail
+        ? `<button type="button" class="oa-q-btn detail" data-open-detail>📋 상세 패널 열기</button>` : '';
       modal.innerHTML = `
         <div class="oa-m-head">
           <img src="/static/office-anime/assets/portraits/${c.asset || hit}.webp?v=cap3" alt="${c.name}">
@@ -901,12 +903,23 @@
         </div>
         <div class="oa-m-quick">
           ${dcfg.quick.map(q => `<button type="button" class="oa-q-btn" data-q="${q}">${q}</button>`).join('')}
+          ${detailBtn}
         </div>
         <form class="oa-m-form" data-order-form>
           <input type="text" name="msg" placeholder="${c.name}에게 직접 지시할 내용을 입력하세요…" autocomplete="off" required>
           <button type="submit">📣 지시 전달</button>
         </form>
         <div class="oa-m-res" data-res hidden></div>`;
+
+      const OA_TO_DASH = {
+        captain: 'captain', claude: 'claude', finder: 'finder', agy: 'agy',
+        reader: 'menu-reader', inspector: 'codex', auditor: 'reviewer',
+        translator: 'polisher', staffing: 'staffing', sorter: 'sorting'
+      };
+      modal.querySelector('[data-open-detail]')?.addEventListener('click', () => {
+        closeTalkModal(false);
+        opts.onOpenDetail(OA_TO_DASH[hit] || hit);
+      });
 
       const sendOrder = async text => {
         const resEl = modal.querySelector('[data-res]');
@@ -923,15 +936,21 @@
           activeTalkNpc = null; n.pausedState = null; modalBack.hidden = true; serveCoffee(); return;
         }
 
+        const fullOrder = hit === 'claude' ? text : `[${c.name} 담당] ${text}`;
         try {
-          const r = await fetch('/api/order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ target: hit, target_name: c.name, text })
-          });
-          resEl.textContent = r.ok
-            ? `✅ ${c.name}에게 지시가 접수되었습니다!`
-            : `✅ ${c.name}에게 현장 지시 전달 완료 (시연 모드)`;
+          if (opts.onSendOrder) {
+            const r = await opts.onSendOrder({ text: fullOrder, when: '', argon: false });
+            resEl.textContent = r?.error ? `⚠️ ${r.error}` : `✅ ${c.name}에게 실전 지시가 접수되었습니다!`;
+          } else {
+            const r = await fetch('/api/order', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-Dashboard': '1' },
+              body: JSON.stringify({ text: fullOrder })
+            });
+            resEl.textContent = r.ok
+              ? `✅ ${c.name}에게 지시가 접수되었습니다!`
+              : `✅ ${c.name}에게 현장 지시 전달 완료 (시연 모드)`;
+          }
         } catch {
           resEl.textContent = `✅ ${c.name}에게 현장 지시 전달 완료`;
         }
@@ -1181,8 +1200,104 @@
     briefStartBtn.addEventListener('click', startBriefing);
     briefStopBtn.addEventListener('click', endBriefing);
 
-    setTimeout(runDemo, 1500);
-    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing };
+    // ---------------------------------------------------------------- 실전 대시보드 실시간 데이터 연동 (syncReal)
+    const DASH_TO_OA = {
+      captain: 'captain', claude: 'claude', finder: 'finder', agy: 'agy',
+      'menu-reader': 'reader', codex: 'inspector', reviewer: 'auditor',
+      polisher: 'translator', staffing: 'staffing', sorting: 'sorter'
+    };
+    let prevReal = null;
+
+    function syncReal({ orders = [], jobs = [], collector = null, hr = null, talk = [] } = {}) {
+      const busy = new Set();
+      for (const j of jobs) {
+        if (j.status === 'running' && DASH_TO_OA[j.desk]) busy.add(DASH_TO_OA[j.desk]);
+      }
+      if (collector?.job?.status === 'running') busy.add('finder');
+      const liveOrders = orders.filter(o => o.status === 'running' || o.status === 'stopping');
+      if (liveOrders.length) busy.add('claude');
+      for (const o of liveOrders) {
+        for (const d of (o.active || [])) if (DASH_TO_OA[d]) busy.add(DASH_TO_OA[d]);
+      }
+
+      const done = new Set();
+      const cleared = o => o.deployState === 'done' || (!o.deployable && o.seenAt);
+      for (const o of orders.filter(o => o.status === 'done' && !cleared(o))) {
+        for (const d of (o.worked || [])) if (DASH_TO_OA[d]) done.add(DASH_TO_OA[d]);
+      }
+
+      // 이름표 실시간 상태 배지 갱신 (작업 중 파랑 / 완료 초록 / 대기 기본)
+      for (const [id, cfg] of Object.entries(CHARS)) {
+        const el = tagEls[id];
+        if (!el) continue;
+        const small = el.querySelector('small');
+        el.classList.toggle('work', busy.has(id));
+        el.classList.toggle('done', !busy.has(id) && done.has(id));
+        if (small) {
+          small.textContent = busy.has(id) ? '⚡ 작업 중…' : (done.has(id) ? '✔ 작업 완료' : cfg.role);
+        }
+      }
+
+      // 전일/최근 실제 완료 지시 데이터를 [📋 보고해] 멘트에 실시간 반영!
+      const recentDone = orders.filter(o => o.status === 'done').slice(0, 6);
+      for (const o of recentDone) {
+        const title = (o.title || o.text || '').replace(/\s+/g, ' ').slice(0, 22);
+        if (!title) continue;
+        for (const d of (o.worked || [])) {
+          const oaId = DASH_TO_OA[d];
+          if (oaId && oaId !== 'captain' && oaId !== 'claude') {
+            YESTERDAY_REPORTS[oaId] = `✅ 최근 "${title}…" 작업 완료 보고드립니다!`;
+          }
+        }
+      }
+      if (hr?.report) {
+        const dayOk = hr.report.day ? '주간 ✔' : '주간 대기';
+        const nightOk = hr.report.night ? '야간 ✔' : '야간 대기';
+        YESTERDAY_REPORTS.staffing = `📅 인력 현황 보고: ${dayOk} · ${nightOk} 확인 완료했습니다!`;
+      }
+
+      // 새로 완료된 담당이 있으면 복도로 걸어 나와 보고 모션 자동 실행!
+      if (prevReal && !briefingActive && !document.hidden) {
+        for (const id of prevReal.busy) {
+          if (!busy.has(id) && id !== 'claude' && id !== 'captain' && npcs[id]?.mode === 'idle') {
+            walkNpcSafe(id, 48 + (Math.random() * 6 - 3), 48, {
+              bubble: '✅ 작업 완료 보고드립니다!',
+              bubbleType: 'ok',
+              onArrive: () => {
+                npcs[id].mode = 'stand'; npcs[id].dir = 'back';
+                setTimeout(() => {
+                  if (!briefingActive) walkNpcSafe(id, CHARS[id].home[0], CHARS[id].home[1], { onArrive: () => seatNpc(id) });
+                }, 2200);
+              }
+            });
+          }
+        }
+        const prevLiveIds = new Set(prevReal.liveIds);
+        if (orders.some(o => prevLiveIds.has(o.id) && o.status === 'done')) {
+          serveCoffee();
+        }
+      }
+      prevReal = { busy, liveIds: liveOrders.map(o => o.id) };
+    }
+
+    function stroll() {
+      if (briefingActive) return;
+      const idleIds = Object.keys(CHARS).filter(id => id !== 'captain' && id !== 'claude' && npcs[id]?.mode === 'idle');
+      if (!idleIds.length) return;
+      const pick = idleIds[Math.floor(Math.random() * idleIds.length)];
+      walkNpcSafe(pick, 15.5, 22.5, {
+        bubble: '☕ 잠시 커피 휴식 중…',
+        onArrive: () => {
+          npcs[pick].mode = 'stand'; npcs[pick].dir = 'back';
+          setTimeout(() => {
+            if (!briefingActive) walkNpcSafe(pick, CHARS[pick].home[0], CHARS[pick].home[1], { onArrive: () => seatNpc(pick) });
+          }, 2200);
+        }
+      });
+    }
+
+    if (opts.autoDemo !== false) setTimeout(runDemo, 1500);
+    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing, syncReal, stroll };
   }
 
   window.OfficeAnime = { create };
