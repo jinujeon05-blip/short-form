@@ -77,12 +77,15 @@
     });
     const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=cutaway1')];
     for (const [id, cfg] of Object.entries(CHARS)) {
-      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [] };
-      const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee'] : ['east', 'front', 'back'];
+      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], water: [], clean: [] };
+      const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee']
+        : id === 'sorter' ? ['east', 'front', 'back', 'water']
+        : id === 'staffing' ? ['east', 'front', 'back', 'clean']
+        : ['east', 'front', 'back'];
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = id === 'captain' ? 'cap8dir' : 'orig2k';
+          const v = id === 'captain' ? 'cap8dir' : (dir === 'water' || dir === 'clean') ? 'act1' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
         }
       }
@@ -631,13 +634,13 @@
       let fIdx = 0;
       if (emoting) {
         const elapsed = Math.max(0, t - (n.emoteStart || 0));
-        fIdx = Math.min(11, Math.floor(elapsed * 4.0));
+        fIdx = n.emoteLoop ? (Math.floor(elapsed * 5.0) % 12) : Math.min(11, Math.floor(elapsed * 4.0));
       } else if (walking) {
         fIdx = Math.floor(n.walkDist * 1.05) % 12;
       }
 
       let dirKey = 'front', flipX = false;
-      if (emoting) { dirKey = n.emote; }
+      if (emoting) { dirKey = n.emote; flipX = (n.dir === 'west'); }
       else if (n.dir === 'east') { dirKey = 'east'; }
       else if (n.dir === 'west') { dirKey = 'east'; flipX = true; }
       else if (n.dir === 'se' && wset.se?.length) { dirKey = 'se'; }
@@ -1776,16 +1779,22 @@
       return n && n.mode === 'idle' && !realBusySet.has(id) && (!activeTalkNpc || activeTalkNpc.id !== id);
     };
 
-    function doChore(id, tx, ty, workDir, goMsg, workMsg, workMs, returnMsg = '') {
+    function doChore(id, tx, ty, workDir, goMsg, workMsg, workMs, returnMsg = '', emoteKey = null) {
       if (briefingActive || !isFree(id)) return false;
       return walkNpcSafe(id, tx, ty, {
         bubble: goMsg,
         onArrive: () => {
           if (briefingActive) return;
           const n = npcs[id];
-          n.mode = 'stand'; n.dir = workDir; n.bubble = workMsg; n.bubbleType = 'ok';
+          n.dir = workDir; n.bubble = workMsg; n.bubbleType = 'ok';
+          if (emoteKey && imgs.walk[id]?.[emoteKey]?.length) {
+            n.mode = 'emote'; n.emote = emoteKey; n.emoteLoop = true; n.emoteStart = performance.now() / 1000;
+          } else {
+            n.mode = 'stand';
+          }
           setTimeout(() => {
             if (briefingActive || (activeTalkNpc && activeTalkNpc.id === id)) return;
+            n.emote = null; n.emoteLoop = false;
             walkNpcSafe(id, CHARS[id].home[0], CHARS[id].home[1], {
               bubble: returnMsg,
               onArrive: () => seatNpc(id)
@@ -1821,18 +1830,18 @@
     }
 
     const LIFE_EVENTS = [
-      // 1. 선별팀 팀장: 중앙 복도 좌/우 화분 물주기
+      // 1. 선별팀 팀장: 중앙 복도 좌/우 화분 물주기 (물뿌리개 전용 12프레임 애니메이션!)
       () => {
         const leftPlant = Math.random() < 0.5;
         return doChore('sorter', leftPlant ? 32.5 : 67.2, 40.5, leftPlant ? 'west' : 'east',
-          '🪴 물뿌리개 들고 화분 관리 가는 중…', '💧 화분에 물 주는 중… 쑥쑥 자라라!', 3000);
+          '🪴 물뿌리개 들고 화분 관리 가는 중…', '💧 화분에 물 주는 중… 쑥쑥 자라라!', 3800, '', 'water');
       },
       // 2. 인력 공급팀 팀장: 중앙 복도 빗자루 청소
       () => doChore('staffing', 49.5, 48.0, 'front',
         '🧹 복도 청소하러 나왔어요!', '🧹 중앙 복도 빗자루질 중… 반짝반짝!', 3200),
-      // 3. 인력 공급팀 팀장: 캡틴 책상 먼지 털기
+      // 3. 인력 공급팀 팀장: 캡틴 책상 먼지 털기 (걸레·먼지털이 전용 12프레임 애니메이션!)
       () => doChore('staffing', 39.5, 21.0, 'east',
-        '🪶 캡틴 책상 정돈하러 올라가는 중…', '✨ 캡틴 책상 먼지 닦아드렸습니다!', 2800),
+        '🪶 캡틴 책상 정돈하러 올라가는 중…', '✨ 캡틴 책상 먼지 닦아드렸습니다!', 3600, '', 'clean'),
       // 4. 비서실장: 캡틴 커피 서빙 & 안부 여쭙기
       () => {
         if (!isFree('claude')) return false;
