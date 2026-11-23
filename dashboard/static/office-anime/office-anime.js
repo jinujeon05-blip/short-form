@@ -12,8 +12,8 @@
     sorter:     { name: '선별팀 팀장',   role: '자료 선별',   home: [83.4, 77.0], standPos: [77.2, 77.0], facing: 'front', scale: 0.95, seat: { x: 83.4, headTopY: 68.2, clipY: 74.7, h: 230 } },
     inspector:  { name: '운영 감찰관',   role: '두 번째 검토', home: [7.7,  86.2], standPos: [13.2, 86.8], facing: 'back',  scale: 0.95, seat: { x: 7.7,  headTopY: 72.2, clipY: 83.0, h: 220 } },
     staffing:   { name: '인력 공급팀',   role: '인력·일정 관리', home: [64.4, 76.8], standPos: [58.0, 76.8], facing: 'front', scale: 0.95, seat: { x: 64.4, headTopY: 67.6, clipY: 74.4, h: 230 } },
-    reader:     { name: '자료 해석 비서', role: '메뉴판 해석',  home: [92.2, 49.0], standPos: [87.2, 50.0], facing: 'back',  scale: 0.96, seat: { x: 92.2, headTopY: 35.8, clipY: 46.2, h: 220 } },
-    auditor:    { name: '데이터 감사관', role: '마지막 점검',  home: [18.6, 86.2], standPos: [24.5, 87.2], facing: 'back',  scale: 0.95, seat: { x: 18.6, headTopY: 72.2, clipY: 83.0, h: 220 } },
+    reader:     { name: '자료 해석 비서', role: '메뉴판 해석',  asset: 'auditor', home: [92.2, 49.0], standPos: [87.2, 50.0], facing: 'back',  scale: 0.96, seat: { x: 92.2, headTopY: 35.8, clipY: 46.2, h: 220 } },
+    auditor:    { name: '데이터 감사관', role: '마지막 점검',  asset: 'reader',  home: [18.6, 86.2], standPos: [24.5, 87.2], facing: 'back',  scale: 0.95, seat: { x: 18.6, headTopY: 72.2, clipY: 83.0, h: 220 } },
   };
 
   // Y-깊이(앞/뒤 가림) 전경 가구 목록 (7개 방 모든 책상·의자 완비!):
@@ -79,10 +79,11 @@
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], greet: [], coffee: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'greet', 'coffee'] : ['east', 'front', 'back'];
+      const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
           const v = id === 'captain' ? 'cap4act' : 'orig2k';
-          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${id}-${dir}-${i}.webp?v=${v}`));
+          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
         }
       }
     }
@@ -878,7 +879,7 @@
 
       modal.innerHTML = `
         <div class="oa-m-head">
-          <img src="/static/office-anime/assets/portraits/${hit}.webp?v=cap3" alt="${c.name}">
+          <img src="/static/office-anime/assets/portraits/${c.asset || hit}.webp?v=cap3" alt="${c.name}">
           <div>
             <h3>${c.name} <span class="oa-m-role">${c.role}</span></h3>
             <p class="oa-m-say">“${dcfg.greet}”</p>
