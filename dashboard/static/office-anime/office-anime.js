@@ -687,21 +687,68 @@
       b.dir = Math.abs(dy) >= Math.abs(dx) ? (dy > 0 ? 'back' : 'front') : (dx < 0 ? 'east' : 'west');
     }
 
+    let activeTalkNpc = null;
+
+    function resumeTalkNpc(keepOrderBubble = false) {
+      if (!activeTalkNpc) return;
+      const n = activeTalkNpc;
+      activeTalkNpc = null;
+      const st = n.pausedState;
+      n.pausedState = null;
+      if (!st) return;
+
+      if (st.mode === 'walk' && st.path.length) {
+        // 걷던 중 대화가 끝났으면 멈췄던 동선 그대로 즉시 재개!
+        n.path = st.path;
+        n.onArrive = st.onArrive;
+        n.mode = 'walk';
+        if (!keepOrderBubble) { n.bubble = st.bubble; n.bubbleType = st.bubbleType; }
+      } else if (st.wasSeated) {
+        // 앉아 있다가 일어나서 인사했던 직원은 대화창 닫으면 다시 자리에 착석!
+        n.mode = 'idle';
+        n.dir = CHARS[n.id].facing;
+        if (!keepOrderBubble) { n.bubble = ''; n.bubbleType = ''; }
+      } else {
+        n.mode = st.mode || 'stand';
+        n.dir = st.dir || 'front';
+        if (!keepOrderBubble) { n.bubble = ''; n.bubbleType = ''; }
+      }
+    }
+
+    function closeTalkModal(keepOrderBubble = false) {
+      modalBack.hidden = true;
+      resumeTalkNpc(keepOrderBubble);
+    }
+
     function openTalkModal(hit) {
+      // 이전 대화 중인 직원이 있었다면 먼저 자연스럽게 복귀
+      if (activeTalkNpc && activeTalkNpc.id !== hit) resumeTalkNpc(false);
+
       const c = CHARS[hit], n = npcs[hit], cap = npcs.captain;
       const dcfg = DIALOG_CFG[hit] || { greet: '캡틴, 지시하실 업무가 있으신가요?', quick: ['📋 현재 업무 보고'] };
 
-      // 대화 시 상대 캐릭터가 즉시 캡틴 쪽을 바라봄 (서 있을 때) & 캡틴도 상대방을 바라봄!
       if (hit !== 'captain') {
-        if (n.mode === 'walk') { n.path = []; n.onArrive = null; n.mode = 'stand'; }
-        if (n.mode !== 'idle') faceEachOther(n, cap);
-        else {
-          // 앉아 있을 때도 캡틴이 대화 걸면 정면 응시 + 말풍선 반응
-          const dx = cap.x - n.x, dy = cap.y - n.y;
-          cap.dir = Math.abs(dy) >= Math.abs(dx) ? (dy < 0 ? 'back' : 'front') : (dx >= 0 ? 'east' : 'west');
+        const wasSeated = (n.mode === 'idle' || n.mode === 'work');
+        // 현재 상태(걷던 경로·콜백·착석 여부)를 그대로 보관해 두고 일시정지!
+        if (!n.pausedState) {
+          n.pausedState = {
+            mode: n.mode,
+            dir: n.dir,
+            wasSeated,
+            path: n.path.map(p => [p[0], p[1]]),
+            onArrive: n.onArrive,
+            bubble: n.bubble,
+            bubbleType: n.bubbleType,
+          };
         }
+        n.path = [];
+        n.onArrive = null;
+        // 앉아 있던 직원도 자리에서 바로 일어나서 캡틴 방향을 바라보며 응대!
+        n.mode = 'stand';
+        faceEachOther(n, cap);
         n.bubble = '💬 캡틴, 지시하실 게 있으신가요?';
         n.bubbleType = 'meet';
+        activeTalkNpc = n;
       }
 
       modal.innerHTML = `
@@ -728,14 +775,13 @@
         resEl.textContent = '📡 지시를 전달하는 중…';
         log(`📣 캡틴 → ${c.name}: "${text}"`);
 
-        // 캡틴 자신 빠른 액션 처리
         if (hit === 'captain') {
-          if (text.includes('커피')) { modalBack.hidden = true; playCaptainAction('coffee'); return; }
-          if (text.includes('인사')) { modalBack.hidden = true; playCaptainAction('greet'); return; }
-          if (text.includes('복귀')) { modalBack.hidden = true; sitCaptainBack(); return; }
+          if (text.includes('커피')) { closeTalkModal(false); playCaptainAction('coffee'); return; }
+          if (text.includes('인사')) { closeTalkModal(false); playCaptainAction('greet'); return; }
+          if (text.includes('복귀')) { closeTalkModal(false); sitCaptainBack(); return; }
         }
         if (hit === 'claude' && text.includes('커피')) {
-          modalBack.hidden = true; serveCoffee(); return;
+          activeTalkNpc = null; n.pausedState = null; modalBack.hidden = true; serveCoffee(); return;
         }
 
         try {
@@ -744,17 +790,15 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ target: hit, target_name: c.name, text })
           });
-          if (r.ok) {
-            resEl.textContent = `✅ ${c.name}에게 지시가 접수되었습니다!`;
-          } else {
-            resEl.textContent = `✅ ${c.name}에게 현장 지시 전달 완료 (시연 모드)`;
-          }
+          resEl.textContent = r.ok
+            ? `✅ ${c.name}에게 지시가 접수되었습니다!`
+            : `✅ ${c.name}에게 현장 지시 전달 완료 (시연 모드)`;
         } catch {
           resEl.textContent = `✅ ${c.name}에게 현장 지시 전달 완료`;
         }
         n.bubble = `✅ 네 캡틴! "${text.slice(0, 14)}${text.length > 14 ? '…' : ''}" 진행하겠습니다!`;
         n.bubbleType = 'ok';
-        setTimeout(() => { modalBack.hidden = true; }, 900);
+        setTimeout(() => closeTalkModal(true), 850);
         setTimeout(() => { if (n.bubble.startsWith('✅ 네 캡틴')) n.bubble = ''; }, 4500);
       };
 
@@ -790,7 +834,10 @@
       openTalkModal(hit);
     });
     modalBack.addEventListener('click', e => {
-      if (e.target === modalBack || e.target.closest('[data-close]')) modalBack.hidden = true;
+      if (e.target === modalBack || e.target.closest('[data-close]')) closeTalkModal(false);
+    });
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !modalBack.hidden) closeTalkModal(false);
     });
 
     setTimeout(runDemo, 1500);
