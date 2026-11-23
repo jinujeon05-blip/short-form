@@ -56,3 +56,4 @@
    - 가게 찾기용은 사진을 받은 뒤 **배포 직전까지 묻지 않고** 끝낸다(2026-10-27). 색·사진·분류 순서도 묻지 않고 정한다(1번 '정식인가, 가게 찾기용인가?'만 묻는다).
    - 끝나면 **폰 화면 캡처 1장과 3줄 보고**만 보낸다. 사용자의 하루 확인 시간은 5~10분이다.
 9. **보고**: 만든 PDF·이미지는 상호를 붙여 보내고(`sh tools/export.sh <스크래치폴더> <가게…>`), 사용량을 보고한다(`CLAUDE.md` 4장).
+   - **정식 가게는 '자료 위치' 표를 꼭 붙인다**(2026-11-23 캡틴 지시, 치뱅이&민짬뽕 건 — 대시보드로 만들었더니 QR·SNS 자료가 어디 있는지 몰랐음). `ls`로 실제 있는지 보고 PC 전체 경로로 쓴다: QR 카드 PDF `D:\qrmenu\restaurants\<가게>\print\table-card-A6.pdf` · 카드 그림 `print\table-card.png` · QR `print\qr.svg` · SNS 정사각형 `print\sns-square.png` · SNS 스토리 `print\sns-story.png` · 소개서 데모 `D:\qrmenu\sales\img\demo-<가게>.jpg` · 폰 캡처 `D:\qrmenu\dashboard\out\<가게>-ko.png`. 대시보드 비서실장 규칙(`dashboard/server.py` ORDER_RULES)에도 같은 줄이 있다.
