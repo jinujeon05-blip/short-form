@@ -440,7 +440,8 @@
           bubEls[id].textContent = n.bubble;
           bubEls[id].className = `oa-bub ${n.bubbleType}`;
           bubEls[id].style.left = `${n.x}%`;
-          bubEls[id].style.top  = `${Math.max(7, n.y - (walking ? 12.2 : 9.0))}%`;
+          const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
+          bubEls[id].style.top  = `${Math.max(3.5, n.y - (standing ? 13.0 : 9.0))}%`;
         } else {
           bubEls[id].hidden = true;
         }
