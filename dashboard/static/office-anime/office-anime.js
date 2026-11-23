@@ -260,7 +260,7 @@
     for (const [id, cfg] of Object.entries(CHARS)) {
       npcs[id] = {
         id, x: cfg.home[0], y: cfg.home[1],
-        mode: 'idle', dir: cfg.facing, path: [], speed: 6.5, walkDist: 0,
+        mode: 'idle', dir: cfg.facing, path: [], speed: id === 'captain' ? 6.5 : 4.2, walkDist: 0,
         bubble: '', bubbleType: '', onArrive: null,
       };
     }
@@ -667,7 +667,8 @@
         const elapsed = Math.max(0, t - (n.emoteStart || 0));
         fIdx = n.emoteLoop ? (Math.floor(elapsed * 5.0) % 12) : Math.min(11, Math.floor(elapsed * 4.0));
       } else if (walking) {
-        fIdx = Math.floor(n.walkDist * 1.05) % 12;
+        const stride = (n.id === 'captain') ? 1.05 : 1.65;
+        fIdx = Math.floor(n.walkDist * stride) % 12;
       }
 
       let dirKey = 'front', flipX = false;
@@ -1171,7 +1172,10 @@
       for (const [id, n] of Object.entries(npcs)) {
         const walking = n.mode === 'walk';
         tagEls[id].style.left = `${n.x}%`;
-        tagEls[id].style.top  = `${n.y + (walking ? 1.4 : (CHARS[id].facing === 'front' ? 4.8 : 1.5))}%`;
+        const tagTop = (id === 'captain' && n.mode === 'idle')
+          ? 16.8
+          : (n.y + (walking ? 1.4 : (CHARS[id].facing === 'front' ? 4.8 : 1.5)));
+        tagEls[id].style.top  = `${tagTop}%`;
         // RPG 퀘스트 마커(! / ?) 머리 위 표시 (말풍선이 없을 때 깔끔하게 통통 뜀)
         const q = activeQuests[id];
         const qEl = questEls[id];
@@ -1870,9 +1874,12 @@
           '🪴 물뿌리개 들고 화분 관리 가는 중…', '💧 화분에 물 주는 중… 쑥쑥 자라라!', 3800, '', 'water',
           leftPlant ? [31.9, 41.4] : [68.1, 41.4]);
       },
-      // 2. 운영 감찰관: 중앙 복도 빗자루 바닥 청소 (전용 빗자루질 모션 준비되면 자동 연결!)
-      () => doChore('inspector', 49.5, 48.0, 'front',
-        '🧹 복도 바닥 청소하러 나왔습니다!', '🧹 중앙 복도 빗자루질 중… 깔끔하게!', 3600, '', 'sweep'),
+      // 2. 운영 감찰관: 복도 화분과 비서실장 책상 사이 공간 바닥 빗자루 청소
+      () => {
+        const leftSide = Math.random() < 0.5;
+        return doChore('inspector', leftSide ? 37.0 : 63.0, 41.2, 'front',
+          '🧹 화분 옆 복도 청소하러 나왔습니다!', '🧹 복도 바닥 빗자루질 중… 깔끔하게!', 3600, '', 'sweep');
+      },
       // 3. 인력 공급팀 팀장: 캡틴 책상 먼지 털기 (책상 좌측 앞쪽 y=23.0 밀착 → 먼지털이가 책상 상판 위를 직접 닦음!)
       () => doChore('staffing', 41.0, 23.0, 'east',
         '🪶 캡틴 책상 정돈하러 올라가는 중…', '✨ 캡틴 책상 먼지 닦아드렸습니다!', 3600, '', 'clean',
