@@ -108,8 +108,10 @@
           <div class="oa-joy" data-joy aria-label="캡틴 이동 조이스틱"><div class="oa-joy-knob" data-joy-knob></div></div>
           <div class="oa-rpg-hud">
             <span class="oa-rpg-pill" data-rpg-stat>👑 <b>Lv.1</b> 캡틴 · 퀘스트 <span class="oa-rpg-qcnt zero" data-qcnt>0</span></span>
+          </div>
+          <div class="oa-snd-bar">
             <button type="button" class="oa-snd-btn on" data-sfx-btn title="게임 효과음 켜기/끄기">🔊 효과음</button>
-            <button type="button" class="oa-snd-btn" data-bgm-btn title="잔잔한 사무실 BGM 켜기/끄기">🎵 BGM</button>
+            <button type="button" class="oa-snd-btn" data-bgm-btn title="사무실 BGM 켜기/끄기">🎵 BGM</button>
           </div>
           <div class="oa-cap-acts" data-cap-acts>
             <button type="button" class="oa-c-btn" data-cap-greet>👋 인사</button>
@@ -1443,8 +1445,12 @@
           const score = ov * 1000 - minDist;
           if (score < bestScore) { bestScore = score; best = s; }
         }
-        modal.style.left = `${best.x}%`;
-        modal.style.top  = `${best.y}%`;
+        // 모바일 가로 등 화면 높이가 낮은 환경에서는 대화창이 위/아래로 절대 잘리지 않도록 세로 중앙(50%) 고정!
+        const rotH = root.querySelector('.oa-rot-wrap')?.clientHeight || 600;
+        const safeY = rotH < 520 ? 50 : Math.max(30, Math.min(70, best.y));
+        const safeX = rotH < 520 ? (best.x < 50 ? 28 : 72) : Math.max(24, Math.min(76, best.x));
+        modal.style.left = `${safeX}%`;
+        modal.style.top  = `${safeY}%`;
       }
 
       modalBack.hidden = false;
