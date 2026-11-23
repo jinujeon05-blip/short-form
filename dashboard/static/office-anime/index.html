@@ -32,13 +32,22 @@
   .oa-bub.meet { border-color: #d97706; background: #fffbeb; color: #78350f; }
   .oa-modal-back { position: absolute; inset: 0; z-index: 20; background: rgba(7,11,20,0.58); display: flex; align-items: center; justify-content: center; }
   .oa-modal-back[hidden] { display: none; }
-  .oa-modal { width: min(360px, 90%); background: #1e293b; border: 2px solid #f59e0b; border-radius: 14px; padding: 14px 16px; color: #fff; box-shadow: 0 18px 40px rgba(0,0,0,0.65); }
-  .oa-m-head { display: flex; align-items: center; gap: 12px; }
-  .oa-m-head img { width: 68px; height: 68px; border-radius: 12px; object-fit: cover; object-position: top; border: 2px solid #f59e0b; }
-  .oa-m-head h3 { margin: 0; font-size: 16px; }
-  .oa-m-head small { color: #94a3b8; }
-  .oa-m-head button { margin-left: auto; border: 0; background: rgba(255,255,255,0.12); color: #fff; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 16px; }
-  .oa-m-st { margin: 12px 0 0; background: #0f172a; padding: 9px 11px; border-radius: 10px; font-size: 13px; color: #fde68a; }
+  .oa-modal { width: min(460px, 92%); background: #1e293b; border: 2px solid #f59e0b; border-radius: 16px; padding: 16px 18px; color: #fff; box-shadow: 0 18px 44px rgba(0,0,0,0.72); }
+  .oa-m-head { display: flex; align-items: flex-start; gap: 14px; }
+  .oa-m-head img { width: 84px; height: 100px; border-radius: 12px; object-fit: cover; object-position: top; border: 2px solid #f59e0b; flex-shrink: 0; }
+  .oa-m-head h3 { margin: 0 0 4px; font-size: 16.5px; display: flex; align-items: center; gap: 7px; }
+  .oa-m-role { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: #334155; color: #fde68a; }
+  .oa-m-say { margin: 4px 0 0; font-size: 13.5px; color: #f1f5f9; line-height: 1.45; }
+  .oa-m-head button { margin-left: auto; border: 0; background: rgba(255,255,255,0.12); color: #fff; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 16px; flex-shrink: 0; }
+  .oa-m-quick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .oa-q-btn { border: 1px solid #475569; background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 6px 10px; font: 700 12px var(--f); cursor: pointer; text-align: left; }
+  .oa-q-btn:hover { border-color: #f59e0b; background: #1e293b; color: #fde68a; }
+  .oa-m-form { display: flex; gap: 6px; margin-top: 12px; }
+  .oa-m-form input { flex: 1; border: 1px solid #475569; background: #0f172a; color: #fff; border-radius: 8px; padding: 8px 10px; font: 13px var(--f); outline: none; }
+  .oa-m-form input:focus { border-color: #f59e0b; }
+  .oa-m-form button { border: 0; background: #f59e0b; color: #0f172a; border-radius: 8px; padding: 8px 13px; font: 800 12.5px var(--f); cursor: pointer; white-space: nowrap; }
+  .oa-m-form button:hover { background: #fbbf24; }
+  .oa-m-res { margin-top: 9px; font-size: 12.5px; font-weight: 700; color: #86efac; }
   .log-box { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 10px 14px; font-size: 12.5px; color: #cbd5e1; }
   .log-box ul { list-style: none; margin: 6px 0 0; padding: 0; max-height: 110px; overflow-y: auto; }
   .log-box li { padding: 3px 0; border-top: 1px solid #293548; }
@@ -63,7 +72,7 @@
   <div id="root"></div>
   <div class="log-box"><b>실시간 움직임 기록</b> (캐릭터를 클릭하면 웹툰 고화질 프로필 상태창이 열립니다)<ul id="log"></ul></div>
 </main>
-<script src="/static/office-anime/office-anime.js?v=14"></script>
+<script src="/static/office-anime/office-anime.js?v=15"></script>
 <script>
 const ul = document.getElementById('log');
 const app = window.OfficeAnime.create(document.getElementById('root'), {

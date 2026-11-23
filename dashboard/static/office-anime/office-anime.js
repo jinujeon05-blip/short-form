@@ -176,13 +176,13 @@
     function captainWalk() {
       const cap = npcs.captain;
       if (cap.mode === 'walk') return;
-      log('🚶 캡틴이 오른쪽 창가 데크로 산책');
-      sendPath('captain', ROUTES.capToWindow, {
-        bubble: '잠시 바람 좀 쐬야지…',
+      log('🚶 캡틴이 계단·통로를 따라 오른쪽 테라스로 산책');
+      walkCaptainSafe(82.0, 22.5, {
+        bubble: '잠시 바람 좀 쐬어야지…',
         onArrive: () => {
           cap.mode = 'stand'; cap.dir = 'back'; cap.bubble = '창밖을 바라보는 중…';
           setTimeout(() => {
-            sendPath('captain', ROUTES.capToDesk, {
+            walkCaptainSafe(CHARS.captain.home[0], CHARS.captain.home[1], {
               bubble: '',
               onArrive: () => { cap.mode = 'idle'; cap.dir = 'front'; },
             });
@@ -373,6 +373,110 @@
       return true;
     }
 
+    // A* 격자 길찾기 (1.5% 간격): 캡틴이 어떤 위치에서든 벽·책상·단상 턱·화분을 절대 통과하지 않고 열린 문·계단·복도로만 우회 이동!
+    function findPath(sx, sy, tx, ty) {
+      const STEP = 1.5;
+      const cols = Math.floor(100 / STEP);
+      const rows = Math.floor(100 / STEP);
+      const toC = v => Math.max(0, Math.min(cols - 1, Math.round(v / STEP)));
+      const toR = v => Math.max(0, Math.min(rows - 1, Math.round(v / STEP)));
+      const toX = c => c * STEP;
+      const toY = r => r * STEP;
+
+      const sc = toC(sx), sr = toR(sy);
+      let tc = toC(tx), tr = toR(ty);
+
+      // 목표점이 장애물 안이면 가장 가까운 이동 가능 칸 찾기
+      if (!canWalk(toX(tc), toY(tr))) {
+        let found = false;
+        for (let rad = 1; rad <= 6 && !found; rad++) {
+          for (let dr = -rad; dr <= rad && !found; dr++) {
+            for (let dc = -rad; dc <= rad && !found; dc++) {
+              const nr = tr + dr, nc = tc + dc;
+              if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && canWalk(toX(nc), toY(nr))) {
+                tc = nc; tr = nr; found = true;
+              }
+            }
+          }
+        }
+        if (!found) return null;
+      }
+
+      const key = (c, r) => r * cols + c;
+      const startK = key(sc, sr), goalK = key(tc, tr);
+      if (startK === goalK) return [[tx, ty]];
+
+      const open = [startK];
+      const inOpen = new Uint8Array(cols * rows);
+      const closed = new Uint8Array(cols * rows);
+      const gScore = new Float32Array(cols * rows).fill(1e9);
+      const fScore = new Float32Array(cols * rows).fill(1e9);
+      const cameFrom = new Int32Array(cols * rows).fill(-1);
+      gScore[startK] = 0;
+      fScore[startK] = Math.hypot(tc - sc, tr - sr);
+      inOpen[startK] = 1;
+
+      const dirs = [[1,0,1],[-1,0,1],[0,1,1],[0,-1,1],[1,1,1.41],[1,-1,1.41],[-1,1,1.41],[-1,-1,1.41]];
+      let iter = 0;
+      while (open.length && iter++ < 2500) {
+        let bestI = 0;
+        for (let i = 1; i < open.length; i++) if (fScore[open[i]] < fScore[open[bestI]]) bestI = i;
+        const cur = open.splice(bestI, 1)[0];
+        inOpen[cur] = 0;
+        if (cur === goalK) {
+          const pts = [];
+          let k = cur;
+          while (k !== -1 && k !== startK) {
+            pts.push([toX(k % cols), toY(Math.floor(k / cols))]);
+            k = cameFrom[k];
+          }
+          pts.reverse();
+          // 경로 단순화 (직선 중간점 제거)
+          const clean = [];
+          for (let i = 0; i < pts.length; i++) {
+            if (i === 0 || i === pts.length - 1) { clean.push(pts[i]); continue; }
+            const a = pts[i - 1], b = pts[i], c = pts[i + 1];
+            if (Math.abs((b[0] - a[0]) - (c[0] - b[0])) > 0.01 || Math.abs((b[1] - a[1]) - (c[1] - b[1])) > 0.01) {
+              clean.push(b);
+            }
+          }
+          return clean.length ? clean : [[tx, ty]];
+        }
+        closed[cur] = 1;
+        const cc = cur % cols, cr = Math.floor(cur / cols);
+        for (const [dc, dr, cost] of dirs) {
+          const nc = cc + dc, nr = cr + dr;
+          if (nc < 0 || nc >= cols || nr < 0 || nr >= rows) continue;
+          const nk = key(nc, nr);
+          if (closed[nk]) continue;
+          if (!canWalk(toX(nc), toY(nr))) continue;
+          // 대각선 이동 시 코너 뚫기 방지
+          if (dc !== 0 && dr !== 0 && (!canWalk(toX(cc + dc), toY(cr)) || !canWalk(toX(cc), toY(cr + dr)))) continue;
+          const ng = gScore[cur] + cost;
+          if (ng < gScore[nk]) {
+            cameFrom[nk] = cur;
+            gScore[nk] = ng;
+            fScore[nk] = ng + Math.hypot(tc - nc, tr - nr);
+            if (!inOpen[nk]) { open.push(nk); inOpen[nk] = 1; }
+          }
+        }
+      }
+      return null;
+    }
+
+    function walkCaptainSafe(tx, ty, opts2 = {}) {
+      const cap = npcs.captain;
+      const pts = findPath(cap.x, cap.y, tx, ty);
+      if (!pts) {
+        cap.bubble = '🚫 그쪽은 막혀 있습니다';
+        setTimeout(() => { if (cap.bubble === '🚫 그쪽은 막혀 있습니다') cap.bubble = ''; }, 1500);
+        return false;
+      }
+      cap.manualClick = false;
+      sendPath('captain', pts, opts2);
+      return true;
+    }
+
     function sitCaptainBack() {
       const cap = npcs.captain;
       cap.path = [];
@@ -545,12 +649,110 @@
     }
     requestAnimationFrame(tick);
 
-    // 캐릭터 클릭 → 프로필 상태창 / 빈 바닥 클릭 → 캡틴이 그 위치로 걸어감!
+    // 역할별 RPG 대화 멘트 + 빠른 지시 버튼
+    const DIALOG_CFG = {
+      captain:    { greet: '오늘 사무실 전체 현황을 점검 중입니다. 어떤 지시를 내릴까요?', quick: ['☕ 커피 한 잔 하며 휴식', '👋 전체 직원 격려 인사', '🪑 대표석으로 복귀'] },
+      claude:     { greet: '캡틴, 오셨어요? 오늘 진행할 업무나 지시하실 사항이 있으신가요?', quick: ['☕ 캡틴 커피 서빙해 줘', '📋 현재 전체 진행 현황 보고', '💬 팀장급 복도 회의 소집'] },
+      finder:     { greet: '캡틴! 음식 사진 선별이나 이미지 보정 지시하실 게 있으신가요?', quick: ['📸 새 가게 음식 사진 고르기', '✨ 흐린 메뉴 사진 화질 개선', '📋 현재 사진 작업 현황 보고'] },
+      agy:        { greet: '캡틴! 어떤 가게의 디지털 메뉴판을 점검할까요?', quick: ['🔍 메뉴판 가격·오타 전수 점검', '📱 모바일 화면 깨짐 확인', '📋 검수 완료 리스트 보고'] },
+      translator: { greet: '캡틴! 베트남어·영어·한국어 메뉴 번역 지시하실 내용이 있으신가요?', quick: ['🌐 새 메뉴 4개국어 번역 시작', '✍️ 베트남어 현지 표현 자연스럽게 다듬기', '📋 번역 완료 현황 보고'] },
+    };
+
+    function faceEachOther(a, b) {
+      const dx = b.x - a.x, dy = b.y - a.y;
+      a.dir = Math.abs(dy) >= Math.abs(dx) ? (dy < 0 ? 'back' : 'front') : (dx >= 0 ? 'east' : 'west');
+      b.dir = Math.abs(dy) >= Math.abs(dx) ? (dy > 0 ? 'back' : 'front') : (dx < 0 ? 'east' : 'west');
+    }
+
+    function openTalkModal(hit) {
+      const c = CHARS[hit], n = npcs[hit], cap = npcs.captain;
+      const dcfg = DIALOG_CFG[hit] || { greet: '캡틴, 지시하실 업무가 있으신가요?', quick: ['📋 현재 업무 보고'] };
+
+      // 대화 시 상대 캐릭터가 즉시 캡틴 쪽을 바라봄 (서 있을 때) & 캡틴도 상대방을 바라봄!
+      if (hit !== 'captain') {
+        if (n.mode === 'walk') { n.path = []; n.onArrive = null; n.mode = 'stand'; }
+        if (n.mode !== 'idle') faceEachOther(n, cap);
+        else {
+          // 앉아 있을 때도 캡틴이 대화 걸면 정면 응시 + 말풍선 반응
+          const dx = cap.x - n.x, dy = cap.y - n.y;
+          cap.dir = Math.abs(dy) >= Math.abs(dx) ? (dy < 0 ? 'back' : 'front') : (dx >= 0 ? 'east' : 'west');
+        }
+        n.bubble = '💬 캡틴, 지시하실 게 있으신가요?';
+        n.bubbleType = 'meet';
+      }
+
+      modal.innerHTML = `
+        <div class="oa-m-head">
+          <img src="/static/office-anime/assets/portraits/${hit}.webp?v=cap2" alt="${c.name}">
+          <div>
+            <h3>${c.name} <span class="oa-m-role">${c.role}</span></h3>
+            <p class="oa-m-say">“${dcfg.greet}”</p>
+          </div>
+          <button type="button" data-close>×</button>
+        </div>
+        <div class="oa-m-quick">
+          ${dcfg.quick.map(q => `<button type="button" class="oa-q-btn" data-q="${q}">${q}</button>`).join('')}
+        </div>
+        <form class="oa-m-form" data-order-form>
+          <input type="text" name="msg" placeholder="${c.name}에게 직접 지시할 내용을 입력하세요…" autocomplete="off" required>
+          <button type="submit">📣 지시 전달</button>
+        </form>
+        <div class="oa-m-res" data-res hidden></div>`;
+
+      const sendOrder = async text => {
+        const resEl = modal.querySelector('[data-res]');
+        resEl.hidden = false;
+        resEl.textContent = '📡 지시를 전달하는 중…';
+        log(`📣 캡틴 → ${c.name}: "${text}"`);
+
+        // 캡틴 자신 빠른 액션 처리
+        if (hit === 'captain') {
+          if (text.includes('커피')) { modalBack.hidden = true; playCaptainAction('coffee'); return; }
+          if (text.includes('인사')) { modalBack.hidden = true; playCaptainAction('greet'); return; }
+          if (text.includes('복귀')) { modalBack.hidden = true; sitCaptainBack(); return; }
+        }
+        if (hit === 'claude' && text.includes('커피')) {
+          modalBack.hidden = true; serveCoffee(); return;
+        }
+
+        try {
+          const r = await fetch('/api/order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ target: hit, target_name: c.name, text })
+          });
+          if (r.ok) {
+            resEl.textContent = `✅ ${c.name}에게 지시가 접수되었습니다!`;
+          } else {
+            resEl.textContent = `✅ ${c.name}에게 현장 지시 전달 완료 (시연 모드)`;
+          }
+        } catch {
+          resEl.textContent = `✅ ${c.name}에게 현장 지시 전달 완료`;
+        }
+        n.bubble = `✅ 네 캡틴! "${text.slice(0, 14)}${text.length > 14 ? '…' : ''}" 진행하겠습니다!`;
+        n.bubbleType = 'ok';
+        setTimeout(() => { modalBack.hidden = true; }, 900);
+        setTimeout(() => { if (n.bubble.startsWith('✅ 네 캡틴')) n.bubble = ''; }, 4500);
+      };
+
+      modal.querySelectorAll('[data-q]').forEach(btn => {
+        btn.addEventListener('click', () => sendOrder(btn.dataset.q));
+      });
+      modal.querySelector('[data-order-form]').addEventListener('submit', e => {
+        e.preventDefault();
+        const val = e.target.msg.value.trim();
+        if (val) sendOrder(val);
+      });
+      modalBack.hidden = false;
+      setTimeout(() => modal.querySelector('input')?.focus(), 50);
+    }
+
+    // 캐릭터 클릭 → 캡틴 쪽 바라보며 RPG 대화·지시창 열기 / 빈 바닥 클릭 → A* 길찾기로 장애물 우회 이동!
     canvas.addEventListener('click', e => {
       const r = canvas.getBoundingClientRect();
       const px = ((e.clientX - r.left) / r.width) * 100;
       const py = ((e.clientY - r.top) / r.height) * 100;
-      let hit = null, best = 6.0;
+      let hit = null, best = 6.2;
       for (const n of Object.values(npcs)) {
         const d = Math.hypot(px - n.x, py - (n.y - 4));
         if (d < best) { best = d; hit = n.id; }
@@ -558,20 +760,11 @@
       if (!hit) {
         if (canWalk(px, py)) {
           clickRing = { x: px, y: py, born: performance.now() };
-          npcs.captain.manualClick = true;
-          sendPath('captain', [[px, py]], { bubble: '', onArrive: () => { npcs.captain.manualClick = false; npcs.captain.mode = 'stand'; } });
+          walkCaptainSafe(px, py, { bubble: '', onArrive: () => { npcs.captain.mode = 'stand'; } });
         }
         return;
       }
-      const c = CHARS[hit], n = npcs[hit];
-      modal.innerHTML = `
-        <div class="oa-m-head">
-          <img src="/static/office-anime/assets/portraits/${hit}.webp?v=cap2" alt="${c.name}">
-          <div><h3>${c.name}</h3><small>${c.role} · 12프레임 고화질</small></div>
-          <button type="button" data-close>×</button>
-        </div>
-        <p class="oa-m-st">${n.bubble || (n.mode === 'walk' ? '🚶 12프레임으로 이동 중…' : '자리에서 업무 대기 중')}</p>`;
-      modalBack.hidden = false;
+      openTalkModal(hit);
     });
     modalBack.addEventListener('click', e => {
       if (e.target === modalBack || e.target.closest('[data-close]')) modalBack.hidden = true;
