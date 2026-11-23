@@ -2,32 +2,32 @@
 (() => {
   const W = 2560, H = 1440; // 16:9 QHD 2K 고화질 (전체화면 선명도 보장)
 
-  // bg-office.webp (2560x1440) 픽셀 실측 착석 좌표 (headTopY=머리 꼭대기, clipY=책상 상단 경계선)
+  // bg-office.webp (cutaway 2560x1440) 픽셀 실측 착석 좌표 (headTopY=머리 꼭대기, clipY=책상 상단 경계선)
   const CHARS = {
-    captain: { name: '캡틴',          role: '결재',        home: [49.8, 15.2], facing: 'front', scale: 1.0,  seat: { x: 49.8, headTopY: 1.8,  clipY: 9.4,  h: 255 } },
-    claude:  { name: '비서실장',      role: '지휘',        home: [50.0, 38.0], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 26.3, clipY: 32.3, h: 235 } },
-    finder:  { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.1, h: 235 } },
-    agy:     { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [83.0, 49.0], facing: 'back',  scale: 0.96, seat: { x: 83.0, headTopY: 34.4, clipY: 45.2, h: 225 }, mask: { key: 'agy-chair', x0: 80.8, y0: 39.1, x1: 85.2, y1: 49.5 } },
+    captain: { name: '캡틴',          role: '결재',        home: [50.0, 18.5], facing: 'front', scale: 1.0,  seat: { x: 50.0, headTopY: 6.4,  clipY: 13.0, h: 240 } },
+    claude:  { name: '비서실장',      role: '지휘',        home: [50.0, 39.0], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 27.6, clipY: 33.4, h: 225 } },
+    finder:  { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.2, h: 225 } },
+    agy:     { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.4, 50.0], facing: 'back',  scale: 0.96, seat: { x: 82.4, headTopY: 35.8, clipY: 46.2, h: 220 }, mask: { key: 'agy-chair', x0: 80.5, y0: 40.5, x1: 84.3, y1: 50.2 } },
   };
 
   const SIGNS = [
-    { text: '미디어 관제실',     x: 14.8, y: 24.0, bg: '#15803d' },
-    { text: '디지털 메뉴 통제실', x: 85.2, y: 24.0, bg: '#dc2626' },
-    { text: '감사실',           x: 13.0, y: 56.5, bg: '#7c3aed' },
-    { text: '통번역 통제실',     x: 36.2, y: 56.5, bg: '#2563eb' },
-    { text: '인력 공급팀',       x: 63.8, y: 56.5, bg: '#0284c7' },
-    { text: '선별팀',           x: 88.2, y: 56.5, bg: '#ea580c' },
+    { text: '미디어 관제실',     x: 14.8, y: 25.8, bg: '#15803d' },
+    { text: '디지털 메뉴 통제실', x: 85.2, y: 25.8, bg: '#dc2626' },
+    { text: '감사실',           x: 13.0, y: 53.5, bg: '#7c3aed' },
+    { text: '통번역 통제실',     x: 36.2, y: 53.5, bg: '#2563eb' },
+    { text: '인력 공급팀',       x: 63.8, y: 53.5, bg: '#0284c7' },
+    { text: '선별팀',           x: 88.2, y: 53.5, bg: '#ea580c' },
   ];
 
   // 벽·책상·화분 0% 통과 동선
   const ROUTES = {
-    capToWindow:  [[50.0, 15.2], [56.0, 15.2], [56.0, 16.5], [67.0, 16.5], [67.0, 20.0], [82.0, 20.0]],
-    capToDesk:    [[82.0, 20.0], [67.0, 20.0], [67.0, 16.5], [56.0, 16.5], [56.0, 15.2], [50.0, 15.2]],
-    chiefToCof:   [[50.0, 34.0], [34.5, 34.0], [34.5, 20.0], [15.5, 20.0]],
-    cofToCap:     [[15.5, 20.0], [34.5, 20.0], [34.5, 16.5], [40.5, 16.5]],
-    capToChief:   [[40.5, 16.5], [34.5, 16.5], [34.5, 34.0], [50.0, 34.0], [50.0, 38.0]],
-    finderToHall: [[14.7, 41.5], [24.8, 41.5], [24.8, 51.5], [46.5, 51.5]],
-    agyToHall:    [[83.0, 51.5], [75.0, 51.5], [53.5, 51.5]],
+    capToWindow:  [[50.0, 18.5], [58.0, 18.5], [64.0, 21.5], [70.0, 22.5], [82.0, 22.5]],
+    capToDesk:    [[82.0, 22.5], [70.0, 22.5], [64.0, 21.5], [58.0, 18.5], [50.0, 18.5]],
+    chiefToCof:   [[50.0, 35.5], [34.5, 35.5], [34.5, 22.5], [15.5, 22.5]],
+    cofToCap:     [[15.5, 22.5], [34.5, 22.5], [34.5, 20.5], [39.5, 20.5]],
+    capToChief:   [[39.5, 20.5], [34.5, 20.5], [34.5, 35.5], [50.0, 35.5], [50.0, 39.0]],
+    finderToHall: [[14.8, 42.0], [24.8, 42.0], [24.8, 50.0], [46.5, 50.0]],
+    agyToHall:    [[82.4, 51.0], [74.5, 51.0], [53.5, 50.0]],
   };
 
   function loadAll() {
@@ -38,7 +38,7 @@
       im.onerror = () => res();
       im.src = url;
     });
-    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=orig2k')];
+    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=cutaway1')];
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [] };
       for (const dir of ['east', 'front', 'back']) {
@@ -47,7 +47,7 @@
         }
       }
       if (cfg.mask) {
-        jobs.push(load(imgs.masks, cfg.mask.key, `/static/office-anime/assets/masks/${cfg.mask.key}.webp?v=seatfix1`));
+        jobs.push(load(imgs.masks, cfg.mask.key, `/static/office-anime/assets/masks/${cfg.mask.key}.webp?v=cutaway1`));
       }
     }
     return Promise.all(jobs).then(() => imgs);
