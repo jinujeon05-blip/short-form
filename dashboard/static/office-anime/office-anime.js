@@ -835,7 +835,39 @@
         const val = e.target.msg.value.trim();
         if (val) sendOrder(val);
       });
+      // 캡틴과 대화 상대 캐릭터를 절대 가리지 않는 최적 위치 자동 계산!
+      function placeModalAvoiding(a, b) {
+        const mw = 36, mh = 34; // 모달 대략 폭/높이 (%)
+        const charBox = p => ({ x0: p.x - 4.5, y0: p.y - 15.5, x1: p.x + 4.5, y1: p.y + 4.0 });
+        const targets = (a && b && a !== b) ? [charBox(a), charBox(b)] : [charBox(a || b)];
+        const slots = [
+          { x: 50, y: 76 }, { x: 23, y: 76 }, { x: 77, y: 76 },
+          { x: 23, y: 24 }, { x: 77, y: 24 }, { x: 50, y: 24 },
+          { x: 23, y: 50 }, { x: 77, y: 50 },
+        ];
+        const overlapArea = (sx, sy, box) => {
+          const ox = Math.max(0, Math.min(sx + mw / 2, box.x1) - Math.max(sx - mw / 2, box.x0));
+          const oy = Math.max(0, Math.min(sy + mh / 2, box.y1) - Math.max(sy - mh / 2, box.y0));
+          return ox * oy;
+        };
+        let best = slots[0], bestScore = Infinity;
+        for (const s of slots) {
+          let ov = 0, minDist = Infinity;
+          for (const tb of targets) {
+            ov += overlapArea(s.x, s.y, tb);
+            const cx = (tb.x0 + tb.x1) / 2, cy = (tb.y0 + tb.y1) / 2;
+            minDist = Math.min(minDist, Math.hypot(s.x - cx, s.y - cy));
+          }
+          // 겹침 면적이 0인 칸을 최우선, 그중 두 캐릭터와 가장 여유 있게 떨어진 칸 선택
+          const score = ov * 1000 - minDist;
+          if (score < bestScore) { bestScore = score; best = s; }
+        }
+        modal.style.left = `${best.x}%`;
+        modal.style.top  = `${best.y}%`;
+      }
+
       modalBack.hidden = false;
+      placeModalAvoiding(cap, n);
       setTimeout(() => modal.querySelector('input')?.focus(), 50);
     }
 
