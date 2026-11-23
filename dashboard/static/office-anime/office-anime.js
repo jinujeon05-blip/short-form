@@ -2,14 +2,14 @@
 (() => {
   const W = 2560, H = 1440; // 16:9 QHD 2K 고화질 (전체화면 선명도 보장)
 
-  // bg-office.webp (cutaway 2560x1440) 픽셀 실측 착석 좌표 (headTopY=머리 꼭대기, clipY=책상 상단 경계선)
+  // bg-office.webp (cutaway 2560x1440) 픽셀 실측 착석 좌표 (headTopY=머리 꼭대기, clipY=책상 상단 경계선, standPos=대화 시 의자 옆 바닥에 서는 위치!)
   const CHARS = {
-    captain:    { name: '캡틴',          role: '결재',        home: [50.0, 18.5], facing: 'front', scale: 1.0,  seat: { x: 50.0, headTopY: 6.4,  clipY: 13.0, h: 240 } },
-    claude:     { name: '비서실장',      role: '지휘',        home: [50.0, 39.0], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 27.6, clipY: 33.4, h: 225 } },
-    finder:     { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.2, h: 225 } },
-    agy:        { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.4, 49.0], facing: 'back',  scale: 0.96, seat: { x: 82.4, headTopY: 35.8, clipY: 46.2, h: 220 } },
-    translator: { name: '수석 번역관',   role: '4개국어 번역', home: [36.8, 76.8], facing: 'front', scale: 0.95, seat: { x: 36.8, headTopY: 67.4, clipY: 74.4, h: 235 } },
-    sorter:     { name: '선별팀 팀장',   role: '자료 선별',   home: [83.4, 77.0], facing: 'front', scale: 0.95, seat: { x: 83.4, headTopY: 68.2, clipY: 74.7, h: 230 } },
+    captain:    { name: '캡틴',          role: '결재',        home: [50.0, 18.5], standPos: [55.5, 18.5], facing: 'front', scale: 1.0,  seat: { x: 50.0, headTopY: 6.4,  clipY: 13.0, h: 240 } },
+    claude:     { name: '비서실장',      role: '지휘',        home: [50.0, 39.0], standPos: [44.2, 36.5], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 27.6, clipY: 33.4, h: 225 } },
+    finder:     { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], standPos: [19.8, 41.5], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.2, h: 225 } },
+    agy:        { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.4, 49.0], standPos: [77.2, 49.8], facing: 'back',  scale: 0.96, seat: { x: 82.4, headTopY: 35.8, clipY: 46.2, h: 220 } },
+    translator: { name: '수석 번역관',   role: '4개국어 번역', home: [36.8, 76.8], standPos: [42.6, 76.8], facing: 'front', scale: 0.95, seat: { x: 36.8, headTopY: 67.4, clipY: 74.4, h: 235 } },
+    sorter:     { name: '선별팀 팀장',   role: '자료 선별',   home: [83.4, 77.0], standPos: [77.2, 77.0], facing: 'front', scale: 0.95, seat: { x: 83.4, headTopY: 68.2, clipY: 74.7, h: 230 } },
   };
 
   // Y-깊이(앞/뒤 가림) 전경 가구 목록 (7개 방 모든 책상·의자 완비!):
@@ -722,9 +722,12 @@
         n.mode = 'walk';
         if (!keepOrderBubble) { n.bubble = st.bubble; n.bubbleType = st.bubbleType; }
       } else if (st.wasSeated) {
-        // 앉아 있다가 일어나서 인사했던 직원은 대화창 닫으면 다시 자리에 착석!
+        // 의자 옆 바닥(standPos)에서 대화했던 직원은 대화창 닫으면 의자 자리(home)로 자연스럽게 복귀·착석!
+        const c = CHARS[n.id];
+        n.x = c.home[0];
+        n.y = c.home[1];
         n.mode = 'idle';
-        n.dir = CHARS[n.id].facing;
+        n.dir = c.facing;
         if (!keepOrderBubble) { n.bubble = ''; n.bubbleType = ''; }
       } else {
         n.mode = st.mode || 'stand';
@@ -761,7 +764,11 @@
         }
         n.path = [];
         n.onArrive = null;
-        // 앉아 있던 직원도 자리에서 바로 일어나서 캡틴 방향을 바라보며 응대!
+        // 앉아 있던 직원은 의자 위로 올라서지 않고 의자 옆 바닥(standPos)으로 비켜 서서 캡틴을 바라봄!
+        if (wasSeated && c.standPos) {
+          n.x = c.standPos[0];
+          n.y = c.standPos[1];
+        }
         n.mode = 'stand';
         faceEachOther(n, cap);
         n.bubble = '💬 캡틴, 지시하실 게 있으신가요?';
