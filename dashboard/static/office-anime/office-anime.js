@@ -7,8 +7,16 @@
     captain: { name: '캡틴',          role: '결재',        home: [50.0, 18.5], facing: 'front', scale: 1.0,  seat: { x: 50.0, headTopY: 6.4,  clipY: 13.0, h: 240 } },
     claude:  { name: '비서실장',      role: '지휘',        home: [50.0, 39.0], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 27.6, clipY: 33.4, h: 225 } },
     finder:  { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.2, h: 225 } },
-    agy:     { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.4, 50.0], facing: 'back',  scale: 0.96, seat: { x: 82.4, headTopY: 35.8, clipY: 46.2, h: 220 }, mask: { key: 'agy-chair', x0: 80.5, y0: 40.5, x1: 84.3, y1: 50.2 } },
+    agy:     { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.4, 49.0], facing: 'back',  scale: 0.96, seat: { x: 82.4, headTopY: 35.8, clipY: 46.2, h: 220 } },
   };
+
+  // Y-깊이(앞/뒤 가림) 전경 가구 목록: 캐릭터의 발 위치(y)가 sortY보다 위(뒤)면 가구가 캐릭터 다리를 가리고, 아래(앞)면 캐릭터가 가구 앞에 서게 됨!
+  const PROPS = [
+    { key: 'captain-desk', x0: 42.6, y0: 12.8, x1: 58.0, y1: 22.8, sortY: 22.4 },
+    { key: 'claude-desk',  x0: 42.8, y0: 33.2, x1: 57.5, y1: 43.8, sortY: 43.4 },
+    { key: 'finder-desk',  x0:  9.2, y0: 39.0, x1: 19.6, y1: 47.6, sortY: 47.2 },
+    { key: 'agy-chair',    x0: 80.5, y0: 40.5, x1: 84.3, y1: 50.2, sortY: 49.5 },
+  ];
 
   const SIGNS = [
     { text: '미디어 관제실',     x: 14.8, y: 25.8, bg: '#15803d' },
@@ -26,7 +34,7 @@
     chiefToCof:   [[50.0, 35.5], [34.5, 35.5], [34.5, 22.5], [15.5, 22.5]],
     cofToCap:     [[15.5, 22.5], [34.5, 22.5], [34.5, 20.5], [39.5, 20.5]],
     capToChief:   [[39.5, 20.5], [34.5, 20.5], [34.5, 35.5], [50.0, 35.5], [50.0, 39.0]],
-    finderToHall: [[14.8, 42.0], [24.8, 42.0], [24.8, 50.0], [46.5, 50.0]],
+    finderToHall: [[14.8, 41.0], [20.6, 41.0], [20.6, 49.5], [46.5, 49.5]],
     agyToHall:    [[82.4, 51.0], [74.5, 51.0], [53.5, 50.0]],
   };
 
@@ -46,9 +54,9 @@
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${id}-${dir}-${i}.webp?v=orig2k`));
         }
       }
-      if (cfg.mask) {
-        jobs.push(load(imgs.masks, cfg.mask.key, `/static/office-anime/assets/masks/${cfg.mask.key}.webp?v=cutaway1`));
-      }
+    }
+    for (const p of PROPS) {
+      jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=ysort1`));
     }
     return Promise.all(jobs).then(() => imgs);
   }
@@ -232,16 +240,6 @@
         ctx.clip();
         ctx.drawImage(im, sx - targetW / 2, topY + bob, targetW, targetH);
         ctx.restore();
-
-        // 북향(메뉴 검사관): 의자 등받이만 정확히 따낸 실루엣을 등 뒤에 덮어 100% 자연 착석!
-        if (cfg.mask && imgs.masks[cfg.mask.key]) {
-          const m = cfg.mask;
-          ctx.drawImage(
-            imgs.masks[m.key],
-            (m.x0 / 100) * W, (m.y0 / 100) * H,
-            ((m.x1 - m.x0) / 100) * W, ((m.y1 - m.y0) / 100) * H
-          );
-        }
         return;
       }
 
@@ -286,7 +284,19 @@
       ctx.clearRect(0, 0, W, H);
       if (imgs.bg) ctx.drawImage(imgs.bg, 0, 0, W, H);
 
-      for (const n of Object.values(npcs).sort((a, b) => a.y - b.y)) drawNpc(n, t);
+      // 통합 Y-깊이(앞/뒤 가림) 정렬: 모든 캐릭터와 모든 책상·의자 전경 마스크를 발 위치(y) 순으로 그림!
+      const drawList = [
+        ...Object.values(npcs).map(n => ({ y: n.y, draw: () => drawNpc(n, t) })),
+        ...PROPS.map(p => ({
+          y: p.sortY,
+          draw: () => {
+            const im = imgs.masks[p.key];
+            if (im) ctx.drawImage(im, (p.x0 / 100) * W, (p.y0 / 100) * H, ((p.x1 - p.x0) / 100) * W, ((p.y1 - p.y0) / 100) * H);
+          }
+        })),
+      ];
+      drawList.sort((a, b) => a.y - b.y);
+      for (const item of drawList) item.draw();
 
       for (const [id, n] of Object.entries(npcs)) {
         const walking = n.mode === 'walk';
