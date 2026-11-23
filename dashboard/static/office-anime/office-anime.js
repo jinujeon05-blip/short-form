@@ -100,9 +100,14 @@
           <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
           <div class="oa-hud"></div>
           <div class="oa-joy" data-joy aria-label="캡틴 이동 조이스틱"><div class="oa-joy-knob" data-joy-knob></div></div>
+          <div class="oa-cap-acts" data-cap-acts>
+            <button type="button" class="oa-c-btn" data-cap-greet>👋 인사</button>
+            <button type="button" class="oa-c-btn" data-cap-coffee>☕ 커피</button>
+            <button type="button" class="oa-c-btn" data-cap-sit>🪑 착석</button>
+          </div>
           <div class="oa-ctrl-hint">🎮 캡틴 조작: 방향키 / WASD 이동 · 바닥 클릭 · 1 인사 · 2 커피 · E 자리 복귀</div>
           <div class="oa-brief-bar">
-            <button type="button" class="oa-b-btn cof" data-brief-cof>☕ 커피 서빙</button>
+            <button type="button" class="oa-b-btn cof" data-brief-cof>☕ 서빙</button>
             <button type="button" class="oa-b-btn start" data-brief-start>📋 보고해</button>
             <button type="button" class="oa-b-btn stop" data-brief-stop hidden>✋ 오늘은 여기까지 하지</button>
           </div>
@@ -689,24 +694,29 @@
       const toX = c => c * STEP;
       const toY = r => r * STEP;
 
-      const sc = toC(sx), sr = toR(sy);
+      let sc = toC(sx), sr = toR(sy);
       let tc = toC(tx), tr = toR(ty);
 
-      // 목표점이 장애물 안이면 가장 가까운 이동 가능 칸 찾기
-      if (!canWalk(toX(tc), toY(tr))) {
-        let found = false;
-        for (let rad = 1; rad <= 6 && !found; rad++) {
-          for (let dr = -rad; dr <= rad && !found; dr++) {
-            for (let dc = -rad; dc <= rad && !found; dc++) {
-              const nr = tr + dr, nc = tc + dc;
+      // 출발점이 책상/의자 안쪽(예: 착석 좌표 home)이면 가장 가까운 이동 가능 바닥 칸에서 출발!
+      const snapWalkable = (c0, r0) => {
+        if (canWalk(toX(c0), toY(r0))) return [c0, r0];
+        for (let rad = 1; rad <= 10; rad++) {
+          for (let dr = -rad; dr <= rad; dr++) {
+            for (let dc = -rad; dc <= rad; dc++) {
+              const nr = r0 + dr, nc = c0 + dc;
               if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && canWalk(toX(nc), toY(nr))) {
-                tc = nc; tr = nr; found = true;
+                return [nc, nr];
               }
             }
           }
         }
-        if (!found) return null;
-      }
+        return null;
+      };
+      const sSnap = snapWalkable(sc, sr);
+      const tSnap = snapWalkable(tc, tr);
+      if (!sSnap || !tSnap) return null;
+      [sc, sr] = sSnap;
+      [tc, tr] = tSnap;
 
       const key = (c, r) => r * cols + c;
       const startK = key(sc, sr), goalK = key(tc, tr);
@@ -1237,13 +1247,21 @@
     }
 
     function walkNpcSafe(id, tx, ty, opts2 = {}) {
-      const n = npcs[id];
-      const pts = findPath(n.x, n.y, tx, ty);
+      const n = npcs[id], c = CHARS[id];
+      // 착석 상태에서 출발할 때는 의자/책상 옆 바닥(standPos)에서 출발해 절대 벽·책상을 뚫지 않음!
+      const sx = (n.mode === 'idle' && c?.standPos) ? c.standPos[0] : n.x;
+      const sy = (n.mode === 'idle' && c?.standPos) ? c.standPos[1] : n.y;
+      const pts = findPath(sx, sy, tx, ty);
       if (!pts) {
-        sendPath(id, [[tx, ty]], opts2);
-      } else {
-        sendPath(id, pts, opts2);
+        // 경로를 못 찾으면 절대 벽을 직선 통과하지 않고 안전하게 제자리 유지!
+        if (opts2.onArrive) opts2.onArrive();
+        return false;
       }
+      if (n.mode === 'idle' && c?.standPos) {
+        n.x = sx; n.y = sy;
+      }
+      sendPath(id, pts, opts2);
+      return true;
     }
 
     function startBriefing() {
@@ -1382,6 +1400,9 @@
     }
 
     const briefCofBtn   = root.querySelector('[data-brief-cof]');
+    root.querySelector('[data-cap-greet]')?.addEventListener('click', () => playCaptainAction('greet'));
+    root.querySelector('[data-cap-coffee]')?.addEventListener('click', () => playCaptainAction('coffee'));
+    root.querySelector('[data-cap-sit]')?.addEventListener('click', sitCaptainBack);
     briefCofBtn.addEventListener('click', serveCoffee);
     briefStartBtn.addEventListener('click', startBriefing);
     briefStopBtn.addEventListener('click', endBriefing);
