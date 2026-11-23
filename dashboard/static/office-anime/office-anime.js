@@ -100,25 +100,38 @@
   }
 
   function create(root, opts = {}) {
+    const DOCK_IDS = ['claude', 'finder', 'agy', 'reader', 'inspector', 'auditor', 'translator', 'staffing', 'sorter'];
+    const DOCK_SHORT = { claude: '비서', finder: '시각', agy: '검사', reader: '해석', inspector: '감찰', auditor: '감사', translator: '번역', staffing: '인력', sorter: '선별' };
+    const dockHtml = DOCK_IDS.map(id => {
+      const c = CHARS[id];
+      return `<button type="button" class="oa-dock-btn" data-dock="${id}" title="${c.name}(${c.role}) 캡틴 앞으로 호출">
+        <img src="/static/office-anime/assets/portraits/${c.asset || id}.webp?v=cap3" alt="${c.name}">
+        <span>${DOCK_SHORT[id]}</span><i class="oa-dock-q" hidden></i>
+      </button>`;
+    }).join('');
     root.innerHTML = `
       <div class="oa-stage">
         <div class="oa-rot-wrap">
-          <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
-          <div class="oa-hud"></div>
+          <div class="oa-cam" data-cam>
+            <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
+            <div class="oa-hud"></div>
+          </div>
           <div class="oa-joy" data-joy aria-label="캡틴 이동 조이스틱"><div class="oa-joy-knob" data-joy-knob></div></div>
           <div class="oa-rpg-hud">
             <span class="oa-rpg-pill" data-rpg-stat>👑 <b>Lv.1</b> 캡틴 · 퀘스트 <span class="oa-rpg-qcnt zero" data-qcnt>0</span></span>
+            <button type="button" class="oa-cam-btn on" data-cam-btn title="게임 카메라(캡틴 확대 추적) / 전체 보기 전환">🗺 전체 보기</button>
           </div>
           <div class="oa-snd-bar">
             <button type="button" class="oa-snd-btn on" data-sfx-btn title="게임 효과음 켜기/끄기">🔊 효과음</button>
             <button type="button" class="oa-snd-btn" data-bgm-btn title="사무실 BGM 켜기/끄기">🎵 BGM</button>
           </div>
+          <div class="oa-dock" data-dock-bar aria-label="직원 빠른 호출">${dockHtml}</div>
           <div class="oa-cap-acts" data-cap-acts>
             <button type="button" class="oa-c-btn" data-cap-greet>👋 인사</button>
             <button type="button" class="oa-c-btn" data-cap-coffee>☕ 커피</button>
             <button type="button" class="oa-c-btn" data-cap-sit>🪑 착석</button>
           </div>
-          <div class="oa-ctrl-hint">🎮 캡틴 조작: 방향키 / WASD 이동 · 바닥 클릭 · 1 인사 · 2 커피 · E 자리 복귀</div>
+          <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 2 커피 · E 착석</div>
           <div class="oa-brief-bar">
             <button type="button" class="oa-b-btn dance" data-brief-dance>💃 댄스</button>
             <button type="button" class="oa-b-btn cof" data-brief-cof>☕ 서빙</button>
@@ -130,9 +143,25 @@
         </div>
       </div>`;
     const stage = root.querySelector('.oa-stage');
+    const camEl = root.querySelector('[data-cam]');
+    const camBtn = root.querySelector('[data-cam-btn]');
     const canvas = root.querySelector('.oa-canvas');
     const hud = root.querySelector('.oa-hud');
     const fsBtn = root.querySelector('.oa-fs-btn');
+    const dockBtns = {};
+    root.querySelectorAll('[data-dock]').forEach(btn => {
+      dockBtns[btn.dataset.dock] = btn;
+      btn.addEventListener('click', () => openTalkModal(btn.dataset.dock));
+    });
+    // 캡틴 확대 추적 게임 카메라 (기본값: follow 1.85배 확대 추적, 보고 중엔 자동 전체 보기!)
+    let camMode = 'follow';
+    const cam = { z: 1.85, fx: CHARS.captain.home[0], fy: CHARS.captain.home[1] + 5 };
+    camBtn?.addEventListener('click', () => {
+      camMode = (camMode === 'follow') ? 'overview' : 'follow';
+      camBtn.classList.toggle('on', camMode === 'follow');
+      camBtn.textContent = camMode === 'follow' ? '🗺 전체 보기' : '🎥 추적 카메라';
+      SFX.tap();
+    });
     const modalBack = root.querySelector('.oa-modal-back');
     const modal = root.querySelector('.oa-modal');
 
@@ -1258,6 +1287,32 @@
           tagEls[id].classList.remove('speaking');
           bubEls[id].hidden = true;
         }
+        // 하단 직원 호출 프로필 바 상태 동기화 (작업 중·완료·퀘스트)
+        const dBtn = dockBtns[id];
+        if (dBtn) {
+          dBtn.classList.toggle('work', tagEls[id].classList.contains('work'));
+          dBtn.classList.toggle('done', tagEls[id].classList.contains('done'));
+          dBtn.classList.toggle('calling', activeTalkNpc?.id === id);
+          const dq = dBtn.querySelector('.oa-dock-q');
+          if (dq) {
+            if (q) { dq.hidden = false; dq.textContent = q.type === 'exc' ? '!' : '?'; dq.className = `oa-dock-q ${q.type}`; }
+            else { dq.hidden = true; }
+          }
+        }
+      }
+
+      // 캡틴 중심 부드러운 게임 카메라 추적 (1.85배 확대 ↔ 보고 시·전체 보기 1.0배 자동 보간!)
+      if (camEl) {
+        const targetZ = (camMode === 'follow' && !briefingActive) ? 1.85 : 1.0;
+        const targetFx = cap.x;
+        const targetFy = Math.max(10, Math.min(90, cap.y - 2));
+        const k = Math.min(1, dt * 6.5);
+        cam.z += (targetZ - cam.z) * k;
+        cam.fx += (targetFx - cam.fx) * k;
+        cam.fy += (targetFy - cam.fy) * k;
+        const tx = Math.max(100 - 100 * cam.z, Math.min(0, 50 - cam.fx * cam.z));
+        const ty = Math.max(100 - 100 * cam.z, Math.min(0, 50 - cam.fy * cam.z));
+        camEl.style.transform = `translate(${tx.toFixed(2)}%, ${ty.toFixed(2)}%) scale(${cam.z.toFixed(4)})`;
       }
       requestAnimationFrame(tick);
     }
