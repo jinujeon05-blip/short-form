@@ -266,7 +266,13 @@ function talkMoves(id) {
   }
   renderOffice();
 }
-const face = id => SEAT[id] ? `${ROOM}faces/${SEAT[id]}.webp` : '';
+// 옆 창·대화방 얼굴: 애니 사무실 고화질 초상화(/static/office-anime/assets/portraits/*.webp, reader↔auditor 배치 일치)
+const ANIME_FACE = {
+  captain: 'captain', claude: 'claude', finder: 'finder', agy: 'agy',
+  'menu-reader': 'auditor', codex: 'inspector', reviewer: 'reader',
+  polisher: 'translator', staffing: 'staffing', sorting: 'sorter',
+};
+const face = id => ANIME_FACE[id] ? `/static/office-anime/assets/portraits/${ANIME_FACE[id]}.webp?v=cap3` : '';
 function avatar(id) {
   return face(id) ? `<img class="avatar" src="${face(id)}" alt="">` : `<div class="avatar ph">${esc((M[id]?.name || WHO[id] || id || '?')[0])}</div>`;
 }
@@ -361,18 +367,25 @@ function renderOrderPanel(oid) {
   const oldTalk = $('#panel-talk');  // 대화 칸은 새로 그리지 않고 옮겨 붙인다(펼친 글·스크롤 유지)
   const sched = o.status === 'scheduled';
   const who = t => t.by === 'me' ? (t.approve ? '캡틴 · 확정' : '캡틴') : t.by === 'claude' ? '비서실장 보고' : '알림';
+  const workedHtml = (o.worked || []).length
+    ? `<div class="worked-row">${o.worked.map(w => `<span class="worked-pill">${avatar(w)}<span>${esc(WHO[w] || M[w]?.name || w)}</span></span>`).join('')}</div>` : '';
+  const stepsHtml = (o.steps || []).length
+    ? `<details class="steps-box"${running ? ' open' : ' open'}><summary>진행 상황 (${o.steps.length}단계)</summary><ul class="steps">${o.steps.map(s => `<li><b class="who-${esc(s.who || 'claude')}">${esc(WHO[s.who] || s.who || '비서실장')}</b> ${esc(s.text)}</li>`).join('')}</ul></details>`
+    : (running ? `<h5>진행 상황</h5><ul class="steps"><li>시작하는 중…</li></ul>` : '');
   $('#panel-body').innerHTML = `<h2>${esc(o.title)}</h2>
     <p class="muted"><span class="badge ${bc}">${bt}</span> ${day(o.createdAt)} ${hm(o.createdAt)} · ${o.via === 'phone' ? '폰에서 지시' : 'PC에서 지시'}${o.argon ? ' · Argon 사용' : ''}${o.tokens ? ` · 토큰 약 ${o.tokens >= 10000 ? Math.round(o.tokens / 10000) + '만' : Math.round(o.tokens / 1000) + '천'}${o.tokensVersion === 3 ? '(담당·다시 읽은 것 포함)' : o.tokensVersion === 2 ? '(담당 몫 빠짐 — 사용량 탭이 맞는 값)' : '(옛 기록: 다시 읽은 것 빠짐)'}` : ''}</p>
+    ${workedHtml}
     ${o.sessionId ? `<p class="muted">창 없이 실행돼서 Claude 앱 세션 목록에는 안 보여요. 대화 전체는 ${local() ? '<button class="btn ghost" id="order-open">PC에서 대화 열기</button>' : 'PC 대시보드의 [PC에서 대화 열기]'}로 봅니다.</p>` : ''}
     ${(o.images || []).length ? `<h5>폰 화면 캡처 (로고·간판 확인)</h5><div class="shots">${o.images.map(f => `<a href="/out/${encodeURIComponent(f)}" target="_blank" rel="noopener"><img src="/out/${encodeURIComponent(f)}?t=${Math.round(o.endedAt || 0)}" alt="${esc(f)}"></a>`).join('')}</div>` : ''}
+    ${stepsHtml}
+    <h5>상세 보고 · 진행 내용</h5>
     ${o.turns.map(t => `<div class="turn ${t.by}"><span class="muted">${who(t)} · ${hm(t.at)}</span>${esc(t.text)}</div>`).join('')}
-    ${sched ? '' : `<h5>팀 대화 <small class="muted">비서실장·담당이 주고받은 말 (누르면 펼침)</small></h5><div class="talk" id="panel-talk"></div>`}
+    ${sched ? '' : `<h5>상세 팀 대화 원문 <small class="muted">누르면 전체 펼침</small></h5><div class="talk" id="panel-talk"></div>`}
     ${sched ? `<div class="reply"><h5>예약</h5><p><b>${day(o.runAt)} ${hm(o.runAt)}</b>에 시작합니다 (${esc(o.runWhy || '')}).</p>
       ${o.waitWhy ? `<p class="muted">기다리는 이유: ${esc(o.waitWhy)}</p>` : ''}
       <p class="muted">대시보드 검은 창이 켜져 있고 PC가 잠들지 않아야 시작돼요. 그 시각에 다른 지시가 실행 중이면 끝난 뒤에 시작해요.</p>
       <button class="btn ghost" id="order-stop">예약 취소</button></div>`
-    : running ? `<h5>진행 상황</h5><ul class="steps">${(o.steps || []).map(s => `<li><b class="who-${esc(s.who || 'claude')}">${esc(WHO[s.who] || s.who || '비서실장')}</b> ${esc(s.text)}</li>`).join('') || '<li>시작하는 중…</li>'}</ul>
-      ${o.last ? `<div class="turn claude"><span class="muted">비서실장 · 지금 하는 말</span>${esc(o.last)}</div>` : ''}
+    : running ? `${o.last ? `<div class="turn claude"><span class="muted">비서실장 · 지금 하는 말</span>${esc(o.last)}</div>` : ''}
       <button class="btn ghost" id="order-stop">멈추기</button>` : `
       <div class="reply"><h5>${o.approval ? '결재' : '이어서 시키기'}</h5>
       ${o.approval ? `<p><b>결재할 것:</b> ${esc(o.approval)}</p>` : ''}
@@ -430,7 +443,7 @@ async function replyOrder(approve) {
 }
 
 // ---------------------------------------------------------------- 브리핑 · 업무 기록
-const WHO = { captain: '캡틴', claude: '비서실장', designer: 'designer', finder: '시각 정보 비서', agy: '메뉴 검사관', 'menu-reader': '자료 해석 비서', codex: '운영 감찰관', reviewer: '데이터 감사관', polisher: '수석 번역관' };
+const WHO = { captain: '캡틴', claude: '비서실장', designer: '디자이너', finder: '시각 정보 비서', agy: '메뉴 검사관', 'menu-reader': '자료 해석 비서', codex: '운영 감찰관', reviewer: '데이터 감사관', polisher: '수석 번역관', staffing: '인력 공급팀', sorting: '선별팀' };
 // ---------------------------------------------------------------- 팀 대화 (2026-11-01, 캡틴 결정 '나-2'·'다-1')
 // server.py 가 실행 기록에서 뽑은 '누가 누구에게 무엇을'(/api/talk). 새로 생긴 말만 받아 아래에 붙인다.
 const KIND = { ask: '지시', say: '말', report: '보고', meet: '회의' };
@@ -451,12 +464,88 @@ async function fetchTalk(id) {
   S.talkApprox[id] = r.approx;
 }
 const loadTalk = id => talkReq[id] ||= fetchTalk(id).catch(() => {}).finally(() => delete talkReq[id]);
-// 대화방(2026-11-21, 캡틴 '가-1'): 왼쪽 카톡 모양. 캡틴 말은 오른쪽 노란 말풍선, 담당은 얼굴+이름 왼쪽
+// 대화방(2026-11-23 캡틴 요청): 딱딱한 문서·기술 보고 대신 실제 사람들이 카톡으로 주고받는 자연스러운 말투로 변환 (원문은 [원문 보기] 또는 상단 [자세히]에서 확인)
+function toHumanChat(t) {
+  const raw = String(t.text || '').trim();
+  if (!raw) return { short: '', hasMore: false };
+  const s = raw.replace(/\r/g, '');
+
+  // 캡틴 지시: 긴 시스템 안내 괄호만 정리
+  if (t.who === 'captain') {
+    const clean = s.replace(/\s*\(대시보드\s*'줄 세우기'로 보낸 지시야[\s\S]*?\)\s*/g, '').replace(/드라이브\s*QR메뉴판\/([^\s]+)\s*폴더에/g, '$1').trim();
+    const short = clean.length > 120 ? clean.slice(0, 118).trim() + '…' : clean;
+    return { short, hasMore: short !== raw };
+  }
+
+  // 비서실장 -> 담당자 지시(ask)
+  if (t.kind === 'ask' && t.who === 'claude') {
+    if (t.to === 'agy') return { short: '메뉴 검사관님, 또렷한 메뉴판 사진 골랐어요! 메뉴랑 가격 좀 꼼꼼히 읽어주세요 😊', hasMore: true };
+    if (t.to === 'menu-reader') return { short: '자료 해석 비서님, 메뉴판 사진 보냈어요! 메뉴 이름이랑 가격표 정리 부탁해요.', hasMore: true };
+    if (t.to === 'finder') return { short: '시각 정보 비서님, 드라이브에서 먹음직스러운 요리 사진 골라주실래요? 📸', hasMore: true };
+    if (t.to === 'codex') return { short: '운영 감찰관님, 메뉴판 가격 한 번 더 교차 확인 부탁드려요!', hasMore: true };
+    if (t.to === 'polisher') return { short: '수석 번역관님, 메뉴판 번역이랑 문구 자연스럽게 다듬어 주세요!', hasMore: true };
+    if (t.to === 'designer') return { short: '디자이너님, 가게 간판 분위기에 맞춰서 메뉴판 화면 예쁘게 꾸며 주세요 ✨', hasMore: true };
+    if (t.to === 'reviewer') return { short: '데이터 감사관님, 배포 전에 문제없는지 마지막으로 쭉 점검 부탁드려요!', hasMore: true };
+  }
+
+  // 담당자 보고(report)
+  if (t.kind === 'report') {
+    if (t.who === 'agy' || t.who === 'menu-reader') {
+      const m = s.match(/총\s*(\d+)\s*개\s*메뉴/);
+      return { short: m ? `메뉴판 다 읽어봤어요! 총 ${m[1]}개 메뉴랑 가격 정리해서 보내드렸습니다 👍` : '메뉴판 사진 다 읽고 가격 정리 끝냈어요! 확인해 보세요 👍', hasMore: true };
+    }
+    if (t.who === 'codex') return { short: '옛날 메뉴판이랑 새 메뉴판 대조 끝났어요! 최신 가격으로 확인해 드렸습니다 👍', hasMore: true };
+    if (t.who === 'finder') return { short: '요리 사진 예쁜 걸로 싹 골라놨어요! 확인해 보세요 📸', hasMore: true };
+    if (t.who === 'polisher') return { short: '번역이랑 메뉴판 문구 다 자연스럽게 다듬어 놓았습니다!', hasMore: true };
+    if (t.who === 'designer') return { short: '가게 간판 느낌 살려서 메뉴판 디자인 예쁘게 끝냈어요 ✨', hasMore: true };
+    if (t.who === 'reviewer') {
+      const ok = /막을\s*문제.*못\s*찾|문제\s*없|통과/.test(s) && !/막을\s*문제\s*\d+건/.test(s);
+      return { short: ok ? '마지막 점검 다 돌렸는데 배포 막을 문제 하나도 없어요! 통과입니다 ✅' : '마지막 점검 마쳤어요! 확인할 부분이 있어서 자세히 쪽에 정리해 뒀어요.', hasMore: true };
+    }
+    if (t.who === 'claude') {
+      if (/담당 알림이 오면|대기 중/.test(s)) return { short: '담당자들 답변 기다리고 있어요, 오면 바로 이어서 할게요!', hasMore: raw.length > 45 };
+      if (/배포만 남았|점검은 전부 통과/.test(s)) {
+        const shop = s.match(/^([가-힣A-Za-z0-9\s]{2,14}?)\s*(?:가게|메뉴판)/)?.[1]?.trim();
+        return { short: shop ? `캡틴, ${shop} 메뉴판 다 만들었어요! 점검도 전부 통과해서 배포만 하시면 됩니다 🎉` : '캡틴, 메뉴판 다 만들었어요! 점검도 전부 통과해서 배포만 하시면 됩니다 🎉', hasMore: true };
+      }
+      if (/결재|어떻게 할까요/.test(s)) return { short: '캡틴, 작업 내용 정리해서 올렸어요! [자세히] 눌러서 확인해 주세요 😊', hasMore: true };
+    }
+  }
+
+  // 비서실장·직원 중간 혼잣말/진행 말(say)
+  if (/기획서 읽음|절차 문서를 읽/.test(s)) return { short: '네 캡틴! 새 가게 작업 바로 시작할게요 😊', hasMore: true };
+  if (/Sheet 이미지를|모음을 보고|모음 이미지/.test(s)) return { short: '먼저 사진들 쭉 훑어보고 어떤 게 메뉴판인지 고르고 있어요!', hasMore: true };
+  if (/가장 또렷한|안티그래비티\(/.test(s)) return { short: '제일 잘 보이는 메뉴판 사진 골라서 메뉴 검사관님께 맡길게요.', hasMore: true };
+  if (/직접 대조|직접 확인/.test(s)) return { short: '가격이 조금 다른 부분이 있어서 제가 사진 한 번 더 확인해 볼게요!', hasMore: true };
+  if (/요리 사진 후보|한 장으로 모아/.test(s)) return { short: '최신 가격 확인 끝! 이제 먹음직스러운 요리 사진 골라볼게요 📸', hasMore: true };
+  if (/사진을 고르고|가게를 만듭니다/.test(s)) return { short: '사진도 다 골랐어요! 이제 메뉴판 틀 만들어 볼게요.', hasMore: true };
+  if (/menu\.js|번역·꾸미기는 담당/.test(s)) return { short: '기본 메뉴 데이터 먼저 채웠고, 번역이랑 디자인 팀에 바로 넘길게요!', hasMore: true };
+  if (/등록 정보를 준비|지역·분류 값을/.test(s)) return { short: '팀원들 작업하는 동안 가게 등록 정보도 미리 챙겨둘게요.', hasMore: true };
+  if (/완료를 기다립니다|결과를 기다립니다|대기 중/.test(s)) return { short: '팀원들 작업 끝날 때까지 잠깐 기다리고 있어요!', hasMore: true };
+  if (/polisher 보고를 받|번역은 자연스럽/.test(s)) return { short: '번역 쪽은 깔끔하게 잘 나왔네요! 다음 단계 이어서 볼게요.', hasMore: true };
+  if (/Both done|Verify the file/.test(s)) return { short: '번역이랑 디자인 둘 다 끝났네요! 잘 합쳐졌는지 확인하고 등록할게요.', hasMore: true };
+  if (/QR/.test(s)) return { short: 'QR 코드도 정상으로 스캔되는지 확인했어요! 이상 없네요 👍', hasMore: true };
+  if (/reviewer 결과.*문제 없음|커밋 직전 점검/.test(s)) return { short: '감사관님 통과 확인! 이제 최종 저장하고 캡틴께 보고 올릴게요 🙌', hasMore: true };
+  if (/잘 나왔습니다\. 보고합니다/.test(s)) return { short: '디자인 예쁘게 잘 나왔어요! 바로 보고드릴게요 ✨', hasMore: false };
+
+  // 일반 폴백: 마크다운·파일경로·코드 기호 벗기고 1~2문장 대화체로 정리
+  const stripped = s
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/[`*_#>]+/g, '')
+    .replace(/[A-Za-z]:\\[^\s,)]+/g, '파일')
+    .replace(/\n+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  const short = stripped.length > 95 ? stripped.slice(0, 93).trim() + '…' : stripped;
+  return { short, hasMore: short !== raw || raw.length > 95 };
+}
 function chatHtml(t) {
-  const me = t.who === 'captain', long = t.text.length > 280 || t.text.split('\n').length > 6;
+  const me = t.who === 'captain';
   const to = t.to && t.to !== 'captain' ? ` <span class="to">→ ${esc(WHO[t.to] || t.to)}</span>` : '';
   const kind = t.kind === 'report' || t.kind === 'meet' ? `<span class="kind">${KIND[t.kind]}</span>` : '';
-  const tx = `<div class="tx${long ? ' long' : ''}">${esc(t.text)}</div>`;
+  const { short, hasMore } = toHumanChat(t);
+  const moreBtn = hasMore ? `<button type="button" class="raw-btn">원문 보기</button><div class="raw" hidden>${esc(t.text)}</div>` : '';
+  const tx = `<div class="tx">${esc(short)}${moreBtn}</div>`;
   return me ? `<div class="cm me"><div>${tx}</div><time>${hm(t.at)}</time></div>`
     : `<div class="cm k-${t.kind}">${avatar(t.who)}<div class="cb"><div class="nm">${esc(WHO[t.who] || t.who)}${to}${kind}</div>${tx}</div><time>${hm(t.at)}</time></div>`;
 }
@@ -921,6 +1010,15 @@ function closePanel() { S.open = null; $('#panel').classList.remove('open'); $('
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
 
 document.addEventListener('click', async e => {
+  const rawBtn = e.target.closest('.cm .raw-btn');
+  if (rawBtn) {
+    const rawBox = rawBtn.nextElementSibling;
+    if (rawBox) {
+      rawBox.hidden = !rawBox.hidden;
+      rawBtn.textContent = rawBox.hidden ? '원문 보기' : '원문 접기';
+    }
+    return;
+  }
   const msg = e.target.closest('.msg.long, .cm .tx.long');  // 긴 말은 눌러서 펼치기·접기 (글자를 고르는 중이면 그대로)
   if (msg && !getSelection().toString()) return msg.classList.toggle('open');
   const ord = e.target.closest('[data-order]');
