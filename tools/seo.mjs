@@ -169,6 +169,7 @@ const SHOPS = {
   okonomiyakimiyakoya: { type: 'Restaurant', cuisine: ['Japanese', 'Okonomiyaki', 'Monjayaki', 'Teppanyaki'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   sumibaozi: { type: 'Restaurant', cuisine: ['Japanese', 'Yakitori', 'Izakaya'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   jeilnaengsam: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork Belly'], country: 'VN', currency: 'VND', og: 'img/p1.jpg' },
+  quananngonhdt: { type: 'Restaurant', cuisine: ['Vietnamese', 'Hotpot', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/banhxeo.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

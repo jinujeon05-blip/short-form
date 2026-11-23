@@ -114,6 +114,7 @@ name() {
     okonomiyakimiyakoya) echo "미야코야" ;;
     sumibaozi) echo "수미보오즈" ;;
     jeilnaengsam) echo "제일냉삼" ;;
+    quananngonhdt) echo "꽌안응온" ;;
     *) echo "$1" ;;
   esac
 }

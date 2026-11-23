@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://quananngonhdt.qrmenuasia.com/sitemap.xml

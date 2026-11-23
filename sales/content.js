@@ -223,6 +223,8 @@ window.DEMOS = [
     name: "수미보오즈 SUMIBOZU 炭ぼうず", type: { ko: "일식 · 숯불 꼬치구이 · 이자카야", vi: "Nhà hàng Nhật · Gà nướng than · Izakaya", en: "Japanese charcoal yakitori · Izakaya", zh: "日式炭火烤鸡肉串 · 居酒屋", ja: "炭火焼き鳥・串焼き・居酒屋" } },
   { id: "jeilnaengsam", hidden: true, url: "https://jeilnaengsam.qrmenuasia.com", shot: "img/demo-jeilnaengsam.jpg", qr: "img/qr-jeilnaengsam.svg",
     name: "제일냉삼 JEIL NAENGSAM", type: { ko: "한식 · 냉동삼겹살 전문점 · 고기구이", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ đông lạnh", en: "Korean BBQ · Frozen pork belly specialist", zh: "韩式烤肉 · 冷冻五花肉专门店", ja: "韓国焼肉・冷凍サムギョプサル専門店" } },
+  { id: "quananngonhdt", hidden: true, url: "https://quananngonhdt.qrmenuasia.com", shot: "img/demo-quananngonhdt.jpg", qr: "img/qr-quananngonhdt.svg",
+    name: "꽌안응온 Quán Ăn Ngon", type: { ko: "베트남 전통 요리 · 전골 · 해산물 · 쌀국수", vi: "Ẩm thực Việt · Lẩu · Hải sản · Bún phở", en: "Vietnamese cuisine · Hotpot · Seafood · Noodles", zh: "越南传统美食 · 火锅 · 海鲜 · 米粉", ja: "ベトナム伝統料理・鍋・海鮮・麺料理" } },
 ];
 
 window.T = {

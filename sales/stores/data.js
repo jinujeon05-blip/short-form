@@ -874,6 +874,12 @@ window.STORES = [
     type: { ko: "한식 · 냉동삼겹살 전문점 · 고기구이", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ đông lạnh", en: "Korean BBQ · Frozen pork belly specialist", zh: "韩式烤肉 · 冷冻五花肉专门店", ja: "韓国焼肉・冷凍サムギョプサル専門店" },
     keywords: "제일냉삼 Jeil Naengsam Nhà hàng Jeil 냉동삼겹살 냉삼 박닌 Bắc Ninh 삼겹살 항정살 김치찜 냉면 Ngọc Hân Công Chúa"
   },
+  { id: "quananngonhdt", name: "꽌안응온 Quán Ăn Ngon", sub: "전골 · 해산물 · 쌀국수 · 반꾸온 · 베트남 전통 요리", url: "https://quananngonhdt.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["seafood","noodle"], tags: ["photos"],
+    address: "25T2 Hoàng Đạo Thúy, Trung Hòa, Cầu Giấy, Hà Nội", map: "https://www.google.com/maps/place/Qu%C3%A1n+%C4%82n+Ngon+-+Ho%C3%A0ng+%C4%90%E1%BA%A1o+Thu%C3%BD/@21.0076425,105.8023123,18z/data=!4m6!3m5!1s0x3135aca0cbcdf525:0x3a4d28ca884316da!8m2!3d21.0067644!4d105.8016773!16s%2Fg%2F12vrd7h2s",
+    type: { ko: "베트남 전통 요리 · 전골 · 해산물 · 쌀국수", vi: "Ẩm thực Việt · Lẩu · Hải sản · Bún phở", en: "Vietnamese cuisine · Hotpot · Seafood · Noodles", zh: "越南传统美食 · 火锅 · 海鲜 · 米粉", ja: "ベトナム伝統料理・鍋・海鮮・麺料理" },
+    keywords: "꽌안응온 Quán Ăn Ngon Hoàng Đạo Thúy 하노이 베트남 음식 쌀국수 반쎄오 넴루이 전골 해산물 반꾸온 분보후에 껌땀 Hanoi Vietnamese restaurant hotpot seafood banh xeo"
+  },
 ];
 window.SI = {
   ko: {
