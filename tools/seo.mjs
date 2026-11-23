@@ -171,6 +171,7 @@ const SHOPS = {
   jeilnaengsam: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork Belly'], country: 'VN', currency: 'VND', og: 'img/p1.jpg' },
   quananngonhdt: { type: 'Restaurant', cuisine: ['Vietnamese', 'Hotpot', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/banhxeo.jpg' },
   nolowachicken: { type: 'Restaurant', cuisine: ['Korean', 'Fried Chicken', 'Korean Snacks'], country: 'VN', currency: 'VND', og: 'img/fried.jpg' },
+  bunchadakkim: { type: 'Restaurant', cuisine: ['Vietnamese', 'Bun Cha', 'Spring Rolls'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

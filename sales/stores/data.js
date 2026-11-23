@@ -887,6 +887,12 @@ window.STORES = [
     type: { ko: "한식 · 치킨 · 분식 · 전골", vi: "Gà rán Hàn Quốc · Món ăn vặt · Lẩu Hàn", en: "Korean fried chicken · Snacks · Hot pot", zh: "韩式炸鸡 · 小吃 · 火锅", ja: "韓国チキン・粉食・チョンゴル" },
     keywords: "놀로와 치킨 놀로와치킨 Nollowa Chicken NOLLOWA CHICKEN Mo Lao Ha Dong Hanoi 하노이 하동 모라오 후라이드 양념치킨 뿌링클 바삭치킨 떡볶이 로제떡볶이 돌솥비빔밥 막국수 짬뽕 전골 부대찌개 Korean fried chicken gà rán Hàn Quốc"
   },
+  { id: "bunchadakkim", name: "분짜닥킴 Bún Chả Đắc Kim", sub: "분짜 · 게살 춘권 · 분넴꾸어베 · 하노이 미쉐린 셀렉티드", url: "https://bunchadakkim.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["vietnamese","noodle"], tags: ["photos"],
+    address: "1 P. Hàng Mành, Phố cổ Hà Nội, Hoàn Kiếm, Hà Nội", map: "https://www.google.com/maps/place/%EB%B6%84%EC%A7%9C%EB%8B%A5%ED%82%B4/@21.0322542,105.8433386,17z/data=!4m6!3m5!1s0x3135abbe40899a17:0x9aa20a2ad5a0f0e4!8m2!3d21.0322493!4d105.8482095!16s%2Fg%2F1thpz5ms",
+    type: { ko: "베트남 하노이 분짜 · 게살 춘권 (1966년부터)", vi: "Bún chả Hà Nội · Nem cua bể (từ năm 1966)", en: "Hanoi bún chả · Crab spring rolls (since 1966)", zh: "河内烤肉米线 · 蟹肉春卷（始于1966年）", ja: "ハノイ名物ブンチャー・蟹春巻き（1966年創業）" },
+    keywords: "분짜닥킴 분짜 닥킴 Bún Chả Đắc Kim Bun Cha Dac Kim 하노이 분짜 맛집 넴꾸어베 구시가지 항망 미쉐린"
+  },
 ];
 window.SI = {
   ko: {

@@ -227,6 +227,8 @@ window.DEMOS = [
     name: "꽌안응온 Quán Ăn Ngon", type: { ko: "베트남 전통 요리 · 전골 · 해산물 · 쌀국수", vi: "Ẩm thực Việt · Lẩu · Hải sản · Bún phở", en: "Vietnamese cuisine · Hotpot · Seafood · Noodles", zh: "越南传统美食 · 火锅 · 海鲜 · 米粉", ja: "ベトナム伝統料理・鍋・海鮮・麺料理" } },
   { id: "nolowachicken", hidden: true, url: "https://nolowachicken.qrmenuasia.com", shot: "img/demo-nolowachicken.jpg", qr: "img/qr-nolowachicken.svg",
     name: "놀로와 치킨 NOLLOWA CHICKEN", type: { ko: "한식 · 치킨 · 분식 · 전골", vi: "Gà rán Hàn Quốc · Món ăn vặt · Lẩu Hàn", en: "Korean fried chicken · Snacks · Hot pot", zh: "韩式炸鸡 · 小吃 · 火锅", ja: "韓国チキン・粉食・チョンゴル" } },
+  { id: "bunchadakkim", hidden: true, url: "https://bunchadakkim.qrmenuasia.com", shot: "img/demo-bunchadakkim.jpg", qr: "img/qr-bunchadakkim.svg",
+    name: "분짜닥킴 Bún Chả Đắc Kim", type: { ko: "베트남 하노이 분짜 · 게살 춘권 (1966년부터)", vi: "Bún chả Hà Nội · Nem cua bể (từ năm 1966)", en: "Hanoi bún chả · Crab spring rolls (since 1966)", zh: "河内烤肉米线 · 蟹肉春卷（始于1966年）", ja: "ハノイ名物ブンチャー・蟹春巻き（1966年創業）" } },
 ];
 
 window.T = {
