@@ -1,6 +1,12 @@
 // Jinwoo 에이전트 — 12프레임 고화질 웹툰/애니 사무실 (4명 선행 시연: 캡틴·비서실장·시각 정보 비서·메뉴 검사관)
 (() => {
-  const W = 2560, H = 1440; // 16:9 QHD 2K 고화질 (전체화면 선명도 보장)
+  const W = 2560, H = 1440;
+  // 서 있는 키(그림판 px, 2026-11-23): 앉은 모습(seat.h 220~240)과 같은 그림이라 같은 기준으로 맞춤.
+  // 예전 164는 앉은 사람보다 30% 작아 화분 옆에서 작아 보였음. 여자는 남자보다 6% 작게.
+  const MALE_IDS = new Set(['captain', 'agy', 'reader']);
+  const STAND_H_MALE = 232, FEMALE_RATIO = 0.94;
+  const standPx = id => STAND_H_MALE * (MALE_IDS.has(id) ? 1 : FEMALE_RATIO);
+  const standPct = id => standPx(id) / H * 100; // 화면 세로 % (말풍선·퀘스트 표시 위치용) // 16:9 QHD 2K 고화질 (전체화면 선명도 보장)
 
   // bg-office.webp (cutaway 2560x1440) 픽셀 실측 착석 좌표 (headTopY=머리 꼭대기, clipY=책상 상단 경계선, standPos=대화 시 의자 옆 바닥에 서는 위치!)
   const CHARS = {
@@ -853,7 +859,8 @@
 
       const cx = (n.x / 100) * W;
       const cy = (n.y / 100) * H;
-      const targetH = 164 * cfg.scale;
+      const targetH = standPx(n.id);
+      const sizeK = targetH / 164; // 그림자 크기도 키에 맞춤
       const targetW = targetH * (im.naturalWidth / im.naturalHeight);
       const bob = walking ? Math.sin(n.walkDist * 1.1) * 1.8 : 0;
 
@@ -868,7 +875,7 @@
 
       ctx.save();
       ctx.fillStyle = 'rgba(15, 23, 42, 0.28)';
-      ctx.beginPath(); ctx.ellipse(cx, cy + 6, 26, 7.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx, cy + 6, 26 * sizeK, 7.5 * sizeK, 0, 0, Math.PI * 2); ctx.fill();
       ctx.translate(cx, cy + bob);
       ctx.scale((flipX ? -1 : 1) * bowScaleX, bowScaleY);
       ctx.drawImage(im, -targetW / 2, -targetH, targetW, targetH);
@@ -1357,7 +1364,7 @@
           qEl.className = `oa-quest ${q.type === 'exc' ? 'exc' : 'ask'}`;
           qEl.style.left = `${n.x}%`;
           const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
-          qEl.style.top = `${Math.max(4, n.y - (standing ? 12.8 : 8.5))}%`;
+          qEl.style.top = `${Math.max(4, n.y - (standing ? standPct(id) + 1.4 : 8.5))}%`;
         } else if (qEl) {
           qEl.hidden = true;
         }
@@ -1368,7 +1375,7 @@
           bubEls[id].className = `oa-bub ${n.bubbleType}`;
           bubEls[id].style.left = `${n.x}%`;
           const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
-          bubEls[id].style.top  = `${Math.max(3.5, n.y - (standing ? 13.5 : 9.2))}%`;
+          bubEls[id].style.top  = `${Math.max(3.5, n.y - (standing ? standPct(id) + 2.1 : 9.2))}%`;
         } else {
           tagEls[id].classList.remove('speaking');
           bubEls[id].hidden = true;
@@ -1457,8 +1464,8 @@
     // ---- 대화창 자리 정하기: 확대 카메라까지 반영한 '실제 화면 위치'로 캡틴·대화 상대(말풍선 포함)를 피함
     function charScreenBox(p) {
       const z = cam.z || 1, tx = cam.tx || 0, ty = cam.ty || 0;
-      // 머리 위 말풍선까지 가리지 않게 위쪽 여유를 넉넉히(-21)
-      return { x0: tx + (p.x - 5) * z, x1: tx + (p.x + 5) * z, y0: ty + (p.y - 21) * z, y1: ty + (p.y + 4) * z };
+      // 머리 위 말풍선까지 가리지 않게 위쪽 여유를 넉넉히(-24, 키 232 기준)
+      return { x0: tx + (p.x - 5) * z, x1: tx + (p.x + 5) * z, y0: ty + (p.y - 24) * z, y1: ty + (p.y + 4) * z };
     }
     function placeModal() {
       if (modalBack.hidden || !modalTargets.length) return;
@@ -1691,9 +1698,10 @@
       // 화면 위치 → 사무실(확대 전) 좌표로 바꿈 (카메라 확대·이동은 그림판 안에서 하므로)
       px = (px - (cam.tx || 0)) / (cam.z || 1);
       py = (py - (cam.ty || 0)) / (cam.z || 1);
-      let hit = null, best = 6.2;
+      let hit = null, best = 6.8;
       for (const n of Object.values(npcs)) {
-        const d = Math.hypot(px - n.x, py - (n.y - 4));
+        const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
+        const d = Math.hypot(px - n.x, py - (n.y - (standing ? standPct(n.id) * 0.45 : 4)));
         if (d < best) { best = d; hit = n.id; }
       }
       if (!hit) {
