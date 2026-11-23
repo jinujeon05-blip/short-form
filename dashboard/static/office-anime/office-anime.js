@@ -99,8 +99,10 @@
         <div class="oa-rot-wrap">
           <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
           <div class="oa-hud"></div>
+          <div class="oa-joy" data-joy aria-label="캡틴 이동 조이스틱"><div class="oa-joy-knob" data-joy-knob></div></div>
           <div class="oa-ctrl-hint">🎮 캡틴 조작: 방향키 / WASD 이동 · 바닥 클릭 · 1 인사 · 2 커피 · E 자리 복귀</div>
           <div class="oa-brief-bar">
+            <button type="button" class="oa-b-btn cof" data-brief-cof>☕ 커피 서빙</button>
             <button type="button" class="oa-b-btn start" data-brief-start>📋 보고해</button>
             <button type="button" class="oa-b-btn stop" data-brief-stop hidden>✋ 오늘은 여기까지 하지</button>
           </div>
@@ -557,9 +559,56 @@
       ctx.restore();
     }
 
-    // ---------------------------------------------------------------- 캡틴 직접 게임 조작 (WASD / 방향키 / 바닥 클릭 / E 착석)
+    // ---------------------------------------------------------------- 캡틴 직접 게임 조작 (WASD / 방향키 / 가상 엄지 조이스틱 / 바닥 클릭 / E 착석)
     const keys = new Set();
+    let joyVec = { x: 0, y: 0 };
     let clickRing = null; // { x, y, born }
+
+    // 가상 엄지 조이스틱 (볼 모양 드래그 — 모바일 90도 회전 상태에서도 방향 정확 변환!)
+    const joyEl = root.querySelector('[data-joy]');
+    const joyKnob = root.querySelector('[data-joy-knob]');
+    let joyPtr = null;
+    const JOY_MAX = 26;
+    function updateJoy(clientX, clientY) {
+      const r = joyEl.getBoundingClientRect();
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      let dx = clientX - cx, dy = clientY - cy;
+      if (stage.classList.contains('oa-fs-rot')) {
+        // 90도 시계방향 회전 시 화면 터치 델타를 회전된 게임 좌표계로 변환
+        const rdx = dy, rdy = -dx;
+        dx = rdx; dy = rdy;
+      }
+      const dist = Math.hypot(dx, dy);
+      const clamped = Math.min(JOY_MAX, dist);
+      const nx = dist > 4 ? (dx / dist) : 0;
+      const ny = dist > 4 ? (dy / dist) : 0;
+      joyKnob.style.transform = `translate(${nx * clamped}px, ${ny * clamped}px)`;
+      joyVec = { x: nx * (clamped / JOY_MAX), y: ny * (clamped / JOY_MAX) };
+      if (dist > 4) {
+        const cap = npcs.captain;
+        if (cap.path.length) { cap.path = []; cap.onArrive = null; }
+        if (cap.mode === 'emote') { cap.emote = null; cap.mode = 'stand'; }
+        cap.bubble = '';
+      }
+    }
+    function resetJoy() {
+      joyPtr = null;
+      joyVec = { x: 0, y: 0 };
+      joyKnob.style.transform = 'translate(0px, 0px)';
+    }
+    joyEl.addEventListener('pointerdown', e => {
+      e.preventDefault(); e.stopPropagation();
+      joyPtr = e.pointerId;
+      joyEl.setPointerCapture?.(e.pointerId);
+      updateJoy(e.clientX, e.clientY);
+    });
+    joyEl.addEventListener('pointermove', e => {
+      if (joyPtr !== e.pointerId) return;
+      e.preventDefault();
+      updateJoy(e.clientX, e.clientY);
+    });
+    joyEl.addEventListener('pointerup', e => { if (joyPtr === e.pointerId) resetJoy(); });
+    joyEl.addEventListener('pointercancel', resetJoy);
 
     // 사무실 전체 벽·책상·화분·가구 실측 충돌 박스 (절대 통과 불가! 열린 문·계단·복도만 통과)
     const BLOCKERS = [
@@ -765,7 +814,15 @@
     }
 
     window.addEventListener('keydown', e => {
-      if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+      // 어떤 입력창(채팅·지시·결재·검색)이든 포커스됐거나 대화창/상세패널이 열려 있거나 한글 조합 중이면 게임 조작 키 완전 차단!
+      const ae = document.activeElement;
+      const isTyping = e.isComposing || e.ctrlKey || e.metaKey || e.altKey ||
+        (e.target && e.target.closest && e.target.closest('input, textarea, select, [contenteditable="true"]')) ||
+        (ae && ae.closest && ae.closest('input, textarea, select, [contenteditable="true"]')) ||
+        !modalBack.hidden ||
+        !!document.querySelector('#panel[aria-hidden="false"]');
+      if (isTyping) { keys.clear(); return; }
+
       const k = e.key.toLowerCase();
       if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd'].includes(k)) {
         e.preventDefault();
@@ -796,15 +853,15 @@
       last = now;
       const t = now / 1000;
 
-      // 캡틴 키보드 실시간 게임 조작
+      // 캡틴 키보드 + 가상 엄지 조이스틱 실시간 게임 조작
       const cap = npcs.captain;
-      let kx = 0, ky = 0;
+      let kx = joyVec.x, ky = joyVec.y;
       if (keys.has('arrowleft')  || keys.has('a')) kx -= 1;
       if (keys.has('arrowright') || keys.has('d')) kx += 1;
       if (keys.has('arrowup')    || keys.has('w')) ky -= 1;
       if (keys.has('arrowdown')  || keys.has('s')) ky += 1;
-      if (kx !== 0 || ky !== 0) {
-        const len = Math.hypot(kx, ky);
+      if (Math.hypot(kx, ky) > 0.12) {
+        const len = Math.max(1, Math.hypot(kx, ky));
         const spd = 8.2 * dt;
         const nx = cap.x + (kx / len) * spd;
         const ny = cap.y + (ky / len) * spd * 1.15;
@@ -908,7 +965,7 @@
 
     // 역할별 RPG 대화 멘트 + 빠른 지시 버튼
     const DIALOG_CFG = {
-      captain:    { greet: '오늘 사무실 전체 현황을 점검 중입니다. 어떤 지시를 내릴까요?', quick: ['☕ 커피 한 잔 하며 휴식', '👋 전체 직원 격려 인사', '🪑 대표석으로 복귀'] },
+      captain:    { greet: '오늘 사무실 전체 현황을 점검 중입니다. 어떤 지시를 내릴까요?', quick: ['🏪 새 가게 찾기 제작 지시', '☕ 커피 한 잔 하며 휴식', '👋 전체 직원 격려 인사', '🪑 대표석으로 복귀'] },
       claude:     { greet: '캡틴, 오셨어요? 오늘 진행할 업무나 지시하실 사항이 있으신가요?', quick: ['☕ 캡틴 커피 서빙해 줘', '📋 현재 전체 진행 현황 보고', '💬 팀장급 복도 회의 소집'] },
       finder:     { greet: '캡틴! 음식 사진 선별이나 이미지 보정 지시하실 게 있으신가요?', quick: ['📸 새 가게 음식 사진 고르기', '✨ 흐린 메뉴 사진 화질 개선', '📋 현재 사진 작업 현황 보고'] },
       agy:        { greet: '캡틴! 어떤 가게의 디지털 메뉴판을 점검할까요?', quick: ['🔍 메뉴판 가격·오타 전수 점검', '📱 모바일 화면 깨짐 확인', '📋 검수 완료 리스트 보고'] },
@@ -1035,6 +1092,17 @@
         log(`📣 캡틴 → ${c.name}: "${text}"`);
 
         if (hit === 'captain') {
+          if (text.includes('새 가게')) {
+            const inp = modal.querySelector('input[name="msg"]');
+            if (inp) {
+              inp.value = '가게명 사진 수집기로 올렸어. 가게 찾기용으로 만들어줘';
+              inp.focus();
+              inp.setSelectionRange(0, 3); // '가게명'만 바로 선택되어 치자마자 교체 가능!
+            }
+            resEl.hidden = false;
+            resEl.textContent = '✏️ 맨 앞 "가게명"만 바꿔서 [지시 전달]을 눌러주세요!';
+            return;
+          }
           if (text.includes('커피')) { closeTalkModal(false); playCaptainAction('coffee'); return; }
           if (text.includes('인사')) { closeTalkModal(false); playCaptainAction('greet'); return; }
           if (text.includes('복귀')) { closeTalkModal(false); sitCaptainBack(); return; }
@@ -1043,7 +1111,7 @@
           activeTalkNpc = null; n.pausedState = null; modalBack.hidden = true; serveCoffee(); return;
         }
 
-        const fullOrder = hit === 'claude' ? text : `[${c.name} 담당] ${text}`;
+        const fullOrder = (hit === 'claude' || hit === 'captain') ? text : `[${c.name} 담당] ${text}`;
         try {
           if (opts.onSendOrder) {
             const r = await opts.onSendOrder({ text: fullOrder, when: '', argon: false });
@@ -1108,7 +1176,7 @@
 
       modalBack.hidden = false;
       placeModalAvoiding(cap, n);
-      setTimeout(() => modal.querySelector('input')?.focus(), 50);
+      // 모바일에서 캐릭 터치 시 키보드가 자동 팝업되지 않도록 자동 focus 제거 (입력창을 직접 터치할 때만 자판 열림!)
     }
 
     // 캐릭터 클릭 → 캡틴 쪽 바라보며 RPG 대화·지시창 열기 / 빈 바닥 클릭 → A* 길찾기로 장애물 우회 이동!
@@ -1311,6 +1379,8 @@
       }, 650));
     }
 
+    const briefCofBtn   = root.querySelector('[data-brief-cof]');
+    briefCofBtn.addEventListener('click', serveCoffee);
     briefStartBtn.addEventListener('click', startBriefing);
     briefStopBtn.addEventListener('click', endBriefing);
 
