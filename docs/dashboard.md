@@ -238,8 +238,10 @@
   - **길찾기·보폭·호출 규칙**: 모든 이동은 `BLOCKERS` 기반 1.5% 격자 A*(`findPath`, 직선 벽 통과 폴백 금지). `finder` 초록 방 우측 조명 박스는 `x0: 22.2`로 두어 `x=21.0` 격자 통로를 반드시 유지한다(`c012f3e`). NPC 이동 속도는 `4.2`(보폭 `stride 1.65`)로 바닥 미끄러짐 제거. 직원 클릭 시 무조건 캡틴 앞(`getSpotNearCaptain()`)으로 걸어오고, 대화창을 닫으면 자기 자리로 A* 안전 복귀(`ef5ac55`).
 - **2) RPG·모바일 전체화면·사운드**:
   - 실시간 데이터 연동(`syncReal`): 작업 중/완료 배지, RPG 퀘스트 마커(`!`/`?`), 현장 결재·새 가게 제작 지시 템플릿, 황금 파티클·`+EXP`·레벨 HUD(`Lv.N 캡틴 · N호점`).
-  - 모바일 전체화면: 가로 자동 회전(`orientation.lock` + `.oa-rot-wrap` 90° 폴백), 화면 꺼짐 방지(Wake Lock + NoSleep 무음 MP4), 뒤로가기 키 종료, 투명 엄지 조이스틱(감사실 위쪽 책장 `left: 2.2%, bottom: 32%`), 세로 중앙 컴팩트 대화창(잘림 방지), 컴팩트 오버레이 버튼(효과음·BGM 좌측 하단, 캡틴 액션 우측 상단).
+  - 모바일 전체화면: 가로 자동 회전(`orientation.lock` + `.oa-rot-wrap` 90° 폴백), 화면 꺼짐 방지(Wake Lock + NoSleep 무음 MP4), 뒤로가기 키 종료, 투명 엄지 조이스틱(왼쪽 아래 효과음 버튼 위 `left: 2.2%, bottom: 14%`, 11-23), 작은 대화창(폰 폭 42%, `placeModal()`이 확대 카메라 반영 화면 위치로 캡틴·대화 상대를 피해 0.2초마다 자리 재계산, 11-23), 컴팩트 오버레이 버튼(효과음·BGM 좌측 하단, 캡틴 액션 우측 상단).
   - 사운드: 캡틴 제공 2곡(`bgm-office.ogg/.m4a`, `bgm-office-2.ogg/.m4a`) 자동 교대 재생(`🎵 BGM 1 ↔ 2`) + 12종 Web Audio 게임 효과음(`tap·close·walkClick·send·fanfare·brief·greet·coffee·sit·water·sweep·dance`).
+  - 화질·속도(11-23): 그림판은 화면에 보이는 부분만 화면 실제 픽셀(최대 3200폭)로 그리고 카메라 확대는 그림판 안 `setTransform`에서 함(HUD만 `.oa-cam` CSS). 전체를 크게 그리면 PC 전체화면이 초당 30장으로 끊김(37f7860 실수).
+  - 목소리·효과음 파일(11-23): 직원 목소리 `assets/voice/<직원>-<call|ok|done|greet>.mp3`(캡틴은 `greet·brief·end·coffee`), Edge 음성 무료(`tools/office-voices.py`, 목소리 배정·대사는 `assets/voice/lines.json`). 행동 효과음 `assets/sfx/{coffee,sit,water,sweep,dance,brief,send}.mp3`는 ElevenLabs 무료 크레딧(96 사용, 키는 `D:\what-if-studio\.env`를 what-if 스킬 `wi.py`가 읽음). 목소리는 한 번에 한 명만, 파일 실패 시 예전 기계음. 연결: 직원 부르기 call·지시 ok·완료 보고 done·캡틴 인사/커피/보고해/여기까지.
 - **3) 메인 대시보드 프로필 & 팀 대화방 개편 (`app.js`, `style.css`, `index.html`)**:
   - `face()`/`avatar()` 전체를 `/static/office-anime/assets/portraits/*.webp`로 통일(`reader↔auditor` 매핑 일치).
   - 왼쪽 팀 대화방(`chatHtml`)은 `toHumanChat()`으로 짧은 카톡 일상 대화체 + `[원문 보기]` 토글로 표시하고, 상단 `[자세히]` 옆 창(`renderOrderPanel`)에는 참여한 직원(애니 프로필)·전체 `진행 상황(N단계)`·상세 보고 원문·팀 대화 원문을 모두 표시한다(`50898c7`).

@@ -361,26 +361,70 @@
       src.connect(flt); flt.connect(g); g.connect(c.destination);
       src.start(c.currentTime + delay);
     }
+    // ---- 진짜 소리 파일(2026-11-23): 직원 목소리 assets/voice/<직원>-<call|ok|done|greet>.mp3(Edge 음성),
+    //      행동 효과음 assets/sfx/<이름>.mp3(ElevenLabs). 효과음 버튼(sfxOn)으로 같이 켜고 끔. 파일이 없거나 실패하면 예전 기계음.
+    const CLIP_BASE = '/static/office-anime/assets/';
+    const clipRaw = {}, clipBuf = {};
+    function fetchClip(path) {
+      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=1').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+      return clipRaw[path];
+    }
+    async function getClip(path) {
+      if (clipBuf[path]) return clipBuf[path];
+      const c = ensureAudio(); if (!c) return null;
+      const raw = await fetchClip(path); if (!raw) return null;
+      try { clipBuf[path] = await c.decodeAudioData(raw.slice(0)); } catch { return null; }
+      return clipBuf[path];
+    }
+    async function playClip(path, vol = 1, delay = 0) {
+      if (!sfxOn) return null;
+      const buf = await getClip(path);
+      const c = actx; if (!buf || !c || !sfxOn) return null;
+      const src = c.createBufferSource(), g = c.createGain();
+      src.buffer = buf; g.gain.value = vol;
+      src.connect(g); g.connect(c.destination);
+      src.start(c.currentTime + delay);
+      return src;
+    }
+    // 목소리는 한 번에 한 명만(겹치면 앞사람 끊고 새 사람) — 여러 명이 동시에 떠들지 않게
+    let voiceSrc = null;
+    const VOICE_KINDS = { captain: ['greet', 'brief', 'end', 'coffee'] };
+    const voiceKinds = id => VOICE_KINDS[id] || ['call', 'ok', 'done', 'greet'];
+    async function voice(id, kind, delay = 0) {
+      if (!sfxOn || !CHARS[id] || !voiceKinds(id).includes(kind)) return;
+      if (delay) await new Promise(r => setTimeout(r, delay * 1000));
+      const buf = await getClip(`voice/${id}-${kind}.mp3`);
+      if (!buf || !sfxOn) return;
+      try { voiceSrc?.stop(); } catch {}
+      voiceSrc = await playClip(`voice/${id}-${kind}.mp3`, 1.0);
+    }
+    // 처음 열 때 파일만 미리 받아 둠(소리 해독은 첫 터치 뒤) — 합쳐서 약 0.6MB
+    if (sfxOn) setTimeout(() => {
+      ['coffee', 'sit', 'water', 'sweep', 'dance', 'brief', 'send'].forEach(n => fetchClip(`sfx/${n}.mp3`));
+      Object.keys(CHARS).forEach(id => voiceKinds(id).forEach(k => fetchClip(`voice/${id}-${k}.mp3`)));
+    }, 1500);
+    const clipOr = (name, vol, fallback) => { playClip(`sfx/${name}.mp3`, vol).then(src => { if (!src && sfxOn) fallback(); }); };
+
     const SFX = {
       tap:       () => { tone(580, 0.08, 'triangle', 0.07); tone(820, 0.09, 'triangle', 0.06, 0.05); navigator.vibrate?.(12); },
       close:     () => { tone(520, 0.07, 'sine', 0.055); tone(380, 0.08, 'sine', 0.045, 0.045); },
       walkClick: () => { tone(660, 0.06, 'sine', 0.05); tone(990, 0.07, 'sine', 0.04, 0.035); },
-      send:      () => { tone(523, 0.09, 'triangle', 0.08); tone(659, 0.09, 'triangle', 0.08, 0.07); tone(784, 0.14, 'triangle', 0.09, 0.14); navigator.vibrate?.([15, 25, 20]); },
+      send:      () => { navigator.vibrate?.([15, 25, 20]); clipOr('send', 0.8, () => { tone(523, 0.09, 'triangle', 0.08); tone(659, 0.09, 'triangle', 0.08, 0.07); tone(784, 0.14, 'triangle', 0.09, 0.14); }); },
       fanfare:   () => {
         [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, i === 3 ? 0.42 : 0.12, 'triangle', 0.10, i * 0.09));
         tone(659.25, 0.42, 'sine', 0.06, 0.27);
         tone(783.99, 0.42, 'sine', 0.06, 0.27);
         navigator.vibrate?.([20, 35, 20, 35, 45]);
       },
-      brief:     () => { tone(659.25, 0.22, 'sine', 0.09); tone(523.25, 0.36, 'sine', 0.09, 0.20); navigator.vibrate?.([20, 40, 20]); },
+      brief:     () => { navigator.vibrate?.([20, 40, 20]); clipOr('brief', 0.9, () => { tone(659.25, 0.22, 'sine', 0.09); tone(523.25, 0.36, 'sine', 0.09, 0.20); }); },
       greet:     () => { tone(587.33, 0.09, 'triangle', 0.07); tone(880.0, 0.14, 'triangle', 0.07, 0.08); navigator.vibrate?.(14); },
-      coffee:    () => { tone(1174, 0.07, 'sine', 0.05); tone(1568, 0.09, 'sine', 0.045, 0.07); tone(880, 0.12, 'triangle', 0.05, 0.15); },
-      sit:       () => { tone(260, 0.07, 'triangle', 0.065); tone(196, 0.09, 'sine', 0.05, 0.05); },
-      water:     () => { [740, 920, 1120, 880].forEach((f, i) => tone(f, 0.07, 'sine', 0.045, i * 0.075)); },
-      sweep:     () => { noiseBurst(0.14, 0.032, 0); noiseBurst(0.14, 0.028, 0.22); },
+      coffee:    () => clipOr('coffee', 0.8, () => { tone(1174, 0.07, 'sine', 0.05); tone(1568, 0.09, 'sine', 0.045, 0.07); tone(880, 0.12, 'triangle', 0.05, 0.15); }),
+      sit:       () => clipOr('sit', 0.7, () => { tone(260, 0.07, 'triangle', 0.065); tone(196, 0.09, 'sine', 0.05, 0.05); }),
+      water:     () => clipOr('water', 0.7, () => { [740, 920, 1120, 880].forEach((f, i) => tone(f, 0.07, 'sine', 0.045, i * 0.075)); }),
+      sweep:     () => clipOr('sweep', 0.7, () => { noiseBurst(0.14, 0.032, 0); noiseBurst(0.14, 0.028, 0.22); }),
       dance:     () => {
-        [587.33, 739.99, 880.0, 1174.66, 1479.98].forEach((f, i) => tone(f, 0.14, 'triangle', 0.085, i * 0.065));
         navigator.vibrate?.([15, 20, 15, 20, 30]);
+        clipOr('dance', 0.8, () => [587.33, 739.99, 880.0, 1174.66, 1479.98].forEach((f, i) => tone(f, 0.14, 'triangle', 0.085, i * 0.065)));
       },
       step:      () => { tone(190, 0.03, 'sine', 0.018); },
     };
@@ -1084,11 +1128,15 @@
       cap.dir = 'front';
       if (action === 'greet') {
         SFX.greet();
+        voice('captain', 'greet');
+        // 직원 대답은 한 명만(비서실장) — 다 같이 말하면 시끄러움
+        voice('claude', 'greet', 1.7);
         cap.bubble = '👋 모두 수고 많습니다! 진행합시다';
         cap.bubbleType = 'ok';
         log('👋 캡틴이 직원들에게 인사·지시 모션을 취했습니다');
       } else if (action === 'coffee') {
         SFX.coffee();
+        voice('captain', 'coffee', 0.2);
         cap.bubble = '☕ 커피 한 잔 하며 상황 점검 중…';
         cap.bubbleType = '';
         log('☕ 캡틴이 커피를 마시며 잠시 휴식 중입니다');
@@ -1508,6 +1556,7 @@
           <button type="button" class="oa-m-quest-btn" data-quest-act>${q.actionLabel}</button>
         </div>` : '';
       SFX.tap();
+      if (hit !== 'captain') voice(hit, 'call', 0.12);
       modal.innerHTML = `
         <div class="oa-m-head">
           <img src="/static/office-anime/assets/portraits/${c.asset || hit}.webp?v=cap3" alt="${c.name}">
@@ -1546,6 +1595,7 @@
           sendOrder(`${q.shopName} 사진 수집기로 올렸어. 가게 찾기용으로 만들어줘`);
         } else if (q.kind === 'seen' && q.orderId && opts.onMarkSeen) {
           SFX.fanfare();
+          voice(hit, 'done', 0.3);
           spawnBurst(n.x, n.y, '🎉 +50 EXP', 50);
           delete activeQuests[hit];
           updateRpgHud();
@@ -1603,6 +1653,7 @@
           resEl.textContent = `✅ ${c.name}에게 현장 지시 전달 완료`;
         }
         SFX.send();
+        if (hit !== 'captain') voice(hit, 'ok', 0.25);
         spawnBurst(n.x, n.y, '+80 EXP', 80);
         n.bubble = `✅ 네 캡틴! "${text.slice(0, 14)}${text.length > 14 ? '…' : ''}" 진행하겠습니다!`;
         n.bubbleType = 'ok';
@@ -1706,6 +1757,7 @@
       if (briefingActive) return;
       briefingActive = true;
       SFX.brief();
+      voice('captain', 'brief', 0.5);
       clearBriefTimers();
       if (activeTalkNpc) closeTalkModal(false);
       briefStartBtn.hidden = true;
@@ -1752,6 +1804,7 @@
               n.dir = 'back';
               n.bubble = YESTERDAY_REPORTS[sid] || `📋 ${c.name} 전일 업무 완료 보고드립니다!`;
               n.bubbleType = 'ok';
+              voice(sid, 'done');
               log(`${c.name}: "${n.bubble}"`);
             }, 900));
           }, delay));
@@ -1804,6 +1857,7 @@
 
       cap.bubble = '✋ 오늘은 여기까지 하지. 모두 수고했다!';
       cap.bubbleType = 'meet';
+      voice('captain', 'end');
       log('✋ 캡틴: "오늘은 여기까지 하지." — 보고 종료');
 
       // 0.7초 뒤 비서실장 + 전체 직원 동시 인사(Bow 모션) + "네, 알겠습니다 캡틴!"
@@ -1956,6 +2010,7 @@
               bubbleType: 'ok',
               onArrive: () => {
                 npcs[id].mode = 'stand'; npcs[id].dir = 'back';
+                voice(id, 'done');
                 setTimeout(() => {
                   if (!briefingActive) walkNpcSafe(id, CHARS[id].home[0], CHARS[id].home[1], { onArrive: () => seatNpc(id) });
                 }, 2200);
