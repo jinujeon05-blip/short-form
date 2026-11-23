@@ -1,40 +1,58 @@
-# 사무실 게임 직원 목소리 만들기 (Edge 음성, 무료). 실행: python tools/office-voices.py
-# 만든 뒤 앞뒤 빈 소리 자르기·크기 맞추기: ffmpeg silenceremove + loudnorm I=-16 (docs/dashboard.md 목소리 항목)
-import asyncio, edge_tts, pathlib, json
+# 사무실 게임 직원 목소리 만들기 — ElevenLabs eleven_v3(감정 표현) 무료 기본 목소리 (2026-11-23)
+# 실행: cd D:\what-if-studio  →  python D:\qrmenu\tools\office-voices.py [직원id ...]
+#   (키는 what-if 스킬 wi.py가 D:\what-if-studio\.env에서 직접 읽음 — 값은 출력하지 않음)
+#   직원id를 주면 그 직원만 다시 만듦. 끝나면 앞뒤 빈 소리 자르기·크기 맞추기(ffmpeg)까지 함.
+# 무료 계정은 한국어 목소리(라이브러리 Jian·Deok·Jaewon)를 API로 못 씀(402) → 기본 목소리가 한국어를 읽음.
+# 예전 Edge 음성(무료)은 발음은 좋지만 감정이 없어 전자음 같다는 캡틴 의견으로 교체.
+import sys, json, pathlib, subprocess
+sys.path.insert(0, r'C:\Users\sia66\.claude\skills\what-if-animation\scripts')
+import wi
+
 OUT = pathlib.Path(r'D:\qrmenu\dashboard\static\office-anime\assets\voice')
-# 직원별 목소리: (목소리, 높낮이, 빠르기)
+# 남 = 캡틴·메뉴 검사관(agy)·데이터 감사관(auditor), 나머지 여
 V = {
-  'captain':    ('ko-KR-InJoonNeural', '-6Hz', '-4%'),
-  'agy':        ('ko-KR-HyunsuMultilingualNeural', '+0Hz', '+6%'),
-  'reader':     ('ko-KR-InJoonNeural', '+14Hz', '+10%'),
-  'claude':     ('ko-KR-SunHiNeural', '+0Hz', '+0%'),
-  'finder':     ('ko-KR-SunHiNeural', '+14Hz', '+8%'),
-  'sorter':     ('ko-KR-SunHiNeural', '+26Hz', '+12%'),
-  'inspector':  ('ko-KR-SunHiNeural', '-16Hz', '-6%'),
-  'translator': ('en-US-AvaMultilingualNeural', '+0Hz', '+4%'),
-  'staffing':   ('en-US-EmmaMultilingualNeural', '+6Hz', '+8%'),
-  'auditor':    ('fr-FR-VivienneMultilingualNeural', '-4Hz', '-2%'),
+  'captain':    ('JBFqnCBsd6RMkjVDRZzb', 'George — 따뜻하고 묵직한 리더'),
+  'agy':        ('TX3LPaxmHKxFdv7VOQHJ', 'Liam — 젊고 활기참'),
+  'auditor':    ('cjVigY5qzO86Huf0OWal', 'Eric — 차분하고 믿음직함'),
+  'claude':     ('EXAVITQu4vr4xnSDxMaL', 'Sarah — 성숙하고 안정감'),
+  'finder':     ('cgSgspJ2msm6clMCkdW9', 'Jessica — 밝고 귀여움'),
+  'sorter':     ('FGY2WhTYpPnrIDTdsKH5', 'Laura — 발랄함'),
+  'inspector':  ('Xb7hH8MSUJpSbSDYk0k2', 'Alice — 또렷하고 단정함'),
+  'staffing':   ('XrExE9yKIg1WjnnlVkGX', 'Matilda — 씩씩하고 경쾌함'),
+  'translator': ('pFZP5JQG7iQjIQuC4Bku', 'Lily — 부드럽고 자신감'),
+  'reader':     ('hpp4J3VqNfWAUOO0d1Us', 'Bella — 밝고 프로다움'),
 }
 L = {
-  'captain':    {'greet': '모두 수고 많습니다!', 'brief': '전원, 보고 시작해!', 'end': '오늘은 여기까지 하지. 수고했다!', 'coffee': '커피 한 잔 할까?'},
-  'claude':     {'call': '네, 캡틴! 부르셨어요?', 'ok': '바로 처리하겠습니다!', 'done': '보고드립니다. 완료했어요!', 'greet': '수고하셨습니다, 캡틴!'},
-  'finder':     {'call': '캡틴, 사진 필요하세요?', 'ok': '사진 바로 골라 올게요!', 'done': '사진 정리 끝났어요!', 'greet': '수고하셨어요!'},
-  'agy':        {'call': '네, 메뉴 검사관입니다!', 'ok': '메뉴판 바로 읽겠습니다!', 'done': '검사 완료! 이상 없습니다!', 'greet': '수고하셨습니다!'},
-  'translator': {'call': '네, 캡틴?', 'ok': '번역 바로 들어갈게요!', 'done': '번역 완료했어요!', 'greet': '수고 많으셨어요!'},
-  'sorter':     {'call': '선별팀입니다, 캡틴!', 'ok': '기준대로 골라 볼게요!', 'done': '선별 끝났습니다!', 'greet': '고생하셨어요!'},
-  'inspector':  {'call': '운영 감찰관입니다.', 'ok': '꼼꼼히 확인하겠습니다.', 'done': '감찰 결과, 이상 없습니다!', 'greet': '수고하셨습니다.'},
-  'staffing':   {'call': '네, 인력 공급팀이요!', 'ok': '인력 바로 배치할게요!', 'done': '배치 완료했습니다!', 'greet': '오늘도 수고하셨어요!'},
-  'reader':     {'call': '네! 자료 해석 비서입니다!', 'ok': '바로 해석하겠습니다!', 'done': '해석 완료했습니다!', 'greet': '수고하셨습니다!'},
-  'auditor':    {'call': '데이터 감사관입니다.', 'ok': '최종 점검 들어갈게요.', 'done': '감사 통과! 배포 가능합니다.', 'greet': '수고하셨어요.'},
+  'captain':    {'greet': '[warmly] 모두 수고 많습니다!', 'brief': '[confidently] 자, 전원 보고 시작해!', 'end': '[satisfied] 좋아. 오늘은 여기까지 하지. 수고했다!', 'coffee': '[relaxed] 후... 커피 한 잔 할까?'},
+  'claude':     {'call': '[cheerfully] 네, 캡틴! 부르셨어요?', 'ok': '[confidently] 네, 바로 처리하겠습니다!', 'done': '[proudly] 캡틴, 완료했어요!', 'greet': '[warmly] 오늘도 수고하셨습니다, 캡틴!'},
+  'finder':     {'call': '[curious] 캡틴, 사진 필요하세요?', 'ok': '[excited] 사진 바로 골라 올게요!', 'done': '[happily] 짜잔! 사진 정리 끝났어요!', 'greet': '[cheerfully] 수고하셨어요!'},
+  'agy':        {'call': '[energetic] 네! 메뉴 검사관입니다!', 'ok': '[confidently] 메뉴판, 바로 읽겠습니다!', 'done': '[proudly] 검사 완료! 이상 없습니다!', 'greet': '[cheerfully] 수고하셨습니다!'},
+  'translator': {'call': '[softly] 네, 캡틴?', 'ok': '[confidently] 번역, 바로 들어갈게요.', 'done': '[pleased] 번역 다 끝냈어요!', 'greet': '[warmly] 수고 많으셨어요.'},
+  'sorter':     {'call': '[cheerfully] 선별팀이에요, 캡틴!', 'ok': '[excited] 좋아요! 기준대로 골라 볼게요!', 'done': '[happily] 선별 끝났습니다!', 'greet': '[cheerfully] 고생하셨어요!'},
+  'inspector':  {'call': '[calmly] 네, 운영 감찰관입니다.', 'ok': '[seriously] 꼼꼼히 확인하겠습니다.', 'done': '[relieved] 감찰 결과, 이상 없습니다.', 'greet': '[politely] 수고하셨습니다.'},
+  'staffing':   {'call': '[energetic] 네, 인력 공급팀이요!', 'ok': '[confidently] 인력, 바로 배치할게요!', 'done': '[happily] 배치 완료했습니다!', 'greet': '[cheerfully] 오늘도 수고하셨어요!'},
+  'reader':     {'call': '[cheerfully] 네! 자료 해석 비서예요!', 'ok': '[confidently] 바로 해석하겠습니다!', 'done': '[proudly] 해석 완료했어요!', 'greet': '[warmly] 수고하셨습니다!'},
+  'auditor':    {'call': '[calmly] 네, 데이터 감사관입니다.', 'ok': '[seriously] 최종 점검 들어가겠습니다.', 'done': '[confidently] 감사 통과. 배포해도 됩니다.', 'greet': '[politely] 수고하셨습니다.'},
 }
-async def main():
-    n = 0
-    for cid, lines in L.items():
-        voice, pitch, rate = V[cid]
-        for kind, text in lines.items():
-            p = OUT / f'{cid}-{kind}.mp3'
-            await edge_tts.Communicate(text, voice, pitch=pitch, rate=rate).save(str(p))
-            n += 1
-    (OUT / 'lines.json').write_text(json.dumps({'voices': V, 'lines': L}, ensure_ascii=False, indent=1), encoding='utf-8')
-    print(n, 'files')
-asyncio.run(main())
+
+only = set(sys.argv[1:])
+before, _ = wi.credits_used()
+n = 0
+for cid, lines in L.items():
+    if only and cid not in only:
+        continue
+    vid = V[cid][0]
+    for kind, text in lines.items():
+        raw = OUT / f'{cid}-{kind}.raw.mp3'
+        raw.write_bytes(wi.api(f'/v1/text-to-speech/{vid}?output_format=mp3_44100_128',
+                               {'text': text, 'model_id': 'eleven_v3', 'voice_settings': {'stability': 0.5}}))
+        dst = OUT / f'{cid}-{kind}.mp3'
+        subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(raw), '-af',
+                        'silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse,loudnorm=I=-16:TP=-1.5:LRA=7',
+                        '-ar', '44100', '-ac', '1', '-b:a', '64k', str(dst)], check=True)
+        raw.unlink()
+        n += 1
+        print('made', dst.name)
+(OUT / 'lines.json').write_text(json.dumps({'engine': 'elevenlabs eleven_v3 stability 0.5', 'voices': V, 'lines': L}, ensure_ascii=False, indent=1), encoding='utf-8')
+after, _ = wi.credits_used()
+print(n, 'files; credits counter', before, '->', after, '(counter can lag)')

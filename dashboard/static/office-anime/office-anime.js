@@ -3,7 +3,7 @@
   const W = 2560, H = 1440;
   // 서 있는 키(그림판 px, 2026-11-23): 앉은 모습(seat.h 220~240)과 같은 그림이라 같은 기준으로 맞춤.
   // 예전 164는 앉은 사람보다 30% 작아 화분 옆에서 작아 보였음. 여자는 남자보다 6% 작게.
-  const MALE_IDS = new Set(['captain', 'agy', 'reader']);
+  const MALE_IDS = new Set(['captain', 'agy', 'auditor']); // 데이터 감사관=남, 자료 해석 비서=여(그림 파일은 서로 바뀌어 있음: asset)
   const STAND_H_MALE = 232, FEMALE_RATIO = 0.94;
   const standPx = id => STAND_H_MALE * (MALE_IDS.has(id) ? 1 : FEMALE_RATIO);
   const standPct = id => standPx(id) / H * 100; // 화면 세로 % (말풍선·퀘스트 표시 위치용) // 16:9 QHD 2K 고화질 (전체화면 선명도 보장)
@@ -367,12 +367,12 @@
       src.connect(flt); flt.connect(g); g.connect(c.destination);
       src.start(c.currentTime + delay);
     }
-    // ---- 진짜 소리 파일(2026-11-23): 직원 목소리 assets/voice/<직원>-<call|ok|done|greet>.mp3(Edge 음성),
+    // ---- 진짜 소리 파일(2026-11-23): 직원 목소리 assets/voice/<직원>-<call|ok|done|greet>.mp3(ElevenLabs v3 감정 목소리),
     //      행동 효과음 assets/sfx/<이름>.mp3(ElevenLabs). 효과음 버튼(sfxOn)으로 같이 켜고 끔. 파일이 없거나 실패하면 예전 기계음.
     const CLIP_BASE = '/static/office-anime/assets/';
     const clipRaw = {}, clipBuf = {};
     function fetchClip(path) {
-      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=1').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=2').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
       return clipRaw[path];
     }
     async function getClip(path) {
