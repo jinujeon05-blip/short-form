@@ -297,33 +297,65 @@
       o.connect(g); g.connect(c.destination);
       o.start(now); o.stop(now + dur + 0.02);
     }
+    function noiseBurst(dur = 0.12, vol = 0.035, delay = 0) {
+      if (!sfxOn) return;
+      const c = ensureAudio();
+      if (!c) return;
+      const len = Math.max(1, Math.floor(c.sampleRate * dur));
+      const buf = c.createBuffer(1, len, c.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.sin((i / len) * Math.PI);
+      const src = c.createBufferSource();
+      src.buffer = buf;
+      const flt = c.createBiquadFilter();
+      flt.type = 'bandpass'; flt.frequency.value = 1800; flt.Q.value = 1.2;
+      const g = c.createGain();
+      g.gain.value = vol;
+      src.connect(flt); flt.connect(g); g.connect(c.destination);
+      src.start(c.currentTime + delay);
+    }
     const SFX = {
-      tap:     () => { tone(580, 0.08, 'triangle', 0.07); tone(820, 0.09, 'triangle', 0.06, 0.05); navigator.vibrate?.(12); },
-      send:    () => { tone(523, 0.09, 'triangle', 0.08); tone(659, 0.09, 'triangle', 0.08, 0.07); tone(784, 0.14, 'triangle', 0.09, 0.14); navigator.vibrate?.([15, 25, 20]); },
-      fanfare: () => {
+      tap:       () => { tone(580, 0.08, 'triangle', 0.07); tone(820, 0.09, 'triangle', 0.06, 0.05); navigator.vibrate?.(12); },
+      close:     () => { tone(520, 0.07, 'sine', 0.055); tone(380, 0.08, 'sine', 0.045, 0.045); },
+      walkClick: () => { tone(660, 0.06, 'sine', 0.05); tone(990, 0.07, 'sine', 0.04, 0.035); },
+      send:      () => { tone(523, 0.09, 'triangle', 0.08); tone(659, 0.09, 'triangle', 0.08, 0.07); tone(784, 0.14, 'triangle', 0.09, 0.14); navigator.vibrate?.([15, 25, 20]); },
+      fanfare:   () => {
         [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, i === 3 ? 0.42 : 0.12, 'triangle', 0.10, i * 0.09));
         tone(659.25, 0.42, 'sine', 0.06, 0.27);
         tone(783.99, 0.42, 'sine', 0.06, 0.27);
         navigator.vibrate?.([20, 35, 20, 35, 45]);
       },
-      step:    () => { tone(190, 0.03, 'sine', 0.018); },
+      brief:     () => { tone(659.25, 0.22, 'sine', 0.09); tone(523.25, 0.36, 'sine', 0.09, 0.20); navigator.vibrate?.([20, 40, 20]); },
+      greet:     () => { tone(587.33, 0.09, 'triangle', 0.07); tone(880.0, 0.14, 'triangle', 0.07, 0.08); navigator.vibrate?.(14); },
+      coffee:    () => { tone(1174, 0.07, 'sine', 0.05); tone(1568, 0.09, 'sine', 0.045, 0.07); tone(880, 0.12, 'triangle', 0.05, 0.15); },
+      sit:       () => { tone(260, 0.07, 'triangle', 0.065); tone(196, 0.09, 'sine', 0.05, 0.05); },
+      water:     () => { [740, 920, 1120, 880].forEach((f, i) => tone(f, 0.07, 'sine', 0.045, i * 0.075)); },
+      sweep:     () => { noiseBurst(0.14, 0.032, 0); noiseBurst(0.14, 0.028, 0.22); },
+      dance:     () => {
+        [587.33, 739.99, 880.0, 1174.66, 1479.98].forEach((f, i) => tone(f, 0.14, 'triangle', 0.085, i * 0.065));
+        navigator.vibrate?.([15, 20, 15, 20, 30]);
+      },
+      step:      () => { tone(190, 0.03, 'sine', 0.018); },
     };
 
-    // 20초 무이음 루프 애니 오피스·카페 Lo-Fi BGM (bgm-office.ogg, 사파리용 .m4a 폴백 — Web Audio 완전 무이음 루프!)
-    let bgmBuf = null, bgmSrc = null, bgmGain = null, bgmLoading = false;
-    async function loadBgmBuffer(c) {
-      if (bgmBuf) return bgmBuf;
+    // 2곡 번갈아 재생되는 사무실 BGM 플레이리스트 (bgm-office 1번 ↔ 2번 자동 교대, ogg + 사파리용 m4a 폴백!)
+    const BGM_TRACKS = ['bgm-office', 'bgm-office-2'];
+    const bgmBufs = [null, null];
+    let bgmIdx = 0, bgmSrc = null, bgmGain = null, bgmLoading = false;
+    async function loadBgmTrack(c, idx) {
+      if (bgmBufs[idx]) return bgmBufs[idx];
+      const name = BGM_TRACKS[idx];
       const probe = document.createElement('audio');
       const urls = probe.canPlayType('audio/ogg; codecs="vorbis"')
-        ? ['/static/office-anime/assets/bgm-office.ogg?v=2', '/static/office-anime/assets/bgm-office.m4a?v=2']
-        : ['/static/office-anime/assets/bgm-office.m4a?v=2', '/static/office-anime/assets/bgm-office.ogg?v=2'];
+        ? [`/static/office-anime/assets/${name}.ogg?v=2`, `/static/office-anime/assets/${name}.m4a?v=2`]
+        : [`/static/office-anime/assets/${name}.m4a?v=2`, `/static/office-anime/assets/${name}.ogg?v=2`];
       for (const u of urls) {
         try {
           const res = await fetch(u);
           if (!res.ok) continue;
           const ab = await res.arrayBuffer();
-          bgmBuf = await c.decodeAudioData(ab);
-          return bgmBuf;
+          bgmBufs[idx] = await c.decodeAudioData(ab);
+          return bgmBufs[idx];
         } catch {}
       }
       return null;
@@ -339,29 +371,48 @@
       }
       const oldSrc = bgmSrc;
       bgmSrc = null;
-      if (oldSrc) setTimeout(() => { try { oldSrc.stop(); oldSrc.disconnect(); } catch {} }, 280);
+      if (oldSrc) {
+        oldSrc.onended = null;
+        setTimeout(() => { try { oldSrc.stop(); oldSrc.disconnect(); } catch {} }, 280);
+      }
     }
-    async function toggleBgm() {
-      bgmOn = !bgmOn;
-      bgmBtn?.classList.toggle('on', bgmOn);
-      if (!bgmOn) { stopBgmNode(); return; }
+    async function playBgmAt(idx) {
+      if (!bgmOn) return;
       const c = ensureAudio();
       if (!c || bgmLoading) return;
       bgmLoading = true;
-      const buf = await loadBgmBuffer(c);
+      const buf = await loadBgmTrack(c, idx);
       bgmLoading = false;
       if (!buf || !bgmOn) return;
       stopBgmNode();
       const src = c.createBufferSource();
       src.buffer = buf;
-      src.loop = true;
+      src.loop = false;
       const g = c.createGain();
       const now = c.currentTime;
       g.gain.setValueAtTime(0.0001, now);
-      g.gain.linearRampToValueAtTime(0.42, now + 0.4);
+      g.gain.linearRampToValueAtTime(0.42, now + 0.45);
       src.connect(g); g.connect(c.destination);
+      src.onended = () => {
+        if (!bgmOn || bgmSrc !== src) return;
+        bgmIdx = (bgmIdx + 1) % BGM_TRACKS.length;
+        playBgmAt(bgmIdx);
+      };
       src.start(0);
       bgmSrc = src; bgmGain = g;
+      if (bgmBtn) bgmBtn.textContent = `🎵 BGM ${idx + 1}`;
+      // 다음 트랙 미리 백그라운드 로딩
+      loadBgmTrack(c, (idx + 1) % BGM_TRACKS.length).catch(() => {});
+    }
+    function toggleBgm() {
+      bgmOn = !bgmOn;
+      bgmBtn?.classList.toggle('on', bgmOn);
+      if (!bgmOn) {
+        stopBgmNode();
+        if (bgmBtn) bgmBtn.textContent = '🎵 BGM';
+        return;
+      }
+      playBgmAt(bgmIdx);
     }
     document.addEventListener('visibilitychange', () => {
       if (!bgmGain || !actx || !bgmOn) return;
@@ -455,6 +506,7 @@
       if (briefingActive) return;
       const cl = npcs.claude, cap = npcs.captain;
       if (cl.mode === 'walk') return;
+      SFX.coffee();
       log('☕ 비서실장이 12프레임으로 커피를 타러 이동');
       sendPath('claude', ROUTES.chiefToCof, {
         bubble: '☕ 캡틴 커피 타러 가는 중…',
@@ -970,6 +1022,7 @@
       cap.dir = 'front';
       cap.mode = 'idle';
       cap.bubble = '';
+      SFX.sit();
       log('🪑 캡틴이 대표 책상 자리에 착석했습니다');
     }
 
@@ -983,10 +1036,12 @@
       cap.emoteUntil = cap.emoteStart + 3.4;
       cap.dir = 'front';
       if (action === 'greet') {
+        SFX.greet();
         cap.bubble = '👋 모두 수고 많습니다! 진행합시다';
         cap.bubbleType = 'ok';
         log('👋 캡틴이 직원들에게 인사·지시 모션을 취했습니다');
       } else if (action === 'coffee') {
+        SFX.coffee();
         cap.bubble = '☕ 커피 한 잔 하며 상황 점검 중…';
         cap.bubbleType = '';
         log('☕ 캡틴이 커피를 마시며 잠시 휴식 중입니다');
@@ -1477,6 +1532,7 @@
       }
       if (!hit) {
         if (canWalk(px, py)) {
+          SFX.walkClick();
           clickRing = { x: px, y: py, born: performance.now() };
           walkCaptainSafe(px, py, { bubble: '', onArrive: () => { npcs.captain.mode = 'stand'; } });
         }
@@ -1534,6 +1590,7 @@
     function startBriefing() {
       if (briefingActive) return;
       briefingActive = true;
+      SFX.brief();
       clearBriefTimers();
       if (activeTalkNpc) closeTalkModal(false);
       briefStartBtn.hidden = true;
@@ -1832,6 +1889,8 @@
           n.dir = workDir; n.bubble = workMsg; n.bubbleType = 'ok';
           if (emoteKey && imgs.walk[id]?.[emoteKey]?.length) {
             n.mode = 'emote'; n.emote = emoteKey; n.emoteLoop = true; n.emoteStart = performance.now() / 1000;
+            if (emoteKey === 'water') SFX.water();
+            else if (emoteKey === 'clean' || emoteKey === 'sweep') SFX.sweep();
           } else {
             n.mode = 'stand';
           }
@@ -2003,7 +2062,7 @@
             n.bubble = d.msg; n.bubbleType = 'meet';
             if (!burstDone) {
               burstDone = true;
-              SFX.fanfare();
+              SFX.dance();
               spawnBurst(st.bx, st.by, '💃 아이돌 댄스! +20 EXP', 20);
             }
             setTimeout(() => {
