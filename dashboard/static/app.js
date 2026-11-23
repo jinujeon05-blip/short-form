@@ -182,6 +182,11 @@ function mountOfficeGame() {
       autoDemo: false,
       getInfo: gameNpcInfo,
       onOpenDetail: id => openPanel(id),
+      onMarkSeen: async id => {
+        if (!id) return;
+        await post('/api/order/seen', { id });
+        await loadOrders();
+      },
       onSendOrder: async ({ text, when, argon }) => {
         const r = await post('/api/order', { text, when, argon });
         if (r.error) return r;
@@ -217,6 +222,8 @@ function renderOffice() {
       jobs: S.jobs || [],
       collector: S.collector,
       hr: S.hr,
+      newshops: S.newshops || [],
+      storesCount: (S.stores || []).length,
       talk: (fid && S.talks?.[fid]) ? S.talks[fid] : [],
     });
   }

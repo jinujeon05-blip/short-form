@@ -100,6 +100,11 @@
           <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
           <div class="oa-hud"></div>
           <div class="oa-joy" data-joy aria-label="캡틴 이동 조이스틱"><div class="oa-joy-knob" data-joy-knob></div></div>
+          <div class="oa-rpg-hud">
+            <span class="oa-rpg-pill" data-rpg-stat>👑 <b>Lv.1</b> 캡틴 · 퀘스트 <span class="oa-rpg-qcnt zero" data-qcnt>0</span></span>
+            <button type="button" class="oa-snd-btn on" data-sfx-btn title="게임 효과음 켜기/끄기">🔊 효과음</button>
+            <button type="button" class="oa-snd-btn" data-bgm-btn title="잔잔한 사무실 BGM 켜기/끄기">🎵 BGM</button>
+          </div>
           <div class="oa-cap-acts" data-cap-acts>
             <button type="button" class="oa-c-btn" data-cap-greet>👋 인사</button>
             <button type="button" class="oa-c-btn" data-cap-coffee>☕ 커피</button>
@@ -253,18 +258,140 @@
       };
     }
 
+    // ---------------------------------------------------------------- 게임 효과음(Web Audio) + 잔잔한 로파이 BGM + 폰 진동 + 황금 파티클/EXP 연출
+    let sfxOn = (localStorage.getItem('jinwoo_oa_sfx') !== '0');
+    let bgmOn = false;
+    let actx = null, bgmTimer = null;
+    const sfxBtn = root.querySelector('[data-sfx-btn]');
+    const bgmBtn = root.querySelector('[data-bgm-btn]');
+    const rpgStatEl = root.querySelector('[data-rpg-stat]');
+    if (sfxBtn) { sfxBtn.classList.toggle('on', sfxOn); sfxBtn.textContent = sfxOn ? '🔊 효과음' : '🔇 무음'; }
+
+    function ensureAudio() {
+      if (!actx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) actx = new AC();
+      }
+      if (actx && actx.state === 'suspended') actx.resume().catch(() => {});
+      return actx;
+    }
+    function tone(freq, dur, type = 'triangle', vol = 0.08, delay = 0) {
+      if (!sfxOn) return;
+      const c = ensureAudio();
+      if (!c) return;
+      const now = c.currentTime + delay;
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = type; o.frequency.setValueAtTime(freq, now);
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+      o.connect(g); g.connect(c.destination);
+      o.start(now); o.stop(now + dur + 0.02);
+    }
+    const SFX = {
+      tap:     () => { tone(580, 0.08, 'triangle', 0.07); tone(820, 0.09, 'triangle', 0.06, 0.05); navigator.vibrate?.(12); },
+      send:    () => { tone(523, 0.09, 'triangle', 0.08); tone(659, 0.09, 'triangle', 0.08, 0.07); tone(784, 0.14, 'triangle', 0.09, 0.14); navigator.vibrate?.([15, 25, 20]); },
+      fanfare: () => {
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, i === 3 ? 0.42 : 0.12, 'triangle', 0.10, i * 0.09));
+        tone(659.25, 0.42, 'sine', 0.06, 0.27);
+        tone(783.99, 0.42, 'sine', 0.06, 0.27);
+        navigator.vibrate?.([20, 35, 20, 35, 45]);
+      },
+      step:    () => { tone(190, 0.03, 'sine', 0.018); },
+    };
+
+    // 잔잔한 로파이 4코드 사무실 BGM (추가 파일·비용 0원!)
+    const BGM_CHORDS = [
+      [261.63, 329.63, 392.00, 493.88], // Cmaj7
+      [220.00, 261.63, 329.63, 392.00], // Am7
+      [174.61, 220.00, 261.63, 329.63], // Fmaj7
+      [196.00, 246.94, 293.66, 392.00], // G6
+    ];
+    let bgmStep = 0;
+    function toggleBgm() {
+      bgmOn = !bgmOn;
+      bgmBtn?.classList.toggle('on', bgmOn);
+      if (bgmTimer) { clearInterval(bgmTimer); bgmTimer = null; }
+      if (!bgmOn) return;
+      const playBar = () => {
+        if (!bgmOn || document.hidden) return;
+        const c = ensureAudio();
+        if (!c) return;
+        const chord = BGM_CHORDS[bgmStep++ % BGM_CHORDS.length];
+        chord.forEach((f, i) => {
+          const now = c.currentTime + i * 0.06;
+          const o = c.createOscillator(), g = c.createGain();
+          o.type = 'sine'; o.frequency.setValueAtTime(f, now);
+          g.gain.setValueAtTime(0.0001, now);
+          g.gain.exponentialRampToValueAtTime(0.022, now + 0.25);
+          g.gain.exponentialRampToValueAtTime(0.0001, now + 2.3);
+          o.connect(g); g.connect(c.destination);
+          o.start(now); o.stop(now + 2.4);
+        });
+      };
+      playBar();
+      bgmTimer = setInterval(playBar, 2400);
+    }
+    sfxBtn?.addEventListener('click', () => {
+      sfxOn = !sfxOn;
+      try { localStorage.setItem('jinwoo_oa_sfx', sfxOn ? '1' : '0'); } catch {}
+      sfxBtn.classList.toggle('on', sfxOn);
+      sfxBtn.textContent = sfxOn ? '🔊 효과음' : '🔇 무음';
+      if (sfxOn) SFX.tap();
+    });
+    bgmBtn?.addEventListener('click', toggleBgm);
+
+    // 황금 파티클 + 플로팅 +EXP 연출
+    const bursts = []; // { x, y, vx, vy, life, max, color, size }
+    const floats = []; // { x, y, text, life, max }
+    let bonusExp = parseInt(localStorage.getItem('jinwoo_oa_exp') || '0', 10) || 0;
+    let totalStoresCount = 0;
+    let activeQuests = {}; // { [oaId]: { type:'exc'|'ask', title, actionLabel, orderId?, shopName? } }
+
+    function updateRpgHud() {
+      if (!rpgStatEl) return;
+      const exp = totalStoresCount * 100 + bonusExp;
+      const lv = Math.max(1, Math.floor(exp / 1000) + 1);
+      const qCount = Object.keys(activeQuests).length;
+      const shopPart = totalStoresCount > 0 ? ` · 🏪 ${totalStoresCount}호점` : '';
+      rpgStatEl.innerHTML = `👑 <b>Lv.${lv}</b> 캡틴${shopPart} · 퀘스트 <span class="oa-rpg-qcnt${qCount ? '' : ' zero'}">${qCount}</span>`;
+    }
+
+    function spawnBurst(xp, yp, label = '+100 EXP', expGain = 100) {
+      if (expGain > 0) {
+        bonusExp += expGain;
+        try { localStorage.setItem('jinwoo_oa_exp', String(bonusExp)); } catch {}
+        updateRpgHud();
+      }
+      const cx = (xp / 100) * W, cy = ((yp - 8) / 100) * H;
+      const colors = ['#fde047', '#f59e0b', '#fef08a', '#4ade80', '#38bdf8'];
+      for (let i = 0; i < 26; i++) {
+        const ang = (Math.PI * 2 * i) / 26 + (Math.random() - 0.5) * 0.3;
+        const spd = 110 + Math.random() * 210;
+        bursts.push({
+          x: cx, y: cy, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd - 70,
+          life: 0, max: 0.85 + Math.random() * 0.45,
+          color: colors[i % colors.length], size: 5 + Math.random() * 6
+        });
+      }
+      if (label) floats.push({ x: cx, y: cy - 20, text: label, life: 0, max: 1.45 });
+    }
+
     hud.innerHTML =
       SIGNS.map(s => `<span class="oa-sign" style="left:${s.x}%;top:${s.y}%;background:${s.bg}">${s.text}</span>`).join('') +
       Object.entries(CHARS).map(([id, c]) =>
         `<div class="oa-tag" data-tag="${id}"><b>${c.name}</b><small>${c.role}</small></div>
+         <div class="oa-quest" data-q="${id}" hidden>!</div>
          <div class="oa-bub" data-bub="${id}" hidden></div>`
       ).join('');
 
-    const tagEls = {}, bubEls = {};
+    const tagEls = {}, bubEls = {}, questEls = {};
     for (const id of Object.keys(CHARS)) {
       tagEls[id] = hud.querySelector(`[data-tag="${id}"]`);
       bubEls[id] = hud.querySelector(`[data-bub="${id}"]`);
+      questEls[id] = hud.querySelector(`[data-q="${id}"]`);
     }
+    updateRpgHud();
 
     const log = m => { if (opts.onLog) opts.onLog(m); };
 
@@ -954,10 +1081,56 @@
       drawList.sort((a, b) => a.y - b.y);
       for (const item of drawList) item.draw();
 
+      // 황금 파티클 & 플로팅 +EXP 텍스트 렌더링
+      for (let i = bursts.length - 1; i >= 0; i--) {
+        const pt = bursts[i];
+        pt.life += dt;
+        if (pt.life >= pt.max) { bursts.splice(i, 1); continue; }
+        pt.x += pt.vx * dt; pt.y += pt.vy * dt; pt.vy += 320 * dt;
+        const a = 1 - pt.life / pt.max;
+        ctx.save();
+        ctx.globalAlpha = a;
+        ctx.fillStyle = pt.color;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      for (let i = floats.length - 1; i >= 0; i--) {
+        const fl = floats[i];
+        fl.life += dt;
+        if (fl.life >= fl.max) { floats.splice(i, 1); continue; }
+        fl.y -= 55 * dt;
+        const a = 1 - Math.pow(fl.life / fl.max, 1.5);
+        ctx.save();
+        ctx.globalAlpha = a;
+        ctx.font = '900 34px "Malgun Gothic", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = '#0f172a';
+        ctx.strokeText(fl.text, fl.x, fl.y);
+        ctx.fillStyle = '#fde047';
+        ctx.fillText(fl.text, fl.x, fl.y);
+        ctx.restore();
+      }
+
       for (const [id, n] of Object.entries(npcs)) {
         const walking = n.mode === 'walk';
         tagEls[id].style.left = `${n.x}%`;
         tagEls[id].style.top  = `${n.y + (walking ? 1.4 : (CHARS[id].facing === 'front' ? 4.8 : 1.5))}%`;
+        // RPG 퀘스트 마커(! / ?) 머리 위 표시 (말풍선이 없을 때 깔끔하게 통통 뜀)
+        const q = activeQuests[id];
+        const qEl = questEls[id];
+        if (q && qEl && !n.bubble) {
+          qEl.hidden = false;
+          qEl.textContent = q.type === 'exc' ? '!' : '?';
+          qEl.className = `oa-quest ${q.type === 'exc' ? 'exc' : 'ask'}`;
+          qEl.style.left = `${n.x}%`;
+          const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
+          qEl.style.top = `${Math.max(4, n.y - (standing ? 12.8 : 8.5))}%`;
+        } else if (qEl) {
+          qEl.hidden = true;
+        }
         if (n.bubble) {
           tagEls[id].classList.add('speaking');
           bubEls[id].hidden = false;
@@ -1068,6 +1241,13 @@
 
       const detailBtn = opts.onOpenDetail
         ? `<button type="button" class="oa-q-btn detail" data-open-detail>📋 상세 패널 열기</button>` : '';
+      const q = activeQuests[hit];
+      const questHtml = q ? `
+        <div class="oa-m-quest ${q.type === 'ask' ? 'done' : ''}">
+          <span class="oa-m-quest-txt">${q.type === 'exc' ? '❗ [퀘스트] ' : '✅ [완료 보고] '}${q.title}</span>
+          <button type="button" class="oa-m-quest-btn" data-quest-act>${q.actionLabel}</button>
+        </div>` : '';
+      SFX.tap();
       modal.innerHTML = `
         <div class="oa-m-head">
           <img src="/static/office-anime/assets/portraits/${c.asset || hit}.webp?v=cap3" alt="${c.name}">
@@ -1077,6 +1257,7 @@
           </div>
           <button type="button" data-close>×</button>
         </div>
+        ${questHtml}
         <div class="oa-m-quick">
           ${dcfg.quick.map(q => `<button type="button" class="oa-q-btn" data-q="${q}">${q}</button>`).join('')}
           ${detailBtn}
@@ -1093,8 +1274,28 @@
         translator: 'polisher', staffing: 'staffing', sorter: 'sorting'
       };
       modal.querySelector('[data-open-detail]')?.addEventListener('click', () => {
+        SFX.tap();
         closeTalkModal(false);
         opts.onOpenDetail(OA_TO_DASH[hit] || hit);
+      });
+      modal.querySelector('[data-quest-act]')?.addEventListener('click', async () => {
+        if (!q) return;
+        if (q.kind === 'newshop' && q.shopName) {
+          SFX.send();
+          spawnBurst(n.x, n.y, '+100 EXP', 100);
+          sendOrder(`${q.shopName} 사진 수집기로 올렸어. 가게 찾기용으로 만들어줘`);
+        } else if (q.kind === 'seen' && q.orderId && opts.onMarkSeen) {
+          SFX.fanfare();
+          spawnBurst(n.x, n.y, '🎉 +50 EXP', 50);
+          delete activeQuests[hit];
+          updateRpgHud();
+          closeTalkModal(false);
+          await opts.onMarkSeen(q.orderId);
+        } else if (opts.onOpenDetail) {
+          SFX.tap();
+          closeTalkModal(false);
+          opts.onOpenDetail(OA_TO_DASH[hit] || hit);
+        }
       });
 
       const sendOrder = async text => {
@@ -1141,6 +1342,8 @@
         } catch {
           resEl.textContent = `✅ ${c.name}에게 현장 지시 전달 완료`;
         }
+        SFX.send();
+        spawnBurst(n.x, n.y, '+80 EXP', 80);
         n.bubble = `✅ 네 캡틴! "${text.slice(0, 14)}${text.length > 14 ? '…' : ''}" 진행하겠습니다!`;
         n.bubbleType = 'ok';
         setTimeout(() => closeTalkModal(true), 850);
@@ -1383,6 +1586,8 @@
           n.bubbleType = 'ok';
         }
         log('🙇 전체 직원: "네, 알겠습니다 캡틴!" (일동 인사)');
+        SFX.fanfare();
+        spawnBurst(50.0, 29.8, '🎉 보고 완료 +50 EXP', 50);
 
         // 인사 끝난 뒤(1.8초 후) 각자 자리로 A* 안전 복귀!
         briefTimers.push(setTimeout(() => {
@@ -1416,7 +1621,8 @@
     let prevReal = null;
     let realBusySet = new Set();
 
-    function syncReal({ orders = [], jobs = [], collector = null, hr = null, talk = [] } = {}) {
+    function syncReal({ orders = [], jobs = [], collector = null, hr = null, newshops = [], storesCount = 0, talk = [] } = {}) {
+      if (storesCount > 0) totalStoresCount = storesCount;
       const busy = new Set();
       for (const j of jobs) {
         if (j.status === 'running' && DASH_TO_OA[j.desk]) busy.add(DASH_TO_OA[j.desk]);
@@ -1430,10 +1636,49 @@
       realBusySet = busy;
 
       const done = new Set();
+      const doneOrderOf = {};
       const cleared = o => o.deployState === 'done' || (!o.deployable && o.seenAt);
       for (const o of orders.filter(o => o.status === 'done' && !cleared(o))) {
-        for (const d of (o.worked || [])) if (DASH_TO_OA[d]) done.add(DASH_TO_OA[d]);
+        for (const d of (o.worked || [])) {
+          const oaId = DASH_TO_OA[d];
+          if (oaId) { done.add(oaId); if (!doneOrderOf[oaId]) doneOrderOf[oaId] = o; }
+        }
       }
+
+      // RPG 퀘스트(! / ?) 자동 생성 (실제 대시보드 데이터 기반!)
+      const nextQ = {};
+      // 1) 결재 대기 또는 배포 대기 -> 비서실장 머리 위 노란 '!'
+      const waitOrder = orders.find(o => o.status === 'wait' || o.needAnswer || o.deployState === 'ready');
+      if (waitOrder) {
+        const wTitle = (waitOrder.title || waitOrder.text || '결재·배포 건').replace(/\s+/g, ' ').slice(0, 20);
+        nextQ.claude = {
+          type: 'exc', kind: 'detail', orderId: waitOrder.id,
+          title: `결재/배포 대기: "${wTitle}"`,
+          actionLabel: '✅ 결재창 열기'
+        };
+      }
+      // 2) 드라이브 새 가게(메뉴판 사진 있음) -> 선별팀 팀장 머리 위 노란 '!'
+      const freshShop = (newshops || []).find(s => s.status === 'new' && s.hasMenu);
+      if (freshShop) {
+        nextQ.sorter = {
+          type: 'exc', kind: 'newshop', shopName: freshShop.name || freshShop.folder,
+          title: `새 가게 도착: "${freshShop.name || freshShop.folder}"`,
+          actionLabel: '🚀 바로 제작 지시 (+100 EXP)'
+        };
+      }
+      // 3) 방금 완료된 담당 -> 초록 '?' (완료 확인 & 보상 수령!)
+      for (const oaId of done) {
+        if (oaId === 'captain' || nextQ[oaId]) continue;
+        const ord = doneOrderOf[oaId];
+        const oTitle = (ord?.title || ord?.text || '최근 업무').replace(/\s+/g, ' ').slice(0, 18);
+        nextQ[oaId] = {
+          type: 'ask', kind: 'seen', orderId: ord?.id,
+          title: `"${oTitle}" 완료 보고!`,
+          actionLabel: '🎉 확인 & +50 EXP'
+        };
+      }
+      activeQuests = nextQ;
+      updateRpgHud();
 
       // 이름표 실시간 상태 배지 갱신 (작업 중 파랑 / 완료 초록 / 대기 기본)
       for (const [id, cfg] of Object.entries(CHARS)) {
