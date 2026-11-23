@@ -372,7 +372,7 @@
     const CLIP_BASE = '/static/office-anime/assets/';
     const clipRaw = {}, clipBuf = {};
     function fetchClip(path) {
-      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=2').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=3').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
       return clipRaw[path];
     }
     async function getClip(path) {

@@ -2,16 +2,16 @@
  "engine": "elevenlabs eleven_v3 stability 0.5",
  "voices": {
   "captain": [
-   "JBFqnCBsd6RMkjVDRZzb",
-   "George — 따뜻하고 묵직한 리더"
+   "IKne3meq5aSn9XLyUdCD",
+   "Charlie — 젊고 자신감 있는 주인공"
   ],
   "agy": [
    "TX3LPaxmHKxFdv7VOQHJ",
    "Liam — 젊고 활기참"
   ],
   "auditor": [
-   "cjVigY5qzO86Huf0OWal",
-   "Eric — 차분하고 믿음직함"
+   "SOYHLrjzK2X1ezoPC6cr",
+   "Harry — 젊은 남자, 애니메이션용"
   ],
   "claude": [
    "EXAVITQu4vr4xnSDxMaL",
@@ -26,20 +26,20 @@
    "Laura — 발랄함"
   ],
   "inspector": [
-   "Xb7hH8MSUJpSbSDYk0k2",
-   "Alice — 또렷하고 단정함"
+   "EXAVITQu4vr4xnSDxMaL",
+   "Sarah — 차분하게(비서실장과 같은 목소리)"
   ],
   "staffing": [
-   "XrExE9yKIg1WjnnlVkGX",
-   "Matilda — 씩씩하고 경쾌함"
+   "FGY2WhTYpPnrIDTdsKH5",
+   "Laura — 씩씩하게(선별팀과 같은 목소리)"
   ],
   "translator": [
-   "pFZP5JQG7iQjIQuC4Bku",
-   "Lily — 부드럽고 자신감"
+   "EXAVITQu4vr4xnSDxMaL",
+   "Sarah — 부드럽게(비서실장과 같은 목소리)"
   ],
   "reader": [
-   "hpp4J3VqNfWAUOO0d1Us",
-   "Bella — 밝고 프로다움"
+   "cgSgspJ2msm6clMCkdW9",
+   "Jessica — 밝게(시각 정보 비서와 같은 목소리)"
   ]
  },
  "lines": {
@@ -92,7 +92,7 @@
    "greet": "[cheerfully] 오늘도 수고하셨어요!"
   },
   "reader": {
-   "call": "[cheerfully] 네! 자료 해석 비서예요!",
+   "call": "[cheerfully] 네, 캡틴! 저 여기 있어요!",
    "ok": "[confidently] 바로 해석하겠습니다!",
    "done": "[proudly] 해석 완료했어요!",
    "greet": "[warmly] 수고하셨습니다!"
