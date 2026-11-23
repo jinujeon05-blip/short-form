@@ -285,6 +285,24 @@
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
+    // ---- 화질: 그림판 실제 픽셀을 '화면 픽셀 × 카메라 확대'에 맞춤 (2026-11-23 가-1)
+    // 예전엔 2560 그림판을 CSS로 1.85배 늘려 흐렸음. 그리는 좌표는 그대로 2560×1440 기준(setTransform)이라 다른 코드는 안 바뀜.
+    // 폰 발열을 막으려고 그림판은 1.6배(4096×2304)까지만(화면 배율 DPR은 폰 기본 3까지 반영).
+    let resScale = 1, resCheckAt = 0;
+    function updateCanvasRes(zoom) {
+      const wrap = root.querySelector('.oa-rot-wrap');
+      const cssW = wrap?.clientWidth || W;
+      const dpr = Math.min(3, window.devicePixelRatio || 1);
+      const want = Math.max(1, Math.min(1.6, cssW * dpr * zoom / W));
+      const s = Math.round(want * 10) / 10; // 0.1 단위로만 바꿔 자꾸 다시 만들지 않게
+      if (s === resScale && canvas.width === Math.round(W * s)) return;
+      resScale = s;
+      canvas.width = Math.round(W * s);
+      canvas.height = Math.round(H * s);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+    }
+
     let imgs = { walk: {}, masks: {} };
     loadAll().then(loaded => { imgs = loaded; });
 
@@ -1191,6 +1209,11 @@
         }
       }
 
+      if (now - resCheckAt > 500) {
+        resCheckAt = now;
+        updateCanvasRes((camMode === 'follow' && !briefingActive) ? 1.85 : 1.0);
+      }
+      ctx.setTransform(resScale, 0, 0, resScale, 0, 0);
       ctx.clearRect(0, 0, W, H);
       if (imgs.bg) ctx.drawImage(imgs.bg, 0, 0, W, H);
 
