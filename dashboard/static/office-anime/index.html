@@ -53,6 +53,8 @@
     <button type="button" class="btn" id="b-cof">☕ 비서 커피 서빙</button>
     <button type="button" class="btn" id="b-chat">💬 복도 수다</button>
     <button type="button" class="btn" id="b-cap">🚶 캡틴 산책</button>
+    <button type="button" class="btn" id="b-greet">👋 인사(1)</button>
+    <button type="button" class="btn" id="b-ccof">☕ 커피(2)</button>
     <button type="button" class="btn" id="b-sit">🪑 자리 복귀(E)</button>
     <a class="btn" href="/">← 메인 대시보드로</a>
   </div>
@@ -61,7 +63,7 @@
   <div id="root"></div>
   <div class="log-box"><b>실시간 움직임 기록</b> (캐릭터를 클릭하면 웹툰 고화질 프로필 상태창이 열립니다)<ul id="log"></ul></div>
 </main>
-<script src="/static/office-anime/office-anime.js?v=9"></script>
+<script src="/static/office-anime/office-anime.js?v=10"></script>
 <script>
 const ul = document.getElementById('log');
 const app = window.OfficeAnime.create(document.getElementById('root'), {
@@ -71,6 +73,8 @@ document.getElementById('b-demo').onclick = () => app.runDemo();
 document.getElementById('b-cof').onclick  = () => app.serveCoffee();
 document.getElementById('b-chat').onclick = () => app.hallChat();
 document.getElementById('b-cap').onclick  = () => app.captainWalk();
+document.getElementById('b-greet').onclick = () => app.playCaptainAction('greet');
+document.getElementById('b-ccof').onclick  = () => app.playCaptainAction('coffee');
 document.getElementById('b-sit').onclick  = () => app.sitCaptainBack();
 </script>
 </body>

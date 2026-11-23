@@ -48,10 +48,12 @@
     });
     const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=cutaway1')];
     for (const [id, cfg] of Object.entries(CHARS)) {
-      imgs.walk[id] = { east: [], front: [], back: [] };
-      for (const dir of ['east', 'front', 'back']) {
+      imgs.walk[id] = { east: [], front: [], back: [], greet: [], coffee: [] };
+      const dirs = id === 'captain' ? ['east', 'front', 'back', 'greet', 'coffee'] : ['east', 'front', 'back'];
+      for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${id}-${dir}-${i}.webp?v=orig2k`));
+          const v = id === 'captain' ? 'cap4act' : 'orig2k';
+          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${id}-${dir}-${i}.webp?v=${v}`));
         }
       }
     }
@@ -66,7 +68,7 @@
       <div class="oa-stage">
         <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
         <div class="oa-hud"></div>
-        <div class="oa-ctrl-hint">🎮 캡틴 조작: 방향키 / WASD 이동 · 바닥 클릭 이동 · E 자리 복귀</div>
+        <div class="oa-ctrl-hint">🎮 캡틴 조작: 방향키 / WASD 이동 · 바닥 클릭 · 1 인사 · 2 커피 · E 자리 복귀</div>
         <button type="button" class="oa-fs-btn" title="전체화면 전환">⛶ 전체화면</button>
         <div class="oa-modal-back" hidden><div class="oa-modal"></div></div>
       </div>`;
@@ -212,10 +214,18 @@
       const wset = imgs.walk[n.id];
       if (!wset) return;
       const walking = (n.mode === 'walk');
-      const fIdx = walking ? (Math.floor(n.walkDist * 1.05) % 12) : 0;
+      const emoting = (n.mode === 'emote' && n.emote && wset[n.emote]?.length);
+      let fIdx = 0;
+      if (emoting) {
+        const elapsed = Math.max(0, t - (n.emoteStart || 0));
+        fIdx = Math.min(11, Math.floor(elapsed * 4.0));
+      } else if (walking) {
+        fIdx = Math.floor(n.walkDist * 1.05) % 12;
+      }
 
       let dirKey = 'front', flipX = false;
-      if (n.dir === 'east') { dirKey = 'east'; }
+      if (emoting) { dirKey = n.emote; }
+      else if (n.dir === 'east') { dirKey = 'east'; }
       else if (n.dir === 'west') { dirKey = 'east'; flipX = true; }
       else if (n.dir === 'back') { dirKey = 'back'; }
       else { dirKey = 'front'; }
@@ -290,6 +300,26 @@
       log('🪑 캡틴이 대표 책상 자리에 착석했습니다');
     }
 
+    function playCaptainAction(action) {
+      const cap = npcs.captain;
+      cap.path = [];
+      cap.onArrive = null;
+      cap.mode = 'emote';
+      cap.emote = action;
+      cap.emoteStart = performance.now() / 1000;
+      cap.emoteUntil = cap.emoteStart + 3.4;
+      cap.dir = 'front';
+      if (action === 'greet') {
+        cap.bubble = '👋 모두 수고 많습니다! 진행합시다';
+        cap.bubbleType = 'ok';
+        log('👋 캡틴이 직원들에게 인사·지시 모션을 취했습니다');
+      } else if (action === 'coffee') {
+        cap.bubble = '☕ 커피 한 잔 하며 상황 점검 중…';
+        cap.bubbleType = '';
+        log('☕ 캡틴이 커피를 마시며 잠시 휴식 중입니다');
+      }
+    }
+
     window.addEventListener('keydown', e => {
       if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
       const k = e.key.toLowerCase();
@@ -298,10 +328,17 @@
         keys.add(k);
         const cap = npcs.captain;
         if (cap.path.length) { cap.path = []; cap.onArrive = null; }
+        if (cap.mode === 'emote') { cap.emote = null; cap.mode = 'stand'; }
         cap.bubble = '';
       } else if (k === 'e') {
         e.preventDefault();
         sitCaptainBack();
+      } else if (k === '1') {
+        e.preventDefault();
+        playCaptainAction('greet');
+      } else if (k === '2') {
+        e.preventDefault();
+        playCaptainAction('coffee');
       }
     });
     window.addEventListener('keyup', e => {
@@ -333,6 +370,10 @@
         cap.mode = 'walk';
         if (moved) cap.walkDist += spd;
         cap.dir = Math.abs(ky) >= Math.abs(kx) ? (ky < 0 ? 'back' : 'front') : (kx > 0 ? 'east' : 'west');
+      } else if (cap.mode === 'emote' && t >= (cap.emoteUntil || 0)) {
+        cap.emote = null;
+        cap.bubble = '';
+        cap.mode = (Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]) < 2.0) ? 'idle' : 'stand';
       } else if (!cap.path.length && cap.mode === 'walk') {
         // 키를 떼면 그 자리에 자연스럽게 서서 대기 (의자로 텔레포트하지 않음!)
         cap.mode = 'stand';
@@ -428,7 +469,7 @@
       const c = CHARS[hit], n = npcs[hit];
       modal.innerHTML = `
         <div class="oa-m-head">
-          <img src="/static/office-anime/assets/portraits/${hit}.webp" alt="${c.name}">
+          <img src="/static/office-anime/assets/portraits/${hit}.webp?v=cap2" alt="${c.name}">
           <div><h3>${c.name}</h3><small>${c.role} · 12프레임 고화질</small></div>
           <button type="button" data-close>×</button>
         </div>
@@ -440,7 +481,7 @@
     });
 
     setTimeout(runDemo, 1500);
-    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack };
+    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction };
   }
 
   window.OfficeAnime = { create };
