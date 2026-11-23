@@ -803,7 +803,7 @@
 
       modal.innerHTML = `
         <div class="oa-m-head">
-          <img src="/static/office-anime/assets/portraits/${hit}.webp?v=cap2" alt="${c.name}">
+          <img src="/static/office-anime/assets/portraits/${hit}.webp?v=cap3" alt="${c.name}">
           <div>
             <h3>${c.name} <span class="oa-m-role">${c.role}</span></h3>
             <p class="oa-m-say">“${dcfg.greet}”</p>
