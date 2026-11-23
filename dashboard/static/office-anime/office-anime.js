@@ -4,10 +4,11 @@
 
   // bg-office.webp (cutaway 2560x1440) 픽셀 실측 착석 좌표 (headTopY=머리 꼭대기, clipY=책상 상단 경계선)
   const CHARS = {
-    captain: { name: '캡틴',          role: '결재',        home: [50.0, 18.5], facing: 'front', scale: 1.0,  seat: { x: 50.0, headTopY: 6.4,  clipY: 13.0, h: 240 } },
-    claude:  { name: '비서실장',      role: '지휘',        home: [50.0, 39.0], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 27.6, clipY: 33.4, h: 225 } },
-    finder:  { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.2, h: 225 } },
-    agy:     { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.4, 49.0], facing: 'back',  scale: 0.96, seat: { x: 82.4, headTopY: 35.8, clipY: 46.2, h: 220 } },
+    captain:    { name: '캡틴',          role: '결재',        home: [50.0, 18.5], facing: 'front', scale: 1.0,  seat: { x: 50.0, headTopY: 6.4,  clipY: 13.0, h: 240 } },
+    claude:     { name: '비서실장',      role: '지휘',        home: [50.0, 39.0], facing: 'front', scale: 0.96, seat: { x: 50.0, headTopY: 27.6, clipY: 33.4, h: 225 } },
+    finder:     { name: '시각 정보 비서', role: '사진 고르기', home: [14.8, 45.0], facing: 'front', scale: 0.94, seat: { x: 14.8, headTopY: 33.2, clipY: 39.2, h: 225 } },
+    agy:        { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [82.4, 49.0], facing: 'back',  scale: 0.96, seat: { x: 82.4, headTopY: 35.8, clipY: 46.2, h: 220 } },
+    translator: { name: '수석 번역관',   role: '4개국어 번역', home: [36.8, 76.8], facing: 'front', scale: 0.95, seat: { x: 36.8, headTopY: 67.4, clipY: 74.4, h: 235 } },
   };
 
   // Y-깊이(앞/뒤 가림) 전경 가구 목록 (7개 방 모든 책상·의자 완비!):
@@ -47,6 +48,8 @@
     capToChief:   [[39.5, 20.5], [34.5, 20.5], [34.5, 35.5], [50.0, 35.5], [50.0, 39.0]],
     finderToHall: [[14.8, 41.0], [20.6, 41.0], [20.6, 49.5], [46.5, 49.5]],
     agyToHall:    [[82.4, 51.0], [74.5, 51.0], [53.5, 50.0]],
+    transToHall:  [[36.8, 76.8], [43.2, 76.8], [43.2, 81.2], [49.8, 81.2], [49.8, 56.0]],
+    hallToTrans:  [[49.8, 56.0], [49.8, 81.2], [43.2, 81.2], [43.2, 76.8], [36.8, 76.8]],
   };
 
   function loadAll() {
@@ -213,9 +216,28 @@
       sendPath('agy', ROUTES.agyToHall, { onArrive: () => { if (++ready === 2) talk(); } });
     }
 
+    function transConsult() {
+      const tr = npcs.translator;
+      if (!tr || tr.mode === 'walk') return;
+      log('🌐 수석 번역관이 번역 톤 상의를 위해 중앙 복도로 이동');
+      sendPath('translator', ROUTES.transToHall, {
+        bubble: '🌐 메뉴 번역 톤 상의하러 가는 중…',
+        onArrive: () => {
+          tr.dir = 'back'; tr.bubble = '💬 베트남어·영어 메뉴 표현 확인 완료!'; tr.bubbleType = 'ok';
+          setTimeout(() => {
+            sendPath('translator', ROUTES.hallToTrans, {
+              bubble: '↩ 통번역 통제실 복귀',
+              onArrive: () => { tr.mode = 'idle'; tr.dir = 'front'; tr.bubble = ''; }
+            });
+          }, 2600);
+        }
+      });
+    }
+
     function runDemo() {
       serveCoffee();
       setTimeout(hallChat, 1200);
+      setTimeout(transConsult, 2200);
       setTimeout(captainWalk, 6500);
     }
 
