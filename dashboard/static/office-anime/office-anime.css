@@ -1,12 +1,12 @@
 /* Jinwoo 에이전트 — 12프레임 2K 고화질 애니 사무실 스타일 */
-.oa-stage { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; border: 2px solid #334155; background: #0b101d; box-shadow: 0 12px 32px rgba(0,0,0,0.35); container-type: inline-size; }
-.oa-stage:fullscreen { width: 100vw; height: 100vh; max-width: none; border: 0; border-radius: 0; display: flex; align-items: center; justify-content: center; background: #050811; }
-.oa-stage:fullscreen .oa-canvas, .oa-stage:fullscreen .oa-hud { width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); inset: auto; }
-/* 모바일 가로 자동 회전 전체화면 (iOS·안드로이드 orientation.lock 미지원 시에도 100% 가로 게임 화면!) */
-.oa-stage.oa-fs-mock { position: fixed !important; inset: 0 !important; z-index: 9999 !important; width: 100vw !important; height: 100dvh !important; aspect-ratio: auto !important; border: 0 !important; border-radius: 0 !important; background: #050811 !important; display: flex; align-items: center; justify-content: center; }
-.oa-stage.oa-fs-rot { position: fixed !important; left: 50% !important; top: 50% !important; z-index: 9999 !important; width: 100dvh !important; height: 100vw !important; aspect-ratio: auto !important; transform: translate(-50%, -50%) rotate(90deg); transform-origin: center center; border: 0 !important; border-radius: 0 !important; background: #050811 !important; }
-.oa-stage.oa-fs-rot .oa-canvas, .oa-stage.oa-fs-rot .oa-hud { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(100dvh, calc(100vw * 16 / 9)); height: min(100vw, calc(100dvh * 9 / 16)); inset: auto; }
+.oa-stage { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; border: 2px solid #334155; background: #0b101d; box-shadow: 0 12px 32px rgba(0,0,0,0.35); }
+.oa-rot-wrap { position: relative; width: 100%; height: 100%; container-type: inline-size; }
+.oa-stage:fullscreen, .oa-stage.oa-fs-mock { position: fixed !important; inset: 0 !important; z-index: 9999 !important; width: 100vw !important; height: 100dvh !important; max-width: none !important; aspect-ratio: auto !important; border: 0 !important; border-radius: 0 !important; display: flex; align-items: center; justify-content: center; background: #050811 !important; }
+.oa-stage:fullscreen .oa-rot-wrap, .oa-stage.oa-fs-mock .oa-rot-wrap { width: min(100vw, calc(100dvh * 16 / 9)); height: min(100dvh, calc(100vw * 9 / 16)); }
+/* 모바일 세로 상태에서 전체화면 누르면 내부 래퍼를 90도 회전시켜 100% 가로 게임 화면으로 꽉 채움! */
+.oa-stage.oa-fs-rot .oa-rot-wrap { position: fixed !important; left: 50% !important; top: 50% !important; width: min(100dvh, calc(100vw * 16 / 9)) !important; height: min(100vw, calc(100dvh * 9 / 16)) !important; transform: translate(-50%, -50%) rotate(90deg) !important; transform-origin: center center !important; }
 .oa-stage.oa-fs-rot .oa-ctrl-hint { display: none; }
+.oa-stage:fullscreen .oa-brief-bar, .oa-stage.oa-fs-mock .oa-brief-bar, .oa-stage.oa-fs-rot .oa-brief-bar { right: 132px; }
 .oa-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: pointer; }
 .oa-hud { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .oa-sign { position: absolute; transform: translate(-50%, -50%); padding: 2px 8px; border-radius: 6px; color: #fff; font-weight: 800; font-size: clamp(8.5px, 1.12cqw, 13px); white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }

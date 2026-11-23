@@ -96,15 +96,17 @@
   function create(root, opts = {}) {
     root.innerHTML = `
       <div class="oa-stage">
-        <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
-        <div class="oa-hud"></div>
-        <div class="oa-ctrl-hint">🎮 캡틴 조작: 방향키 / WASD 이동 · 바닥 클릭 · 1 인사 · 2 커피 · E 자리 복귀</div>
-        <div class="oa-brief-bar">
-          <button type="button" class="oa-b-btn start" data-brief-start>📋 보고해</button>
-          <button type="button" class="oa-b-btn stop" data-brief-stop hidden>✋ 오늘은 여기까지 하지</button>
+        <div class="oa-rot-wrap">
+          <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
+          <div class="oa-hud"></div>
+          <div class="oa-ctrl-hint">🎮 캡틴 조작: 방향키 / WASD 이동 · 바닥 클릭 · 1 인사 · 2 커피 · E 자리 복귀</div>
+          <div class="oa-brief-bar">
+            <button type="button" class="oa-b-btn start" data-brief-start>📋 보고해</button>
+            <button type="button" class="oa-b-btn stop" data-brief-stop hidden>✋ 오늘은 여기까지 하지</button>
+          </div>
+          <button type="button" class="oa-fs-btn" title="전체화면 전환">⛶ 전체화면</button>
+          <div class="oa-modal-back" hidden><div class="oa-modal"></div></div>
         </div>
-        <button type="button" class="oa-fs-btn" title="전체화면 전환">⛶ 전체화면</button>
-        <div class="oa-modal-back" hidden><div class="oa-modal"></div></div>
       </div>`;
     const stage = root.querySelector('.oa-stage');
     const canvas = root.querySelector('.oa-canvas');
