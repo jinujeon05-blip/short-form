@@ -22,6 +22,14 @@
   .oa-fs-btn { position: absolute; right: 12px; bottom: 12px; z-index: 15; border: 1px solid rgba(255,255,255,0.28); background: rgba(15,23,42,0.78); color: #f8fafc; border-radius: 8px; padding: 6px 11px; font: 700 12px var(--f); cursor: pointer; backdrop-filter: blur(4px); }
   .oa-fs-btn:hover { background: rgba(37,99,235,0.9); border-color: #93c5fd; }
   .oa-ctrl-hint { position: absolute; left: 12px; bottom: 12px; z-index: 15; background: rgba(15,23,42,0.78); border: 1px solid rgba(255,255,255,0.2); color: #e2e8f0; border-radius: 8px; padding: 5px 11px; font: 700 11.5px var(--f); backdrop-filter: blur(4px); pointer-events: none; }
+  .oa-brief-bar { position: absolute; right: 108px; bottom: 12px; z-index: 15; display: flex; gap: 6px; }
+  .oa-b-btn { border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 6px 13px; font: 800 12.5px var(--f); cursor: pointer; backdrop-filter: blur(4px); box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
+  .oa-b-btn.start { background: rgba(37,99,235,0.92); color: #fff; border-color: #93c5fd; }
+  .oa-b-btn.start:hover { background: #1d4ed8; }
+  .oa-b-btn.stop { background: rgba(220,38,38,0.94); color: #fff; border-color: #fca5a5; animation: oaPulse 1.6s infinite; }
+  .oa-b-btn.stop:hover { background: #b91c1c; }
+  .oa-b-btn[hidden] { display: none; }
+  @keyframes oaPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(248,113,113,0.55); } 50% { box-shadow: 0 0 0 8px rgba(248,113,113,0); } }
   .oa-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: pointer; }
   .oa-hud { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
   .oa-sign { position: absolute; transform: translate(-50%, -50%); padding: 2px 9px; border-radius: 6px; color: #fff; font-weight: 800; font-size: clamp(9px, 1.15cqw, 13.5px); white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
@@ -59,6 +67,7 @@
   <h1>Jinwoo 에이전트 · 12프레임 고화질 애니 사무실 <span class="pill">6명 시연 (캡틴·비서실장·시각 정보·메뉴 검사관·수석 번역관·선별팀)</span></h1>
   <div class="btns">
     <button type="button" class="btn green" id="b-demo">▶ 6명 전체 시연</button>
+    <button type="button" class="btn" id="b-brief" style="background:#1d4ed8;border-color:#60a5fa">📋 보고해</button>
     <button type="button" class="btn" id="b-cof">☕ 비서 커피 서빙</button>
     <button type="button" class="btn" id="b-chat">💬 복도 수다</button>
     <button type="button" class="btn" id="b-cap">🚶 캡틴 산책</button>
@@ -72,13 +81,14 @@
   <div id="root"></div>
   <div class="log-box"><b>실시간 움직임 기록</b> (캐릭터를 클릭하면 웹툰 고화질 프로필 상태창이 열립니다)<ul id="log"></ul></div>
 </main>
-<script src="/static/office-anime/office-anime.js?v=17"></script>
+<script src="/static/office-anime/office-anime.js?v=19"></script>
 <script>
 const ul = document.getElementById('log');
 const app = window.OfficeAnime.create(document.getElementById('root'), {
   onLog: m => { const li = document.createElement('li'); li.textContent = `${new Date().toLocaleTimeString('ko-KR')} · ${m}`; ul.prepend(li); }
 });
 document.getElementById('b-demo').onclick = () => app.runDemo();
+document.getElementById('b-brief').onclick = () => app.startBriefing();
 document.getElementById('b-cof').onclick  = () => app.serveCoffee();
 document.getElementById('b-chat').onclick = () => app.hallChat();
 document.getElementById('b-cap').onclick  = () => app.captainWalk();

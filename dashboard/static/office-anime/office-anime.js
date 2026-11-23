@@ -86,6 +86,10 @@
         <canvas class="oa-canvas" width="${W}" height="${H}"></canvas>
         <div class="oa-hud"></div>
         <div class="oa-ctrl-hint">🎮 캡틴 조작: 방향키 / WASD 이동 · 바닥 클릭 · 1 인사 · 2 커피 · E 자리 복귀</div>
+        <div class="oa-brief-bar">
+          <button type="button" class="oa-b-btn start" data-brief-start>📋 보고해</button>
+          <button type="button" class="oa-b-btn stop" data-brief-stop hidden>✋ 오늘은 여기까지 하지</button>
+        </div>
         <button type="button" class="oa-fs-btn" title="전체화면 전환">⛶ 전체화면</button>
         <div class="oa-modal-back" hidden><div class="oa-modal"></div></div>
       </div>`;
@@ -147,6 +151,7 @@
     }
 
     function serveCoffee() {
+      if (briefingActive) return;
       const cl = npcs.claude, cap = npcs.captain;
       if (cl.mode === 'walk') return;
       log('☕ 비서실장이 12프레임으로 커피를 타러 이동');
@@ -177,6 +182,7 @@
     }
 
     function captainWalk() {
+      if (briefingActive) return;
       const cap = npcs.captain;
       if (cap.mode === 'walk') return;
       log('🚶 캡틴이 계단·통로를 따라 오른쪽 테라스로 산책');
@@ -195,6 +201,7 @@
     }
 
     function hallChat() {
+      if (briefingActive) return;
       const f = npcs.finder, a = npcs.agy;
       if (f.mode === 'walk' || a.mode === 'walk') return;
       let ready = 0;
@@ -220,6 +227,7 @@
     }
 
     function transConsult() {
+      if (briefingActive) return;
       const tr = npcs.translator;
       if (!tr || tr.mode === 'walk') return;
       log('🌐 수석 번역관이 번역 톤 상의를 위해 중앙 복도로 이동');
@@ -238,6 +246,7 @@
     }
 
     function sorterCheck() {
+      if (briefingActive) return;
       const sr = npcs.sorter;
       if (!sr || sr.mode === 'walk') return;
       log('📦 선별팀 팀장이 자료 분류 보고를 위해 중앙 복도로 이동');
@@ -315,11 +324,20 @@
       const targetW = targetH * (im.naturalWidth / im.naturalHeight);
       const bob = walking ? Math.sin(n.walkDist * 1.1) * 1.8 : 0;
 
+      // 캡틴에게 공손히 허리 숙여 인사하는 보우(Bow) 모션!
+      let bowScaleY = 1, bowScaleX = 1;
+      if (n.bowStart && n.bowUntil && t < n.bowUntil) {
+        const p = Math.min(1, Math.max(0, (t - n.bowStart) / (n.bowUntil - n.bowStart)));
+        const dip = Math.sin(p * Math.PI); // 0 -> 1 -> 0 부드러운 인사 곡선
+        bowScaleY = 1 - dip * 0.14;
+        bowScaleX = 1 + dip * 0.04;
+      }
+
       ctx.save();
       ctx.fillStyle = 'rgba(15, 23, 42, 0.28)';
       ctx.beginPath(); ctx.ellipse(cx, cy + 6, 26, 7.5, 0, 0, Math.PI * 2); ctx.fill();
       ctx.translate(cx, cy + bob);
-      if (flipX) ctx.scale(-1, 1);
+      ctx.scale((flipX ? -1 : 1) * bowScaleX, bowScaleY);
       ctx.drawImage(im, -targetW / 2, -targetH, targetW, targetH);
       ctx.restore();
     }
@@ -840,8 +858,174 @@
       if (e.key === 'Escape' && !modalBack.hidden) closeTalkModal(false);
     });
 
+    // ---------------------------------------------------------------- 전체 업무 보고 (캡틴 "보고해" → 비서실장 단상 진행 + 전원 빨간줄 정렬 + 차례 보고 + "오늘은 여기까지 하지" 전원 인사!)
+    const briefStartBtn = root.querySelector('[data-brief-start]');
+    const briefStopBtn  = root.querySelector('[data-brief-stop]');
+    let briefingActive = false;
+    let briefTimers = [];
+
+    const YESTERDAY_REPORTS = {
+      finder:     '📷 전일 음식 사진 24장 선별·고화질 보정 완료했습니다!',
+      agy:        '🔍 전일 디지털 메뉴판 3곳 가격·오타 전수 검수 마쳤습니다!',
+      translator: '🌐 전일 한·베·영·중 4개국어 메뉴 번역 48건 검수 완료했습니다!',
+      sorter:     '📦 전일 신규 가게 원본 메뉴·사진 자료 1차 선별 끝냈습니다!',
+    };
+
+    function clearBriefTimers() {
+      for (const id of briefTimers) clearTimeout(id);
+      briefTimers = [];
+    }
+
+    function walkNpcSafe(id, tx, ty, opts2 = {}) {
+      const n = npcs[id];
+      const pts = findPath(n.x, n.y, tx, ty);
+      if (!pts) {
+        sendPath(id, [[tx, ty]], opts2);
+      } else {
+        sendPath(id, pts, opts2);
+      }
+    }
+
+    function startBriefing() {
+      if (briefingActive) return;
+      briefingActive = true;
+      clearBriefTimers();
+      if (activeTalkNpc) closeTalkModal(false);
+      briefStartBtn.hidden = true;
+      briefStopBtn.hidden = false;
+
+      const cap = npcs.captain;
+      const cl = npcs.claude;
+      const staffIds = Object.keys(CHARS).filter(id => id !== 'captain' && id !== 'claude');
+
+      // 캡틴은 대표석으로 착석(또는 단상 중앙)하며 지시
+      cap.path = []; cap.onArrive = null;
+      cap.x = CHARS.captain.home[0]; cap.y = CHARS.captain.home[1];
+      cap.mode = 'idle'; cap.dir = 'front';
+      cap.bubble = '📋 전원 단상 앞으로 모여 전일 업무 보고해!';
+      cap.bubbleType = 'meet';
+      log('📋 캡틴: "전원 보고해!" — 전체 업무 보고 시작');
+
+      // 비서실장: 단상 좌측(x=39.5, y=21.0)으로 올라가 남쪽(front)을 보며 진행!
+      let arrived = 0;
+      const need = 1 + staffIds.length;
+
+      const beginSequence = () => {
+        if (!briefingActive) return;
+        cap.bubble = '';
+        cl.dir = 'front';
+        cl.bubble = '📢 전원 정렬 완료! 차례대로 전일 진행 내역 보고하세요.';
+        cl.bubbleType = 'meet';
+        log('📢 비서실장이 단상에서 전일 업무 보고를 진행합니다');
+
+        let delay = 2200;
+        staffIds.forEach((sid, idx) => {
+          const c = CHARS[sid];
+          const n = npcs[sid];
+          briefTimers.push(setTimeout(() => {
+            if (!briefingActive) return;
+            cl.bubble = idx === 0
+              ? `📢 ${c.name}, 전일 진행 내역 보고하세요.`
+              : `📢 다음, ${c.name} 보고하세요.`;
+            cl.bubbleType = '';
+            // 이전 보고자 말풍선 정리
+            if (idx > 0) npcs[staffIds[idx - 1]].bubble = '';
+            briefTimers.push(setTimeout(() => {
+              if (!briefingActive) return;
+              n.dir = 'back';
+              n.bubble = YESTERDAY_REPORTS[sid] || `📋 ${c.name} 전일 업무 완료 보고드립니다!`;
+              n.bubbleType = 'ok';
+              log(`${c.name}: "${n.bubble}"`);
+            }, 900));
+          }, delay));
+          delay += 3800;
+        });
+
+        // 모든 직원 보고가 자연스럽게 끝나면 마무리 안내
+        briefTimers.push(setTimeout(() => {
+          if (!briefingActive) return;
+          if (staffIds.length) npcs[staffIds[staffIds.length - 1]].bubble = '';
+          cl.bubble = '📢 이상 전일 보고를 마쳤습니다, 캡틴!';
+          cl.bubbleType = 'ok';
+          briefTimers.push(setTimeout(() => { if (briefingActive) endBriefing(); }, 2200));
+        }, delay));
+      };
+
+      const onOneArrived = () => {
+        if (++arrived === need) beginSequence();
+      };
+
+      // 비서실장 단상 이동 (좌측 계단 경유 A* 길찾기)
+      walkNpcSafe('claude', 39.5, 21.0, {
+        bubble: '📋 단상에서 보고 진행 준비 중…',
+        onArrive: () => { cl.mode = 'stand'; cl.dir = 'front'; cl.bubble = ''; onOneArrived(); }
+      });
+
+      // 모든 직원 빨간줄 위치(y=29.8%, x=40.5..59.5 균등 정렬)로 이동 후 북쪽(back) 캡틴 바라보기!
+      const count = staffIds.length;
+      staffIds.forEach((sid, idx) => {
+        const n = npcs[sid];
+        const slotX = count === 1 ? 50.0 : (39.5 + (idx / (count - 1)) * 21.0);
+        const slotY = 29.8;
+        walkNpcSafe(sid, slotX, slotY, {
+          bubble: '🏃 보고 정렬 이동 중…',
+          onArrive: () => { n.mode = 'stand'; n.dir = 'back'; n.bubble = ''; onOneArrived(); }
+        });
+      });
+    }
+
+    function endBriefing() {
+      if (!briefingActive) return;
+      briefingActive = false;
+      clearBriefTimers();
+      briefStartBtn.hidden = false;
+      briefStopBtn.hidden = true;
+
+      const cap = npcs.captain;
+      const cl = npcs.claude;
+      const staffIds = Object.keys(CHARS).filter(id => id !== 'captain' && id !== 'claude');
+
+      cap.bubble = '✋ 오늘은 여기까지 하지. 모두 수고했다!';
+      cap.bubbleType = 'meet';
+      log('✋ 캡틴: "오늘은 여기까지 하지." — 보고 종료');
+
+      // 0.7초 뒤 비서실장 + 전체 직원 동시 인사(Bow 모션) + "네, 알겠습니다 캡틴!"
+      const bowT = performance.now() / 1000 + 0.65;
+      briefTimers.push(setTimeout(() => {
+        const nowS = performance.now() / 1000;
+        const allStaff = ['claude', ...staffIds];
+        for (const sid of allStaff) {
+          const n = npcs[sid];
+          n.path = []; n.onArrive = null;
+          n.mode = 'stand';
+          n.dir = (sid === 'claude') ? 'east' : 'back';
+          n.bowStart = nowS;
+          n.bowUntil = nowS + 1.45;
+          n.bubble = '🙇 네, 알겠습니다 캡틴!';
+          n.bubbleType = 'ok';
+        }
+        log('🙇 전체 직원: "네, 알겠습니다 캡틴!" (일동 인사)');
+
+        // 인사 끝난 뒤(1.8초 후) 각자 자리로 A* 안전 복귀!
+        briefTimers.push(setTimeout(() => {
+          cap.bubble = '';
+          for (const sid of allStaff) {
+            const n = npcs[sid];
+            const c = CHARS[sid];
+            n.bubble = '';
+            walkNpcSafe(sid, c.home[0], c.home[1], {
+              onArrive: () => { n.mode = 'idle'; n.dir = c.facing; n.bubble = ''; }
+            });
+          }
+        }, 1800));
+      }, 650));
+    }
+
+    briefStartBtn.addEventListener('click', startBriefing);
+    briefStopBtn.addEventListener('click', endBriefing);
+
     setTimeout(runDemo, 1500);
-    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction };
+    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing };
   }
 
   window.OfficeAnime = { create };
