@@ -22,6 +22,7 @@ window.CATS = {
   seafood: { icon: "🦐", ko: "해산물 · 회", vi: "Hải sản · Gỏi cá", en: "Seafood & sashimi", zh: "海鲜 · 刺身", ja: "海鮮・刺身" },
   chinese: { icon: "🥟", ko: "중식 · 짜장 · 짬뽕", vi: "Món Hoa kiểu Hàn", en: "Korean-Chinese", zh: "韩式中餐", ja: "韓国式中華" },
   japanese: { icon: "🍣", ko: "일식", vi: "Món Nhật", en: "Japanese food", zh: "日料", ja: "日本料理" },
+  vietnamese: { icon: "🥢", ko: "베트남식", vi: "Món Việt", en: "Vietnamese food", zh: "越南菜", ja: "ベトナム料理" },
   bar:    { icon: "🍸", ko: "바 · 술집", vi: "Bar · Quán nhậu", en: "Bar & drinks", zh: "酒吧", ja: "バー・居酒屋" },
   photo:  { icon: "📸", ko: "사진관", vi: "Studio ảnh", en: "Photo studios", zh: "摄影工作室", ja: "写真館" },
   massage: { icon: "💈", ko: "이발관 · 마사지", vi: "Cắt tóc · Massage", en: "Barber & massage", zh: "理发 · 按摩", ja: "理髪・マッサージ" },
@@ -83,7 +84,7 @@ window.STORES = [
     type: { ko: "치킨 · 골뱅이 · 떡볶이 호프", vi: "Gà rán · Ốc · Tokbokki · Quán nhậu Hàn Quốc", en: "Korean fried chicken · Sea snails · Tteokbokki pub", zh: "韩式炸鸡 · 海螺 · 辣炒年糕 · 啤酒屋", ja: "韓国チキン・ツブ貝・トッポッキ・ビアホール" },
     keywords: "치뱅이 chibaengi 골뱅이치킨 golbaengi chicken 치킨 후라이드 양념 간장 반반 골뱅이 무침 골뱅이탕 숙회 떡볶이 고스트떡볶이 모듬튀김 바베큐치킨 닭도리탕 찜닭 오뎅탕 똥집 닭발 소떡소떡 마른안주 먹태 쥐포 호프 맥주 박닌 bac ninh ngọc hân công chúa gà rán gà chiên ốc trộn ốc luộc tokbokki mề gà chân gà nhậu fried chicken sea snail 炸鸡 海螺 年糕 啤酒 チキン ツブ貝 トッポッキ" },
   { id: "phothin", name: "퍼틴 PHỞ THÌN", sub: "미딩 직영점 · 13 Lò Đúc", url: "https://phothin.qrmenuasia.com",
-    region: "hanoi", cats: ["noodle"], tags: ["zalo", "photos"],
+    region: "hanoi", cats: ["vietnamese", "noodle"], tags: ["zalo", "photos"],
     address: "Lô 5, TT1 Đình Thôn, Mỹ Đình, Từ Liêm, Hà Nội",
     type: { ko: "하노이 전통 소고기 쌀국수", vi: "Phở bò truyền thống Hà Nội", en: "Traditional Hanoi beef phở", zh: "河内传统牛肉河粉", ja: "ハノイ伝統の牛肉フォー" },
     keywords: "퍼틴 pho thin phở thìn 13 lò đúc 쌀국수 소고기 쌀국수 퍼보 갈비 쌀국수 퍼쑤언 도가니 미딩 mỹ đình đình thôn từ liêm hà nội phở bò phở sườn nem rán phở cuốn bánh xèo quẩy beef pho rice noodle 牛肉河粉 排骨河粉 美庭 フォー 牛肉フォー" },
@@ -279,7 +280,7 @@ window.STORES = [
     type: { ko: "스포츠 바 · 버거 · 타코 · 수제 맥주 · 키즈 놀이방", vi: "Sports bar · Burger · Tacos · Bia thủ công · Khu vui chơi trẻ em", en: "Sports bar · Burgers · Tacos · Craft beer · Kids play area", zh: "体育酒吧 · 汉堡 · 塔可 · 精酿啤酒 · 儿童游乐区", ja: "スポーツバー・バーガー・タコス・クラフトビール・キッズスペース" },
     keywords: "스낵섁 스낵쉑 스낵샥 snack shack snackshack 스포츠바 sports bar 버거 햄버거 스매시버거 치즈버거 베이컨 치킨버거 타코 케사디야 나초 치킨윙 치킨텐더 팝콘치킨 클럽샌드위치 핫도그 감자튀김 츄러스 샐러드 수제맥주 생맥주 칼스버그 맥주타워 IPA 키즈메뉴 키즈카페 놀이방 아이 축구 중계 sunshine city ciputra burger tacos quesadilla nachos cánh gà khoai tây chiên bia tươi bia thủ công khu vui chơi trẻ em 汉堡 塔可 啤酒 儿童 ハンバーガー タコス ビール キッズ" },
   { id: "holoi", name: "퍼보 호러이 Phở Bò Hồ Lợi", sub: "Phở bò · Quẩy", url: "https://holoi.qrmenuasia.com", listing: true,
-    region: "hanoi", cats: ["noodle"], tags: ["photos"],
+    region: "hanoi", cats: ["vietnamese", "noodle"], tags: ["photos"],
     address: "28 ngõ 209 An Dương Vương, Phú Thượng, Tây Hồ, Hà Nội",
     type: { ko: "소고기 쌀국수 · 부위별 조합 · 수제 꿔이", vi: "Phở bò · Mix topping tuỳ thích · Quẩy nhà làm", en: "Beef phở · Mix-and-match cuts · House-made quẩy", zh: "牛肉河粉 · 部位自由搭配 · 自制油条", ja: "牛肉フォー・部位の組み合わせ自由・自家製クァイ" },
     keywords: "퍼보 호러이 호러이 호 러이 포보 호로이 hồ lợi ho loi pho bo ho loi phở hồ lợi phở bò 쌀국수 소고기쌀국수 퍼 포 하노이 쌀국수 맛집 로컬 쌀국수 타이 짜이 찐 남 저우 건 란 로이 솟방 갈비 꿔이 튀김빵 완자 목 육포 보코 포장 phú thượng tây hồ an dương vương hà nội phở tái chín nạm gầu gân lăn lõi sốt vang sườn nhừ tuỷ bát đặc biệt quẩy bò khô beef noodle soup pho beef rib sốt vang 河粉 牛肉粉 油条 フォー 牛肉 クァイ" },
@@ -698,7 +699,7 @@ window.STORES = [
     keywords: "메르밀 메르 밀 mereumil 하노이 메밀 메밀국수 메밀면 소바 냉메밀 땡초메밀 온메밀 우삼겹 온메밀 들기름 메밀 들기름막국수 비빔메밀 콩국수 메밀 콩국수 우삼겹 짬뽕 메밀 오뎅소바 새우튀김 등심돈까스 치즈돈까스 돈까스 고기왕만두 만두 콩물 mỹ đình mễ trì từ liêm hà nội nhà hàng hàn quốc mì kiều mạch soba tonkatsu korean restaurant 荞麦面 そば 맛집"
   },
   { id: "jenniemom", name: "분짜 제니맘 Bún Chả Jenniemom", sub: "숯불 분짜 · 분짜짠 · 분목 · 넴 · 반똠 · 분짜 세트", url: "https://jenniemom.qrmenuasia.com", listing: true,
-    region: "hanoi", cats: ["noodle", "bbq"], tags: ["photos"],
+    region: "hanoi", cats: ["vietnamese", "noodle", "bbq"], tags: ["photos"],
     address: "Khu Sông Đà (gần CT4 Sông Đà), Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/B%C3%BAn+Ch%E1%BA%A3+Jenniemom/@21.0177021,105.7805612,17z",
     type: { ko: "베트남 음식 · 하노이 분짜 · 넴 · 반똠 · 반미", vi: "Bún chả Hà Nội · Nem rán · Bánh tôm · Bánh mì", en: "Vietnamese · Hanoi bún chả · Fried spring rolls · Shrimp fritters · Bánh mì", zh: "越南菜 · 河内烤肉米线 · 炸春卷 · 虾饼 · 法棍", ja: "ベトナム料理・ハノイ式ブンチャー・揚げ春巻き・海老揚げ・バインミー" },
     keywords: "분짜 제니맘 분짜제니맘 jenniemom jennie mom bún chả jenniemom 하노이 분짜 숯불 분짜 분짜짠 분목 넴 짜조 반똠 반미 소불고기 반미 분짜 세트 베트남 음식 미딩 송다 ct4 bun cha bún chả chan bún mọc nem rán bánh tôm bánh mì trà đá trà tắc từ liêm mỹ đình sông đà hanoi hà nội vietnamese food grilled pork rice noodles spring rolls" },
@@ -849,6 +850,48 @@ window.STORES = [
     address: "6 P. Bùi Thị Xuân, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%23DA+BANG+Chicken+%EB%8B%A4%EB%B0%A9%EC%B9%98%ED%82%A8+%EB%B0%95%EB%8B%8C%EB%B3%B8%EC%A0%90/@21.1713337,106.0579998,17z",
     type: { ko: "한국식 치킨 · 분식 · 피자", vi: "Gà rán Hàn Quốc · Đồ ăn vặt · Pizza", en: "Korean fried chicken · Snacks · Pizza", zh: "韩式炸鸡 · 小吃 · 披萨", ja: "韓国チキン・軽食・ピザ" },
     keywords: "다방치킨 다방 박닌본점 DA BANG Chicken dabang 치킨 후라이드 양념치킨 장작통닭 떡볶이 피자 Bắc Ninh gà rán Hàn Quốc Korean fried chicken 韩式炸鸡 韓国チキン"
+  },
+  { id: "fujiro", name: "후지로 판께빈 FUJIRO Phan Kế Bính", sub: "돈카츠 · 카츠토지 · 카레라이스 · 덮밥 · 굴튀김", url: "https://fujiro.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese"], tags: ["photos"],
+    address: "47 P. Phan Kế Bính, Giảng Võ, Hà Nội", map: "https://www.google.com/maps/place/FUJIRO%E3%80%90Phan+K%E1%BA%BF+B%C3%ADnh%E3%80%91/@21.0359958,105.8084057,17z",
+    type: { ko: "일식 · 돈카츠 · 카츠토지 · 카레", vi: "Nhà hàng Nhật · Tonkatsu · Katsutoji · Cơm cà ri", en: "Japanese tonkatsu · Katsutoji · Curry rice", zh: "日式炸猪排 · 鸡蛋炸排锅 · 咖喱饭", ja: "とんかつ・カツとじ・カレーライス" },
+    keywords: "후지로 판께빈 FUJIRO Phan Kế Bính フジロ とんかつ 돈카츠 豚カツ 카츠토지 가츠토지 카레라이스 굴튀김 일식 하노이 Giảng Võ Hà Nội"
+  },
+  { id: "okonomiyakimiyakoya", name: "미야코야 MIYAKOYA", sub: "오코노미야키 · 몬자야키 · 철판구이 · 야키니쿠", url: "https://okonomiyakimiyakoya.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese"], tags: ["photos"],
+    address: "25 Linh Lang, Ngọc Hà, Hà Nội", map: "https://www.google.com/maps/place/%E3%81%8A%E5%A5%BD%E3%81%BF%E6%9C%AC%E8%88%97%E3%81%BF%E3%82%84%E3%81%93%E5%B1%8B+%E3%83%8F%E3%83%8E%E3%82%A4%E5%BA%97Okonomiyaki+Miyakoya/@21.0358143,105.8090686,18z/data=!4m6!3m5!1s0x3135ab058f86fa01:0x388ccb390aee34d6!8m2!3d21.0359097!4d105.8106163",
+    type: { ko: "일식 · 오코노미야키 · 몬자 · 철판구이", vi: "Món Nhật · Okonomiyaki · Monjayaki · Teppanyaki", en: "Japanese okonomiyaki · Monja · Teppanyaki", zh: "日料 · 大阪烧 · 文字烧 · 铁板烧", ja: "お好み焼き・もんじゃ・鉄板焼き" },
+    keywords: "미야코야 오코노미야키 미야코야 하노이 お好み本舗みやこ屋 Okonomiyaki Miyakoya 몬자 몬자야키 철판구이 야키소바 호르몬 Linh Lang Hanoi 일식 일본 음식 monjayaki teppanyaki bánh xèo Nhật"
+  },
+  { id: "sumibaozi", name: "수미보오즈 SUMIBOZU 炭ぼうず", sub: "숯불 꼬치구이 · 닭꼬치 · 츠쿠네 · 가라아게 · 일본식 안주", url: "https://sumibaozi.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese","bar"], tags: ["photos"],
+    address: "ngõ 535 P. Kim Mã, Giảng Võ, Hà Nội", map: "https://www.google.com/maps/place/%EC%88%98%EB%AF%B8%EB%B3%B4%EC%98%A4%EC%A6%88/@21.0291465,105.810392,17z",
+    type: { ko: "일식 · 숯불 꼬치구이 · 이자카야", vi: "Nhà hàng Nhật · Gà nướng than · Izakaya", en: "Japanese charcoal yakitori · Izakaya", zh: "日式炭火烤鸡肉串 · 居酒屋", ja: "炭火焼き鳥・串焼き・居酒屋" },
+    keywords: "수미보오즈 스미보즈 SUMIBOZU 炭ぼうず Sumibozu Gà nướng than 꼬치구이 야키토리 닭꼬치 츠쿠네 가라아게 이자카야 일식 하노이 Kim Mã Giảng Võ Hà Nội"
+  },
+  { id: "jeilnaengsam", name: "제일냉삼 JEIL NAENGSAM", sub: "냉동삼겹살 · 항정살 · 우삼겹 · 냉면 · 김치찜", url: "https://jeilnaengsam.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["bbq","korean"], tags: [],
+    address: "272 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%EC%A0%9C%EC%9D%BC%EB%83%89%EC%82%BC/@21.1714655,106.0574095,21z",
+    type: { ko: "한식 · 냉동삼겹살 전문점 · 고기구이", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ đông lạnh", en: "Korean BBQ · Frozen pork belly specialist", zh: "韩式烤肉 · 冷冻五花肉专门店", ja: "韓国焼肉・冷凍サムギョプサル専門店" },
+    keywords: "제일냉삼 Jeil Naengsam Nhà hàng Jeil 냉동삼겹살 냉삼 박닌 Bắc Ninh 삼겹살 항정살 김치찜 냉면 Ngọc Hân Công Chúa"
+  },
+  { id: "quananngonhdt", name: "꽌안응온 Quán Ăn Ngon", sub: "전골 · 해산물 · 쌀국수 · 반꾸온 · 베트남 전통 요리", url: "https://quananngonhdt.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["vietnamese", "seafood","noodle"], tags: ["photos"],
+    address: "25T2 Hoàng Đạo Thúy, Trung Hòa, Cầu Giấy, Hà Nội", map: "https://www.google.com/maps/place/Qu%C3%A1n+%C4%82n+Ngon+-+Ho%C3%A0ng+%C4%90%E1%BA%A1o+Thu%C3%BD/@21.0076425,105.8023123,18z/data=!4m6!3m5!1s0x3135aca0cbcdf525:0x3a4d28ca884316da!8m2!3d21.0067644!4d105.8016773!16s%2Fg%2F12vrd7h2s",
+    type: { ko: "베트남 전통 요리 · 전골 · 해산물 · 쌀국수", vi: "Ẩm thực Việt · Lẩu · Hải sản · Bún phở", en: "Vietnamese cuisine · Hotpot · Seafood · Noodles", zh: "越南传统美食 · 火锅 · 海鲜 · 米粉", ja: "ベトナム伝統料理・鍋・海鮮・麺料理" },
+    keywords: "꽌안응온 Quán Ăn Ngon Hoàng Đạo Thúy 하노이 베트남 음식 쌀국수 반쎄오 넴루이 전골 해산물 반꾸온 분보후에 껌땀 Hanoi Vietnamese restaurant hotpot seafood banh xeo"
+  },
+  { id: "nolowachicken", name: "놀로와 치킨 NOLLOWA CHICKEN", sub: "후라이드 · 양념 · 바삭치킨 · 떡볶이 · 비빔밥 · 전골", url: "https://nolowachicken.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["chicken","korean"], tags: ["photos"],
+    address: "BT 01 11, Khu đô thị Mỗ Lao, Hà Đông, Hà Nội", map: "https://www.google.com/maps/place/Nollowa+Chicken/@20.9876768,105.7847243,20z/data=!4m6!3m5!1s0x3135ad8859e6c851:0x9d2a98cca7dc95fc!8m2!3d20.9873619!4d105.7843375!16s%2Fg%2F11trf_s07y",
+    type: { ko: "한식 · 치킨 · 분식 · 전골", vi: "Gà rán Hàn Quốc · Món ăn vặt · Lẩu Hàn", en: "Korean fried chicken · Snacks · Hot pot", zh: "韩式炸鸡 · 小吃 · 火锅", ja: "韓国チキン・粉食・チョンゴル" },
+    keywords: "놀로와 치킨 놀로와치킨 Nollowa Chicken NOLLOWA CHICKEN Mo Lao Ha Dong Hanoi 하노이 하동 모라오 후라이드 양념치킨 뿌링클 바삭치킨 떡볶이 로제떡볶이 돌솥비빔밥 막국수 짬뽕 전골 부대찌개 Korean fried chicken gà rán Hàn Quốc"
+  },
+  { id: "bunchadakkim", name: "분짜닥킴 Bún Chả Đắc Kim", sub: "분짜 · 게살 춘권 · 분넴꾸어베 · 하노이 미쉐린 셀렉티드", url: "https://bunchadakkim.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["vietnamese","noodle"], tags: ["photos"],
+    address: "1 P. Hàng Mành, Phố cổ Hà Nội, Hoàn Kiếm, Hà Nội", map: "https://www.google.com/maps/place/%EB%B6%84%EC%A7%9C%EB%8B%A5%ED%82%B4/@21.0322542,105.8433386,17z/data=!4m6!3m5!1s0x3135abbe40899a17:0x9aa20a2ad5a0f0e4!8m2!3d21.0322493!4d105.8482095!16s%2Fg%2F1thpz5ms",
+    type: { ko: "베트남 하노이 분짜 · 게살 춘권 (1966년부터)", vi: "Bún chả Hà Nội · Nem cua bể (từ năm 1966)", en: "Hanoi bún chả · Crab spring rolls (since 1966)", zh: "河内烤肉米线 · 蟹肉春卷（始于1966年）", ja: "ハノイ名物ブンチャー・蟹春巻き（1966年創業）" },
+    keywords: "분짜닥킴 분짜 닥킴 Bún Chả Đắc Kim Bun Cha Dac Kim 하노이 분짜 맛집 넴꾸어베 구시가지 항망 미쉐린"
   },
 ];
 window.SI = {

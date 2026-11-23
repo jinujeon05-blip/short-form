@@ -165,6 +165,13 @@ const SHOPS = {
   ganghodong: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef', 'Pork'], country: 'VN', currency: 'VND', og: 'img/lagalbi.jpg' },
   sangdiegopizza: { type: 'Restaurant', cuisine: ['Western', 'Pizza', 'Steak', 'Pasta', 'BBQ Ribs'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   dabangchicken: { type: 'Restaurant', cuisine: ['Korean', 'Fried Chicken', 'Pizza'], country: 'VN', currency: 'VND', og: 'img/fried.jpg' },
+  fujiro: { type: 'Restaurant', cuisine: ['Japanese', 'Tonkatsu', 'Curry Rice'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  okonomiyakimiyakoya: { type: 'Restaurant', cuisine: ['Japanese', 'Okonomiyaki', 'Monjayaki', 'Teppanyaki'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  sumibaozi: { type: 'Restaurant', cuisine: ['Japanese', 'Yakitori', 'Izakaya'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  jeilnaengsam: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Pork Belly'], country: 'VN', currency: 'VND', og: 'img/p1.jpg' },
+  quananngonhdt: { type: 'Restaurant', cuisine: ['Vietnamese', 'Hotpot', 'Seafood'], country: 'VN', currency: 'VND', og: 'img/banhxeo.jpg' },
+  nolowachicken: { type: 'Restaurant', cuisine: ['Korean', 'Fried Chicken', 'Korean Snacks'], country: 'VN', currency: 'VND', og: 'img/fried.jpg' },
+  bunchadakkim: { type: 'Restaurant', cuisine: ['Vietnamese', 'Bun Cha', 'Spring Rolls'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

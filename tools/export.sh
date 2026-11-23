@@ -110,6 +110,13 @@ name() {
     ganghodong) echo "강호동 백정" ;;
     sangdiegopizza) echo "상디에고 피자 & 그릴" ;;
     dabangchicken) echo "다방치킨" ;;
+    fujiro) echo "후지로 판께빈" ;;
+    okonomiyakimiyakoya) echo "미야코야" ;;
+    sumibaozi) echo "수미보오즈" ;;
+    jeilnaengsam) echo "제일냉삼" ;;
+    quananngonhdt) echo "꽌안응온" ;;
+    nolowachicken) echo "놀로와치킨" ;;
+    bunchadakkim) echo "분짜닥킴" ;;
     *) echo "$1" ;;
   esac
 }

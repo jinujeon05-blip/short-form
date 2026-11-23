@@ -1,0 +1,52 @@
+/* Jinwoo 에이전트 3D 사무실 (별도 시험 공간, 2026-11-22) */
+.o3-root { position: relative; width: 100%; aspect-ratio: 16 / 9; min-height: 300px; border-radius: 14px; overflow: hidden; background: #1d2230; touch-action: none; }
+.o3-root canvas { display: block; width: 100% !important; height: 100% !important; }
+.o3-loading { position: absolute; inset: 0; display: grid; place-items: center; color: #cfd6e6; font: 600 14px/1.4 system-ui, 'Malgun Gothic', sans-serif; }
+.o3-tags { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.o3-tag { position: absolute; transform: translate(-50%, -100%); white-space: nowrap; text-align: center; font: 600 11px/1.25 system-ui, 'Malgun Gothic', sans-serif; }
+.o3-tag .nm { display: inline-block; padding: 1px 6px; border-radius: 8px; background: rgba(15, 20, 32, .72); color: #fff; }
+.o3-tag.me .nm { background: #c8a24a; color: #1b1406; }
+.o3-tag .bb { display: block; margin: 0 auto 3px; max-width: 170px; padding: 3px 8px; border-radius: 10px; background: #fff; color: #1d2230; box-shadow: 0 2px 6px rgba(0,0,0,.25); white-space: normal; }
+.o3-tag .bb:empty { display: none; }
+.o3-tag .bb.work { background: #e8f4ff; }
+.o3-tag .bb.done { background: #e9f8ec; }
+.o3-hint { position: absolute; left: 10px; bottom: 8px; color: rgba(255,255,255,.7); font: 11px system-ui, 'Malgun Gothic', sans-serif; pointer-events: none; }
+@media (max-width: 640px) { .o3-root { aspect-ratio: 4 / 3; min-height: 0; } .o3-tag { font-size: 9.5px; } .o3-tag .nm { padding: 0 4px; } .o3-tag .bb { max-width: 120px; } }
+
+/* 단독 시험 페이지 */
+.o3-page { margin: 0; background: #12151d; color: #e7ebf3; font: 14px/1.5 system-ui, 'Malgun Gothic', sans-serif; }
+.o3-topbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding: 12px 16px; }
+.o3-topbar h1 { margin: 0; font-size: 17px; }
+.o3-pill { display: inline-block; white-space: nowrap; margin-left: 6px; padding: 2px 8px; border-radius: 10px; background: #26304a; font-size: 11px; font-weight: 500; }
+.o3-controls { display: flex; flex-wrap: wrap; gap: 6px; }
+.o3-btn { padding: 6px 10px; border: 1px solid #3a4560; border-radius: 8px; background: #1e2638; color: #e7ebf3; font: inherit; font-size: 13px; cursor: pointer; text-decoration: none; }
+.o3-btn.green { background: #2f7d4f; border-color: #2f7d4f; }
+.o3-wrap { padding: 0 16px 24px; max-width: 1400px; margin: 0 auto; }
+.o3-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+@media (max-width: 640px) { .o3-grid { grid-template-columns: 1fr; } }
+.o3-card { background: #1a2030; border-radius: 12px; padding: 10px 14px; }
+.o3-card h2 { margin: 0 0 6px; font-size: 14px; }
+.o3-log { margin: 0; padding: 0; list-style: none; max-height: 180px; overflow: auto; font-size: 12px; color: #c3cbe0; }
+.o3-muted { color: #9aa5bf; font-size: 13px; }
+
+/* 🎨 꾸미기 창 (2026-11-22) */
+.o3-edit-btn { position: absolute; right: 10px; top: 10px; z-index: 5; padding: 6px 12px; border: 0; border-radius: 18px; background: rgba(255,255,255,.92); color: #1d2230; font: 700 13px system-ui, 'Malgun Gothic', sans-serif; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+.o3-edit-btn.on { background: #c8a24a; }
+.o3-editor { margin-top: 10px; padding: 12px 14px; border-radius: 12px; background: #1a2030; color: #e7ebf3; font: 13px/1.4 system-ui, 'Malgun Gothic', sans-serif; }
+.o3e-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px; }
+.o3e-who { padding: 5px 8px; border-radius: 8px; border: 1px solid #3a4560; background: #10141f; color: #e7ebf3; font: inherit; }
+.o3e-tip { color: #9aa5bf; font-size: 12px; }
+.o3e-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; border-top: 1px solid #262e42; }
+.o3e-lb { flex: 0 0 74px; color: #c3cbe0; }
+.o3e-ctl { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; min-width: 0; }
+.o3e-chip { padding: 4px 10px; border-radius: 14px; border: 1px solid #3a4560; background: #10141f; color: #e7ebf3; font: inherit; cursor: pointer; }
+.o3e-chip.on { background: #2f7d4f; border-color: #2f7d4f; }
+.o3e-sw { width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(255,255,255,.25); cursor: pointer; padding: 0; }
+.o3e-sw.on { border-color: #ffd76a; box-shadow: 0 0 0 2px #ffd76a; }
+.o3e-pick { position: relative; display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 2px dashed #6b7690; color: #c3cbe0; cursor: pointer; overflow: hidden; }
+.o3e-pick input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.o3e-foot { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 10px; }
+.o3e-foot button { padding: 6px 12px; border-radius: 8px; border: 1px solid #3a4560; background: #1e2638; color: #e7ebf3; font: inherit; cursor: pointer; }
+.o3e-foot .o3e-save { background: #2f7d4f; border-color: #2f7d4f; font-weight: 700; }
+.o3e-msg { color: #ffd76a; font-size: 12px; }
+@media (max-width: 640px) { .o3e-lb { flex-basis: 60px; font-size: 12px; } .o3e-sw, .o3e-pick { width: 26px; height: 26px; } .o3-edit-btn { top: 6px; right: 6px; padding: 5px 10px; font-size: 12px; } }

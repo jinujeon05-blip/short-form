@@ -1,0 +1,97 @@
+/* Jinwoo 에이전트 — 12프레임 2K 고화질 애니 사무실 스타일 */
+.oa-stage { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; border: 2px solid #334155; background: #0b101d; box-shadow: 0 12px 32px rgba(0,0,0,0.35); }
+.oa-rot-wrap { position: relative; width: 100%; height: 100%; container-type: inline-size; }
+.oa-stage:fullscreen, .oa-stage.oa-fs-mock { position: fixed !important; inset: 0 !important; z-index: 9999 !important; width: 100vw !important; height: 100dvh !important; max-width: none !important; aspect-ratio: auto !important; border: 0 !important; border-radius: 0 !important; display: flex; align-items: center; justify-content: center; background: #050811 !important; }
+.oa-stage:fullscreen .oa-rot-wrap, .oa-stage.oa-fs-mock .oa-rot-wrap { width: min(100vw, calc(100dvh * 16 / 9)); height: min(100dvh, calc(100vw * 9 / 16)); }
+/* 모바일 세로 상태에서 전체화면 누르면 내부 래퍼를 90도 회전시켜 100% 가로 게임 화면으로 꽉 채움! */
+.oa-stage.oa-fs-rot .oa-rot-wrap { position: fixed !important; left: 50% !important; top: 50% !important; width: min(100dvh, calc(100vw * 16 / 9)) !important; height: min(100vw, calc(100dvh * 9 / 16)) !important; transform: translate(-50%, -50%) rotate(90deg) !important; transform-origin: center center !important; }
+.oa-stage.oa-fs-rot .oa-ctrl-hint { display: none; }
+.oa-stage:fullscreen .oa-brief-bar, .oa-stage.oa-fs-mock .oa-brief-bar, .oa-stage.oa-fs-rot .oa-brief-bar { right: 132px; }
+/* 모바일/전체화면 좌측 하단 게임식 가상 엄지 조이스틱 (평소 투명 → 터치 시 흐릿하게 나타남!) */
+.oa-joy { position: absolute; left: 16px; bottom: 16px; z-index: 16; width: 92px; height: 92px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.22); touch-action: none; display: none; align-items: center; justify-content: center; opacity: 0.06; transition: opacity .18s ease, background .18s ease; }
+.oa-joy.active { opacity: 0.52; background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.48); backdrop-filter: blur(3px); }
+.oa-joy-knob { width: 38px; height: 38px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.72), rgba(226,232,240,0.42) 70%, rgba(148,163,184,0.32)); border: 1.5px solid rgba(255,255,255,0.68); box-shadow: 0 2px 8px rgba(0,0,0,0.25); pointer-events: none; transition: transform .06s linear; }
+.oa-stage.oa-fs-rot .oa-joy, .oa-stage.oa-fs-mock .oa-joy, .oa-stage:fullscreen .oa-joy { display: flex; }
+@media (pointer: coarse) { .oa-joy { display: flex; } .oa-ctrl-hint { display: none; } }
+.oa-stage.oa-fs-rot .oa-ctrl-hint, .oa-stage.oa-fs-mock .oa-ctrl-hint, .oa-stage:fullscreen .oa-ctrl-hint { left: 116px; }
+.oa-b-btn.cof { background: rgba(15,23,42,0.84); color: #fde68a; border-color: rgba(250,204,21,0.45); }
+.oa-b-btn.cof:hover { background: rgba(180,83,9,0.92); color: #fff; }
+/* 전체화면 전용 우측 상단 캡틴 액션 버튼 모음 (인사 · 커피 · 착석) */
+.oa-cap-acts { position: absolute; right: 12px; top: 12px; z-index: 16; display: none; gap: 6px; }
+.oa-stage:fullscreen .oa-cap-acts, .oa-stage.oa-fs-mock .oa-cap-acts, .oa-stage.oa-fs-rot .oa-cap-acts { display: flex; }
+.oa-c-btn { border: 1px solid rgba(255,255,255,0.3); background: rgba(15,23,42,0.78); color: #f8fafc; border-radius: 8px; padding: 5px 10px; font: 700 11.5px "Malgun Gothic", sans-serif; cursor: pointer; backdrop-filter: blur(4px); box-shadow: 0 3px 10px rgba(0,0,0,0.35); }
+.oa-c-btn:hover { background: rgba(245,158,11,0.9); color: #0f172a; border-color: #fde68a; }
+/* RPG 상단 좌측 레벨·퀘스트 HUD + 사운드 토글 */
+.oa-rpg-hud { position: absolute; left: 10px; top: 10px; z-index: 16; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.oa-rpg-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(15,23,42,0.82); border: 1.5px solid rgba(250,204,21,0.45); color: #f8fafc; border-radius: 99px; padding: 4px 10px; font: 800 11.5px "Malgun Gothic", sans-serif; backdrop-filter: blur(4px); box-shadow: 0 3px 10px rgba(0,0,0,0.35); }
+.oa-rpg-pill b { color: #facc15; }
+.oa-rpg-qcnt { background: #dc2626; color: #fff; border-radius: 99px; padding: 1px 6px; font-size: 10.5px; }
+.oa-rpg-qcnt.zero { background: #15803d; }
+.oa-snd-btn { border: 1px solid rgba(255,255,255,0.26); background: rgba(15,23,42,0.78); color: #cbd5e1; border-radius: 99px; padding: 4px 9px; font: 700 11px "Malgun Gothic", sans-serif; cursor: pointer; backdrop-filter: blur(4px); }
+.oa-snd-btn.on { border-color: #38bdf8; color: #e0f2fe; background: rgba(12,74,110,0.86); }
+/* 캐릭터 머리 위 RPG 느낌표(!) / 물음표(?) 퀘스트 마커 */
+.oa-quest { position: absolute; transform: translate(-50%, -100%); z-index: 9; width: clamp(20px, 2.1cqw, 28px); height: clamp(20px, 2.1cqw, 28px); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: clamp(13px, 1.45cqw, 18px); box-shadow: 0 4px 12px rgba(0,0,0,0.5); animation: oaBounce 0.9s ease-in-out infinite; pointer-events: none; }
+.oa-quest[hidden] { display: none; }
+.oa-quest.exc { background: linear-gradient(180deg, #fde047, #f59e0b); color: #451a03; border: 2px solid #fff; }
+.oa-quest.ask { background: linear-gradient(180deg, #4ade80, #16a34a); color: #052e16; border: 2px solid #fff; }
+@keyframes oaBounce { 0%,100% { transform: translate(-50%, -100%); } 50% { transform: translate(-50%, -132%); } }
+/* 대화창 안 RPG 퀘스트 카드 */
+.oa-m-quest { margin-top: 10px; padding: 9px 11px; border-radius: 10px; background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(30,41,59,0.95)); border: 1.5px solid #f59e0b; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.oa-m-quest.done { background: linear-gradient(135deg, rgba(34,197,94,0.18), rgba(30,41,59,0.95)); border-color: #22c55e; }
+.oa-m-quest-txt { font-size: 12px; color: #fef3c7; font-weight: 700; flex: 1; min-width: 150px; }
+.oa-m-quest.done .oa-m-quest-txt { color: #dcfce7; }
+.oa-m-quest-btn { border: 0; background: #f59e0b; color: #0f172a; border-radius: 8px; padding: 6px 11px; font: 800 11.5px "Malgun Gothic", sans-serif; cursor: pointer; white-space: nowrap; }
+.oa-m-quest.done .oa-m-quest-btn { background: #22c55e; color: #052e16; }
+.oa-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: pointer; }
+.oa-hud { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.oa-sign { position: absolute; transform: translate(-50%, -50%); padding: 2px 8px; border-radius: 6px; color: #fff; font-weight: 800; font-size: clamp(8.5px, 1.12cqw, 13px); white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+.oa-tag { position: absolute; transform: translate(-50%, 0); display: inline-flex; flex-direction: column; align-items: center; background: rgba(15,23,42,0.88); color: #fff; border: 1.5px solid rgba(255,255,255,0.22); border-radius: 8px; padding: 2px 7px; font-size: clamp(8px, 0.92cqw, 11.5px); line-height: 1.18; white-space: nowrap; transition: border-color .15s, box-shadow .15s, background .15s; }
+.oa-tag small { font-size: 0.8em; color: #cbd5e1; }
+.oa-tag.work { border-color: #38bdf8; background: rgba(12,74,110,0.92); box-shadow: 0 0 10px rgba(56,189,248,0.6); }
+.oa-tag.work small { color: #bae6fd; font-weight: 700; }
+.oa-tag.done { border-color: #4ade80; background: rgba(20,83,45,0.92); box-shadow: 0 0 10px rgba(74,222,128,0.55); }
+.oa-tag.done small { color: #bbf7d0; font-weight: 700; }
+.oa-tag.speaking { border-color: #facc15; box-shadow: 0 0 10px rgba(250,204,21,0.7); z-index: 6; }
+.oa-bub { position: absolute; transform: translate(-50%, -100%); background: #fff; color: #0f172a; border: 2px solid #2563eb; border-radius: 12px; padding: 4px 10px; font-size: clamp(8.5px, 0.98cqw, 12px); font-weight: 700; white-space: nowrap; box-shadow: 0 5px 14px rgba(0,0,0,0.35); z-index: 8; }
+.oa-bub::before { content: ""; position: absolute; left: 50%; bottom: -9px; transform: translateX(-50%); border: 5px solid transparent; border-top-color: #2563eb; border-bottom: 0; }
+.oa-bub::after  { content: ""; position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%); border: 4px solid transparent; border-top-color: #fff; border-bottom: 0; }
+.oa-bub.ok { border-color: #16a34a; background: #f0fdf4; color: #14532d; }
+.oa-bub.ok::before { border-top-color: #16a34a; }
+.oa-bub.ok::after  { border-top-color: #f0fdf4; }
+.oa-bub.meet { border-color: #d97706; background: #fffbeb; color: #78350f; }
+.oa-bub.meet::before { border-top-color: #d97706; }
+.oa-bub.meet::after  { border-top-color: #fffbeb; }
+.oa-fs-btn { position: absolute; right: 10px; bottom: 10px; z-index: 15; border: 1px solid rgba(255,255,255,0.28); background: rgba(15,23,42,0.8); color: #f8fafc; border-radius: 8px; padding: 5px 10px; font: 700 11.5px "Malgun Gothic", sans-serif; cursor: pointer; backdrop-filter: blur(4px); }
+.oa-fs-btn:hover { background: rgba(37,99,235,0.92); border-color: #93c5fd; }
+.oa-ctrl-hint { position: absolute; left: 10px; bottom: 10px; z-index: 15; background: rgba(15,23,42,0.78); border: 1px solid rgba(255,255,255,0.2); color: #e2e8f0; border-radius: 8px; padding: 4px 9px; font: 700 11px "Malgun Gothic", sans-serif; backdrop-filter: blur(4px); pointer-events: none; }
+.oa-brief-bar { position: absolute; right: 100px; bottom: 10px; z-index: 15; display: flex; gap: 6px; }
+.oa-b-btn { border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 5px 11px; font: 800 11.5px "Malgun Gothic", sans-serif; cursor: pointer; backdrop-filter: blur(4px); box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
+.oa-b-btn.start { background: rgba(37,99,235,0.92); color: #fff; border-color: #93c5fd; }
+.oa-b-btn.start:hover { background: #1d4ed8; }
+.oa-b-btn.stop { background: rgba(220,38,38,0.94); color: #fff; border-color: #fca5a5; animation: oaPulse 1.6s infinite; }
+.oa-b-btn.stop:hover { background: #b91c1c; }
+.oa-b-btn[hidden] { display: none; }
+@keyframes oaPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(248,113,113,0.55); } 50% { box-shadow: 0 0 0 8px rgba(248,113,113,0); } }
+.oa-modal-back { position: absolute; inset: 0; z-index: 20; background: rgba(7,11,20,0.22); }
+.oa-modal-back[hidden] { display: none; }
+.oa-modal { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(440px, 56%); min-width: 300px; background: rgba(30,41,59,0.96); border: 2px solid #f59e0b; border-radius: 16px; padding: 14px 16px; color: #fff; box-shadow: 0 18px 44px rgba(0,0,0,0.72); backdrop-filter: blur(6px); transition: left .18s ease, top .18s ease; }
+.oa-m-head { display: flex; align-items: flex-start; gap: 12px; }
+.oa-m-head img { width: 76px; height: 92px; border-radius: 12px; object-fit: cover; object-position: top; border: 2px solid #f59e0b; flex-shrink: 0; }
+.oa-m-head h3 { margin: 0 0 4px; font-size: 15.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.oa-m-role { font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: #334155; color: #fde68a; }
+.oa-m-say { margin: 4px 0 0; font-size: 12.8px; color: #f1f5f9; line-height: 1.42; }
+.oa-m-head button { margin-left: auto; border: 0; background: rgba(255,255,255,0.12); color: #fff; width: 26px; height: 26px; border-radius: 8px; cursor: pointer; font-size: 16px; flex-shrink: 0; }
+.oa-m-quick { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.oa-q-btn { border: 1px solid #475569; background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 5px 9px; font: 700 11.5px "Malgun Gothic", sans-serif; cursor: pointer; text-align: left; }
+.oa-q-btn:hover { border-color: #f59e0b; background: #1e293b; color: #fde68a; }
+.oa-q-btn.detail { border-color: #38bdf8; color: #7dd3fc; }
+.oa-m-form { display: flex; gap: 6px; margin-top: 10px; }
+.oa-m-form input { flex: 1; border: 1px solid #475569; background: #0f172a; color: #fff; border-radius: 8px; padding: 7px 9px; font: 12.5px "Malgun Gothic", sans-serif; outline: none; }
+.oa-m-form input:focus { border-color: #f59e0b; }
+.oa-m-form button { border: 0; background: #f59e0b; color: #0f172a; border-radius: 8px; padding: 7px 12px; font: 800 12px "Malgun Gothic", sans-serif; cursor: pointer; white-space: nowrap; }
+.oa-m-form button:hover { background: #fbbf24; }
+.oa-m-res { margin-top: 8px; font-size: 12px; font-weight: 700; color: #86efac; }
+@media (max-width: 720px) {
+  .oa-ctrl-hint { display: none; }
+  .oa-modal { width: 92%; min-width: 0; left: 50% !important; top: 50% !important; }
+}

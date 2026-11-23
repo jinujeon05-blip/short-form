@@ -14,7 +14,7 @@ const load = (file) => {
 };
 
 // 음식점만(호텔·사진관·마사지·미용 제외), 흐린 사진(메뉴판에서 오려 낸 것 등)은 뺀다
-const FOOD = ["bbq", "korean", "chicken", "noodle", "cafe", "western", "seafood", "chinese", "japanese", "bar"];
+const FOOD = ["bbq", "korean", "chicken", "noodle", "cafe", "western", "seafood", "chinese", "japanese", "vietnamese", "bar"];
 const MIN_SHARP = 1100; // tools/sharpness.py 점수, 2026-10-31 사진 모음으로 눈으로 보고 정함(중간값 약 2000)
 
 const { STORES } = load(path.join(ROOT, "sales/stores/data.js"));

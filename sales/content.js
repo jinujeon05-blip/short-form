@@ -215,6 +215,20 @@ window.DEMOS = [
     name: "상디에고 피자 & 그릴 SANG DIEGO", type: { ko: "양식 · 피자 · 스테이크 · 파스타 · 바비큐 립", vi: "Nhà hàng Âu · Pizza · Bít tết · Mỳ Ý · Sườn nướng BBQ", en: "Western grill · Pizza · Steak · Pasta · BBQ ribs", zh: "西餐 · 披萨 · 牛排 · 意面 · BBQ 烤肋排", ja: "洋食・ピザ・ステーキ・パスタ・BBQリブ" } },
   { id: "dabangchicken", hidden: true, url: "https://dabangchicken.qrmenuasia.com", shot: "img/demo-dabangchicken.jpg", qr: "img/qr-dabangchicken.svg",
     name: "다방치킨 박닌본점 DA BANG", type: { ko: "한국식 치킨 · 분식 · 피자", vi: "Gà rán Hàn Quốc · Đồ ăn vặt · Pizza", en: "Korean fried chicken · Snacks · Pizza", zh: "韩式炸鸡 · 小吃 · 披萨", ja: "韓国チキン・軽食・ピザ" } },
+  { id: "fujiro", hidden: true, url: "https://fujiro.qrmenuasia.com", shot: "img/demo-fujiro.jpg", qr: "img/qr-fujiro.svg",
+    name: "후지로 판께빈 FUJIRO Phan Kế Bính", type: { ko: "일식 · 돈카츠 · 카츠토지 · 카레", vi: "Nhà hàng Nhật · Tonkatsu · Katsutoji · Cơm cà ri", en: "Japanese tonkatsu · Katsutoji · Curry rice", zh: "日式炸猪排 · 鸡蛋炸排锅 · 咖喱饭", ja: "とんかつ・カツとじ・カレーライス" } },
+  { id: "okonomiyakimiyakoya", hidden: true, url: "https://okonomiyakimiyakoya.qrmenuasia.com", shot: "img/demo-okonomiyakimiyakoya.jpg", qr: "img/qr-okonomiyakimiyakoya.svg",
+    name: "미야코야 MIYAKOYA", type: { ko: "일식 · 오코노미야키 · 몬자 · 철판구이", vi: "Món Nhật · Okonomiyaki · Monjayaki · Teppanyaki", en: "Japanese okonomiyaki · Monja · Teppanyaki", zh: "日料 · 大阪烧 · 文字烧 · 铁板烧", ja: "お好み焼き・もんじゃ・鉄板焼き" } },
+  { id: "sumibaozi", hidden: true, url: "https://sumibaozi.qrmenuasia.com", shot: "img/demo-sumibaozi.jpg", qr: "img/qr-sumibaozi.svg",
+    name: "수미보오즈 SUMIBOZU 炭ぼうず", type: { ko: "일식 · 숯불 꼬치구이 · 이자카야", vi: "Nhà hàng Nhật · Gà nướng than · Izakaya", en: "Japanese charcoal yakitori · Izakaya", zh: "日式炭火烤鸡肉串 · 居酒屋", ja: "炭火焼き鳥・串焼き・居酒屋" } },
+  { id: "jeilnaengsam", hidden: true, url: "https://jeilnaengsam.qrmenuasia.com", shot: "img/demo-jeilnaengsam.jpg", qr: "img/qr-jeilnaengsam.svg",
+    name: "제일냉삼 JEIL NAENGSAM", type: { ko: "한식 · 냉동삼겹살 전문점 · 고기구이", vi: "Quán thịt nướng Hàn Quốc · Ba chỉ đông lạnh", en: "Korean BBQ · Frozen pork belly specialist", zh: "韩式烤肉 · 冷冻五花肉专门店", ja: "韓国焼肉・冷凍サムギョプサル専門店" } },
+  { id: "quananngonhdt", hidden: true, url: "https://quananngonhdt.qrmenuasia.com", shot: "img/demo-quananngonhdt.jpg", qr: "img/qr-quananngonhdt.svg",
+    name: "꽌안응온 Quán Ăn Ngon", type: { ko: "베트남 전통 요리 · 전골 · 해산물 · 쌀국수", vi: "Ẩm thực Việt · Lẩu · Hải sản · Bún phở", en: "Vietnamese cuisine · Hotpot · Seafood · Noodles", zh: "越南传统美食 · 火锅 · 海鲜 · 米粉", ja: "ベトナム伝統料理・鍋・海鮮・麺料理" } },
+  { id: "nolowachicken", hidden: true, url: "https://nolowachicken.qrmenuasia.com", shot: "img/demo-nolowachicken.jpg", qr: "img/qr-nolowachicken.svg",
+    name: "놀로와 치킨 NOLLOWA CHICKEN", type: { ko: "한식 · 치킨 · 분식 · 전골", vi: "Gà rán Hàn Quốc · Món ăn vặt · Lẩu Hàn", en: "Korean fried chicken · Snacks · Hot pot", zh: "韩式炸鸡 · 小吃 · 火锅", ja: "韓国チキン・粉食・チョンゴル" } },
+  { id: "bunchadakkim", hidden: true, url: "https://bunchadakkim.qrmenuasia.com", shot: "img/demo-bunchadakkim.jpg", qr: "img/qr-bunchadakkim.svg",
+    name: "분짜닥킴 Bún Chả Đắc Kim", type: { ko: "베트남 하노이 분짜 · 게살 춘권 (1966년부터)", vi: "Bún chả Hà Nội · Nem cua bể (từ năm 1966)", en: "Hanoi bún chả · Crab spring rolls (since 1966)", zh: "河内烤肉米线 · 蟹肉春卷（始于1966年）", ja: "ハノイ名物ブンチャー・蟹春巻き（1966年創業）" } },
 ];
 
 window.T = {

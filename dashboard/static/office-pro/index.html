@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jinwoo 에이전트 — Phaser 3 프로 픽셀 사무실 (별도 시연)</title>
+<link rel="stylesheet" href="/static/office-pro/office-pro.css">
+</head>
+<body class="op-page">
+<header class="op-top">
+  <h1>Jinwoo 에이전트 · Phaser 3 프로 픽셀 사무실 <span class="op-badge">가-1 별도 시연 공간 · 기존 대시보드 무변경</span></h1>
+  <div class="op-btns">
+    <button type="button" class="op-btn green" id="btn-demo">▶ 새 가게 제작 시연</button>
+    <button type="button" class="op-btn" id="btn-coffee">☕ 커피 서빙</button>
+    <button type="button" class="op-btn" id="btn-chat">💬 직원 수다</button>
+    <button type="button" class="op-btn blue" id="btn-zoom">🔍 줌 리셋</button>
+    <a class="op-btn" href="/">← 기존 대시보드로</a>
+  </div>
+</header>
+
+<main class="op-wrap">
+  <div id="pro-root"></div>
+  <section class="op-grid">
+    <div class="op-card">
+      <h2>실시간 움직임 기록</h2>
+      <ul class="op-log" id="op-log"></ul>
+    </div>
+    <div class="op-card">
+      <h2>가-1 (Phaser 3 엔진) 핵심 업그레이드</h2>
+      <p class="op-muted" style="line-height:1.65">
+        • <b>1픽셀 격자 픽셀아트</b>: 흐림·얼굴 변형·크기 변화 0%<br>
+        • <b>진짜 Y-깊이 레이어</b>: 책상 뒤 착석 &amp; 북향 의자 등받이 100% 자연 겹침<br>
+        • <b>진짜 A* 격자 길찾기</b>: 벽·책상·화분을 알아서 피해 걷기<br>
+        • <b>카메라 줌인/줌아웃</b>: 아무 캐릭터나 클릭해 보세요!<br>
+        • 추후 <code>itch.io</code> 상용 픽셀팩(LimeZu 등) 구매 시 그림 파일만 교체하면 즉시 반영
+      </p>
+    </div>
+  </section>
+</main>
+
+<script src="/static/office-pro/lib/phaser.min.js"></script>
+<script src="/static/office-pro/office-pro.js"></script>
+<script>
+const logEl = document.getElementById('op-log');
+function addLog(msg) {
+  const li = document.createElement('li');
+  li.innerHTML = `<time>${new Date().toLocaleTimeString('ko-KR')}</time><span>${msg}</span>`;
+  logEl.prepend(li);
+  while (logEl.children.length > 20) logEl.lastChild.remove();
+}
+const pro = window.OfficePro.create(document.getElementById('pro-root'), { onLog: addLog });
+addLog('Phaser 3 프로 픽셀 사무실 준비 완료 (캐릭터를 클릭하면 줌인됩니다)');
+document.getElementById('btn-demo').onclick = () => pro.runDemo();
+document.getElementById('btn-coffee').onclick = () => pro.serveCoffee();
+document.getElementById('btn-chat').onclick = () => pro.hallwayChat();
+document.getElementById('btn-zoom').onclick = () => pro.resetCamera();
+</script>
+</body>
+</html>

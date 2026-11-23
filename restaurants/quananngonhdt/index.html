@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b5412b">
+<title>꽌안응온 Quán Ăn Ngon 메뉴</title>
+<meta name="description" content="꽌안응온 Quán Ăn Ngon · Nhà hàng món Việt — 25T2 Hoàng Đạo Thúy, Trung Hòa, Cầu Giấy, Hà Nội">
+<style>
+  :root {
+    --paper: #faf5ea;
+    --paper-2: #f1e8d6;
+    --band: #b5412b;
+    --band-2: #8f3220;
+    --ink: #26302d;
+    --muted: #7a6e62;
+    --line: #e6dac4;
+    --rust: #b5412b;
+    --gold: #b08a4f;
+    /* 간판의 세로 목재 루버(줄무늬) */
+    --louver: repeating-linear-gradient(90deg, rgba(0,0,0,.16) 0 1.5px, transparent 1.5px 7px);
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 60px; }
+  body {
+    margin: 0; color: var(--ink); background: var(--paper);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans SC", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.4;
+  }
+  :lang(ko) body { word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── 상단 ── */
+  header { position: relative; overflow: hidden; text-align: center; padding: 12px 0 30px; border-top: 12px solid var(--band); background-image: var(--louver); background-size: 100% 0; }
+  header::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 8px; background: var(--band); background-image: var(--louver); pointer-events: none; }
+  .corner { display: none; }
+  .langs { position: relative; z-index: 1; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .langs button { font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: rgba(255,255,255,.65); border: 1px solid #d9c9ae; border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .langs button[aria-pressed="true"] { color: #fff; background: var(--band); border-color: var(--band); }
+  .logo { display: block; width: 132px; height: auto; margin: 26px auto 0; }
+  .logo.sign { width: 100%; max-width: 440px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 14px; margin-top: 18px; }
+  h1 { margin: 6px 0 0; font-size: 40px; font-weight: 800; letter-spacing: 6px; line-height: 1; }
+  .en { margin: 6px 0 0; font-size: 18px; font-weight: 700; letter-spacing: 5px; }
+  .tagline { margin: 12px 0 0; font-size: 14.5px; font-weight: 600; color: var(--muted); }
+  .chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 14px; position: relative; z-index: 1; }
+  .chips span { font-size: 12.5px; font-weight: 700; color: var(--band-2); background: var(--paper-2); border: 1px solid #d8cdbb; border-radius: 999px; padding: 4px 11px; }
+
+  /* ── 카테고리 탭 ── */
+  nav { position: sticky; top: 0; z-index: 10; background: var(--band) var(--louver); box-shadow: 0 4px 12px rgba(80,25,15,.25); }
+  nav .wrap { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-top: 7px; padding-bottom: 7px; }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a { flex: none; color: #fbeee2; text-decoration: none; font-size: 14px; font-weight: 700; padding: 8px 12px; border-radius: 999px; white-space: nowrap; }
+  nav a.active { color: var(--band-2); background: var(--paper); }
+
+  /* ── 메뉴 ── */
+  section { padding: 30px 0 6px; }
+  .head { display: flex; align-items: center; gap: 12px; }
+  .head::before, .head::after { content: ""; flex: 1; height: 7px; background: var(--louver); background-color: var(--band); opacity: .85; border-radius: 1px; }
+  h2 { margin: 0; font-size: 25px; font-weight: 800; letter-spacing: 1px; text-align: center; color: var(--ink); }
+  h2 small { display: block; margin-top: 3px; font-size: 14px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
+  .note { margin: 12px 0 0; font-size: 13.5px; color: var(--band-2); background: var(--paper-2); border-left: 3px solid var(--band); border-radius: 0 10px 10px 0; padding: 8px 12px; }
+  .tip { margin: 14px 0 0; font-size: 13.5px; color: var(--ink); background: #fff; border: 1px dashed #cdbfa9; border-radius: 12px; padding: 10px 12px; }
+  .tip b { color: var(--rust); margin-right: 4px; }
+
+  ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  li { display: flex; gap: 12px; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  li:last-child { border-bottom: 0; }
+  .thumb { flex: none; width: 96px; height: 72px; border-radius: 12px; overflow: hidden; padding: 0; border: 1px solid var(--line); background: var(--paper); cursor: zoom-in; }
+  .thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .info { flex: 1; min-width: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 3px; }
+  .tags span { font-size: 10.5px; font-weight: 800; letter-spacing: .3px; color: #fff; background: var(--rust); border-radius: 3px; padding: 1px 6px; }
+  .tags .best { background: var(--band-2); }
+  .tags .special { background: var(--gold); }
+  .tags .hot { background: #fff; color: #c2402a; border: 1px solid #e6b3a6; }
+  .row { display: flex; align-items: baseline; gap: 8px; }
+  .row b { font-size: 17px; font-weight: 800; }
+  .row .unit { font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .row .leader { flex: 1; min-width: 10px; border-bottom: 2px dotted #cdbfa9; transform: translateY(-4px); }
+  .price { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .price small { font-size: 11px; color: var(--muted); margin-left: 1px; }
+  .sizes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+  .sizes span { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 2px 8px; }
+  .sizes span i { font-style: normal; font-size: 11px; font-weight: 800; color: #fff; background: var(--band); border-radius: 4px; padding: 0 4px; margin-right: 5px; }
+  .desc { margin-top: 4px; font-size: 13px; color: #5d544b; }
+  .sub { margin-top: 3px; font-size: 13px; color: var(--muted); }
+  .sub.it { font-style: italic; }
+
+  /* ── 가게 정보 ── */
+  footer { margin-top: 40px; background: var(--band) var(--louver); color: #fbeee2; padding: 30px 0 calc(28px + env(safe-area-inset-bottom)); }
+  .quote { text-align: center; font-size: 15px; line-height: 1.7; margin: 0 0 18px; }
+  .quote small { display: block; margin-top: 4px; font-size: 12.5px; opacity: .8; }
+  .pills { display: grid; gap: 10px; }
+  .pill { display: flex; align-items: center; gap: 12px; width: 100%; font: inherit; text-align: left; color: var(--ink); text-decoration: none; background: var(--paper); border: 0; border-radius: 16px; padding: 10px 14px 10px 10px; cursor: pointer; }
+  .pill i { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--band-2); }
+  .pill i svg { width: 20px; height: 20px; color: #fff; }
+  .pill div { flex: 1; min-width: 0; }
+  .pill small { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .pill strong { display: block; font-size: 16px; font-weight: 800; word-break: break-word; }
+  .pill em { flex: none; font-style: normal; font-size: 12px; font-weight: 700; color: var(--rust); }
+  .vnd { text-align: center; margin: 16px 0 0; font-size: 12px; opacity: .8; }
+
+  .zoom { position: fixed; inset: 0; z-index: 30; display: none; place-items: center; padding: 16px; background: rgba(30,28,26,.88); cursor: zoom-out; }
+  .zoom.show { display: grid; }
+  .zoom figure { margin: 0; max-width: 560px; width: 100%; }
+  .zoom img { width: 100%; border-radius: 16px; display: block; background: var(--paper); }
+  .zoom figcaption { margin-top: 10px; text-align: center; font-size: 16px; font-weight: 800; color: #fff; }
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); z-index: 40; background: var(--band-2); color: #fff; font-size: 14px; font-weight: 700; padding: 10px 18px; border-radius: 999px; opacity: 0; transition: .2s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+<style id="partner-theme">
+  /* 하단 파트너 배너(다산·JS welink) 색을 이 메뉴판에 맞춘다 */
+  :root { --pt-mode: light; --pt-bg: #fff; --pt-ink: #26302d; --pt-muted: #7a6e62; --pt-line: #e6dac4; --pt-accent: #b5412b; --pt-btn: #8f3220; --pt-btn-ink: #fff; --pt-shadow: 0 6px 16px rgba(60,48,36,.12); }
+</style>
+<!-- seo:start (tools/seo.mjs 가 만듦, 직접 고치지 말 것) -->
+<link rel="canonical" href="https://quananngonhdt.qrmenuasia.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="꽌안응온 Quán Ăn Ngon 메뉴">
+<meta property="og:description" content="꽌안응온 Quán Ăn Ngon · Nhà hàng món Việt — 25T2 Hoàng Đạo Thúy, Trung Hòa, Cầu Giấy, Hà Nội">
+<meta property="og:url" content="https://quananngonhdt.qrmenuasia.com/">
+<meta property="og:image" content="https://quananngonhdt.qrmenuasia.com/img/banhxeo.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"꽌안응온 Quán Ăn Ngon - Hoàng Đạo Thúy","url":"https://quananngonhdt.qrmenuasia.com/","address":{"@type":"PostalAddress","streetAddress":"25T2 Hoàng Đạo Thúy, Trung Hòa, Cầu Giấy, Hà Nội","addressCountry":"VN"},"telephone":"0902186963","image":"https://quananngonhdt.qrmenuasia.com/img/banhxeo.jpg","servesCuisine":["Vietnamese","Hotpot","Seafood"],"hasMenu":{"@type":"Menu","name":"꽌안응온 Quán Ăn Ngon - Hoàng Đạo Thúy menu","inLanguage":["ko","en","zh","ja","vi"],"hasMenuSection":[{"@type":"MenuSection","name":"Hot Pot","hasMenuItem":[{"@type":"MenuItem","name":"Crab Paste Hot Pot with Beef Shank (Lẩu riêu cua bắp bò)","alternateName":["소고기 아롱사태 게살 전골","Lẩu riêu cua bắp bò","蟹膏牛腱火锅 (Lẩu riêu cua bắp bò)","カニ味噌風味の牛すねスープ鍋 (ラウ・リエウ・クア・バップ・ボー)"],"offers":{"@type":"Offer","price":560000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Crab Paste Hot Pot with Beef Shank and Pork Ribs with Cartilage (Lẩu riêu cua bắp bò, sườn sụn)","alternateName":["소고기 아롱사태·돼지 오돌뼈 갈비 게살 전골","Lẩu riêu cua bắp bò, sườn sụn","蟹膏牛腱软骨排骨火锅","カニ味噌風味の牛すね・豚軟骨スペアリブ鍋"],"offers":{"@type":"Offer","price":560000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Freshwater Catfish Hot Pot with Sour Bamboo Shoots (Lẩu cá lăng măng chua)","alternateName":["죽순 민물메기(까랑) 전골","Lẩu cá lăng măng chua","酸笋鮰鱼(叉尾鮰)火锅","タケノコ入り川ナマズ(カーラン)の酸味鍋"],"offers":{"@type":"Offer","price":520000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Hot and Sour Seafood Hot Pot","alternateName":["새콤매콤 해산물 전골","Lẩu hải sản chua cay","酸辣海鲜火锅","酸っぱ辛いシーフード鍋"],"offers":{"@type":"Offer","price":690000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Chicken Hot Pot (Lẩu gà)","alternateName":["닭 전골","Lẩu gà","鸡肉火锅","鶏肉鍋 (ラウ・ガー)"],"offers":{"@type":"Offer","price":420000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sturgeon Hot Pot (Lẩu cá tầm)","alternateName":["철갑상어 전골","Lẩu cá tầm","鲟鱼火锅","チョウザメ鍋 (ラウ・カー・タム)"],"offers":{"@type":"Offer","price":595000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Freshwater Eel Hot Pot (Lẩu cá chình)","alternateName":["민물장어(까찐) 전골","Lẩu cá chình","河鳗火锅","淡水ウナギ鍋 (ラウ・カー・チン)"],"offers":{"@type":"Offer","price":650000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sea Crab Hot Pot (Lẩu cua bể)","alternateName":["바다게 전골","Lẩu cua bể","海蟹火锅","海ガニ鍋 (ラウ・クア・ベー)"],"offers":{"@type":"Offer","price":690000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Fish Dishes","hasMenuItem":[{"@type":"MenuItem","name":"Hanoi-style Fried Fish with Turmeric and Dill (Chả cá Hà Nội)","alternateName":["하노이식 생선 튀김 볶음(짜까)","Chả cá Hà Nội","河内煎鱼 (Chả cá Hà Nội)","ハノイ風魚のターメリック炒め (チャーカー・ハノイ)"],"offers":{"@type":"Offer","price":225000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Red Tilapia with Salt and Chili","alternateName":["레드 틸라피아 소금고추 구이","Cá diêu hồng nướng muối ớt","盐辣椒烤红罗非鱼","レッドティラピアの塩唐辛子焼き"],"offers":{"@type":"Offer","price":390000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Red Tilapia with Soy Sauce","alternateName":["레드 틸라피아 간장찜","Cá diêu hồng hấp xì dầu","酱油蒸红罗非鱼","レッドティラピアの醤油蒸し"],"offers":{"@type":"Offer","price":390000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Sturgeon with Salt and Chili","alternateName":["철갑상어 소금고추 구이","Cá tầm nướng muối ớt","盐辣椒烤鲟鱼","チョウザメの塩唐辛子焼き"],"offers":{"@type":"Offer","price":490000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Sturgeon with Satay","alternateName":["철갑상어 사테 구이","Cá tầm nướng sa tế","沙爹烤鲟鱼","チョウザメのサテ焼き"],"offers":{"@type":"Offer","price":490000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Salt-fried Sturgeon","alternateName":["철갑상어 소금 튀김","Cá tầm rang muối","椒盐炸鲟鱼","チョウザメの塩揚げ"],"offers":{"@type":"Offer","price":490000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Catfish with Galangal and Fermented Rice (Cá lăng nướng riềng mẻ)","alternateName":["메기(까랑) 갈랑갈·발효쌀 양념 구이","Cá lăng nướng riềng mẻ","高良姜米酵烤鮰鱼","川ナマズのガランガル・発酵米ダレ焼き"],"offers":{"@type":"Offer","price":405000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Catfish with Salt and Chili","alternateName":["메기(까랑) 소금고추 구이","Cá lăng nướng muối ớt","盐辣椒烤鮰鱼","川ナマズの塩唐辛子焼き"],"offers":{"@type":"Offer","price":405000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Braised Catfish with Bamboo Shoots","alternateName":["메기(까랑) 매운 죽순 조림","Cá lăng om măng cay","辣笋炖鮰鱼","川ナマズとタケノコの辛い煮込み"],"offers":{"@type":"Offer","price":475000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Freshwater Eel with Galangal and Fermented Rice","alternateName":["장어(까찐) 갈랑갈·발효쌀 양념 구이","Cá chình nướng riềng mẻ","高良姜米酵烤河鳗","淡水ウナギのガランガル・発酵米ダレ焼き"],"offers":{"@type":"Offer","price":575000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Snakehead Fish with Rice Paper Rolls","alternateName":["가물치 찜과 라이스페이퍼 쌈","Cá lóc hấp cuốn bánh tráng","清蒸黑鱼配米纸卷","雷魚の蒸し物 ライスペーパー巻き"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Snakehead Fish Braised in Clay Pot (Cá lóc kho tộ)","alternateName":["뚝배기 가물치 조림","Cá lóc kho tộ","砂锅焖黑鱼","雷魚の土鍋煮 (カーロック・コー・トー)"],"offers":{"@type":"Offer","price":135000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sour Snakehead Fish Soup (Canh chua cá lóc)","alternateName":["새콤한 가물치 국(깐쭈아)","Canh chua cá lóc","酸汤黑鱼","雷魚の酸っぱいスープ (カインチュア・カーロック)"],"offers":{"@type":"Offer","price":135000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Seafood (Shrimp, Squid, Crab, Clams)","hasMenuItem":[{"@type":"MenuItem","name":"Breaded Fried Shrimp","alternateName":["빵가루 새우튀김","Tôm tẩm bột chiên xù","面包糠炸虾","エビのパン粉揚げ"],"offers":{"@type":"Offer","price":290000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Shrimp in Young Coconut","alternateName":["코코넛 새우 찜","Tôm hấp nước dừa","椰子水蒸虾","エビのココナッツ蒸し"],"offers":{"@type":"Offer","price":290000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fried Shrimp with Lemongrass and Chili","alternateName":["레몬그라스·칠리 새우튀김","Tôm chiên sả ớt","香茅辣椒炸虾","エビのレモングラス・唐辛子揚げ"],"offers":{"@type":"Offer","price":290000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Sweet Snails (Ốc hương nướng)","alternateName":["향고둥 구이","Ốc hương nướng","烤香螺","香り巻貝の炭火焼き (オック・フオン)"],"offers":{"@type":"Offer","price":230000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Oysters with Scallion Oil","alternateName":["파기름 굴구이","Hào nướng mỡ hành","葱油烤生蚝","牡蠣のネギ油焼き"],"offers":{"@type":"Offer","price":145000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Raw Oysters with Wasabi Sauce","alternateName":["생굴(와사비 소스)","Hào sống mù tạt","生蚝配芥末酱","生牡蠣 わさびソース"],"offers":{"@type":"Offer","price":145000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Clams with Lemongrass","alternateName":["레몬그라스 백합 조개찜","Nghêu trắng hấp sả","香茅蒸白蛤","ハマグリのレモングラス蒸し"],"offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sour Clam Soup (Canh chua nghêu)","alternateName":["새콤한 조개국","Canh chua nghêu","酸汤蛤蜊","アサリの酸っぱいスープ (カインチュア・ンゲウ)"],"offers":{"@type":"Offer","price":135000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Crispy Fried Squid Rings","alternateName":["바삭한 오징어링 튀김","Mực vòng tẩm bột chiên giòn","酥炸鱿鱼圈","イカリングの唐揚げ"],"offers":{"@type":"Offer","price":265000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Squid with Salt and Chili","alternateName":["소금고추 오징어 구이","Mực nướng muối ớt","盐辣椒烤鱿鱼","イカの塩唐辛子焼き"],"offers":{"@type":"Offer","price":290000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Semi-dried Squid","alternateName":["반건조 오징어 구이","Mực một nắng nướng","烤半干鱿鱼","半干しイカの炭火焼き"],"offers":{"@type":"Offer","price":485000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Crispy Fried Semi-dried Squid","alternateName":["반건조 오징어 바삭 튀김","Mực một nắng chiên giòn","酥炸半干鱿鱼","半干しイカの唐揚げ"],"offers":{"@type":"Offer","price":485000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Ha Long Squid Cake with Dill (Chả mực Hạ Long)","alternateName":["하롱베이 오징어 어묵 튀김(딜)","Chả mực Hạ Long","下龙湾鱿鱼饼配莳萝","ハロン湾のイカのすり身揚げ ディル入り (チャー・ムック・ハロン)"],"offers":{"@type":"Offer","price":280000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Baby Squid with Garlic","alternateName":["마늘 작은 오징어 볶음","Mực ống xào tỏi","蒜香炒小鱿鱼","小イカのニンニク炒め"],"offers":{"@type":"Offer","price":275000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed / Grilled Crab","alternateName":["게찜 / 게구이","Cua hấp / nướng","清蒸 / 烤蟹","カニの蒸し / 焼き"],"offers":{"@type":"Offer","price":625000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fried Crab with Tamarind Sauce (Cua rang me)","alternateName":["타마린드 소스 게튀김","Cua rang me","罗望子酱炸蟹","カニのタマリンドソース炒め"],"offers":{"@type":"Offer","price":625000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Meat, Grill and Chicken","hasMenuItem":[{"@type":"MenuItem","name":"Grilled Pork Ribs with Lemongrass and Chili","alternateName":["레몬그라스 칠리 돼지갈비 구이","Sườn nướng sả ớt","香茅辣椒烤猪排","豚スペアリブのレモングラス・唐辛子焼き"],"offers":{"@type":"Offer","price":255000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Pork Skewer","alternateName":["돼지고기 꼬치구이","Heo xiên nướng","烤猪肉串","豚肉の串焼き"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Pork Belly with Galangal and Fermented Rice","alternateName":["갈랑갈 양념 삼겹살 구이","Ba chỉ nướng riềng mẻ","高良姜米酵烤五花肉","豚バラ肉のガランガル・発酵米ダレ焼き"],"offers":{"@type":"Offer","price":135000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Caramelized Stir-fried Pork Belly","alternateName":["캐러멜 삼겹살 볶음","Thịt ba chỉ rang cháy cạnh","焦糖炒五花肉","豚バラ肉のカラメル炒め"],"offers":{"@type":"Offer","price":135000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Braised Pork in Clay Pot (Thịt kho tộ)","alternateName":["뚝배기 돼지고기 조림","Thịt kho tộ","砂锅红烧肉 (Thịt kho tộ)","豚肉の土鍋煮込み (ティット・コー・トー)"],"offers":{"@type":"Offer","price":135000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Huế-style Grilled Pork Skewers with Vegetables (Nem lụi Huế)","alternateName":["후에식 넴루이(돼지고기 꼬치구이와 채소)","Nem lụi Huế","顺化烤猪肉串配蔬菜 (Nem lụi Huế)","フエ風豚肉の串焼きと野菜 (ネム・ルイ)"],"offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Pork Paste with Rice Noodles and Rice Paper Wraps (Nem nướng cuốn bánh tráng)","alternateName":["BBQ 돼지고기 페이스트와 쌀국수·라이스페이퍼 쌈","Nem nướng cuốn bánh tráng","烤肉酱配米粉和米纸卷 (Nem nướng)","焼き豚ペースト ビーフン・ライスペーパー巻き (ネム・ヌオン)"],"offers":{"@type":"Offer","price":198000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Shaking Beef with French Fries (Bò lúc lắc)","alternateName":["깍둑 소고기 볶음과 감자튀김(보룩락)","Bò lúc lắc khoai tây chiên","摇摇牛肉配薯条 (Bò lúc lắc)","サイコロステーキ炒めとフライドポテト (ボー・ルック・ラック)"],"offers":{"@type":"Offer","price":198000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Quan An Ngon Special Grilled Beef with Salad","alternateName":["꽌안응온 특제 소고기 구이와 샐러드","Bò nướng Quán Ăn Ngon","Quán Ăn Ngon 招牌烤牛肉配沙拉","Quán Ăn Ngon特製牛肉の炭火焼き サラダ添え"],"offers":{"@type":"Offer","price":230000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Beef with Salt and Chili and Salad","alternateName":["소금고추 소고기 구이와 샐러드","Bò nướng muối ớt","盐辣椒烤牛肉配沙拉","牛肉の塩唐辛子焼き サラダ添え"],"offers":{"@type":"Offer","price":230000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Nha Trang-style Grilled Beef with Salad and Bread","alternateName":["나트랑식 소고기 구이(샐러드·빵)","Bò nướng Nha Trang","芽庄风味烤牛肉(配沙拉和面包)","ニャチャン風牛肉の炭火焼き (サラダ・パン付き)"],"offers":{"@type":"Offer","price":290000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef on Sizzling Plate Bánh Mì with Egg and French Fries (Bánh mì bò né)","alternateName":["철판 소고기 반미(계란·감자튀김)","Bánh mì bò né","铁板牛肉法棍(配煎蛋和薯条)","鉄板ビーフ バインミー (卵・フライドポテト付き)"],"offers":{"@type":"Offer","price":198000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Grilled Chicken with Mac Khen Spice (Northwest Vietnam Specialty)","alternateName":["막켄 향신료 닭구이(서북부 요리)","Gà nướng mắc khén","麻辣香料(mắc khén)烤鸡(西北部名菜)","マッケン(山椒系スパイス)風味の焼き鳥 (北西部料理)"],"offers":{"@type":"Offer","price":450000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Chicken with Lime Leaves","alternateName":["레몬잎 닭고기 찜","Gà hấp lá chanh","柠檬叶蒸鸡","鶏肉のライムリーフ蒸し"],"offers":{"@type":"Offer","price":450000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Salt-roasted Chicken","alternateName":["소금구이 치킨","Gà rang muối","盐焗鸡","鶏の塩焼き"],"offers":{"@type":"Offer","price":365000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Roasted Pigeon","alternateName":["구운 비둘기","Bồ câu quay","烤乳鸽","ハトのロースト"],"offers":{"@type":"Offer","price":235000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Salads, Soups, Fried Dishes and Fried Rice","hasMenuItem":[{"@type":"MenuItem","name":"Chicken Soup","alternateName":["닭고기 수프","Súp gà","鸡肉汤","チキンスープ"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Beef Green Salad","alternateName":["볶은 소고기 그린 샐러드","Xà lách áp chảo thịt bò","香煎牛肉蔬菜沙拉","炒め牛肉のグリーンサラダ"],"offers":{"@type":"Offer","price":150000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Tomato and Cucumber Salad","alternateName":["토마토 오이 샐러드","Xà lách cà chua dưa chuột","番茄黄瓜沙拉","トマトときゅうりのサラダ"],"offers":{"@type":"Offer","price":75000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Green Salad with Garlic Vinegar Dressing","alternateName":["마늘 식초 소스 그린 샐러드","Xà lách trộn dầu dấm","蒜香醋汁蔬菜沙拉","ニンニク酢ドレッシングのグリーンサラダ"],"offers":{"@type":"Offer","price":75000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Green Papaya Salad with Beef Jerky (Nộm bò khô)","alternateName":["육포 그린 파파야 샐러드","Nộm bò khô","牛肉干青木瓜沙拉","牛ジャーキーのグリーンパパイヤサラダ"],"offers":{"@type":"Offer","price":98000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Green Papaya Salad with Peanuts","alternateName":["땅콩 그린 파파야 샐러드","Nộm lạc","花生青木瓜沙拉","ピーナッツのグリーンパパイヤサラダ"],"offers":{"@type":"Offer","price":48000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Green Mango Seafood Salad (Gỏi xoài hải sản)","alternateName":["그린 망고 해산물 샐러드","Gỏi xoài hải sản","青芒果海鲜沙拉","青マンゴーとシーフードのサラダ"],"offers":{"@type":"Offer","price":215000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Green Banana and Star Fruit Beef Salad (Gỏi bò bóp thấu)","alternateName":["그린 바나나·스타프루트 소고기 샐러드","Gỏi bò bóp thấu","青香蕉杨桃牛肉沙拉","青バナナ・スターフルーツと牛肉のサラダ"],"offers":{"@type":"Offer","price":152000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lotus Root Salad with Shrimp and Pork (Gỏi ngó sen tôm thịt)","alternateName":["새우·돼지고기 연근 샐러드","Gỏi ngó sen tôm thịt","虾肉莲藕沙拉","エビと豚肉のレンコンサラダ"],"offers":{"@type":"Offer","price":165000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fried Crab Spring Rolls with Herbs (3 pieces) (Nem cua bể)","alternateName":["게살 튀김 춘권과 허브(3개)","Nem cua bể","蟹肉炸春卷配香草(3个)","カニ肉の揚げ春巻きとハーブ (3個) (ネム・クア・ベー)"],"offers":{"@type":"Offer","price":130000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Crispy Shrimp and Pork Pancake (Bánh xèo tôm thịt)","alternateName":["새우·돼지고기 베트남식 튀김 팬케이크(반쎄오)","Bánh xèo tôm thịt","越南煎饼:虾肉脆饼 (Bánh xèo)","エビと豚肉のベトナム風パリパリお好み焼き (バインセオ)"],"offers":{"@type":"Offer","price":210000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Hanoi Shrimp Fritters (Bánh tôm Hà Nội)","alternateName":["하노이 새우 튀김전(반똠)","Bánh tôm Hà Nội","河内炸虾饼 (Bánh tôm)","ハノイ風エビのかき揚げ (バイン・トム)"],"offers":{"@type":"Offer","price":96000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bánh Gối (Fried Dumplings, 3 pieces)","alternateName":["반고이(튀김 만두 3개)","Bánh gối","炸饺子 (Bánh gối,3个)","揚げ餃子 (バイン・ゴイ、3個)"],"offers":{"@type":"Offer","price":96000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Seafood Fried Rice","alternateName":["해산물 볶음밥","Cơm rang hải sản","海鲜炒饭","シーフードチャーハン"],"offers":{"@type":"Offer","price":198000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Shrimp Chips","alternateName":["새우칩","Bánh phồng tôm","虾片","エビせんべい"],"offers":{"@type":"Offer","price":40000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"French Fries","alternateName":["감자튀김","Khoai tây chiên","薯条","フライドポテト"],"offers":{"@type":"Offer","price":85000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Noodles","hasMenuItem":[{"@type":"MenuItem","name":"Beef Noodle Soup / Chicken Noodle Soup (Phở bò / Phở gà) - Breakfast","alternateName":["소고기 쌀국수 / 닭고기 쌀국수(퍼) — 아침 메뉴","Phở bò / Phở gà - Bữa sáng","牛肉河粉 / 鸡肉河粉 (Phở) - 早餐","牛肉フォー / 鶏肉フォー (フォー) - 朝食メニュー"],"offers":{"@type":"Offer","price":68000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Seafood Rice Noodle Soup / Bún bò Huế - Breakfast","alternateName":["해산물 쌀국수 / 분보후에 — 아침 메뉴","Bún hải sản / Bún bò Huế - Bữa sáng","海鲜米线 / 顺化牛肉米线 - 早餐","シーフードブン / ブンボーフエ - 朝食メニュー"],"offers":{"@type":"Offer","price":89000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Southern-style Beef Rice Noodle Salad (Bún bò Nam Bộ)","alternateName":["남부식 소고기 비빔 쌀국수(분보남보)","Bún bò Nam Bộ","南部风味牛肉拌米线 (Bún bò Nam Bộ)","南部風牛肉のあえ麺 (ブンボーナンボー)"],"offers":{"@type":"Offer","price":95000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Huế-style Beef and Pork Knuckle Noodle Soup (Bún bò Huế)","alternateName":["후에식 소고기·족발 쌀국수(분보후에)","Bún bò Huế","顺化牛肉猪蹄米线 (Bún bò Huế)","フエ風牛肉・豚足の麺 (ブンボーフエ)"],"offers":{"@type":"Offer","price":98000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Chicken and Bamboo Shoot Rice Noodle Soup","alternateName":["닭고기 죽순 쌀국수","Bún măng gà","鸡肉竹笋米线","鶏肉とタケノコのブン"],"offers":{"@type":"Offer","price":95000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pork Ribs, Meatballs and Bamboo Shoot Rice Noodle Soup","alternateName":["돼지갈비·미트볼 죽순 쌀국수","Bún măng sườn mọc","排骨肉丸竹笋米线","豚スペアリブ・肉団子とタケノコのブン"],"offers":{"@type":"Offer","price":95000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Snail Rice Noodle Soup (Bún ốc)","alternateName":["우렁이 쌀국수","Bún ốc","田螺米线 (Bún ốc)","タニシのブン (ブン・オック)"],"offers":{"@type":"Offer","price":95000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Crab Paste Rice Noodle Soup (Bún riêu cua)","alternateName":["게살 쌀국수(분리에우)","Bún riêu cua","蟹膏米线 (Bún riêu cua)","カニ味噌風味のブン (ブン・リエウ・クア)"],"offers":{"@type":"Offer","price":95000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Crab Paste and Snail Rice Noodle Soup (Bún riêu ốc)","alternateName":["게살 우렁이 쌀국수","Bún riêu ốc","蟹膏田螺米线 (Bún riêu ốc)","カニ味噌風味とタニシのブン (ブン・リエウ・オック)"],"offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bún Đậu Mắm Tôm (Fried Tofu and Rice Noodles with Fermented Shrimp Paste)","alternateName":["분더우 맘똠(튀긴 두부·새우젓 소스)","Bún đậu mắm tôm","虾酱炸豆腐米线 (Bún đậu mắm tôm)","ブンダウ・マムトム (揚げ豆腐と発酵エビペースト)"],"offers":{"@type":"Offer","price":68000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bún Đậu Combo Platter (Bún đậu thập cẩm)","alternateName":["분더우 모둠","Bún đậu thập cẩm","豆腐米线拼盘 (Bún đậu thập cẩm)","ブンダウ盛り合わせ"],"offers":{"@type":"Offer","price":120000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Boiled Pork with Rice Noodles and Shrimp Dipping Sauce (Bún thịt luộc chấm mắm tép)","alternateName":["삶은 돼지고기 쌀국수(맘떱 소스)","Bún thịt luộc chấm mắm tép","白切猪肉米线配小虾酱 (Bún thịt luộc)","茹で豚とブン 小エビのつけダレ (ブン・ティット・ルオック)"],"offers":{"@type":"Offer","price":75000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Chả Cốm (Fried Pork Patties with Young Green Rice)","alternateName":["짜꼼(풋쌀 돼지고기 튀김)","Chả cốm","青米肉饼 (Chả cốm)","チャー・コム (若米入り豚肉の揚げ焼き)"],"offers":{"@type":"Offer","price":120000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bánh Hỏi with Grilled Pork Patties and Rice Paper Wraps","alternateName":["반호이 넴느엉 라이스페이퍼 쌈","Bánh hỏi nem nướng cuốn bánh tráng","细米线卷配烤肉饼与米纸卷 (Bánh hỏi nem nướng)","バインホイ ネムヌオンのライスペーパー巻き"],"offers":{"@type":"Offer","price":195000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bánh Hỏi with Roast Pork and Rice Paper Wraps","alternateName":["반호이 통돼지구이 라이스페이퍼 쌈","Bánh hỏi heo quay cuốn bánh tráng","细米线卷配烤全猪与米纸卷 (Bánh hỏi heo quay)","バインホイ 豚の丸焼きのライスペーパー巻き"],"offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Beef and Vegetables with Soft Pho Noodles (Phở xào mềm)","alternateName":["소고기 야채 볶음 쌀국수(부드러운 면)","Phở xào mềm","牛肉蔬菜炒河粉(软)","牛肉と野菜のフォー炒め (やわらか麺)"],"offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Beef and Vegetables with Crispy Pho Noodles (Phở xào giòn)","alternateName":["소고기 야채 볶음 쌀국수(바삭한 면)","Phở xào giòn","牛肉蔬菜炒河粉(脆)","牛肉と野菜のフォー炒め (カリカリ麺)"],"offers":{"@type":"Offer","price":160000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Rice Noodles with Shrimp and Pork","alternateName":["새우·돼지고기 쌀국수 볶음","Bún gạo xào tôm thịt","虾肉炒米线","エビと豚肉のブン炒め"],"offers":{"@type":"Offer","price":145000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Egg Noodles with Beef (Crispy / Soft)","alternateName":["소고기 에그누들 볶음(바삭/부드러운 면)","Mì xào bò giòn / mềm","牛肉炒鸡蛋面(脆 / 软)","牛肉の卵麺炒め (カリカリ / やわらか)"],"offers":{"@type":"Offer","price":135000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Egg Noodles with Seafood","alternateName":["해산물 에그누들 볶음","Mì xào hải sản","海鲜炒鸡蛋面","シーフードの卵麺炒め"],"offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Macaroni with Minced Beef and Tomato","alternateName":["다진 소고기 토마토 마카로니 볶음","Nui xào bò bằm","番茄肉末炒通心粉","牛ひき肉とトマトのマカロニ炒め"],"offers":{"@type":"Offer","price":135000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fish Flat Noodles with Fried Fish (Soup / Dry) (Bánh đa cá)","alternateName":["생선 튀김 납작면(국물/비빔)","Bánh đa cá","炸鱼宽米粉(汤 / 拌)","揚げ魚入り平麺 (スープ / あえ麺) (バイン・ダー・カー)"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Chicken and Bamboo Shoot Glass Noodles (Soup / Dry)","alternateName":["닭고기 죽순 당면(국물/비빔)","Miến măng gà","鸡肉竹笋粉丝(汤 / 拌)","鶏肉とタケノコの春雨 (スープ / あえ麺)"],"offers":{"@type":"Offer","price":85000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fish Glass Noodles (Soup / Dry)","alternateName":["생선 당면(국물/비빔)","Miến cá","鱼肉粉丝(汤 / 拌)","魚入り春雨 (スープ / あえ麺)"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Rice, Porridge and Sticky Rice","hasMenuItem":[{"@type":"MenuItem","name":"Broken Rice with Pork Chop, Shredded Pork Skin and Steamed Egg Meatloaf (Cơm tấm)","alternateName":["껌땀 돼지갈비·돼지껍질·계란찜","Cơm tấm sườn bì chả","碎米饭配猪排、猪皮丝和蒸蛋肉饼 (Cơm tấm)","コムタム 豚スペアリブ・豚皮・卵蒸しミートローフ"],"offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Broken Rice with Pork Chop and Steamed Egg Meatloaf (Cơm tấm)","alternateName":["껌땀 돼지갈비·계란찜","Cơm tấm sườn chả","碎米饭配猪排和蒸蛋肉饼","コムタム 豚スペアリブ・卵蒸しミートローフ"],"offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Broken Rice with Pork Chop and Shredded Pork Skin (Cơm tấm)","alternateName":["껌땀 돼지갈비·돼지껍질","Cơm tấm bì sườn","碎米饭配猪排和猪皮丝","コムタム 豚スペアリブ・豚皮"],"offers":{"@type":"Offer","price":190000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Broken Rice with Grilled Pork and Shredded Pork Skin (Cơm tấm)","alternateName":["껌땀 구운 돼지고기·돼지껍질","Cơm tấm bì thịt nướng","碎米饭配烤猪肉和猪皮丝","コムタム 焼き豚・豚皮"],"offers":{"@type":"Offer","price":98000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Broken Rice with Grilled Pork (Cơm tấm)","alternateName":["껌땀 구운 돼지고기","Cơm tấm thịt nướng","碎米饭配烤猪肉","コムタム 焼き豚"],"offers":{"@type":"Offer","price":98000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Extra Steamed Rice","alternateName":["공깃밥 추가","Cơm tám ăn thêm","加饭","ご飯おかわり"],"offers":{"@type":"Offer","price":45000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Chicken Rice Porridge (Cháo gà)","alternateName":["닭죽","Cháo gà","鸡肉粥","鶏肉のお粥 (チャオ・ガー)"],"offers":{"@type":"Offer","price":85000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fish Rice Porridge (Cháo cá)","alternateName":["생선죽","Cháo cá","鱼肉粥","魚のお粥 (チャオ・カー)"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pork Rib Rice Porridge (Cháo sườn)","alternateName":["돼지갈비죽","Cháo sườn","排骨粥","豚スペアリブのお粥 (チャオ・スン)"],"offers":{"@type":"Offer","price":45000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sticky Rice with Squid Cake (Xôi chả mực) - Breakfast","alternateName":["오징어 어묵 찰밥 — 아침 메뉴","Xôi chả mực - Bữa sáng","鱿鱼饼糯米饭 (Xôi chả mực) - 早餐","イカのすり身揚げ入りおこわ (ソイ・チャー・ムック) - 朝食メニュー"],"offers":{"@type":"Offer","price":68000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sticky Rice with Braised Pork Belly (Xôi khâu nhục) - Breakfast","alternateName":["삼겹살 조림 찰밥 — 아침 메뉴","Xôi khâu nhục - Bữa sáng","扣肉糯米饭 (Xôi khâu nhục) - 早餐","豚バラ煮込みのおこわ (ソイ・カウ・ニュック) - 朝食メニュー"],"offers":{"@type":"Offer","price":68000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Bánh and Snacks","hasMenuItem":[{"@type":"MenuItem","name":"Phủ Lý-style Steamed Rice Rolls with Grilled Pork (Bánh cuốn Phủ Lý)","alternateName":["풀리식 돼지구이 반꾸온","Bánh cuốn Phủ Lý","府理风味烤肉蒸米卷 (Bánh cuốn Phủ Lý)","フーリー風 焼き豚入り蒸し米ロール (バインクオン・フーリー)"],"offers":{"@type":"Offer","price":98000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Rice Rolls with Cinnamon Pork Sausage (Bánh cuốn chả quế)","alternateName":["짜꾸에(계피 돼지고기 소시지) 반꾸온","Bánh cuốn chả quế","肉桂猪肉肠蒸米卷 (Bánh cuốn chả quế)","シナモン風味豚肉ソーセージの蒸し米ロール (バインクオン・チャー・クエ)"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Rice Rolls with Shrimp and Minced Pork","alternateName":["새우·다진 돼지고기 반꾸온","Bánh cuốn nhân tôm","虾仁猪肉馅蒸米卷","エビと豚ひき肉の蒸し米ロール (バインクオン)"],"offers":{"@type":"Offer","price":85000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Rice Rolls with Pork and Mushroom","alternateName":["돼지고기·버섯 반꾸온","Bánh cuốn nhân thịt","猪肉香菇馅蒸米卷","豚肉ときのこの蒸し米ロール (バインクオン)"],"offers":{"@type":"Offer","price":85000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Plain Steamed Rice Rolls (without sausage)","alternateName":["기본 반꾸온(소시지 없음)","Bánh cuốn không chả","原味蒸米卷(不含肉肠)","プレーンの蒸し米ロール (ソーセージなし)"],"offers":{"@type":"Offer","price":40000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Beef Stew in Red Wine Sauce with Bánh Mì","alternateName":["와인 소스 소고기 스튜 반미","Bánh mì sốt vang","红酒炖牛肉配法棍 (Bánh mì sốt vang)","牛肉の赤ワイン煮込みとバインミー"],"offers":{"@type":"Offer","price":90000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Huế-style Tapioca Dumplings with Shrimp and Pork (Bánh bột lọc Huế)","alternateName":["후에식 반봇록(타피오카 새우·돼지 떡)","Bánh bột lọc Huế","顺化虾肉木薯粉团 (Bánh bột lọc)","フエ風タピオカ団子 エビ・豚肉入り (バイン・ボット・ロック)"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bánh Ít Trần (Huế-style Sticky Rice Dumplings)","alternateName":["반잇쩐(후에식 찹쌀 경단)","Bánh ít trần","顺化糯米团 (Bánh ít trần)","バイン・イット・チャン (フエ風もち米団子)"],"offers":{"@type":"Offer","price":90000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Huế-style Bánh Nậm (Flat Steamed Rice Cake)","alternateName":["후에식 반남(납작 찐 떡)","Bánh nậm Huế","顺化扁蒸米糕 (Bánh nậm)","フエ風バイン・ナム (平たい蒸し餅)"],"offers":{"@type":"Offer","price":85000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bánh Mì (Vietnamese Baguette)","alternateName":["반미(빵)","Bánh mì","越南法棍面包 (Bánh mì)","バインミー (ベトナムのパン)"],"offers":{"@type":"Offer","price":10000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Bánh Quẩy (Fried Dough Sticks)","alternateName":["반꾸어이(튀김빵)","Bánh quẩy","油条 (Bánh quẩy)","揚げパン (バイン・クアイ)"],"offers":{"@type":"Offer","price":20000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Vegetables and Northwest Specialties","hasMenuItem":[{"@type":"MenuItem","name":"Stir-fried Chayote Shoots with Garlic","alternateName":["차요테 순 마늘볶음","Ngọn su su xào tỏi","蒜香炒佛手瓜尖","ハヤトウリの新芽のニンニク炒め"],"offers":{"@type":"Offer","price":98000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried / Blanched Sweet Mustard Greens (Choy Sum)","alternateName":["초이섬(달콤한 배추) 볶음 / 데침","Rau cải ngọt xào / luộc","清炒 / 白灼菜心","チンゲン菜に似た菜心の炒め / 湯通し"],"offers":{"@type":"Offer","price":85000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Bok Choy with Mushrooms","alternateName":["청경채 버섯볶음","Rau cải chíp xào nấm","蘑菇炒小白菜","チンゲン菜ときのこの炒め"],"offers":{"@type":"Offer","price":85000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Morning Glory with Garlic","alternateName":["모닝글로리(공심채) 마늘볶음","Rau muống xào tỏi","蒜香炒空心菜","空心菜のニンニク炒め"],"offers":{"@type":"Offer","price":85000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mixed Vegetables with Kho Quẹt Dipping Sauce","alternateName":["모둠 채소와 코꿧 소스","Rau củ quả chấm kho quẹt","什锦蔬菜配焦糖猪肉酱 (kho quẹt)","野菜盛り合わせ コー・クエット(甘辛肉味噌)添え"],"offers":{"@type":"Offer","price":125000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Cauliflower with Garlic","alternateName":["콜리플라워 마늘볶음","Súp lơ xào tỏi","蒜香炒花菜","カリフラワーのニンニク炒め"],"offers":{"@type":"Offer","price":88000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Stir-fried Northwest Bamboo Shoots with Garlic (Măng lay Tây Bắc)","alternateName":["서북부 죽순 마늘볶음","Măng lay Tây Bắc xào tỏi","蒜香炒西北竹笋","北西部産タケノコのニンニク炒め"],"offers":{"@type":"Offer","price":115000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Spicy Catfish Soup with Bamboo Shoots","alternateName":["매운 죽순 메기탕","Canh cá lăng măng cay","辣笋鮰鱼汤","川ナマズとタケノコの辛いスープ"],"offers":{"@type":"Offer","price":145000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Chè and Fruit Desserts","hasMenuItem":[{"@type":"MenuItem","name":"Lotus Seed Sweet Soup (Chè hạt sen)","alternateName":["연꽃씨 체","Chè hạt sen","莲子糖水 (Chè hạt sen)","蓮の実のチェー"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Dried Longan Sweet Soup (Chè nhãn nhục)","alternateName":["건용안 체","Chè nhãn nhục","桂圆糖水 (Chè nhãn nhục)","干しリュウガンのチェー"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Jelly, Tapioca and Coconut Milk Sweet Soup (Chè sương sa hạt lựu)","alternateName":["젤리·타피오카·코코넛밀크 체","Chè sương sa hạt lựu","果冻西米椰奶糖水","ゼリー・タピオカ入りココナッツミルクのチェー"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sweet Potato and Mung Bean Coconut Milk Sweet Soup (Chè bà ba)","alternateName":["고구마·녹두 코코넛밀크 체(체 바바)","Chè bà ba","红薯绿豆椰奶糖水 (Chè bà ba)","サツマイモと緑豆のココナッツミルクのチェー (チェー・バー・バー)"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sweet Corn Pudding Dessert (Chè bắp)","alternateName":["옥수수 푸딩 체","Chè bắp","玉米布丁糖水 (Chè bắp)","コーンプリンのチェー (チェー・バップ)"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Steamed Banana in Coconut Milk Sweet Soup","alternateName":["코코넛밀크 찐 바나나 체","Chè chuối hấp nước dừa","椰奶蒸香蕉糖水","バナナ蒸しココナッツミルクのチェー"],"offers":{"@type":"Offer","price":50000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Black Bean Sweet Soup (Chè đậu đen)","alternateName":["검은콩 체","Chè đậu đen","黑豆糖水 (Chè đậu đen)","黒豆のチェー"],"offers":{"@type":"Offer","price":35000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pomelo (Năm Roi Grapefruit)","alternateName":["포멜로(남로이 자몽)","Bưởi năm roi","柚子(Năm Roi 柚)","ポメロ (ナムロイ種)"],"offers":{"@type":"Offer","price":100000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pineapple","alternateName":["파인애플","Dứa","菠萝","パイナップル"],"offers":{"@type":"Offer","price":65000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Watermelon","alternateName":["수박","Dưa hấu","西瓜","スイカ"],"offers":{"@type":"Offer","price":65000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mixed Fruit Platter","alternateName":["모둠 과일 접시","Trái cây đĩa","什锦水果拼盘","フルーツ盛り合わせ"],"offers":{"@type":"Offer","price":175000,"priceCurrency":"VND"}}]},{"@type":"MenuSection","name":"Drinks, Coffee and Alcohol","hasMenuItem":[{"@type":"MenuItem","name":"Fresh Orange Juice","alternateName":["생오렌지 주스","Cam vắt","鲜榨橙汁","生搾りオレンジジュース"],"offers":{"@type":"Offer","price":75000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh 100% Pure Orange Juice","alternateName":["생오렌지 100% 원액 주스","Cam vắt nguyên chất","鲜榨100%纯橙汁","生搾り100%オレンジジュース"],"offers":{"@type":"Offer","price":106250,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh Calamansi (Kumquat) Juice","alternateName":["생금귤(깔라만시) 주스","Nước tắc ép","鲜榨金桔(卡曼橘)汁","生搾りカラマンシー(キンカン)ジュース"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh Guava Juice","alternateName":["생구아바 주스","Nước ép ổi","鲜榨番石榴汁","生搾りグァバジュース"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh Lime Juice","alternateName":["생라임 주스","Nước chanh tươi","鲜榨青柠汁","生搾りライムジュース"],"offers":{"@type":"Offer","price":48000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh Pomelo Juice","alternateName":["생포멜로 주스","Nước ép bưởi","鲜榨柚子汁","生搾りポメロジュース"],"offers":{"@type":"Offer","price":98000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh Pineapple Juice","alternateName":["생파인애플 주스","Nước ép dứa","鲜榨菠萝汁","生搾りパイナップルジュース"],"offers":{"@type":"Offer","price":65000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh Watermelon Juice","alternateName":["생수박 주스","Nước ép dưa hấu","鲜榨西瓜汁","生搾りスイカジュース"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh Carrot Juice","alternateName":["생당근 주스","Nước ép cà rốt","鲜榨胡萝卜汁","生搾りにんじんジュース"],"offers":{"@type":"Offer","price":60000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh Tomato Juice","alternateName":["생토마토 주스","Nước ép cà chua","鲜榨番茄汁","生搾りトマトジュース"],"offers":{"@type":"Offer","price":40000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Orange and Carrot Juice","alternateName":["오렌지·당근 주스","Nước ép cam cà rốt","橙子胡萝卜汁","オレンジ・にんじんジュース"],"offers":{"@type":"Offer","price":95000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Passion Fruit and Kumquat Juice","alternateName":["패션후르츠·금귤 주스","Nước ép chanh leo và tắc","百香果金桔汁","パッションフルーツ・キンカンジュース"],"offers":{"@type":"Offer","price":70000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Pomegranate Juice","alternateName":["석류 주스","Nước ép lựu","石榴汁","ザクロジュース"],"offers":{"@type":"Offer","price":88000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sugarcane Juice (Lemongrass-Kumquat / Coconut / Pineapple Flavor)","alternateName":["사탕수수 주스(레몬그라스·금귤 / 코코넛 / 파인애플향)","Nước mía sả tắc / dừa bào / hương dứa","甘蔗汁(香茅金桔 / 椰子 / 菠萝味)","サトウキビジュース (レモングラス・キンカン / ココナッツ / パイナップル風味)"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Banana Smoothie","alternateName":["바나나 스무디","Sinh tố chuối","香蕉冰沙","バナナスムージー"],"offers":{"@type":"Offer","price":65000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Mango Smoothie","alternateName":["망고 스무디","Sinh tố xoài","芒果冰沙","マンゴースムージー"],"offers":{"@type":"Offer","price":75000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Coconut Smoothie","alternateName":["코코넛 스무디","Sinh tố dừa xiêm","椰子冰沙","ココナッツスムージー"],"offers":{"@type":"Offer","price":80000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Avocado Smoothie","alternateName":["아보카도 스무디","Sinh tố bơ","牛油果冰沙","アボカドスムージー"],"offers":{"@type":"Offer","price":106250,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Coconut Avocado Ice Cream (served in a coconut)","alternateName":["코코넛 아보카도 아이스크림","Kem bơ trái dừa","椰子牛油果冰淇淋","ココナッツ・アボカドアイスクリーム"],"offers":{"@type":"Offer","price":95000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh Whole Coconut","alternateName":["생 코코넛","Trái dừa tươi","新鲜椰子","生ココナッツ"],"offers":{"@type":"Offer","price":75000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Yogurt","alternateName":["요거트","Sữa chua","酸奶","ヨーグルト"],"offers":{"@type":"Offer","price":20000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Blended Iced Yogurt","alternateName":["얼음 블렌디드 요거트","Sữa chua đánh đá","冰沙酸奶","アイスブレンドヨーグルト"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Fresh Milk","alternateName":["생우유","Sữa tươi","鲜牛奶","生乳(牛乳)"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Vietnamese Black Coffee (Hot / Iced) (Cà phê đen)","alternateName":["베트남 블랙커피 (핫/아이스)","Cà phê đen (nóng / đá)","越南黑咖啡(热 / 冰)","ベトナムブラックコーヒー (ホット / アイス)"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Vietnamese Condensed Milk Coffee (Hot / Iced) (Cà phê sữa)","alternateName":["베트남 연유 커피 (핫/아이스)","Cà phê sữa (nóng / đá)","越南炼乳咖啡(热 / 冰)","ベトナム練乳コーヒー (ホット / アイス)"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Milk Cocoa (Hot / Iced)","alternateName":["밀크 코코아 (핫/아이스)","Ca cao sữa (nóng / đá)","牛奶可可(热 / 冰)","ミルクココア (ホット / アイス)"],"offers":{"@type":"Offer","price":55000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Espresso","alternateName":["에스프레소","意式浓缩咖啡","エスプレッソ"],"offers":{"@type":"Offer","price":59000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Double Espresso","alternateName":["더블 에스프레소","Espresso đôi","双份意式浓缩咖啡","ダブルエスプレッソ"],"offers":{"@type":"Offer","price":79000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Cappuccino","alternateName":["카푸치노","卡布奇诺","カプチーノ"],"offers":{"@type":"Offer","price":79000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Café Latte","alternateName":["카페 라떼","Cà phê latte","拿铁咖啡","カフェラテ"],"offers":{"@type":"Offer","price":79000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Café Macchiato","alternateName":["카페 마키아토","Cà phê macchiato","玛奇朵咖啡","カフェマキアート"],"offers":{"@type":"Offer","price":79000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Coca-Cola / Sprite / Soda / Diet Coke","alternateName":["코카콜라 / 스프라이트 / 소다 / 다이어트 콜라","Coca Cola / Sprite / Soda / Coca Cola Light","可口可乐 / 雪碧 / 苏打水 / 健怡可乐","コカ・コーラ / スプライト / ソーダ / ダイエットコーラ"],"offers":{"@type":"Offer","price":30000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lemon Soda","alternateName":["레몬 소다","Soda chanh đường","柠檬苏打","レモンソーダ"],"offers":{"@type":"Offer","price":40000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Lavie Bottled Water","alternateName":["라비 생수","Nước khoáng Lavie","Lavie 矿泉水","ラヴィ ミネラルウォーター"],"offers":{"@type":"Offer","price":28000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Hanoi / Saigon Beer","alternateName":["하노이 · 사이공 맥주","Bia Hà Nội / Bia Sài Gòn","河内啤酒 / 西贡啤酒","ハノイビール / サイゴンビール"],"offers":{"@type":"Offer","price":45000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Sapporo / Heineken / Tiger / Tiger Crystal / Tiger Draft Beer","alternateName":["삿포로 · 하이네켄 · 타이거 · 타이거 크리스탈 · 타이거 생맥주","Bia Sapporo / Heineken / Tiger / Tiger Crystal / Bia tươi Tiger","札幌 / 喜力 / 虎牌 / 虎牌冰爽 / 虎牌生啤","サッポロ / ハイネケン / タイガー / タイガークリスタル / タイガー生ビール"],"offers":{"@type":"Offer","price":48000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Heineken Non-alcoholic Beer","alternateName":["하이네켄 논알코올 맥주","Bia Heineken không cồn","喜力无酒精啤酒","ハイネケン ノンアルコールビール"],"offers":{"@type":"Offer","price":36000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Chamisul Soju (360ml)","alternateName":["참이슬 소주(360ml)","Soju Chamisul (360ml)","真露烧酒(360ml)","チャミスル 焼酎 (360ml)"],"offers":{"@type":"Offer","price":200000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Hanoi Vodka","alternateName":["하노이 보드카","Rượu Vodka Hà Nội","河内伏特加","ハノイ・ウォッカ"],"offers":{"@type":"Offer","price":275000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Nếp Cái Hoa Vàng (Vietnamese Traditional Sticky Rice Liquor)","alternateName":["넵까이 호아방(베트남 전통 찹쌀주)","Rượu nếp cái hoa vàng","黄花糯米酒 (Nếp cái hoa vàng,越南传统糯米酒)","ネプ・カイ・ホアヴァン (ベトナム伝統のもち米酒)"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Rượu Làng (Traditional Liquor, Dragon Fruit)","alternateName":["르어우 랑(전통주·용과주)","Rượu Làng","Rượu Làng 传统酒(火龙果酒)","ルオウ・ラン (伝統酒・ドラゴンフルーツ酒)"],"offers":{"@type":"Offer","price":1350000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Corkage Fee - Spirits (Brandy)","alternateName":["콜키지 — 양주(브랜디)","Phí mang rượu mạnh vào (corkage)","开瓶费 - 烈酒(白兰地)","持ち込み料 - 洋酒 (ブランデー)"],"offers":{"@type":"Offer","price":400000,"priceCurrency":"VND"}},{"@type":"MenuItem","name":"Corkage Fee - Wine","alternateName":["콜키지 — 와인","Phí mang rượu vang vào (corkage)","开瓶费 - 葡萄酒","持ち込み料 - ワイン"],"offers":{"@type":"Offer","price":300000,"priceCurrency":"VND"}}]}]}}</script>
+<!-- seo:end -->
+</head>
+<body>
+<header>
+  <span class="corner l"></span><span class="corner r"></span>
+  <div class="wrap">
+    <div class="langs" id="langs"></div>
+    <img class="logo sign" src="img/sign.jpg" alt="">
+    <h1>꽌안응온</h1>
+    <p class="en">QUÁN ĂN NGON · HOÀNG ĐẠO THÚY</p>
+    <p class="tagline" id="tagline"></p>
+    <div class="chips" id="chips"></div>
+  </div>
+</header>
+
+<nav><div class="wrap" id="nav"></div></nav>
+
+<main class="wrap" id="menu"></main>
+
+<footer>
+  <div class="wrap">
+    <p class="quote" id="quote"></p>
+    <div class="pills">
+      <button class="pill" id="wifi" type="button" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg></i>
+        <div><small id="wifiLabel"></small><strong id="wifiText"></strong></div>
+        <em id="wifiCopy"></em>
+      </button>
+      <div class="pill" id="hours" hidden>
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></i>
+        <div><small id="hoursLabel"></small><strong id="hoursText"></strong></div>
+      </div>
+      <a class="pill" id="call">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></i>
+        <div><small id="callLabel"></small><strong id="callText"></strong></div>
+      </a>
+      <a class="pill" id="map" target="_blank" rel="noopener">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></i>
+        <div><small id="mapLabel"></small><strong id="mapText"></strong></div>
+      </a>
+    </div>
+    <p class="vnd" id="foot"></p>
+  </div>
+</footer>
+
+<div class="zoom" id="zoom"><figure><img id="zoomImg" alt=""><figcaption id="zoomCap"></figcaption></figure></div>
+<div class="toast" id="toast"></div>
+
+<script src="menu.js"></script>
+<!-- override:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script src="https://qrmenuasia.com/api/override?shop=quananngonhdt"></script>
+<!-- override:end -->
+<script>
+  const LANGS = [["ko", "한국어"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"], ["vi", "Tiếng Việt"]];
+  const UI = {
+    ko: { title: "메뉴", tagline: "베트남 전통 요리 · 전골 · 해산물 · 쌀국수", chips: ["전골 · 해산물", "아침 메뉴 07:00~", "VAT 별도"],
+      must: "Must Try", best: "BEST", special: "스페셜", spicy: "🌶 매콤", tip: "TIP", market: "시가",
+      quote: "맛있는 한 끼가 즐거운 시간이 되시길 바랍니다.<small>– Quán Ăn Ngon –</small>",
+      copy: "복사", copied: "비밀번호를 복사했어요", hours: "영업시간", call: "전화 · 예약", map: "주소 · 지도", vnd: "가격 단위: 베트남 동(VND) · 메뉴·가격은 구글 지도에 올린 메뉴판 기준이며 바뀔 수 있어요" },
+    en: { title: "Menu", tagline: "Vietnamese home cooking · Hotpot · Seafood · Noodles", chips: ["Hotpot · Seafood", "Breakfast from 07:00", "VAT not included"],
+      must: "Must Try", best: "BEST", special: "Special", spicy: "🌶 Spicy", tip: "TIP", market: "Market price",
+      quote: "We hope a delicious meal makes for a lovely time.<small>– Quán Ăn Ngon –</small>",
+      copy: "Copy", copied: "Password copied", hours: "Opening hours", call: "Call · Reservations", map: "Address · Map", vnd: "Prices in Vietnamese đồng (VND) · Menu and prices are based on the menu posted on Google Maps and may change" },
+    zh: { title: "菜单", tagline: "越南传统美食 · 火锅 · 海鲜 · 米粉", chips: ["火锅 · 海鲜", "早餐 07:00起", "价格不含VAT"],
+      must: "必吃", best: "人气", special: "特色", spicy: "🌶 辣", tip: "小贴士", market: "时价",
+      quote: "愿美味的一餐带给您愉快的时光。<small>– Quán Ăn Ngon –</small>",
+      copy: "复制", copied: "密码已复制", hours: "营业时间", call: "电话 · 预订", map: "地址 · 地图", vnd: "价格单位：越南盾（VND）· 菜单和价格以谷歌地图上发布的菜单为准，可能会有变动" },
+    ja: { title: "メニュー", tagline: "ベトナム伝統料理・鍋・海鮮・麺料理", chips: ["鍋・海鮮", "朝メニュー 07:00〜", "VAT別"],
+      must: "Must Try", best: "BEST", special: "スペシャル", spicy: "🌶 辛口", tip: "TIP", market: "時価",
+      quote: "美味しい食事が楽しいひとときになりますように。<small>– Quán Ăn Ngon –</small>",
+      copy: "コピー", copied: "パスワードをコピーしました", hours: "営業時間", call: "電話・ご予約", map: "住所・地図", vnd: "価格はベトナムドン（VND）です・メニューと価格はGoogleマップに掲載されたメニュー表に基づいており、変更される場合があります" },
+    vi: { title: "Thực đơn", tagline: "Ẩm thực Việt · Lẩu · Hải sản · Bún phở", chips: ["Lẩu · Hải sản", "Bữa sáng từ 07:00", "Chưa gồm VAT"],
+      must: "Must Try", best: "BEST", special: "Đặc biệt", spicy: "🌶 Cay", tip: "TIP", market: "Liên hệ",
+      quote: "Chúc quý khách có một bữa ăn ngon miệng.<small>– Quán Ăn Ngon –</small>",
+      copy: "Sao chép", copied: "Đã sao chép mật khẩu", hours: "Giờ mở cửa", call: "Gọi điện · Đặt bàn", map: "Địa chỉ · Bản đồ", vnd: "Giá tính bằng VND · Thực đơn và giá theo menu đăng trên Google Maps, có thể thay đổi" },
+  };
+  const SUPPORTED = LANGS.map(([c]) => c);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const storage = (fn) => { try { return fn(localStorage); } catch { return null; } };
+  let observer;
+
+  // 우선순위: ?lang= → 손님이 직접 고른 언어 → 휴대폰 언어 → 영어
+  function detectLang() {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (SUPPORTED.includes(q)) return q;
+    const saved = storage((s) => s.getItem("menu-lang"));
+    if (SUPPORTED.includes(saved)) return saved;
+    for (const l of navigator.languages || [navigator.language]) {
+      const code = (l || "").toLowerCase().split("-")[0];
+      if (SUPPORTED.includes(code)) return code;
+    }
+    return "en";
+  }
+
+  const fmt = (n) => n.toLocaleString("en-US");
+
+  function priceHtml(it, t) {
+    if (it.sizes) return `<div class="sizes">${it.sizes.map(([s, p]) => `<span><i>${s}</i>${fmt(p)}<small>₫</small></span>`).join("")}</div>`;
+    return "";
+  }
+
+  function render(lang) {
+    const t = UI[lang], R = window.RESTAURANT;
+    // 아랫줄: 한국어 화면 → 베트남어(직원용), 그 외 → 한국어
+    const second = lang === "ko" ? "vi" : "ko";
+    document.documentElement.lang = lang === "zh" ? "zh-Hans" : lang;
+    document.title = `${R.brand.ko} ${R.brand.en} · ${t.title}`;
+
+    $("langs").innerHTML = LANGS.map(([c, label]) => `<button type="button" data-lang="${c}" aria-pressed="${c === lang}">${label}</button>`).join("");
+    $("tagline").textContent = t.tagline;
+    $("chips").innerHTML = t.chips.map((c) => `<span>${esc(c)}</span>`).join("");
+    $("nav").innerHTML = MENU.map((cat) => `<a href="#${cat.id}">${esc(cat.name[lang])}</a>`).join("");
+
+    $("menu").innerHTML = MENU.map((cat) => `
+      <section id="${cat.id}">
+        <div class="head"><h2>${esc(cat.name[lang])}${lang !== "vi" ? `<small>${esc(cat.name.vi)}</small>` : `<small>${esc(cat.name.ko)}</small>`}</h2></div>
+        ${cat.note ? `<p class="note">${esc(cat.note[lang])}</p>` : ""}
+        <ul>${cat.items.map((it) => {
+          const tags = [it.tag ? `<span class="${it.tag}">${esc(t[it.tag])}</span>` : "", it.spicy ? `<span class="hot">${esc(t.spicy)}</span>` : ""].join("");
+          const single = it.sizes ? "" : `<span class="leader"></span><span class="price">${it.price == null ? esc(t.market) : `${fmt(it.price)}<small>₫</small>`}</span>`;
+          return `
+          <li>
+            ${it.photo ? `<button class="thumb" type="button" data-photo="${it.photo}" data-cap="${esc(it.name[lang])}"><img src="${it.photo}" alt="${esc(it.name[lang])}" loading="lazy"></button>` : ""}
+            <div class="info">
+              ${tags.trim() ? `<div class="tags">${tags}</div>` : ""}
+              <div class="row"><b>${esc(it.name[lang])}</b>${it.unit ? `<span class="unit">${esc(it.unit)}</span>` : ""}${single}</div>
+              ${priceHtml(it, t)}
+              ${it.desc ? `<div class="desc">${esc(it.desc[lang])}</div>` : ""}
+              <div class="sub ${second === "vi" ? "it" : ""}">${esc(it.name[second])}</div>
+            </div>
+          </li>`; }).join("")}
+        </ul>
+        ${cat.tip ? `<p class="tip"><b>${esc(t.tip)}</b>${esc(cat.tip[lang])}</p>` : ""}
+      </section>`).join("");
+
+    $("quote").innerHTML = t.quote;
+    if (R.wifi) {
+      $("wifi").hidden = false;
+      $("wifiLabel").textContent = `Wi-Fi · ${R.wifi.ssid}`;
+      $("wifiText").textContent = R.wifi.password;
+      $("wifiCopy").textContent = t.copy;
+    }
+    if (R.hours) {
+      $("hours").hidden = false;
+      $("hoursLabel").textContent = t.hours;
+      $("hoursText").textContent = typeof R.hours === "string" ? R.hours : R.hours[lang];
+    }
+    $("callLabel").textContent = t.call;
+    $("callText").textContent = R.phone;
+    $("call").href = "tel:" + R.phone.replace(/[^\d+]/g, "");
+    $("mapLabel").textContent = t.map;
+    $("mapText").textContent = R.address;
+    $("map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(R.brand.en + " " + R.address);
+    $("foot").textContent = t.vnd;
+    observeSections();
+  }
+
+  let lang = detectLang();
+  render(lang);
+
+  $("langs").addEventListener("click", (e) => {
+    const c = e.target.closest("button")?.dataset.lang;
+    if (!c || c === lang) return;
+    lang = c;
+    storage((s) => s.setItem("menu-lang", c));
+    render(lang);
+  });
+
+  $("menu").addEventListener("click", (e) => {
+    const b = e.target.closest(".thumb");
+    if (!b) return;
+    $("zoomImg").src = b.dataset.photo;
+    $("zoomCap").textContent = b.dataset.cap;
+    $("zoom").classList.add("show");
+  });
+  $("zoom").addEventListener("click", () => $("zoom").classList.remove("show"));
+
+  function toast(msg) {
+    const el = $("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+  $("wifi").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(RESTAURANT.wifi.password); toast(UI[lang].copied); }
+    catch { toast(RESTAURANT.wifi.password); }
+  });
+
+  // 스크롤 위치에 맞춰 상단 카테고리 강조
+  function observeSections() {
+    observer?.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        document.querySelectorAll("nav a").forEach((a) => {
+          const on = a.getAttribute("href") === "#" + e.target.id;
+          a.classList.toggle("active", on);
+          if (on) a.parentElement.scrollTo({ left: a.offsetLeft - a.parentElement.clientWidth / 2 + a.clientWidth / 2, behavior: "smooth" });
+        });
+      }
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    document.querySelectorAll("main section").forEach((s) => observer.observe(s));
+  }
+</script>
+<script src="dasan.js"></script>
+<script src="stores-link.js"></script>
+<script src="lang-menu.js"></script>
+<script src="qr-home.js"></script>
+<!-- analytics:start (tools/analytics.mjs 가 만듦, 직접 고치지 말 것) -->
+<script>(function(){var q=new URLSearchParams(location.search),ig=0;try{var s=localStorage;if(q.has('notrack'))s.setItem('qm_ignore','1');if(q.has('track'))s.removeItem('qm_ignore');ig=s.getItem('qm_ignore')}catch(e){}if(ig)return;try{navigator.sendBeacon('https://qrmenuasia.com/api/hit',JSON.stringify({h:location.hostname,p:location.pathname,l:document.documentElement.lang,s:q.get('utm_source')||'',r:document.referrer,w:screen.width}))}catch(e){}})()</script>
+<!-- analytics:end -->
+</body>
+</html>

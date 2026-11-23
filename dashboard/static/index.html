@@ -7,15 +7,16 @@
 <link rel="stylesheet" href="/static/style.css">
 <link rel="stylesheet" href="/static/builder.css">
 <link rel="stylesheet" href="/static/sales.css">
+<link rel="stylesheet" href="/static/office-anime/office-anime.css?v=7">
 </head>
 <body>
 <header class="top">
   <div class="brand"><span class="logo">J</span><div><b>Jinwoo 에이전트</b><small id="updated">불러오는 중…</small></div></div>
-  <div class="counts" id="counts"></div>
+  <div class="topr"><div class="counts" id="counts"></div><button type="button" class="btn-bell" id="notify-btn" title="PC · 휴대폰(텔레그램) 알림 설정">🔔 알림</button><details class="qmini" id="quota" aria-label="Claude 사용량"></details></div>
 </header>
 
 <div class="layout">
-  <!-- 왼쪽: 대화방(지시·팀 대화·결재함) · 새 가게 -->
+  <!-- 왼쪽: 대화방(지시·팀 대화·결재함) — '새 가게' 줄 세우기 칸은 2026-11-23 없앰(캡틴 '가-1') -->
   <aside class="col left">
     <!-- 대화방 (2026-11-21, 캡틴 '가-1'): 지시하기 + 팀 대화 + 결재함을 카톡 모양 하나로 -->
     <section class="card chat" aria-label="팀 대화방">
@@ -39,16 +40,24 @@
         <p class="send-err" id="order-err" role="alert"></p>
       </div>
     </section>
-    <section class="card" aria-label="새 가게 줄 세우기">
-      <h2>새 가게 <span class="badge b-na" id="ns-count">0</span><small>드라이브에 올린 사진 · 줄 세우기</small></h2>
-      <div id="newshops"><p class="muted">드라이브 폴더를 읽는 중…</p></div>
-    </section>
   </aside>
 
   <!-- 가운데: 한도 · 사무실 · 탭 -->
   <main class="col center">
-    <section class="quota" id="quota" aria-label="할당량"></section>
-    <section class="office" id="office" aria-label="사무실"></section>
+    <div class="office-bar">
+      <div class="office-sw" role="group" aria-label="사무실 보기 방식">
+        <button type="button" id="of-mode-game" class="on">✨ 애니 사무실</button>
+        <button type="button" id="of-mode-photo">🖼 사진 사무실</button>
+      </div>
+      <div class="office-acts" id="of-game-acts">
+        <button type="button" id="of-game-brief" title="전 직원 단상 앞 정렬 후 전일 업무 보고">📋 보고해</button>
+        <button type="button" id="of-game-coffee" title="비서실장이 캡틴에게 커피 서빙">☕ 커피 서빙</button>
+        <button type="button" id="of-game-stroll" title="대기 중인 직원 커피 휴식 이동">🚶 휴식 이동</button>
+        <a href="/static/office-anime/index.html" target="_blank" rel="noopener" title="별도 창에서 크게 보기">↗ 크게 보기</a>
+      </div>
+    </div>
+    <section class="office office-game-wrap" id="office-game" aria-label="12프레임 고화질 애니 사무실"></section>
+    <section class="office" id="office" aria-label="사진 사무실" hidden></section>
 
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="stores" class="on">가게 현황</button>
@@ -98,7 +107,8 @@
 <div class="toast" id="toast"></div>
 <script src="/static/rooms/new/tiles.js"></script>
 <script src="/static/rooms/new/routes.js"></script>
-<script src="/static/app.js"></script>
+<script src="/static/office-anime/office-anime.js?v=37"></script>
+<script src="/static/app.js?v=anime2"></script>
 <script src="/static/builder.js"></script>
 <script src="/static/sales.js"></script>
 </body>

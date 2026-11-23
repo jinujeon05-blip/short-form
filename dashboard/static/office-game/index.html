@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jinwoo 에이전트 — 2D 픽셀 NPC 사무실 (별도 시연 공간)</title>
+<link rel="stylesheet" href="/static/office-game/office-game.css">
+</head>
+<body class="og-page">
+<header class="og-topbar">
+  <h1>
+    Jinwoo 에이전트 · 2D 픽셀 NPC 사무실
+    <span class="og-pill">별도 시연 공간 · 기존 대시보드 무변경</span>
+  </h1>
+  <div class="og-controls">
+    <button class="og-btn green" id="btn-demo">▶ 새 가게 제작 시연 (22초)</button>
+    <button class="og-btn ghost" id="btn-serve">☕ 비서 커피 서빙 보기</button>
+    <button class="og-btn ghost" id="btn-coffee">🚶 직원 휴식 이동</button>
+    <button class="og-btn ghost" id="btn-live">● 실시간 연동</button>
+    <a class="og-btn ghost" href="/" style="text-decoration:none">← 기존 대시보드로</a>
+  </div>
+</header>
+
+<main class="og-wrap">
+  <div id="game-root"></div>
+
+  <div class="og-grid">
+    <section class="og-card">
+      <h2>실시간 움직임 기록 <span class="og-muted">캐릭터를 누르면 오른쪽에 상세가 나와요</span></h2>
+      <ul class="og-log" id="og-log"></ul>
+    </section>
+    <section class="og-card">
+      <h2>선택한 직원 정보</h2>
+      <div class="og-detail" id="og-detail">
+        <p class="og-muted">사무실 안의 캐릭터를 클릭하면 지금 맡은 일과 상태가 여기에 표시됩니다.<br>대시보드에 연결하면 기존 옆 창(상세·점검 실행)이 그대로 열립니다.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="/static/office-game/office-game.js"></script>
+<script>
+(() => {
+  const logEl = document.getElementById('og-log');
+  const detailEl = document.getElementById('og-detail');
+  const api = p => fetch(p, { cache: 'no-store' }).then(r => r.json()).catch(() => null);
+
+  function addLog(text) {
+    const t = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const li = document.createElement('li');
+    li.innerHTML = `<time>${t}</time><span>${text}</span>`;
+    logEl.prepend(li);
+    while (logEl.children.length > 30) logEl.lastElementChild.remove();
+  }
+
+  const game = window.OfficeGame.create(document.getElementById('game-root'), {
+    onLog: addLog,
+    onSelect(id, npc, cfg) {
+      const stateMap = { idle: '대기 중', work: '작업 중', walk: '이동·보고 중', 'coffee-walk': '커피 휴식 중', done: '✔ 작업 완료' };
+      detailEl.innerHTML = `
+        <p style="margin:0 0 6px"><b>${cfg.name}</b> <span class="og-muted">(${cfg.role})</span></p>
+        <p style="margin:0 0 6px">현재 상태: <b>${stateMap[npc.mode] || npc.mode}</b></p>
+        <p style="margin:0">${npc.bubble ? `지금 하는 일: <b>${npc.bubble}</b>` : '<span class="og-muted">지금 진행 중인 작업 말풍선이 없습니다.</span>'}</p>`;
+      addLog(`${cfg.name} 자리 확인 (${stateMap[npc.mode] || npc.mode})`);
+    },
+  });
+
+  async function poll() {
+    const [ordersRes, jobsRes, colRes, hrRes] = await Promise.all([
+      api('/api/orders'), api('/api/jobs'), api('/api/collector'), api('/api/hr'),
+    ]);
+    const orders = ordersRes?.orders || [];
+    const activeOrder = orders.find(o => o.status === 'running') || orders[0];
+    let talk = [];
+    if (activeOrder) {
+      const tr = await api(`/api/talk?id=${encodeURIComponent(activeOrder.id)}&from=0`);
+      talk = tr?.items || [];
+    }
+    game.syncReal({
+      orders,
+      jobs: jobsRes?.jobs || [],
+      collector: colRes,
+      hr: hrRes,
+      talk,
+    });
+  }
+
+  document.getElementById('btn-demo').addEventListener('click', () => game.runDemo());
+  document.getElementById('btn-serve').addEventListener('click', () => game.serveCoffeeToCaptain());
+  document.getElementById('btn-coffee').addEventListener('click', () => game.coffeeStroll());
+  document.getElementById('btn-live').addEventListener('click', () => {
+    game.stopDemo();
+    addLog('● 실시간 대시보드 데이터 연동 모드로 전환');
+    poll();
+  });
+
+  addLog('2D 픽셀 NPC 사무실 준비 완료 (실시간 대시보드 데이터 연결 중)');
+  poll();
+  setInterval(poll, 3000);
+})();
+</script>
+</body>
+</html>

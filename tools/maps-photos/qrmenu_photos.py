@@ -32,7 +32,6 @@ from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, quote, urlparse
-from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 try:
@@ -40,9 +39,8 @@ try:
 except ImportError:  # 없어도 동작한다(크기 표시·webp 변환만 빠짐)
   Image = None
 
-VERSION = "1.7"
+VERSION = "1.8"
 PORT = int(os.environ.get("QRMENU_PORT", "8765"))
-DASH_URL = os.environ.get("QRMENU_DASH_URL", "http://127.0.0.1:8899")  # 대시보드(Jinwoo 에이전트), 같은 PC 안에서만 부른다
 HOME = Path.home() / ".qrmenu_photos"
 JOBS = HOME / "jobs"
 BUNDLE_LIMIT = int(4.5 * 1024 * 1024)  # 8MB 넘는 묶음은 드라이브 연결 도구가 받다가 끊김(2026-10-23)
@@ -963,38 +961,6 @@ def save_job(job, body):
   return job.saved
 
 
-def queue_job(job):
-  """저장한 가게를 대시보드(Jinwoo 에이전트)의 '새 가게 줄'에 넣는다(v1.7). 사용자가 버튼을 누를 때만 부른다."""
-  saved = job.saved
-  if not saved:
-    raise ValueError("먼저 '드라이브에 저장'을 눌러 주세요.")
-  if str(saved.get("kind") or "").startswith("정식"):
-    raise ValueError("정식 가게는 줄에 넣지 않아요. '문장 복사'로 Claude에 직접 보내 주세요.")
-  if saved.get("queued"):
-    raise ValueError("이미 대시보드 줄에 넣었어요.")
-  folder = saved.get("folder") or Path(saved["path"]).name
-  req = Request(DASH_URL + "/api/queue", method="POST",
-                data=json.dumps({"folders": [folder], "path": saved["path"]}).encode("utf-8"),
-                headers={"Content-Type": "application/json", "X-Dashboard": "1"})
-  try:
-    with urlopen(req, timeout=60) as r:  # 대시보드가 드라이브 폴더 목록을 읽는 데 10초쯤 걸린다
-      res = json.loads(r.read().decode("utf-8"))
-  except HTTPError as exc:
-    try:
-      msg = json.loads(exc.read().decode("utf-8")).get("error")
-    except Exception:
-      msg = None
-    raise ValueError(msg or f"대시보드가 거절했어요({exc.code}).")
-  except (URLError, OSError):
-    raise ValueError("대시보드(Jinwoo 에이전트)가 꺼져 있어요. start-dashboard.bat을 켠 뒤 다시 눌러 주세요.")
-  if not res.get("count"):
-    raise ValueError(res.get("error") or "대시보드 줄에 넣지 못했어요.")
-  saved["queued"] = datetime.now().isoformat(timespec="seconds")
-  job.log(f"대시보드 줄에 넣음: {folder}")
-  job.persist()
-  return saved
-
-
 def make_guide(m):
   s = m["store"]
   c = ", ".join(f"{k} {v}장" for k, v in m["counts"].items())
@@ -1315,8 +1281,6 @@ class Handler(BaseHTTPRequestHandler):
         if job.status == "running":
           return self._send(409, {"error": "수집이 끝난 뒤 저장해 주세요."})
         return self._send(200, save_job(job, body))
-      if self.path == "/api/queue":
-        return self._send(200, queue_job(job))
       if self.path == "/api/open":
         open_folder(body.get("path", ""))
         return self._send(200, {"ok": True})
@@ -1523,8 +1487,7 @@ table.hist{width:100%;border-collapse:collapse;font-size:13px}table.hist td{padd
 </section>
 
 <section class="card" id="savedCard" hidden>
-  <h2>4. 저장 완료 → 대시보드 줄에 넣거나, 아래 문장을 Claude 세션에 보내세요</h2>
-  <div class="row" style="margin-bottom:8px"><button class="primary" id="queue">대시보드 줄에 넣기</button><span class="muted" id="queueMsg"></span></div>
+  <h2>4. 저장 완료 → 아래 문장을 대시보드 지시창이나 Claude 세션에 보내세요</h2>
   <div class="box" id="prompt"></div>
   <div class="row" style="margin-top:8px"><button id="copy">문장 복사</button><button id="openDir" class="pc-only">폴더 열기</button><span class="muted" id="savedPath" style="overflow-wrap:anywhere;min-width:0"></span></div>
 </section>
@@ -1556,7 +1519,7 @@ const $ = id => document.getElementById(id);
 const REMOTE = __REMOTE__;  // 서버가 휴대폰 문으로 들어온 요청인지 알려 줌
 if (REMOTE) document.body.classList.add('remote');
 let S = null, CLASSES = [], TAB_KO = {}, filter = 'all', lbIndex = -1, timer = null, infoFilled = '';
-let queueBusy = false, queueFor = '';  // 대시보드 줄에 넣기: queueFor = 실패 이유를 보여 주고 있는 저장(다시 저장하면 안내 글로 돌아감)
+
 const api = (path, body) => fetch(path, body === undefined ? {} : {method:'POST', headers:{'Content-Type':'application/json','X-QR':'1'}, body:JSON.stringify(body)})
   .then(async r => { if (r.status === 401) { location.reload(); throw new Error('PIN'); } const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; });
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -1595,14 +1558,6 @@ function render() {
   $('savedCard').hidden = !S.saved;
   if (S.saved) {
     $('prompt').textContent = S.saved.prompt; $('savedPath').textContent = S.saved.path;
-    const formal = String(S.saved.kind || '').startsWith('정식');
-    $('queue').hidden = formal;
-    if (!queueBusy) {
-      $('queue').disabled = !!S.saved.queued;
-      if (S.saved.queued) { $('queueMsg').style.color = ''; $('queueMsg').textContent = '✔ 줄에 넣었어요. 대시보드(Jinwoo 에이전트) 결재함의 \'새 가게 줄\'에서 차례대로 만들어요.'; }
-      else if (formal) { $('queueMsg').style.color = ''; $('queueMsg').textContent = '정식 가게는 줄에 넣지 않아요. 문장을 복사해 Claude에 직접 보내 주세요.'; }
-      else if (queueFor !== S.id + S.saved.path) { $('queueMsg').style.color = ''; $('queueMsg').textContent = '누르면 이 가게(가게 찾기용)를 대시보드가 차례대로 만들기 시작해요.'; }
-    }
   }
 }
 function first_fill() {
@@ -1706,12 +1661,6 @@ $('copy').onclick = () => copyText($('prompt').textContent)
   .then(() => { $('copy').textContent = '복사됨'; setTimeout(() => $('copy').textContent = '문장 복사', 1500); })
   .catch(() => alert('복사가 안 되면 문장을 길게 눌러 복사해 주세요.'));
 $('openDir').onclick = () => api('/api/open', {path: S.saved.path}).catch(e => alert(e.message));
-$('queue').onclick = async () => {
-  queueBusy = true; $('queue').disabled = true; queueFor = '';
-  $('queueMsg').style.color = ''; $('queueMsg').textContent = '대시보드에 보내는 중… (10초쯤 걸려요)';
-  try { await api('/api/queue', {}); queueBusy = false; await load(false); }
-  catch (e) { queueBusy = false; queueFor = S.id + S.saved.path; $('queue').disabled = false; $('queueMsg').style.color = '#c0392b'; $('queueMsg').textContent = '못 넣었어요: ' + e.message; }
-};
 function showRemote(r) {
   $('remoteOn').checked = r.enabled; $('remoteLan').checked = r.lan;
   $('remoteMsg').textContent = (r.has_pin ? 'PIN 설정됨. ' : 'PIN을 먼저 정해 주세요. ') +

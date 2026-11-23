@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jinwoo 에이전트 — 12프레임 고화질 애니 사무실 (4명 선행 시연)</title>
+<style>
+  :root { --f: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0f172a; color: #f8fafc; font: 14px/1.5 var(--f); }
+  .top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 18px; background: #1e293b; border-bottom: 1px solid #334155; }
+  .top h1 { margin: 0; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+  .pill { font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 99px; background: #16a34a; color: #fff; }
+  .btns { display: flex; flex-wrap: wrap; gap: 6px; }
+  .btn { border: 1px solid #475569; background: #0f172a; color: #f8fafc; border-radius: 8px; padding: 6px 12px; font: 700 12.5px var(--f); cursor: pointer; text-decoration: none; }
+  .btn:hover { border-color: #60a5fa; }
+  .btn.green { background: #15803d; border-color: #22c55e; }
+  .wrap { max-width: 1320px; margin: 14px auto 28px; padding: 0 14px; display: flex; flex-direction: column; gap: 12px; }
+  .oa-stage { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 16px; overflow: hidden; border: 2px solid #334155; background: #0b101d; box-shadow: 0 16px 40px rgba(0,0,0,0.45); container-type: inline-size; }
+  .oa-stage:fullscreen { width: 100vw; height: 100vh; max-width: none; border: 0; border-radius: 0; display: flex; align-items: center; justify-content: center; background: #050811; }
+  .oa-stage:fullscreen .oa-canvas, .oa-stage:fullscreen .oa-hud { width: min(100vw, calc(100vh * 16 / 9)); height: min(100vh, calc(100vw * 9 / 16)); inset: auto; }
+  .oa-fs-btn { position: absolute; right: 12px; bottom: 12px; z-index: 15; border: 1px solid rgba(255,255,255,0.28); background: rgba(15,23,42,0.78); color: #f8fafc; border-radius: 8px; padding: 6px 11px; font: 700 12px var(--f); cursor: pointer; backdrop-filter: blur(4px); }
+  .oa-fs-btn:hover { background: rgba(37,99,235,0.9); border-color: #93c5fd; }
+  .oa-ctrl-hint { position: absolute; left: 12px; bottom: 12px; z-index: 15; background: rgba(15,23,42,0.78); border: 1px solid rgba(255,255,255,0.2); color: #e2e8f0; border-radius: 8px; padding: 5px 11px; font: 700 11.5px var(--f); backdrop-filter: blur(4px); pointer-events: none; }
+  .oa-brief-bar { position: absolute; right: 108px; bottom: 12px; z-index: 15; display: flex; gap: 6px; }
+  .oa-b-btn { border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 6px 13px; font: 800 12.5px var(--f); cursor: pointer; backdrop-filter: blur(4px); box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
+  .oa-b-btn.start { background: rgba(37,99,235,0.92); color: #fff; border-color: #93c5fd; }
+  .oa-b-btn.start:hover { background: #1d4ed8; }
+  .oa-b-btn.stop { background: rgba(220,38,38,0.94); color: #fff; border-color: #fca5a5; animation: oaPulse 1.6s infinite; }
+  .oa-b-btn.stop:hover { background: #b91c1c; }
+  .oa-b-btn[hidden] { display: none; }
+  @keyframes oaPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(248,113,113,0.55); } 50% { box-shadow: 0 0 0 8px rgba(248,113,113,0); } }
+  .oa-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: pointer; }
+  .oa-hud { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .oa-sign { position: absolute; transform: translate(-50%, -50%); padding: 2px 9px; border-radius: 6px; color: #fff; font-weight: 800; font-size: clamp(9px, 1.15cqw, 13.5px); white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+  .oa-tag { position: absolute; transform: translate(-50%, 0); display: inline-flex; flex-direction: column; align-items: center; background: rgba(15,23,42,0.88); color: #fff; border: 1px solid rgba(255,255,255,0.22); border-radius: 8px; padding: 2px 7px; font-size: clamp(8.5px, 0.95cqw, 11.5px); line-height: 1.18; white-space: nowrap; transition: border-color .15s, box-shadow .15s; }
+  .oa-tag.speaking { border-color: #facc15; box-shadow: 0 0 10px rgba(250,204,21,0.65); z-index: 6; }
+  .oa-tag small { font-size: 0.8em; color: #cbd5e1; }
+  .oa-bub { position: absolute; transform: translate(-50%, -100%); background: #fff; color: #0f172a; border: 2px solid #2563eb; border-radius: 12px; padding: 4px 10px; font-size: clamp(9px, 1cqw, 12px); font-weight: 700; white-space: nowrap; box-shadow: 0 5px 14px rgba(0,0,0,0.35); z-index: 8; }
+  .oa-bub::before { content: ""; position: absolute; left: 50%; bottom: -9px; transform: translateX(-50%); border: 5px solid transparent; border-top-color: #2563eb; border-bottom: 0; }
+  .oa-bub::after  { content: ""; position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%); border: 4px solid transparent; border-top-color: #fff; border-bottom: 0; }
+  .oa-bub.ok { border-color: #16a34a; background: #f0fdf4; color: #14532d; }
+  .oa-bub.ok::before { border-top-color: #16a34a; }
+  .oa-bub.ok::after  { border-top-color: #f0fdf4; }
+  .oa-bub.meet { border-color: #d97706; background: #fffbeb; color: #78350f; }
+  .oa-bub.meet::before { border-top-color: #d97706; }
+  .oa-bub.meet::after  { border-top-color: #fffbeb; }
+  .oa-modal-back { position: absolute; inset: 0; z-index: 20; background: rgba(7,11,20,0.22); }
+  .oa-modal-back[hidden] { display: none; }
+  .oa-modal { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(440px, 44%); min-width: 320px; background: rgba(30,41,59,0.96); border: 2px solid #f59e0b; border-radius: 16px; padding: 15px 17px; color: #fff; box-shadow: 0 18px 44px rgba(0,0,0,0.72); backdrop-filter: blur(6px); transition: left .18s ease, top .18s ease; }
+  .oa-m-head { display: flex; align-items: flex-start; gap: 14px; }
+  .oa-m-head img { width: 84px; height: 100px; border-radius: 12px; object-fit: cover; object-position: top; border: 2px solid #f59e0b; flex-shrink: 0; }
+  .oa-m-head h3 { margin: 0 0 4px; font-size: 16.5px; display: flex; align-items: center; gap: 7px; }
+  .oa-m-role { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: #334155; color: #fde68a; }
+  .oa-m-say { margin: 4px 0 0; font-size: 13.5px; color: #f1f5f9; line-height: 1.45; }
+  .oa-m-head button { margin-left: auto; border: 0; background: rgba(255,255,255,0.12); color: #fff; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 16px; flex-shrink: 0; }
+  .oa-m-quick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .oa-q-btn { border: 1px solid #475569; background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 6px 10px; font: 700 12px var(--f); cursor: pointer; text-align: left; }
+  .oa-q-btn:hover { border-color: #f59e0b; background: #1e293b; color: #fde68a; }
+  .oa-m-form { display: flex; gap: 6px; margin-top: 12px; }
+  .oa-m-form input { flex: 1; border: 1px solid #475569; background: #0f172a; color: #fff; border-radius: 8px; padding: 8px 10px; font: 13px var(--f); outline: none; }
+  .oa-m-form input:focus { border-color: #f59e0b; }
+  .oa-m-form button { border: 0; background: #f59e0b; color: #0f172a; border-radius: 8px; padding: 8px 13px; font: 800 12.5px var(--f); cursor: pointer; white-space: nowrap; }
+  .oa-m-form button:hover { background: #fbbf24; }
+  .oa-m-res { margin-top: 9px; font-size: 12.5px; font-weight: 700; color: #86efac; }
+  .log-box { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 10px 14px; font-size: 12.5px; color: #cbd5e1; }
+  .log-box ul { list-style: none; margin: 6px 0 0; padding: 0; max-height: 110px; overflow-y: auto; }
+  .log-box li { padding: 3px 0; border-top: 1px solid #293548; }
+  .log-box li:first-child { border-top: 0; }
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Jinwoo 에이전트 · 12프레임 고화질 애니 사무실 <span class="pill">🎉 10명 전원 완성!</span></h1>
+  <div class="btns">
+    <button type="button" class="btn green" id="b-demo">▶ 10명 전체 시연</button>
+    <button type="button" class="btn" id="b-brief" style="background:#1d4ed8;border-color:#60a5fa">📋 보고해</button>
+    <button type="button" class="btn" id="b-cof">☕ 비서 커피 서빙</button>
+    <button type="button" class="btn" id="b-chat">💬 복도 수다</button>
+    <button type="button" class="btn" id="b-cap">🚶 캡틴 산책</button>
+    <button type="button" class="btn" id="b-greet">👋 인사(1)</button>
+    <button type="button" class="btn" id="b-ccof">☕ 커피(2)</button>
+    <button type="button" class="btn" id="b-sit">🪑 자리 복귀(E)</button>
+    <a class="btn" href="/">← 메인 대시보드로</a>
+  </div>
+</header>
+<main class="wrap">
+  <div id="root"></div>
+  <div class="log-box"><b>실시간 움직임 기록</b> (캐릭터를 클릭하면 웹툰 고화질 프로필 상태창이 열립니다)<ul id="log"></ul></div>
+</main>
+<script src="/static/office-anime/office-anime.js?v=29"></script>
+<script>
+const ul = document.getElementById('log');
+const app = window.OfficeAnime.create(document.getElementById('root'), {
+  onLog: m => { const li = document.createElement('li'); li.textContent = `${new Date().toLocaleTimeString('ko-KR')} · ${m}`; ul.prepend(li); }
+});
+document.getElementById('b-demo').onclick = () => app.runDemo();
+document.getElementById('b-brief').onclick = () => app.startBriefing();
+document.getElementById('b-cof').onclick  = () => app.serveCoffee();
+document.getElementById('b-chat').onclick = () => app.hallChat();
+document.getElementById('b-cap').onclick  = () => app.captainWalk();
+document.getElementById('b-greet').onclick = () => app.playCaptainAction('greet');
+document.getElementById('b-ccof').onclick  = () => app.playCaptainAction('coffee');
+document.getElementById('b-sit').onclick  = () => app.sitCaptainBack();
+</script>
+</body>
+</html>

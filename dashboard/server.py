@@ -20,7 +20,6 @@ import subprocess
 import sys
 import threading
 import time
-import unicodedata
 import urllib.error
 import urllib.request
 import uuid
@@ -30,6 +29,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, quote, urlparse
 
 import builder  # 운영자 모드 '가게 만들기' (dashboard/builder.py)
+import notify   # 텔레그램 알림 발송 (dashboard/notify.py)
 import sales    # 영업 탭 (dashboard/sales.py)
 
 HERE = Path(__file__).resolve().parent
@@ -870,14 +870,24 @@ def save_order(o):
     write_atomic(ORDERS_DIR / f"{o['id']}.json", json.dumps(keep, ensure_ascii=False, indent=1))
 
 
-def load_orders():
+def load_orders(only_new=False):
+    """only_new: 켜져 있는 동안 20초마다 — 이 서버가 모르는 지시 파일만 더 읽는다(이미 아는 것은 덮어쓰지 않음).
+    2026-11-23 분짜닥킴 건: 서버가 두 개 켜져 있었고, 먼저 켠 쪽이 만든 지시를 나중 서버가 몰라 결재함이 0으로 보였다."""
     if not ORDERS_DIR.is_dir():
         return
     for f in ORDERS_DIR.glob("*.json"):
+        if only_new and f.stem in ORDERS:
+            continue
         try:
             o = json.loads(f.read_text(encoding="utf-8"))
         except Exception:
             continue
+        if not isinstance(o, dict) or not o.get("id"):
+            continue
+        if o.get("queue") and o.get("status") == "scheduled":  # 줄 세우기는 2026-11-23 없앴다(캡틴 '가-1') — 남은 줄은 시작하지 않는다
+            o["status"] = "stopped"
+            o.setdefault("turns", []).append({"by": "system", "text": "줄 세우기 기능을 없애서 시작하지 않았어요. 필요하면 지시창에 직접 보내 주세요.", "at": time.time()})
+            save_order(o)
         if o.get("status") == "running":  # 대시보드를 껐다 켜면 실행 중이던 것은 끊긴다
             o["status"] = "stopped"
             o.setdefault("turns", []).append({"by": "system", "text": "대시보드를 다시 켜서 실행이 끊겼습니다. '답하기'로 이어서 시킬 수 있어요.", "at": time.time()})
@@ -1335,11 +1345,14 @@ def run_order(o, prompt):
         o["endedAt"] = time.time()
         save_order(o)
         write_talk_md(o)
-        if o.get("queue"):
-            queue_after(o, text, o["endedAt"] - t0)
+        notify_kind = o["status"]
+        notify_snap = dict(o)
+    try:
+        notify.notify_order(notify_kind, notify_snap, text)
+    except Exception as e:
+        print("notify_order:", e)
     _cache.pop("recent", None)
     _cache.pop("stores", None)
-    _cache.pop("newshops", None)
 
 
 def order_blocked():
@@ -1406,6 +1419,11 @@ def scheduler():
             except Exception as e:
                 print("밖 배포 확인 오류:", e)
         try:
+            with ORDER_LOCK:
+                load_orders(only_new=True)
+        except Exception as e:
+            print("새 지시 파일 읽기 오류:", e)
+        try:
             due = None
             with ORDER_LOCK:
                 now = time.time()
@@ -1418,7 +1436,7 @@ def scheduler():
                     else:
                         due = ready[0]
                         late = now - due["runAt"]
-                        if late > 600 and not due.get("queue"):
+                        if late > 600:
                             due["turns"].append({"by": "system", "text": f"예약 시각보다 {int(late // 60)}분 늦게 시작했어요(대시보드가 꺼져 있었거나 앞 지시가 실행 중이었음).", "at": now})
                         text = due.pop("pending", None) or due["turns"][0]["text"]
                         due.update(status="running", waitWhy=None, startedAt=now, steps=[], last=None)
@@ -1766,6 +1784,15 @@ def run_deploy(o, shops):
             o["turns"].append({"by": "system", "text": "배포 멈춤: " + str(e)[:300] + "\n" + "\n".join(o.get("deployLog") or []), "at": time.time()})
     with ORDER_LOCK:
         save_order(o)
+        dep_state = o.get("deployState")
+        dep_snap = dict(o)
+    try:
+        if dep_state == "done":
+            notify.notify_order("deploy_done", dep_snap)
+        elif dep_state == "fail":
+            notify.notify_order("deploy_fail", dep_snap, dep_snap.get("deployErr") or "")
+    except Exception as e:
+        print("notify_deploy:", e)
     if o.get("deployState") == "done":
         try:
             settle_deployed(o, shops)
@@ -1856,204 +1883,7 @@ def start_deploy(oid):
     return None
 
 
-# ---------------------------------------------------------------- 새 가게 줄 세우기 (2026-11-10, 캡틴 결정 '가-1')
-# 드라이브 QR메뉴판/ 의 가게 폴더 중 아직 안 만든 곳을 보여 주고, 캡틴이 골라 [줄 세우기]를 누르면 한 곳씩 차례로 만든다.
-# 줄 = 예약(status scheduled, queue=True)이라 기존 scheduler 가 그대로 하나씩 시작한다(앞 지시 실행 중·한도 90% 이상이면 기다림).
-# AI가 스스로 줄을 만들지 않는다 — 캡틴이 누를 때만. 가게 찾기용만(정식은 사장님 동의가 필요해 직접 지시).
-DRIVE = Path(r"G:\내 드라이브\QR메뉴판")
-HIDE_FILE = OUT / "newshops-hide.json"  # 캡틴이 '숨기기' 한 폴더 이름(git 제외)
-IMG_EXT = (".jpg", ".jpeg", ".png", ".webp")
-PLACE_WORDS = {"박닌", "박닌점", "박닌본점", "본점", "미딩", "미딩점", "하노이", "하노이점", "시푸차", "션샤인", "점"}  # 가게 이름 맞추기에서 빼는 낱말
-QUEUE_MAX = 10  # 한 번에 줄 세울 수 있는 가게 수(주간 한도로 약 10곳)
-QUEUE_TEXT = ("드라이브 QR메뉴판/{folder} 폴더에 사진을 올렸어. 가게 찾기용(무동의·무료)으로 새 메뉴판을 만들어줘.\n"
-              "(대시보드 '줄 세우기'로 보낸 지시야. 뒤에 다른 가게가 기다리니, 물어볼 것이 있으면 멈추지 말고 추천안대로 진행한 뒤 끝 보고에 번호 보기로 남겨.)")
-
-
-def name_key(s):
-    """가게 이름 비교용: 소문자, 베트남어 성조 떼기, 한글·영문·숫자만."""
-    s = unicodedata.normalize("NFD", str(s).lower().replace("đ", "d"))
-    s = unicodedata.normalize("NFC", "".join(c for c in s if not unicodedata.combining(c)))
-    return re.sub(r"[^0-9a-z가-힣]", "", s)
-
-
-def known_shops():
-    """이미 만든 가게: id → 비교용 이름(docs/stores.md 가게 칸 + 가게 찾기 목록 이름 + id)."""
-    known = {}
-    for line in read("docs/stores.md").splitlines():
-        m = re.match(r"^\| `restaurants/([a-z0-9]+)` \|([^|]*)", line)
-        if m:
-            known[m.group(1)] = known.get(m.group(1), "") + " " + m.group(2).split(" — ")[0]
-    for s in cached("stores", 30, build_stores)["stores"]:
-        known[s["id"]] = known.get(s["id"], "") + f" {s['name']} {s['sub']}"
-    return {sid: name_key(t) + sid for sid, t in known.items()}
-
-
-def match_shop(folder, known):
-    """드라이브 폴더 이름 → ('made'|'check'|'new', 가게 id). 낱말이 전부 맞으면 만든 것, 일부만 맞으면 '확인 필요'."""
-    whole = name_key(folder)
-    words = [w for w in (name_key(t) for t in re.split(r"[\s()&,·_-]+", folder)) if len(w) >= 2 and w not in PLACE_WORDS] or [whole]
-    best, hit = None, 0
-    for sid, text in known.items():
-        if whole and whole in text:
-            return "made", sid
-        n = sum(1 for w in words if w in text)
-        if n > hit:
-            best, hit = sid, n
-    if hit and hit == len(words):
-        return "made", best
-    return ("check", best) if hit else ("new", None)
-
-
-def phone_shop(info_file, phones):
-    """사진 수집기의 store_info.json 전화번호가 docs/stores.md 어느 가게 줄에 있으면 그 가게 id."""
-    try:
-        store = json.loads(info_file.read_text(encoding="utf-8")).get("store") or {}
-    except Exception:
-        return None
-    num = re.sub(r"\D", "", str(store.get("phone") or ""))
-    num = "0" + num[2:] if num.startswith("84") and len(num) >= 11 else num
-    if len(num) < 9:
-        return None
-    return next((sid for sid, line in phones.items() if num in line), None)
-
-
-def hidden_folders():
-    try:
-        return set(json.loads(HIDE_FILE.read_text(encoding="utf-8")))
-    except Exception:
-        return set()
-
-
-def build_newshops():
-    if not DRIVE.is_dir():
-        return {"status": "nodrive", "how": f"드라이브 동기화 폴더({DRIVE})가 안 보여요. 구글 드라이브 앱이 켜져 있는지 확인해 주세요.", "folders": [], "made": [], "hidden": []}
-    known, hide = known_shops(), hidden_folders()
-    phones = {m.group(1): re.sub(r"(?<=\d)[ .\-](?=\d)", "", line) for line in read("docs/stores.md").splitlines()
-              for m in [re.match(r"^\| `restaurants/([a-z0-9]+)` \|", line)] if m}  # 가게 줄(숫자 사이 띄어쓰기를 붙인 것)
-    with ORDER_LOCK:
-        mine = {}
-        for o in sorted(ORDERS.values(), key=lambda o: o["createdAt"]):
-            if o.get("folder") and o["status"] not in ("stopped", "fail"):
-                mine[o["folder"]] = (o["id"], o["status"])
-        hold = next((o["hold"] for o in ORDERS.values() if o.get("queue") and o["status"] == "scheduled" and o.get("hold")), None)
-    rows, made, hidden = [], [], []
-    for d in sorted(DRIVE.iterdir(), key=lambda d: d.name):
-        if not d.is_dir():
-            continue
-        try:
-            files = [f.name.lower() for f in d.iterdir() if f.is_file()]
-        except OSError:
-            continue
-        photos = [f for f in files if f.endswith(IMG_EXT) and not f.startswith("debug_")]
-        if not photos and "store_info.json" not in files:
-            continue  # 가게 폴더가 아님(글꼴·영상 등)
-        row = {"name": d.name, "photos": len(photos), "menus": sum(1 for f in photos if f.startswith("menu_"))}
-        if d.name in mine:
-            oid, st = mine[d.name]
-            if st == "done":
-                made.append({"name": d.name, "id": None, "order": oid})
-                continue
-            rows.append({**row, "state": "queued" if st == "scheduled" else "running", "order": oid})
-            continue
-        state, sid = match_shop(d.name, known)
-        if state != "made" and "store_info.json" in files:
-            # 이름이 달라도(폴더 '미즈 레스토랑' ↔ 기록 '미즈 MIZ') 사진 수집기가 적어 둔 전화번호가 기록에 있으면 같은 가게다(2026-11-10)
-            hit = phone_shop(d / "store_info.json", phones)
-            if hit:
-                state, sid = "made", hit
-        if state == "made":
-            made.append({"name": d.name, "id": sid})
-        elif d.name in hide:
-            hidden.append(d.name)
-        else:
-            rows.append({**row, "state": state if row["menus"] else "empty", "guess": sid})
-    order = {"running": 0, "queued": 1, "new": 2, "check": 3, "empty": 4}
-    rows.sort(key=lambda r: (order[r["state"]], r["name"]))
-    return {"status": "ok", "folders": rows, "made": made, "hidden": hidden, "hold": hold, "max": QUEUE_MAX}
-
-
-def hide_folder(name, hide):
-    names = hidden_folders()
-    (names.add if hide else names.discard)(str(name)[:200])
-    OUT.mkdir(exist_ok=True)
-    write_atomic(HIDE_FILE, json.dumps(sorted(names), ensure_ascii=False))
-    _cache.pop("newshops", None)
-    return None
-
-
-def queue_why(shops, folder):
-    """한 곳만 줄에 넣으려다 안 됐을 때 그 이유(사진 수집기 [대시보드 줄에 넣기] 버튼에 그대로 보인다, 2026-11-12)."""
-    if shops.get("status") != "ok":
-        return shops.get("how")
-    row = next((r for r in shops["folders"] if r["name"] == folder), None)
-    if row:
-        return {"queued": f"'{folder}'은(는) 이미 줄에 있어요", "running": f"'{folder}'은(는) 지금 만드는 중이에요",
-                "empty": f"'{folder}' 폴더에 메뉴판 사진(menu_)이 없어서 줄에 못 넣어요"}.get(row["state"])
-    made = next((m for m in shops["made"] if m["name"] == folder), None)
-    if made:
-        return f"'{folder}'은(는) 이미 만든 가게로 보여요" + (f"({made['id']})" if made.get("id") else "") + ". 다시 만들려면 Claude에 직접 지시해 주세요"
-    if folder in shops["hidden"]:
-        return f"'{folder}'은(는) 대시보드 '새 가게' 칸에서 숨긴 폴더예요. 다시 보이기를 누른 뒤 넣어 주세요"
-    return f"드라이브 QR메뉴판 폴더에서 '{folder}'을(를) 못 찾았어요({DRIVE})"
-
-
-def start_queue(folders, via):
-    """고른 폴더를 차례로 줄 세운다. 폴더 이름은 드라이브 목록에 실제로 있는 '새 가게·확인 필요'만 받는다."""
-    if not claude_exe():
-        return 0, "Claude Code 실행 파일을 찾지 못함(Claude 데스크톱 앱이 설치돼 있어야 함)"
-    shops = build_newshops()
-    ok = {r["name"] for r in shops["folders"] if r["state"] in ("new", "check")}
-    asked = list(dict.fromkeys(str(f) for f in (folders if isinstance(folders, list) else [])))
-    picked = [f for f in asked if f in ok]
-    if not picked:
-        return 0, (queue_why(shops, asked[0]) if len(asked) == 1 else None) or "줄 세울 가게를 골라 주세요(이미 줄에 있거나 만든 가게는 뺐어요)"
-    with ORDER_LOCK:
-        waiting = sum(1 for o in ORDERS.values() if o.get("queue") and o["status"] == "scheduled")
-        if waiting + len(picked) > QUEUE_MAX:
-            return 0, f"줄은 한 번에 {QUEUE_MAX}곳까지예요(지금 {waiting}곳 기다리는 중). 주간 한도로 만들 수 있는 양이에요."
-        hold = next((o["hold"] for o in ORDERS.values() if o.get("queue") and o["status"] == "scheduled" and o.get("hold")), None)
-        base = max([time.time()] + [o["runAt"] + 1 for o in ORDERS.values() if o.get("queue") and o["status"] == "scheduled"])
-        for i, folder in enumerate(picked):
-            oid, n = datetime.now().strftime("%m%d-%H%M%S") + f"-q{i + 1}", 1
-            while oid in ORDERS:
-                n += 1
-                oid = datetime.now().strftime("%m%d-%H%M%S") + f"-q{i + 1}-{n}"
-            text = QUEUE_TEXT.format(folder=folder)
-            o = {"id": oid, "title": f"{folder} · 새 가게(줄)"[:60], "status": "scheduled", "via": via, "createdAt": time.time() + i / 1000,
-                 "turns": [{"by": "me", "text": text, "at": time.time()}], "steps": [], "argon": False,
-                 "queue": True, "folder": folder, "runAt": base + i, "runWhy": "줄 세우기", "pending": text, "waitWhy": hold, "hold": hold}
-            ORDERS[oid] = o
-            save_order(o)
-    _cache.pop("newshops", None)
-    return len(picked), None
-
-
-def queue_after(o, text, took):
-    """줄에 있던 가게가 끝났을 때(ORDER_LOCK 안에서 부름). 캡틴 결정 '가-1': 질문·보통 실패는 다음 가게로 계속,
-    로그인·한도 문제(또는 캡틴이 멈춤)면 남은 줄을 멈춘다 — 같은 이유로 줄줄이 실패하며 한도를 쓰지 않게."""
-    why = None
-    if o["status"] == "stopped":
-        why = f"캡틴이 '{o.get('folder')}'을(를) 멈춰서 줄도 멈췄어요"
-    elif o["status"] == "fail":
-        if "로그인" in text or re.search(r"usage limit|rate limit|limit reached|out of extra usage|한도", text, re.I):
-            why = f"'{o.get('folder')}'이(가) 로그인·한도 문제로 실패해서 줄을 멈췄어요"
-        elif not o.get("tokens") and took < 120:
-            why = f"'{o.get('folder')}'이(가) 시작하자마자 실패해서 줄을 멈췄어요(로그인·실행 문제일 수 있음)"
-    if why:
-        for x in ORDERS.values():
-            if x.get("queue") and x["status"] == "scheduled":
-                x.update(hold=why, waitWhy=why)
-                save_order(x)
-
-
-def queue_resume():
-    with ORDER_LOCK:
-        held = [o for o in ORDERS.values() if o.get("queue") and o["status"] == "scheduled" and o.get("hold")]
-        for o in held:
-            o.update(hold=None, waitWhy=None)
-            save_order(o)
-    _cache.pop("newshops", None)
-    return None if held else "멈춘 줄이 없어요"
+IMG_EXT = (".jpg", ".jpeg", ".png", ".webp")  # 실행 기록에서 이미지를 본 횟수 세기용
 
 
 # ---------------------------------------------------------------- 지시별 사용량 (2026-11-10, 캡틴 결정 '나-1')
@@ -2205,11 +2035,9 @@ def build_brief():
     ov = orders_view()
     wait = [o for o in ov if o["status"] == "done" and o.get("approval")]
     run = [o for o in ov if o["status"] in ("running", "stopping")]
-    sched = sorted((o for o in ov if o["status"] == "scheduled" and not o.get("queue")), key=lambda o: o["runAt"])
-    line = [o for o in ov if o["status"] == "scheduled" and o.get("queue")]
+    sched = sorted((o for o in ov if o["status"] == "scheduled"), key=lambda o: o["runAt"])
     line2 = (f"결재 기다림 {len(wait)}건: {wait[0]['approval'][:40]}" if wait else "결재 기다리는 일 없음") + (f" · 실행 중 {len(run)}건" if run else "") \
-        + (f" · 예약 {len(sched)}건(다음 {datetime.fromtimestamp(sched[0]['runAt']).strftime('%H:%M')})" if sched else "") \
-        + (f" · 새 가게 줄 {len(line)}곳" + ("(멈춤)" if any(o.get("hold") for o in line) else "") if line else "")
+        + (f" · 예약 {len(sched)}건(다음 {datetime.fromtimestamp(sched[0]['runAt']).strftime('%H:%M')})" if sched else "")
     todo = sum(1 for l in read("docs/todo.md").splitlines() if re.match(r"^- \*\*", l))
     bars = cached("quota", 60, build_quota)["claude"]["bars"]
     worst = max((b["used"] for b in bars if not b["stale"]), default=None)
@@ -2309,8 +2137,6 @@ class Handler(BaseHTTPRequestHandler):
             return self.json(cached("hr", 120, build_hr))
         if p == "/api/brief":
             return self.json(build_brief())
-        if p == "/api/newshops":
-            return self.json(cached("newshops", 120, build_newshops))
         if p == "/api/usage":
             return self.json(build_usage())
         # 가게 만들기 (builder.py)
@@ -2321,6 +2147,9 @@ class Handler(BaseHTTPRequestHandler):
         # 영업 탭 (sales.py)
         if p == "/api/sales":
             return self.json(sales.build_sales())
+        # 알림 설정 상태 (notify.py)
+        if p == "/api/notify":
+            return self.json(notify.status())
         if p.startswith("/builder-img/"):  # /builder-img/<가게>/<사진>
             parts = p.split("/")
             if len(parts) == 4 and builder.SHOP_RE.match(parts[2]) and builder.IMG_RE.match(parts[3]):
@@ -2388,6 +2217,18 @@ class Handler(BaseHTTPRequestHandler):
         if urlparse(self.path).path == "/api/sales/sent":
             res, err = sales.mark_sent(body.get("id", ""), str(body.get("action") or "sent"))
             return self.json({"error": err} if err else res, 400 if err else 200)
+        if urlparse(self.path).path == "/api/notify/setup":
+            res, err = notify.setup(
+                token=str(body.get("token") or ""),
+                chat_id=str(body.get("chatId") or ""),
+                enabled=bool(body.get("enabled", True)),
+                dash_url=body.get("dashUrl"),
+                send_test=bool(body.get("sendTest", True)),
+            )
+            return self.json({"error": err} if err else res, 400 if err else 200)
+        if urlparse(self.path).path == "/api/notify/test":
+            ok, err = notify.send_sync("🔔 Jinwoo 에이전트 테스트 알림", "휴대폰·PC 알림이 정상 연결되었습니다!")
+            return self.json({"error": err} if not ok else {"ok": True, **notify.status()}, 400 if not ok else 200)
         if urlparse(self.path).path == "/api/collector/launch":
             err = launch_collector()
             _cache.pop("collector", None)
@@ -2400,19 +2241,6 @@ class Handler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
         if path == "/api/deploy":
             err = start_deploy(str(body.get("id", "")))
-            return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
-        if path == "/api/queue":
-            # 사진 수집기가 보낼 때는 저장한 폴더 경로도 같이 온다: 드라이브 QR메뉴판 밖에 저장한 것이면 이름이 같아도 거절
-            src, fl = body.get("path"), body.get("folders")
-            if src and not (isinstance(fl, list) and len(fl) == 1 and os.path.normcase(os.path.abspath(str(src))) == os.path.normcase(os.path.abspath(str(DRIVE / str(fl[0]))))):
-                return self.json({"error": f"드라이브 QR메뉴판 폴더({DRIVE})에 저장한 가게만 줄에 넣을 수 있어요"}, 400)
-            n, err = start_queue(body.get("folders"), "phone" if isinstance(self, RemoteHandler) else "pc")
-            return self.json({"error": err} if err else {"ok": True, "count": n}, 400 if err else 200)
-        if path == "/api/queue/resume":
-            err = queue_resume()
-            return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
-        if path == "/api/newshops/hide":
-            err = hide_folder(body.get("name", ""), bool(body.get("hide", True)))
             return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
         if path == "/api/order/seen":
             err = seen_order(str(body.get("id", "")))
@@ -2550,13 +2378,19 @@ class RemoteHandler(Handler):
         self.wfile.write(body)
 
 
+class OneServer(ThreadingHTTPServer):
+    """윈도우에서 기본값(SO_REUSEADDR)이면 같은 포트에 서버가 두 개 켜져 요청이 아무 쪽으로나 간다(2026-11-23 분짜닥킴 건).
+    두 번째로 켜면 포트를 못 잡고 실패하게 한다."""
+    allow_reuse_address = False
+
+
 def start_remote():
     if not pin_settings().get("pin_hash"):
         print("휴대폰 접속 꺼짐: 사진 수집기에 PIN이 없음")
         return
     for ip in tailscale_ips():
         try:
-            srv = ThreadingHTTPServer((ip, REMOTE_PORT), RemoteHandler)
+            srv = OneServer((ip, REMOTE_PORT), RemoteHandler)
         except OSError as e:
             print(f"휴대폰 접속 실패({ip}:{REMOTE_PORT}): {e}")
             continue
@@ -2572,7 +2406,11 @@ if __name__ == "__main__":
     sales.init(__import__("__main__"))
     load_orders()
     threading.Thread(target=scheduler, daemon=True).start()
-    srv = ThreadingHTTPServer((HOST, PORT), Handler)
+    try:
+        srv = OneServer((HOST, PORT), Handler)
+    except OSError:
+        print(f"대시보드가 이미 켜져 있어요(http://{HOST}:{PORT}). 이 창은 닫아도 됩니다. 두 개가 같이 켜지면 한쪽이 만든 결과가 결재함에 안 보여요.")
+        sys.exit(1)
     print(f"Jinwoo 에이전트(QR메뉴 대시보드): http://{HOST}:{PORT}  (이 PC에서만 열림, 끄려면 이 창을 닫거나 Ctrl+C)")
     if not os.environ.get("DASH_PORT"):  # 시험용 임시 포트에서는 휴대폰 접속을 열지 않는다
         start_remote()
