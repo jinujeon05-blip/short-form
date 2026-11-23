@@ -113,15 +113,120 @@
     const modalBack = root.querySelector('.oa-modal-back');
     const modal = root.querySelector('.oa-modal');
 
-    fsBtn.addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        stage.requestFullscreen?.().catch(() => {});
-      } else {
-        document.exitFullscreen?.().catch(() => {});
+    // ---------------------------------------------------------------- 모바일 가로 자동 회전 + 화면 꺼짐 방지(Wake Lock + NoSleep) + 뒤로가기 키 종료
+    let wakeLock = null;
+    let fakeFs = false;
+    let fsHistoryPushed = false;
+    let keepAwakeVideo = null;
+
+    // HTTP LAN(8900) 환경에서도 화면이 꺼지지 않도록 초소형 무음 루프 비디오 폴백 생성
+    function startNoSleepFallback() {
+      try {
+        if (!keepAwakeVideo) {
+          const v = document.createElement('video');
+          v.setAttribute('playsinline', '');
+          v.setAttribute('muted', '');
+          v.muted = true;
+          v.loop = true;
+          v.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0.001;pointer-events:none;bottom:0;right:0;';
+          // 1x1 초소형 무음 MP4 (NoSleep 표준 방식)
+          v.src = 'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAu1tZGF0AAACrgYF//+q3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE0OCByMjY0MyA1YzY1NzA0IC0gSC4yNjQvTVBFRy00IEFWQyBjb2RlYyAtIENvcHlyaWdodCAyMDAzLTIwMTUgLSBodHRwOi8vd3d3LnZpZGVvbGFuLm9yZy94MjY0Lmh0bWwgLSBvcHRpb25zOiBjYWJhYz0xIHJlZj0zIGRlYmxvY2s9MTowOjAgYW5hbHlzZT0weDM6MHgxMTMgbWU9aGV4IHN1Ym1lPTcgcHN5PTEgcHN5X3JkPTEuMDA6MC4wMCBtaXhlZF9yZWY9MSBtZV9yYW5nZT0xNiBjaHJvbWFfbWU9MSB0cmVsbGlzPTEgOHg4ZGN0PTEgY3FtPTAgZGVhZHpvbmU9MjEsMTEgZmFzdF9wc2tpcD0xIGNocm9tYV9xcF9vZmZzZXQ9LTIgdGhyZWFkcz0xIGxvb2thaGVhZF90aHJlYWRzPTEgc2xpY2VkX3RocmVhZHM9MCBucj0wIGRlY2ltYXRlPTEgaW50ZXJsYWNlZD0wIGJsdXJheV9jb21wYXQ9MCBjb25zdHJhaW5lZF9pbnRyYT0wIGJmcmFtZXM9MyBiX3B5cmFtaWQ9MiBiX2FkYXB0PTEgYl9iaWFzPTAgZGlyZWN0PTEgd2VpZ2h0Yj0xIG9wZW5fZ29wPTAgd2VpZ2h0cD0yIGtleWludD0yNTAga2V5aW50X21pbj0yNSBzY2VuZWN1dD00MCBpbnRyYV9yZWZyZXNoPTAgcmNfbG9va2FoZWFkPTQwIHJjPWNyZiBtYnRyZWU9MSBjcmY9MjMuMCBxY29tcD0wLjYwIHFwbWluPTAgcXBtYXg9NjkgcXBzdGVwPTQgZWRpdD0wIHRlbXBvcmFsX212cD0wIGlxX3JhdGlvPTEuNDAgcGJfcmF0aW89MS4zMCBhcT0xOjEuMDAgAIAAAAF6ZAAABQAAAACAAAAA';
+          document.body.appendChild(v);
+          keepAwakeVideo = v;
+        }
+        keepAwakeVideo.play().catch(() => {});
+      } catch {}
+    }
+
+    async function acquireWakeLock() {
+      try {
+        if ('wakeLock' in navigator && !wakeLock) {
+          wakeLock = await navigator.wakeLock.request('screen');
+          wakeLock.addEventListener('release', () => { wakeLock = null; });
+        }
+      } catch {}
+      startNoSleepFallback();
+    }
+
+    function releaseWakeLock() {
+      try { if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; } } catch {}
+      try { if (keepAwakeVideo) { keepAwakeVideo.pause(); } } catch {}
+    }
+
+    function updateMobileRotClass() {
+      const isActive = !!document.fullscreenElement || fakeFs;
+      const isPortraitMobile = (window.innerHeight > window.innerWidth) && (window.innerWidth <= 920);
+      stage.classList.toggle('oa-fs-rot', isActive && isPortraitMobile);
+      stage.classList.toggle('oa-fs-mock', fakeFs && !isPortraitMobile);
+      fsBtn.textContent = isActive ? '✕ 전체화면 닫기' : '⛶ 전체화면';
+    }
+
+    async function enterFullscreen() {
+      await acquireWakeLock();
+      // 모바일 뒤로가기 키를 눌렀을 때 페이지 이탈 대신 전체화면만 닫히게 히스토리 1칸 추가
+      if (!fsHistoryPushed) {
+        try { history.pushState({ oaFs: 1 }, ''); fsHistoryPushed = true; } catch {}
       }
+      let nativeOk = false;
+      try {
+        if (stage.requestFullscreen) {
+          await stage.requestFullscreen();
+          nativeOk = true;
+        } else if (stage.webkitRequestFullscreen) {
+          stage.webkitRequestFullscreen();
+          nativeOk = true;
+        }
+      } catch {}
+      if (!nativeOk) fakeFs = true;
+      // 안드로이드 등 지원 기기에서는 OS 가로 회전 자동 잠금!
+      try {
+        if (screen.orientation && screen.orientation.lock) {
+          await screen.orientation.lock('landscape');
+        }
+      } catch {}
+      updateMobileRotClass();
+    }
+
+    async function exitFullscreen(fromPopState = false) {
+      fakeFs = false;
+      stage.classList.remove('oa-fs-rot', 'oa-fs-mock');
+      releaseWakeLock();
+      try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch {}
+      try {
+        if (document.fullscreenElement) await document.exitFullscreen();
+        else if (document.webkitFullscreenElement && document.webkitExitFullscreen) document.webkitExitFullscreen();
+      } catch {}
+      if (!fromPopState && fsHistoryPushed) {
+        fsHistoryPushed = false;
+        try { if (history.state && history.state.oaFs) history.back(); } catch {}
+      } else {
+        fsHistoryPushed = false;
+      }
+      updateMobileRotClass();
+    }
+
+    fsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement && !fakeFs) enterFullscreen();
+      else exitFullscreen(false);
     });
     document.addEventListener('fullscreenchange', () => {
-      fsBtn.textContent = document.fullscreenElement ? '✕ 전체화면 닫기' : '⛶ 전체화면';
+      if (!document.fullscreenElement && !fakeFs) {
+        releaseWakeLock();
+        try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch {}
+        fsHistoryPushed = false;
+      }
+      updateMobileRotClass();
+    });
+    window.addEventListener('resize', updateMobileRotClass);
+    window.addEventListener('popstate', () => {
+      if (document.fullscreenElement || fakeFs) {
+        exitFullscreen(true);
+      }
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && (document.fullscreenElement || fakeFs)) {
+        acquireWakeLock();
+      }
     });
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = true;
@@ -1007,8 +1112,15 @@
     // 캐릭터 클릭 → 캡틴 쪽 바라보며 RPG 대화·지시창 열기 / 빈 바닥 클릭 → A* 길찾기로 장애물 우회 이동!
     canvas.addEventListener('click', e => {
       const r = canvas.getBoundingClientRect();
-      const px = ((e.clientX - r.left) / r.width) * 100;
-      const py = ((e.clientY - r.top) / r.height) * 100;
+      let px, py;
+      if (stage.classList.contains('oa-fs-rot')) {
+        // 90도 시계방향 회전 상태 터치 좌표 정확 변환!
+        px = ((e.clientY - r.top) / r.height) * 100;
+        py = (1 - (e.clientX - r.left) / r.width) * 100;
+      } else {
+        px = ((e.clientX - r.left) / r.width) * 100;
+        py = ((e.clientY - r.top) / r.height) * 100;
+      }
       let hit = null, best = 6.2;
       for (const n of Object.values(npcs)) {
         const d = Math.hypot(px - n.x, py - (n.y - 4));
