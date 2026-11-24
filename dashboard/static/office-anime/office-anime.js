@@ -133,17 +133,15 @@
             <button type="button" class="oa-snd-btn" data-bgm-btn title="사무실 BGM 켜기/끄기">🎵 BGM</button>
           </div>
           <div class="oa-dock" data-dock-bar aria-label="직원 빠른 호출">${dockHtml}</div>
-          <div class="oa-cap-acts" data-cap-acts>
-            <button type="button" class="oa-c-btn" data-cap-greet>👋 인사</button>
-            <button type="button" class="oa-c-btn" data-cap-coffee>☕ 커피</button>
-            <button type="button" class="oa-c-btn" data-cap-sit>🪑 착석</button>
-          </div>
           <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 2 커피 · E 착석</div>
-          <div class="oa-brief-bar">
-            <button type="button" class="oa-b-btn dance" data-brief-dance>💃 댄스</button>
-            <button type="button" class="oa-b-btn cof" data-brief-cof>☕ 서빙</button>
-            <button type="button" class="oa-b-btn start" data-brief-start>📋 보고해</button>
-            <button type="button" class="oa-b-btn stop" data-brief-stop hidden>✋ 오늘은 여기까지 하지</button>
+          <div class="oa-skills" aria-label="액션 스킬창">
+            <button type="button" class="oa-sk sk-sit" data-cap-sit title="캡틴 대표석 복귀(E)"><i>🪑</i><span>착석</span></button>
+            <button type="button" class="oa-sk sk-cof" data-brief-cof title="비서실장 커피 서빙"><i>☕</i><span>서빙</span></button>
+            <button type="button" class="oa-sk sk-dance" data-brief-dance title="비서실장·자료해석 합동 댄스"><i>💃</i><span>댄스</span></button>
+            <button type="button" class="oa-sk sk-capcof" data-cap-coffee title="캡틴 커피 마시기(2)"><i>☕</i><span>커피</span></button>
+            <button type="button" class="oa-sk sk-greet" data-cap-greet title="캡틴 격려 인사(1)"><i>👋</i><span>인사</span></button>
+            <button type="button" class="oa-sk sk-main start" data-brief-start title="전 직원 단상 앞 보고"><i>📋</i><span>보고해</span></button>
+            <button type="button" class="oa-sk sk-main stop" data-brief-stop hidden title="보고 종료 및 해산"><i>✋</i><span>종료</span></button>
           </div>
           <button type="button" class="oa-fs-btn" title="전체화면 전환">⛶ 전체화면</button>
           <div class="oa-modal-back" hidden><div class="oa-modal"></div></div>
@@ -549,17 +547,59 @@
     hud.innerHTML =
       SIGNS.map(s => `<span class="oa-sign" style="left:${s.x}%;top:${s.y}%;background:${s.bg}">${s.text}</span>`).join('') +
       Object.entries(CHARS).map(([id, c]) =>
-        `<div class="oa-tag" data-tag="${id}"><b>${c.name}</b><small>${c.role}</small></div>
-         <div class="oa-quest" data-q="${id}" hidden>!</div>
-         <div class="oa-bub" data-bub="${id}" hidden></div>`
+        id === 'captain'
+          ? `<div class="oa-tag oa-tag-cap" data-tag="${id}"><span class="oa-crown">👑</span><b>${c.name}</b><small>${c.role}</small></div>
+             <div class="oa-quest" data-q="${id}" hidden>!</div>
+             <div class="oa-bub" data-bub="${id}" hidden></div>`
+          : `<div class="oa-tag" data-tag="${id}"><b>${c.name}</b><small>${c.role}</small></div>
+             <div class="oa-quest" data-q="${id}" hidden>!</div>
+             <div class="oa-bub" data-bub="${id}" hidden></div>`
       ).join('') +
       `<div class="oa-cap-hp" data-cap-hp title="클로드 잔여량 · 위: 5시간(녹색) / 아래: 주간(파랑)">
          <div class="oa-hp-track"><div class="oa-hp-fill h5" data-hp-5h style="width:100%"></div></div>
          <div class="oa-hp-track"><div class="oa-hp-fill wk" data-hp-wk style="width:100%"></div></div>
+       </div>
+       <div class="oa-cap-ring" data-cap-ring>
+         <button type="button" class="oa-cr-item i0" data-cr="newshop">🏪 새 가게 제작</button>
+         <button type="button" class="oa-cr-item i1" data-cr="greet">👋 격려 인사</button>
+         <button type="button" class="oa-cr-item i2" data-cr="coffee">☕ 커피 휴식</button>
+         <button type="button" class="oa-cr-item i3" data-cr="sit">🪑 대표석 복귀</button>
        </div>`;
     const capHpEl = hud.querySelector('[data-cap-hp]');
     const capHp5h = hud.querySelector('[data-hp-5h]');
     const capHpWk = hud.querySelector('[data-hp-wk]');
+    const capRingEl = hud.querySelector('[data-cap-ring]');
+    let capRingOpen = false;
+    let capRingOrigin = { x: 0, y: 0 };
+    function setCapRing(open) {
+      if (capRingOpen === open) return;
+      capRingOpen = open;
+      capRingEl?.classList.toggle('open', open);
+      if (open) {
+        capRingOrigin = { x: npcs.captain.x, y: npcs.captain.y };
+        SFX.tap();
+      } else {
+        SFX.close();
+      }
+    }
+    capRingEl?.addEventListener('click', e => {
+      const btn = e.target.closest('[data-cr]');
+      if (!btn) return;
+      e.stopPropagation();
+      const act = btn.dataset.cr;
+      setCapRing(false);
+      if (act === 'greet') playCaptainAction('greet');
+      else if (act === 'coffee') playCaptainAction('coffee');
+      else if (act === 'sit') sitCaptainBack();
+      else if (act === 'newshop') {
+        openTalkModal('captain');
+        const inp = modal.querySelector('input[name="msg"]');
+        if (inp) {
+          inp.value = '<가게명> 사진 수집기로 올렸어. 가게 찾기용(무동의·무료)으로 새 메뉴판 만들어줘.';
+          inp.focus(); inp.setSelectionRange(0, 5);
+        }
+      }
+    });
 
     const tagEls = {}, bubEls = {}, questEls = {};
     for (const id of Object.keys(CHARS)) {
@@ -567,6 +607,10 @@
       bubEls[id] = hud.querySelector(`[data-bub="${id}"]`);
       questEls[id] = hud.querySelector(`[data-q="${id}"]`);
     }
+    tagEls.captain?.addEventListener('click', e => {
+      e.stopPropagation();
+      setCapRing(!capRingOpen);
+    });
     updateRpgHud();
 
     const log = m => { if (opts.onLog) opts.onLog(m); };
@@ -1490,11 +1534,18 @@
         }
       }
 
-      // 캡틴 머리 위 RPG HP/MP 피통 게이지 위치 추적 (5시간 녹색 · 주간 파랑)
+      // 캡틴 머리 위 RPG HP/MP 피통 게이지 + 타원형 링 메뉴 위치 추적 (움직이면 링 자동 닫힘!)
       if (capHpEl) {
         const capStanding = (cap.mode === 'walk' || cap.mode === 'stand' || cap.mode === 'emote');
         capHpEl.style.left = `${cap.x}%`;
         capHpEl.style.top  = `${Math.max(1.5, cap.y - (capStanding ? standPct('captain') + 0.6 : 13.0))}%`; // 서 있을 땐 머리 위(키 16.1% + 0.6), 11-24 목에 걸리던 것 수정
+        if (capRingEl) {
+          capRingEl.style.left = `${cap.x}%`;
+          capRingEl.style.top  = `${Math.max(8, cap.y - (capStanding ? standPct('captain') + 1.5 : 13.5))}%`;
+          if (capRingOpen && (cap.mode === 'walk' || Math.hypot(cap.x - capRingOrigin.x, cap.y - capRingOrigin.y) > 0.35)) {
+            setCapRing(false);
+          }
+        }
       }
 
       // 대화창이 열려 있으면 0.2초마다 캐릭터(카메라 확대 반영) 화면 위치를 다시 보고, 가리면 다른 자리로 옮김
@@ -1809,6 +1860,7 @@
         if (d < best) { best = d; hit = n.id; }
       }
       if (!hit) {
+        if (capRingOpen) setCapRing(false);
         if (canWalk(px, py)) {
           SFX.walkClick();
           clickRing = { x: px, y: py, born: performance.now() };
@@ -1816,6 +1868,11 @@
         }
         return;
       }
+      if (hit === 'captain') {
+        setCapRing(!capRingOpen);
+        return;
+      }
+      if (capRingOpen) setCapRing(false);
       openTalkModal(hit);
     });
     modalBack.addEventListener('click', e => {
