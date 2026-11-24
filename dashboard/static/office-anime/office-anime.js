@@ -1386,8 +1386,14 @@
         ctx.restore();
       }
 
+      // 보고 중 2.4배 확대일 때 말풍선·이름표가 같이 커져 화면을 가리지 않게 '전체 보기' 때 크기로 되돌림(폰 포함) — 평소 추적·전체 보기는 그대로(1)
+      const uiS = briefingActive ? 1 / (cam.z || 1) : 1;
+      const tagTf = uiS < 0.999 ? `translate(-50%, 0) scale(${uiS.toFixed(3)})` : '';
+      const bubTf = uiS < 0.999 ? `translate(-50%, -100%) scale(${uiS.toFixed(3)})` : '';
       for (const [id, n] of Object.entries(npcs)) {
         const walking = n.mode === 'walk';
+        tagEls[id].style.transform = tagTf; tagEls[id].style.transformOrigin = tagTf ? '50% 0' : '';
+        bubEls[id].style.transform = bubTf; bubEls[id].style.transformOrigin = bubTf ? '50% 100%' : '';
         tagEls[id].style.left = `${n.x}%`;
         const tagTop = (id === 'captain' && n.mode === 'idle')
           ? 16.8
