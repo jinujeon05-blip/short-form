@@ -435,27 +435,18 @@
       step:      () => { tone(190, 0.03, 'sine', 0.018); },
     };
 
-    // 2곡 번갈아 재생되는 사무실 BGM 플레이리스트 (bgm-office 1번 ↔ 2번 자동 교대, ogg + 사파리용 m4a 폴백!)
-    const BGM_TRACKS = ['bgm-office', 'bgm-office-2'];
-    const bgmBufs = [null, null];
+    // 사무실 BGM 1곡 반복 재생 (2026-11-24 캡틴 지시: 'adventure tale' 1곡만, mp3는 모든 브라우저 재생)
+    const BGM_TRACKS = ['bgm-adventure'];
+    const bgmBufs = [null];
     let bgmIdx = 0, bgmSrc = null, bgmGain = null, bgmLoading = false;
     async function loadBgmTrack(c, idx) {
       if (bgmBufs[idx]) return bgmBufs[idx];
-      const name = BGM_TRACKS[idx];
-      const probe = document.createElement('audio');
-      const urls = probe.canPlayType('audio/ogg; codecs="vorbis"')
-        ? [`/static/office-anime/assets/${name}.ogg?v=2`, `/static/office-anime/assets/${name}.m4a?v=2`]
-        : [`/static/office-anime/assets/${name}.m4a?v=2`, `/static/office-anime/assets/${name}.ogg?v=2`];
-      for (const u of urls) {
-        try {
-          const res = await fetch(u);
-          if (!res.ok) continue;
-          const ab = await res.arrayBuffer();
-          bgmBufs[idx] = await c.decodeAudioData(ab);
-          return bgmBufs[idx];
-        } catch {}
-      }
-      return null;
+      try {
+        const res = await fetch(`/static/office-anime/assets/${BGM_TRACKS[idx]}.mp3?v=1`);
+        if (!res.ok) return null;
+        bgmBufs[idx] = await c.decodeAudioData(await res.arrayBuffer());
+        return bgmBufs[idx];
+      } catch { return null; }
     }
     function stopBgmNode() {
       if (bgmGain && actx) {
@@ -484,22 +475,15 @@
       stopBgmNode();
       const src = c.createBufferSource();
       src.buffer = buf;
-      src.loop = false;
+      src.loop = true;
       const g = c.createGain();
       const now = c.currentTime;
       g.gain.setValueAtTime(0.0001, now);
       g.gain.linearRampToValueAtTime(0.42, now + 0.45);
       src.connect(g); g.connect(c.destination);
-      src.onended = () => {
-        if (!bgmOn || bgmSrc !== src) return;
-        bgmIdx = (bgmIdx + 1) % BGM_TRACKS.length;
-        playBgmAt(bgmIdx);
-      };
       src.start(0);
       bgmSrc = src; bgmGain = g;
-      if (bgmBtn) bgmBtn.textContent = `🎵 BGM ${idx + 1}`;
-      // 다음 트랙 미리 백그라운드 로딩
-      loadBgmTrack(c, (idx + 1) % BGM_TRACKS.length).catch(() => {});
+      if (bgmBtn) bgmBtn.textContent = '🎵 BGM 켜짐';
     }
     function toggleBgm() {
       bgmOn = !bgmOn;
