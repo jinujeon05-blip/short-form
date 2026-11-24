@@ -237,6 +237,8 @@ window.DEMOS = [
     name: "피그윙 PIG WING KOREA BBQ", type: { ko: "한식 · 숙성 삼겹살 · 숯불 고기구이", vi: "Thịt nướng Hàn Quốc · Thịt ủ nướng than hoa", en: "Korean BBQ · Aged pork belly · Charcoal grill", zh: "韩式烤肉 · 熟成五花肉 · 炭火烧烤", ja: "韓国焼肉・熟成サムギョプサル・炭火焼き" } },
   { id: "sanhoanago", hidden: true, url: "https://sanhoanago.qrmenuasia.com", shot: "img/demo-sanhoanago.jpg", qr: "img/qr-sanhoanago.svg",
     name: "산호 아나고 꼼장어 SANHO", type: { ko: "숯불구이 · 꼼장어 · 아나고", vi: "Nướng than hoa · Cá ninja · Cá chình", en: "Charcoal grill · Hagfish · Conger eel", zh: "炭火烧烤 · 盲鳗 · 星鳗", ja: "炭火焼き・コムジャンオ・アナゴ" } },
+  { id: "hwadam", hidden: true, url: "https://hwadam.qrmenuasia.com", shot: "img/demo-hwadam.jpg", qr: "img/qr-hwadam.svg",
+    name: "화담 HOA ĐAM", type: { ko: "한식당 · 프리미엄 BBQ룸 · 소고기 · 점심특선", vi: "Nhà hàng Hàn Quốc · Phòng BBQ cao cấp · Thịt bò · Set trưa", en: "Korean restaurant · Premium BBQ rooms · Beef · Lunch specials", zh: "韩餐厅 · 高级烤肉包间 · 牛肉 · 午间特餐", ja: "韓国料理店・プレミアムBBQルーム・牛肉・ランチ特選" } },
 ];
 
 window.T = {

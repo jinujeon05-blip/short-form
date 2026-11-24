@@ -917,6 +917,12 @@ window.STORES = [
     type: { ko: "숯불구이 · 꼼장어 · 아나고", vi: "Nướng than hoa · Cá ninja · Cá chình", en: "Charcoal grill · Hagfish · Conger eel", zh: "炭火烧烤 · 盲鳗 · 星鳗", ja: "炭火焼き・コムジャンオ・アナゴ" },
     keywords: "산호 아나고 꼼장어 산호포차 Sanho Sanhopocha 아나고 꼼장어 숯불구이 쪽갈비 닭갈비 막창 삼겹살 하노이 딘톤 Đình Thôn Từ Liêm cá ninja cá chình nướng than hoa korean grill hagfish conger eel 韩国烤肉 盲鳗 星鳗 コムジャンオ アナゴ"
   },
+  { id: "hwadam", name: "화담 HOA ĐAM", sub: "프리미엄 한식 BBQ · 소고기 모듬 · 어복쟁반 · 점심특선", url: "https://hwadam.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean","bbq"], tags: ["photos"],
+    address: "47 TT4 Đỗ Đình Thiện, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%ED%99%94%EB%8B%B4+-+Nh%C3%A0+H%C3%A0ng+Hoa+%C4%90am/@21.0171816,105.7796217,17z",
+    type: { ko: "한식당 · 프리미엄 BBQ룸 · 소고기 · 점심특선", vi: "Nhà hàng Hàn Quốc · Phòng BBQ cao cấp · Thịt bò · Set trưa", en: "Korean restaurant · Premium BBQ rooms · Beef · Lunch specials", zh: "韩餐厅 · 高级烤肉包间 · 牛肉 · 午间特餐", ja: "韓国料理店・プレミアムBBQルーム・牛肉・ランチ特選" },
+    keywords: "화담 호아담 Hoa Đam Hoadam Hwadam Nhà hàng Hoa Đam 하노이 Từ Liêm Đỗ Đình Thiện 한식 소고기 모듬 와규 안심 어복쟁반 나주식곰탕 냉면 막국수 점심특선 시그니처 코스 BBQ룸 thịt nướng Hàn Quốc thịt bò Wagyu Korean BBQ premium beef 韩国烤肉 和牛 花潭 焼肉 和牛 ランチ"
+  },
 ];
 window.SI = {
   ko: {

@@ -121,6 +121,7 @@ name() {
     donchicken) echo "돈치킨" ;;
     pigwing) echo "피그윙" ;;
     sanhoanago) echo "산호 아나고 꼼장어" ;;
+    hwadam) echo "화담" ;;
     *) echo "$1" ;;
   esac
 }
