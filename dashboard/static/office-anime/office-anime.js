@@ -624,7 +624,7 @@
              <div class="oa-quest" data-q="${id}" hidden>!</div>
              <div class="oa-bub" data-bub="${id}" hidden></div>`
       ).join('') +
-      `<button type="button" class="oa-cap-status" data-cap-status title="캡틴 실시간 업무·결재 상태 (클릭 시 바로 이동)">🟢 대기 중</button>
+      `<button type="button" class="oa-cap-status" data-cap-status hidden title="캡틴 실시간 업무·결재 상태 (클릭 시 바로 이동)"></button>
        <div class="oa-cap-hp" data-cap-hp title="클로드 잔여량 · 위: 5시간(녹색) / 아래: 주간(파랑)">
          <div class="oa-hp-track"><div class="oa-hp-fill h5" data-hp-5h style="width:100%"></div></div>
          <div class="oa-hp-track"><div class="oa-hp-fill wk" data-hp-wk style="width:100%"></div></div>
@@ -2480,14 +2480,18 @@
         if (pendingApprovals.length > 0) {
           capStatusEl.textContent = `🔔 결재 ${pendingApprovals.length}건 대기`;
           capStatusEl.classList.add('st-wait');
+          capStatusEl.hidden = false;
         } else if (busy.size > 0) {
           capStatusEl.textContent = `⚡ ${busy.size}명 작업 중`;
           capStatusEl.classList.add('st-work');
+          capStatusEl.hidden = false;
         } else if (done.size > 0) {
           capStatusEl.textContent = `✅ 완료 보고 ${done.size}건`;
           capStatusEl.classList.add('st-done');
+          capStatusEl.hidden = false;
         } else {
-          capStatusEl.textContent = '🟢 대기 중';
+          capStatusEl.textContent = '';
+          capStatusEl.hidden = true;
         }
       }
       const ringFirst = capRingEl?.querySelector('.oa-cr-item.i0');
