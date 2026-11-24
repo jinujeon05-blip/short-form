@@ -496,6 +496,55 @@
       }
       playBgmAt(bgmIdx);
     }
+    // 캐릭터별 7.20초 전용 아이돌 댄스 음악 재생 + 재생 중 BGM 자동 덕킹(볼륨 낮춤 → 끝나면 복원)
+    const danceBufs = {};
+    let danceSrc = null, danceThemeIdx = 0;
+    function stopDanceMusic() {
+      if (danceSrc) { try { danceSrc.onended = null; danceSrc.stop(); danceSrc.disconnect(); } catch {} danceSrc = null; }
+      if (bgmGain && actx && bgmOn) {
+        try { bgmGain.gain.setTargetAtTime(0.42, actx.currentTime, 0.25); } catch {}
+      }
+    }
+    async function playDanceMusic(who = 'claude') {
+      if (!sfxOn) return;
+      const c = ensureAudio();
+      if (!c) return;
+      stopDanceMusic();
+      const key = who === 'reader' ? 'dance-reader' : 'dance-claude';
+      if (!danceBufs[key]) {
+        const probe = document.createElement('audio');
+        const urls = probe.canPlayType('audio/ogg; codecs="vorbis"')
+          ? [`/static/office-anime/assets/${key}.ogg?v=1`, `/static/office-anime/assets/${key}.m4a?v=1`]
+          : [`/static/office-anime/assets/${key}.m4a?v=1`, `/static/office-anime/assets/${key}.ogg?v=1`];
+        for (const u of urls) {
+          try {
+            const res = await fetch(u);
+            if (!res.ok) continue;
+            danceBufs[key] = await c.decodeAudioData(await res.arrayBuffer());
+            break;
+          } catch {}
+        }
+      }
+      const buf = danceBufs[key];
+      if (!buf) { SFX.dance(); return; }
+      // 댄스 음악이 나오는 동안 배경 BGM을 부드럽게 줄임
+      if (bgmGain && bgmOn) {
+        try { bgmGain.gain.setTargetAtTime(0.05, c.currentTime, 0.15); } catch {}
+      }
+      const src = c.createBufferSource();
+      src.buffer = buf;
+      const g = c.createGain();
+      g.gain.setValueAtTime(0.55, c.currentTime);
+      src.connect(g); g.connect(c.destination);
+      src.onended = () => {
+        if (danceSrc === src) danceSrc = null;
+        if (bgmGain && actx && bgmOn) {
+          try { bgmGain.gain.setTargetAtTime(0.42, actx.currentTime, 0.28); } catch {}
+        }
+      };
+      src.start(0);
+      danceSrc = src;
+    }
     document.addEventListener('visibilitychange', () => {
       if (!bgmGain || !actx || !bgmOn) return;
       const now = actx.currentTime;
@@ -884,9 +933,13 @@
       const wset = imgs.walk[n.id];
       if (!wset) return;
       const walking = (n.mode === 'walk');
-      const emoting = (n.mode === 'emote' && n.emote && wset[n.emote]?.length);
+      const kicking = (n.id === 'captain' && n.kickUntil && t < n.kickUntil && wset.kick?.length);
+      const emoting = !kicking && (n.mode === 'emote' && n.emote && wset[n.emote]?.length);
       let fIdx = 0;
-      if (emoting) {
+      if (kicking) {
+        const elapsed = Math.max(0, t - (n.kickStart || 0));
+        fIdx = Math.min(11, Math.floor(elapsed * 5.2));
+      } else if (emoting) {
         const elapsed = Math.max(0, t - (n.emoteStart || 0));
         fIdx = n.emoteLoop ? (Math.floor(elapsed * 5.0) % 12) : Math.min(11, Math.floor(elapsed * 4.0));
       } else if (walking) {
@@ -895,7 +948,10 @@
       }
 
       let dirKey = 'front', flipX = false;
-      if (emoting) { dirKey = n.emote; flipX = (n.dir === 'west'); }
+      if (kicking) {
+        dirKey = 'kick';
+        flipX = (n.dir === 'west' || n.dir === 'sw' || n.dir === 'nw');
+      } else if (emoting) { dirKey = n.emote; flipX = (n.dir === 'west'); }
       else if (walking && n.walkOverride && wset[n.walkOverride]?.length) {
         dirKey = n.walkOverride;
         flipX = (n.dir === 'west' || n.dir === 'sw' || n.dir === 'nw');
@@ -1262,13 +1318,27 @@
     function playCaptainAction(action) {
       const cap = npcs.captain;
       // 발차기는 다리가 책상에 가려지므로, 대표석(의자)에 있으면 단상 앞 바닥으로 걸어 나온 뒤 찬다
-      if (action === 'kick' && !cap._kickWalked &&
-          Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]) < 4.0) {
-        const ok = walkCaptainSafe(KICK_SPOT[0], KICK_SPOT[1], {
-          bubble: '🥋 잠깐 시범 보일게요!',
-          onArrive: () => { cap._kickWalked = true; cap.dir = 'front'; playCaptainAction('kick'); cap._kickWalked = false; },
-        });
-        if (ok) return;
+      if (action === 'kick') {
+        // 캡틴 이동 중 발차기 지원! 앉아 있을 때만 대표석 앞으로 나온 뒤 발차기, 서 있거나 이동 중이면 멈추지 않고 바로 이동 발차기!
+        if (!cap._kickWalked && cap.mode === 'idle' &&
+            Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]) < 4.0) {
+          const ok = walkCaptainSafe(KICK_SPOT[0], KICK_SPOT[1], {
+            bubble: '🥋 잠깐 시범 보일게요!',
+            onArrive: () => { cap._kickWalked = true; cap.dir = 'east'; playCaptainAction('kick'); cap._kickWalked = false; },
+          });
+          if (ok) return;
+        }
+        const nowS = performance.now() / 1000;
+        cap.kickStart = nowS;
+        cap.kickUntil = nowS + 2.35;
+        if (cap.mode === 'idle') cap.mode = 'stand';
+        SFX.kick();
+        cap.bubble = '🥋 얍! 이동 발차기!';
+        cap.bubbleType = 'ok';
+        spawnBurst(cap.x, cap.y - 4, '🥋 얍!', 0);
+        log('🥋 캡틴이 이동 중 태권도 발차기를 시전했습니다');
+        setTimeout(() => { if (cap.bubble === '🥋 얍! 이동 발차기!') cap.bubble = ''; }, 2400);
+        return;
       }
       cap.path = [];
       cap.onArrive = null;
@@ -1285,12 +1355,6 @@
         cap.bubble = '👋 모두 수고 많습니다! 진행합시다';
         cap.bubbleType = 'ok';
         log('👋 캡틴이 직원들에게 인사·지시 모션을 취했습니다');
-      } else if (action === 'kick') {
-        // 태권도 발차기 시범(2026-11-24, 챗GPT 그림 12장 assets/walk/captain-kick-*.webp) — 오른쪽을 보고 차므로 dir은 front(뒤집기 없음)
-        SFX.kick();
-        cap.bubble = '🥋 얍! 앞차기·돌려차기·옆차기!';
-        cap.bubbleType = 'ok';
-        log('🥋 캡틴이 태권도 발차기 시범을 보였습니다');
       } else if (action === 'coffee') {
         SFX.coffee();
         voice('captain', 'coffee', 0.2);
@@ -1327,7 +1391,7 @@
       } else if (k === '2') {
         e.preventDefault();
         playCaptainAction('coffee');
-      } else if (k === '3') {
+      } else if (k === '3' || k === ' ') {
         e.preventDefault();
         playCaptainAction('kick');
       }
@@ -2461,8 +2525,9 @@
             n.bubble = d.msg; n.bubbleType = 'meet';
             if (!burstDone) {
               burstDone = true;
-              SFX.dance();
-              spawnBurst(st.bx, st.by, '💃 아이돌 댄스! +20 EXP', 20);
+              const theme = (danceThemeIdx++ % 2 === 0) ? 'claude' : 'reader';
+              playDanceMusic(theme);
+              spawnBurst(st.bx, st.by, theme === 'claude' ? '💃 비서실장 댄스! +20 EXP' : '🎶 자료해석 댄스! +20 EXP', 20);
             }
             setTimeout(() => {
               if (briefingActive || (activeTalkNpc && activeTalkNpc.id === d.id)) return;
