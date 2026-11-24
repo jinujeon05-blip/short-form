@@ -103,6 +103,11 @@
         imgs.walk[id].punch = [];
         for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1`));
       }
+      // 비서실장 책상 업무(문서 작성) 12프레임 — 앉아 있는 동안 계속 반복(챗GPT 3명씩 4장: 쓰기·생각·종이 넘기기·서명)
+      if (id === 'claude') {
+        imgs.walk[id].write = [];
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].write, i - 1, `/static/office-anime/assets/walk/claude-write-${i}.webp?v=write1`));
+      }
     }
     for (const p of PROPS) {
       jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq4k`));
@@ -935,6 +940,10 @@
     }
 
     // ---------------------------------------------------------------- 렌더링 (실측 책상 경계 클리핑 + 의자 실루엣 마스크!)
+    const WRITE_DUR = [0.45, 0.32, 0.32, 0.4, 1.3, 0.38, 0.4, 0.35, 0.45, 0.7, 0.5, 0.45];
+    const WRITE_TOTAL = WRITE_DUR.reduce((a, b) => a + b, 0);
+    const WRITE_SCALE = (226 / 650) * (499 / 214); // = 앉은 그림 목표 높이 / s.h
+    const WRITE_CLIP = 0.49;
     function drawNpc(n, t) {
       const cfg = CHARS[n.id];
       const wset = imgs.walk[n.id];
@@ -973,10 +982,18 @@
       else if (n.dir === 'back') { dirKey = 'back'; }
       else { dirKey = 'front'; }
 
-      const im = wset[dirKey]?.[fIdx] || wset.front?.[0];
+      let im = wset[dirKey]?.[fIdx] || wset.front?.[0];
       if (!im) return;
 
       const seated = (n.mode === 'idle' || n.mode === 'work' || (n.id === 'captain' && n.idleCoffeeSeated && n.mode === 'emote' && n.emote === 'coffee'));
+      // 비서실장: 앉아 있으면 문서 작성 12프레임을 계속 반복(생각·서명 장면은 조금 길게)
+      let writing = false;
+      if (seated && cfg.seat && wset.write?.length === 12 && wset.write.every(Boolean)) {
+        const loopT = t % WRITE_TOTAL;
+        let k = 0, acc = 0;
+        while (k < 11 && loopT >= acc + WRITE_DUR[k]) { acc += WRITE_DUR[k]; k++; }
+        im = wset.write[k]; writing = true;
+      }
 
       if (seated && cfg.seat) {
         const s = cfg.seat;
@@ -990,15 +1007,17 @@
           ? Math.sin(t * 1.6 + ph) * 0.6 + Math.abs(Math.sin(t * 9.5 + ph)) * 1.4
           : Math.sin(t * 1.8 + sx * 0.01) * 1.1;
         const sway = working ? Math.sin(t * 4.7 + ph) * 0.9 : 0;
-        const targetH = s.h;
+        // 앉은 그림은 서 있는 그림과 머리~허리 길이가 같도록 줄임(서 있는 그림 머리~허리 226/650, 앉은 그림 214/499)
+        const targetH = writing ? s.h * WRITE_SCALE : s.h;
         const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
         ctx.save();
         // 책상 상단 경계선(남향) 또는 의자 좌판 하단(북향)에서 깔끔하게 클리핑하여 다리·치마가 책상 위로 튀어나오지 않음!
         ctx.beginPath();
-        ctx.rect(0, 0, W, clipY);
+        // 문서 작성 중에는 책상 위 손·펜이 보이도록 손끝(그림 높이 49%)까지 보여 줌
+        ctx.rect(0, 0, W, writing ? Math.max(clipY, topY + targetH * WRITE_CLIP) : clipY);
         ctx.clip();
-        ctx.drawImage(im, sx - targetW / 2 + sway, topY + bob, targetW, targetH);
+        ctx.drawImage(im, sx - targetW / 2 + (writing ? sway * 0.3 : sway), topY + (writing ? bob * 0.4 : bob), targetW, targetH);
         ctx.restore();
         if (working) {
           // 모니터 불빛(얼굴·책상 쪽이 은은하게 깜빡임)
