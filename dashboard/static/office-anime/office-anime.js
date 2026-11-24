@@ -8,7 +8,7 @@
   const standPx = id => STAND_H_MALE * (MALE_IDS.has(id) ? 1 : FEMALE_RATIO);
   const standPct = id => standPx(id) / H * 100; // 화면 세로 % (말풍선·퀘스트 표시 위치용) // 16:9 QHD 2K 고화질 (전체화면 선명도 보장)
 
-  // bg-office.webp (2026-11-24 새 배경 '입체 오피스 평면도' 2560x1440) 픽셀 실측 착석 좌표
+  // bg-office.webp (2026-11-24 새 배경 '입체 오피스 평면도', 같은 날 9조각 고화질 3996x2248로 교체(좌표 %는 그대로)) 픽셀 실측 착석 좌표
   // (headTopY=머리 꼭대기, clipY=책상 상단 경계선(남향)·의자 좌판(북향), standPos=일어설 때 서는 책상 옆 바닥 — 반드시 걸을 수 있는 칸)
   // 옛 배경과 책상을 자동 대조(템플릿 비교)해 옮긴 뒤 합성 캡처로 확인함
   const CHARS = {
@@ -81,7 +81,7 @@
       im.onerror = () => res();
       im.src = url;
     });
-    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq2')];
+    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k')];
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], water: [], clean: [], dance: [], sweep: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee']
@@ -100,7 +100,7 @@
       }
     }
     for (const p of PROPS) {
-      jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq2`));
+      jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq4k`));
     }
     return Promise.all(jobs).then(() => imgs);
   }
