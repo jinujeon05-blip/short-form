@@ -551,7 +551,14 @@
         `<div class="oa-tag" data-tag="${id}"><b>${c.name}</b><small>${c.role}</small></div>
          <div class="oa-quest" data-q="${id}" hidden>!</div>
          <div class="oa-bub" data-bub="${id}" hidden></div>`
-      ).join('');
+      ).join('') +
+      `<div class="oa-cap-hp" data-cap-hp title="클로드 잔여량 · 위: 5시간(녹색) / 아래: 주간(파랑)">
+         <div class="oa-hp-track"><div class="oa-hp-fill h5" data-hp-5h style="width:100%"></div></div>
+         <div class="oa-hp-track"><div class="oa-hp-fill wk" data-hp-wk style="width:100%"></div></div>
+       </div>`;
+    const capHpEl = hud.querySelector('[data-cap-hp]');
+    const capHp5h = hud.querySelector('[data-hp-5h]');
+    const capHpWk = hud.querySelector('[data-hp-wk]');
 
     const tagEls = {}, bubEls = {}, questEls = {};
     for (const id of Object.keys(CHARS)) {
@@ -1438,6 +1445,13 @@
         }
       }
 
+      // 캡틴 머리 위 RPG HP/MP 피통 게이지 위치 추적 (5시간 녹색 · 주간 파랑)
+      if (capHpEl) {
+        const capStanding = (cap.mode === 'walk' || cap.mode === 'stand' || cap.mode === 'emote');
+        capHpEl.style.left = `${cap.x}%`;
+        capHpEl.style.top  = `${Math.max(1.5, cap.y - (capStanding ? standPct('captain') + 0.6 : 13.0))}%`; // 서 있을 땐 머리 위(키 16.1% + 0.6), 11-24 목에 걸리던 것 수정
+      }
+
       // 대화창이 열려 있으면 0.2초마다 캐릭터(카메라 확대 반영) 화면 위치를 다시 보고, 가리면 다른 자리로 옮김
       if (!modalBack.hidden && now - modalPlaceAt > 200) { modalPlaceAt = now; placeModal(); }
       requestAnimationFrame(tick);
@@ -1964,8 +1978,25 @@
     let prevReal = null;
     let realBusySet = new Set();
 
-    function syncReal({ orders = [], jobs = [], collector = null, hr = null, newshops = [], storesCount = 0, talk = [] } = {}) {
+    function syncReal({ orders = [], jobs = [], collector = null, hr = null, quota = null, newshops = [], storesCount = 0, talk = [] } = {}) {
       if (storesCount > 0) totalStoresCount = storesCount;
+      // 캡틴 머리 위 클로드 사용량 HP(5시간=녹색)/MP(주간=파랑) 피통 게이지 업데이트! (0% 사용 = 100% 풀, 많이 쓸수록 깎이고 위험 시 빨강)
+      const cq = quota?.claude;
+      if (cq?.status === 'ok' && Array.isArray(cq.bars) && capHp5h && capHpWk) {
+        const b5 = cq.bars.find(b => /5시간|5h/i.test(b.label || '')) || cq.bars[0];
+        const bw = cq.bars.find(b => /주간|week/i.test(b.label || '')) || cq.bars[1];
+        const u5 = Math.max(0, Math.min(100, Number(b5?.used ?? 0)));
+        const uw = Math.max(0, Math.min(100, Number(bw?.used ?? 0)));
+        const rem5 = Math.max(2, 100 - u5);
+        const remW = Math.max(2, 100 - uw);
+        capHp5h.style.width = `${rem5}%`;
+        capHp5h.classList.toggle('warn', u5 >= 65 && u5 < 80);
+        capHp5h.classList.toggle('low',  u5 >= 80);
+        capHpWk.style.width = `${remW}%`;
+        capHpWk.classList.toggle('warn', uw >= 70 && uw < 85);
+        capHpWk.classList.toggle('low',  uw >= 85);
+        capHpEl.title = `클로드 잔여량 · 5시간 ${100 - u5}% 남음(${u5}% 사용) · 주간 ${100 - uw}% 남음(${uw}% 사용)`;
+      }
       const busy = new Set();
       for (const j of jobs) {
         if (j.status === 'running' && DASH_TO_OA[j.desk]) busy.add(DASH_TO_OA[j.desk]);

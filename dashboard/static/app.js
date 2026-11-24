@@ -222,6 +222,7 @@ function renderOffice() {
       jobs: S.jobs || [],
       collector: S.collector,
       hr: S.hr,
+      quota: S.quota,
       storesCount: (S.stores || []).length,
       talk: (fid && S.talks?.[fid]) ? S.talks[fid] : [],
     });
@@ -1179,5 +1180,5 @@ async function loadAll() {
 }
 setOfficeMode(officeMode);
 loadAll();
-setInterval(() => api('/api/quota').then(q => { S.quota = q; renderQuota(); }), 60000);
+setInterval(() => api('/api/quota').then(q => { S.quota = q; renderQuota(); renderOffice(); }), 60000);
 setInterval(() => { loadFeed(); loadBrief(); loadHr(); }, 120000);

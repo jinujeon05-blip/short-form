@@ -65,9 +65,20 @@
 .oa-m-quest.done .oa-m-quest-btn { background: #22c55e; color: #052e16; }
 .oa-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: pointer; }
 .oa-hud { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.oa-sign { position: absolute; transform: translate(-50%, -50%); padding: 2px 8px; border-radius: 6px; color: #fff; font-weight: 800; font-size: clamp(8.5px, 1.12cqw, 13px); white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
-.oa-tag { position: absolute; transform: translate(-50%, 0); display: inline-flex; flex-direction: column; align-items: center; background: rgba(15,23,42,0.88); color: #fff; border: 1.5px solid rgba(255,255,255,0.22); border-radius: 8px; padding: 2px 7px; font-size: clamp(8px, 0.92cqw, 11.5px); line-height: 1.18; white-space: nowrap; transition: border-color .15s, box-shadow .15s, background .15s; }
-.oa-tag small { font-size: 0.8em; color: #cbd5e1; }
+.oa-sign { position: absolute; transform: translate(-50%, -50%); padding: 1.5px 6px; border-radius: 5px; color: #fff; font-weight: 800; font-size: clamp(7px, 0.85cqw, 10.5px); white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+/* 슬림 이름표: 평소엔 1줄 이름만 아주 작고 깔끔하게, 작업 중/완료 시에만 상태 표시 (배경 가림 최소화!) */
+.oa-tag { position: absolute; transform: translate(-50%, 0); display: inline-flex; flex-direction: column; align-items: center; background: rgba(15,23,42,0.72); color: #f8fafc; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 1px 4px; font-size: clamp(5.8px, 0.6cqw, 8px); line-height: 1.12; white-space: nowrap; transition: border-color .15s, box-shadow .15s, background .15s; }
+.oa-tag small { display: none; font-size: 0.82em; color: #cbd5e1; }
+.oa-tag.work small, .oa-tag.done small { display: block; }
+/* 캡틴 머리 위 RPG HP(5시간 녹색) / MP(주간 파랑) 클로드 사용량 게이지 */
+.oa-cap-hp { position: absolute; transform: translate(-50%, -100%); z-index: 9; width: clamp(32px, 3.6cqw, 52px); display: flex; flex-direction: column; gap: 1.5px; padding: 2px; border-radius: 4px; background: rgba(15,23,42,0.82); border: 1px solid rgba(255,255,255,0.32); box-shadow: 0 2px 6px rgba(0,0,0,0.5); pointer-events: auto; }
+.oa-hp-track { width: 100%; height: clamp(3px, 0.34cqw, 4.5px); background: rgba(15,23,42,0.92); border-radius: 2px; overflow: hidden; }
+.oa-hp-fill { height: 100%; border-radius: 2px; transition: width .5s ease, background .35s ease; }
+.oa-hp-fill.h5 { background: linear-gradient(90deg, #16a34a, #4ade80); }
+.oa-hp-fill.wk { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+.oa-hp-fill.warn { background: linear-gradient(90deg, #ea580c, #fb923c); }
+.oa-hp-fill.low  { background: linear-gradient(90deg, #dc2626, #f87171); animation: oaHpLow 1.1s ease-in-out infinite; }
+@keyframes oaHpLow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.35); } }
 .oa-tag.work { border-color: #38bdf8; background: rgba(12,74,110,0.92); box-shadow: 0 0 10px rgba(56,189,248,0.6); }
 .oa-tag.work small { color: #bae6fd; font-weight: 700; }
 .oa-tag.done { border-color: #4ade80; background: rgba(20,83,45,0.92); box-shadow: 0 0 10px rgba(74,222,128,0.55); }
