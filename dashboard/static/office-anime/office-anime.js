@@ -81,7 +81,7 @@
       im.onerror = () => res();
       im.src = url;
     });
-    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k2')];
+    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k3')];
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee']
@@ -972,11 +972,10 @@
       { x0: 77.6, y0: 38.5, x1: 87.2, y1: 47.6 }, // 좌측 책상·의자
       { x0: 87.6, y0: 38.5, x1: 97.6, y1: 47.6 }, // 우측 책상·의자
       { x0: 96.6, y0: 22.8, x1: 100., y1: 50.0 }, // 우벽 + 화분
-      // 감사실(보라): 오른쪽 문짝 아래 틈(y 78.3~83.4)으로 드나듦
+      // 감사실(보라): 오른쪽 벽 아래 입구(y 78.3~83.4)로 드나듦(2026-11-24 캡틴 요청으로 복도 쪽 문짝 그림·막힘 삭제)
       { x0:  0.0, y0: 48.2, x1: 23.0, y1: 71.8 }, // 윗벽 + 책장 + 휴지통 + 벽에 붙은 책상 상판
       { x0:  0.0, y0: 48.0, x1:  2.0, y1: 90.0 }, // 좌벽
       { x0: 20.6, y0: 48.2, x1: 22.9, y1: 78.3 }, // 우측 벽
-      { x0: 21.6, y0: 75.2, x1: 24.9, y1: 78.3 }, // 우측 문짝(복도로 튀어나옴)
       { x0:  2.6, y0: 71.5, x1: 12.4, y1: 81.9 }, // 좌측 감사 책상·의자
       { x0: 12.6, y0: 71.5, x1: 21.0, y1: 81.9 }, // 우측 감사 책상·의자
       { x0:  0.0, y0: 77.0, x1:  4.4, y1: 84.0 }, // 좌하단 화분
