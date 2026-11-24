@@ -81,7 +81,7 @@
       im.onerror = () => res();
       im.src = url;
     });
-    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k5')];
+    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k6')];
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee', 'kick']
@@ -115,7 +115,7 @@
       }
     }
     for (const p of PROPS) {
-      jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq4k`));
+      jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq4k2`));
     }
     return Promise.all(jobs).then(() => imgs);
   }
@@ -624,7 +624,8 @@
              <div class="oa-quest" data-q="${id}" hidden>!</div>
              <div class="oa-bub" data-bub="${id}" hidden></div>`
       ).join('') +
-      `<div class="oa-cap-hp" data-cap-hp title="클로드 잔여량 · 위: 5시간(녹색) / 아래: 주간(파랑)">
+      `<button type="button" class="oa-cap-status" data-cap-status title="캡틴 실시간 업무·결재 상태 (클릭 시 바로 이동)">🟢 대기 중</button>
+       <div class="oa-cap-hp" data-cap-hp title="클로드 잔여량 · 위: 5시간(녹색) / 아래: 주간(파랑)">
          <div class="oa-hp-track"><div class="oa-hp-fill h5" data-hp-5h style="width:100%"></div></div>
          <div class="oa-hp-track"><div class="oa-hp-fill wk" data-hp-wk style="width:100%"></div></div>
        </div>
@@ -634,10 +635,25 @@
          <button type="button" class="oa-cr-item i2" data-cr="coffee">☕ 커피 휴식</button>
          <button type="button" class="oa-cr-item i3" data-cr="sit">🪑 대표석 복귀</button>
        </div>`;
+    const capStatusEl = hud.querySelector('[data-cap-status]');
     const capHpEl = hud.querySelector('[data-cap-hp]');
     const capHp5h = hud.querySelector('[data-hp-5h]');
     const capHpWk = hud.querySelector('[data-hp-wk]');
     const capRingEl = hud.querySelector('[data-cap-ring]');
+    let latestOrders = [], pendingApprovals = [];
+    capStatusEl?.addEventListener('click', e => {
+      e.stopPropagation();
+      SFX.tap();
+      if (pendingApprovals.length && opts.onOpenOrder) {
+        opts.onOpenOrder(pendingApprovals[0].id);
+      } else if (pendingApprovals.length) {
+        openTalkModal('claude');
+      } else if (latestOrders.length && opts.onOpenOrder) {
+        opts.onOpenOrder(latestOrders[0].id);
+      } else {
+        setCapRing(!capRingOpen);
+      }
+    });
     let capRingOpen = false;
     let capRingOrigin = { x: 0, y: 0 };
     function setCapRing(open) {
@@ -660,6 +676,10 @@
       if (act === 'greet') playCaptainAction('greet');
       else if (act === 'coffee') playCaptainAction('coffee');
       else if (act === 'sit') sitCaptainBack();
+      else if (act === 'approval' && pendingApprovals.length) {
+        if (opts.onOpenOrder) opts.onOpenOrder(pendingApprovals[0].id);
+        else openTalkModal('claude');
+      }
       else if (act === 'newshop') {
         openTalkModal('captain');
         const inp = modal.querySelector('input[name="msg"]');
@@ -1718,11 +1738,16 @@
         }
       }
 
-      // 캡틴 머리 위 RPG HP/MP 피통 게이지 + 타원형 링 메뉴 위치 추적 (움직이면 링 자동 닫힘!)
+      // 캡틴 머리 위 RPG HP/MP 피통 게이지 + 실시간 상태 표시 배지 + 타원형 링 메뉴 위치 추적
       if (capHpEl) {
         const capStanding = (cap.mode === 'walk' || cap.mode === 'stand' || cap.mode === 'emote');
+        const hpTop = Math.max(5.0, cap.y - (capStanding ? standPct('captain') + 0.6 : 12.2));
         capHpEl.style.left = `${cap.x}%`;
-        capHpEl.style.top  = `${Math.max(1.5, cap.y - (capStanding ? standPct('captain') + 0.6 : 13.0))}%`; // 서 있을 땐 머리 위(키 16.1% + 0.6), 11-24 목에 걸리던 것 수정
+        capHpEl.style.top  = `${hpTop}%`;
+        if (capStatusEl) {
+          capStatusEl.style.left = `${cap.x}%`;
+          capStatusEl.style.top  = `${Math.max(0.8, hpTop - 4.0)}%`;
+        }
         if (capRingEl) {
           capRingEl.style.left = `${cap.x}%`;
           capRingEl.style.top  = `${Math.max(8, cap.y - (capStanding ? standPct('captain') + 1.5 : 13.5))}%`;
@@ -1893,10 +1918,72 @@
         }
       }
 
+      const escHtml = s => String(s || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+      const parseApprovalChoices = ord => {
+        if (!ord) return [];
+        const lastAi = [...(ord.turns || [])].reverse().find(t => t.by === 'claude')?.text || '';
+        const src = `${ord.approval || ''}\n${lastAi}`;
+        const found = [];
+        const seen = new Set();
+        // 1) "1. ...", "2) ...", "① ..." 또는 "가-1 ..." 패턴 파싱
+        for (const raw of src.split(/\r?\n/)) {
+          const line = raw.trim();
+          let m = line.match(/^(?:([1-4])[.)]|([①②③④]))\s+(.{2,60})/);
+          if (m) {
+            const circ = { '①': '1', '②': '2', '③': '3', '④': '4' };
+            const num = m[1] || circ[m[2]];
+            const lbl = m[3].replace(/\*\*/g, '').trim().slice(0, 34);
+            if (!seen.has(num)) { seen.add(num); found.push({ num, label: lbl, replyText: `${num}번으로 진행해 주세요 (${lbl})`, approve: false }); }
+            continue;
+          }
+          m = line.match(/^([가나다라]-[1-4])[.:)\s]+(.{2,60})/);
+          if (m && found.length < 4) {
+            const key = m[1], lbl = m[2].replace(/\*\*/g, '').trim().slice(0, 30);
+            if (!seen.has(key)) { seen.add(key); found.push({ num: String(found.length + 1), label: `${key} ${lbl}`, replyText: key, approve: false }); }
+          }
+        }
+        if (found.length >= 2) return found.slice(0, 4);
+        // 2) 번호 선택지가 따로 없으면 기본 1·2·3 결재 선택지 제공
+        const isDeployOnly = !ord.approval && ord.deploy?.length && ord.deployState !== 'done';
+        return [
+          isDeployOnly
+            ? { num: '1', label: '배포 확정 창 바로 열기', action: 'openOrder' }
+            : { num: '1', label: '✅ 확정 진행 (승인)', replyText: '확정합니다. 진행해 주세요.', approve: true },
+          { num: '2', label: '✏️ 수정 요청 (직접 입력)', action: 'edit' },
+          { num: '3', label: '📋 결재 내용 자세히 보기', action: 'openOrder' },
+        ];
+      };
+
+      const OA_TO_DASH = {
+        captain: 'captain', claude: 'claude', finder: 'finder', agy: 'agy',
+        reader: 'menu-reader', inspector: 'codex', auditor: 'reviewer',
+        translator: 'polisher', staffing: 'staffing', sorter: 'sorting'
+      };
+      const dashId = OA_TO_DASH[hit] || hit;
+      // 이 직원에게 걸려 있는 결재 대기 건 (비서실장/캡틴은 첫 결재 건, 다른 직원은 본인 참여 결재 건)
+      const npcAppr = pendingApprovals.find(o => (hit === 'claude' || hit === 'captain') || (o.worked || []).includes(dashId))
+        || (hit === 'claude' ? pendingApprovals[0] : null);
+      const apprChoices = npcAppr ? parseApprovalChoices(npcAppr) : [];
+      const apprHtml = npcAppr ? `
+        <div class="oa-m-appr">
+          <div class="oa-appr-head">
+            <span class="oa-appr-badge">🔔 결재 대기</span>
+            <strong class="oa-appr-title">${escHtml((npcAppr.title || npcAppr.text || '결재 건').slice(0, 26))}</strong>
+            <button type="button" class="oa-appr-go" data-open-order="${escHtml(npcAppr.id)}">📋 결재 내용</button>
+          </div>
+          ${npcAppr.approval ? `<p class="oa-appr-desc">${escHtml(npcAppr.approval.slice(0, 95))}</p>` : (npcAppr.deploy?.length ? `<p class="oa-appr-desc">배포 대기: ${escHtml(npcAppr.deploy.join(', '))}</p>` : '')}
+          <div class="oa-appr-choices">
+            ${apprChoices.map((ch, idx) => `<button type="button" class="oa-appr-opt" data-appr-idx="${idx}"><span class="oa-appr-num">${escHtml(ch.num)}</span><span class="oa-appr-lbl">${escHtml(ch.label)}</span></button>`).join('')}
+          </div>
+        </div>` : '';
+
+      const fallbackOrder = npcAppr || latestOrders.find(o => (o.worked || []).includes(dashId)) || latestOrders[0];
+      const orderBtn = (opts.onOpenOrder && fallbackOrder)
+        ? `<button type="button" class="oa-q-btn appr-link" data-open-order="${escHtml(fallbackOrder.id)}">📋 ${npcAppr ? '결재 내용 보기' : '최근 결재·지시 보기'}</button>` : '';
       const detailBtn = opts.onOpenDetail
-        ? `<button type="button" class="oa-q-btn detail" data-open-detail>📋 상세 패널 열기</button>` : '';
+        ? `<button type="button" class="oa-q-btn detail" data-open-detail>👤 직원 상세</button>` : '';
       const q = activeQuests[hit];
-      const questHtml = q ? `
+      const questHtml = (!npcAppr && q) ? `
         <div class="oa-m-quest ${q.type === 'ask' ? 'done' : ''}">
           <span class="oa-m-quest-txt">${q.type === 'exc' ? '❗ [퀘스트] ' : '✅ [완료 보고] '}${q.title}</span>
           <button type="button" class="oa-m-quest-btn" data-quest-act>${q.actionLabel}</button>
@@ -1912,8 +1999,10 @@
           </div>
           <button type="button" data-close>×</button>
         </div>
+        ${apprHtml}
         ${questHtml}
         <div class="oa-m-quick">
+          ${orderBtn}
           ${dcfg.quick.map(q => `<button type="button" class="oa-q-btn" data-q="${q}">${q}</button>`).join('')}
           ${detailBtn}
         </div>
@@ -1923,15 +2012,52 @@
         </form>
         <div class="oa-m-res" data-res hidden></div>`;
 
-      const OA_TO_DASH = {
-        captain: 'captain', claude: 'claude', finder: 'finder', agy: 'agy',
-        reader: 'menu-reader', inspector: 'codex', auditor: 'reviewer',
-        translator: 'polisher', staffing: 'staffing', sorter: 'sorting'
-      };
+      modal.querySelectorAll('[data-open-order]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          SFX.tap();
+          const oid = btn.dataset.openOrder;
+          closeTalkModal(false);
+          if (opts.onOpenOrder && oid) opts.onOpenOrder(oid);
+          else if (opts.onOpenDetail) opts.onOpenDetail(dashId);
+        });
+      });
+      modal.querySelectorAll('[data-appr-idx]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const ch = apprChoices[Number(btn.dataset.apprIdx)];
+          if (!ch || !npcAppr) return;
+          if (ch.action === 'openOrder') {
+            SFX.tap();
+            closeTalkModal(false);
+            if (opts.onOpenOrder) opts.onOpenOrder(npcAppr.id);
+            return;
+          }
+          if (ch.action === 'edit') {
+            SFX.tap();
+            const inp = modal.querySelector('input[name="msg"]');
+            if (inp) { inp.value = '수정 요청: '; inp.focus(); }
+            const resEl = modal.querySelector('[data-res]');
+            if (resEl) { resEl.hidden = false; resEl.textContent = '✏️ 수정할 내용을 입력하고 [지시 전달]을 눌러주세요!'; }
+            return;
+          }
+          const resEl = modal.querySelector('[data-res]');
+          if (resEl) { resEl.hidden = false; resEl.textContent = `📡 [${ch.num}번] 결재 응답을 전달하는 중…`; }
+          if (opts.onReplyOrder) {
+            const r = await opts.onReplyOrder({ id: npcAppr.id, text: ch.replyText || ch.label, approve: !!ch.approve });
+            if (r?.error) { if (resEl) resEl.textContent = `⚠️ ${r.error}`; return; }
+          }
+          SFX.fanfare();
+          if (hit !== 'captain') voice(hit, 'ok', 0.25);
+          spawnBurst(n.x, n.y, '✅ 결재 완료! +100 EXP', 100);
+          n.bubble = `✅ [${ch.num}번] 결재 확인했습니다! 바로 진행합니다!`;
+          n.bubbleType = 'ok';
+          if (resEl) resEl.textContent = `✅ [${ch.num}번] "${ch.label}" 전달 완료!`;
+          setTimeout(() => closeTalkModal(true), 850);
+        });
+      });
       modal.querySelector('[data-open-detail]')?.addEventListener('click', () => {
         SFX.tap();
         closeTalkModal(false);
-        opts.onOpenDetail(OA_TO_DASH[hit] || hit);
+        opts.onOpenDetail(dashId);
       });
       modal.querySelector('[data-quest-act]')?.addEventListener('click', async () => {
         if (!q) return;
@@ -2343,10 +2469,40 @@
         }
       }
 
-      // RPG 퀘스트(! / ?) 자동 생성 (실제 대시보드 데이터 기반!)
+      // RPG 퀘스트(! / ?) 및 캡틴 실시간 상태 배지 갱신 (실제 대시보드 데이터 기반!)
+      latestOrders = orders || [];
+      pendingApprovals = latestOrders.filter(o =>
+        o.status !== 'running' && o.status !== 'stopping' &&
+        (o.approval || o.status === 'wait' || o.needAnswer || (o.deploy?.length && o.deployState !== 'done' && o.deployState !== 'running'))
+      );
+      if (capStatusEl) {
+        capStatusEl.classList.remove('st-wait', 'st-work', 'st-done');
+        if (pendingApprovals.length > 0) {
+          capStatusEl.textContent = `🔔 결재 ${pendingApprovals.length}건 대기`;
+          capStatusEl.classList.add('st-wait');
+        } else if (busy.size > 0) {
+          capStatusEl.textContent = `⚡ ${busy.size}명 작업 중`;
+          capStatusEl.classList.add('st-work');
+        } else if (done.size > 0) {
+          capStatusEl.textContent = `✅ 완료 보고 ${done.size}건`;
+          capStatusEl.classList.add('st-done');
+        } else {
+          capStatusEl.textContent = '🟢 대기 중';
+        }
+      }
+      const ringFirst = capRingEl?.querySelector('.oa-cr-item.i0');
+      if (ringFirst) {
+        if (pendingApprovals.length > 0) {
+          ringFirst.dataset.cr = 'approval';
+          ringFirst.textContent = `🔔 결재함 (${pendingApprovals.length}건)`;
+        } else {
+          ringFirst.dataset.cr = 'newshop';
+          ringFirst.textContent = '🏪 새 가게 제작';
+        }
+      }
       const nextQ = {};
       // 1) 결재 대기 또는 배포 대기 -> 비서실장 머리 위 노란 '!'
-      const waitOrder = orders.find(o => o.status === 'wait' || o.needAnswer || o.deployState === 'ready');
+      const waitOrder = pendingApprovals[0];
       if (waitOrder) {
         const wTitle = (waitOrder.title || waitOrder.text || '결재·배포 건').replace(/\s+/g, ' ').slice(0, 20);
         nextQ.claude = {

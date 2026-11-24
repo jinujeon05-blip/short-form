@@ -182,6 +182,19 @@ function mountOfficeGame() {
       autoDemo: false,
       getInfo: gameNpcInfo,
       onOpenDetail: id => openPanel(id),
+      onOpenOrder: id => {
+        if (!id) return;
+        if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+        openPanel('order:' + id);
+      },
+      onReplyOrder: async ({ id, text = '', approve = false }) => {
+        if (!id) return { error: '결재 대상 ID가 없습니다.' };
+        const r = await post('/api/order/reply', { id, text, approve, when: '' }).catch(() => ({ error: '대시보드 서버에 닿지 않았어요.' }));
+        if (r.error) return r;
+        toast(approve ? '결재를 확정했습니다. 다음 단계를 진행해요.' : '결재 답변을 전달했습니다.');
+        await loadOrders();
+        return r;
+      },
       onMarkSeen: async id => {
         if (!id) return;
         await post('/api/order/seen', { id });
