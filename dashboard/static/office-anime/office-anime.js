@@ -17,7 +17,7 @@
     finder:     { name: '시각 정보 비서', role: '사진 고르기', home: [14.6, 43.3], standPos: [20.6, 43.2], facing: 'front', scale: 0.94, seat: { x: 14.6, headTopY: 31.6, clipY: 37.6, h: 225 } },
     agy:        { name: '메뉴 검사관',   role: '메뉴판 읽기', home: [83.0, 46.6], standPos: [79.6, 48.0], facing: 'back',  scale: 0.96, seat: { x: 83.0, headTopY: 33.5, clipY: 43.9, h: 220 } },
     translator: { name: '수석 번역관',   role: '4개국어 번역', home: [37.6, 71.5], standPos: [43.4, 71.5], facing: 'front', scale: 0.95, seat: { x: 37.6, headTopY: 62.4, clipY: 69.4, h: 235 } },
-    sorter:     { name: '선별팀 팀장',   role: '자료 선별',   home: [85.0, 70.9], standPos: [79.2, 70.6], facing: 'front', scale: 0.95, seat: { x: 85.0, headTopY: 62.2, clipY: 68.7, h: 230 } },
+    sorter:     { name: '선별팀 팀장',   role: '방문 현황 담당',   home: [85.0, 70.9], standPos: [79.2, 70.6], facing: 'front', scale: 0.95, seat: { x: 85.0, headTopY: 62.2, clipY: 68.7, h: 230 } },
     inspector:  { name: '운영 감찰관',   role: '두 번째 검토', home: [7.2,  80.4], standPos: [11.2, 82.6], facing: 'back',  scale: 0.95, seat: { x: 7.2,  headTopY: 66.3, clipY: 77.1, h: 220 } },
     staffing:   { name: '인력 공급팀',   role: '인력·일정 관리', home: [64.5, 71.6], standPos: [58.2, 71.4], facing: 'front', scale: 0.95, seat: { x: 64.5, headTopY: 62.6, clipY: 69.4, h: 230 } },
     reader:     { name: '자료 해석 비서', role: '메뉴판 해석',  asset: 'auditor', home: [92.5, 46.5], standPos: [89.4, 48.0], facing: 'back',  scale: 0.96, seat: { x: 92.5, headTopY: 33.5, clipY: 43.9, h: 220 } },
@@ -641,6 +641,10 @@
     const capHpWk = hud.querySelector('[data-hp-wk]');
     const capRingEl = hud.querySelector('[data-cap-ring]');
     let latestOrders = [], pendingApprovals = [];
+    // 방문 현황 담당(선별팀 팀장) 30분 보고 (2026-11-24, 캡틴 다-1) — 서버 dashboard/visits.py 의 report
+    let latestVisits = null;
+    const lsGet = k => { try { return localStorage.getItem(k) || ''; } catch { return ''; } };
+    const lsSet = (k, v) => { try { localStorage.setItem(k, String(v)); } catch {} };
     capStatusEl?.addEventListener('click', e => {
       e.stopPropagation();
       SFX.tap();
@@ -1770,12 +1774,46 @@
       finder:     { greet: '캡틴! 음식 사진 선별이나 이미지 보정 지시하실 게 있으신가요?', quick: ['📸 새 가게 음식 사진 고르기', '✨ 흐린 메뉴 사진 화질 개선', '📋 현재 사진 작업 현황 보고'] },
       agy:        { greet: '캡틴! 어떤 가게의 디지털 메뉴판을 점검할까요?', quick: ['🔍 메뉴판 가격·오타 전수 점검', '📱 모바일 화면 깨짐 확인', '📋 검수 완료 리스트 보고'] },
       translator: { greet: '캡틴! 베트남어·영어·한국어 메뉴 번역 지시하실 내용이 있으신가요?', quick: ['🌐 새 메뉴 4개국어 번역 시작', '✍️ 베트남어 현지 표현 자연스럽게 다듬기', '📋 번역 완료 현황 보고'] },
-      sorter:     { greet: '캡틴! 새로 들어온 가게 메뉴 사진·자료를 어떤 기준으로 선별할까요?', quick: ['📦 신규 가게 자료 1차 선별 시작', '🗂️ 중복·흐린 파일 자동 정리', '📋 선별 완료 목록 보고'] },
+      sorter:     { greet: '캡틴! 오늘 메뉴판 방문 현황을 30분마다 보고드려요(08~22시).', quick: ['📊 지금 보고해', '🔍 상세 보기', '📅 어제와 비교'] },
       inspector:  { greet: '캡틴! 배포 전 2차 교차 감찰이 필요한 가게나 메뉴판이 있으신가요?', quick: ['🛡️ 배포 예정 가게 2차 교차 감찰', '🔎 오타·링크 깨짐 최종 확인', '📋 감찰 통과 현황 보고'] },
       staffing:   { greet: '캡틴! 오늘 거래처 주·야간 인력 배치나 근태 현황 확인하실까요?', quick: ['📅 오늘 주·야간 인력 배치 보고', '📊 이번 달 거래처 실적 확인', '📋 미보고 거래처 점검'] },
       reader:     { greet: '캡틴! 새로 들어온 메뉴판 사진에서 글자·가격 데이터를 추출할까요?', quick: ['📑 신규 메뉴판 원문 해석 시작', '💰 가격·옵션 누락 정밀 대조', '📋 해석 완료 리스트 보고'] },
       auditor:    { greet: '캡틴! 배포 전 마지막 데이터 감사·오류 점검을 진행할까요?', quick: ['📊 전체 메뉴 데이터 최종 감사', '🔗 배포 링크·이미지 깨짐 점검', '📋 감사 완료 보고서 제출'] },
     };
+
+    const vEsc = s => String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+    function visitBlock() {
+      const v = latestVisits;
+      if (!v) return `<div class="oa-m-visit" data-visit><p class="oa-v-empty">아직 오늘 방문 기록이 없어요. [📊 지금 보고해]를 누르면 바로 읽어 와요.</p></div>`;
+      return `<div class="oa-m-visit" data-visit>
+          <div class="oa-v-head"><b>📊 ${vEsc(v.hm)} 방문 보고</b><span>오늘 ${v.vis}명${v.d30 ? ` · 30분 새 ${v.d30}명` : ''}</span></div>
+          <ul>${v.lines.map(l => `<li>${vEsc(l)}</li>`).join('')}</ul>
+        </div>`;
+    }
+
+    // 새 30분 보고가 오면 선별팀 팀장이 캡틴 앞으로 걸어와 말풍선으로 보고 → 자리로 돌아감 (한 보고에 한 번)
+    function visitWalkReport() {
+      const v = latestVisits, n = npcs.sorter, c = CHARS.sorter;
+      if (!v || !n || !c || String(v.id) === lsGet('oa_visit_shown')) return;
+      if (briefingActive || document.hidden || n.mode !== 'idle' || realBusySet.has('sorter') || activeTalkNpc) return;
+      lsSet('oa_visit_shown', v.id);
+      const [tx, ty] = getSpotNearCaptain();
+      log(`📊 선별팀 팀장이 ${v.hm} 방문 현황 보고하러 캡틴에게 갑니다`);
+      walkNpcSafe('sorter', tx, ty, {
+        bubble: '📊 방문 현황 보고드리러 갑니다!', bubbleType: 'ok',
+        onArrive: () => {
+          n.mode = 'stand';
+          faceEachOther(n, npcs.captain);
+          n.bubble = v.speech; n.bubbleType = 'ok';
+          voice('sorter', 'done', 0.1);
+          setTimeout(() => {
+            if (activeTalkNpc && activeTalkNpc.id === 'sorter') return; // 캡틴이 눌러 대화 중이면 그대로
+            if (n.bubble === v.speech) n.bubble = '';
+            if (!briefingActive) walkNpcSafe('sorter', c.home[0], c.home[1], { onArrive: () => seatNpc('sorter') });
+          }, 9000);
+        },
+      });
+    }
 
     function faceEachOther(a, b) {
       const dx = b.x - a.x, dy = b.y - a.y;
@@ -1983,11 +2021,13 @@
       const detailBtn = opts.onOpenDetail
         ? `<button type="button" class="oa-q-btn detail" data-open-detail>👤 직원 상세</button>` : '';
       const q = activeQuests[hit];
-      const questHtml = (!npcAppr && q) ? `
+      const questHtml = (!npcAppr && q && q.kind !== 'visits') ? `
         <div class="oa-m-quest ${q.type === 'ask' ? 'done' : ''}">
           <span class="oa-m-quest-txt">${q.type === 'exc' ? '❗ [퀘스트] ' : '✅ [완료 보고] '}${q.title}</span>
           <button type="button" class="oa-m-quest-btn" data-quest-act>${q.actionLabel}</button>
         </div>` : '';
+      const visitHtml = (hit === 'sorter') ? visitBlock() : '';
+      if (hit === 'sorter' && latestVisits) { lsSet('oa_visit_read', latestVisits.id); if (activeQuests.sorter?.kind === 'visits') { delete activeQuests.sorter; updateRpgHud(); } }
       SFX.tap();
       if (hit !== 'captain') voice(hit, 'call', 0.12);
       modal.innerHTML = `
@@ -2000,6 +2040,7 @@
           <button type="button" data-close>×</button>
         </div>
         ${apprHtml}
+        ${visitHtml}
         ${questHtml}
         <div class="oa-m-quick">
           ${orderBtn}
@@ -2061,7 +2102,14 @@
       });
       modal.querySelector('[data-quest-act]')?.addEventListener('click', async () => {
         if (!q) return;
-        if (q.kind === 'newshop' && q.shopName) {
+        if (q.kind === 'visits') {
+          SFX.tap();
+          lsSet('oa_visit_read', q.reportId);
+          delete activeQuests[hit];
+          updateRpgHud();
+          closeTalkModal(false);
+          opts.onOpenVisits?.();
+        } else if (q.kind === 'newshop' && q.shopName) {
           SFX.send();
           spawnBurst(n.x, n.y, '+100 EXP', 100);
           sendOrder(`${q.shopName} 사진 수집기로 올렸어. 가게 찾기용으로 만들어줘`);
@@ -2103,6 +2151,29 @@
           if (text.includes('발차기') || text.includes('태권도')) { closeTalkModal(false); playCaptainAction('kick'); return; }
           if (['주먹', '펀치', '복싱', '격투'].some(w => text.includes(w))) { closeTalkModal(false); playCaptainAction('punch'); return; }
           if (text.includes('복귀')) { closeTalkModal(false); sitCaptainBack(); return; }
+        }
+        if (hit === 'sorter' && text === '🔍 상세 보기') { closeTalkModal(false); opts.onOpenVisits?.(); return; }
+        if (hit === 'sorter' && text === '📅 어제와 비교') {
+          const v = latestVisits;
+          resEl.textContent = !v ? '아직 오늘 방문 기록이 없어요.'
+            : v.ydayVis == null ? `오늘 ${v.hm}까지 ${v.vis}명이에요. 어제 같은 시각 기록은 아직 없어요(기록은 오늘부터 쌓여요).`
+            : `오늘 ${v.hm}까지 ${v.vis}명 · 어제 ${v.ydayHm}까지 ${v.ydayVis}명 → ${v.vis - v.ydayVis > 0 ? (v.vis - v.ydayVis) + '명 많아요 ▲' : v.vis - v.ydayVis < 0 ? (v.ydayVis - v.vis) + '명 적어요 ▼' : '똑같아요'}`;
+          return;
+        }
+        if (hit === 'sorter' && text === '📊 지금 보고해') {
+          resEl.textContent = '📡 방문 기록을 새로 읽는 중…';
+          const r = opts.onVisitsRefresh ? await opts.onVisitsRefresh().catch(() => null) : null;
+          if (!r || r.error || !r.report) { resEl.textContent = `⚠️ 못 읽었어요: ${r?.error || '대시보드 서버(다시 켜야 할 수 있어요) 또는 관리자 키 확인'}`; return; }
+          latestVisits = r.report;
+          lsSet('oa_visit_shown', r.report.id); lsSet('oa_visit_read', r.report.id);
+          const box = modal.querySelector('[data-visit]');
+          if (box) box.outerHTML = visitBlock();
+          resEl.textContent = r.fresh ? `✅ ${r.report.hm} 기준으로 새로 읽었어요.` : `ℹ️ 2분 안에 읽은 결과라 그대로 보여 드려요(${r.report.hm} 기준).`;
+          voice(hit, 'done', 0.2);
+          n.bubble = r.report.speech; n.bubbleType = 'ok';
+          setTimeout(() => { if (n.bubble === r.report.speech) n.bubble = ''; }, 9000);
+          placeModal();
+          return;
         }
         if (hit === 'claude' && text.includes('커피')) {
           activeTalkNpc = null; n.pausedState = null; modalBack.hidden = true; serveCoffee(); return;
@@ -2415,7 +2486,8 @@
     };
     let prevReal = null;
 
-    function syncReal({ orders = [], jobs = [], collector = null, hr = null, quota = null, newshops = [], storesCount = 0, talk = [] } = {}) {
+    function syncReal({ orders = [], jobs = [], collector = null, hr = null, quota = null, newshops = [], storesCount = 0, talk = [], visits = null } = {}) {
+      latestVisits = visits || latestVisits;
       if (storesCount > 0) totalStoresCount = storesCount;
       // 캡틴 머리 위 클로드 사용량 HP(5시간=녹색)/MP(주간=파랑) 피통 게이지 업데이트! (0% 사용 = 100% 풀, 많이 쓸수록 깎이고 위험 시 빨강)
       const cq = quota?.claude;
@@ -2524,6 +2596,14 @@
           actionLabel: '🚀 바로 제작 지시 (+100 EXP)'
         };
       }
+      // 2-1) 아직 열어 보지 않은 30분 방문 보고 -> 선별팀 팀장 머리 위 초록 '?' (새 가게 알림이 먼저)
+      if (latestVisits && !nextQ.sorter && String(latestVisits.id) !== lsGet('oa_visit_read')) {
+        nextQ.sorter = {
+          type: 'ask', kind: 'visits', reportId: latestVisits.id,
+          title: `${latestVisits.hm} 방문 보고: 오늘 ${latestVisits.vis}명`,
+          actionLabel: '🔍 상세 보기'
+        };
+      }
       // 3) 방금 완료된 담당 -> 초록 '?' (완료 확인 & 보상 수령!)
       for (const oaId of done) {
         if (oaId === 'captain' || nextQ[oaId]) continue;
@@ -2562,6 +2642,8 @@
           }
         }
       }
+      if (latestVisits) YESTERDAY_REPORTS.sorter = latestVisits.speech;
+      visitWalkReport();
       if (hr?.report) {
         const dayOk = hr.report.day ? '주간 ✔' : '주간 대기';
         const nightOk = hr.report.night ? '야간 ✔' : '야간 대기';

@@ -390,3 +390,43 @@ th { color: var(--sub); font-weight: 400; font-size: 12px; }
 .ntf-in { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; font: inherit; font-size: 13px; background: #fff; margin: 4px 0 8px; }
 .ntf-steps { margin: 6px 0 10px; padding-left: 18px; font-size: 12.5px; color: #334155; line-height: 1.55; }
 .ntf-steps code { background: #e2e8f0; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+
+/* 방문 기록 탭 — 오늘 방문 현황(선별팀 팀장 30분 보고, 2026-11-24) */
+.vt-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-bottom: 8px; }
+.vt-top h3 { margin: 0; }
+.vt-acts { margin-left: auto; display: flex; gap: 6px; }
+.vt-acts select, .vt-acts button { font: inherit; font-size: 13px; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; }
+.vt-acts button { background: #ea580c; color: #fff; border-color: #ea580c; font-weight: 700; }
+.vt-say { background: #fff7ed; border: 1px solid #fdba74; border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; }
+.vt-say ul { margin: 4px 0 0; padding-left: 18px; }
+.vt-say li { margin: 3px 0; overflow-wrap: anywhere; }
+.vt-kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-bottom: 6px; }
+.vt-kpi { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; min-width: 0; }
+.vt-kpi span { display: block; font-size: 12px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vt-kpi b { font-size: 18px; white-space: nowrap; }
+.vt-kpi small { font-size: 12px; color: #64748b; }
+.vt h4 { margin: 12px 0 6px; font-size: 14px; }
+.vt-bars { display: flex; gap: 3px; align-items: flex-end; height: 120px; overflow-x: auto; padding-bottom: 2px; }
+.vt-bar { flex: 0 0 38px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+.vt-bar i { display: block; width: 22px; min-height: 2px; background: #fb923c; border-radius: 4px 4px 0 0; }
+.vt-bar em { font-style: normal; font-size: 11px; font-weight: 700; }
+.vt-bar span { font-size: 10px; color: #64748b; }
+.vt-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.vt-src { display: grid; grid-template-columns: 170px 1fr 82px; gap: 8px; align-items: center; font-size: 13px; margin: 3px 0; }
+.vt-src > div { background: #f1f5f9; border-radius: 6px; height: 12px; overflow: hidden; }
+.vt-src i { display: block; height: 100%; background: #ea580c; }
+.vt-src b { text-align: right; white-space: nowrap; }
+.vt-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.vt-chip { background: #f1f5f9; border-radius: 99px; padding: 2px 10px; font-size: 13px; }
+.vt-warn { margin: 0; padding-left: 18px; }
+.vt-warn li { overflow-wrap: anywhere; }
+.vt-scroll { overflow-x: auto; }
+.vt-scroll td, .vt-scroll th { white-space: nowrap; }
+.vt-pseudo td { color: #64748b; font-style: italic; }
+.vt-h { margin: 16px 0 4px; font-size: 15px; }
+@media (max-width: 700px) {
+  .vt-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vt-two { grid-template-columns: 1fr; }
+  .vt-src { grid-template-columns: 118px 1fr 68px; font-size: 12px; }
+  .vt-acts { margin-left: 0; }
+}

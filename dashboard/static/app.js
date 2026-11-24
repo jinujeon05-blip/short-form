@@ -200,6 +200,16 @@ function mountOfficeGame() {
         await post('/api/order/seen', { id });
         await loadOrders();
       },
+      onVisitsRefresh: async () => {
+        const r = await post('/api/visits/refresh', {});
+        if (r && r.date) { S.vt = r; S.vtToday = r; S.vtDate = ''; renderVisits(); }
+        return r;
+      },
+      onOpenVisits: () => {
+        if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+        const t = $('.tabs button[data-tab="visits"]');
+        if (t) { t.click(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      },
       onSendOrder: async ({ text, when, argon }) => {
         const r = await post('/api/order', { text, when, argon });
         if (r.error) return r;
@@ -238,6 +248,7 @@ function renderOffice() {
       quota: S.quota,
       storesCount: (S.stores || []).length,
       talk: (fid && S.talks?.[fid]) ? S.talks[fid] : [],
+      visits: (S.vtToday?.report) || null,
     });
   }
   if (!OF.st) buildOffice();
@@ -883,18 +894,77 @@ function renderTodo() {
     S.todo.map(g => `<div class="box"><h3>${esc(g.title)}${g.shop ? `<a class="muted" href="https://${g.shop}.qrmenuasia.com" target="_blank" rel="noopener">${esc(name(g.shop) || g.shop)}</a>` : '<span class="badge b-na">공통</span>'}${g.note ? `<span class="muted">${esc(g.note)}</span>` : ''}</h3>
       <ul>${g.items.map(i => `<li>${esc(i.replace(/\*\*/g, ''))}</li>`).join('')}</ul></div>`).join('');
 }
+// 방문 기록 탭 = 위: 오늘 상세(30분마다, dashboard/visits.py) / 아래: 최근 30일 표(예전 그대로) — 2026-11-24 캡틴 나-1
+function vtHtml() {
+  const t = S.vt;
+  if (!t) return '<div class="box"><h3>오늘 방문 현황</h3><p class="muted">읽는 중…</p></div>';
+  if (t.error && !t.date) return `<div class="box"><h3>오늘 방문 현황 <span class="badge b-na">못 읽음</span></h3><p>${esc(t.error)}</p></div>`;
+  const days = (t.days || []).slice().reverse();
+  const pick = `<select id="vt-date" title="날짜 고르기">${(days.includes(t.date) ? days : [t.date, ...days]).map(d => `<option value="${d}"${d === t.date ? ' selected' : ''}>${d}</option>`).join('')}</select>`;
+  const head = `<div class="vt-top"><h3>📊 방문 현황 담당(선별팀 팀장) 보고</h3><span class="muted">${esc(t.hours)} 자동 기록 · PC 파일 dashboard/out/visits/${esc(t.date)}.jsonl</span>
+    <span class="vt-acts">${pick}<button type="button" id="vt-refresh">지금 보고해</button></span></div>`;
+  const r = t.report;
+  if (!r) return `<div class="box">${head}<p class="muted">${t.status === '연결 필요' ? '관리자 키(QRMENU_ADMIN_KEY)가 없어 읽지 못해요.' : '이 날짜 기록이 아직 없어요. 08~22시 30분마다 쌓여요. [지금 보고해]로 바로 읽을 수 있어요.'}</p>${t.error ? `<p class="muted">마지막 오류: ${esc(t.error)}</p>` : ''}</div>`;
+  const yd = r.ydayVis == null ? '기록 없음' : `${r.ydayVis}명 <small>(${r.vis - r.ydayVis >= 0 ? '▲' : '▼'}${Math.abs(r.vis - r.ydayVis)})</small>`;
+  const kpi = [['방문자', `${r.vis}명`], ['페이지 열림', `${r.pv}번`], ['지난 30분', r.d30 == null ? '-' : `+${r.d30}명`], [r.ydayHm ? `어제 ${r.ydayHm}` : '어제', yd], ['외국에서', `${r.foreignPct}%`], ['휴대폰', `${r.mobilePct}%`]]
+    .map(([k, v]) => `<div class="vt-kpi"><span>${k}</span><b>${v}</b></div>`).join('');
+  // 30분 칸 막대: 칸마다 새로 들어온 사람(마우스를 올리면 누적·어제 같은 무렵)
+  const ymap = Object.fromEntries((t.yseries || []).map(x => [x.hm.slice(0, 4), x.vis]));
+  const max = Math.max(1, ...t.series.map(x => x.add));
+  const bars = t.series.map(x => `<div class="vt-bar" title="${x.hm}${x.manual ? '(수동)' : ''} · 새로 ${x.add}명 · 누적 ${x.vis}명${ymap[x.hm.slice(0, 4)] != null ? ' · 어제 이 무렵 누적 ' + ymap[x.hm.slice(0, 4)] + '명' : ''}"><em>${x.add || ''}</em><i style="height:${Math.round(x.add / max * 80)}%"></i><span>${x.hm}</span></div>`).join('');
+  const srcs = r.sources.map(x => `<div class="vt-src" title="${esc(x.help)}"><span>${esc(x.label)}</span><div><i style="width:${x.pct}%"></i></div><b>${x.vis}명 ${x.pct}%</b></div>`).join('') || '<p class="muted">아직 없음</p>';
+  const chips = arr => arr.map(x => `<span class="vt-chip">${esc(x.label)} <b>${x.vis}</b></span>`).join('') || '<span class="muted">-</span>';
+  const rows = r.shops.map(x => `<tr class="${x.pseudo ? 'vt-pseudo' : ''}"><td>${esc(x.name)}${x.full ? ' <span class="badge b-ok">정식</span>' : ''}</td><td>${x.vis}</td><td>${x.pv}</td><td>${x.d30 ? '+' + x.d30 : ''}</td><td>${esc(x.mainSrc)}</td><td>${x.foreign || ''}</td><td>${x.mobile}</td></tr>`).join('');
+  const warn = [
+    r.spikes.length ? `<li>⚡ 갑자기 늘어남(30분 5명↑): ${r.spikes.map(x => esc(x.name) + ' +' + x.d30).join(', ')}</li>` : '',
+    r.newShops.length ? `<li>🆕 오늘 첫 손님: ${r.newShops.map(esc).join(', ')}</li>` : '',
+    r.zeroFull.length ? `<li>⚠ 정식 가게 오늘 0명(${r.zeroFull.length}곳): ${r.zeroFull.map(esc).join(', ')}</li>` : '',
+  ].join('');
+  return `<div class="box vt">${head}
+    <div class="vt-say"><b>${esc(r.hm)} 보고${r.manual ? ' (지금 보고해)' : ''}</b><ul>${r.lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul></div>
+    <div class="vt-kpis">${kpi}</div>
+    <h4>30분마다 새로 들어온 사람</h4><div class="vt-bars">${bars}</div>
+    <div class="vt-two"><div><h4>어떻게 들어왔나 <small class="muted">(줄에 마우스를 올리면 설명)</small></h4>${srcs}</div>
+      <div><h4>어느 나라에서</h4><div class="vt-chips">${chips(r.countries)}</div><h4>무슨 말로 봤나(화면 언어)</h4><div class="vt-chips">${chips(r.langs)}</div></div></div>
+    ${warn ? `<h4>살펴볼 것</h4><ul class="vt-warn">${warn}</ul>` : ''}
+    <h4>가게별 (오늘 손님 ${r.shopCount}곳 + 영업용 페이지)</h4>
+    <div class="vt-scroll"><table><thead><tr><th>가게</th><th>방문자</th><th>페이지</th><th>30분</th><th>주로 들어온 길</th><th>외국</th><th>폰</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="muted">방문자 = 하루에 같은 사람은 가게마다 1명으로 셈(관리자 화면과 같은 기준). 인쇄된 예전 QR은 꼬리표가 없어 '주소창·즐겨찾기·옛 QR'에 섞여요.</p>
+  </div>`;
+}
 function renderVisits() {
   const v = S.visits;
-  if (!v) return;
-  if (v.status !== 'ok') {
-    $('#tab-visits').innerHTML = `<div class="box"><h3>방문 기록 <span class="badge b-na">연결 필요</span></h3><p>${esc(v.how)}</p>${v.error ? `<p class="muted">마지막 시도 오류: ${esc(v.error)}</p>` : ''}</div>`;
-    return;
-  }
-  const rows = Object.entries(v.shops).sort((a, b) => b[1].visitors - a[1].visitors);
-  const name = id => S.stores.find(s => s.id === id)?.name || id;
-  $('#tab-visits').innerHTML = `<p class="muted">최근 ${v.days}일 · qrmenuasia.com/api/stats · ${esc(new Date(v.generatedAt).toLocaleString('ko-KR'))}</p>
+  let old = '';
+  if (v && v.status !== 'ok') {
+    old = `<div class="box"><h3>방문 기록 <span class="badge b-na">연결 필요</span></h3><p>${esc(v.how)}</p>${v.error ? `<p class="muted">마지막 시도 오류: ${esc(v.error)}</p>` : ''}</div>`;
+  } else if (v) {
+    const rows = Object.entries(v.shops).sort((a, b) => b[1].visitors - a[1].visitors);
+    const name = id => S.stores.find(s => s.id === id)?.name || id;
+    old = `<h3 class="vt-h">최근 ${v.days}일</h3><p class="muted">최근 ${v.days}일 · qrmenuasia.com/api/stats · ${esc(new Date(v.generatedAt).toLocaleString('ko-KR'))}</p>
     <table><thead><tr><th>가게</th><th>방문자</th><th>페이지뷰</th></tr></thead><tbody>${rows.map(([id, r]) => `<tr><td>${esc(name(id))}</td><td>${r.visitors}</td><td>${r.views}</td></tr>`).join('')}</tbody></table>`;
+  }
+  $('#tab-visits').innerHTML = vtHtml() + old;
 }
+async function loadVisitsToday() {
+  try {
+    const r = await api('/api/visits/today' + (S.vtDate ? '?date=' + S.vtDate : ''));
+    if (r && r.date) { S.vt = r; if (!S.vtDate) S.vtToday = r; }
+  } catch { S.vt = S.vt || { error: '대시보드 서버가 아직 새 기능을 모르거나(다시 켜기 필요) 닿지 않아요.' }; }
+  renderVisits(); renderOffice();
+}
+document.addEventListener('change', e => {
+  if (e.target.id !== 'vt-date') return;
+  S.vtDate = e.target.value === S.vtToday?.date ? '' : e.target.value;
+  loadVisitsToday();
+});
+document.addEventListener('click', async e => {
+  if (e.target.id !== 'vt-refresh') return;
+  e.target.disabled = true; e.target.textContent = '읽는 중…';
+  const r = await post('/api/visits/refresh', {}).catch(() => null);
+  if (r && r.date) { S.vt = r; S.vtToday = r; S.vtDate = ''; toast(r.fresh ? '방문 현황을 새로 읽었어요.' : '2분 안에 읽은 결과예요(무료 한도 아끼기).'); }
+  else toast('못 읽었어요. 대시보드를 다시 켜야 할 수 있어요.');
+  renderVisits(); renderOffice();
+});
 function renderCounts() {
   const full = S.stores.filter(s => s.kind === 'full').length, list = S.stores.filter(s => s.kind === 'listing').length;
   const items = S.todo.length;
@@ -1190,8 +1260,10 @@ async function loadAll() {
   loadHr();
   loadNotifyStatus();
   S.visits = await api('/api/visits'); renderVisits();
+  loadVisitsToday();
 }
 setOfficeMode(officeMode);
 loadAll();
 setInterval(() => api('/api/quota').then(q => { S.quota = q; renderQuota(); renderOffice(); }), 60000);
 setInterval(() => { loadFeed(); loadBrief(); loadHr(); }, 120000);
+setInterval(() => { if (!S.vtDate) loadVisitsToday(); }, 60000);  // 새 30분 보고가 생겼는지 1분마다(PC 파일만 읽음, 사이트엔 안 물어봄)

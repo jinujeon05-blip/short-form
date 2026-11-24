@@ -29,6 +29,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, quote, urlparse
 
 import builder  # 운영자 모드 '가게 만들기' (dashboard/builder.py)
+import visits  # 방문 현황 담당(선별팀 팀장) 30분 보고 (dashboard/visits.py, 2026-11-24)
 import notify   # 텔레그램 알림 발송 (dashboard/notify.py)
 import sales    # 영업 탭 (dashboard/sales.py)
 
@@ -2115,6 +2116,9 @@ class Handler(BaseHTTPRequestHandler):
             return self.json({**build_team(), "recent": cached("recent", 30, build_recent)})
         if p == "/api/visits":
             return self.json(cached("visits", 300, build_visits))
+        if p == "/api/visits/today":
+            d = (parse_qs(urlparse(self.path).query).get("date") or [""])[0]
+            return self.json(visits.today(d if re.fullmatch(r"\d{4}-\d{2}-\d{2}", d) else None))
         if p == "/api/quota":
             return self.json(cached("quota", 60, build_quota))
         if p == "/api/collector":
@@ -2240,6 +2244,9 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json({"error": err}, 400)
             return self.json({"job": job})
         path = urlparse(self.path).path
+        if path == "/api/visits/refresh":
+            row = visits.refresh()
+            return self.json({**visits.today(), "fresh": bool(row)})
         if path == "/api/deploy":
             err = start_deploy(str(body.get("id", "")))
             return self.json({"error": err} if err else {"ok": True}, 400 if err else 200)
@@ -2405,6 +2412,7 @@ if __name__ == "__main__":
         sys.stderr = _Tee(sys.stderr, OUT / "server.log")
     builder.init(__import__("__main__"))
     sales.init(__import__("__main__"))
+    visits.init(__import__("__main__"))
     load_orders()
     threading.Thread(target=scheduler, daemon=True).start()
     try:
@@ -2413,8 +2421,9 @@ if __name__ == "__main__":
         print(f"대시보드가 이미 켜져 있어요(http://{HOST}:{PORT}). 이 창은 닫아도 됩니다. 두 개가 같이 켜지면 한쪽이 만든 결과가 결재함에 안 보여요.")
         sys.exit(1)
     print(f"Jinwoo 에이전트(QR메뉴 대시보드): http://{HOST}:{PORT}  (이 PC에서만 열림, 끄려면 이 창을 닫거나 Ctrl+C)")
-    if not os.environ.get("DASH_PORT"):  # 시험용 임시 포트에서는 휴대폰 접속을 열지 않는다
+    if not os.environ.get("DASH_PORT"):  # 시험용 임시 포트에서는 휴대폰 접속·방문 자동 기록을 열지 않는다
         start_remote()
+        visits.start()
     try:
         srv.serve_forever()
     except KeyboardInterrupt:
