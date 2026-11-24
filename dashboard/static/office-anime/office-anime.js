@@ -81,7 +81,7 @@
       im.onerror = () => res();
       im.src = url;
     });
-    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k3')];
+    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k5')];
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee']
@@ -106,6 +106,7 @@
   }
 
   function create(root, opts = {}) {
+    let realBusySet = new Set(); // 대시보드에서 실제로 일하는 중인 직원(syncReal이 채움) — 위쪽 함수들이 먼저 쓰므로 맨 앞에 둠
     const DOCK_IDS = ['claude', 'finder', 'agy', 'reader', 'inspector', 'auditor', 'translator', 'staffing', 'sorter'];
     const DOCK_SHORT = { claude: '비서', finder: '시각', agy: '검사', reader: '해석', inspector: '감찰', auditor: '감사', translator: '번역', staffing: '인력', sorter: '선별' };
     const dockHtml = DOCK_IDS.map(id => {
@@ -581,19 +582,32 @@
       n.bubble = '';
     }
 
-    function sendPath(id, pts, { bubble = '', bubbleType = '', onArrive = null } = {}) {
+    // 작업 중(대시보드에서 실제 일하는 중) 직원은 자리에서 움직이지 않음(2026-11-24 캡틴 요청).
+    // 예외: 자기 자리로 돌아가는 길, 캡틴이 직접 부른 것(직원 클릭·보고해 = force)
+    function busyBlocked(id, pts, force) {
+      if (force || !realBusySet.has(id) || id === 'captain') return false;
+      const c = CHARS[id], last = pts && pts[pts.length - 1];
+      if (c && last && (Math.hypot(last[0] - c.home[0], last[1] - c.home[1]) < 4 ||
+        (c.standPos && Math.hypot(last[0] - c.standPos[0], last[1] - c.standPos[1]) < 4))) return false;
+      return true;
+    }
+
+    function sendPath(id, pts, { bubble = '', bubbleType = '', onArrive = null, force = false } = {}) {
       const n = npcs[id];
+      if (busyBlocked(id, pts, force)) return false;
       n.path = pts.map(p => [p[0], p[1]]);
       n.mode = 'walk';
       n.bubble = bubble;
       n.bubbleType = bubbleType;
       n.onArrive = onArrive;
+      return true;
     }
 
     function serveCoffee() {
       if (briefingActive) return;
       const cl = npcs.claude, cap = npcs.captain;
       if (cl.mode === 'walk' || cl.mode === 'emote') return;
+      if (realBusySet.has('claude')) return;
       SFX.coffee();
       log('☕ 비서실장이 커피바에서 커피를 추출해 캡틴께 서빙합니다');
       cl.walkOverride = null;
@@ -665,6 +679,7 @@
       if (briefingActive) return;
       const f = npcs.finder, a = npcs.agy;
       if (f.mode === 'walk' || a.mode === 'walk') return;
+      if (realBusySet.has('finder') || realBusySet.has('agy')) return;
       let ready = 0;
       log('💬 시각 정보 비서 · 메뉴 검사관 중앙 복도 12프레임 이동 후 업무 수다');
       const talk = () => {
@@ -858,7 +873,13 @@
         const sx = (s.x / 100) * W;
         const topY = (s.headTopY / 100) * H;
         const clipY = (s.clipY / 100) * H;
-        const bob = Math.sin(t * 1.8 + sx * 0.01) * 1.1;
+        // 작업 중(실제 대시보드 일) = 자판 두드리듯 잔떨림 + 모니터 불빛 + 머리 위 '입력 중…' 점 3개
+        const working = n.mode === 'idle' && realBusySet.has(n.id);
+        const ph = sx * 0.013;
+        const bob = working
+          ? Math.sin(t * 1.6 + ph) * 0.6 + Math.abs(Math.sin(t * 9.5 + ph)) * 1.4
+          : Math.sin(t * 1.8 + sx * 0.01) * 1.1;
+        const sway = working ? Math.sin(t * 4.7 + ph) * 0.9 : 0;
         const targetH = s.h;
         const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
@@ -867,8 +888,36 @@
         ctx.beginPath();
         ctx.rect(0, 0, W, clipY);
         ctx.clip();
-        ctx.drawImage(im, sx - targetW / 2, topY + bob, targetW, targetH);
+        ctx.drawImage(im, sx - targetW / 2 + sway, topY + bob, targetW, targetH);
         ctx.restore();
+        if (working) {
+          // 모니터 불빛(얼굴·책상 쪽이 은은하게 깜빡임)
+          const gy = cfg.facing === 'back' ? topY + targetH * 0.05 : topY + targetH * 0.42;
+          const a = 0.13 + 0.06 * Math.sin(t * 3.1 + ph) + (Math.sin(t * 13 + ph) > 0.92 ? 0.05 : 0);
+          ctx.save();
+          ctx.globalCompositeOperation = 'lighter';
+          const g = ctx.createRadialGradient(sx, gy, 4, sx, gy, targetH * 0.42);
+          g.addColorStop(0, `rgba(125,205,255,${a.toFixed(3)})`);
+          g.addColorStop(1, 'rgba(125,205,255,0)');
+          ctx.fillStyle = g;
+          ctx.fillRect(sx - targetH * 0.45, gy - targetH * 0.45, targetH * 0.9, targetH * 0.9);
+          ctx.restore();
+          // 머리 위 '입력 중…' 점 3개 (말풍선이 없을 때만)
+          if (!n.bubble) {
+            const bx = sx, by = topY - 20, r = 5.5;
+            ctx.save();
+            ctx.fillStyle = 'rgba(12,74,110,0.88)';
+            ctx.strokeStyle = 'rgba(56,189,248,0.95)'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect ? ctx.roundRect(bx - 30, by - 14, 60, 28, 14) : ctx.rect(bx - 30, by - 14, 60, 28);
+            ctx.fill(); ctx.stroke();
+            for (let i = 0; i < 3; i++) {
+              const k = (Math.sin(t * 6 - i * 0.9) + 1) / 2;
+              ctx.fillStyle = `rgba(224,242,254,${(0.35 + 0.65 * k).toFixed(2)})`;
+              ctx.beginPath(); ctx.arc(bx - 14 + i * 14, by - k * 3, r, 0, Math.PI * 2); ctx.fill();
+            }
+            ctx.restore();
+          }
+        }
         return;
       }
 
@@ -952,7 +1001,7 @@
 
     // 사무실 전체 벽·책상·화분·가구 실측 충돌 박스 (2026-11-24 새 배경 실측. 열린 문 아래·위 틈·계단·복도·맨 아래 나무 바닥만 통과)
     // 주의: A* 격자가 1.5% 간격이라 벽 상자는 폭 1.5% 이상으로 둔다(얇으면 격자가 건너뜀).
-    // 문짝: 방마다 열린 나무 문짝이 벽에서 튀어나와 있어 문짝 바닥(아래쪽 끝) 자리를 막고, 문짝 위·아래 틈으로만 드나듦.
+    // 문짝: 2026-11-24 캡틴 요청으로 모든 방의 문짝 그림·막힘을 지움 — 벽이 끊긴 입구로 드나듦.
     const BLOCKERS = [
       // 상단 창가·커피바·테라스 난간·화분·단상
       { x0:  0.0, y0:  0.0, x1:  8.0, y1: 22.2 }, // 좌측 상단 화분(화분 바닥 21.5까지)
@@ -968,13 +1017,13 @@
       // 미디어 관제실(초록): 문짝 아래 틈(y 46~47.4)으로 드나듦
       { x0:  0.0, y0: 22.8, x1: 28.8, y1: 39.6 }, // 윗벽 + 크로마키 뒷벽
       { x0:  0.0, y0: 22.8, x1:  8.6, y1: 49.0 }, // 좌벽 + 카메라 삼각대
-      { x0: 25.6, y0: 22.8, x1: 28.8, y1: 46.0 }, // 우측 벽 + 문짝
+      { x0: 27.4, y0: 22.8, x1: 28.8, y1: 46.0 }, // 우측 벽(문짝은 11-24 삭제)
       { x0: 20.8, y0: 36.0, x1: 26.5, y1: 41.8 }, // 우측 조명·휴지통
       { x0:  9.0, y0: 41.0, x1: 19.6, y1: 44.8 }, // 시각 정보 비서 책상
       { x0:  0.0, y0: 47.4, x1: 23.0, y1: 50.5 }, // 초록방 앞벽 + 보라방 윗벽
       // 디지털 메뉴 통제실(빨강): 문짝 아래 틈(y 46~48.4)으로 드나듦
       { x0: 71.6, y0: 22.8, x1: 100., y1: 38.8 }, // 윗벽 + 빨강 뒷벽 + 벽에 붙은 책상 상판(책상 뒤로 못 걷게)
-      { x0: 71.6, y0: 22.8, x1: 75.4, y1: 46.0 }, // 좌측 벽 + 문짝
+      { x0: 71.6, y0: 22.8, x1: 73.4, y1: 46.0 }, // 좌측 벽(문짝은 11-24 삭제)
       { x0: 74.0, y0: 37.0, x1: 77.2, y1: 43.6 }, // 휴지통
       { x0: 77.6, y0: 38.5, x1: 87.2, y1: 47.6 }, // 좌측 책상·의자
       { x0: 87.6, y0: 38.5, x1: 97.6, y1: 47.6 }, // 우측 책상·의자
@@ -987,28 +1036,24 @@
       { x0: 12.6, y0: 71.5, x1: 21.0, y1: 81.9 }, // 우측 감사 책상·의자
       { x0:  0.0, y0: 77.0, x1:  4.4, y1: 84.0 }, // 좌하단 화분
       { x0:  0.0, y0: 83.4, x1: 22.0, y1: 90.0 }, // 앞벽
-      // 통번역 통제실(남색): 좌우 문짝 위(y 73~74)·아래(y 77~79) 틈으로 드나듦
+      // 통번역 통제실(남색): 좌우 벽이 끊긴 입구(y 73~79)로 드나듦
       { x0: 26.2, y0: 48.3, x1: 47.2, y1: 67.2 }, // 윗벽 + 뒷벽 + 화분·책장
       { x0: 29.2, y0: 66.0, x1: 33.4, y1: 69.0 }, // 화분 바닥(68.3)
       { x0: 39.8, y0: 66.0, x1: 44.6, y1: 68.4 }, // 책장 바닥(67.7)
       { x0: 26.2, y0: 48.3, x1: 29.2, y1: 73.0 }, // 좌벽
-      { x0: 26.4, y0: 74.2, x1: 28.9, y1: 77.0 }, // 좌측 문짝
       { x0: 26.2, y0: 79.0, x1: 28.6, y1: 90.0 }, // 좌측 기둥
       { x0: 27.5, y0: 79.0, x1: 31.8, y1: 85.0 }, // 좌하단 화분
       { x0: 44.6, y0: 48.3, x1: 46.0, y1: 72.6 }, // 우벽
-      { x0: 45.0, y0: 74.4, x1: 47.6, y1: 77.4 }, // 우측 문짝(복도로 튀어나옴)
       { x0: 44.2, y0: 79.0, x1: 46.2, y1: 90.0 }, // 우측 기둥
       { x0: 26.2, y0: 84.6, x1: 47.2, y1: 89.8 }, // 앞벽
       { x0: 31.8, y0: 73.6, x1: 42.8, y1: 78.8 }, // 수석 번역관 책상
-      // 인력 공급팀(하늘): 좌우 문짝 위(y 72~74)·아래(y 77~78.6) 틈으로 드나듦
+      // 인력 공급팀(하늘): 좌우 벽이 끊긴 입구(y 72~78.6)로 드나듦
       { x0: 53.6, y0: 48.4, x1: 73.4, y1: 65.4 }, // 윗벽 + 뒷벽
       { x0: 55.6, y0: 65.0, x1: 59.8, y1: 68.6 }, // 좌측 화분
       { x0: 68.6, y0: 65.0, x1: 72.0, y1: 68.6 }, // 휴지통
       { x0: 53.4, y0: 48.4, x1: 55.4, y1: 72.4 }, // 좌벽
-      { x0: 53.8, y0: 74.0, x1: 56.4, y1: 76.8 }, // 좌측 문짝
       { x0: 54.8, y0: 78.9, x1: 57.0, y1: 85.0 }, // 좌측 기둥
       { x0: 71.8, y0: 48.4, x1: 73.4, y1: 72.0 }, // 우벽
-      { x0: 72.4, y0: 74.3, x1: 74.6, y1: 77.0 }, // 우측 문짝(선별팀 옆 좁은 통로로 튀어나옴)
       { x0: 73.0, y0: 78.6, x1: 76.0, y1: 85.0 }, // 우측 기둥
       { x0: 53.4, y0: 84.6, x1: 76.0, y1: 89.8 }, // 앞벽
       { x0: 59.4, y0: 73.6, x1: 69.8, y1: 78.9 }, // 인력 공급팀 책상
@@ -1599,6 +1644,7 @@
         } else {
           if (wasSeated && c.standPos) { n.x = c.standPos[0]; n.y = c.standPos[1]; }
           walkNpcSafe(hit, tx, ty, {
+            force: true,
             bubble: '🏃 네 캡틴, 바로 가겠습니다!',
             bubbleType: 'meet',
             onArrive: () => {
@@ -1803,6 +1849,9 @@
 
     function walkNpcSafe(id, tx, ty, opts2 = {}) {
       const n = npcs[id], c = CHARS[id];
+      if (busyBlocked(id, [[tx, ty]], opts2.force)) return false;
+      // 이미 자기 자리에 앉아 있는데 '자리로 돌아가기'가 또 오면(늦게 도착한 타이머) 일어서지 않음
+      if (n.mode === 'idle' && c && Math.hypot(tx - c.home[0], ty - c.home[1]) < 0.6) return true;
       // 착석 상태에서 출발할 때는 의자/책상 옆 바닥(standPos)에서 출발해 절대 벽·책상을 뚫지 않음!
       const sx = (n.mode === 'idle' && c?.standPos) ? c.standPos[0] : n.x;
       const sy = (n.mode === 'idle' && c?.standPos) ? c.standPos[1] : n.y;
@@ -1893,6 +1942,7 @@
 
       // 비서실장 단상 이동 (좌측 계단 경유 A* 길찾기)
       walkNpcSafe('claude', 39.5, 21.0, {
+        force: true,
         bubble: '📋 단상에서 보고 진행 준비 중…',
         onArrive: () => { cl.mode = 'stand'; cl.dir = 'front'; cl.bubble = ''; onOneArrived(); }
       });
@@ -1904,6 +1954,7 @@
         const slotX = count === 1 ? 50.0 : (39.5 + (idx / (count - 1)) * 21.0);
         const slotY = 29.8;
         walkNpcSafe(sid, slotX, slotY, {
+          force: true,
           bubble: '🏃 보고 정렬 이동 중…',
           onArrive: () => { n.mode = 'stand'; n.dir = 'back'; n.bubble = ''; onOneArrived(); }
         });
@@ -1976,7 +2027,6 @@
       polisher: 'translator', staffing: 'staffing', sorting: 'sorter'
     };
     let prevReal = null;
-    let realBusySet = new Set();
 
     function syncReal({ orders = [], jobs = [], collector = null, hr = null, quota = null, newshops = [], storesCount = 0, talk = [] } = {}) {
       if (storesCount > 0) totalStoresCount = storesCount;
@@ -2008,6 +2058,19 @@
         for (const d of (o.active || [])) if (DASH_TO_OA[d]) busy.add(DASH_TO_OA[d]);
       }
       realBusySet = busy;
+      if (!briefingActive) {
+        for (const id of busy) {
+          const n = npcs[id], c = CHARS[id];
+          if (!n || !c || id === 'captain' || n.mode === 'idle' || n.goingToWork) continue;
+          if (activeTalkNpc && activeTalkNpc.id === id) continue;
+          n.goingToWork = true;
+          n.emote = null; n.emoteLoop = false;
+          walkNpcSafe(id, c.home[0], c.home[1], {
+            bubble: '⚡ 일 들어왔어요, 자리로 갑니다!', bubbleType: 'ok',
+            onArrive: () => { n.goingToWork = false; seatNpc(id); },
+          });
+        }
+      }
 
       const done = new Set();
       const doneOrderOf = {};
