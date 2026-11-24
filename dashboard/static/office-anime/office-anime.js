@@ -85,8 +85,8 @@
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], water: [], clean: [], dance: [], sweep: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee']
-        : id === 'claude' ? ['east', 'front', 'back', 'dance']
-        : id === 'reader' ? ['east', 'front', 'back', 'dance']
+        : id === 'claude' ? ['east', 'front', 'back', 'se', 'ne', 'dance']
+        : id === 'reader' ? ['east', 'front', 'back', 'se', 'ne', 'dance']
         : id === 'sorter' ? ['east', 'front', 'back', 'water']
         : id === 'staffing' ? ['east', 'front', 'back', 'clean']
         : id === 'inspector' ? ['east', 'front', 'back', 'sweep']
@@ -94,7 +94,7 @@
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = id === 'captain' ? 'cap8dir' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : 'orig2k';
+          const v = id === 'captain' ? 'cap8dir' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
         }
       }
@@ -1287,7 +1287,8 @@
             n.x = nx; n.y = ny;
           }
           n.walkDist += step;
-          n.dir = vecToDir(dx, dy, n.id === 'captain');
+          const has8 = (n.id === 'captain' || n.id === 'claude' || n.id === 'reader');
+          n.dir = vecToDir(dx, dy, has8);
         }
       }
 
