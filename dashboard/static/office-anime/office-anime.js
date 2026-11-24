@@ -98,6 +98,11 @@
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
         }
       }
+      // 캡틴 주먹 격투(복싱 연속 공격)는 15프레임 — 챗GPT 3명씩 5장(가드·잽·스트레이트·훅·어퍼컷)
+      if (id === 'captain') {
+        imgs.walk[id].punch = [];
+        for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1`));
+      }
     }
     for (const p of PROPS) {
       jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq4k`));
@@ -133,13 +138,14 @@
             <button type="button" class="oa-snd-btn" data-bgm-btn title="사무실 BGM 켜기/끄기">🎵 BGM</button>
           </div>
           <div class="oa-dock" data-dock-bar aria-label="직원 빠른 호출">${dockHtml}</div>
-          <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 2 커피 · 3 발차기 · E 착석</div>
+          <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 2 커피 · 3 발차기 · 4 주먹 · E 착석</div>
           <div class="oa-skills" aria-label="액션 스킬창">
             <button type="button" class="oa-sk sk-sit" data-cap-sit title="캡틴 대표석 복귀(E)"><i>🪑</i><span>착석</span></button>
             <button type="button" class="oa-sk sk-cof" data-brief-cof title="비서실장 커피 서빙"><i>☕</i><span>서빙</span></button>
             <button type="button" class="oa-sk sk-dance" data-brief-dance title="비서실장·자료해석 합동 댄스"><i>💃</i><span>댄스</span></button>
             <button type="button" class="oa-sk sk-capcof" data-cap-coffee title="캡틴 커피 마시기(2)"><i>☕</i><span>커피</span></button>
             <button type="button" class="oa-sk sk-kick" data-cap-kick title="캡틴 태권도 발차기 시범(3)"><i>🥋</i><span>발차기</span></button>
+            <button type="button" class="oa-sk sk-punch" data-cap-punch title="캡틴 주먹 격투 연속 공격(4)"><i>👊</i><span>주먹</span></button>
             <button type="button" class="oa-sk sk-greet" data-cap-greet title="캡틴 격려 인사(1)"><i>👋</i><span>인사</span></button>
             <button type="button" class="oa-sk sk-main start" data-brief-start title="전 직원 단상 앞 보고"><i>📋</i><span>보고해</span></button>
             <button type="button" class="oa-sk sk-main stop" data-brief-stop hidden title="보고 종료 및 해산"><i>✋</i><span>종료</span></button>
@@ -424,6 +430,7 @@
       },
       brief:     () => { navigator.vibrate?.([20, 40, 20]); clipOr('brief', 0.9, () => { tone(659.25, 0.22, 'sine', 0.09); tone(523.25, 0.36, 'sine', 0.09, 0.20); }); },
       kick:      () => { [0, 0.75, 1.5, 2.25].forEach(d => noiseBurst(0.09, 0.05, d)); navigator.vibrate?.([12, 60, 12]); },
+      punch:     () => { [0.32, 0.81, 1.29, 1.78, 2.1].forEach(d => noiseBurst(0.06, 0.045, d)); navigator.vibrate?.([10, 40, 10, 40, 14]); },
       greet:     () => { tone(587.33, 0.09, 'triangle', 0.07); tone(880.0, 0.14, 'triangle', 0.07, 0.08); navigator.vibrate?.(14); },
       coffee:    () => clipOr('coffee', 0.8, () => { tone(1174, 0.07, 'sine', 0.05); tone(1568, 0.09, 'sine', 0.045, 0.07); tone(880, 0.12, 'triangle', 0.05, 0.15); }),
       sit:       () => clipOr('sit', 0.7, () => { tone(260, 0.07, 'triangle', 0.065); tone(196, 0.09, 'sine', 0.05, 0.05); }),
@@ -933,12 +940,13 @@
       const wset = imgs.walk[n.id];
       if (!wset) return;
       const walking = (n.mode === 'walk');
-      const kicking = (n.id === 'captain' && n.kickUntil && t < n.kickUntil && wset.kick?.length);
+      const fightKey = (n.fightKind === 'punch') ? 'punch' : 'kick'; // 발차기·주먹 격투가 같은 타이머(kickUntil)를 씀
+      const kicking = (n.id === 'captain' && n.kickUntil && t < n.kickUntil && wset[fightKey]?.length);
       const emoting = !kicking && (n.mode === 'emote' && n.emote && wset[n.emote]?.length);
       let fIdx = 0;
       if (kicking) {
         const elapsed = Math.max(0, t - (n.kickStart || 0));
-        fIdx = Math.min(11, Math.floor(elapsed * 5.2));
+        fIdx = Math.min(wset[fightKey].length - 1, Math.floor(elapsed * (fightKey === 'punch' ? 6.2 : 5.2)));
       } else if (emoting) {
         const elapsed = Math.max(0, t - (n.emoteStart || 0));
         fIdx = n.emoteLoop ? (Math.floor(elapsed * 5.0) % 12) : Math.min(11, Math.floor(elapsed * 4.0));
@@ -949,7 +957,7 @@
 
       let dirKey = 'front', flipX = false;
       if (kicking) {
-        dirKey = 'kick';
+        dirKey = fightKey;
         flipX = (n.dir === 'west' || n.dir === 'sw' || n.dir === 'nw');
       } else if (emoting) { dirKey = n.emote; flipX = (n.dir === 'west'); }
       else if (walking && n.walkOverride && wset[n.walkOverride]?.length) {
@@ -1335,26 +1343,29 @@
       touchCaptainInput();
       const cap = npcs.captain;
       // 발차기는 다리가 책상에 가려지므로, 대표석(의자)에 있으면 단상 앞 바닥으로 걸어 나온 뒤 찬다
-      if (action === 'kick') {
-        // 캡틴 이동 중 발차기 지원! 앉아 있을 때만 대표석 앞으로 나온 뒤 발차기, 서 있거나 이동 중이면 멈추지 않고 바로 이동 발차기!
+      if (action === 'kick' || action === 'punch') {
+        const isPunch = action === 'punch';
+        // 캡틴 이동 중 발차기·주먹 지원! 앉아 있을 때만 대표석 앞으로 나온 뒤 동작, 서 있거나 이동 중이면 멈추지 않고 바로 동작!
         if (!cap._kickWalked && cap.mode === 'idle' &&
             Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]) < 4.0) {
           const ok = walkCaptainSafe(KICK_SPOT[0], KICK_SPOT[1], {
-            bubble: '🥋 잠깐 시범 보일게요!',
-            onArrive: () => { cap._kickWalked = true; cap.dir = 'east'; playCaptainAction('kick'); cap._kickWalked = false; },
+            bubble: isPunch ? '👊 잠깐 몸 좀 풀게요!' : '🥋 잠깐 시범 보일게요!',
+            onArrive: () => { cap._kickWalked = true; cap.dir = 'east'; playCaptainAction(action); cap._kickWalked = false; },
           });
           if (ok) return;
         }
         const nowS = performance.now() / 1000;
+        cap.fightKind = action;
         cap.kickStart = nowS;
-        cap.kickUntil = nowS + 2.35;
+        cap.kickUntil = nowS + (isPunch ? 2.55 : 2.35);
         if (cap.mode === 'idle') cap.mode = 'stand';
-        SFX.kick();
-        cap.bubble = '🥋 얍! 이동 발차기!';
+        const say = isPunch ? '👊 원투! 연속 펀치!' : '🥋 얍! 이동 발차기!';
+        if (isPunch) SFX.punch(); else SFX.kick();
+        cap.bubble = say;
         cap.bubbleType = 'ok';
-        spawnBurst(cap.x, cap.y - 4, '🥋 얍!', 0);
-        log('🥋 캡틴이 이동 중 태권도 발차기를 시전했습니다');
-        setTimeout(() => { if (cap.bubble === '🥋 얍! 이동 발차기!') cap.bubble = ''; }, 2400);
+        spawnBurst(cap.x, cap.y - 4, isPunch ? '👊 퍽!' : '🥋 얍!', 0);
+        log(isPunch ? '👊 캡틴이 주먹 격투(잽·스트레이트·훅·어퍼컷) 연속 공격을 시전했습니다' : '🥋 캡틴이 이동 중 태권도 발차기를 시전했습니다');
+        setTimeout(() => { if (cap.bubble === say) cap.bubble = ''; }, 2600);
         return;
       }
       cap.path = [];
@@ -1412,6 +1423,9 @@
       } else if (k === '3' || k === ' ') {
         e.preventDefault();
         playCaptainAction('kick');
+      } else if (k === '4' || k === 'f') {
+        e.preventDefault();
+        playCaptainAction('punch');
       }
     });
     window.addEventListener('keyup', e => {
@@ -1924,6 +1938,7 @@
           if (text.includes('커피')) { closeTalkModal(false); playCaptainAction('coffee'); return; }
           if (text.includes('인사')) { closeTalkModal(false); playCaptainAction('greet'); return; }
           if (text.includes('발차기') || text.includes('태권도')) { closeTalkModal(false); playCaptainAction('kick'); return; }
+          if (['주먹', '펀치', '복싱', '격투'].some(w => text.includes(w))) { closeTalkModal(false); playCaptainAction('punch'); return; }
           if (text.includes('복귀')) { closeTalkModal(false); sitCaptainBack(); return; }
         }
         if (hit === 'claude' && text.includes('커피')) {
@@ -2208,19 +2223,20 @@
     root.querySelector('[data-cap-greet]')?.addEventListener('click', () => playCaptainAction('greet'));
     root.querySelector('[data-cap-coffee]')?.addEventListener('click', () => playCaptainAction('coffee'));
     // 모바일 멀티터치(왼손 조이스틱 드래그 + 오른손 발차기 탭)에서 즉시 발동하도록 pointerdown 사용!
-    const kickBtn = root.querySelector('[data-cap-kick]');
-    if (kickBtn) {
-      let kickTrigAt = 0;
-      const fireKick = e => {
+    [['[data-cap-kick]', 'kick'], ['[data-cap-punch]', 'punch']].forEach(([sel, act]) => {
+      const btn = root.querySelector(sel);
+      if (!btn) return;
+      let trigAt = 0;
+      const fire = e => {
         e.preventDefault(); e.stopPropagation();
         const nowMs = performance.now();
-        if (nowMs - kickTrigAt < 250) return;
-        kickTrigAt = nowMs;
-        playCaptainAction('kick');
+        if (nowMs - trigAt < 250) return;
+        trigAt = nowMs;
+        playCaptainAction(act);
       };
-      kickBtn.addEventListener('pointerdown', fireKick);
-      kickBtn.addEventListener('click', fireKick);
-    }
+      btn.addEventListener('pointerdown', fire);
+      btn.addEventListener('click', fire);
+    });
     root.querySelector('[data-cap-sit]')?.addEventListener('click', sitCaptainBack);
     briefCofBtn.addEventListener('click', serveCoffee);
     briefStartBtn.addEventListener('click', startBriefing);
