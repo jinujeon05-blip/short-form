@@ -83,9 +83,9 @@
     });
     const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k')];
     for (const [id, cfg] of Object.entries(CHARS)) {
-      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], water: [], clean: [], dance: [], sweep: [] };
+      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee']
-        : id === 'claude' ? ['east', 'front', 'back', 'se', 'ne', 'dance']
+        : id === 'claude' ? ['east', 'front', 'back', 'se', 'ne', 'dance', 'brew', 'carry', 'serve']
         : id === 'reader' ? ['east', 'front', 'back', 'se', 'ne', 'dance']
         : id === 'sorter' ? ['east', 'front', 'back', 'water']
         : id === 'staffing' ? ['east', 'front', 'back', 'clean']
@@ -94,7 +94,7 @@
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = id === 'captain' ? 'cap8dir' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : 'orig2k';
+          const v = id === 'captain' ? 'cap8dir' : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
         }
       }
@@ -159,7 +159,7 @@
       dockBtns[btn.dataset.dock] = btn;
       btn.addEventListener('click', () => openTalkModal(btn.dataset.dock));
     });
-    // 캡틴 확대 추적 게임 카메라 (기본값: follow 1.85배 확대 추적, 보고 중엔 자동 전체 보기!)
+    // 캡틴 확대 추적 게임 카메라 (기본값: follow 1.85배 확대 추적, 보고 중엔 단상 앞 2.4배 확대)
     let camMode = 'follow';
     const cam = { z: 1.85, fx: CHARS.captain.home[0], fy: CHARS.captain.home[1] + 5, tx: 0, ty: 0 };
     let modalTargets = [], modalSlot = null, modalPlaceAt = 0; // 대화창 자리 정하기(placeModal)용
@@ -586,31 +586,51 @@
     function serveCoffee() {
       if (briefingActive) return;
       const cl = npcs.claude, cap = npcs.captain;
-      if (cl.mode === 'walk') return;
+      if (cl.mode === 'walk' || cl.mode === 'emote') return;
       SFX.coffee();
-      log('☕ 비서실장이 12프레임으로 커피를 타러 이동');
+      log('☕ 비서실장이 커피바에서 커피를 추출해 캡틴께 서빙합니다');
+      cl.walkOverride = null;
       sendPath('claude', safeRoute(ROUTES.chiefToCof), {
         bubble: '☕ 캡틴 커피 타러 가는 중…',
         onArrive: () => {
-          cl.dir = 'back'; cl.bubble = '☕ 원두 커피 추출 중…';
+          if (briefingActive) return;
+          cl.dir = 'back';
+          cl.mode = 'emote'; cl.emote = 'brew'; cl.emoteLoop = true;
+          cl.emoteStart = performance.now() / 1000;
+          cl.bubble = '☕ 원두 커피 추출 중…';
+          SFX.coffee();
           setTimeout(() => {
+            if (briefingActive) return;
+            cl.emote = null; cl.emoteLoop = false;
+            cl.walkOverride = 'carry';
             sendPath('claude', safeRoute(ROUTES.cofToCap), {
               bubble: '☕ 캡틴, 커피 가져왔습니다!', bubbleType: 'ok',
               onArrive: () => {
+                if (briefingActive) { cl.walkOverride = null; return; }
+                cl.walkOverride = null;
+                cl.x = 43.0; cl.y = 22.8; // 캡틴 책상 바로 앞 밀착!
                 cl.dir = 'east';
-                cap.bubble = '☕ 고마워요! 잘 마실게요'; cap.bubbleType = 'ok';
+                cl.mode = 'emote'; cl.emote = 'serve'; cl.emoteLoop = false;
+                cl.emoteStart = performance.now() / 1000;
+                cl.bubble = '☕ 캡틴, 따뜻한 커피 내려놓았습니다!'; cl.bubbleType = 'ok';
+                SFX.coffee();
                 setTimeout(() => {
+                  cap.bubble = '☕ 고마워요! 잘 마실게요'; cap.bubbleType = 'ok';
+                }, 900);
+                setTimeout(() => {
+                  if (briefingActive) return;
+                  cl.emote = null; cl.emoteLoop = false;
                   sendPath('claude', safeRoute(ROUTES.capToChief), {
                     bubble: '',
                     onArrive: () => {
-                      cl.mode = 'idle'; cl.dir = 'front';
+                      seatNpc('claude');
                       setTimeout(() => { if (cap.bubble.includes('고마워요')) cap.bubble = ''; }, 2400);
                     },
                   });
-                }, 1600);
+                }, 3100);
               },
             });
-          }, 1100);
+          }, 2400);
         },
       });
     }
@@ -808,6 +828,10 @@
 
       let dirKey = 'front', flipX = false;
       if (emoting) { dirKey = n.emote; flipX = (n.dir === 'west'); }
+      else if (walking && n.walkOverride && wset[n.walkOverride]?.length) {
+        dirKey = n.walkOverride;
+        flipX = (n.dir === 'west' || n.dir === 'sw' || n.dir === 'nw');
+      }
       else if (n.dir === 'east') { dirKey = 'east'; }
       else if (n.dir === 'west') { dirKey = 'east'; flipX = true; }
       else if (n.dir === 'se' && wset.se?.length) { dirKey = 'se'; }
@@ -1276,11 +1300,12 @@
         }
       }
 
-      // 캡틴 중심 부드러운 게임 카메라 추적 (1.85배 확대 ↔ 보고 시·전체 보기 1.0배 자동 보간!)
+      // 캡틴 중심 부드러운 게임 카메라 추적 (1.85배 확대 ↔ 전체 보기 1.0배 자동 보간!)
+      // 보고 중(2026-11-24 캡틴 요청)엔 전체 보기 대신 캡틴 단상 앞(직원 줄 y=29.8·비서실장 단상 포함)을 2.4배로 비춤
       if (camEl) {
-        const targetZ = (camMode === 'follow' && !briefingActive) ? 1.85 : 1.0;
-        const targetFx = cap.x;
-        const targetFy = Math.max(10, Math.min(90, cap.y - 2));
+        const targetZ = briefingActive ? 2.4 : (camMode === 'follow' ? 1.85 : 1.0);
+        const targetFx = briefingActive ? 50 : cap.x;
+        const targetFy = briefingActive ? 21 : Math.max(10, Math.min(90, cap.y - 2));
         const k = Math.min(1, dt * 6.5);
         cam.z += (targetZ - cam.z) * k;
         cam.fx += (targetFx - cam.fx) * k;
