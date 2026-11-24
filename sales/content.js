@@ -233,6 +233,8 @@ window.DEMOS = [
     name: "치뱅이 & 민짬뽕 CHIBAENGI & MINJJAMPPONG", type: { ko: "한식 치킨 · 중화요리 호프", vi: "Gà rán Hàn Quốc · Món Hoa kiểu Hàn · Quán nhậu", en: "Korean fried chicken · Korean-Chinese · Pub", zh: "韩式炸鸡 · 韩式中餐 · 啤酒屋", ja: "韓国チキン・韓国式中華・パブ" } },
   { id: "donchicken", hidden: true, url: "https://donchicken.qrmenuasia.com", shot: "img/demo-donchicken.jpg", qr: "img/qr-donchicken.svg",
     name: "돈치킨 박닌점 DON CHICKEN", type: { ko: "한국식 치킨 · 피자 · 떡볶이 · 한식", vi: "Gà rán Hàn Quốc · Pizza · Tteok-bokki · Món Hàn", en: "Korean fried chicken · Pizza · Tteok-bokki · Korean dishes", zh: "韩式炸鸡 · 披萨 · 辣炒年糕 · 韩餐", ja: "韓国チキン・ピザ・トッポッキ・韓国料理" } },
+  { id: "pigwing", hidden: true, url: "https://pigwing.qrmenuasia.com", shot: "img/demo-pigwing.jpg", qr: "img/qr-pigwing.svg",
+    name: "피그윙 PIG WING KOREA BBQ", type: { ko: "한식 · 숙성 삼겹살 · 숯불 고기구이", vi: "Thịt nướng Hàn Quốc · Thịt ủ nướng than hoa", en: "Korean BBQ · Aged pork belly · Charcoal grill", zh: "韩式烤肉 · 熟成五花肉 · 炭火烧烤", ja: "韓国焼肉・熟成サムギョプサル・炭火焼き" } },
 ];
 
 window.T = {

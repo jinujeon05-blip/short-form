@@ -905,6 +905,12 @@ window.STORES = [
     type: { ko: "한국식 치킨 · 피자 · 떡볶이 · 한식", vi: "Gà rán Hàn Quốc · Pizza · Tteok-bokki · Món Hàn", en: "Korean fried chicken · Pizza · Tteok-bokki · Korean dishes", zh: "韩式炸鸡 · 披萨 · 辣炒年糕 · 韩餐", ja: "韓国チキン・ピザ・トッポッキ・韓国料理" },
     keywords: "돈치킨 DON CHICKEN Don Chicken 돈치킨 박닌 Gà rán Hàn Quốc Bắc Ninh 치킨 구운치킨 양념치킨 피자 떡볶이 부대찌개 Lý Thái Tổ Kinh Bắc 박닌"
   },
+  { id: "pigwing", name: "피그윙 PIG WING KOREA BBQ", sub: "숙성 삼겹살 · 꽃목살 · 소갈비 · 소곱창 · 찌개", url: "https://pigwing.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["bbq","korean"], tags: ["photos"],
+    address: "03N6 Nguyễn Cao, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%ED%94%BC%EA%B7%B8%EC%9C%99+Korea+BBQ/@21.1733343,106.0573457,19z/data=!4m6!3m5!1s0x31350da879c4f0c9:0x33ee87c75dcaa7e4!8m2!3d21.1733343!4d106.0573457!16s%2Fg%2F11fst02s6q",
+    type: { ko: "한식 · 숙성 삼겹살 · 숯불 고기구이", vi: "Thịt nướng Hàn Quốc · Thịt ủ nướng than hoa", en: "Korean BBQ · Aged pork belly · Charcoal grill", zh: "韩式烤肉 · 熟成五花肉 · 炭火烧烤", ja: "韓国焼肉・熟成サムギョプサル・炭火焼き" },
+    keywords: "피그윙 PIG WING KOREA BBQ Pigwing 박닌 삼겹살 꽃목살 숙성 숯불구이 소곱창 소고기 한국식 고기집 Bắc Ninh thịt nướng Hàn Quốc"
+  },
 ];
 window.SI = {
   ko: {
