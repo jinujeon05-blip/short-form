@@ -60,7 +60,7 @@ window.MENU = [
     items: [
       { name: { ko: "참이슬", en: "Chamisul soju", zh: "真露烧酒(Chamisul)", ja: "チャミスル", vi: "Rượu Chamisul" }, price: 140000 },
       { name: { ko: "처음처럼", en: "Chum Churum soju", zh: "初饮初乐烧酒(Chum Churum)", ja: "チュムチュルム", vi: "Rượu Chum Churum" }, price: 140000 },
-      { name: { ko: "새로", en: "Saero soju", zh: "Saero烧酒", ja: "セロ", vi: "Rượu Sero" }, price: 140000 },
+      { name: { ko: "새로", en: "Saero soju", zh: "Saero烧酒", ja: "セロ", vi: "Rượu Saero" }, price: 140000 },
       { name: { ko: "진로", en: "Jinro soju", zh: "真露(Jinro)烧酒", ja: "ジンロ", vi: "Rượu Jinro" }, price: 140000 },
       { name: { ko: "과일소주", en: "Fruit soju", zh: "水果烧酒", ja: "フルーツ焼酎", vi: "Rượu trái cây" }, price: 140000 },
       { name: { ko: "막걸리", en: "Makgeolli", zh: "马格利米酒", ja: "マッコリ", vi: "Rượu gạo" }, price: 150000 },
@@ -80,7 +80,7 @@ window.MENU = [
       { name: { ko: "스프라이트", en: "Sprite", zh: "雪碧", ja: "スプライト", vi: "Sprite" }, price: 20000 },
       { name: { ko: "환타", en: "Fanta", zh: "芬达", ja: "ファンタ", vi: "Fanta" }, price: 20000 },
       { name: { ko: "싱하소다", en: "Singha soda", zh: "胜狮苏打水", ja: "シンハーソーダ", vi: "Soda Singha" }, price: 30000 },
-      { name: { ko: "아침햇살", en: "Morning Sun rice drink", zh: "朝日晨光大米饮料", ja: "朝の光(アチムヘッサル)ライスドリンク", vi: "Nước gạo Achimhaetsal" }, price: 30000 },
+      { name: { ko: "아침햇살", en: "Morning Sun rice drink", zh: "早晨阳光(大米饮料)", ja: "アチムヘッサル(米のドリンク)", vi: "Nước gạo Achimhaetsal" }, price: 30000 },
     ],
   },
 ];
