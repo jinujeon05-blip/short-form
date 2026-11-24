@@ -79,3 +79,38 @@ const out = `// 자동 생성 — node tools/game-data.mjs (직접 고치지 않
 const file = path.join(ROOT, "sales/stores/game-data.js");
 if (!fs.existsSync(file) || fs.readFileSync(file, "utf8") !== out) fs.writeFileSync(file, out);
 console.log(`가게 ${Object.keys(stores).length}곳, 사진 메뉴 ${dishes.length}개, 간판 룰렛 ${signs.length}곳(그림 없음 ${signs.filter((x) => !x.img).length})`);
+
+// 가게 찾기 '메뉴 검색'용(2026-11-24 캡틴 가-1): 가게 찾기의 모든 가게·모든 메뉴(사진 없어도)
+// menu-search.js = 가게마다 { c: 돈 단위, m: [[한국어, 베트남어, 영어, 가장 낮은 가격(시가 null)], ...] }
+// menu-search-zh.js·-ja.js = 같은 순서로 그 언어 이름만(중국어·일본어 화면에서만 더 불러옴)
+// 가게 찾기 화면이 검색창을 누를 때만 불러온다(첫 화면은 그대로 가벼움).
+const base = {}, extra = { zh: {}, ja: {} };
+let searchCount = 0;
+for (const s of STORES) {
+  const f = path.join(ROOT, "restaurants", s.id, "menu.js");
+  if (!fs.existsSync(f)) continue;
+  let w; try { w = load(f); } catch { console.log(`  ! ${s.id} menu.js 읽기 실패 — 메뉴 검색에서 빠짐`); continue; }
+  const m = [], ex = { zh: [], ja: [] };
+  for (const cat of w.MENU || []) for (const it of cat.items || []) {
+    if (!it.name) continue;
+    const nm = typeof it.name === "string" ? { ko: it.name } : it.name;
+    const ps = (it.sizes ? it.sizes.map((x) => x[1]) : [it.price]).filter((x) => typeof x === "number");
+    const t = (l) => String(nm[l] || "");
+    m.push([t("ko"), t("vi") === t("ko") ? "" : t("vi"), t("en") === t("ko") || t("en") === t("vi") ? "" : t("en"), ps.length ? Math.min(...ps) : null]);
+    for (const l of ["zh", "ja"]) ex[l].push(t(l) === t("ko") ? "" : t(l));
+  }
+  if (!m.length) continue;
+  searchCount += m.length;
+  base[s.id] = { c: (w.ORDER && w.ORDER.currency) || (s.region === "korea" ? "원" : "₫"), m };
+  for (const l of ["zh", "ja"]) extra[l][s.id] = ex[l];
+}
+const writeIf = (name, body) => {
+  const sf = path.join(ROOT, "sales/stores", name);
+  const js = `// 자동 생성 — node tools/game-data.mjs (직접 고치지 않음). 가게 찾기 메뉴 검색용
+${body}
+`;
+  if (!fs.existsSync(sf) || fs.readFileSync(sf, "utf8") !== js) fs.writeFileSync(sf, js);
+};
+writeIf("menu-search.js", `window.MENU_SEARCH = ${JSON.stringify(base)};`);
+for (const l of ["zh", "ja"]) writeIf(`menu-search-${l}.js`, `window.MENU_SEARCH_${l.toUpperCase()} = ${JSON.stringify(extra[l])};`);
+console.log(`메뉴 검색: 가게 ${Object.keys(base).length}곳, 메뉴 ${searchCount}개`);

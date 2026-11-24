@@ -103,7 +103,7 @@ else console.log(`■ 카드 사진: 아직 없음(${demo}) — register-shop.mj
 run('메뉴 게임 데이터', 'node', ['tools/game-data.mjs'], 1);
 
 const st = execFileSync('git', ['status', '--porcelain', '--untracked-files=all'], { cwd: ROOT, encoding: 'utf8' }).split('\n').filter((l) => l && !l.includes('.scratch/'));
-const isMine = (l) => l.includes(`restaurants/${id}/`) || l.includes(demo) || l.includes('sales/stores/game-data.js');
+const isMine = (l) => l.includes(`restaurants/${id}/`) || l.includes(demo) || l.includes('sales/stores/game-data.js') || l.includes('sales/stores/menu-search-');
 const mine = st.filter(isMine), other = st.filter((l) => !isMine(l) &&(!l.startsWith('??') || /^\?\? "?(sales|tools|docs|restaurants)\//.test(l)));
 console.log(`■ 커밋 안 한 파일: 이 가게 ${mine.length}개 · 그 밖 ${other.length}개`);
 if (other.length) console.log(other.slice(0, 20).map((l) => '  ' + l).join('\n') + (other.length > 20 ? `\n  … 외 ${other.length - 20}개` : ''));
