@@ -1598,9 +1598,23 @@
           bubEls[id].hidden = false;
           bubEls[id].textContent = n.bubble;
           bubEls[id].className = `oa-bub ${n.bubbleType}`;
-          bubEls[id].style.left = `${n.x}%`;
           const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
-          bubEls[id].style.top  = `${Math.max(3.5, n.y - (standing ? standPct(id) + 2.1 : 9.2))}%`;
+          let bx = n.x;
+          let by = Math.max(5.0, n.y - (standing ? standPct(id) + 1.8 : 11.5));
+          // 캡틴 착석 시 말풍선이 캡틴 얼굴·피통 게이지를 가리지 않도록 오른쪽 옆에 깔끔하게 배치!
+          if (id === 'captain' && !standing) {
+            bx = 60.5;
+            by = 10.2;
+          } else if (briefingActive && id === 'claude' && n.y < 24) {
+            // 보고 진행 중 비서실장이 단상 위에 있을 때 좌측 상단 HUD(Lv/퀘스트/전체보기)에 가리지 않게 아래쪽 빈 창가로 배치!
+            bx = 34.5;
+            by = 11.5;
+          } else if (id === 'captain' && standing) {
+            // 캡틴 서 있을 때도 머리 위 피통 게이지(standPct + 0.6) 위쪽으로 여유 확보
+            by = Math.max(4.8, n.y - (standPct(id) + 3.4));
+          }
+          bubEls[id].style.left = `${bx}%`;
+          bubEls[id].style.top  = `${by}%`;
         } else {
           tagEls[id].classList.remove('speaking');
           bubEls[id].hidden = true;
