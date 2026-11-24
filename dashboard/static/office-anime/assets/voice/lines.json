@@ -2,8 +2,8 @@
  "engine": "elevenlabs eleven_v3 stability 0.5",
  "voices": {
   "captain": [
-   "IKne3meq5aSn9XLyUdCD",
-   "Charlie — 젊고 자신감 있는 주인공"
+   "fish:재민 Jaemin",
+   "Fish Audio 웹(무료 크레딧) — 2026-11-24 캡틴이 고름"
   ],
   "agy": [
    "TX3LPaxmHKxFdv7VOQHJ",
@@ -14,8 +14,8 @@
    "Harry — 젊은 남자, 애니메이션용"
   ],
   "claude": [
-   "EXAVITQu4vr4xnSDxMaL",
-   "Sarah — 성숙하고 안정감"
+   "fish:나레이션2",
+   "Fish Audio 웹(무료 크레딧) — 2026-11-24 캡틴이 고름"
   ],
   "finder": [
    "cgSgspJ2msm6clMCkdW9",
@@ -26,8 +26,8 @@
    "Laura — 발랄함"
   ],
   "inspector": [
-   "EXAVITQu4vr4xnSDxMaL",
-   "Sarah — 차분하게(비서실장과 같은 목소리)"
+   "fish:따뜻한 여성",
+   "Fish Audio 웹(무료 크레딧) — 2026-11-24 캡틴이 고름"
   ],
   "staffing": [
    "FGY2WhTYpPnrIDTdsKH5",
@@ -103,5 +103,6 @@
    "done": "[confidently] 감사 통과. 배포해도 됩니다.",
    "greet": "[politely] 수고하셨습니다."
   }
- }
+ },
+ "loudness": "전 직원 -16.4 LUFS 안팎(±0.5)으로 맞춤, 최고 -1.5dB (2026-11-24)"
 }
