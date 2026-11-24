@@ -389,7 +389,7 @@
     const CLIP_BASE = '/static/office-anime/assets/';
     const clipRaw = {}, clipBuf = {};
     function fetchClip(path) {
-      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=5').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=6').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
       return clipRaw[path];
     }
     async function getClip(path) {
@@ -412,16 +412,21 @@
     // 목소리는 한 번에 한 명만(겹치면 앞사람 끊고 새 사람) — 여러 명이 동시에 떠들지 않게
     let voiceSrc = null;
     const VOICE_KINDS = {
-      captain: ['greet', 'brief', 'end', 'coffee'],
-      sorter:  ['call', 'ok', 'done', 'greet', 'visit', 'newshop', 'check', 'water', 'oh', 'yay', 'yes', 'rest'],
-      reader:  ['call', 'ok', 'done', 'greet', 'work', 'dance', 'chat', 'aha', 'yay', 'hmm'],
-      agy:     ['call', 'ok', 'done', 'greet', 'work', 'alert', 'chat', 'yes', 'wow', 'rest'],
-      auditor: ['call', 'ok', 'done', 'greet', 'approve', 'warn', 'chat', 'hmm', 'ok2', 'rest'],
+      captain:    ['greet', 'brief', 'end', 'coffee', 'kick', 'punch', 'sit', 'approve', 'order', 'nice', 'walk', 'thanks'],
+      claude:     ['call', 'ok', 'done', 'greet', 'coffee', 'dance', 'brief', 'approval', 'work', 'ok2', 'yay', 'rest'],
+      inspector:  ['call', 'ok', 'done', 'greet', 'dance', 'sweep', 'chat', 'warn', 'nice', 'hmm', 'rest'],
+      finder:     ['call', 'ok', 'done', 'greet', 'studio', 'work', 'chat', 'snap', 'wow', 'yes'],
+      translator: ['call', 'ok', 'done', 'greet', 'chat', 'work', 'fix', 'aha', 'yes', 'rest'],
+      staffing:   ['call', 'ok', 'done', 'greet', 'clean', 'report', 'urgent', 'cheer', 'ok2', 'rest'],
+      sorter:     ['call', 'ok', 'done', 'greet', 'visit', 'newshop', 'check', 'water', 'oh', 'yay', 'yes', 'rest'],
+      reader:     ['call', 'ok', 'done', 'greet', 'work', 'dance', 'chat', 'aha', 'yay', 'hmm'],
+      agy:        ['call', 'ok', 'done', 'greet', 'work', 'alert', 'chat', 'yes', 'wow', 'rest'],
+      auditor:    ['call', 'ok', 'done', 'greet', 'approve', 'warn', 'chat', 'hmm', 'ok2', 'rest'],
     };
     const voiceKinds = id => VOICE_KINDS[id] || ['call', 'ok', 'done', 'greet'];
     const VOICE_PICK_MAP = {
-      ok:   { sorter: ['ok', 'yes'], agy: ['ok', 'yes'], auditor: ['ok', 'ok2'] },
-      done: { sorter: ['done', 'yay'], reader: ['done', 'yay', 'aha'], agy: ['done', 'wow'], auditor: ['done', 'approve', 'hmm'] },
+      ok:   { claude: ['ok', 'ok2'], finder: ['ok', 'yes'], translator: ['ok', 'yes'], staffing: ['ok', 'ok2'], sorter: ['ok', 'yes'], agy: ['ok', 'yes'], auditor: ['ok', 'ok2'] },
+      done: { claude: ['done', 'yay'], inspector: ['done', 'nice'], finder: ['done', 'snap', 'wow'], translator: ['done', 'aha'], staffing: ['done', 'cheer'], sorter: ['done', 'yay'], reader: ['done', 'yay', 'aha'], agy: ['done', 'wow'], auditor: ['done', 'approve', 'hmm'] },
       call: { sorter: ['call', 'oh'] },
     };
     async function voice(id, kind, delay = 0) {
@@ -777,6 +782,8 @@
             sendPath('claude', safeRoute(ROUTES.cofToCap), {
               bubble: '☕ 캡틴, 커피 가져왔습니다!', bubbleType: 'ok',
               onArrive: () => {
+                voice('claude', 'coffee', 0.1);
+                voice('captain', 'thanks', 2.6);
                 if (briefingActive) { cl.walkOverride = null; return; }
                 cl.walkOverride = null;
                 cl.x = 43.0; cl.y = 22.8; // 캡틴 책상 바로 앞 밀착!
@@ -1410,6 +1417,7 @@
       cap.mode = 'idle';
       cap.bubble = '';
       SFX.sit();
+      voice('captain', 'sit', 0.15);
       log('🪑 캡틴이 대표 책상 자리에 착석했습니다');
     }
 
@@ -1435,6 +1443,7 @@
         if (cap.mode === 'idle') cap.mode = 'stand';
         const say = isPunch ? '👊 원투! 연속 펀치!' : '🥋 얍! 이동 발차기!';
         if (isPunch) SFX.punch(); else SFX.kick();
+        voice('captain', isPunch ? 'punch' : 'kick');
         cap.bubble = say;
         cap.bubbleType = 'ok';
         spawnBurst(cap.x, cap.y - 4, isPunch ? '👊 퍽!' : '🥋 얍!', 0);
@@ -2100,7 +2109,8 @@
             if (r?.error) { if (resEl) resEl.textContent = `⚠️ ${r.error}`; return; }
           }
           SFX.fanfare();
-          if (hit !== 'captain') voice(hit, 'ok', 0.25);
+          if (ch.approve) voice('captain', 'approve');
+          else if (hit !== 'captain') voice(hit, 'ok', 0.25);
           spawnBurst(n.x, n.y, '✅ 결재 완료! +100 EXP', 100);
           n.bubble = `✅ [${ch.num}번] 결재 확인했습니다! 바로 진행합니다!`;
           n.bubbleType = 'ok';
@@ -2722,11 +2732,14 @@
           if (emoteKey && imgs.walk[id]?.[emoteKey]?.length) {
             n.mode = 'emote'; n.emote = emoteKey; n.emoteLoop = true; n.emoteStart = performance.now() / 1000;
             if (emoteKey === 'water') { SFX.water(); if (id === 'sorter') voice('sorter', 'water', 0.25); }
-            else if (emoteKey === 'clean' || emoteKey === 'sweep') SFX.sweep();
+            else if (emoteKey === 'clean') { SFX.sweep(); if (id === 'staffing') voice('staffing', 'clean', 0.25); }
+            else if (emoteKey === 'sweep') { SFX.sweep(); if (id === 'inspector') voice('inspector', 'sweep', 0.25); }
           } else {
             n.mode = 'stand';
             if (id === 'sorter' && workMsg.includes('포장')) voice('sorter', 'check', 0.2);
-            else if ((id === 'sorter' || id === 'agy' || id === 'auditor') && (workMsg.includes('커피') || workMsg.includes('환기'))) voice(id, 'rest', 0.25);
+            else if (id === 'finder' && workMsg.includes('크로마키')) voice('finder', 'studio', 0.2);
+            else if (id === 'translator' && workMsg.includes('번역')) voice('translator', 'chat', 0.2);
+            else if (voiceKinds(id).includes('rest') && (workMsg.includes('커피') || workMsg.includes('환기'))) voice(id, 'rest', 0.25);
           }
           setTimeout(() => {
             if (briefingActive || (activeTalkNpc && activeTalkNpc.id === id)) return;
@@ -2917,6 +2930,7 @@
           ins.bubble = '👍✨ 운영 감찰관 솔로 댄스 타임!';
           ins.bubbleType = 'meet';
           playDanceMusic('inspector');
+          voice('inspector', 'dance', 0.1);
           spawnBurst(st.pos[0], st.pos[1] - 1.8, '👍 감찰관 솔로 댄스! +25 EXP', 25);
           soloDanceTimer = setTimeout(() => {
             soloDanceTimer = null;
@@ -2962,7 +2976,7 @@
         const syncStart = performance.now() / 1000;
         const theme = (danceThemeIdx++ % 2 === 0) ? 'claude' : 'reader';
         playDanceMusic(theme);
-        if (theme === 'reader') voice('reader', 'dance', 0.1);
+        voice(theme === 'reader' ? 'reader' : 'claude', 'dance', 0.1);
         spawnBurst(st.bx, st.by, theme === 'claude' ? '💃 비서실장 댄스! +20 EXP' : '🎶 자료해석 댄스! +20 EXP', 20);
         for (const d of validDancers) {
           const dn = npcs[d.id];
