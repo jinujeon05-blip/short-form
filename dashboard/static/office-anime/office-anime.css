@@ -20,7 +20,7 @@
 .oa-b-btn.dance:hover { background: linear-gradient(135deg, #db2777, #7e22ce); }
 /* 우측 하단 모바일 액션 RPG 원형 스킬창 (보고해 메인 + 서빙·댄스·인사·커피·착석 부채꼴 배치!) */
 .oa-skills { position: absolute; right: 10px; bottom: 10px; z-index: 16; width: clamp(138px, 16.5cqw, 186px); height: clamp(118px, 14cqw, 160px); pointer-events: none; }
-.oa-sk { position: absolute; pointer-events: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.42); background: radial-gradient(circle at 35% 28%, rgba(30,41,59,0.82), rgba(15,23,42,0.92)); color: #f8fafc; cursor: pointer; backdrop-filter: blur(5px); box-shadow: 0 3px 10px rgba(0,0,0,0.48), inset 0 1px 1px rgba(255,255,255,0.22); transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease; padding: 0; }
+.oa-sk { position: absolute; pointer-events: auto; touch-action: manipulation; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.42); background: radial-gradient(circle at 35% 28%, rgba(30,41,59,0.82), rgba(15,23,42,0.92)); color: #f8fafc; cursor: pointer; backdrop-filter: blur(5px); box-shadow: 0 3px 10px rgba(0,0,0,0.48), inset 0 1px 1px rgba(255,255,255,0.22); transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease; padding: 0; }
 .oa-sk:active { transform: scale(0.92); }
 .oa-sk:hover { transform: scale(1.07); border-color: #fde047; box-shadow: 0 0 12px rgba(250,204,21,0.55); }
 .oa-sk i { font-style: normal; font-size: clamp(11px, 1.35cqw, 15px); line-height: 1; }

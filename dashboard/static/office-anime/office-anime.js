@@ -968,7 +968,7 @@
       const im = wset[dirKey]?.[fIdx] || wset.front?.[0];
       if (!im) return;
 
-      const seated = (n.mode === 'idle' || n.mode === 'work');
+      const seated = (n.mode === 'idle' || n.mode === 'work' || (n.id === 'captain' && n.idleCoffeeSeated && n.mode === 'emote' && n.emote === 'coffee'));
 
       if (seated && cfg.seat) {
         const s = cfg.seat;
@@ -1048,10 +1048,25 @@
       ctx.restore();
     }
 
-    // ---------------------------------------------------------------- 캡틴 직접 게임 조작 (WASD / 방향키 / 가상 엄지 조이스틱 / 바닥 클릭 / E 착석)
+    // ---------------------------------------------------------------- 캡틴 직접 게임 조작 (WASD / 방향키 / 가상 엄지 조이스틱 / 바닥 클릭 / E 착석 + 10초 미조작 자동 커피!)
     const keys = new Set();
     let joyVec = { x: 0, y: 0 };
     let clickRing = null; // { x, y, born }
+    let lastCapInput = performance.now() / 1000;
+    function touchCaptainInput() {
+      lastCapInput = performance.now() / 1000;
+      const cap = npcs.captain;
+      if (cap && cap.idleCoffee) {
+        cap.idleCoffee = false;
+        const wasSeated = cap.idleCoffeeSeated;
+        cap.idleCoffeeSeated = false;
+        if (cap.mode === 'emote' && cap.emote === 'coffee') {
+          cap.emote = null; cap.emoteLoop = false; cap.emoteUntil = 0;
+          cap.mode = wasSeated ? 'idle' : 'stand';
+          if (cap.bubble === '☕ 커피 한 잔 하며 쉬는 중…') cap.bubble = '';
+        }
+      }
+    }
 
     // 가상 엄지 조이스틱 (볼 모양 드래그 — 모바일 90도 회전 상태에서도 방향 정확 변환!)
     const joyEl = root.querySelector('[data-joy]');
@@ -1074,10 +1089,11 @@
       joyKnob.style.transform = `translate(${nx * clamped}px, ${ny * clamped}px)`;
       joyVec = { x: nx * (clamped / JOY_MAX), y: ny * (clamped / JOY_MAX) };
       if (dist > 4) {
+        touchCaptainInput();
         const cap = npcs.captain;
         if (cap.path.length) { cap.path = []; cap.onArrive = null; }
-        if (cap.mode === 'emote') { cap.emote = null; cap.mode = 'stand'; }
-        cap.bubble = '';
+        if (cap.mode === 'emote') { cap.emote = null; cap.emoteLoop = false; cap.mode = 'stand'; }
+        if (!(cap.kickUntil && performance.now() / 1000 < cap.kickUntil)) cap.bubble = '';
       }
     }
     function resetJoy() {
@@ -1316,6 +1332,7 @@
     }
 
     function playCaptainAction(action) {
+      touchCaptainInput();
       const cap = npcs.captain;
       // 발차기는 다리가 책상에 가려지므로, 대표석(의자)에 있으면 단상 앞 바닥으로 걸어 나온 뒤 찬다
       if (action === 'kick') {
@@ -1377,11 +1394,12 @@
       const k = e.key.toLowerCase();
       if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd'].includes(k)) {
         e.preventDefault();
+        touchCaptainInput();
         keys.add(k);
         const cap = npcs.captain;
         if (cap.path.length) { cap.path = []; cap.onArrive = null; }
-        if (cap.mode === 'emote') { cap.emote = null; cap.mode = 'stand'; }
-        cap.bubble = '';
+        if (cap.mode === 'emote') { cap.emote = null; cap.emoteLoop = false; cap.mode = 'stand'; }
+        if (!(cap.kickUntil && performance.now() / 1000 < cap.kickUntil)) cap.bubble = '';
       } else if (k === 'e') {
         e.preventDefault();
         sitCaptainBack();
@@ -1431,6 +1449,7 @@
       if (keys.has('arrowup')    || keys.has('w')) ky -= 1;
       if (keys.has('arrowdown')  || keys.has('s')) ky += 1;
       if (Math.hypot(kx, ky) > 0.12) {
+        touchCaptainInput();
         const len = Math.max(1, Math.hypot(kx, ky));
         const spd = 8.2 * dt;
         const nx = cap.x + (kx / len) * spd;
@@ -1442,12 +1461,27 @@
         if (moved) cap.walkDist += spd;
         cap.dir = vecToDir(kx, ky, true);
       } else if (cap.mode === 'emote' && t >= (cap.emoteUntil || 0)) {
-        cap.emote = null;
+        cap.emote = null; cap.emoteLoop = false;
         cap.bubble = '';
         cap.mode = (Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]) < 2.0) ? 'idle' : 'stand';
       } else if (!cap.path.length && cap.mode === 'walk') {
         // 키를 떼면 그 자리에 자연스럽게 서서 대기 (의자로 텔레포트하지 않음!)
         cap.mode = 'stand';
+      } else if (!briefingActive && modalBack.hidden && !cap.path.length &&
+                 !(cap.kickUntil && t < cap.kickUntil) &&
+                 (cap.mode === 'idle' || cap.mode === 'stand') &&
+                 (t - lastCapInput >= 10.0)) {
+        // 10초 이상 캡틴 미조작 시 커피 마시기 무한 루프 (조작할 때까지 유지!)
+        cap.idleCoffee = true;
+        cap.idleCoffeeSeated = (cap.mode === 'idle');
+        cap.mode = 'emote';
+        cap.emote = 'coffee';
+        cap.emoteLoop = true;
+        cap.emoteStart = t;
+        cap.emoteUntil = Infinity;
+        cap.dir = 'front';
+        cap.bubble = '☕ 커피 한 잔 하며 쉬는 중…';
+        cap.bubbleType = '';
       }
 
       for (const n of Object.values(npcs)) {
@@ -1960,6 +1994,7 @@
         if (d < best) { best = d; hit = n.id; }
       }
       if (!hit) {
+        touchCaptainInput();
         if (capRingOpen) setCapRing(false);
         if (canWalk(px, py)) {
           SFX.walkClick();
@@ -2172,7 +2207,20 @@
     root.querySelector('[data-brief-dance]')?.addEventListener('click', () => danceParty());
     root.querySelector('[data-cap-greet]')?.addEventListener('click', () => playCaptainAction('greet'));
     root.querySelector('[data-cap-coffee]')?.addEventListener('click', () => playCaptainAction('coffee'));
-    root.querySelector('[data-cap-kick]')?.addEventListener('click', () => playCaptainAction('kick'));
+    // 모바일 멀티터치(왼손 조이스틱 드래그 + 오른손 발차기 탭)에서 즉시 발동하도록 pointerdown 사용!
+    const kickBtn = root.querySelector('[data-cap-kick]');
+    if (kickBtn) {
+      let kickTrigAt = 0;
+      const fireKick = e => {
+        e.preventDefault(); e.stopPropagation();
+        const nowMs = performance.now();
+        if (nowMs - kickTrigAt < 250) return;
+        kickTrigAt = nowMs;
+        playCaptainAction('kick');
+      };
+      kickBtn.addEventListener('pointerdown', fireKick);
+      kickBtn.addEventListener('click', fireKick);
+    }
     root.querySelector('[data-cap-sit]')?.addEventListener('click', sitCaptainBack);
     briefCofBtn.addEventListener('click', serveCoffee);
     briefStartBtn.addEventListener('click', startBriefing);
@@ -2523,33 +2571,50 @@
         { id: 'claude', tx: st.a[0], ty: st.a[1], go: `💃 ${st.name} 무대로 이동 중…`, msg: '💃✨ 신나는 아이돌 댄스 타임!' },
         { id: 'reader', tx: st.b[0], ty: st.b[1], go: '🎶 같이 춤추러 가요!', msg: '🎶 같이 춤춰요 캡틴! ✨' },
       ];
-      let burstDone = false;
+      // 2명 모두 도착할 때까지 먼저 온 쪽이 기다렸다가, 동시에 댄스 시작 + 음악 시작 + 7.2초 뒤 동시 종료!
+      const validDancers = dancers.filter(d => npcs[d.id]);
+      let arrivedCount = 0;
       log(`💃 비서실장 · 자료 해석 비서 — ${st.name} 합동 아이돌 댄스 타임!`);
-      for (const d of dancers) {
+      const startDuoSync = () => {
+        if (briefingActive) return;
+        const syncStart = performance.now() / 1000;
+        const theme = (danceThemeIdx++ % 2 === 0) ? 'claude' : 'reader';
+        playDanceMusic(theme);
+        spawnBurst(st.bx, st.by, theme === 'claude' ? '💃 비서실장 댄스! +20 EXP' : '🎶 자료해석 댄스! +20 EXP', 20);
+        for (const d of validDancers) {
+          const dn = npcs[d.id];
+          dn.dir = 'front';
+          dn.mode = 'emote'; dn.emote = 'dance'; dn.emoteLoop = true;
+          dn.emoteStart = syncStart;
+          dn.bubble = d.msg; dn.bubbleType = 'meet';
+        }
+        setTimeout(() => {
+          stopDanceMusic();
+          for (const d of validDancers) {
+            const dn = npcs[d.id];
+            if (briefingActive || (activeTalkNpc && activeTalkNpc.id === d.id)) continue;
+            dn.emote = null; dn.emoteLoop = false; dn.bubble = '';
+            walkNpcSafe(d.id, CHARS[d.id].home[0], CHARS[d.id].home[1], {
+              onArrive: () => seatNpc(d.id)
+            });
+          }
+        }, 7200);
+      };
+      for (const d of validDancers) {
         const n = npcs[d.id];
-        if (!n) continue;
         n.emote = null; n.emoteLoop = false;
         walkNpcSafe(d.id, d.tx, d.ty, {
           bubble: d.go,
           onArrive: () => {
             if (briefingActive) return;
             n.dir = 'front';
-            n.mode = 'emote'; n.emote = 'dance'; n.emoteLoop = true;
-            n.emoteStart = performance.now() / 1000;
-            n.bubble = d.msg; n.bubbleType = 'meet';
-            if (!burstDone) {
-              burstDone = true;
-              const theme = (danceThemeIdx++ % 2 === 0) ? 'claude' : 'reader';
-              playDanceMusic(theme);
-              spawnBurst(st.bx, st.by, theme === 'claude' ? '💃 비서실장 댄스! +20 EXP' : '🎶 자료해석 댄스! +20 EXP', 20);
+            n.mode = 'stand';
+            if (++arrivedCount < validDancers.length) {
+              n.bubble = '🎶 준비 완료! 기다리는 중…';
+              n.bubbleType = '';
+            } else {
+              startDuoSync();
             }
-            setTimeout(() => {
-              if (briefingActive || (activeTalkNpc && activeTalkNpc.id === d.id)) return;
-              n.emote = null; n.emoteLoop = false; n.bubble = '';
-              walkNpcSafe(d.id, CHARS[d.id].home[0], CHARS[d.id].home[1], {
-                onArrive: () => seatNpc(d.id)
-              });
-            }, 7200);
           }
         });
       }
