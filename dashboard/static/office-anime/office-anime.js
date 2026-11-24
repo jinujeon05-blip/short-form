@@ -108,6 +108,11 @@
         imgs.walk[id].write = [];
         for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].write, i - 1, `/static/office-anime/assets/walk/claude-write-${i}.webp?v=write1`));
       }
+      // 운영 감찰관 솔로 댄스 36프레임 (127 BPM 전용 BGM 17.35초 칼박 싱크: 인트로6 + 메인24×2 + 엔딩6)
+      if (id === 'inspector') {
+        imgs.walk[id].dance = [];
+        for (let i = 1; i <= 36; i++) jobs.push(load(imgs.walk[id].dance, i - 1, `/static/office-anime/assets/walk/inspector-dance-${i}.webp?v=idance1`));
+      }
     }
     for (const p of PROPS) {
       jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq4k`));
@@ -148,6 +153,7 @@
             <button type="button" class="oa-sk sk-sit" data-cap-sit title="캡틴 대표석 복귀(E)"><i>🪑</i><span>착석</span></button>
             <button type="button" class="oa-sk sk-cof" data-brief-cof title="비서실장 커피 서빙"><i>☕</i><span>서빙</span></button>
             <button type="button" class="oa-sk sk-dance" data-brief-dance title="비서실장·자료해석 합동 댄스"><i>💃</i><span>댄스</span></button>
+            <button type="button" class="oa-sk sk-solo" data-inspector-dance title="운영 감찰관 솔로 댄스 (전용 BGM)"><i>👍</i><span>솔로</span></button>
             <button type="button" class="oa-sk sk-capcof" data-cap-coffee title="캡틴 커피 마시기(2)"><i>☕</i><span>커피</span></button>
             <button type="button" class="oa-sk sk-kick" data-cap-kick title="캡틴 태권도 발차기 시범(3)"><i>🥋</i><span>발차기</span></button>
             <button type="button" class="oa-sk sk-punch" data-cap-punch title="캡틴 주먹 격투 연속 공격(4)"><i>👊</i><span>주먹</span></button>
@@ -522,7 +528,7 @@
       const c = ensureAudio();
       if (!c) return;
       stopDanceMusic();
-      const key = who === 'reader' ? 'dance-reader' : 'dance-claude';
+      const key = who === 'inspector' ? 'dance-inspector' : who === 'reader' ? 'dance-reader' : 'dance-claude';
       if (!danceBufs[key]) {
         const probe = document.createElement('audio');
         const urls = probe.canPlayType('audio/ogg; codecs="vorbis"')
@@ -958,7 +964,19 @@
         fIdx = Math.min(wset[fightKey].length - 1, Math.floor(elapsed * (fightKey === 'punch' ? 6.2 : 5.2)));
       } else if (emoting) {
         const elapsed = Math.max(0, t - (n.emoteStart || 0));
-        fIdx = n.emoteLoop ? (Math.floor(elapsed * 5.0) % 12) : Math.min(11, Math.floor(elapsed * 4.0));
+        if (n.id === 'inspector' && n.emote === 'dance' && wset.dance?.length === 36) {
+          // 127 BPM 전용 BGM(17.35s) 칼박 싱크: 인트로 2.2s(0..5) → 메인 6.6s×2(6..29) → 엔딩 1.95s(30..35)
+          if (elapsed < 2.20) {
+            fIdx = Math.min(5, Math.floor((elapsed / 2.20) * 6));
+          } else if (elapsed < 15.40) {
+            const loopPos = ((elapsed - 2.20) % 6.60) / 6.60;
+            fIdx = 6 + Math.min(23, Math.floor(loopPos * 24));
+          } else {
+            fIdx = 30 + Math.min(5, Math.floor(((elapsed - 15.40) / 1.95) * 6));
+          }
+        } else {
+          fIdx = n.emoteLoop ? (Math.floor(elapsed * 5.0) % 12) : Math.min(11, Math.floor(elapsed * 4.0));
+        }
       } else if (walking) {
         const stride = (n.id === 'captain') ? 1.05 : 1.65;
         fIdx = Math.floor(n.walkDist * stride) % 12;
@@ -2096,6 +2114,7 @@
 
     function startBriefing() {
       if (briefingActive) return;
+      stopInspectorSolo(false);
       briefingActive = true;
       SFX.brief();
       voice('captain', 'brief', 0.5);
@@ -2239,6 +2258,7 @@
 
     const briefCofBtn   = root.querySelector('[data-brief-cof]');
     root.querySelector('[data-brief-dance]')?.addEventListener('click', () => danceParty());
+    root.querySelector('[data-inspector-dance]')?.addEventListener('click', () => inspectorSoloDance());
     root.querySelector('[data-cap-greet]')?.addEventListener('click', () => playCaptainAction('greet'));
     root.querySelector('[data-cap-coffee]')?.addEventListener('click', () => playCaptainAction('coffee'));
     // 모바일 멀티터치(왼손 조이스틱 드래그 + 오른손 발차기 탭)에서 즉시 발동하도록 pointerdown 사용!
@@ -2588,8 +2608,76 @@
     ];
 
     let lastDanceStage = -1;
+    let soloDanceTimer = null, lastSoloStage = -1;
+    const soloBtn = root.querySelector('[data-inspector-dance]');
+    function stopInspectorSolo(returnHome = true) {
+      if (soloDanceTimer) { clearTimeout(soloDanceTimer); soloDanceTimer = null; }
+      soloBtn?.classList.remove('on');
+      const ins = npcs.inspector;
+      if (!ins) return;
+      if (ins.mode === 'emote' && ins.emote === 'dance') {
+        stopDanceMusic();
+        ins.emote = null; ins.emoteLoop = false; ins.bubble = '';
+        if (returnHome && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === 'inspector')) {
+          walkNpcSafe('inspector', CHARS.inspector.home[0], CHARS.inspector.home[1], {
+            onArrive: () => seatNpc('inspector')
+          });
+        }
+      }
+    }
+    function inspectorSoloDance() {
+      if (briefingActive) return false;
+      const ins = npcs.inspector;
+      if (!ins) return false;
+      // 이미 솔로 댄스 중이면 한 번 더 눌러서 깔끔하게 종료·복귀
+      if (soloDanceTimer || (ins.mode === 'emote' && ins.emote === 'dance')) {
+        stopInspectorSolo(true);
+        log('👍 운영 감찰관 솔로 댄스 종료 — 자리로 복귀합니다.');
+        return true;
+      }
+      const soloStages = [
+        { name: '중앙 홀',          pos: [50.0, 49.0] },
+        { name: '좌측 복도 라운지', pos: [37.2, 46.5] },
+        { name: '우측 복도 라운지', pos: [62.7, 46.5] },
+        { name: '우측 햇살 테라스', pos: [78.5, 19.8] },
+        { name: '좌측 커피바 앞',   pos: [27.5, 22.5] },
+        { name: '맨 아래 나무 바닥', pos: [50.0, 93.5] },
+      ];
+      lastSoloStage = (lastSoloStage + 1) % soloStages.length;
+      const st = soloStages[lastSoloStage];
+      soloBtn?.classList.add('on');
+      ins.emote = null; ins.emoteLoop = false;
+      log(`👍 운영 감찰관 — ${st.name} 솔로 아이돌 댄스 무대!`);
+      walkNpcSafe('inspector', st.pos[0], st.pos[1], {
+        bubble: `👍 ${st.name} 솔로 무대로 이동 중…`,
+        onArrive: () => {
+          if (briefingActive) { soloBtn?.classList.remove('on'); return; }
+          ins.dir = 'front';
+          ins.mode = 'emote'; ins.emote = 'dance'; ins.emoteLoop = true;
+          ins.emoteStart = performance.now() / 1000;
+          ins.bubble = '👍✨ 운영 감찰관 솔로 댄스 타임!';
+          ins.bubbleType = 'meet';
+          playDanceMusic('inspector');
+          spawnBurst(st.pos[0], st.pos[1] - 1.8, '👍 감찰관 솔로 댄스! +25 EXP', 25);
+          soloDanceTimer = setTimeout(() => {
+            soloDanceTimer = null;
+            soloBtn?.classList.remove('on');
+            stopDanceMusic();
+            if (briefingActive || (activeTalkNpc && activeTalkNpc.id === 'inspector')) return;
+            ins.emote = null; ins.emoteLoop = false; ins.bubble = '';
+            walkNpcSafe('inspector', CHARS.inspector.home[0], CHARS.inspector.home[1], {
+              bubble: '😎 솔로 무대 끝! 자리로 복귀합니다.',
+              onArrive: () => seatNpc('inspector')
+            });
+          }, 17350);
+        }
+      });
+      return true;
+    }
+
     function danceParty() {
       if (briefingActive) return false;
+      stopInspectorSolo(true);
       const stages = [
         { name: '우측 햇살 테라스', a: [75.5, 19.8], b: [81.5, 19.8], bx: 78.5, by: 18.2 },
         { name: '좌측 복도 라운지', a: [34.5, 46.5], b: [40.0, 46.5], bx: 37.2, by: 44.5 },
@@ -2675,7 +2763,7 @@
     scheduleIdleLife();
 
     if (opts.autoDemo !== false) setTimeout(runDemo, 1500);
-    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing, syncReal, stroll, danceParty };
+    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing, syncReal, stroll, danceParty, inspectorSoloDance };
   }
 
   window.OfficeAnime = { create };
