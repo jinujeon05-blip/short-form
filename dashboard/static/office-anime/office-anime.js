@@ -389,7 +389,7 @@
     const CLIP_BASE = '/static/office-anime/assets/';
     const clipRaw = {}, clipBuf = {};
     function fetchClip(path) {
-      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=4').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=5').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
       return clipRaw[path];
     }
     async function getClip(path) {
@@ -411,15 +411,28 @@
     }
     // 목소리는 한 번에 한 명만(겹치면 앞사람 끊고 새 사람) — 여러 명이 동시에 떠들지 않게
     let voiceSrc = null;
-    const VOICE_KINDS = { captain: ['greet', 'brief', 'end', 'coffee'] };
+    const VOICE_KINDS = {
+      captain: ['greet', 'brief', 'end', 'coffee'],
+      sorter:  ['call', 'ok', 'done', 'greet', 'visit', 'newshop', 'check', 'water', 'oh', 'yay', 'yes', 'rest'],
+      reader:  ['call', 'ok', 'done', 'greet', 'work', 'dance', 'chat', 'aha', 'yay', 'hmm'],
+      agy:     ['call', 'ok', 'done', 'greet', 'work', 'alert', 'chat', 'yes', 'wow', 'rest'],
+      auditor: ['call', 'ok', 'done', 'greet', 'approve', 'warn', 'chat', 'hmm', 'ok2', 'rest'],
+    };
     const voiceKinds = id => VOICE_KINDS[id] || ['call', 'ok', 'done', 'greet'];
+    const VOICE_PICK_MAP = {
+      ok:   { sorter: ['ok', 'yes'], agy: ['ok', 'yes'], auditor: ['ok', 'ok2'] },
+      done: { sorter: ['done', 'yay'], reader: ['done', 'yay', 'aha'], agy: ['done', 'wow'], auditor: ['done', 'approve', 'hmm'] },
+      call: { sorter: ['call', 'oh'] },
+    };
     async function voice(id, kind, delay = 0) {
-      if (!sfxOn || !CHARS[id] || !voiceKinds(id).includes(kind)) return;
+      const pool = VOICE_PICK_MAP[kind]?.[id];
+      const chosen = pool ? pool[Math.floor(Math.random() * pool.length)] : kind;
+      if (!sfxOn || !CHARS[id] || !voiceKinds(id).includes(chosen)) return;
       if (delay) await new Promise(r => setTimeout(r, delay * 1000));
-      const buf = await getClip(`voice/${id}-${kind}.mp3`);
+      const buf = await getClip(`voice/${id}-${chosen}.mp3`);
       if (!buf || !sfxOn) return;
       try { voiceSrc?.stop(); } catch {}
-      voiceSrc = await playClip(`voice/${id}-${kind}.mp3`, 1.0);
+      voiceSrc = await playClip(`voice/${id}-${chosen}.mp3`, 1.0);
     }
     // 처음 열 때 파일만 미리 받아 둠(소리 해독은 첫 터치 뒤) — 합쳐서 약 0.6MB
     if (sfxOn) setTimeout(() => {
@@ -1805,7 +1818,7 @@
           n.mode = 'stand';
           faceEachOther(n, npcs.captain);
           n.bubble = v.speech; n.bubbleType = 'ok';
-          voice('sorter', 'done', 0.1);
+          voice('sorter', 'visit', 0.1);
           setTimeout(() => {
             if (activeTalkNpc && activeTalkNpc.id === 'sorter') return; // 캡틴이 눌러 대화 중이면 그대로
             if (n.bubble === v.speech) n.bubble = '';
@@ -2708,10 +2721,12 @@
           n.dir = workDir; n.bubble = workMsg; n.bubbleType = 'ok';
           if (emoteKey && imgs.walk[id]?.[emoteKey]?.length) {
             n.mode = 'emote'; n.emote = emoteKey; n.emoteLoop = true; n.emoteStart = performance.now() / 1000;
-            if (emoteKey === 'water') SFX.water();
+            if (emoteKey === 'water') { SFX.water(); if (id === 'sorter') voice('sorter', 'water', 0.25); }
             else if (emoteKey === 'clean' || emoteKey === 'sweep') SFX.sweep();
           } else {
             n.mode = 'stand';
+            if (id === 'sorter' && workMsg.includes('포장')) voice('sorter', 'check', 0.2);
+            else if ((id === 'sorter' || id === 'agy' || id === 'auditor') && (workMsg.includes('커피') || workMsg.includes('환기'))) voice(id, 'rest', 0.25);
           }
           setTimeout(() => {
             if (briefingActive || (activeTalkNpc && activeTalkNpc.id === id)) return;
@@ -2735,9 +2750,11 @@
         if (Math.abs(ax - bx) < 2) { a.dir = 'front'; b.dir = 'back'; }
         else { a.dir = 'east'; b.dir = 'west'; }
         a.bubble = msgA; a.bubbleType = 'meet';
+        if (voiceKinds(idA).includes('chat')) voice(idA, 'chat', 0.15);
         setTimeout(() => {
           if (briefingActive) return;
           a.bubble = ''; b.bubble = msgB; b.bubbleType = 'ok';
+          if (voiceKinds(idB).includes('chat')) voice(idB, 'chat', 0.15);
           setTimeout(() => {
             if (briefingActive) return;
             b.bubble = '';
@@ -2945,6 +2962,7 @@
         const syncStart = performance.now() / 1000;
         const theme = (danceThemeIdx++ % 2 === 0) ? 'claude' : 'reader';
         playDanceMusic(theme);
+        if (theme === 'reader') voice('reader', 'dance', 0.1);
         spawnBurst(st.bx, st.by, theme === 'claude' ? '💃 비서실장 댄스! +20 EXP' : '🎶 자료해석 댄스! +20 EXP', 20);
         for (const d of validDancers) {
           const dn = npcs[d.id];
