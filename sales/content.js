@@ -235,6 +235,8 @@ window.DEMOS = [
     name: "돈치킨 박닌점 DON CHICKEN", type: { ko: "한국식 치킨 · 피자 · 떡볶이 · 한식", vi: "Gà rán Hàn Quốc · Pizza · Tteok-bokki · Món Hàn", en: "Korean fried chicken · Pizza · Tteok-bokki · Korean dishes", zh: "韩式炸鸡 · 披萨 · 辣炒年糕 · 韩餐", ja: "韓国チキン・ピザ・トッポッキ・韓国料理" } },
   { id: "pigwing", hidden: true, url: "https://pigwing.qrmenuasia.com", shot: "img/demo-pigwing.jpg", qr: "img/qr-pigwing.svg",
     name: "피그윙 PIG WING KOREA BBQ", type: { ko: "한식 · 숙성 삼겹살 · 숯불 고기구이", vi: "Thịt nướng Hàn Quốc · Thịt ủ nướng than hoa", en: "Korean BBQ · Aged pork belly · Charcoal grill", zh: "韩式烤肉 · 熟成五花肉 · 炭火烧烤", ja: "韓国焼肉・熟成サムギョプサル・炭火焼き" } },
+  { id: "sanhoanago", hidden: true, url: "https://sanhoanago.qrmenuasia.com", shot: "img/demo-sanhoanago.jpg", qr: "img/qr-sanhoanago.svg",
+    name: "산호 아나고 꼼장어 SANHO", type: { ko: "숯불구이 · 꼼장어 · 아나고", vi: "Nướng than hoa · Cá ninja · Cá chình", en: "Charcoal grill · Hagfish · Conger eel", zh: "炭火烧烤 · 盲鳗 · 星鳗", ja: "炭火焼き・コムジャンオ・アナゴ" } },
 ];
 
 window.T = {

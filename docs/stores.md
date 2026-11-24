@@ -329,5 +329,6 @@
 | `restaurants/chibaengimin` | 치뱅이 & 민짬뽕 CHIBAENGI & MINJJAMPPONG 치킨·중화요리 호프 (TT1/Lô 26 Đ. Mỹ Đình, Từ Liêm, Hà Nội, 0389 712 797, 11:00–02:00) — **정식(캡틴 동생 가게, 2026-11-23)**, 장바구니·Zalo 주문. 맨 위는 간판 사진(밤 네온). 메뉴 59개, 사진 33장+메뉴판 속 그림 보정 · **2026-11-23 배포**(대시보드 자동, 커밋 7d78917, chibaengimin.qrmenuasia.com 열림 확인) |
 | `restaurants/donchicken` | 돈치킨 박닌점 DON CHICKEN Bắc Ninh — 후라이드·구운 치킨·피자·떡볶이·부대찌개 (Đ. Lý Thái Tổ, Kinh Bắc, Bắc Ninh, 0379868286, 10:00–22:00) — **가게 찾기용**(2026-11-24). 맨 위는 로고. 메뉴 117개 | https://donchicken.qrmenuasia.com (2026-11-24 배포, 01b9b71) |
 | `restaurants/pigwing` | 피그윙 PigWing — 숙성 삼겹살·숯불 고기구이 (03N6 Nguyễn Cao Bắc Ninh, 0973954319, 10:00~23:00) — **가게 찾기용**(2026-11-24). 맨 위는 간판 사진. 메뉴 36개 · **2026-11-24 배포**(대시보드 자동, 커밋 779308f, pigwing.qrmenuasia.com 열림 확인) |
+| `restaurants/sanhoanago` | 산호 아나고 꼼장어 Sanho Anago Kkomjangeo — 양념 꼼장어·아나고·숯불구이·쪽갈비 (176 Đình Thôn, Từ Liêm, Hà Nội, 0877 756 856, 11:00–02:00) — **가게 찾기용**(2026-11-24). 맨 위는 간판 사진. 메뉴 43개 |
 - **2026-11-09 전체 배포**: 다산 배너 끄기 + 10-30 배포 모음(부뚜막·서서갈비·지지GO 사진, 부뚜막·낭만집·어수사 영업시간, 지지GO·최고집 seo)을 가게 122곳·qrmenu-intro에 배포(커밋 d34554f). 실제 주소 122곳 모두 꺼진 dasan.js 확인.
 - **2026-11-23 가게 찾기 '베트남식' 분류**: `sales/stores/data.js` CATS에 `vietnamese`(🥢) 추가, 퍼틴·호러이·분짜 제니맘·꽌안응온에 붙임(La Cherie Coffee는 카페라 뺌). qrmenu-intro 배포(커밋 c5575f3), qrmenuasia.com/stores 칩 '베트남식 4'·폰 폭 넘침 없음·사이트맵 160개(직전과 같음) 확인.

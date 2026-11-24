@@ -911,6 +911,12 @@ window.STORES = [
     type: { ko: "한식 · 숙성 삼겹살 · 숯불 고기구이", vi: "Thịt nướng Hàn Quốc · Thịt ủ nướng than hoa", en: "Korean BBQ · Aged pork belly · Charcoal grill", zh: "韩式烤肉 · 熟成五花肉 · 炭火烧烤", ja: "韓国焼肉・熟成サムギョプサル・炭火焼き" },
     keywords: "피그윙 PIG WING KOREA BBQ Pigwing 박닌 삼겹살 꽃목살 숙성 숯불구이 소곱창 소고기 한국식 고기집 Bắc Ninh thịt nướng Hàn Quốc"
   },
+  { id: "sanhoanago", name: "산호 아나고 꼼장어 SANHO", sub: "양념 꼼장어 · 아나고 · 숯불구이 · 쪽갈비", url: "https://sanhoanago.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bbq","korean","seafood"], tags: ["photos"],
+    address: "176 Đ. Đình Thôn, Đình Thôn, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Nh%C3%A0+H%C3%A0ng+Sanhopocha+%EC%82%B0%ED%98%B8+%EC%95%84%EB%82%98%EA%B3%A0+%EA%BC%BC%EC%9E%A5%EC%96%B4/@21.0186841,105.7748239,20z/data=!4m6!3m5!1s0x31345500208c975f:0xadbab2ff9565b38e!8m2!3d21.0188477!4d105.7751602",
+    type: { ko: "숯불구이 · 꼼장어 · 아나고", vi: "Nướng than hoa · Cá ninja · Cá chình", en: "Charcoal grill · Hagfish · Conger eel", zh: "炭火烧烤 · 盲鳗 · 星鳗", ja: "炭火焼き・コムジャンオ・アナゴ" },
+    keywords: "산호 아나고 꼼장어 산호포차 Sanho Sanhopocha 아나고 꼼장어 숯불구이 쪽갈비 닭갈비 막창 삼겹살 하노이 딘톤 Đình Thôn Từ Liêm cá ninja cá chình nướng than hoa korean grill hagfish conger eel 韩国烤肉 盲鳗 星鳗 コムジャンオ アナゴ"
+  },
 ];
 window.SI = {
   ko: {

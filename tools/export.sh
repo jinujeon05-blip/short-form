@@ -120,6 +120,7 @@ name() {
     chibaengimin) echo "치뱅이 & 민짬뽕" ;;
     donchicken) echo "돈치킨" ;;
     pigwing) echo "피그윙" ;;
+    sanhoanago) echo "산호 아나고 꼼장어" ;;
     *) echo "$1" ;;
   esac
 }
