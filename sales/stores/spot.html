@@ -57,6 +57,8 @@
   .pic svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
   .it { position: absolute; transform: translate(-50%, -50%); pointer-events: none; filter: drop-shadow(0 3px 3px rgba(40, 20, 5, .5)); }
   .it img { display: block; width: 100%; height: auto; }
+  .it .in { position: relative; }
+  .it img.tp { position: absolute; filter: drop-shadow(0 1px 1px rgba(40, 20, 5, .45)); }
   .pic.shake { animation: shake .3s; }
   @keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
   .ring { fill: none; stroke: #ff3b30; stroke-width: 4; stroke-dasharray: 400; stroke-dashoffset: 400;
@@ -198,17 +200,62 @@
   ];
   var ART = "spot-art/";
 
+  /* ───── 3단계부터: 토핑·미세 차이 (2026-11-24 "너무 쉽다" → 가-1) ─────
+     요리 위에 고추·마늘 조각(토핑)을 얹고, 그 토핑 하나만 없애거나·더하거나·돌린다.
+     미세 차이 = 색 조금(20도) · 크기 88% · 14도 돌리기 · 살짝 옮기기. 난이도 표시 3 = 미세. */
+  var TOPS = ["rchili", "gchili", "garlic"], TOPW = { rchili: .17, gchili: .17, garlic: .15 };
+  var PLATE = " L M S ";   // 토핑을 얹을 수 있는 종류(접시·그릇)
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function newTop(p, avoid) {   // 요리 가운데쪽 빈자리에 토핑 하나 (dx·dy = 요리 폭 기준 비율)
+    for (var k = 0; k < 20; k++) {
+      var a = rnd(0, 6.28), d = rnd(.08, .28), t = { f: pick(TOPS), dx: Math.cos(a) * d, dy: Math.sin(a) * d, rot: Math.round(rnd(0, 360)) };
+      if (!(avoid || []).some(function (o) { return Math.hypot(o.dx - t.dx, o.dy - t.dy) < .17; })) { t.w = TOPW[t.f]; return t; }
+    }
+    return null;
+  }
+  function subtleFor(p) {
+    var t = TYPE[p.f], m = [];
+    if (NOHUE.indexOf(" " + p.f + " ") < 0) m.push(["hue", pick([20, -20, 24, -24]), 3]);
+    m.push(["size", .88, 3], ["nudge", pick([-9, 9]), 3]);
+    if (PLAIN.indexOf(" " + p.f + " ") < 0) m.push(["rot", pick([14, -14]), 3]);
+    if (PLATE.indexOf(" " + t + " ") >= 0) {
+      if (p.tops.length) m.push(["tgone", Math.floor(Math.random() * p.tops.length), 3], ["trot", Math.floor(Math.random() * p.tops.length), 3]);
+      var nt = newTop(p, p.tops); if (nt) m.push(["tadd", nt, 3]);
+      if (p.tops.length) m.push(["tgone", 0, 3]);   // 토핑 차이를 조금 더 자주
+    }
+    return m;
+  }
+  // 틀린 곳의 정답 자리(토핑 차이는 토핑 자리만 작게)
+  function spotOf(i) {
+    var p = cur[i], mu = diff[i], t = null;
+    if (mu && (mu[0] === "tgone" || mu[0] === "trot")) t = p.tops[mu[1]];
+    if (mu && mu[0] === "tadd") t = mu[1];
+    if (!t) return { x: p.x, y: p.y, r: p.r };
+    return { x: p.x + t.dx * p.w, y: p.y + t.dy * p.w, r: 17 };
+  }
+
+  function topImg(t, p, extraRot) {   // dx·dy는 요리 폭 기준이라 세로 %는 폭/높이 비율을 곱한다
+    return '<img class="tp" src="' + ART + t.f + '.webp" alt="" draggable="false" style="left:' + ((.5 + t.dx) * 100).toFixed(1) + "%;top:" +
+      ((.5 + t.dy * p.w / p.h) * 100).toFixed(1) + "%;width:" + (t.w * 100).toFixed(1) + "%;transform:translate(-50%,-50%) rotate(" + (t.rot + (extraRot || 0)) + 'deg)">';
+  }
+
   function scene(diff) {
     var s = "";
     cur.forEach(function (p, i) {
-      var mu = diff && diff[i], tr = "", fl = "", w = dims(p.f).w;
+      var mu = diff && diff[i], tr = "", fl = "", w = p.w, x = p.x, tops = "";
       if (mu && mu[0] === "gone") return;
       if (mu && mu[0] === "flip") tr += " scaleX(-1)";
       if (mu && mu[0] === "rot") tr += " rotate(" + mu[1] + "deg)";
       if (mu && mu[0] === "size") w = w * mu[1];
       if (mu && mu[0] === "hue") fl = "filter:hue-rotate(" + mu[1] + "deg);";
-      s += '<div class="it" data-i="' + i + '" style="left:' + (p.x / 3.6).toFixed(2) + "%;top:" + (p.y / 3).toFixed(2) + "%;width:" + (w / 3.6).toFixed(2) + '%">' +
-        '<img src="' + ART + p.f + '.webp" alt="" draggable="false" style="' + fl + (tr ? "transform:" + tr : "") + '"></div>';
+      if (mu && mu[0] === "nudge") x += mu[1];
+      (p.tops || []).forEach(function (t, k) {
+        if (mu && mu[0] === "tgone" && mu[1] === k) return;
+        tops += topImg(t, p, mu && mu[0] === "trot" && mu[1] === k ? 90 : 0);
+      });
+      if (mu && mu[0] === "tadd") tops += topImg(mu[1], p);
+      s += '<div class="it" data-i="' + i + '" style="left:' + (x / 3.6).toFixed(2) + "%;top:" + (p.y / 3).toFixed(2) + "%;width:" + (w / 3.6).toFixed(2) + '%">' +
+        '<div class="in" style="' + fl + (tr ? "transform:" + tr : "") + '"><img src="' + ART + p.f + '.webp" alt="" draggable="false">' + tops + "</div></div>";
     });
     return s + '<svg class="ov" viewBox="0 0 360 300"><g class="marks"></g></svg>';
   }
@@ -221,12 +268,32 @@
   var shuffle = function (a) { return a.slice().sort(function () { return Math.random() - .5; }); };
   try { best = +localStorage.getItem("qm_spot_best") || 0; sound = localStorage.getItem("qm_spot_mute") !== "1"; } catch (e) {}
 
-  // 단계별 설정: 음식 수 · 틀린 곳 수 · 시간 · 어려운 차이를 쓸지(0 안 씀, 1 섞음, 2 먼저 씀)
+  // 단계별 설정: 음식 수 · 틀린 곳 수 · 시간 · 차이 종류(0 쉬운 것만, 1 어려운+미세 섞음, 3 미세 먼저)
+  // 1~2단계는 예전 그대로(정해진 자리 9곳). 3단계부터 상을 붐비게(sc 크기 비율, 자리는 무작위) + 토핑 + 미세 차이.
   function conf(lv) {
     if (lv === 1) return { n: 6, need: 3, time: 60, hard: 0 };
     if (lv === 2) return { n: 8, need: 4, time: 75, hard: 0 };
-    if (lv === 3) return { n: 9, need: 5, time: 90, hard: 1 };
-    return { n: 9, need: 5, time: Math.max(50, 90 - (lv - 3) * 10), hard: 2 };
+    if (lv === 3) return { n: 12, need: 5, time: 90, hard: 1, sc: .8 };
+    return { n: 14, need: 6, time: Math.max(60, 100 - (lv - 4) * 8), hard: 3, sc: .74 };
+  }
+  // 붐비는 상: 큰 것부터 무작위 자리에 겹치지 않게 놓는다. 반찬·종지·소품은 같은 것이 두 번 나올 수 있다.
+  var CROWD = "L L L M M M S S S S X X U U G T".split(" ");
+  function crowd(cf) {
+    var used = {}, out = [], slots = CROWD.slice(0, 3).concat(shuffle(CROWD.slice(3))).slice(0, cf.n + 2);
+    slots.sort(function (a, b) { return SIZE[b] - SIZE[a]; });
+    slots.forEach(function (t) {
+      if (out.length >= cf.n) return;
+      var names = shuffle(Object.keys(TYPE).filter(function (k) { return TYPE[k] === t && (!used[k] || " S X U ".indexOf(" " + t + " ") >= 0); }));
+      if (!names.length) return;
+      var f = names[0], d = dims(f), w = d.w * cf.sc, h = d.h * cf.sc, r = Math.max(w, h) / 2;
+      for (var k = 0; k < 300; k++) {
+        var x = rnd(r + 3, 357 - r), y = rnd(r + 3, 297 - r);
+        if (out.every(function (o) { return Math.hypot(o.x - x, o.y - y) > (o.r + r) * .9; })) {
+          used[f] = true; out.push({ f: f, x: x, y: y, w: w, h: h, r: Math.max(r, 16) }); return;
+        }
+      }
+    });
+    return out;
   }
 
   // 소리 (파일 없이 브라우저가 내는 짧은 음)
@@ -244,19 +311,32 @@
 
   function newBoard() {
     cf = conf(level);
-    var lay = pick(LAYOUTS), mirror = Math.random() < .5, used = {};
-    cur = lay.slice(0, cf.n).map(function (sl) {
-      var names = shuffle(Object.keys(TYPE).filter(function (k) { return TYPE[k] === sl.t && !used[k]; }));
-      used[names[0]] = true;
-      var d = dims(names[0]);
-      return { f: names[0], x: mirror ? 360 - sl.x : sl.x, y: sl.y, r: Math.max(Math.max(d.w, d.h) / 2, 20) };
+    if (cf.sc) cur = crowd(cf);
+    else {
+      var lay = pick(LAYOUTS), mirror = Math.random() < .5, used = {};
+      cur = lay.slice(0, cf.n).map(function (sl) {
+        var names = shuffle(Object.keys(TYPE).filter(function (k) { return TYPE[k] === sl.t && !used[k]; }));
+        used[names[0]] = true;
+        var d = dims(names[0]);
+        return { f: names[0], x: mirror ? 360 - sl.x : sl.x, y: sl.y, w: d.w, h: d.h, r: Math.max(Math.max(d.w, d.h) / 2, 20) };
+      });
+    }
+    cur.forEach(function (p) {   // 토핑: 3단계부터 접시 절반쯤에 1~2개 (두 그림 모두에 똑같이)
+      p.tops = [];
+      if (!cf.sc || PLATE.indexOf(" " + TYPE[p.f] + " ") < 0 || Math.random() < .4) return;
+      var n = TYPE[p.f] === "S" ? 1 : 1 + (Math.random() < .5 ? 1 : 0);
+      for (var k = 0; k < n; k++) { var t = newTop(p, p.tops); if (t) p.tops.push(t); }
     });
     diff = {};
-    shuffle(cur.map(function (_, i) { return i; })).slice(0, cf.need).forEach(function (i) {
+    var need = Math.min(cf.need, cur.length);
+    shuffle(cur.map(function (_, i) { return i; })).slice(0, need).forEach(function (i) {
       var mu = mutsFor(cur[i].f);
       var easy = mu.filter(function (m) { return m[2] === 1; }), hard = mu.filter(function (m) { return m[2] === 2; });
-      diff[i] = pick(cf.hard === 0 ? easy : (cf.hard === 2 && hard.length ? hard : mu));
+      if (cf.hard === 0) diff[i] = pick(easy);
+      else if (cf.hard === 1) diff[i] = pick(Math.random() < .5 && hard.length ? hard : subtleFor(cur[i]));
+      else diff[i] = pick(Math.random() < .85 || !hard.length ? subtleFor(cur[i]) : hard);
     });
+    cf.need = need;
     var flip = Math.random() < .5;   // 어느 쪽이 바뀐 그림인지 매번 다르게
     picA.innerHTML = scene(flip ? diff : null); picB.innerHTML = scene(flip ? null : diff);
     found = {}; left = cf.time; hints = 2; usedHints = 0; hud();
@@ -281,7 +361,7 @@
     var b = e.currentTarget.getBoundingClientRect();
     var x = (e.clientX - b.left) * 360 / b.width, y = (e.clientY - b.top) * 300 / b.height, hit = -1;
     Object.keys(diff).forEach(function (i) {
-      var p = cur[i];
+      var p = spotOf(i);
       if (!found[i] && Math.hypot(x - p.x, y - p.y) <= p.r + 5) hit = i;
     });
     if (hit < 0) {
@@ -294,7 +374,7 @@
       hud(); if (left <= 0) end(false); return;
     }
     found[hit] = true;
-    var p = cur[hit], r = p.r + 2, rays = "";
+    var p = spotOf(hit), r = p.r + 2, rays = "";
     for (var a = 0; a < 360; a += 45) rays += '<path d="M0 ' + (-r - 5) + "V" + (-r - 15) + '" transform="rotate(' + a + ')"/>';
     mark('<circle class="ring" cx="' + p.x + '" cy="' + p.y + '" r="' + r + '"/><g transform="translate(' + p.x + " " + p.y + ')"><g class="burst">' + rays + "</g></g>");
     beep(880, .12); beep(1320, .2, "sine", .09);
@@ -305,7 +385,7 @@
     if (!playing || hints < 1) return;
     var rest = Object.keys(diff).filter(function (i) { return !found[i]; }); if (!rest.length) return;
     hints--; usedHints++;
-    var p = cur[pick(rest)];
+    var p = spotOf(pick(rest));
     mark('<circle class="glow" cx="' + p.x + '" cy="' + p.y + '" r="' + (p.r + 7) + '"/>');
     setTimeout(function () { document.querySelectorAll(".glow").forEach(function (g) { g.remove(); }); }, 1600);
     beep(660, .15); hud();
@@ -328,7 +408,7 @@
       [523, 659, 784, 1047].forEach(function (f, i) { beep(f, .22, "triangle", .12 * i + .15, .13); });
     } else {
       Object.keys(diff).forEach(function (i) {   // 못 찾은 곳을 노란 점선 원으로 알려 줌
-        if (!found[i]) { var p = cur[i]; mark('<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (p.r + 2) + '" fill="none" stroke="#ffd60a" stroke-width="4" stroke-dasharray="7 5"/>'); }
+        if (!found[i]) { var p = spotOf(i); mark('<circle cx="' + p.x + '" cy="' + p.y + '" r="' + (p.r + 2) + '" fill="none" stroke="#ffd60a" stroke-width="4" stroke-dasharray="7 5"/>'); }
       });
       beep(300, .3, "sawtooth", 0, .05); beep(200, .45, "sawtooth", .25, .05);
     }
