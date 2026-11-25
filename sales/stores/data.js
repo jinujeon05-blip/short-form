@@ -923,6 +923,12 @@ window.STORES = [
     type: { ko: "한식당 · 프리미엄 BBQ룸 · 소고기 · 점심특선", vi: "Nhà hàng Hàn Quốc · Phòng BBQ cao cấp · Thịt bò · Set trưa", en: "Korean restaurant · Premium BBQ rooms · Beef · Lunch specials", zh: "韩餐厅 · 高级烤肉包间 · 牛肉 · 午间特餐", ja: "韓国料理店・プレミアムBBQルーム・牛肉・ランチ特選" },
     keywords: "화담 호아담 Hoa Đam Hoadam Hwadam Nhà hàng Hoa Đam 하노이 Từ Liêm Đỗ Đình Thiện 한식 소고기 모듬 와규 안심 어복쟁반 나주식곰탕 냉면 막국수 점심특선 시그니처 코스 BBQ룸 thịt nướng Hàn Quốc thịt bò Wagyu Korean BBQ premium beef 韩国烤肉 和牛 花潭 焼肉 和牛 ランチ"
   },
+  { id: "heungbi", name: "흥비식당 HƯƠNG BI", sub: "백반 · 찌개 · 부대찌개 · 전골 · 구이 · 국수", url: "https://heungbi.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["korean"], tags: ["photos"],
+    address: "45 Hoàng Hoa Thám, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/%ED%9D%A5%EB%B9%84%EC%8B%9D%EB%8B%B9(%EB%B0%B1%EB%B0%98)/@21.1662447,106.0601351,17z/data=!3m1!4b1!4m6!3m5!1s0x313509999e0061b5:0x4c57594c6203e443!8m2!3d21.1662447!4d106.0601351!16s%2Fg%2F11g4dm2_2d",
+    type: { ko: "한식 · 백반 · 찌개 · 전골", vi: "Quán cơm suất Hàn Quốc · Canh · Lẩu", en: "Korean set meals · Stews · Hot pots", zh: "韩式家常饭 · 汤锅 · 火锅", ja: "韓国定食・チゲ・鍋" },
+    keywords: "흥비식당 흥비맛집 Hương Bi Huong Bi 888 백반 한식 찌개 부대찌개 전골 박닌 Bắc Ninh Võ Cường Hoàng Hoa Thám"
+  },
 ];
 window.SI = {
   ko: {

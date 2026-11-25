@@ -177,6 +177,7 @@ const SHOPS = {
   pigwing: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Grill'], country: 'VN', currency: 'VND', og: 'img/samgyeop.jpg' },
   sanhoanago: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Grilled Eel'], country: 'VN', currency: 'VND', og: 'img/anago.jpg' },
   hwadam: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef'], country: 'VN', currency: 'VND', og: 'img/beef-set.jpg' },
+  heungbi: { type: 'Restaurant', cuisine: ['Korean', 'Set Meal', 'Stew'], country: 'VN', currency: 'VND', og: 'img/budae.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

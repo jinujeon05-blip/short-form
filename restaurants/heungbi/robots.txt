@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://heungbi.qrmenuasia.com/sitemap.xml
