@@ -241,6 +241,8 @@ window.DEMOS = [
     name: "화담 HOA ĐAM", type: { ko: "한식당 · 프리미엄 BBQ룸 · 소고기 · 점심특선", vi: "Nhà hàng Hàn Quốc · Phòng BBQ cao cấp · Thịt bò · Set trưa", en: "Korean restaurant · Premium BBQ rooms · Beef · Lunch specials", zh: "韩餐厅 · 高级烤肉包间 · 牛肉 · 午间特餐", ja: "韓国料理店・プレミアムBBQルーム・牛肉・ランチ特選" } },
   { id: "heungbi", hidden: true, url: "https://heungbi.qrmenuasia.com", shot: "img/demo-heungbi.jpg", qr: "img/qr-heungbi.svg",
     name: "흥비식당 HƯƠNG BI", type: { ko: "한식 · 백반 · 찌개 · 전골", vi: "Quán cơm suất Hàn Quốc · Canh · Lẩu", en: "Korean set meals · Stews · Hot pots", zh: "韩式家常饭 · 汤锅 · 火锅", ja: "韓国定食・チゲ・鍋" } },
+  { id: "dungcua", hidden: true, url: "https://dungcua.qrmenuasia.com", shot: "img/demo-dungcua.jpg", qr: "img/qr-dungcua.svg",
+    name: "중꾸아 해산물 식당 DUNG CUA", type: { ko: "활 해산물 · 랍스터 · 킹크랩 · 회", vi: "Nhà hàng hải sản tươi sống · Tôm hùm · Cua hoàng đế · Gỏi cá", en: "Live seafood · Lobster · King crab · Sashimi", zh: "活海鲜 · 龙虾 · 帝王蟹 · 刺身", ja: "活き海鮮・ロブスター・タラバガニ・刺身" } },
 ];
 
 window.T = {

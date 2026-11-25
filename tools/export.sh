@@ -123,6 +123,7 @@ name() {
     sanhoanago) echo "산호 아나고 꼼장어" ;;
     hwadam) echo "화담" ;;
     heungbi) echo "흥비식당" ;;
+    dungcua) echo "중꾸아 해산물 식당" ;;
     *) echo "$1" ;;
   esac
 }
