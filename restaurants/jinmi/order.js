@@ -12,6 +12,10 @@
 // 직원 호출 · 우리 테이블 주문 내역(2026-11-16): 주방 주문이 켜진 가게에서만 화면 아래 [🔔 직원 호출] [🧾 주문 내역] 버튼이 보인다.
 //   호출 = 물·반찬 리필·얼음·앞접시·계산서·직원 호출 → 주방 화면에 테이블 번호와 요청이 소리와 함께 뜬다.
 //   주문 내역 = 같은 테이블에서 보낸 주문 전부(일행 각자 보낸 것 포함)·상태·합계. 열어 둔 동안 10초마다 새로 고침.
+// 자리 표(2026-11-23 캡틴 가-1·나-1·다-1): 주방 주문·호출·내역은 테이블 QR(?t=5&k=)을 찍었을 때 서버가 주는 '자리 표'가 있어야 된다.
+//   표는 1시간(주문하면 그때부터 다시 1시간) 또는 주방 [자리 정리]까지. 끝나면 주문 안 되는 기본 메뉴판으로 돌아간다(가게 밖 주문 막기).
+//   QR 주소의 t·k 는 표를 받은 뒤 주소창에서 지운다. 테이블 번호를 손으로 적어 주방에 보내는 길은 없앴다.
+//   내가 보낸 주문은 주방이 '접수'하기 전까지 [주문 내역]에서 수정·취소할 수 있다(그 주문을 보낸 폰만, 서버가 열쇠로 확인).
 (function () {
   const MENU = window.MENU, R = window.RESTAURANT || {};
   if (!Array.isArray(MENU) || !document.getElementById("menu")) return;
@@ -28,15 +32,20 @@
   };
   // 직원 호출 · 주문 내역 문구
   const C = {
-    ko: { call: "직원 호출", callT: "무엇이 필요하세요?", callSent: "직원에게 알렸어요", callFail: "알리지 못했어요 — 직원을 직접 불러 주세요", bill: "주문 내역", billT: "우리 테이블 주문 내역", billEmpty: "아직 주방에 보낸 주문이 없어요", billHint: "같은 테이블에서 보낸 주문이 모두 보여요 · 자동으로 새로 고침", stNew: "주문 들어감", stCook: "만드는 중", stDone: "나왔어요",
+    ko: { mine: "내 주문", edit: "수정", cancel: "취소", cancelQ: "주문 #{n}을 취소할까요?", cancelled: "주문 #{n}을 취소했어요", editing: "주문 #{n} 고치는 중 — 보내면 예전 주문은 취소돼요", editStop: "그만두기", editSend: "고친 주문 보내기", edited: "주문 #{o}을 고쳐서 다시 보냈어요", taken: "주방에서 이미 만들기 시작했어요 — 바꾸려면 직원에게 말씀해 주세요", takenHint: "만들기 시작해서 고칠 수 없어요 — 직원에게 말씀해 주세요", gone: "이미 취소된 주문이에요", qrAgain: "주문하려면 테이블 QR을 다시 찍어 주세요",
+      call: "직원 호출", callT: "무엇이 필요하세요?", callSent: "직원에게 알렸어요", callFail: "알리지 못했어요 — 직원을 직접 불러 주세요", bill: "주문 내역", billT: "우리 테이블 주문 내역", billEmpty: "아직 주방에 보낸 주문이 없어요", billHint: "같은 테이블에서 보낸 주문이 모두 보여요 · 자동으로 새로 고침", stNew: "주문 들어감", stCook: "만드는 중", stDone: "나왔어요",
       req: { water: "물 부탁드립니다", refill: "반찬 리필해 주세요", ice: "얼음 좀 주세요", utensils: "앞접시·수저 주세요", bill: "계산서 부탁드립니다", staff: "직원 불러 주세요" } },
-    en: { call: "Call staff", callT: "What do you need?", callSent: "The staff has been notified", callFail: "Couldn't notify — please call the staff", bill: "Our orders", billT: "Our table's orders", billEmpty: "No orders sent to the kitchen yet", billHint: "Shows every order sent from this table · updates automatically", stNew: "Received", stCook: "Cooking", stDone: "Served",
+    en: { mine: "Mine", edit: "Edit", cancel: "Cancel", cancelQ: "Cancel order #{n}?", cancelled: "Order #{n} cancelled", editing: "Editing order #{n} — sending replaces the old order", editStop: "Stop editing", editSend: "Send updated order", edited: "Order #{o} was updated and re-sent", taken: "The kitchen has already started — please tell the staff to change it", takenHint: "Already being prepared — ask the staff to change it", gone: "This order was already cancelled", qrAgain: "To order, please scan the table QR again",
+      call: "Call staff", callT: "What do you need?", callSent: "The staff has been notified", callFail: "Couldn't notify — please call the staff", bill: "Our orders", billT: "Our table's orders", billEmpty: "No orders sent to the kitchen yet", billHint: "Shows every order sent from this table · updates automatically", stNew: "Received", stCook: "Cooking", stDone: "Served",
       req: { water: "Water, please", refill: "Refill side dishes", ice: "Some ice, please", utensils: "Extra plates & cutlery", bill: "The bill, please", staff: "Call a staff member" } },
-    zh: { call: "呼叫服务员", callT: "需要什么？", callSent: "已通知服务员", callFail: "通知失败 — 请直接叫服务员", bill: "已点菜品", billT: "本桌已点菜品", billEmpty: "还没有发送到厨房的订单", billHint: "显示本桌发送的所有订单 · 自动更新", stNew: "已下单", stCook: "制作中", stDone: "已上菜",
+    zh: { mine: "我的", edit: "修改", cancel: "取消", cancelQ: "取消订单 #{n}？", cancelled: "已取消订单 #{n}", editing: "正在修改订单 #{n} — 发送后原订单将取消", editStop: "放弃修改", editSend: "发送修改后的订单", edited: "订单 #{o} 已修改并重新发送", taken: "厨房已开始制作 — 如需更改请告诉服务员", takenHint: "已在制作，无法修改 — 请告诉服务员", gone: "该订单已取消", qrAgain: "如需点餐，请重新扫描桌上的二维码",
+      call: "呼叫服务员", callT: "需要什么？", callSent: "已通知服务员", callFail: "通知失败 — 请直接叫服务员", bill: "已点菜品", billT: "本桌已点菜品", billEmpty: "还没有发送到厨房的订单", billHint: "显示本桌发送的所有订单 · 自动更新", stNew: "已下单", stCook: "制作中", stDone: "已上菜",
       req: { water: "请给我水", refill: "加小菜", ice: "请给我冰块", utensils: "加碗碟餐具", bill: "买单", staff: "请服务员过来" } },
-    ja: { call: "スタッフ呼び出し", callT: "ご用件は？", callSent: "スタッフに知らせました", callFail: "知らせられませんでした — スタッフを直接お呼びください", bill: "注文履歴", billT: "このテーブルの注文", billEmpty: "まだ厨房に送った注文はありません", billHint: "このテーブルから送った注文がすべて表示されます · 自動更新", stNew: "注文済み", stCook: "調理中", stDone: "提供済み",
+    ja: { mine: "自分の注文", edit: "変更", cancel: "取消", cancelQ: "注文 #{n} を取り消しますか？", cancelled: "注文 #{n} を取り消しました", editing: "注文 #{n} を変更中 — 送信すると前の注文は取り消されます", editStop: "やめる", editSend: "変更した注文を送る", edited: "注文 #{o} を変更して送り直しました", taken: "厨房ですでに作り始めています — 変更はスタッフにお伝えください", takenHint: "調理中のため変更できません — スタッフにお伝えください", gone: "この注文はすでに取り消されています", qrAgain: "注文するにはテーブルのQRをもう一度読み取ってください",
+      call: "スタッフ呼び出し", callT: "ご用件は？", callSent: "スタッフに知らせました", callFail: "知らせられませんでした — スタッフを直接お呼びください", bill: "注文履歴", billT: "このテーブルの注文", billEmpty: "まだ厨房に送った注文はありません", billHint: "このテーブルから送った注文がすべて表示されます · 自動更新", stNew: "注文済み", stCook: "調理中", stDone: "提供済み",
       req: { water: "お水をください", refill: "おかずのおかわり", ice: "氷をください", utensils: "取り皿・カトラリーをください", bill: "お会計お願いします", staff: "スタッフを呼ぶ" } },
-    vi: { call: "Gọi nhân viên", callT: "Bạn cần gì?", callSent: "Đã báo nhân viên", callFail: "Không báo được — hãy gọi nhân viên trực tiếp", bill: "Món đã gọi", billT: "Món bàn mình đã gọi", billEmpty: "Chưa có đơn nào gửi vào bếp", billHint: "Hiện tất cả đơn gửi từ bàn này · tự cập nhật", stNew: "Đã gửi", stCook: "Đang làm", stDone: "Đã ra món",
+    vi: { mine: "Đơn của bạn", edit: "Sửa", cancel: "Hủy", cancelQ: "Hủy đơn #{n}?", cancelled: "Đã hủy đơn #{n}", editing: "Đang sửa đơn #{n} — gửi đi thì đơn cũ sẽ bị hủy", editStop: "Thôi sửa", editSend: "Gửi đơn đã sửa", edited: "Đã sửa và gửi lại đơn #{o}", taken: "Bếp đã bắt đầu làm — muốn đổi hãy báo nhân viên", takenHint: "Đang làm nên không sửa được — hãy báo nhân viên", gone: "Đơn này đã bị hủy", qrAgain: "Để gọi món, vui lòng quét lại mã QR trên bàn",
+      call: "Gọi nhân viên", callT: "Bạn cần gì?", callSent: "Đã báo nhân viên", callFail: "Không báo được — hãy gọi nhân viên trực tiếp", bill: "Món đã gọi", billT: "Món bàn mình đã gọi", billEmpty: "Chưa có đơn nào gửi vào bếp", billHint: "Hiện tất cả đơn gửi từ bàn này · tự cập nhật", stNew: "Đã gửi", stCook: "Đang làm", stDone: "Đã ra món",
       req: { water: "Cho xin nước", refill: "Thêm đồ ăn kèm", ice: "Cho xin đá", utensils: "Thêm chén đĩa, đũa muỗng", bill: "Tính tiền", staff: "Gọi nhân viên" } },
   };
   const REQS = [["water", "💧"], ["refill", "🥢"], ["ice", "🧊"], ["utensils", "🍽️"], ["bill", "🧾"], ["staff", "🙋"]];
@@ -50,6 +59,17 @@
     vi: { asks: "Yêu cầu thường gặp", herb: "Không cho rau mùi", mild: "Không cay", msg: "Không bột ngọt", ice: "Để đá riêng", plate: "Cho thêm chén đĩa nhỏ", togo: "Gói mang về" },
   };
   const ASKS = [["herb", "🌿"], ["mild", "🌶️"], ["msg", "🧂"], ["ice", "🧊"], ["plate", "🍽️"], ["togo", "🥡"]];
+  // 손님 돈으로 대략 환산(2026-11-21 캡틴 가-2): 동(₫) 가게에서 손님 언어가 ko·en·ja·zh일 때만. 환율은 고정값 —
+  // 바꿀 때 FX_DATE·FX 를 같이 고치고 tools 로 11곳에 복사한다(출처 open.er-api.com, 1단위 = 몇 동). 가게에서 끄려면 ORDER.fx = false
+  const FX_DATE = "2026-11-20";
+  const FX = {
+    ko: { per: 19.31, step: 100, f: (n) => n.toLocaleString("en-US") + "원", note: "환율 " + FX_DATE + " 기준, 대략" },
+    en: { per: 25641, step: 0.1, f: (n) => "$" + (n >= 10 ? Math.round(n).toLocaleString("en-US") : n.toFixed(1)), note: "Approx. rate as of " + FX_DATE },
+    ja: { per: 161.11, step: 10, f: (n) => n.toLocaleString("en-US") + "円", note: FX_DATE + " 時点の概算レート" },
+    zh: { per: 3846.15, step: 1, f: (n) => n.toLocaleString("en-US") + "元", note: "约按 " + FX_DATE + " 汇率" },
+  };
+  const fxOf = (l) => (CFG.fx !== false && CFG.currency === "₫" && FX[l]) || null;
+  const fx = (vnd, l) => { const r = fxOf(l); if (!r || !vnd) return ""; const n = Math.max(r.step, Math.round(vnd / r.per / r.step) * r.step); return r.f(r.step < 1 ? Math.round(n * 10) / 10 : n); };
   // 직원에게 보여주는 주문서 머리말 (직원 언어)
   const HEAD = { vi: "ĐƠN GỌI MÓN", ko: "주문서", en: "ORDER", zh: "点餐单", ja: "注文書" };
 
@@ -83,11 +103,16 @@
   let asks = new Set(((fresh && saved.asks) || []).filter((k) => ASK.ko[k]));
   // 직원이 읽을 요청 = 고른 버튼(직원 언어) + 손님이 쓴 글
   const noteFor = (l) => [...ASKS.filter(([k]) => asks.has(k)).map(([k]) => ASK[l][k]), note.trim()].filter(Boolean).join(" · ");
-  // 테이블 QR 열쇠(&k=)는 그 QR의 테이블 번호와 짝으로만 쓴다(손님이 번호를 바꾸면 안 보냄)
+  // 테이블 QR 열쇠(&k=)는 서버에서 '자리 표'로 바꾼다. 표 = { table, tk, exp }(1시간). 내 주문 = 수정·취소 열쇠 [{ id, no, ek }]
   const qKey = new URLSearchParams(location.search).get("k");
-  let tkey = qTable && qKey ? { table: qTable.slice(0, 12), k: qKey.slice(0, 20) } : (fresh && saved.tkey) || null;
+  let ticket = saved && saved.ticket && saved.ticket.exp > Date.now() ? saved.ticket : null;
+  const staleTicket = !!(saved && saved.ticket && !ticket); // 지난번 표가 끝남 → '다시 찍어 주세요' 한 번 알림
+  if (staleTicket && !qTable && table === saved.ticket.table) table = "";
+  let mine = (ticket && Array.isArray(saved.mine) && saved.mine) || [];
+  let editing = null, prevCart = null; // 고치는 중인 내 주문 { id, no, ek }
   let kitchenOn = null, sending = false; // null = 아직 안 물어봄
-  const save = () => storage((s) => s.setItem(KEY, JSON.stringify({ t: Date.now(), items: [...cart], table, note, asks: [...asks], tkey })));
+  const ordering = () => !!(kitchenOn && ticket && ticket.exp > Date.now()); // 주방 주문·호출·내역을 쓸 수 있는 상태
+  const save = () => storage((s) => s.setItem(KEY, JSON.stringify({ t: Date.now(), items: [...cart], table, note, asks: [...asks], ticket, mine })));
   const count = () => [...cart.values()].reduce((a, b) => a + b, 0);
   const total = () => [...cart].reduce((n, [k, q]) => n + (ITEMS.get(k).opt.price || 0) * q, 0);
   const hasMarket = () => [...cart.keys()].some((k) => ITEMS.get(k).opt.price == null);
@@ -119,6 +144,7 @@
   }
 
   const css = `
+    .qo-fx { margin-top: 3px; text-align: right; font-size: 12px; font-weight: 600; color: var(--pt-muted, #888); font-variant-numeric: tabular-nums; }
     .qo-add { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
     .qo-add button { position: relative; font: inherit; font-size: 12.5px; font-weight: 800; line-height: 1; letter-spacing: 0; text-transform: none; color: var(--pt-ink, #222); background: transparent; border: 1.5px solid var(--pt-line, #ddd); border-radius: 999px; padding: 6px 11px 6px 9px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
     .qo-add button::before { content: "+ "; color: var(--pt-accent, #e0452b); }
@@ -203,6 +229,17 @@
     .qo-bill .bl { display: flex; gap: 8px; padding: 4px 0 0; font-size: 14.5px; }
     .qo-bill .bl span:first-child { flex: 1; min-width: 0; font-weight: 700; }
     .qo-bill .bl span:last-child { white-space: nowrap; font-weight: 700; }
+    .qo-bill li.my { background: rgba(224, 69, 43, .06); border-radius: 10px; padding-left: 8px; padding-right: 8px; }
+    .qo-bill .bh .me { border-radius: 999px; padding: 1px 8px; font-size: 11.5px; font-weight: 800; color: var(--pt-accent, #e0452b); border: 1.5px solid var(--pt-accent, #e0452b); white-space: nowrap; }
+    .qo-mine { display: flex; gap: 8px; margin-top: 8px; }
+    .qo-mine button { flex: 1; min-width: 0; font: inherit; font-size: 14px; font-weight: 800; letter-spacing: 0; text-transform: none; padding: 9px 8px; border-radius: 12px; border: 1.5px solid var(--pt-line, #ddd); background: transparent; color: var(--pt-ink, #222); cursor: pointer; }
+    .qo-mine button[data-ocancel] { color: #c0392b; border-color: #e3b1aa; }
+    .qo-mh { margin: 6px 0 0; font-size: 12.5px; font-weight: 700; color: #a06a00; }
+    .qo-editbar { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; padding: 9px 10px; border-radius: 12px; background: #fff4d6; color: #5a4300; font-size: 13.5px; font-weight: 700; line-height: 1.35; }
+    .qo-editbar[hidden] { display: none; }
+    .qo-editbar span { flex: 1; min-width: 0; }
+    .qo-editbar button { flex: none; font: inherit; font-size: 13px; font-weight: 800; letter-spacing: 0; text-transform: none; padding: 7px 10px; border-radius: 10px; border: 1.5px solid #c9a64a; background: #fff; color: #5a4300; cursor: pointer; }
+    .qo-fields input[readonly] { opacity: .75; }
     .qo-empty { margin: 18px 0; text-align: center; font-size: 14px; color: var(--pt-muted, #888); }
   `;
 
@@ -224,6 +261,15 @@
       const lis = sec.querySelectorAll(":scope > ul > li");
       cat.items.forEach((it, i) => {
         const li = lis[i];
+        if (li && fxOf(l) && !li.querySelector(".qo-fx")) {
+          const ps = options(it).map((o) => o.price).filter((p) => p != null);
+          if (ps.length) {
+            const lo = Math.min(...ps), hi = Math.max(...ps), el = document.createElement("div");
+            el.className = "qo-fx";
+            el.textContent = "≈ " + fx(lo, l) + (hi > lo ? " ~ " + fx(hi, l) : "");
+            (li.querySelector(":scope > .info") || li).appendChild(el);
+          }
+        }
         if (!li || it.soldOut || li.querySelector(".qo-add")) return;
         const box = document.createElement("div");
         box.className = "qo-add";
@@ -267,7 +313,7 @@
         <div class="pr">${p == null ? esc(t.market) : money(p * q)}</div></li>`;
     }).join("");
     $("qoTotal").innerHTML = `<span>${esc(t.total)}</span><span>${money(total())}${hasMarket() ? ` <small>${esc(t.plus)}</small>` : ""}</span>`;
-    $("qoHint").textContent = t.hint;
+    $("qoHint").textContent = t.hint + (fxOf(l) && total() ? ` · ≈ ${fx(total(), l)} (${FX[l].note})` : "");
     $("qoTableL").firstChild.textContent = t.table;
     $("qoTable").placeholder = t.tablePh;
     const a = ASK[l] || ASK.en;
@@ -275,10 +321,15 @@
       `<button type="button" data-ask="${k}" aria-pressed="${asks.has(k)}">${ic} ${esc(a[k])}</button>`).join("")}</div>`;
     $("qoNoteL").firstChild.textContent = t.note;
     $("qoNote").placeholder = t.notePh;
-    $("qoKitchen").hidden = !kitchenOn;
-    $("qoKitchen").textContent = sending ? t.sending : t.kitchen;
+    const on = ordering(), c = ct();
+    $("qoTable").readOnly = on; // 주방 주문 = 자리 표의 테이블(바꿀 수 없음)
+    if (on) $("qoTable").value = ticket.table;
+    $("qoEdit").hidden = !(on && editing);
+    if (on && editing) { $("qoEditT").textContent = "✏️ " + fmt(c.editing, { n: editing.no }); $("qoEditX").textContent = c.editStop; }
+    $("qoKitchen").hidden = !on;
+    $("qoKitchen").textContent = sending ? t.sending : on && editing ? c.editSend : t.kitchen;
     $("qoKitchen").disabled = sending;
-    $("qoShow").className = kitchenOn ? "qo-ghost" : "qo-main";
+    $("qoShow").className = on ? "qo-ghost" : "qo-main";
     $("qoShow").textContent = t.show;
     $("qoSend").hidden = !CFG.zalo;
     $("qoSend").textContent = t.send;
@@ -297,22 +348,64 @@
     checkKitchen();
   }
   // 이 가게가 주방 주문을 받는지 한 번만 묻는다(실패하면 버튼을 안 보여 줌 → 예전과 똑같이 동작)
+  // 테이블 QR(?t=&k=)로 들어왔으면 같은 요청으로 '자리 표'를 받고, 주소창에서 t·k 를 지운다
   async function checkKitchen() {
     if (kitchenOn !== null || !CFG.shop || CFG.kitchen === false) return;
     kitchenOn = false;
+    let got = null;
     try {
-      const r = await fetch(`${CFG.api}/api/order?shop=${CFG.shop}`, { cache: "no-store" });
-      if (r.ok) kitchenOn = !!(await r.json()).on;
+      const q = qTable ? `&t=${encodeURIComponent(qTable)}${qKey ? `&k=${encodeURIComponent(qKey)}` : ""}`
+        : ticket ? `&tt=${encodeURIComponent(ticket.table)}&tk=${encodeURIComponent(ticket.tk)}` : ""; // 남은 표는 서버에 확인(자리 정리됐으면 끝)
+      const r = await fetch(`${CFG.api}/api/order?shop=${CFG.shop}${q}`, { cache: "no-store" });
+      if (r.ok) {
+        const j = await r.json(); kitchenOn = !!j.on; got = j.ticket || null;
+        if (kitchenOn && qTable && !got) { ticket = null; mine = []; save(); }
+        if (kitchenOn && !qTable && ticket && j.ticketOk === false) { kitchenOn = true; expire(); }
+      }
     } catch {}
-    if (kitchenOn && !$("qoSheet").hidden) renderSheet();
+    if (got) { setTicket(got); cleanUrl(); }
+    else if (kitchenOn && (staleTicket || qTable)) toast(ct().qrAgain);
+    if (!$("qoSheet").hidden) renderSheet();
     paintTools();
   }
+  function cleanUrl() {
+    try { const u = new URL(location.href); u.searchParams.delete("t"); u.searchParams.delete("table"); u.searchParams.delete("k"); history.replaceState(history.state, "", u.pathname + u.search + u.hash); } catch {}
+  }
+  let expT = null;
+  function setTicket(tk) {
+    if (ticket && ticket.table !== tk.table) mine = []; // 다른 테이블로 옮김
+    ticket = tk; table = tk.table; save();
+    clearTimeout(expT); expT = setTimeout(checkExpire, Math.min(2147483000, Math.max(1000, tk.exp - Date.now() + 500)));
+  }
+  // 자리 표가 끝남(1시간·자리 정리) → 주문 안 되는 기본 메뉴판으로. 장바구니는 그대로 둔다
+  function expire(say = true) {
+    clearTimeout(expT);
+    if (ticket && table === ticket.table) table = "";
+    ticket = null; mine = []; editing = null; prevCart = null; save();
+    closePanel("qoCall"); closePanel("qoBillS");
+    paintTools();
+    if (!$("qoSheet").hidden) { $("qoTable").value = table; renderSheet(); }
+    if (say && kitchenOn) toast(ct().qrAgain);
+  }
+  function checkExpire() { if (ticket && ticket.exp <= Date.now()) expire(); }
+  // 화면으로 돌아왔을 때(가게를 나갔다 다시 폰을 켠 경우 등) 남은 표를 서버에 다시 확인. 30초에 한 번만
+  let lastVerify = 0;
+  async function verifyTicket() {
+    if (!ordering() || Date.now() - lastVerify < 30000) return;
+    lastVerify = Date.now();
+    try {
+      const r = await fetch(`${CFG.api}/api/order?shop=${CFG.shop}&tt=${encodeURIComponent(ticket.table)}&tk=${encodeURIComponent(ticket.tk)}`, { cache: "no-store" });
+      const j = r.ok ? await r.json() : null;
+      if (j && (!j.on || j.ticketOk === false)) { if (!j.on) kitchenOn = false; expire(!j.on ? false : true); }
+    } catch {}
+  }
+  const failOf = (err, fallback) => (err === "expired" || err === "key" ? (expire(), "") : fallback);
 
-  // ── 직원 호출 · 우리 테이블 주문 내역 (주방 주문이 켜진 가게만) ──
+  // ── 직원 호출 · 우리 테이블 주문 내역 (주방 주문이 켜진 가게 + 자리 표가 있을 때만) ──
   const ct = () => C[langOf()] || C.en;
-  const keyFor = (tb) => (tkey && tkey.table === tb ? tkey.k : "");
+  const fmt = (s, o) => s.replace(/\{(\w)\}/g, (_, k) => o[k]);
   function paintTools() {
-    const on = !!kitchenOn, c = ct();
+    const on = ordering(), c = ct();
     $("qoTools").hidden = !on;
     document.body.classList.toggle("qo-tl", on);
     $("qoCallB").textContent = "🔔 " + c.call;
@@ -329,68 +422,96 @@
   const cooldown = new Map(); // 같은 요청을 연달아 누르지 않게(30초)
   function renderCall() {
     const c = ct(), t = T[langOf()];
-    $("qoCallT").textContent = c.callT;
-    $("qoCallTblL").textContent = t.table;
-    $("qoCallTbl").placeholder = t.tablePh;
-    if (document.activeElement !== $("qoCallTbl")) $("qoCallTbl").value = table;
+    $("qoCallT").textContent = c.callT + (ticket ? ` · ${t.table} ${ticket.table}` : "");
     $("qoReqs").innerHTML = REQS.map(([k, icon]) => `<button type="button" data-req="${k}"${Date.now() - (cooldown.get(k) || 0) < 30000 ? " disabled" : ""}${k === "bill" ? ' class="hot"' : ""}><i>${icon}</i>${esc(c.req[k])}</button>`).join("");
   }
   async function sendCall(what) {
-    const c = ct(), t = T[langOf()], tb = table.trim();
-    if (!tb) { toast(t.needTable); $("qoCallTbl").focus(); return; }
+    const c = ct();
+    if (!ordering()) return expire();
     cooldown.set(what, Date.now()); renderCall();
     setTimeout(() => { if (!$("qoCall").hidden) renderCall(); }, 30500);
     let ok = false, err = "";
     try {
-      const r = await fetch(`${CFG.api}/api/order`, { method: "POST", headers: { "content-type": "text/plain" }, body: JSON.stringify({ shop: CFG.shop, kind: "call", table: tb, req: what, lang: langOf(), k: keyFor(tb) }) });
+      const r = await fetch(`${CFG.api}/api/order`, { method: "POST", headers: { "content-type": "text/plain" }, body: JSON.stringify({ shop: CFG.shop, kind: "call", table: ticket.table, req: what, lang: langOf(), tk: ticket.tk }) });
       ok = r.ok; if (!ok) err = ((await r.json().catch(() => ({}))).error) || "x";
     } catch { err = "net"; }
-    if (ok) { closePanel("qoCall"); toast(`✅ ${c.callSent} · ${c.req[what]}`); }
-    else { cooldown.delete(what); renderCall(); toast(err === "key" ? t.badKey : c.callFail); }
+    if (ok) { closePanel("qoCall"); toast(`✅ ${c.callSent} · ${c.req[what]}`); return; }
+    cooldown.delete(what);
+    const msg = failOf(err, c.callFail);
+    if (msg) { renderCall(); toast(msg); }
   }
   let billTimer = null, billData = null, billErr = "";
   const lineOf = (x, lang) => (x.key && ITEMS.has(x.key) ? lineName(x.key, langOf()) : lang === langOf() && x.sub ? x.sub : x.name);
+  const mineOf = (id) => mine.find((x) => x.id === id);
   function renderBill() {
-    const c = ct(), t = T[langOf()], tb = table.trim();
-    $("qoBillT").textContent = c.billT + (tb ? ` · ${tb}` : "");
-    $("qoBillTblL").textContent = t.table;
-    $("qoBillTbl").placeholder = t.tablePh;
-    $("qoBillTblW").hidden = !!qTable;
-    if (document.activeElement !== $("qoBillTbl")) $("qoBillTbl").value = table;
+    const c = ct(), t = T[langOf()];
+    $("qoBillT").textContent = c.billT + (ticket ? ` · ${ticket.table}` : "");
     $("qoBillHint").textContent = c.billHint;
     const d = billData;
-    if (!tb) { $("qoBillL").innerHTML = ""; $("qoBillSum").innerHTML = ""; return; }
     if (!d) { $("qoBillL").innerHTML = `<li class="qo-empty">${esc(billErr || t.sending)}</li>`; $("qoBillSum").innerHTML = ""; return; }
     const st = { new: c.stNew, cooking: c.stCook, done: c.stDone };
     const cur = d.currency || CFG.currency, m = (n) => n.toLocaleString("en-US") + cur;
-    $("qoBillL").innerHTML = d.orders.length ? d.orders.map((o) => `<li><div class="bh"><span>#${o.no}</span><span>${new Date(o.at).toLocaleTimeString(langOf(), { hour: "2-digit", minute: "2-digit" })}</span><span class="s ${o.status}">${esc(st[o.status] || "")}</span></div>
-      ${o.items.map((x) => `<div class="bl"><span>${esc(lineOf(x, o.lang))} × ${x.q}</span><span>${x.price == null ? esc(t.market) : m(x.price)}</span></div>`).join("")}</li>`).join("")
+    $("qoBillL").innerHTML = d.orders.length ? d.orders.map((o) => {
+      const my = o.id && mineOf(o.id);
+      const acts = !my ? "" : o.status === "new"
+        ? `<div class="qo-mine"><button type="button" data-oedit="${esc(o.id)}">✏️ ${esc(c.edit)}</button><button type="button" data-ocancel="${esc(o.id)}">✕ ${esc(c.cancel)}</button></div>`
+        : o.status === "cooking" ? `<p class="qo-mh">${esc(c.takenHint)}</p>` : "";
+      return `<li${my ? ' class="my"' : ""}><div class="bh"><span>#${o.no}</span><span>${new Date(o.at).toLocaleTimeString(langOf(), { hour: "2-digit", minute: "2-digit" })}</span>${my ? `<span class="me">${esc(c.mine)}</span>` : ""}<span class="s ${o.status}">${esc(st[o.status] || "")}</span></div>
+      ${o.items.map((x) => `<div class="bl"><span>${esc(lineOf(x, o.lang))} × ${x.q}</span><span>${x.price == null ? esc(t.market) : m(x.price)}</span></div>`).join("")}${acts}</li>`;
+    }).join("")
       : `<li class="qo-empty">${esc(c.billEmpty)}</li>`;
     $("qoBillSum").innerHTML = d.orders.length ? `<span>${esc(t.total)}</span><span>${m(d.total)}${d.market ? ` <small>${esc(t.plus)}</small>` : ""}</span>` : "";
   }
   async function loadBill() {
     clearTimeout(billTimer);
-    const tb = table.trim();
     if ($("qoBillS").hidden) return;
-    if (tb) {
-      const fail = ct().callFail.split(" — ")[0];
-      try {
-        const r = await fetch(`${CFG.api}/api/order?shop=${CFG.shop}&bill=${encodeURIComponent(tb)}&k=${encodeURIComponent(keyFor(tb))}`, { cache: "no-store" });
-        const j = await r.json().catch(() => ({}));
-        if (r.ok && j.on) { billData = j; billErr = ""; }
-        else { billData = null; billErr = j.error === "key" ? T[langOf()].badKey : fail; }
-      } catch { if (!billData) billErr = fail; }
-      if (tb !== table.trim()) return loadBill(); // 그사이 번호가 바뀜
-    }
+    if (!ordering()) return expire();
+    const fail = ct().callFail.split(" — ")[0];
+    try {
+      const r = await fetch(`${CFG.api}/api/order?shop=${CFG.shop}&bill=${encodeURIComponent(ticket.table)}&tk=${encodeURIComponent(ticket.tk)}`, { cache: "no-store" });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok && j.on) { billData = j; billErr = ""; }
+      else if (!failOf(j.error, "x")) return;
+      else { billData = null; billErr = fail; }
+    } catch { if (!billData) billErr = fail; }
     renderBill();
     if (!$("qoBillS").hidden && document.visibilityState !== "hidden") billTimer = setTimeout(loadBill, 10000);
   }
+  // 내 주문 취소(접수 전만)
+  async function cancelMine(id) {
+    const c = ct(), my = mineOf(id);
+    if (!my || !ordering() || !confirm(fmt(c.cancelQ, { n: my.no }))) return;
+    let err = "";
+    try {
+      const r = await fetch(`${CFG.api}/api/order`, { method: "POST", headers: { "content-type": "text/plain" }, body: JSON.stringify({ shop: CFG.shop, kind: "cancel", table: ticket.table, tk: ticket.tk, id, ek: my.ek }) });
+      if (!r.ok) err = ((await r.json().catch(() => ({}))).error) || "x";
+    } catch { err = "net"; }
+    if (!err || err === "gone") { mine = mine.filter((x) => x.id !== id); save(); toast(err ? c.gone : fmt(c.cancelled, { n: my.no })); }
+    else { const msg = failOf(err, err === "taken" ? c.taken : c.callFail); if (msg) toast(msg); }
+    if (!$("qoBillS").hidden) loadBill();
+  }
+  // 내 주문 고치기: 그 주문 내용을 장바구니에 넣고 주문서를 연다(지금 장바구니는 '그만두기'하면 돌아옴)
+  function editMine(id) {
+    const my = mineOf(id), o = billData && billData.orders.find((x) => x.id === id);
+    if (!my || !o || !ordering()) return;
+    if (!editing) prevCart = [...cart];
+    cart.clear();
+    for (const x of o.items) if (x.key && ITEMS.has(x.key) && !soldOut(x.key)) cart.set(x.key, (cart.get(x.key) || 0) + x.q);
+    editing = { id, no: my.no, ek: my.ek };
+    closePanel("qoBillS"); update(); openSheet();
+  }
+  function stopEdit() {
+    editing = null;
+    if (prevCart) { cart.clear(); prevCart.forEach(([k, q]) => cart.set(k, q)); prevCart = null; }
+    update(); if (!$("qoSheet").hidden) renderSheet();
+  }
   async function sendKitchen() {
-    const t = T[langOf()], l = T[CFG.staff] ? CFG.staff : "vi", me = langOf();
+    const t = T[langOf()], c = ct(), l = T[CFG.staff] ? CFG.staff : "vi", me = langOf();
     if (sending) return;
-    if (!table.trim()) { toast(t.needTable); $("qoTable").focus(); return; }
+    if (!ordering()) return expire();
     const items = [...cart].map(([k, q]) => { const p = ITEMS.get(k).opt.price; return { name: lineName(k, l), sub: me === l ? "" : lineName(k, me), key: k, q, price: p == null ? null : p * q }; });
-    const body = { shop: CFG.shop, table: table.trim(), note: noteFor(T[CFG.staff] ? CFG.staff : "vi").slice(0, 200), lang: me, currency: CFG.currency, items, k: tkey && tkey.table === table.trim() ? tkey.k : "" };
+    const ed = editing;
+    const body = { shop: CFG.shop, table: ticket.table, note: noteFor(T[CFG.staff] ? CFG.staff : "vi").slice(0, 200), lang: me, currency: CFG.currency, items, tk: ticket.tk, ...(ed ? { edit: { id: ed.id, ek: ed.ek } } : {}) };
     sending = true; renderSheet();
     let res = null, err = "";
     try {
@@ -398,9 +519,19 @@
       if (r.ok) res = await r.json(); else err = ((await r.json().catch(() => ({}))).error) || "x";
     } catch { err = "net"; }
     sending = false;
-    if (!res) { renderSheet(); toast(err === "key" ? t.badKey : t.sendFail); return; }
+    if (!res) {
+      if (ed && (err === "taken" || err === "gone")) { editing = null; prevCart = null; mine = mine.filter((x) => x.id !== ed.id); save(); renderSheet(); toast(err === "taken" ? c.taken : c.gone); return; }
+      const msg = failOf(err, t.sendFail);
+      if (msg) { renderSheet(); toast(msg); }
+      return;
+    }
+    if (ed) mine = mine.filter((x) => x.id !== ed.id);
+    mine.push({ id: res.id, no: res.no, ek: res.ek }); mine = mine.slice(-30);
+    if (res.ticket) setTicket(res.ticket); // 주문하면 그때부터 다시 1시간
     // 보낸 내용을 직원 화면 모양으로 보여 주고 장바구니를 비운다(두 번 보내기 방지)
-    $("qoStaffBody").innerHTML = `<p class="say" style="color:#1a7f37;font-size:17px">✅ ${esc(t.sent)}<br>${esc(t.sentNo)} #${res.no}</p>` + staffHtml().replace(/^\s*<p class="say">[^<]*<\/p>/, "");
+    const head = ed ? `${esc(fmt(c.edited, { o: ed.no }))}<br>${esc(t.sentNo)} #${res.no}` : `${esc(t.sent)}<br>${esc(t.sentNo)} #${res.no}`;
+    $("qoStaffBody").innerHTML = `<p class="say" style="color:#1a7f37;font-size:17px">✅ ${head}</p>` + staffHtml().replace(/^\s*<p class="say">[^<]*<\/p>/, "");
+    editing = null; prevCart = null;
     cart.clear(); note = ""; asks.clear(); update(); closeSheet();
     $("qoStaff").hidden = false; $("qoStaff").scrollTop = 0;
   }
@@ -430,6 +561,7 @@
         <div class="qo-bg" data-close></div>
         <div class="qo-panel" role="dialog" aria-modal="true" aria-labelledby="qoTitle">
           <div class="qo-head"><h3 id="qoTitle"></h3><button type="button" class="qo-x" data-close aria-label="close">×</button></div>
+          <div class="qo-editbar" id="qoEdit" hidden><span id="qoEditT"></span><button type="button" id="qoEditX"></button></div>
           <ul class="qo-lines" id="qoLines"></ul>
           <div class="qo-total" id="qoTotal"></div>
           <p class="qo-hint" id="qoHint"></p>
@@ -453,7 +585,6 @@
         <div class="qo-bg" data-pclose="qoCall"></div>
         <div class="qo-panel" role="dialog" aria-modal="true" aria-labelledby="qoCallT">
           <div class="qo-head"><h3 id="qoCallT"></h3><button type="button" class="qo-x" data-pclose="qoCall" aria-label="close">×</button></div>
-          <label class="qo-tbl"><span id="qoCallTblL"></span><input id="qoCallTbl" maxlength="12" autocomplete="off"></label>
           <div class="qo-reqs" id="qoReqs"></div>
         </div>
       </div>
@@ -461,7 +592,6 @@
         <div class="qo-bg" data-pclose="qoBillS"></div>
         <div class="qo-panel" role="dialog" aria-modal="true" aria-labelledby="qoBillT">
           <div class="qo-head"><h3 id="qoBillT"></h3><button type="button" class="qo-x" data-pclose="qoBillS" aria-label="close">×</button></div>
-          <label class="qo-tbl" id="qoBillTblW"><span id="qoBillTblL"></span><input id="qoBillTbl" maxlength="12" autocomplete="off"></label>
           <ul class="qo-bill" id="qoBillL"></ul>
           <div class="qo-total" id="qoBillSum"></div>
           <p class="qo-hint" id="qoBillHint"></p>
@@ -488,7 +618,7 @@
       if (dec) { const q = cart.get(dec) - 1; q > 0 ? cart.set(dec, q) : cart.delete(dec); update(); }
     });
     $("qoSheet").addEventListener("input", () => {
-      table = $("qoTable").value.trim();
+      if (!ordering()) table = $("qoTable").value.trim();
       note = $("qoNote").value;
       $("qoPrev").textContent = orderText();
       save();
@@ -514,13 +644,15 @@
     });
     $("qoCallB").addEventListener("click", () => { openPanel("qoCall"); renderCall(); });
     $("qoBillB").addEventListener("click", () => { openPanel("qoBillS"); billData = null; billErr = ""; renderBill(); loadBill(); });
+    if (ticket) setTicket(ticket); // 남은 시간이 지나면 기본 메뉴판으로
     document.addEventListener("click", (e) => { const c = e.target.closest("[data-pclose]"); if (c) closePanel(c.dataset.pclose); });
     $("qoReqs").addEventListener("click", (e) => { const b = e.target.closest("[data-req]"); if (b && !b.disabled) sendCall(b.dataset.req); });
-    const tblInput = (el, after) => el.addEventListener("input", () => { table = el.value.trim().slice(0, 12); save(); if (after) after(); });
-    tblInput($("qoCallTbl"));
-    let tblT = null;
-    tblInput($("qoBillTbl"), () => { billData = null; renderBill(); clearTimeout(tblT); tblT = setTimeout(loadBill, 600); });
-    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && !$("qoBillS").hidden) loadBill(); });
+    $("qoBillL").addEventListener("click", (e) => {
+      const ed = e.target.closest("[data-oedit]"), cn = e.target.closest("[data-ocancel]");
+      if (ed) editMine(ed.dataset.oedit); else if (cn) cancelMine(cn.dataset.ocancel);
+    });
+    $("qoEditX").addEventListener("click", stopEdit);
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState !== "visible") return; checkExpire(); verifyTicket(); if (!$("qoBillS").hidden) loadBill(); });
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
       if (!$("qoCall").hidden) return closePanel("qoCall");
