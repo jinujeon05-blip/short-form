@@ -88,7 +88,7 @@
     });
     const jobs = [
       load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k6'),
-      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing2'),
+      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing3'),
       load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing2'),
     ];
     for (const [id, cfg] of Object.entries(CHARS)) {
@@ -3837,7 +3837,7 @@
         capTarget = spot;
         const ok = walkNpcSafe('vip_jung', spot[0], spot[1], {
           force: true,
-          bubble: (voice('vip_jung', 'arrive'), '🤝 아우님! NANA VINA 정은수 왔어!'),
+          bubble: '🤝 아우님! NANA VINA 정은수 왔어!',
           bubbleType: 'meet',
           onArrive: () => {
             if (greetedCap || briefingActive) return;
@@ -3852,6 +3852,8 @@
         });
         if (!ok) doGreetCaptain();
       };
+      // 입장 인사 음성은 경로 재탐색 때 반복되지 않도록 입장 시 딱 1번만 재생!
+      voice('vip_jung', 'arrive');
       walkToCaptainNow(capTarget);
       // 대표님이 걸어오는 동안(0.7초마다) 캡틴이 다른 곳으로 이동했으면 새 위치로 실시간 경로 재탐색!
       capTrackPoll = setInterval(() => {
