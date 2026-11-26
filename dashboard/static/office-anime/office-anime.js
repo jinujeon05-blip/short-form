@@ -488,12 +488,14 @@
       reader:     ['call', 'ok', 'done', 'greet', 'work', 'dance', 'chat', 'aha', 'yay', 'hmm'],
       agy:        ['call', 'ok', 'done', 'greet', 'work', 'alert', 'chat', 'yes', 'wow', 'rest'],
       auditor:    ['call', 'ok', 'done', 'greet', 'approve', 'warn', 'chat', 'hmm', 'ok2', 'rest'],
+      // NANA VINA 정은수 대표님(Fish Audio 남자 성우, 2026-11-26) — 직원 자리 인사는 그 직원 id로
+      vip_jung:   ['arrive', 'greet', 'chat', 'coffee', 'claude', 'finder', 'translator', 'staffing', 'sorter', 'wait', 'bye', 'meeting'],
     };
     const voiceKinds = id => VOICE_KINDS[id] || ['call', 'ok', 'done', 'greet'];
     const VOICE_PICK_MAP = {
       ok:   { claude: ['ok', 'ok2'], finder: ['ok', 'yes'], translator: ['ok', 'yes'], staffing: ['ok', 'ok2'], sorter: ['ok', 'yes'], agy: ['ok', 'yes'], auditor: ['ok', 'ok2'] },
       done: { claude: ['done', 'yay'], inspector: ['done', 'nice'], finder: ['done', 'snap', 'wow'], translator: ['done', 'aha'], staffing: ['done', 'cheer'], sorter: ['done', 'yay'], reader: ['done', 'yay', 'aha'], agy: ['done', 'wow'], auditor: ['done', 'approve', 'hmm'] },
-      call: { sorter: ['call', 'oh'] },
+      call: { sorter: ['call', 'oh'], vip_jung: ['chat'] },
     };
     async function voice(id, kind, delay = 0, optsV = {}) {
       const pool = VOICE_PICK_MAP[kind]?.[id];
@@ -3369,7 +3371,7 @@
       log('👋 전체 보고 시작 — 정은수 대표님께서 자리를 비워주시고 사무실 밖으로 나가십니다.');
       const ok = walkNpcSafe('vip_jung', 50.0, 96.5, {
         force: true,
-        bubble: '👋 회의 시작하네! 아우님, 나 먼저 나가 있을게~',
+        bubble: (voice('vip_jung', 'meeting'), '👋 회의 시작하네! 아우님, 나 먼저 나가 있을게~'),
         bubbleType: 'meet',
         onArrive: () => {
           v.hidden = true; v.bubble = ''; v.mode = 'stand';
@@ -3417,6 +3419,7 @@
           v.emote = null; v.emoteLoop = false;
         }
         v.bubble = '👋 아우님, 나 먼저 들어가 볼게! 조만간 한잔하자!';
+        voice('vip_jung', 'bye');
         v.bubbleType = 'meet';
         // 말풍선 겹침 방지: 대표님 작별 인사(2.0초) → 대표님 말풍선 닫고 캡틴 화답(2.2초)
         vipSetTimeout(() => {
@@ -3467,6 +3470,7 @@
             v.mode = 'emote'; v.emote = 'talk'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
           }
           v.bubble = st.vipSay; v.bubbleType = 'meet';
+          voice('vip_jung', st.id);
           if (tn && tc && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
             tn.bubble = ''; // 이전 "기다리는 중" 말풍선 제거해 겹침 방지
             if (tc.standPos) { tn.x = tc.standPos[0]; tn.y = tc.standPos[1]; }
@@ -3537,6 +3541,7 @@
               startMeeting();
             } else {
               v.bubble = '😊 잠깐 기다려 볼까…';
+              voice('vip_jung', 'wait');
               v.bubbleType = '';
               // 0.3초마다 담당자가 자리에 도착했는지 재확인 + 최대 8초 뒤 자동 진행
               const poll = setInterval(() => {
@@ -3576,6 +3581,7 @@
           v.mode = 'emote'; v.emote = 'greet'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
         }
         v.bubble = '🤝 아우님! 요즘 사업 잘 되지? 잠깐 들렀어!';
+        voice('vip_jung', 'greet');
         v.bubbleType = 'meet';
         spawnBurst(v.x, v.y - 4, '🤝 NANA VINA VIP 방문!', 0);
         // 2.0초 뒤 대표님 말풍선 닫고 캡틴 화답 + 대표님 엄지척 격려 (겹침 방지!)
@@ -3607,6 +3613,7 @@
               }
               SFX.coffee();
               v.bubble = '☕ 여기 사무실 커피 향이 진짜 좋네~';
+              voice('vip_jung', 'coffee');
               v.bubbleType = 'ok';
               vipSetTimeout(() => {
                 v.emote = null; v.emoteLoop = false; v.bubble = '';
@@ -3621,7 +3628,7 @@
         capTarget = spot;
         const ok = walkNpcSafe('vip_jung', spot[0], spot[1], {
           force: true,
-          bubble: '🤝 아우님! NANA VINA 정은수 왔어!',
+          bubble: (voice('vip_jung', 'arrive'), '🤝 아우님! NANA VINA 정은수 왔어!'),
           bubbleType: 'meet',
           onArrive: () => {
             if (greetedCap || briefingActive) return;
