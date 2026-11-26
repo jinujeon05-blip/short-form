@@ -455,12 +455,14 @@
       const buf = await getClip(next.path);
       if (!buf || !sfxOn) {
         voiceBusy = false;
+        try { next.onEnd?.(); } catch {}
         if (voiceQueue.length && sfxOn) pumpVoiceQueue();
         return;
       }
       const src = await playClip(next.path, 1.0);
       if (!src) {
         voiceBusy = false;
+        try { next.onEnd?.(); } catch {}
         if (voiceQueue.length && sfxOn) pumpVoiceQueue();
         return;
       }
@@ -468,6 +470,7 @@
       src.onended = () => {
         if (voiceSrc === src) voiceSrc = null;
         voiceBusy = false;
+        try { next.onEnd?.(); } catch {}
         if (voiceQueue.length && sfxOn) {
           voiceGapTimer = setTimeout(() => { voiceGapTimer = null; pumpVoiceQueue(); }, 220);
         }
@@ -494,9 +497,12 @@
     async function voice(id, kind, delay = 0, optsV = {}) {
       const pool = VOICE_PICK_MAP[kind]?.[id];
       const chosen = pool ? pool[Math.floor(Math.random() * pool.length)] : kind;
-      if (!sfxOn || !CHARS[id] || !voiceKinds(id).includes(chosen)) return;
+      if (!sfxOn || !CHARS[id] || !voiceKinds(id).includes(chosen)) {
+        try { optsV.onEnd?.(); } catch {}
+        return;
+      }
       if (delay) await new Promise(r => setTimeout(r, delay * 1000));
-      if (!sfxOn) return;
+      if (!sfxOn) { try { optsV.onEnd?.(); } catch {} return; }
       const path = `voice/${id}-${chosen}.mp3`;
       if (optsV.interrupt) {
         clearVoiceQueue(true);
@@ -506,7 +512,7 @@
         if (last && last.id === id && last.kind === kind) return;
         if (voiceQueue.length >= 4) voiceQueue.shift();
       }
-      voiceQueue.push({ id, kind, path });
+      voiceQueue.push({ id, kind, path, onEnd: optsV.onEnd });
       pumpVoiceQueue();
     }
     // 처음 열 때 파일만 미리 받아 둠(소리 해독은 첫 터치 뒤) — 합쳐서 약 0.6MB
@@ -3065,11 +3071,11 @@
           atLounge ? 27.5 : 36.5, atLounge ? 20.0 : 45.5,
           '🛡️ 방금 검수한 가격표 교차 확인했나요?', '📊 네! 오타 0건, 100% 일치합니다!');
       },
-      // 7. 수석 번역관: 5개 언어 번역 검수 & 표현 다듬기 (12프레임 전용 모션!)
+      // 7. 수석 번역관: 좌측 복도에서 5개 언어 번역 검수 & 표현 다듬기 (비서실장 자리 가리지 않게 중앙 제외!)
       () => {
         if (!isFree('translator')) return false;
-        return doChore('translator', 49.8, 46.5, 'front',
-          '🌐 번역 톤 상의하러 가는 중…', '💬 베트남어·영어 메뉴 표현 자연스럽게 다듬었어요!', 3600, '', 'review');
+        return doChore('translator', 35.5, 45.5, 'front',
+          '🌐 번역 톤 점검하러 가는 중…', '💬 베트남어·영어 메뉴 표현 자연스럽게 다듬었어요!', 3600, '', 'review');
       },
       // 8. 디지털 메뉴 통제실 2인방(메뉴 검사관 + 자료 해석 비서): 우측 테라스 또는 우측 복도 데이터 수다
       () => {
@@ -3169,7 +3175,6 @@
         return true;
       }
       const soloStages = [
-        { name: '중앙 홀',          pos: [50.0, 49.0] },
         { name: '좌측 복도 라운지', pos: [37.2, 46.5] },
         { name: '우측 복도 라운지', pos: [62.7, 46.5] },
         { name: '우측 햇살 테라스', pos: [78.5, 19.8] },
@@ -3216,7 +3221,6 @@
         { name: '좌측 복도 라운지', a: [34.5, 46.5], b: [40.0, 46.5], bx: 37.2, by: 44.5 },
         { name: '우측 복도 라운지', a: [60.0, 46.5], b: [65.5, 46.5], bx: 62.7, by: 44.5 },
         { name: '좌측 커피바 앞',   a: [25.0, 22.5], b: [30.0, 22.5], bx: 27.5, by: 20.9 },
-        { name: '중앙 홀',          a: [46.5, 46.0], b: [53.5, 46.0], bx: 50.0, by: 44.5 },
         { name: '맨 아래 나무 바닥', a: [46.0, 93.5], b: [54.0, 93.5], bx: 50.0, by: 91.5 },
       ];
       let sIdx = Math.floor(Math.random() * stages.length);
@@ -3227,35 +3231,51 @@
         { id: 'claude', tx: st.a[0], ty: st.a[1], go: `💃 ${st.name} 무대로 이동 중…`, msg: '💃✨ 신나는 아이돌 댄스 타임!' },
         { id: 'reader', tx: st.b[0], ty: st.b[1], go: '🎶 같이 춤추러 가요!', msg: '🎶 같이 춤춰요 캡틴! ✨' },
       ];
-      // 2명 모두 도착할 때까지 먼저 온 쪽이 기다렸다가, 동시에 댄스 시작 + 음악 시작 + 7.2초 뒤 동시 종료!
+      // 2명 모두 도착 → 먼저 인트로 멘트("자, 음악 주세요!" 등) 끝까지 말함 → 멘트 끝나자마자 음악 + 2인 칼군무 동시 시작 + 7.2초 뒤 동시 종료!
       const validDancers = dancers.filter(d => npcs[d.id]);
       let arrivedCount = 0;
       log(`💃 비서실장 · 자료 해석 비서 — ${st.name} 합동 아이돌 댄스 타임!`);
       const startDuoSync = () => {
         if (briefingActive) return;
-        const syncStart = performance.now() / 1000;
         const theme = (danceThemeIdx++ % 2 === 0) ? 'claude' : 'reader';
-        playDanceMusic(theme);
-        voice(theme === 'reader' ? 'reader' : 'claude', 'dance', 0.1);
-        spawnBurst(st.bx, st.by, theme === 'claude' ? '💃 비서실장 댄스! +20 EXP' : '🎶 자료해석 댄스! +20 EXP', 20);
-        for (const d of validDancers) {
-          const dn = npcs[d.id];
-          dn.dir = 'front';
-          dn.mode = 'emote'; dn.emote = 'dance'; dn.emoteLoop = true;
-          dn.emoteStart = syncStart;
-          dn.bubble = d.msg; dn.bubbleType = 'meet';
-        }
-        setTimeout(() => {
-          stopDanceMusic();
+        let launched = false;
+        const launchMusicAndDance = () => {
+          if (launched || briefingActive) return;
+          launched = true;
+          const syncStart = performance.now() / 1000;
+          playDanceMusic(theme);
+          spawnBurst(st.bx, st.by, theme === 'claude' ? '💃 비서실장 댄스! +20 EXP' : '🎶 자료해석 댄스! +20 EXP', 20);
           for (const d of validDancers) {
             const dn = npcs[d.id];
-            if (briefingActive || (activeTalkNpc && activeTalkNpc.id === d.id)) continue;
-            dn.emote = null; dn.emoteLoop = false; dn.bubble = '';
-            walkNpcSafe(d.id, CHARS[d.id].home[0], CHARS[d.id].home[1], {
-              onArrive: () => seatNpc(d.id)
-            });
+            dn.dir = 'front';
+            dn.mode = 'emote'; dn.emote = 'dance'; dn.emoteLoop = true;
+            dn.emoteStart = syncStart;
+            dn.bubble = d.msg; dn.bubbleType = 'meet';
           }
-        }, 7200);
+          setTimeout(() => {
+            stopDanceMusic();
+            for (const d of validDancers) {
+              const dn = npcs[d.id];
+              if (briefingActive || (activeTalkNpc && activeTalkNpc.id === d.id)) continue;
+              dn.emote = null; dn.emoteLoop = false; dn.bubble = '';
+              walkNpcSafe(d.id, CHARS[d.id].home[0], CHARS[d.id].home[1], {
+                onArrive: () => seatNpc(d.id)
+              });
+            }
+          }, 7200);
+        };
+        // 1) 두 사람이 무대에 정렬해 서서 인트로 멘트 먼저 말함!
+        for (const d of validDancers) {
+          const dn = npcs[d.id];
+          dn.dir = 'front'; dn.mode = 'stand';
+          dn.bubble = (d.id === theme)
+            ? (theme === 'claude' ? '🎤 캡틴! 분위기 좀 띄워볼까요? 자, 음악 주세요!' : '🎤 자~ 신나게 같이 춤춰요, 캡틴!')
+            : '🎶 준비 완료! 큐 사인 대기 중…';
+          dn.bubbleType = 'meet';
+        }
+        // 2) 멘트 음성이 끝나는 순간(onEnd) 즉시 음악과 춤 동시 시작! (안전 폴백 6.5초)
+        voice(theme === 'reader' ? 'reader' : 'claude', 'dance', 0, { interrupt: true, onEnd: launchMusicAndDance });
+        setTimeout(launchMusicAndDance, 6500);
       };
       for (const d of validDancers) {
         const n = npcs[d.id];
