@@ -179,6 +179,7 @@ const SHOPS = {
   hwadam: { type: 'Restaurant', cuisine: ['Korean', 'Korean BBQ', 'Beef'], country: 'VN', currency: 'VND', og: 'img/beef-set.jpg' },
   heungbi: { type: 'Restaurant', cuisine: ['Korean', 'Set Meal', 'Stew'], country: 'VN', currency: 'VND', og: 'img/budae.jpg' },
   dungcua: { type: 'Restaurant', cuisine: ['Seafood', 'Lobster', 'King Crab', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/kingcrab.jpg' },
+  osaka: { type: 'Restaurant', cuisine: ['Japanese', 'Yakiniku', 'Sashimi', 'Sushi'], country: 'VN', currency: 'VND', og: 'img/sushi.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

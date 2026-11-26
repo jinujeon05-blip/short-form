@@ -243,6 +243,8 @@ window.DEMOS = [
     name: "흥비식당 HƯƠNG BI", type: { ko: "한식 · 백반 · 찌개 · 전골", vi: "Quán cơm suất Hàn Quốc · Canh · Lẩu", en: "Korean set meals · Stews · Hot pots", zh: "韩式家常饭 · 汤锅 · 火锅", ja: "韓国定食・チゲ・鍋" } },
   { id: "dungcua", hidden: true, url: "https://dungcua.qrmenuasia.com", shot: "img/demo-dungcua.jpg", qr: "img/qr-dungcua.svg",
     name: "중꾸아 해산물 식당 DUNG CUA", type: { ko: "활 해산물 · 랍스터 · 킹크랩 · 회", vi: "Nhà hàng hải sản tươi sống · Tôm hùm · Cua hoàng đế · Gỏi cá", en: "Live seafood · Lobster · King crab · Sashimi", zh: "活海鲜 · 龙虾 · 帝王蟹 · 刺身", ja: "活き海鮮・ロブスター・タラバガニ・刺身" } },
+  { id: "osaka", hidden: true, url: "https://osaka.qrmenuasia.com", shot: "img/demo-osaka.jpg", qr: "img/qr-osaka.svg",
+    name: "오사카 OSAKA 일식당", type: { ko: "일식 · 일본식 BBQ · 사시미 · 초밥", vi: "Nhà hàng Nhật · Nướng BBQ kiểu Nhật · Sashimi · Sushi", en: "Japanese restaurant · Japanese BBQ · Sashimi · Sushi", zh: "日本料理 · 日式烤肉 · 刺身 · 寿司", ja: "日本料理・焼肉・刺身・寿司" } },
 ];
 
 window.T = {

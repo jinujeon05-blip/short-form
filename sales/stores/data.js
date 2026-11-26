@@ -935,6 +935,12 @@ window.STORES = [
     type: { ko: "활 해산물 · 랍스터 · 킹크랩 · 회", vi: "Nhà hàng hải sản tươi sống · Tôm hùm · Cua hoàng đế · Gỏi cá", en: "Live seafood · Lobster · King crab · Sashimi", zh: "活海鲜 · 龙虾 · 帝王蟹 · 刺身", ja: "活き海鮮・ロブスター・タラバガニ・刺身" },
     keywords: "중꾸아 해산물 식당 중꾸아 Dung Cua Dũng Cua Nhà hàng hải sản Dung Cua 박닌 Bắc Ninh 해산물 랍스터 킹크랩 갯가재 굴 전복 활어회 시세 seafood lobster king crab"
   },
+  { id: "osaka", name: "오사카 OSAKA 일식당", sub: "와규 A5 · 야키니쿠 · 사시미 · 초밥 · 라멘 · 사케", url: "https://osaka.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["japanese","bbq","seafood"], tags: ["photos"],
+    address: "184 Ngọc Hân Công Chúa, Võ Cường, Bắc Ninh", map: "https://www.google.com/maps/place/NH%C3%80+H%C3%80NG+NH%E1%BA%ACT+B%E1%BA%A2N+OSAKA,+OSAKA+Japanese+style+BBQ+%26+Sashimi/@21.1726429,106.0595155,17z",
+    type: { ko: "일식 · 일본식 BBQ · 사시미 · 초밥", vi: "Nhà hàng Nhật · Nướng BBQ kiểu Nhật · Sashimi · Sushi", en: "Japanese restaurant · Japanese BBQ · Sashimi · Sushi", zh: "日本料理 · 日式烤肉 · 刺身 · 寿司", ja: "日本料理・焼肉・刺身・寿司" },
+    keywords: "오사카 OSAKA 일식당 박닌 와규 A5 야키니쿠 사시미 초밥 라멘 사케 Nhà hàng Nhật Bản Osaka Bắc Ninh Japanese style BBQ Sashimi"
+  },
 ];
 window.SI = {
   ko: {

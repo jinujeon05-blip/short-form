@@ -124,6 +124,7 @@ name() {
     hwadam) echo "화담" ;;
     heungbi) echo "흥비식당" ;;
     dungcua) echo "중꾸아 해산물 식당" ;;
+    osaka) echo "오사카" ;;
     *) echo "$1" ;;
   esac
 }
