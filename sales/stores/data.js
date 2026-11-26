@@ -941,6 +941,12 @@ window.STORES = [
     type: { ko: "일식 · 일본식 BBQ · 사시미 · 초밥", vi: "Nhà hàng Nhật · Nướng BBQ kiểu Nhật · Sashimi · Sushi", en: "Japanese restaurant · Japanese BBQ · Sashimi · Sushi", zh: "日本料理 · 日式烤肉 · 刺身 · 寿司", ja: "日本料理・焼肉・刺身・寿司" },
     keywords: "오사카 OSAKA 일식당 박닌 와규 A5 야키니쿠 사시미 초밥 라멘 사케 Nhà hàng Nhật Bản Osaka Bắc Ninh Japanese style BBQ Sashimi"
   },
+  { id: "mikadosushi", name: "미카도 스시 미딩점 MIKADO SUSHI", sub: "회전초밥 · 아부리 · 딤섬 · 우동 · 모듬한판초밥", url: "https://mikadosushi.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese","seafood"], tags: ["photos"],
+    address: "C008, Tầng 1, CT1, P. Trần Văn Lai, The Manor, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Mikado+Sushi+M%E1%BB%B9+%C4%90%C3%ACnh+%5B%EB%AF%B8%EC%B9%B4%EB%8F%84+%EC%8A%A4%EC%8B%9C+%EB%AF%B8%EB%94%A9%EC%A0%90%5D/@21.0145766,105.7747425,20z/data=!4m6!3m5!1s0x313453005e6cf7b3:0x2fd4010724f351d6!8m2!3d21.0146169!4d105.7746649!16s%2Fg%2F11y3twgmzt",
+    type: { ko: "회전초밥 · 일식 · 퓨전 초밥 · 딤섬", vi: "Sushi băng chuyền · Món Nhật · Sushi fusion · Dimsum", en: "Conveyor-belt sushi · Japanese · Fusion sushi · Dim sum", zh: "回转寿司 · 日料 · 创意寿司 · 点心", ja: "回転寿司・日本料理・フュージョン寿司・飲茶" },
+    keywords: "미카도 스시 미딩점 미카도스시 Mikado Sushi Mỹ Đình 미딩 The Manor 회전초밥 스시 초밥 아부리 딤섬 우동 사시미 하노이 sushi băng chuyền"
+  },
 ];
 window.SI = {
   ko: {

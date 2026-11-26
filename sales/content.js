@@ -245,6 +245,8 @@ window.DEMOS = [
     name: "중꾸아 해산물 식당 DUNG CUA", type: { ko: "활 해산물 · 랍스터 · 킹크랩 · 회", vi: "Nhà hàng hải sản tươi sống · Tôm hùm · Cua hoàng đế · Gỏi cá", en: "Live seafood · Lobster · King crab · Sashimi", zh: "活海鲜 · 龙虾 · 帝王蟹 · 刺身", ja: "活き海鮮・ロブスター・タラバガニ・刺身" } },
   { id: "osaka", hidden: true, url: "https://osaka.qrmenuasia.com", shot: "img/demo-osaka.jpg", qr: "img/qr-osaka.svg",
     name: "오사카 OSAKA 일식당", type: { ko: "일식 · 일본식 BBQ · 사시미 · 초밥", vi: "Nhà hàng Nhật · Nướng BBQ kiểu Nhật · Sashimi · Sushi", en: "Japanese restaurant · Japanese BBQ · Sashimi · Sushi", zh: "日本料理 · 日式烤肉 · 刺身 · 寿司", ja: "日本料理・焼肉・刺身・寿司" } },
+  { id: "mikadosushi", hidden: true, url: "https://mikadosushi.qrmenuasia.com", shot: "img/demo-mikadosushi.jpg", qr: "img/qr-mikadosushi.svg",
+    name: "미카도 스시 미딩점 MIKADO SUSHI", type: { ko: "회전초밥 · 일식 · 퓨전 초밥 · 딤섬", vi: "Sushi băng chuyền · Món Nhật · Sushi fusion · Dimsum", en: "Conveyor-belt sushi · Japanese · Fusion sushi · Dim sum", zh: "回转寿司 · 日料 · 创意寿司 · 点心", ja: "回転寿司・日本料理・フュージョン寿司・飲茶" } },
 ];
 
 window.T = {
