@@ -2956,7 +2956,7 @@
     // ---------------------------------------------------------------- 대기 중 자율 사무실 생활 엔진 (12종: 화분 물주기·청소·책상 닦기·커피·테라스 환기·부서 수다 등!)
     const isFree = id => {
       const n = npcs[id];
-      return n && n.mode === 'idle' && !realBusySet.has(id) && (!activeTalkNpc || activeTalkNpc.id !== id);
+      return n && n.mode === 'idle' && !n.vipReserved && !realBusySet.has(id) && (!activeTalkNpc || activeTalkNpc.id !== id);
     };
 
     function doChore(id, tx, ty, workDir, goMsg, workMsg, workMs, returnMsg = '', emoteKey = null, exactPos = null) {
@@ -3330,13 +3330,15 @@
         v.emote = null; v.emoteLoop = false;
         v.bubble = '👋 아우님, 나 먼저 들어가 볼게! 조만간 한잔하자!';
         v.bubbleType = 'meet';
-        if (cap && !briefingActive) {
-          const prev = cap.bubble;
-          cap.bubble = '😄 조심히 들어가세요 형님! 곧 연락드릴게요!';
-          cap.bubbleType = 'ok';
-          setTimeout(() => { if (cap.bubble.startsWith('😄 조심히')) cap.bubble = prev || ''; }, 3200);
-        }
+        // 말풍선 겹침 방지: 대표님 작별 인사(2.0초) → 대표님 말풍선 닫고 캡틴 화답(2.2초)
         setTimeout(() => {
+          v.bubble = '';
+          if (cap && !briefingActive) {
+            const prev = cap.bubble;
+            cap.bubble = '😄 조심히 들어가세요 형님! 곧 연락드릴게요!';
+            cap.bubbleType = 'ok';
+            setTimeout(() => { if (cap.bubble.startsWith('😄 조심히')) cap.bubble = prev || ''; }, 2400);
+          }
           walkNpcSafe('vip_jung', 50.0, 96.5, {
             force: true,
             bubble: '🚶 NANA VINA로 복귀 중…',
@@ -3347,7 +3349,7 @@
               scheduleNextVip();
             }
           });
-        }, 1800);
+        }, 2000);
       };
 
       const visitStop = idx => {
@@ -3356,57 +3358,78 @@
         const tn = npcs[st.id];
         const tc = CHARS[st.id];
         let vipArrived = false;
-        let npcReady = !tn || (tn.mode === 'idle');
+        let npcReady = !tn || (tn.mode === 'idle' && Math.hypot(tn.x - tc.home[0], tn.y - tc.home[1]) < 3.5);
         let started = false;
+        let guardTimer = null;
+        if (tn) tn.vipReserved = true;
 
         const startMeeting = () => {
-          if (started || briefingActive) return;
+          if (started) return;
           started = true;
+          if (guardTimer) { clearTimeout(guardTimer); guardTimer = null; }
+          if (briefingActive) {
+            if (tn) tn.vipReserved = false;
+            exitOffice();
+            return;
+          }
           v.dir = st.dir; v.mode = 'stand';
+          // 1) 대표님이 먼저 말풍선 표시 + 담당자는 일어서서 대표님 쪽을 마주 보며 경청! (말풍선 겹침 0%)
           v.bubble = st.vipSay; v.bubbleType = 'meet';
+          if (tn && tc && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
+            tn.bubble = ''; // 이전 "기다리는 중" 말풍선 제거해 겹침 방지
+            if (tc.standPos) { tn.x = tc.standPos[0]; tn.y = tc.standPos[1]; }
+            tn.mode = 'stand'; tn.emote = null; tn.emoteLoop = false;
+            faceEachOther(tn, v);
+            faceEachOther(v, tn);
+          }
 
-          // 1) 정은수 대표님이 말을 걸면 0.45초 뒤 담당자가 자리에서 일어서서 대표님 쪽을 바라보며 대화!
-          setTimeout(() => {
-            if (tn && tc && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
-              if (tc.standPos) { tn.x = tc.standPos[0]; tn.y = tc.standPos[1]; }
-              tn.mode = 'stand'; tn.emote = null; tn.emoteLoop = false;
-              faceEachOther(tn, v);
-              faceEachOther(v, tn);
-              tn.bubble = st.npcSay; tn.bubbleType = 'ok';
-              voice(st.id, 'greet', 0.15);
-            }
-          }, 450);
-
-          // 2) 대화 완료(3.9초 뒤) → 담당자는 자리로 착석, 대표님은 다음 담당자로 이동!
+          // 2) 2.2초 뒤: 대표님 말풍선을 닫고 담당자가 대답(순차 티키타카 -> 말풍선 절대 안 겹침!)
           setTimeout(() => {
             v.bubble = '';
             if (tn && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
-              tn.bubble = '';
-              seatNpc(st.id);
+              tn.bubble = st.npcSay; tn.bubbleType = 'ok';
+              voice(st.id, 'greet', 0.1);
+            }
+          }, 2200);
+
+          // 3) 4.5초 뒤: 대화 종료 → 담당자 착석 + 예약 해제, 대표님은 다음 담당자로!
+          setTimeout(() => {
+            v.bubble = '';
+            if (tn) {
+              tn.vipReserved = false;
+              if (!briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
+                tn.bubble = '';
+                seatNpc(st.id);
+              }
             }
             visitStop(idx + 1);
-          }, 3900);
+          }, 4500);
         };
 
-        // 담당자가 자리 밖에 있으면 즉시 자리로 복귀해 대표님을 기다리게 함!
+        const markNpcReady = () => {
+          npcReady = true;
+          if (tn && !started) {
+            seatNpc(st.id);
+            if (!vipArrived) tn.bubble = '😊 정은수 대표님 기다리는 중…';
+          }
+          if (vipArrived && !started) startMeeting();
+        };
+
+        // 담당자가 자리 밖에 있으면 즉시 자리로 복귀! (경로 실패/근접 시 즉시 ready 처리 -> 데드락 0%)
         if (tn && tc && !npcReady && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
-          tn.emote = null; tn.emoteLoop = false;
-          walkNpcSafe(st.id, tc.home[0], tc.home[1], {
+          tn.emote = null; tn.emoteLoop = false; tn.path = []; tn.onArrive = null;
+          const okNpc = walkNpcSafe(st.id, tc.home[0], tc.home[1], {
             force: true,
             bubble: '🏃 정은수 대표님 오신대요! 자리로 복귀 중…',
-            onArrive: () => {
-              seatNpc(st.id);
-              tn.bubble = '😊 정은수 대표님 기다리는 중…';
-              npcReady = true;
-              if (vipArrived) startMeeting();
-            }
+            onArrive: markNpcReady
           });
+          if (!okNpc) markNpcReady();
         } else if (tn && npcReady && !briefingActive) {
           tn.bubble = '😊 정은수 대표님 기다리는 중…';
         }
 
-        // 정은수 대표님이 먼저 도착하면 담당자가 자리에 올 때까지 기다림!
-        walkNpcSafe('vip_jung', st.pos[0], st.pos[1], {
+        // 정은수 대표님 출발 (도착 시 담당자가 아직 오는 중이면 기다리되, 최대 8초 안전 폴백으로 절대 멈추지 않음!)
+        const okVip = walkNpcSafe('vip_jung', st.pos[0], st.pos[1], {
           force: true,
           bubble: `🚶 ${tc?.name || '직원'} 자리 들르는 중…`,
           onArrive: () => {
@@ -3417,12 +3440,26 @@
             } else {
               v.bubble = '😊 잠깐 기다려 볼까…';
               v.bubbleType = '';
+              // 0.3초마다 담당자가 자리에 도착했는지 재확인 + 최대 8초 뒤 자동 진행
+              const poll = setInterval(() => {
+                if (started) { clearInterval(poll); return; }
+                if (!tn || tn.mode === 'idle' || Math.hypot(tn.x - tc.home[0], tn.y - tc.home[1]) < 4.0) {
+                  clearInterval(poll);
+                  npcReady = true;
+                  startMeeting();
+                }
+              }, 300);
+              guardTimer = setTimeout(() => { clearInterval(poll); startMeeting(); }, 8000);
             }
           }
         });
+        if (!okVip) {
+          if (tn) tn.vipReserved = false;
+          visitStop(idx + 1);
+        }
       };
 
-      // 1) 입장 → 캡틴 단상 앞 인사 → 2) 커피바에서 커피 한 잔 → 3) 직원 공간 2곳 방문 → 4) 작별 & 퇴장!
+      // 1) 입장 → 캡틴 단상 앞 인사(순차 말풍선!) → 2) 커피바에서 커피 한 잔 → 3) 직원 공간 2곳 방문 → 4) 작별 & 퇴장!
       walkNpcSafe('vip_jung', greetSpot[0], greetSpot[1], {
         force: true,
         bubble: '🤝 아우님! NANA VINA 정은수 왔어!',
@@ -3432,12 +3469,16 @@
           v.bubble = '🤝 아우님! 요즘 사업 잘 되지? 잠깐 들렀어!';
           v.bubbleType = 'meet';
           spawnBurst(v.x, v.y - 4, '🤝 NANA VINA VIP 방문!', 0);
-          if (cap && !briefingActive) {
-            const prev = cap.bubble;
-            cap.bubble = '😄 형님 오셨어요! 커피 한 잔 하시고 편히 보세요!';
-            cap.bubbleType = 'ok';
-            setTimeout(() => { if (cap.bubble.startsWith('😄 형님')) cap.bubble = prev || ''; }, 3400);
-          }
+          // 2.0초 뒤 대표님 말풍선 닫고 캡틴 화답 (겹침 방지!)
+          setTimeout(() => {
+            v.bubble = '';
+            if (cap && !briefingActive) {
+              const prev = cap.bubble;
+              cap.bubble = '😄 형님 오셨어요! 커피 한 잔 하시고 편히 보세요!';
+              cap.bubbleType = 'ok';
+              setTimeout(() => { if (cap.bubble.startsWith('😄 형님')) cap.bubble = prev || ''; }, 2400);
+            }
+          }, 2000);
           setTimeout(() => {
             walkNpcSafe('vip_jung', coffeeSpot[0], coffeeSpot[1], {
               force: true,
@@ -3458,7 +3499,7 @@
                 }, 3800);
               }
             });
-          }, 3200);
+          }, 4200);
         }
       });
       return true;
