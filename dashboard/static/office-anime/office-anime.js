@@ -87,7 +87,7 @@
       im.src = url;
     });
     const jobs = [
-      load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k7'),
+      load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k8'),
       load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing4'),
       load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing2'),
     ];
