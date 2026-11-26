@@ -1920,16 +1920,17 @@
           ? 16.8
           : (n.y + (walking ? 1.4 : (CHARS[id].facing === 'front' ? 4.8 : 1.5)));
         tagEls[id].style.top  = `${tagTop}%`;
-        // RPG 퀘스트 마커(! / ?) 머리 위 표시 (말풍선이 없을 때 깔끔하게 통통 뜀)
+        // RPG 퀘스트 마커(! / ?) 머리 위 표시 (말풍선이 없을 때 깔끔하게 통통 뜀 — 착석 시 실측 headTopY 기준 머리 위로 띄움!)
         const q = activeQuests[id];
         const qEl = questEls[id];
+        const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
+        const headY = standing ? (n.y - standPct(id)) : (CHARS[id]?.seat?.headTopY ?? (n.y - 12.0));
         if (q && qEl && !n.bubble) {
           qEl.hidden = false;
           qEl.textContent = q.type === 'exc' ? '!' : '?';
           qEl.className = `oa-quest ${q.type === 'exc' ? 'exc' : 'ask'}`;
           qEl.style.left = `${n.x}%`;
-          const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
-          qEl.style.top = `${Math.max(4, n.y - (standing ? standPct(id) + 1.4 : 8.5))}%`;
+          qEl.style.top = `${Math.max(3.5, headY - (standing ? 1.4 : 1.2))}%`;
         } else if (qEl) {
           qEl.hidden = true;
         }
@@ -1938,9 +1939,8 @@
           bubEls[id].hidden = false;
           bubEls[id].textContent = n.bubble;
           bubEls[id].className = `oa-bub ${n.bubbleType}`;
-          const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
           let bx = n.x;
-          let by = Math.max(5.0, n.y - (standing ? standPct(id) + 1.8 : 11.5));
+          let by = Math.max(5.0, headY - (standing ? 1.8 : 1.5));
           // 캡틴 착석 시 말풍선이 캡틴 얼굴·피통 게이지를 가리지 않도록 오른쪽 옆에 깔끔하게 배치!
           if (id === 'captain' && !standing) {
             bx = 60.5;
