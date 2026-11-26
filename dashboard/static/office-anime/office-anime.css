@@ -252,6 +252,11 @@
 .oa-flash-fx.pop { animation: oaCamFlash 0.42s ease-out forwards; }
 @keyframes oaCamFlash { 0% { opacity: 0.95; } 100% { opacity: 0; } }
 
+/* NANA VINA 정은수 대표님 VIP 손님 이름표 */
+.oa-tag-vip { border-color: rgba(192,132,252,0.92) !important; background: linear-gradient(135deg, rgba(59,7,100,0.92), rgba(15,23,42,0.92)) !important; box-shadow: 0 0 10px rgba(168,85,247,0.5); }
+.oa-tag-vip b { color: #fde68a !important; }
+.oa-vip-ic { margin-right: 2px; font-size: 0.95em; }
+
 /* 화면(회전 포함) 실제 폭이 아주 좁을 때만 넓게 — 가로 회전 전체화면은 여기에 안 걸림 */
 @container (max-width: 520px) {
   .oa-modal { width: 88%; min-width: 0; }

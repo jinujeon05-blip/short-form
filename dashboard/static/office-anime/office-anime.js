@@ -22,6 +22,7 @@
     staffing:   { name: '인력 공급팀',   role: '인력·일정 관리', home: [64.5, 71.6], standPos: [58.2, 71.4], facing: 'front', scale: 0.95, seat: { x: 64.5, headTopY: 62.6, clipY: 69.4, h: 230 } },
     reader:     { name: '자료 해석 비서', role: '메뉴판 해석',  asset: 'auditor', home: [92.5, 46.5], standPos: [89.4, 48.0], facing: 'back',  scale: 0.96, seat: { x: 92.5, headTopY: 33.5, clipY: 43.9, h: 220 } },
     auditor:    { name: '데이터 감사관', role: '마지막 점검',  asset: 'reader',  home: [17.2, 80.4], standPos: [20.0, 82.6], facing: 'back',  scale: 0.95, seat: { x: 17.2, headTopY: 66.3, clipY: 77.1, h: 220 } },
+    vip_jung:   { name: '정은수 대표님', role: 'NANA VINA · VIP', guest: true, home: [50.0, 96.5], standPos: [50.0, 96.5], facing: 'back', scale: 1.0, seat: null },
   };
 
   // Y-깊이(앞/뒤 가림) 전경 가구 목록 (7개 방 모든 책상·의자 완비!):
@@ -94,7 +95,7 @@
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new1' : id === 'captain' ? (dir === 'kick' ? 'kick1' : 'cap8dir') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
+          const v = (id === 'vip_jung') ? 'vip1' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new1' : id === 'captain' ? (dir === 'kick' ? 'kick1' : 'cap8dir') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
         }
       }
@@ -103,18 +104,20 @@
         imgs.walk[id].punch = [];
         for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1`));
       }
-      // 전 직원(캡틴 제외) 9명 정중 인사 12프레임 로드 (id 기준 파일명 — reader↔auditor 일치!)
-      if (id !== 'captain' && id !== 'claude') {
+      // 전 직원(캡틴·외부 손님 제외) 9명 정중 인사 12프레임 로드 (id 기준 파일명 — reader↔auditor 일치!)
+      if (id !== 'captain' && id !== 'claude' && !cfg.guest) {
         for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].bow, i - 1, `/static/office-anime/assets/walk/${id}-bow-${i}.webp?v=bow1`));
       }
       // 시각 정보 비서 스튜디오 카메라 촬영 12프레임
       if (id === 'finder') {
         for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].photo, i - 1, `/static/office-anime/assets/walk/finder-photo-${i}.webp?v=bow1`));
       }
-      // 전 직원 10명 책상 맞춤 앉은 업무 동작(25° 내려다보는 각도 · 앞모습 6명 + 뒷모습 4명, 인력공급팀 8프레임/나머지 4프레임)
-      imgs.walk[id].seat = [];
-      const seatCnt = (id === 'staffing') ? 8 : 4;
-      for (let i = 1; i <= seatCnt; i++) jobs.push(load(imgs.walk[id].seat, i - 1, `/static/office-anime/assets/walk/${id}-seat-${i}.webp?v=seat1`));
+      // 전 직원 10명 책상 맞춤 앉은 업무 동작(외부 손님 제외)
+      if (!cfg.guest) {
+        imgs.walk[id].seat = [];
+        const seatCnt = (id === 'staffing') ? 8 : 4;
+        for (let i = 1; i <= seatCnt; i++) jobs.push(load(imgs.walk[id].seat, i - 1, `/static/office-anime/assets/walk/${id}-seat-${i}.webp?v=seat1`));
+      }
       // 비서실장 책상 업무(구 12프레임 백업 유지)
       if (id === 'claude') {
         imgs.walk[id].write = [];
@@ -497,7 +500,7 @@
     // 처음 열 때 파일만 미리 받아 둠(소리 해독은 첫 터치 뒤) — 합쳐서 약 0.6MB
     if (sfxOn) setTimeout(() => {
       ['coffee', 'sit', 'water', 'sweep', 'dance', 'brief', 'send'].forEach(n => fetchClip(`sfx/${n}.mp3`));
-      Object.keys(CHARS).forEach(id => voiceKinds(id).forEach(k => fetchClip(`voice/${id}-${k}.mp3`)));
+      Object.keys(CHARS).filter(id => !CHARS[id].guest).forEach(id => voiceKinds(id).forEach(k => fetchClip(`voice/${id}-${k}.mp3`)));
     }, 1500);
     const clipOr = (name, vol, fallback) => { playClip(`sfx/${name}.mp3`, vol).then(src => { if (!src && sfxOn) fallback(); }); };
 
@@ -711,9 +714,13 @@
           ? `<div class="oa-tag oa-tag-cap" data-tag="${id}"><span class="oa-crown">👑</span><b>${c.name}</b><small>${c.role}</small></div>
              <div class="oa-quest" data-q="${id}" hidden>!</div>
              <div class="oa-bub" data-bub="${id}" hidden></div>`
-          : `<div class="oa-tag" data-tag="${id}"><b>${c.name}</b><small>${c.role}</small></div>
-             <div class="oa-quest" data-q="${id}" hidden>!</div>
-             <div class="oa-bub" data-bub="${id}" hidden></div>`
+          : c.guest
+            ? `<div class="oa-tag oa-tag-vip" data-tag="${id}" hidden><span class="oa-vip-ic">🤝</span><b>${c.name}</b><small>${c.role}</small></div>
+               <div class="oa-quest" data-q="${id}" hidden>!</div>
+               <div class="oa-bub" data-bub="${id}" hidden></div>`
+            : `<div class="oa-tag" data-tag="${id}"><b>${c.name}</b><small>${c.role}</small></div>
+               <div class="oa-quest" data-q="${id}" hidden>!</div>
+               <div class="oa-bub" data-bub="${id}" hidden></div>`
       ).join('') +
       `<button type="button" class="oa-cap-status" data-cap-status hidden title="캡틴 실시간 업무·결재 상태 (클릭 시 바로 이동)"></button>
        <div class="oa-cap-hp" data-cap-hp title="클로드 잔여량 · 위: 5시간(녹색) / 아래: 주간(파랑)">
@@ -1083,6 +1090,7 @@
     const WRITE_SCALE = (226 / 650) * (499 / 214); // = 앉은 그림 목표 높이 / s.h
     const WRITE_CLIP = 0.49;
     function drawNpc(n, t) {
+      if (n.hidden) return;
       const cfg = CHARS[n.id];
       const wset = imgs.walk[n.id];
       if (!wset) return;
@@ -1878,6 +1886,13 @@
       const tagTf = uiS < 0.999 ? `translate(-50%, 0) scale(${uiS.toFixed(3)})` : '';
       const bubTf = uiS < 0.999 ? `translate(-50%, -100%) scale(${uiS.toFixed(3)})` : '';
       for (const [id, n] of Object.entries(npcs)) {
+        if (n.hidden) {
+          if (tagEls[id]) tagEls[id].hidden = true;
+          if (bubEls[id]) bubEls[id].hidden = true;
+          if (questEls[id]) questEls[id].hidden = true;
+          continue;
+        }
+        if (tagEls[id]) tagEls[id].hidden = false;
         const walking = n.mode === 'walk';
         tagEls[id].style.transform = tagTf; tagEls[id].style.transformOrigin = tagTf ? '50% 0' : '';
         bubEls[id].style.transform = bubTf; bubEls[id].style.transformOrigin = bubTf ? '50% 100%' : '';
@@ -1976,6 +1991,7 @@
       staffing:   { greet: '캡틴! 오늘 거래처 주·야간 인력 배치나 근태 현황 확인하실까요?', quick: ['📅 오늘 주·야간 인력 배치 보고', '📊 이번 달 거래처 실적 확인', '📋 미보고 거래처 점검'] },
       reader:     { greet: '캡틴! 새로 들어온 메뉴판 사진에서 글자·가격 데이터를 추출할까요?', quick: ['📑 신규 메뉴판 원문 해석 시작', '💰 가격·옵션 누락 정밀 대조', '📋 해석 완료 리스트 보고'] },
       auditor:    { greet: '캡틴! 배포 전 마지막 데이터 감사·오류 점검을 진행할까요?', quick: ['📊 전체 메뉴 데이터 최종 감사', '🔗 배포 링크·이미지 깨짐 점검', '📋 감사 완료 보고서 제출'] },
+      vip_jung:   { greet: '아우님! NANA VINA 정은수 형님이야. 오늘 사무실 분위기 좋네! 커피 한 잔 하면서 얘기 좀 할까?', quick: ['☕ 형님 커피 한 잔 대접하기', '🤝 직원들 둘러보시게 안내'] },
     };
 
     const vEsc = s => String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
@@ -2545,7 +2561,7 @@
 
       const cap = npcs.captain;
       const cl = npcs.claude;
-      const staffIds = Object.keys(CHARS).filter(id => id !== 'captain' && id !== 'claude');
+      const staffIds = Object.keys(CHARS).filter(id => id !== 'captain' && id !== 'claude' && !CHARS[id].guest);
 
       // 캡틴은 대표석으로 착석(또는 단상 중앙)하며 지시
       cap.path = []; cap.onArrive = null;
@@ -2635,7 +2651,7 @@
 
       const cap = npcs.captain;
       const cl = npcs.claude;
-      const staffIds = Object.keys(CHARS).filter(id => id !== 'captain' && id !== 'claude');
+      const staffIds = Object.keys(CHARS).filter(id => id !== 'captain' && id !== 'claude' && !CHARS[id].guest);
 
       cap.bubble = '✋ 오늘은 여기까지 하지. 모두 수고했다!';
       cap.bubbleType = 'meet';
@@ -3251,8 +3267,133 @@
     }
     scheduleIdleLife();
 
+    // ---------------------------------------------------------------- NANA VINA 정은수 대표님(VIP 손님) 자동 방문·커피·직원 순회·퇴장 반복 루프!
+    if (npcs.vip_jung) {
+      npcs.vip_jung.hidden = true;
+      npcs.vip_jung.mode = 'stand';
+    }
+    let vipActive = false;
+    function startVipVisit() {
+      const v = npcs.vip_jung;
+      if (!v || vipActive || briefingActive) return false;
+      vipActive = true;
+      v.hidden = false;
+      v.x = 50.0; v.y = 96.5; v.dir = 'back'; v.mode = 'walk';
+      v.emote = null; v.emoteLoop = false;
+      log('🤝 NANA VINA 정은수 대표님(VIP)이 사무실에 방문하셨습니다!');
+
+      const cap = npcs.captain;
+      const greetSpot = [50.0, 29.8];
+      const coffeeSpot = [15.5, 22.0];
+      const tourStops = [
+        { id: 'claude',     pos: [43.5, 44.5], dir: 'east',  vipSay: '✨ 비서실장님, 우리 아우님 잘 보좌해 주셔서 감사해요!', npcSay: '😊 정은수 대표님, 언제든 편히 쉬다 가세요!' },
+        { id: 'finder',     pos: [20.6, 43.2], dir: 'west',  vipSay: '📷 스튜디오 시설이 아주 끝내주네요! 고생 많으세요!', npcSay: '😊 감사합니다 정은수 대표님!' },
+        { id: 'translator', pos: [43.4, 71.5], dir: 'west',  vipSay: '🌐 5개국어 번역 퀄리티가 정말 대단하시던데요!', npcSay: '😊 좋게 봐주셔서 감사합니다 대표님!' },
+        { id: 'staffing',   pos: [58.2, 71.4], dir: 'east',  vipSay: '💪 현장 인력 관리 꼼꼼하시네요! 파이팅입니다!', npcSay: '😄 감사합니다! NANA VINA도 파이팅입니다!' },
+        { id: 'sorter',     pos: [79.2, 70.6], dir: 'east',  vipSay: '📦 선별팀이랑 방문 현황까지 완벽하군요!', npcSay: '😊 정은수 대표님 또 놀러 오세요!' },
+      ];
+      // 매 방문마다 2곳의 담당자 공간을 랜덤 선택해 순회 방문!
+      const picked = [...tourStops].sort(() => Math.random() - 0.5).slice(0, 2);
+
+      const exitOffice = () => {
+        if (!v || v.hidden) { vipActive = false; return; }
+        v.emote = null; v.emoteLoop = false;
+        v.bubble = '👋 아우님, 나 먼저 들어가 볼게! 조만간 한잔하자!';
+        v.bubbleType = 'meet';
+        if (cap && !briefingActive) {
+          const prev = cap.bubble;
+          cap.bubble = '😄 조심히 들어가세요 형님! 곧 연락드릴게요!';
+          cap.bubbleType = 'ok';
+          setTimeout(() => { if (cap.bubble.startsWith('😄 조심히')) cap.bubble = prev || ''; }, 3200);
+        }
+        setTimeout(() => {
+          walkNpcSafe('vip_jung', 50.0, 96.5, {
+            force: true,
+            bubble: '🚶 NANA VINA로 복귀 중…',
+            onArrive: () => {
+              v.hidden = true; v.bubble = ''; v.mode = 'stand';
+              vipActive = false;
+              log('👋 정은수 대표님께서 인사를 마치고 사무실을 나가셨습니다.');
+              scheduleNextVip();
+            }
+          });
+        }, 1800);
+      };
+
+      const visitStop = idx => {
+        if (idx >= picked.length) { exitOffice(); return; }
+        const st = picked[idx];
+        walkNpcSafe('vip_jung', st.pos[0], st.pos[1], {
+          force: true,
+          bubble: `🚶 ${CHARS[st.id]?.name || '직원'} 자리 들르는 중…`,
+          onArrive: () => {
+            v.dir = st.dir; v.mode = 'stand';
+            v.bubble = st.vipSay; v.bubbleType = 'meet';
+            const tn = npcs[st.id];
+            setTimeout(() => {
+              if (tn && !briefingActive) {
+                const prev = tn.bubble;
+                tn.bubble = st.npcSay; tn.bubbleType = 'ok';
+                setTimeout(() => { if (tn.bubble === st.npcSay) tn.bubble = prev || ''; }, 3000);
+              }
+            }, 900);
+            setTimeout(() => { v.bubble = ''; visitStop(idx + 1); }, 3600);
+          }
+        });
+      };
+
+      // 1) 입장 → 캡틴 단상 앞 인사 → 2) 커피바에서 커피 한 잔 → 3) 직원 공간 2곳 방문 → 4) 작별 & 퇴장!
+      walkNpcSafe('vip_jung', greetSpot[0], greetSpot[1], {
+        force: true,
+        bubble: '🤝 아우님! NANA VINA 정은수 왔어!',
+        bubbleType: 'meet',
+        onArrive: () => {
+          v.dir = 'back'; v.mode = 'stand';
+          v.bubble = '🤝 아우님! 요즘 사업 잘 되지? 잠깐 들렀어!';
+          v.bubbleType = 'meet';
+          spawnBurst(v.x, v.y - 4, '🤝 NANA VINA VIP 방문!', 0);
+          if (cap && !briefingActive) {
+            const prev = cap.bubble;
+            cap.bubble = '😄 형님 오셨어요! 커피 한 잔 하시고 편히 보세요!';
+            cap.bubbleType = 'ok';
+            setTimeout(() => { if (cap.bubble.startsWith('😄 형님')) cap.bubble = prev || ''; }, 3400);
+          }
+          setTimeout(() => {
+            walkNpcSafe('vip_jung', coffeeSpot[0], coffeeSpot[1], {
+              force: true,
+              bubble: '☕ 커피 한 잔 마시러 가는 중…',
+              onArrive: () => {
+                v.dir = 'front';
+                if (imgs.walk.vip_jung?.coffee?.length === 12) {
+                  v.mode = 'emote'; v.emote = 'coffee'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
+                } else {
+                  v.mode = 'stand';
+                }
+                SFX.coffee();
+                v.bubble = '☕ 여기 사무실 커피 향이 진짜 좋네~';
+                v.bubbleType = 'ok';
+                setTimeout(() => {
+                  v.emote = null; v.emoteLoop = false; v.bubble = '';
+                  visitStop(0);
+                }, 3800);
+              }
+            });
+          }, 3200);
+        }
+      });
+      return true;
+    }
+    function scheduleNextVip(delayMs) {
+      const wait = delayMs ?? (38000 + Math.floor(Math.random() * 18000));
+      setTimeout(() => {
+        if (document.hidden || briefingActive || vipActive) { scheduleNextVip(12000); return; }
+        startVipVisit();
+      }, wait);
+    }
+    scheduleNextVip(12000); // 사무실 열리고 12초 뒤 첫 방문 시작, 이후 퇴장마다 반복!
+
     if (opts.autoDemo !== false) setTimeout(runDemo, 1500);
-    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing, syncReal, stroll, danceParty, inspectorSoloDance };
+    return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing, syncReal, stroll, danceParty, inspectorSoloDance, startVipVisit };
   }
 
   window.OfficeAnime = { create };
