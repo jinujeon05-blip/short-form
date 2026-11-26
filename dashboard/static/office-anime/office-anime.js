@@ -103,7 +103,11 @@
         imgs.walk[id].punch = [];
         for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1`));
       }
-      // 비서실장 책상 업무(문서 작성) 12프레임 — 앉아 있는 동안 계속 반복(챗GPT 3명씩 4장: 쓰기·생각·종이 넘기기·서명)
+      // 전 직원 10명 책상 맞춤 앉은 업무 동작(25° 내려다보는 각도 · 앞모습 6명 + 뒷모습 4명, 인력공급팀 8프레임/나머지 4프레임)
+      imgs.walk[id].seat = [];
+      const seatCnt = (id === 'staffing') ? 8 : 4;
+      for (let i = 1; i <= seatCnt; i++) jobs.push(load(imgs.walk[id].seat, i - 1, `/static/office-anime/assets/walk/${id}-seat-${i}.webp?v=seat1`));
+      // 비서실장 책상 업무(구 12프레임 백업 유지)
       if (id === 'claude') {
         imgs.walk[id].write = [];
         for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].write, i - 1, `/static/office-anime/assets/walk/claude-write-${i}.webp?v=write1`));
@@ -1048,13 +1052,17 @@
       if (!im) return;
 
       const seated = (n.mode === 'idle' || n.mode === 'work' || (n.id === 'captain' && n.idleCoffeeSeated && n.mode === 'emote' && n.emote === 'coffee'));
-      // 비서실장: 앉아 있으면 문서 작성 12프레임을 계속 반복(생각·서명 장면은 조금 길게)
-      let writing = false;
-      if (seated && cfg.seat && wset.write?.length === 12 && wset.write.every(Boolean)) {
-        const loopT = t % WRITE_TOTAL;
-        let k = 0, acc = 0;
-        while (k < 11 && loopT >= acc + WRITE_DUR[k]) { acc += WRITE_DUR[k]; k++; }
-        im = wset.write[k]; writing = true;
+      const capSipping = (n.id === 'captain' && n.idleCoffeeSeated && n.mode === 'emote' && n.emote === 'coffee');
+      // 전 직원 10명 책상 맞춤 앉은 업무 포즈 루프 (직원별 위상 분산, 실제 작업 중엔 더 부지런히 전환!)
+      let seatPose = false;
+      const working = (n.mode === 'idle' || n.mode === 'work') && realBusySet.has(n.id);
+      if (seated && !capSipping && cfg.seat && wset.seat?.length >= 4 && wset.seat.every(Boolean)) {
+        const cnt = wset.seat.length;
+        const stepSec = working ? 1.45 : 2.85;
+        const phase = (cfg.seat.x * 0.37 + cfg.seat.headTopY * 0.19);
+        const k = Math.floor((t + phase) / stepSec) % cnt;
+        im = wset.seat[k];
+        seatPose = true;
       }
 
       if (seated && cfg.seat) {
@@ -1063,23 +1071,23 @@
         const topY = (s.headTopY / 100) * H;
         const clipY = (s.clipY / 100) * H;
         // 작업 중(실제 대시보드 일) = 자판 두드리듯 잔떨림 + 모니터 불빛 + 머리 위 '입력 중…' 점 3개
-        const working = n.mode === 'idle' && realBusySet.has(n.id);
         const ph = sx * 0.013;
         const bob = working
-          ? Math.sin(t * 1.6 + ph) * 0.6 + Math.abs(Math.sin(t * 9.5 + ph)) * 1.4
-          : Math.sin(t * 1.8 + sx * 0.01) * 1.1;
-        const sway = working ? Math.sin(t * 4.7 + ph) * 0.9 : 0;
-        // 앉은 그림은 서 있는 그림과 머리~허리 길이가 같도록 줄임(서 있는 그림 머리~허리 226/650, 앉은 그림 214/499)
-        const targetH = writing ? s.h * WRITE_SCALE : s.h;
+          ? Math.sin(t * 1.6 + ph) * 0.5 + Math.abs(Math.sin(t * 9.5 + ph)) * 1.1
+          : Math.sin(t * 1.8 + sx * 0.01) * 0.85;
+        const sway = working ? Math.sin(t * 4.7 + ph) * 0.7 : 0;
+        // 새 상반신 앉은 그림: 앞모습은 머리~손끝이 책상 상판에 딱 얹히도록(0.45), 뒷모습은 의자 등받이 높이에 맞춤(0.56)
+        const seatScale = (cfg.facing === 'back') ? 0.56 : (n.id === 'captain' ? 0.46 : 0.44);
+        const targetH = seatPose ? s.h * seatScale : s.h;
         const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
         ctx.save();
-        // 책상 상단 경계선(남향) 또는 의자 좌판 하단(북향)에서 깔끔하게 클리핑하여 다리·치마가 책상 위로 튀어나오지 않음!
+        // 책상 상단 경계선(남향) 또는 의자 좌판 하단(북향)에서 깔끔하게 클리핑
         ctx.beginPath();
-        // 문서 작성 중에는 책상 위 손·펜이 보이도록 손끝(그림 높이 49%)까지 보여 줌
-        ctx.rect(0, 0, W, writing ? Math.max(clipY, topY + targetH * WRITE_CLIP) : clipY);
+        const maxClip = (seatPose && cfg.facing === 'front') ? Math.max(clipY + 14, topY + targetH) : clipY;
+        ctx.rect(0, 0, W, maxClip);
         ctx.clip();
-        ctx.drawImage(im, sx - targetW / 2 + (writing ? sway * 0.3 : sway), topY + (writing ? bob * 0.4 : bob), targetW, targetH);
+        ctx.drawImage(im, sx - targetW / 2 + (seatPose ? sway * 0.35 : sway), topY + (seatPose ? bob * 0.45 : bob), targetW, targetH);
         ctx.restore();
         if (working) {
           // 모니터 불빛(얼굴·책상 쪽이 은은하게 깜빡임)
