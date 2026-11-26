@@ -2087,11 +2087,15 @@
         [cap.x, cap.y + 4.8], [cap.x + 5.0, cap.y], [cap.x - 5.0, cap.y],
         [cap.x, cap.y - 4.8], [cap.x + 4.0, cap.y + 4.0], [cap.x - 4.0, cap.y + 4.0],
         [cap.x + 4.0, cap.y - 4.0], [cap.x - 4.0, cap.y - 4.0],
+        // 좁은 방·책상 옆에서도 대표석으로 튀지 않도록 더 가까운 반경(2.8~3.2) → 캡틴 본인 좌표까지 단계 탐색!
+        [cap.x, cap.y + 3.0], [cap.x + 3.0, cap.y], [cap.x - 3.0, cap.y], [cap.x, cap.y - 3.0],
+        [cap.x + 2.2, cap.y + 2.2], [cap.x - 2.2, cap.y + 2.2], [cap.x + 2.2, cap.y - 2.2], [cap.x - 2.2, cap.y - 2.2],
+        [cap.x, cap.y],
       ];
       for (const [tx, ty] of cands) {
         if (canWalk(tx, ty)) return [tx, ty];
       }
-      return [50.0, 29.8];
+      return [cap.x, cap.y];
     }
 
     // ---- 대화창 자리 정하기: 확대 카메라까지 반영한 '실제 화면 위치'로 캡틴·대화 상대(말풍선 포함)를 피함
@@ -3552,61 +3556,95 @@
         }
       };
 
-      // 1) 입장 → 캡틴 단상 앞 인사(순차 말풍선!) → 2) 커피바에서 커피 한 잔 → 3) 직원 공간 2곳 방문 → 4) 작별 & 퇴장!
-      walkNpcSafe('vip_jung', greetSpot[0], greetSpot[1], {
-        force: true,
-        bubble: '🤝 아우님! NANA VINA 정은수 왔어!',
-        bubbleType: 'meet',
-        onArrive: () => {
-          if (briefingActive) return;
-          v.mode = 'stand';
-          if (cap) faceEachOther(v, cap);
-          else v.dir = 'back';
-          if (imgs.walk.vip_jung?.greet?.length === 12) {
-            v.mode = 'emote'; v.emote = 'greet'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
-          }
-          v.bubble = '🤝 아우님! 요즘 사업 잘 되지? 잠깐 들렀어!';
-          v.bubbleType = 'meet';
-          spawnBurst(v.x, v.y - 4, '🤝 NANA VINA VIP 방문!', 0);
-          // 2.0초 뒤 대표님 말풍선 닫고 캡틴 화답 + 대표님 엄지척 격려 (겹침 방지!)
-          vipSetTimeout(() => {
-            v.bubble = '';
-            if (imgs.walk.vip_jung?.thumb?.length === 12) {
-              v.mode = 'emote'; v.emote = 'thumb'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
-            }
-            if (cap && !briefingActive) {
-              const prev = cap.bubble;
-              cap.bubble = '😄 형님 오셨어요! 커피 한 잔 하시고 편히 보세요!';
-              cap.bubbleType = 'ok';
-              setTimeout(() => { if (cap.bubble.startsWith('😄 형님')) cap.bubble = prev || ''; }, 2400);
-            }
-          }, 2000);
-          vipSetTimeout(() => {
-            if (briefingActive) return;
-            v.emote = null; v.emoteLoop = false;
-            walkNpcSafe('vip_jung', coffeeSpot[0], coffeeSpot[1], {
-              force: true,
-              bubble: '☕ 커피 한 잔 마시러 가는 중…',
-              onArrive: () => {
-                if (briefingActive) return;
-                v.dir = 'front';
-                if (imgs.walk.vip_jung?.coffee?.length === 12) {
-                  v.mode = 'emote'; v.emote = 'coffee'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
-                } else {
-                  v.mode = 'stand';
-                }
-                SFX.coffee();
-                v.bubble = '☕ 여기 사무실 커피 향이 진짜 좋네~';
-                v.bubbleType = 'ok';
-                vipSetTimeout(() => {
-                  v.emote = null; v.emoteLoop = false; v.bubble = '';
-                  visitStop(0);
-                }, 3800);
-              }
-            });
-          }, 4200);
+      // 1) 입장 → 캡틴 실시간 위치로 추적해 인사(이동 중 캡틴이 자리를 옮겨도 끝까지 따라감!) → 2) 커피바 → 3) 직원 공간 2곳 방문 → 4) 작별 & 퇴장!
+      let capTarget = greetSpot;
+      let greetedCap = false;
+      let capTrackPoll = null;
+      const stopCapTrack = () => {
+        if (capTrackPoll) { clearInterval(capTrackPoll); capTrackPoll = null; }
+      };
+      const doGreetCaptain = () => {
+        if (greetedCap || briefingActive) return;
+        greetedCap = true;
+        stopCapTrack();
+        v.mode = 'stand';
+        if (cap) faceEachOther(v, cap);
+        else v.dir = 'back';
+        if (imgs.walk.vip_jung?.greet?.length === 12) {
+          v.mode = 'emote'; v.emote = 'greet'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
         }
-      });
+        v.bubble = '🤝 아우님! 요즘 사업 잘 되지? 잠깐 들렀어!';
+        v.bubbleType = 'meet';
+        spawnBurst(v.x, v.y - 4, '🤝 NANA VINA VIP 방문!', 0);
+        // 2.0초 뒤 대표님 말풍선 닫고 캡틴 화답 + 대표님 엄지척 격려 (겹침 방지!)
+        vipSetTimeout(() => {
+          v.bubble = '';
+          if (imgs.walk.vip_jung?.thumb?.length === 12) {
+            v.mode = 'emote'; v.emote = 'thumb'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
+          }
+          if (cap && !briefingActive) {
+            const prev = cap.bubble;
+            cap.bubble = '😄 형님 오셨어요! 커피 한 잔 하시고 편히 보세요!';
+            cap.bubbleType = 'ok';
+            setTimeout(() => { if (cap.bubble.startsWith('😄 형님')) cap.bubble = prev || ''; }, 2400);
+          }
+        }, 2000);
+        vipSetTimeout(() => {
+          if (briefingActive) return;
+          v.emote = null; v.emoteLoop = false;
+          walkNpcSafe('vip_jung', coffeeSpot[0], coffeeSpot[1], {
+            force: true,
+            bubble: '☕ 커피 한 잔 마시러 가는 중…',
+            onArrive: () => {
+              if (briefingActive) return;
+              v.dir = 'front';
+              if (imgs.walk.vip_jung?.coffee?.length === 12) {
+                v.mode = 'emote'; v.emote = 'coffee'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
+              } else {
+                v.mode = 'stand';
+              }
+              SFX.coffee();
+              v.bubble = '☕ 여기 사무실 커피 향이 진짜 좋네~';
+              v.bubbleType = 'ok';
+              vipSetTimeout(() => {
+                v.emote = null; v.emoteLoop = false; v.bubble = '';
+                visitStop(0);
+              }, 3800);
+            }
+          });
+        }, 4200);
+      };
+      let rerouteCount = 0;
+      const walkToCaptainNow = (spot) => {
+        capTarget = spot;
+        const ok = walkNpcSafe('vip_jung', spot[0], spot[1], {
+          force: true,
+          bubble: '🤝 아우님! NANA VINA 정은수 왔어!',
+          bubbleType: 'meet',
+          onArrive: () => {
+            if (greetedCap || briefingActive) return;
+            const fresh = getSpotNearCaptain();
+            if (rerouteCount < 6 && Math.hypot(v.x - fresh[0], v.y - fresh[1]) > 8.0) {
+              rerouteCount++;
+              walkToCaptainNow(fresh);
+            } else {
+              doGreetCaptain();
+            }
+          }
+        });
+        if (!ok) doGreetCaptain();
+      };
+      walkToCaptainNow(capTarget);
+      // 대표님이 걸어오는 동안(0.7초마다) 캡틴이 다른 곳으로 이동했으면 새 위치로 실시간 경로 재탐색!
+      capTrackPoll = setInterval(() => {
+        if (greetedCap || briefingActive || !vipActive || v.hidden) { stopCapTrack(); return; }
+        const fresh = getSpotNearCaptain();
+        if (Math.hypot(fresh[0] - capTarget[0], fresh[1] - capTarget[1]) > 5.5 && rerouteCount < 6) {
+          rerouteCount++;
+          walkToCaptainNow(fresh);
+        }
+      }, 700);
+      vipTimers.push(capTrackPoll);
       return true;
     }
     function scheduleNextVip(delayMs) {
