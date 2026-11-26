@@ -413,8 +413,43 @@
       src.start(c.currentTime + delay);
       return src;
     }
-    // 목소리는 한 번에 한 명만(겹치면 앞사람 끊고 새 사람) — 여러 명이 동시에 떠들지 않게
-    let voiceSrc = null;
+    // 자연스러운 대화 순서 대기열(Voice Queue): 앞사람 말이 끝나야 0.22초 숨 고르기 후 다음 사람이 이어서 말함(말 잘림 방지!)
+    let voiceSrc = null, voiceBusy = false, voiceGapTimer = null;
+    const voiceQueue = [];
+    function clearVoiceQueue(stopCurrent = false) {
+      voiceQueue.length = 0;
+      if (voiceGapTimer) { clearTimeout(voiceGapTimer); voiceGapTimer = null; }
+      if (stopCurrent && voiceSrc) {
+        try { voiceSrc.onended = null; voiceSrc.stop(); } catch {}
+        voiceSrc = null; voiceBusy = false;
+      }
+    }
+    async function pumpVoiceQueue() {
+      if (voiceBusy || !voiceQueue.length) return;
+      if (!sfxOn) { clearVoiceQueue(true); return; }
+      const next = voiceQueue.shift();
+      voiceBusy = true;
+      const buf = await getClip(next.path);
+      if (!buf || !sfxOn) {
+        voiceBusy = false;
+        if (voiceQueue.length && sfxOn) pumpVoiceQueue();
+        return;
+      }
+      const src = await playClip(next.path, 1.0);
+      if (!src) {
+        voiceBusy = false;
+        if (voiceQueue.length && sfxOn) pumpVoiceQueue();
+        return;
+      }
+      voiceSrc = src;
+      src.onended = () => {
+        if (voiceSrc === src) voiceSrc = null;
+        voiceBusy = false;
+        if (voiceQueue.length && sfxOn) {
+          voiceGapTimer = setTimeout(() => { voiceGapTimer = null; pumpVoiceQueue(); }, 220);
+        }
+      };
+    }
     const VOICE_KINDS = {
       captain:    ['greet', 'brief', 'end', 'coffee', 'kick', 'punch', 'sit', 'approve', 'order', 'nice', 'walk', 'thanks'],
       claude:     ['call', 'ok', 'done', 'greet', 'coffee', 'dance', 'brief', 'approval', 'work', 'ok2', 'yay', 'rest'],
@@ -433,15 +468,23 @@
       done: { claude: ['done', 'yay'], inspector: ['done', 'nice'], finder: ['done', 'snap', 'wow'], translator: ['done', 'aha'], staffing: ['done', 'cheer'], sorter: ['done', 'yay'], reader: ['done', 'yay', 'aha'], agy: ['done', 'wow'], auditor: ['done', 'approve', 'hmm'] },
       call: { sorter: ['call', 'oh'] },
     };
-    async function voice(id, kind, delay = 0) {
+    async function voice(id, kind, delay = 0, optsV = {}) {
       const pool = VOICE_PICK_MAP[kind]?.[id];
       const chosen = pool ? pool[Math.floor(Math.random() * pool.length)] : kind;
       if (!sfxOn || !CHARS[id] || !voiceKinds(id).includes(chosen)) return;
       if (delay) await new Promise(r => setTimeout(r, delay * 1000));
-      const buf = await getClip(`voice/${id}-${chosen}.mp3`);
-      if (!buf || !sfxOn) return;
-      try { voiceSrc?.stop(); } catch {}
-      voiceSrc = await playClip(`voice/${id}-${chosen}.mp3`, 1.0);
+      if (!sfxOn) return;
+      const path = `voice/${id}-${chosen}.mp3`;
+      if (optsV.interrupt) {
+        clearVoiceQueue(true);
+      } else {
+        // 대기열 과다 누적·동일인 중복 발화 방지 (최대 4건)
+        const last = voiceQueue[voiceQueue.length - 1];
+        if (last && last.id === id && last.kind === kind) return;
+        if (voiceQueue.length >= 4) voiceQueue.shift();
+      }
+      voiceQueue.push({ id, kind, path });
+      pumpVoiceQueue();
     }
     // 처음 열 때 파일만 미리 받아 둠(소리 해독은 첫 터치 뒤) — 합쳐서 약 0.6MB
     if (sfxOn) setTimeout(() => {
@@ -2083,7 +2126,7 @@
       const visitHtml = (hit === 'sorter') ? visitBlock() : '';
       if (hit === 'sorter' && latestVisits) { lsSet('oa_visit_read', latestVisits.id); if (activeQuests.sorter?.kind === 'visits') { delete activeQuests.sorter; updateRpgHud(); } }
       SFX.tap();
-      if (hit !== 'captain') voice(hit, 'call', 0.12);
+      if (hit !== 'captain') voice(hit, 'call', 0.12, { interrupt: true });
       modal.innerHTML = `
         <div class="oa-m-head">
           <img src="/static/office-anime/assets/portraits/${c.asset || hit}.webp?v=cap3" alt="${c.name}">
@@ -2471,7 +2514,7 @@
 
       cap.bubble = '✋ 오늘은 여기까지 하지. 모두 수고했다!';
       cap.bubbleType = 'meet';
-      voice('captain', 'end');
+      voice('captain', 'end', 0, { interrupt: true });
       log('✋ 캡틴: "오늘은 여기까지 하지." — 보고 종료');
 
       // 0.7초 뒤 비서실장 + 전체 직원 동시 인사(Bow 모션) + "네, 알겠습니다 캡틴!"
