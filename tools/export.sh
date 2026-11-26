@@ -129,6 +129,7 @@ name() {
     rumor) echo "루머" ;;
     highba23) echo "하이바23 펍" ;;
     obcchicken) echo "OBC 치킨" ;;
+    pizzapub) echo "피자앤펍" ;;
     *) echo "$1" ;;
   esac
 }

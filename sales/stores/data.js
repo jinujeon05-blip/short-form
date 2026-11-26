@@ -965,6 +965,12 @@ window.STORES = [
     type: { ko: "한식 · 오븐구이 치킨 · 치킨주점", vi: "Gà nướng oven kiểu Hàn · Quán nhậu · Món Hàn", en: "Korean oven-baked chicken · Pub · Korean dishes", zh: "韩式烤箱烤鸡 · 酒馆 · 韩餐", ja: "韓国式オーブン焼きチキン・パブ・韓国料理" },
     keywords: "OBC 치킨 OBC Chicken Oven & Baked Chicken 오비씨치킨 오븐구이 치킨 후라이드 하이볼 하노이 Vinhomes Skylake Cầu Giấy 한식 치킨주점"
   },
+  { id: "pizzapub", name: "피자앤펍 PIZZA & PUB", sub: "피자 · 치킨 · 스파게티 · 떡볶이 · 피치 세트", url: "https://pizzapub.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["western","korean","chicken"], tags: ["photos"],
+    address: "SO05A - Toà S2, Đường Phạm Hùng, Vinhomes Skylake, Cầu Giấy, Hà Nội", map: "https://www.google.com/maps/place/%ED%94%BC%EC%9E%90%EC%95%A4%ED%8E%8D/@21.0197115,105.7811052,21z/data=!4m6!3m5!1s0x3135ab72159e0331:0x3343fba3c546214b!8m2!3d21.0197115!4d105.7812662!16s%2Fg%2F11jcj4ypln",
+    type: { ko: "한국식 피자 · 치킨 · 스파게티 · 떡볶이", vi: "Pizza kiểu Hàn · Gà rán · Mỳ Ý · Tokbokki", en: "Korean-style pizza · Chicken · Spaghetti · Tteokbokki", zh: "韩式披萨 · 炸鸡 · 意面 · 炒年糕", ja: "韓国風ピザ・チキン・スパゲッティ・トッポッキ" },
+    keywords: "피자앤펍 피자 앤 펍 PIZZA & PUB Pizza n Pub 빈홈즈 스카이레이크 하노이 한국식 피자 고구마 피자 불고기 피자 치킨 스파게티 떡볶이 피치 세트"
+  },
 ];
 window.SI = {
   ko: {

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pizzapub.qrmenuasia.com/sitemap.xml
