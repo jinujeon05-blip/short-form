@@ -3314,12 +3314,13 @@
       const cap = npcs.captain;
       const greetSpot = [50.0, 29.8];
       const coffeeSpot = [15.5, 22.0];
+      // 대표님이 담당자 standPos 바로 옆(4.5~5% 거리)에 서서, 담당자가 일어났을 때 깔끔하게 마주 보고 대화!
       const tourStops = [
-        { id: 'claude',     pos: [43.5, 44.5], dir: 'east',  vipSay: '✨ 비서실장님, 우리 아우님 잘 보좌해 주셔서 감사해요!', npcSay: '😊 정은수 대표님, 언제든 편히 쉬다 가세요!' },
-        { id: 'finder',     pos: [20.6, 43.2], dir: 'west',  vipSay: '📷 스튜디오 시설이 아주 끝내주네요! 고생 많으세요!', npcSay: '😊 감사합니다 정은수 대표님!' },
-        { id: 'translator', pos: [43.4, 71.5], dir: 'west',  vipSay: '🌐 5개국어 번역 퀄리티가 정말 대단하시던데요!', npcSay: '😊 좋게 봐주셔서 감사합니다 대표님!' },
-        { id: 'staffing',   pos: [58.2, 71.4], dir: 'east',  vipSay: '💪 현장 인력 관리 꼼꼼하시네요! 파이팅입니다!', npcSay: '😄 감사합니다! NANA VINA도 파이팅입니다!' },
-        { id: 'sorter',     pos: [79.2, 70.6], dir: 'east',  vipSay: '📦 선별팀이랑 방문 현황까지 완벽하군요!', npcSay: '😊 정은수 대표님 또 놀러 오세요!' },
+        { id: 'claude',     pos: [38.5, 35.2], dir: 'east', vipSay: '✨ 비서실장님, 우리 아우님 잘 보좌해 주셔서 감사해요!', npcSay: '😊 정은수 대표님, 언제든 편히 쉬다 가세요!' },
+        { id: 'finder',     pos: [25.5, 43.2], dir: 'west', vipSay: '📷 스튜디오 시설이 아주 끝내주네요! 고생 많으세요!', npcSay: '😊 감사합니다 정은수 대표님!' },
+        { id: 'translator', pos: [48.0, 71.5], dir: 'west', vipSay: '🌐 5개국어 번역 퀄리티가 정말 대단하시던데요!', npcSay: '😊 좋게 봐주셔서 감사합니다 대표님!' },
+        { id: 'staffing',   pos: [53.5, 71.4], dir: 'east', vipSay: '💪 현장 인력 관리 꼼꼼하시네요! 파이팅입니다!', npcSay: '😄 감사합니다! NANA VINA도 파이팅입니다!' },
+        { id: 'sorter',     pos: [74.5, 70.6], dir: 'east', vipSay: '📦 선별팀이랑 방문 현황까지 완벽하군요!', npcSay: '😊 정은수 대표님 또 놀러 오세요!' },
       ];
       // 매 방문마다 2곳의 담당자 공간을 랜덤 선택해 순회 방문!
       const picked = [...tourStops].sort(() => Math.random() - 0.5).slice(0, 2);
@@ -3352,21 +3353,71 @@
       const visitStop = idx => {
         if (idx >= picked.length) { exitOffice(); return; }
         const st = picked[idx];
+        const tn = npcs[st.id];
+        const tc = CHARS[st.id];
+        let vipArrived = false;
+        let npcReady = !tn || (tn.mode === 'idle');
+        let started = false;
+
+        const startMeeting = () => {
+          if (started || briefingActive) return;
+          started = true;
+          v.dir = st.dir; v.mode = 'stand';
+          v.bubble = st.vipSay; v.bubbleType = 'meet';
+
+          // 1) 정은수 대표님이 말을 걸면 0.45초 뒤 담당자가 자리에서 일어서서 대표님 쪽을 바라보며 대화!
+          setTimeout(() => {
+            if (tn && tc && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
+              if (tc.standPos) { tn.x = tc.standPos[0]; tn.y = tc.standPos[1]; }
+              tn.mode = 'stand'; tn.emote = null; tn.emoteLoop = false;
+              faceEachOther(tn, v);
+              faceEachOther(v, tn);
+              tn.bubble = st.npcSay; tn.bubbleType = 'ok';
+              voice(st.id, 'greet', 0.15);
+            }
+          }, 450);
+
+          // 2) 대화 완료(3.9초 뒤) → 담당자는 자리로 착석, 대표님은 다음 담당자로 이동!
+          setTimeout(() => {
+            v.bubble = '';
+            if (tn && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
+              tn.bubble = '';
+              seatNpc(st.id);
+            }
+            visitStop(idx + 1);
+          }, 3900);
+        };
+
+        // 담당자가 자리 밖에 있으면 즉시 자리로 복귀해 대표님을 기다리게 함!
+        if (tn && tc && !npcReady && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
+          tn.emote = null; tn.emoteLoop = false;
+          walkNpcSafe(st.id, tc.home[0], tc.home[1], {
+            force: true,
+            bubble: '🏃 정은수 대표님 오신대요! 자리로 복귀 중…',
+            onArrive: () => {
+              seatNpc(st.id);
+              tn.bubble = '😊 정은수 대표님 기다리는 중…';
+              npcReady = true;
+              if (vipArrived) startMeeting();
+            }
+          });
+        } else if (tn && npcReady && !briefingActive) {
+          tn.bubble = '😊 정은수 대표님 기다리는 중…';
+        }
+
+        // 정은수 대표님이 먼저 도착하면 담당자가 자리에 올 때까지 기다림!
         walkNpcSafe('vip_jung', st.pos[0], st.pos[1], {
           force: true,
-          bubble: `🚶 ${CHARS[st.id]?.name || '직원'} 자리 들르는 중…`,
+          bubble: `🚶 ${tc?.name || '직원'} 자리 들르는 중…`,
           onArrive: () => {
             v.dir = st.dir; v.mode = 'stand';
-            v.bubble = st.vipSay; v.bubbleType = 'meet';
-            const tn = npcs[st.id];
-            setTimeout(() => {
-              if (tn && !briefingActive) {
-                const prev = tn.bubble;
-                tn.bubble = st.npcSay; tn.bubbleType = 'ok';
-                setTimeout(() => { if (tn.bubble === st.npcSay) tn.bubble = prev || ''; }, 3000);
-              }
-            }, 900);
-            setTimeout(() => { v.bubble = ''; visitStop(idx + 1); }, 3600);
+            vipArrived = true;
+            if (npcReady) {
+              startMeeting();
+            } else {
+              v.bubble = '😊 잠깐 기다려 볼까…';
+              v.bubbleType = '';
+            }
           }
         });
       };
