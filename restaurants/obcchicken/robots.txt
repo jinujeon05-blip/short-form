@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://obcchicken.qrmenuasia.com/sitemap.xml

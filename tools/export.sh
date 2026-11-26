@@ -128,6 +128,7 @@ name() {
     mikadosushi) echo "미카도 스시 미딩점" ;;
     rumor) echo "루머" ;;
     highba23) echo "하이바23 펍" ;;
+    obcchicken) echo "OBC 치킨" ;;
     *) echo "$1" ;;
   esac
 }

@@ -959,6 +959,12 @@ window.STORES = [
     type: { ko: "펍 · 수제맥주 · 하이볼 · 안주", vi: "Pub · Bia thủ công · Highball · Đồ nhắm", en: "Pub · Craft beer · Highball · Bar bites", zh: "酒吧 · 精酿啤酒 · 嗨棒 · 下酒菜", ja: "パブ・クラフトビール・ハイボール・おつまみ" },
     keywords: "하이바23 펍 Highba23 Highba23.pub HIGHBA23 PUB 하노이 미딩 The Manor 수제맥주 하이볼 타코 소시지 나초 감바스 먹태 craft beer highball pub Hanoi My Dinh bia thủ công quán nhậu"
   },
+  { id: "obcchicken", name: "OBC 치킨 OBC Chicken", sub: "오븐구이 치킨 · 후라이드 · 하이볼 · 한식 안주", url: "https://obcchicken.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["chicken","korean","bar"], tags: ["photos"],
+    address: "Vinhomes Skylake, S3 Đường Phạm Hùng, Cầu Giấy, Hà Nội", map: "https://www.google.com/maps/place/OBC+Chicken/@21.0201708,105.7821338,21z/data=!4m6!3m5!1s0x3135abc8ca0a4b39:0xbc6934e3668943c6!8m2!3d21.0201708!4d105.7821338",
+    type: { ko: "한식 · 오븐구이 치킨 · 치킨주점", vi: "Gà nướng oven kiểu Hàn · Quán nhậu · Món Hàn", en: "Korean oven-baked chicken · Pub · Korean dishes", zh: "韩式烤箱烤鸡 · 酒馆 · 韩餐", ja: "韓国式オーブン焼きチキン・パブ・韓国料理" },
+    keywords: "OBC 치킨 OBC Chicken Oven & Baked Chicken 오비씨치킨 오븐구이 치킨 후라이드 하이볼 하노이 Vinhomes Skylake Cầu Giấy 한식 치킨주점"
+  },
 ];
 window.SI = {
   ko: {

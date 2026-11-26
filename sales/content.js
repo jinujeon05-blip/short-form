@@ -251,6 +251,8 @@ window.DEMOS = [
     name: "루머 RUMOR", type: { ko: "레스토랑 & 펍 · 피자 · 치킨 · 수제맥주", vi: "Nhà hàng & Pub · Pizza · Gà rán · Bia thủ công", en: "Restaurant & pub · Pizza · Fried chicken · Craft beer", zh: "餐厅酒吧 · 披萨 · 炸鸡 · 精酿啤酒", ja: "レストラン＆パブ・ピザ・チキン・クラフトビール" } },
   { id: "highba23", hidden: true, url: "https://highba23.qrmenuasia.com", shot: "img/demo-highba23.jpg", qr: "img/qr-highba23.svg",
     name: "하이바23 펍 HIGHBA23", type: { ko: "펍 · 수제맥주 · 하이볼 · 안주", vi: "Pub · Bia thủ công · Highball · Đồ nhắm", en: "Pub · Craft beer · Highball · Bar bites", zh: "酒吧 · 精酿啤酒 · 嗨棒 · 下酒菜", ja: "パブ・クラフトビール・ハイボール・おつまみ" } },
+  { id: "obcchicken", hidden: true, url: "https://obcchicken.qrmenuasia.com", shot: "img/demo-obcchicken.jpg", qr: "img/qr-obcchicken.svg",
+    name: "OBC 치킨 OBC Chicken", type: { ko: "한식 · 오븐구이 치킨 · 치킨주점", vi: "Gà nướng oven kiểu Hàn · Quán nhậu · Món Hàn", en: "Korean oven-baked chicken · Pub · Korean dishes", zh: "韩式烤箱烤鸡 · 酒馆 · 韩餐", ja: "韓国式オーブン焼きチキン・パブ・韓国料理" } },
 ];
 
 window.T = {
