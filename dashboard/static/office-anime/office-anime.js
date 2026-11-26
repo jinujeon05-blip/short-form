@@ -88,8 +88,8 @@
     });
     const jobs = [
       load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k6'),
-      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing1'),
-      load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing1'),
+      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing2'),
+      load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing2'),
     ];
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], photo: [], review: [], inspect: [], analyze: [], cheer: [], stretch: [], talk: [], thumb: [] };
@@ -1638,7 +1638,7 @@
     }
 
     // 🥊 신관 복싱 짐 인터랙티브 샌드백 물리·타격감·콤보 시스템!
-    const BAG = { x0: 114.71, y0: 52.14, x1: 120.70, y1: 75.44, pivotX: 117.71, pivotY: 52.14, cx: 117.71, cy: 74.5 };
+    const BAG = { x0: 115.47, y0: 57.03, x1: 119.19, y1: 74.96, pivotX: 117.33, pivotY: 57.03, cx: 117.33, cy: 74.5 };
     const bagState = { angle: 0, vel: 0, squash: 0, combo: 0, lastHit: 0, shockwaves: [] };
     let shakeAmt = 0;
 
@@ -3561,6 +3561,7 @@
     }
     let vipActive = false;
     let vipTimers = [];
+    let nextVipTimer = null;
     const vipSetTimeout = (fn, ms) => { const id = setTimeout(fn, ms); vipTimers.push(id); return id; };
     const clearVipTimers = () => { vipTimers.forEach(id => { clearTimeout(id); clearInterval(id); }); vipTimers = []; };
     function dismissVipForBriefing() {
@@ -3592,7 +3593,9 @@
       const v = npcs.vip_jung;
       if (!v || vipActive || briefingActive) return false;
       clearVipTimers();
+      if (nextVipTimer) { clearTimeout(nextVipTimer); nextVipTimer = null; }
       vipActive = true;
+      let vipGreetVoiced = false;
       v.hidden = false;
       v.x = 50.0; v.y = 96.5; v.dir = 'back'; v.mode = 'walk';
       v.emote = null; v.emoteLoop = false;
@@ -3690,7 +3693,10 @@
             }
             if (tn && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
               tn.bubble = st.npcSay; tn.bubbleType = 'ok';
-              voice(st.id, st.id === 'claude' ? 'greet-vip' : 'greet', 0.1);
+              if (!vipGreetVoiced) {
+                vipGreetVoiced = true;
+                voice(st.id, st.id === 'claude' ? 'greet-vip' : 'greet', 0.1);
+              }
             }
           }, 2200);
 
@@ -3860,8 +3866,10 @@
       return true;
     }
     function scheduleNextVip(delayMs) {
+      if (nextVipTimer) { clearTimeout(nextVipTimer); nextVipTimer = null; }
       const wait = delayMs ?? (38000 + Math.floor(Math.random() * 18000));
-      setTimeout(() => {
+      nextVipTimer = setTimeout(() => {
+        nextVipTimer = null;
         if (document.hidden || briefingActive || vipActive) { scheduleNextVip(12000); return; }
         startVipVisit();
       }, wait);
