@@ -25,6 +25,18 @@
     vip_jung:   { name: '정은수 대표님', role: 'NANA VINA · VIP', guest: true, home: [50.0, 96.5], standPos: [50.0, 96.5], facing: 'back', scale: 1.0, seat: null },
   };
 
+  // 신관 대회의실 6석 실측 착석 좌표 (배포 대기 중 6명 자동 회의 연출!)
+  // 윗줄(앞모습): 시각정보비서 · 비서실장 · 수석번역관 / 아랫줄(뒷모습): 운영감찰관 · 데이터감사관 · 자료해석비서
+  const CONF_SEATS = {
+    finder:     { x: 141.9, y: 38.0, headTopY: 28.6, clipY: 35.8, h: 215, facing: 'front', stand: [130.5, 44.5] },
+    claude:     { x: 149.3, y: 38.0, headTopY: 28.6, clipY: 35.8, h: 215, facing: 'front', stand: [132.5, 44.5] },
+    translator: { x: 156.5, y: 38.0, headTopY: 28.6, clipY: 35.8, h: 215, facing: 'front', stand: [134.5, 44.5] },
+    inspector:  { x: 141.2, y: 46.2, headTopY: 33.4, clipY: 43.2, h: 210, facing: 'back',  stand: [139.0, 46.8] },
+    auditor:    { x: 149.2, y: 46.4, headTopY: 33.6, clipY: 43.6, h: 210, facing: 'back',  stand: [149.2, 46.8] },
+    reader:     { x: 157.1, y: 46.4, headTopY: 33.6, clipY: 43.6, h: 210, facing: 'back',  stand: [157.5, 46.8] },
+  };
+  const CONF_IDS = ['finder', 'claude', 'translator', 'inspector', 'auditor', 'reader'];
+
   // Y-깊이(앞/뒤 가림) 전경 가구 목록 (7개 방 모든 책상·의자 완비!):
   // 캐릭터의 발 위치(y)가 sortY보다 위(뒤)면 가구가 다리를 가리고, 아래(앞)면 캐릭터가 가구 앞에 서게 됨!
   const PROPS = [
@@ -394,6 +406,63 @@
         bubble: '', bubbleType: '', onArrive: null,
       };
     }
+
+    // ---- 새로고침 시 캡틴·직원·카메라 위치 유지 (localStorage 자동 저장 & 복원!)
+    const POS_KEY = 'jinwoo_oa_pos_v1';
+    function restoreOfficePositions() {
+      try {
+        const raw = localStorage.getItem(POS_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (!data || typeof data !== 'object') return;
+        if (data.npcs) {
+          for (const [id, sv] of Object.entries(data.npcs)) {
+            const n = npcs[id];
+            if (!n || !sv || CHARS[id]?.guest) continue;
+            const x = Number(sv.x), y = Number(sv.y);
+            if (!Number.isFinite(x) || !Number.isFinite(y) || x < 2 || x > 198 || y < 14 || y > 98) continue;
+            if (sv.mode === 'conf' && CONF_SEATS[id]) {
+              n.x = CONF_SEATS[id].x; n.y = CONF_SEATS[id].y;
+              n.mode = 'conf'; n.dir = CONF_SEATS[id].facing;
+            } else if (sv.mode === 'idle') {
+              n.x = CHARS[id].home[0]; n.y = CHARS[id].home[1];
+              n.mode = 'idle'; n.dir = CHARS[id].facing;
+            } else {
+              n.x = x; n.y = y;
+              n.mode = 'stand'; n.dir = sv.dir || CHARS[id].facing;
+            }
+          }
+        }
+        if (data.cam) {
+          if (data.cam.mode === 'overview' || data.cam.mode === 'follow') {
+            camMode = data.cam.mode;
+            if (camBtn) {
+              camBtn.classList.toggle('on', camMode === 'follow');
+              camBtn.textContent = camMode === 'follow' ? '🗺 전체 보기' : '🎥 추적 카메라';
+            }
+          }
+          if (Number.isFinite(data.cam.fx)) cam.fx = data.cam.fx;
+          if (Number.isFinite(data.cam.fy)) cam.fy = data.cam.fy;
+          if (Number.isFinite(data.cam.z)) cam.z = data.cam.z;
+        }
+      } catch {}
+    }
+    function saveOfficePositions() {
+      try {
+        if (briefingActive) return;
+        const out = { npcs: {}, cam: { fx: cam.fx, fy: cam.fy, z: cam.z, mode: camMode } };
+        for (const [id, n] of Object.entries(npcs)) {
+          if (CHARS[id]?.guest) continue;
+          const m = (n.mode === 'idle' || n.mode === 'conf') ? n.mode : 'stand';
+          out.npcs[id] = { x: Math.round(n.x * 10) / 10, y: Math.round(n.y * 10) / 10, mode: m, dir: n.dir };
+        }
+        localStorage.setItem(POS_KEY, JSON.stringify(out));
+      } catch {}
+    }
+    restoreOfficePositions();
+    setInterval(saveOfficePositions, 1500);
+    window.addEventListener('beforeunload', saveOfficePositions);
+    window.addEventListener('pagehide', saveOfficePositions);
 
     // ---------------------------------------------------------------- 게임 효과음(Web Audio) + 잔잔한 로파이 BGM + 폰 진동 + 황금 파티클/EXP 연출
     let sfxOn = (localStorage.getItem('jinwoo_oa_sfx') !== '0');
@@ -1216,23 +1285,26 @@
 
       const capSipping = (n.id === 'captain' && n.idleCoffeeSeated && n.mode === 'emote' && n.emote === 'coffee');
       const capStamping = (n.id === 'captain' && n.mode === 'emote' && n.emote === 'stamp' && wset.stamp?.length === 12);
-      const seated = (n.mode === 'idle' || n.mode === 'work' || capSipping || capStamping);
-      // 전 직원 10명 책상 맞춤 앉은 업무 포즈 루프 (직원별 위상 분산, 실제 작업 중엔 더 부지런히 전환!)
+      const isConfSeat = (n.mode === 'conf' && !!CONF_SEATS[n.id]);
+      const activeSeat = isConfSeat ? CONF_SEATS[n.id] : cfg.seat;
+      const activeFacing = isConfSeat ? CONF_SEATS[n.id].facing : cfg.facing;
+      const seated = (n.mode === 'idle' || n.mode === 'work' || isConfSeat || capSipping || capStamping);
+      // 전 직원 10명 책상·회의실 맞춤 앉은 포즈 루프 (직원별 위상 분산, 실제 작업 중엔 더 부지런히 전환!)
       let seatPose = false;
       const working = (n.mode === 'idle' || n.mode === 'work') && realBusySet.has(n.id);
       if (capStamping) {
         seatPose = true;
-      } else if (seated && !capSipping && cfg.seat && wset.seat?.length >= 4 && wset.seat.every(Boolean)) {
+      } else if (seated && !capSipping && activeSeat && wset.seat?.length >= 4 && wset.seat.every(Boolean)) {
         const cnt = wset.seat.length;
-        const stepSec = working ? 1.45 : 2.85;
-        const phase = (cfg.seat.x * 0.37 + cfg.seat.headTopY * 0.19);
+        const stepSec = working ? 1.45 : (isConfSeat ? 2.2 : 2.85);
+        const phase = (activeSeat.x * 0.37 + activeSeat.headTopY * 0.19);
         const k = Math.floor((t + phase) / stepSec) % cnt;
         im = wset.seat[k];
         seatPose = true;
       }
 
-      if (seated && cfg.seat) {
-        const s = cfg.seat;
+      if (seated && activeSeat) {
+        const s = activeSeat;
         const sx = (s.x / 100) * W;
         const topY = (s.headTopY / 100) * H;
         const clipY = (s.clipY / 100) * H;
@@ -1243,15 +1315,15 @@
           : Math.sin(t * 1.8 + sx * 0.01) * 0.85;
         const sway = working ? Math.sin(t * 4.7 + ph) * 0.7 : 0;
         // 새 상반신 앉은 그림: 앞모습은 머리~손끝이 책상 상판에 딱 얹히도록(0.45), 뒷모습은 의자 등받이 높이에 맞춤(0.56)
-        const seatScale = (cfg.facing === 'back') ? 0.56 : (n.id === 'captain' ? 0.46 : 0.44);
+        const seatScale = (activeFacing === 'back') ? 0.56 : (n.id === 'captain' ? 0.46 : 0.44);
         const targetH = seatPose ? s.h * seatScale : s.h;
         const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
         ctx.save();
-        // 책상 상단 경계선(남향) 또는 의자 좌판 하단(북향)에서 깔끔하게 클리핑
+        // 책상/회의 테이블 상단 경계선(남향) 또는 의자 좌판 하단(북향)에서 깔끔하게 클리핑 (본관+신관 W*2 전체 지원!)
         ctx.beginPath();
-        const maxClip = (seatPose && cfg.facing === 'front') ? Math.max(clipY + 14, topY + targetH) : clipY;
-        ctx.rect(0, 0, W, maxClip);
+        const maxClip = (seatPose && activeFacing === 'front') ? Math.max(clipY + 14, topY + targetH) : clipY;
+        ctx.rect(0, 0, W * 2, maxClip);
         ctx.clip();
         ctx.drawImage(im, sx - targetW / 2 + (seatPose ? sway * 0.35 : sway), topY + (seatPose ? bob * 0.45 : bob), targetW, targetH);
         ctx.restore();
@@ -2108,11 +2180,12 @@
           ? 16.8
           : (n.y + (walking ? 1.4 : (CHARS[id].facing === 'front' ? 4.8 : 1.5)));
         tagEls[id].style.top  = `${tagTop}%`;
-        // RPG 퀘스트 마커(! / ?) 머리 위 표시 (말풍선이 없을 때 깔끔하게 통통 뜀 — 착석 시 실측 headTopY 기준 머리 위로 띄움!)
+        // RPG 퀘스트 마커(! / ?) 머리 위 표시 (말풍선이 없을 때 깔끔하게 통통 뜀 — 착석·회의실 시 실측 headTopY 기준 머리 위로 띄움!)
         const q = activeQuests[id];
         const qEl = questEls[id];
         const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
-        const headY = standing ? (n.y - standPct(id)) : (CHARS[id]?.seat?.headTopY ?? (n.y - 12.0));
+        const curSeat = (n.mode === 'conf' && CONF_SEATS[id]) ? CONF_SEATS[id] : CHARS[id]?.seat;
+        const headY = standing ? (n.y - standPct(id)) : (curSeat?.headTopY ?? (n.y - 12.0));
         if (q && qEl && !n.bubble) {
           qEl.hidden = false;
           qEl.textContent = q.type === 'exc' ? '!' : '?';
@@ -2759,6 +2832,91 @@
       if (e.key === 'Escape' && !modalBack.hidden) closeTalkModal(false);
     });
 
+    // ---------------------------------------------------------------- 신관 대회의실 6명 자동 회의 연출 (제작 완료 · 배포 대기 중!)
+    let confMeetingActive = false;
+    let confChatTimer = null;
+    let confChatIdx = 0;
+    const CONF_LINES = [
+      { id: 'claude',     say: '📋 캡틴 배포 확정 대기 중입니다. 마지막 점검해 볼까요?' },
+      { id: 'finder',     say: '📷 메뉴 사진 해상도랑 색감 보정, 깔끔하게 끝냈어요!' },
+      { id: 'translator', say: '🌐 한·베·영·중 4개국어 번역 오타 0건 확인했습니다!' },
+      { id: 'inspector',  say: '🛡️ 가격·옵션 교차 감찰까지 이상 없습니다.' },
+      { id: 'auditor',    say: '📊 링크·데이터 무결성 최종 감사 100% 통과입니다.' },
+      { id: 'reader',     say: '📑 메뉴판 구성도 완벽해요! 캡틴 배포 확정만 남았네요~' },
+    ];
+    function startConfMeeting(depOrder = null) {
+      if (briefingActive) return;
+      if (!confMeetingActive) {
+        confMeetingActive = true;
+        const shopNm = depOrder?.title || (depOrder?.deploy || []).join(', ') || '가게';
+        log(`🏢 [${shopNm}] 배포 대기 — 6명이 신관 대회의실에 모여 최종 점검 회의를 시작합니다.`);
+      }
+      for (const id of CONF_IDS) {
+        const n = npcs[id], s = CONF_SEATS[id];
+        if (!n || !s) continue;
+        if (n.mode === 'conf' || n.confWalking) continue;
+        if (activeTalkNpc && activeTalkNpc.id === id) continue;
+        if (realBusySet.has(id)) continue;
+        n.confWalking = true;
+        n.emote = null; n.emoteLoop = false;
+        const ok = walkNpcSafe(id, s.stand[0], s.stand[1], {
+          force: true,
+          bubble: '🏢 대회의실로 이동 중…',
+          onArrive: () => {
+            n.confWalking = false;
+            if (!confMeetingActive || briefingActive) return;
+            n.x = s.x; n.y = s.y; n.mode = 'conf'; n.dir = s.facing; n.bubble = '';
+          }
+        });
+        if (!ok) {
+          n.confWalking = false;
+          n.x = s.x; n.y = s.y; n.mode = 'conf'; n.dir = s.facing; n.bubble = '';
+        }
+      }
+      if (!confChatTimer) {
+        confChatTimer = setInterval(() => {
+          if (!confMeetingActive || briefingActive) return;
+          const seatedIds = CONF_IDS.filter(id => npcs[id]?.mode === 'conf');
+          if (seatedIds.length < 2) return;
+          // 말풍선 겹침 방지: 이전 발언자 말풍선 정리 후 순서대로 1명씩 발언!
+          for (const id of CONF_IDS) {
+            if (npcs[id]?.mode === 'conf') npcs[id].bubble = '';
+          }
+          const line = CONF_LINES[confChatIdx % CONF_LINES.length];
+          confChatIdx++;
+          const sp = npcs[line.id];
+          if (sp && sp.mode === 'conf') {
+            sp.bubble = line.say;
+            sp.bubbleType = line.id === 'claude' ? 'meet' : 'ok';
+          }
+        }, 4200);
+      }
+    }
+    function endConfMeeting(walkHome = true) {
+      if (!confMeetingActive) return;
+      confMeetingActive = false;
+      if (confChatTimer) { clearInterval(confChatTimer); confChatTimer = null; }
+      for (const id of CONF_IDS) {
+        const n = npcs[id];
+        if (!n) continue;
+        n.confWalking = false;
+        if (n.mode === 'conf') {
+          n.bubble = '';
+          if (walkHome && !(activeTalkNpc && activeTalkNpc.id === id)) {
+            const s = CONF_SEATS[id];
+            n.x = s.stand[0]; n.y = s.stand[1]; n.mode = 'stand';
+            walkNpcSafe(id, CHARS[id].home[0], CHARS[id].home[1], {
+              force: true,
+              bubble: '↩ 자리로 복귀 중…',
+              onArrive: () => seatNpc(id),
+            });
+          } else {
+            n.mode = 'stand';
+          }
+        }
+      }
+    }
+
     // ---------------------------------------------------------------- 전체 업무 보고 (캡틴 "보고해" → 비서실장 단상 진행 + 전원 빨간줄 정렬 + 차례 보고 + "오늘은 여기까지 하지" 전원 인사!)
     const briefStartBtn = root.querySelector('[data-brief-start]');
     const briefStopBtn  = root.querySelector('[data-brief-stop]');
@@ -2805,6 +2963,7 @@
     function startBriefing() {
       if (briefingActive) return;
       stopInspectorSolo(false);
+      endConfMeeting(false);
       dismissVipForBriefing();
       briefingActive = true;
       SFX.brief();
@@ -3052,6 +3211,16 @@
         o.status !== 'running' && o.status !== 'stopping' &&
         (o.approval || o.status === 'wait' || o.needAnswer || (o.deploy?.length && o.deployState !== 'done' && o.deployState !== 'running'))
       );
+      // 배포 대기(제작 완료 · 배포 미확정) 시 6명 신관 대회의실 자동 회의 연출 연동!
+      const hasDeployWait = liveOrders.length === 0 && latestOrders.some(o =>
+        o.status === 'done' && o.deploy?.length && o.deployState !== 'done' && o.deployState !== 'running'
+      );
+      if (hasDeployWait && !briefingActive) {
+        startConfMeeting(latestOrders.find(o => o.status === 'done' && o.deploy?.length && o.deployState !== 'done' && o.deployState !== 'running'));
+      } else if (!hasDeployWait && confMeetingActive) {
+        endConfMeeting(true);
+      }
+
       if (capStatusEl) {
         capStatusEl.classList.remove('st-wait', 'st-work', 'st-done');
         if (pendingApprovals.length > 0) {
