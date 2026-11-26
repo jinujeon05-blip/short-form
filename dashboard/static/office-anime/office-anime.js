@@ -51,6 +51,10 @@
     { text: '통번역 통제실',     x: 36.8, y: 49.4, bg: '#2563eb' },
     { text: '인력 공급팀',       x: 63.6, y: 49.4, bg: '#0284c7' },
     { text: '선별팀',           x: 88.5, y: 49.4, bg: '#ea580c' },
+    // 오른쪽 4K 신관(x 100~200): 대회의실·VIP 접견실, 복싱 짐, 직원 휴게실
+    { text: '대회의실 · VIP 접견실', x: 158.0, y: 21.8, bg: '#0f766e' },
+    { text: '트레이닝 · 복싱 짐',    x: 124.0, y: 49.4, bg: '#b91c1c' },
+    { text: '직원 휴게실 · 라운지',  x: 176.0, y: 49.4, bg: '#059669' },
   ];
 
   // 동선 경유점(2026-11-24 새 배경): 실제 이동은 safeRoute()가 점과 점 사이를 A* 길찾기로 이어 벽·문짝을 절대 뚫지 않음
@@ -82,7 +86,11 @@
       im.onerror = () => res();
       im.src = url;
     });
-    const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k6')];
+    const jobs = [
+      load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k6'),
+      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing1'),
+      load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing1'),
+    ];
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], photo: [], review: [], inspect: [], analyze: [], cheer: [], stretch: [], talk: [], thumb: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee', 'kick', 'praise', 'stamp']
@@ -170,6 +178,7 @@
           <div class="oa-rpg-hud">
             <span class="oa-rpg-pill" data-rpg-stat>👑 <b>Lv.1</b> 캡틴 · 퀘스트 <span class="oa-rpg-qcnt zero" data-qcnt>0</span></span>
             <button type="button" class="oa-cam-btn on" data-cam-btn title="게임 카메라(캡틴 확대 추적) / 전체 보기 전환">🗺 전체 보기</button>
+            <button type="button" class="oa-cam-btn" data-wing-btn title="오른쪽 신관(복싱짐·회의실·휴게실) ↔ 본관 이동">🥊 신관·복싱짐</button>
           </div>
           <div class="oa-snd-bar">
             <button type="button" class="oa-snd-btn on" data-sfx-btn title="게임 효과음 켜기/끄기">🔊 효과음</button>
@@ -196,6 +205,7 @@
     const stage = root.querySelector('.oa-stage');
     const camEl = root.querySelector('[data-cam]');
     const camBtn = root.querySelector('[data-cam-btn]');
+    const wingBtn = root.querySelector('[data-wing-btn]');
     const canvas = root.querySelector('.oa-canvas');
     const hud = root.querySelector('.oa-hud');
     const fsBtn = root.querySelector('.oa-fs-btn');
@@ -213,6 +223,26 @@
       camBtn.classList.toggle('on', camMode === 'follow');
       camBtn.textContent = camMode === 'follow' ? '🗺 전체 보기' : '🎥 추적 카메라';
       SFX.tap();
+    });
+    wingBtn?.addEventListener('click', () => {
+      SFX.tap();
+      touchCaptainInput();
+      const cap = npcs.captain;
+      if (cap.x < 100) {
+        // 신관 복싱짐 샌드백 앞으로 바로 이동!
+        const ok = walkCaptainSafe(122.5, 76.0, {
+          bubble: '🥊 신관 복싱짐으로 이동!',
+          onArrive: () => { cap.mode = 'stand'; cap.dir = 'west'; cap.bubble = '🥊 샌드백 쳐볼까! (3 발차기 · 4 주먹)'; setTimeout(() => { if (cap.bubble.includes('샌드백')) cap.bubble = ''; }, 3000); }
+        });
+        if (!ok) { cap.x = 122.5; cap.y = 76.0; cap.mode = 'stand'; cap.dir = 'west'; }
+      } else {
+        // 본관 중앙으로 복귀!
+        const ok = walkCaptainSafe(50.0, 29.8, {
+          bubble: '🏢 본관으로 복귀!',
+          onArrive: () => { cap.mode = 'stand'; cap.dir = 'front'; }
+        });
+        if (!ok) { cap.x = 50.0; cap.y = 29.8; cap.mode = 'stand'; }
+      }
     });
     const modalBack = root.querySelector('.oa-modal-back');
     const modal = root.querySelector('.oa-modal');
@@ -539,6 +569,26 @@
       brief:     () => { navigator.vibrate?.([20, 40, 20]); clipOr('brief', 0.9, () => { tone(659.25, 0.22, 'sine', 0.09); tone(523.25, 0.36, 'sine', 0.09, 0.20); }); },
       kick:      () => { [0, 0.75, 1.5, 2.25].forEach(d => noiseBurst(0.09, 0.05, d)); navigator.vibrate?.([12, 60, 12]); },
       punch:     () => { [0.32, 0.81, 1.29, 1.78, 2.1].forEach(d => noiseBurst(0.06, 0.045, d)); navigator.vibrate?.([10, 40, 10, 40, 14]); },
+      bagHit:    (heavy = false) => {
+        if (!sfxOn) return;
+        const c = ensureAudio(); if (!c) return;
+        const now = c.currentTime;
+        // 묵직한 가죽 샌드백 저음 펀치/킥 임팩트 (퍽!/쾅!)
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = heavy ? 'sawtooth' : 'triangle';
+        o.frequency.setValueAtTime(heavy ? 128 : 155, now);
+        o.frequency.exponentialRampToValueAtTime(heavy ? 32 : 46, now + (heavy ? 0.19 : 0.12));
+        g.gain.setValueAtTime(0.001, now);
+        g.gain.exponentialRampToValueAtTime(heavy ? 0.34 : 0.24, now + 0.008);
+        g.gain.exponentialRampToValueAtTime(0.001, now + (heavy ? 0.22 : 0.14));
+        const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = heavy ? 420 : 580;
+        o.connect(lp); lp.connect(g); g.connect(c.destination);
+        o.start(now); o.stop(now + 0.24);
+        // 가죽 타격 파열음
+        noiseBurst(heavy ? 0.11 : 0.065, heavy ? 0.16 : 0.10, 0);
+        if (heavy) tone(520, 0.045, 'square', 0.06, 0.01);
+        navigator.vibrate?.(heavy ? [35, 20, 45] : [20]);
+      },
       greet:     () => { tone(587.33, 0.09, 'triangle', 0.07); tone(880.0, 0.14, 'triangle', 0.07, 0.08); navigator.vibrate?.(14); },
       coffee:    () => clipOr('coffee', 0.8, () => { tone(1174, 0.07, 'sine', 0.05); tone(1568, 0.09, 'sine', 0.045, 0.07); tone(880, 0.12, 'triangle', 0.05, 0.15); }),
       sit:       () => clipOr('sit', 0.7, () => { tone(260, 0.07, 'triangle', 0.065); tone(196, 0.09, 'sine', 0.05, 0.05); }),
@@ -1358,7 +1408,7 @@
       { x0: 23.5, y0:  0.0, x1: 36.5, y1: 19.2 }, // 좌측 상단 통유리 창가(정수기~단상 계단 사이 — 창틀 위로 못 올라가게!)
       { x0: 63.5, y0:  0.0, x1: 72.0, y1: 19.2 }, // 우측 상단 통유리 창가(단상 계단~테라스 난간 사이 — 창틀 위로 못 올라가게!)
       { x0: 71.5, y0:  0.0, x1: 100., y1: 19.0 }, // 우측 테라스 난간(기둥 바닥 18.2까지)
-      { x0: 91.5, y0:  0.0, x1: 100., y1: 21.4 }, // 우측 상단 화분(화분 바닥 20.6까지)
+      { x0: 93.0, y0:  0.0, x1: 99.0, y1: 20.2 }, // 우측 상단 화분(아래쪽 통로 열어 신관 연결!)
       { x0: 42.3, y0: 17.2, x1: 58.0, y1: 21.8 }, // 캡틴 대표 책상
       { x0: 36.8, y0: 23.4, x1: 63.2, y1: 27.8 }, // 단상 앞쪽 턱 (좌우 계단으로만 내려오게)
       // 중앙 복도 책상·화분
@@ -1417,20 +1467,42 @@
       { x0: 86.2, y0: 73.6, x1: 100., y1: 84.0 }, // 가로 컨베이어
       { x0: 75.4, y0: 78.4, x1: 79.2, y1: 85.0 }, // 좌하단 화분
       { x0: 74.0, y0: 84.6, x1: 100., y1: 89.8 }, // 앞벽
-      // 맨 아래 넓은 나무 바닥(y 89.8~97.5)은 전부 걸을 수 있음
+      // 맨 아래 넓은 나무 바닥(y 89.8~97.5)은 본관~신관(x 2~198) 전부 걸을 수 있음!
+      // ---- 오른쪽 4K 신관 (x 100~200): 대회의실·VIP 접견실, 트레이닝·복싱 짐, 직원 휴게실·라운지 ----
+      { x0: 100.0, y0:  0.0, x1: 200.0, y1: 18.8 }, // 신관 상단 통유리 창가 + 양쪽 화분
+      // 대회의실 & VIP 접견실 (왼쪽 아래 출입구 y 40.5~48.0 활짝 열림!)
+      { x0: 121.0, y0: 21.0, x1: 196.0, y1: 31.8 }, // 윗벽 + 대형 스크린 + 뒷화분
+      { x0: 120.0, y0: 21.0, x1: 124.0, y1: 40.5 }, // 왼쪽 윗벽 (아래쪽 출입구 개방)
+      { x0: 193.0, y0: 21.0, x1: 200.0, y1: 48.5 }, // 오른쪽 벽
+      { x0: 135.5, y0: 33.5, x1: 163.5, y1: 45.5 }, // 대회의실 원목 테이블·의자
+      { x0: 170.0, y0: 30.0, x1: 186.0, y1: 44.0 }, // VIP 가죽 소파·티테이블
+      // 트레이닝 · 복싱 짐 (오른쪽 아래 출입구 y 74.5~85.0 활짝 열림!)
+      { x0: 100.0, y0: 48.5, x1: 148.0, y1: 65.5 }, // 윗벽 + 거울 + 덤벨 랙 + 샌드백 기둥
+      { x0: 100.0, y0: 48.5, x1: 107.0, y1: 88.5 }, // 왼쪽 벽 + 요가매트
+      { x0: 100.0, y0: 85.0, x1: 148.0, y1: 88.8 }, // 아래 벽
+      { x0: 146.0, y0: 48.5, x1: 148.8, y1: 74.5 }, // 오른쪽 윗벽 (아래쪽 넓은 출입구 개방!)
+      { x0: 132.5, y0: 62.0, x1: 142.5, y1: 70.5 }, // 운동 벤치
+      { x0: 115.8, y0: 71.5, x1: 119.6, y1: 76.2 }, // 샌드백 하단 바닥 점유 영역
+      // 직원 휴게실 · 라운지 (왼쪽 아래 출입구 y 74.5~85.0 활짝 열림!)
+      { x0: 152.5, y0: 48.5, x1: 200.0, y1: 67.5 }, // 윗벽 + 스낵바 + 냉장고 + 소파
+      { x0: 190.5, y0: 48.5, x1: 200.0, y1: 88.5 }, // 오른쪽 벽 + 소파
+      { x0: 152.5, y0: 85.0, x1: 200.0, y1: 88.8 }, // 아래 벽
+      { x0: 152.2, y0: 48.5, x1: 154.8, y1: 74.5 }, // 왼쪽 윗벽 (아래쪽 넓은 출입구 개방!)
+      { x0: 160.5, y0: 69.5, x1: 171.5, y1: 80.0 }, // 좌측 원형 카페 테이블
+      { x0: 178.0, y0: 69.5, x1: 189.0, y1: 80.0 }, // 우측 원형 카페 테이블
     ];
     function canWalk(x, y) {
-      if (x < 2.0 || x > 98.0 || y < 15.6 || y > 97.5) return false;
+      if (x < 2.0 || x > 198.0 || y < 15.6 || y > 97.5) return false;
       for (const b of BLOCKERS) {
         if (x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1) return false;
       }
       return true;
     }
 
-    // A* 격자 길찾기 (1.5% 간격): 캡틴이 어떤 위치에서든 벽·책상·단상 턱·화분을 절대 통과하지 않고 열린 문·계단·복도로만 우회 이동!
+    // A* 격자 길찾기 (1.5% 간격, 본관+신관 200×100 전체!): 벽·책상·단상 턱·화분을 절대 통과하지 않고 열린 문·계단·복도로만 우회 이동!
     function findPath(sx, sy, tx, ty) {
       const STEP = 1.5;
-      const cols = Math.floor(100 / STEP);
+      const cols = Math.floor(200 / STEP);
       const rows = Math.floor(100 / STEP);
       const toC = v => Math.max(0, Math.min(cols - 1, Math.round(v / STEP)));
       const toR = v => Math.max(0, Math.min(rows - 1, Math.round(v / STEP)));
@@ -1565,6 +1637,47 @@
       log('🪑 캡틴이 대표 책상 자리에 착석했습니다');
     }
 
+    // 🥊 신관 복싱 짐 인터랙티브 샌드백 물리·타격감·콤보 시스템!
+    const BAG = { x0: 114.71, y0: 52.14, x1: 120.70, y1: 75.44, pivotX: 117.71, pivotY: 52.14, cx: 117.71, cy: 74.5 };
+    const bagState = { angle: 0, vel: 0, squash: 0, combo: 0, lastHit: 0, shockwaves: [] };
+    let shakeAmt = 0;
+
+    function hitPunchingBag(isHeavy = false) {
+      const cap = npcs.captain;
+      const nowS = performance.now() / 1000;
+      if (nowS - bagState.lastHit > 4.2) bagState.combo = 0;
+      bagState.combo += 1;
+      bagState.lastHit = nowS;
+      // 캡틴이 왼쪽에 있으면 오른쪽(+)으로, 오른쪽에 있으면 왼쪽(-)으로 샌드백이 강하게 날아감!
+      const pushDir = (cap.x <= BAG.cx) ? 1 : -1;
+      bagState.vel += pushDir * (isHeavy ? 7.6 : 4.8);
+      bagState.vel = Math.max(-11.5, Math.min(11.5, bagState.vel));
+      bagState.squash = isHeavy ? 0.19 : 0.12;
+      shakeAmt = Math.max(shakeAmt, isHeavy ? 15 : 8);
+      SFX.bagHit(isHeavy);
+      // 충격파 링 + 불꽃 파티클 + 콤보 텍스트!
+      const hitX = (BAG.cx / 100) * W;
+      const hitY = ((isHeavy ? 64.5 : 62.5) / 100) * H;
+      bagState.shockwaves.push({ x: hitX, y: hitY, born: performance.now(), heavy: isHeavy });
+      const colors = isHeavy ? ['#ef4444', '#f97316', '#facc15', '#ffffff'] : ['#facc15', '#fb923c', '#ffffff'];
+      for (let i = 0; i < (isHeavy ? 18 : 11); i++) {
+        const ang = (Math.random() * Math.PI * 2);
+        const spd = (isHeavy ? 260 : 170) + Math.random() * 240;
+        bursts.push({
+          x: hitX, y: hitY,
+          vx: Math.cos(ang) * spd + pushDir * 120,
+          vy: Math.sin(ang) * spd - 90,
+          size: (isHeavy ? 5 : 3.5) + Math.random() * 5,
+          color: colors[i % colors.length],
+          life: 0, max: 0.36 + Math.random() * 0.22,
+        });
+      }
+      const word = isHeavy
+        ? (bagState.combo >= 5 ? `⚡ 크리티컬!! ${bagState.combo} HIT!` : `💥 쾅!! ${bagState.combo} HIT!`)
+        : (bagState.combo >= 4 ? `🔥 연타! ${bagState.combo} HIT!` : `👊 퍽! ${bagState.combo} HIT`);
+      spawnBurst(BAG.cx, 58.0, `${word} +15 EXP`, 15);
+    }
+
     function playCaptainAction(action) {
       touchCaptainInput();
       const cap = npcs.captain;
@@ -1580,17 +1693,31 @@
           });
           if (ok) return;
         }
+        const nearBag = Math.hypot(cap.x - BAG.cx, cap.y - BAG.cy) < 11.5;
+        if (nearBag) {
+          cap.dir = (cap.x <= BAG.cx) ? 'east' : 'west';
+        }
         const nowS = performance.now() / 1000;
         cap.fightKind = action;
         cap.kickStart = nowS;
         cap.kickUntil = nowS + (isPunch ? 2.55 : 2.35);
         if (cap.mode === 'idle') cap.mode = 'stand';
-        const say = isPunch ? '👊 원투! 연속 펀치!' : '🥋 얍! 이동 발차기!';
-        if (isPunch) SFX.punch(); else SFX.kick();
+        const say = nearBag
+          ? (isPunch ? '🥊 샌드백 연타! 원투 훅 어퍼컷!' : '🥊 샌드백 강타! 회축 쾅!!')
+          : (isPunch ? '👊 원투! 연속 펀치!' : '🥋 얍! 이동 발차기!');
+        if (nearBag) {
+          // 샌드백 타격 타이밍에 맞춰 다단 히트 임팩트 발동!
+          const timings = isPunch ? [[220, false], [680, false], [1180, true]] : [[280, true], [920, true]];
+          timings.forEach(([ms, heavy]) => setTimeout(() => {
+            if (Math.hypot(npcs.captain.x - BAG.cx, npcs.captain.y - BAG.cy) < 13.0) hitPunchingBag(heavy);
+          }, ms));
+        } else {
+          if (isPunch) SFX.punch(); else SFX.kick();
+          spawnBurst(cap.x, cap.y - 4, isPunch ? '👊 퍽!' : '🥋 얍!', 0);
+        }
         cap.bubble = say;
         cap.bubbleType = 'ok';
-        spawnBurst(cap.x, cap.y - 4, isPunch ? '👊 퍽!' : '🥋 얍!', 0);
-        log(isPunch ? '👊 캡틴이 주먹 격투(잽·스트레이트·훅·어퍼컷) 연속 공격을 시전했습니다' : '🥋 캡틴이 이동 중 태권도 발차기를 시전했습니다');
+        log(nearBag ? `🥊 캡틴이 복싱 짐 샌드백을 ${isPunch ? '연속 펀치로' : '강력한 발차기로'} 타격했습니다!` : (isPunch ? '👊 캡틴이 주먹 격투(잽·스트레이트·훅·어퍼컷) 연속 공격을 시전했습니다' : '🥋 캡틴이 이동 중 태권도 발차기를 시전했습니다'));
         setTimeout(() => { if (cap.bubble === say) cap.bubble = ''; }, 2600);
         return;
       }
@@ -1818,17 +1945,30 @@
         }
       }
 
-      // 캡틴 중심 부드러운 게임 카메라 추적 (1.85배 확대 ↔ 전체 보기 1.0배 자동 보간!)
+      // 🥊 샌드백 물리 진자 흔들림 & 화면 반동 셰이크 업데이트
+      bagState.vel += (-36 * bagState.angle - 4.8 * bagState.vel) * dt;
+      bagState.angle += bagState.vel * dt;
+      if (Math.abs(bagState.angle) < 0.0005 && Math.abs(bagState.vel) < 0.002) { bagState.angle = 0; bagState.vel = 0; }
+      bagState.squash *= Math.pow(0.008, dt);
+      shakeAmt *= Math.pow(0.0004, dt);
+      if (shakeAmt < 0.25) shakeAmt = 0;
+      if (wingBtn) {
+        const inRight = cap.x >= 100;
+        const lbl = inRight ? '🏢 본관 복귀' : '🥊 신관·복싱짐';
+        if (wingBtn.textContent !== lbl) wingBtn.textContent = lbl;
+      }
+
+      // 캡틴 중심 부드러운 게임 카메라 추적 (본관 0~100 + 신관 100~200 확장 월드!)
       // 보고 중(2026-11-24 캡틴 요청)엔 전체 보기 대신 캡틴 단상 앞(직원 줄 y=29.8·비서실장 단상 포함)을 2.4배로 비춤
       if (camEl) {
         const targetZ = briefingActive ? 2.4 : (camMode === 'follow' ? 1.85 : 1.0);
-        const targetFx = briefingActive ? 50 : cap.x;
+        const targetFx = briefingActive ? 50 : (camMode === 'overview' ? (cap.x >= 100 ? 150 : 50) : cap.x);
         const targetFy = briefingActive ? 21 : Math.max(10, Math.min(90, cap.y - 2));
         const k = Math.min(1, dt * 6.5);
         cam.z += (targetZ - cam.z) * k;
         cam.fx += (targetFx - cam.fx) * k;
         cam.fy += (targetFy - cam.fy) * k;
-        const tx = Math.max(100 - 100 * cam.z, Math.min(0, 50 - cam.fx * cam.z));
+        const tx = Math.max(100 - 200 * cam.z, Math.min(0, 50 - cam.fx * cam.z));
         const ty = Math.max(100 - 100 * cam.z, Math.min(0, 50 - cam.fy * cam.z));
         cam.tx = tx; cam.ty = ty;
         camEl.style.transform = `translate(${tx.toFixed(2)}%, ${ty.toFixed(2)}%) scale(${cam.z.toFixed(4)})`;
@@ -1836,11 +1976,14 @@
       if (now - resCheckAt > 500) { resCheckAt = now; updateCanvasRes(); }
       {
         const s = canvas.width / W, z = cam.z || 1;
+        const shX = shakeAmt ? (Math.random() * 2 - 1) * shakeAmt : 0;
+        const shY = shakeAmt ? (Math.random() * 2 - 1) * shakeAmt * 0.6 : 0;
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.setTransform(s * z, 0, 0, s * z, (cam.tx || 0) / 100 * W * s, (cam.ty || 0) / 100 * H * s);
+        ctx.setTransform(s * z, 0, 0, s * z, (cam.tx || 0) / 100 * W * s + shX, (cam.ty || 0) / 100 * H * s + shY);
       }
       if (imgs.bg) ctx.drawImage(imgs.bg, 0, 0, W, H);
+      if (imgs.bgRight) ctx.drawImage(imgs.bgRight, W, 0, W, H);
 
       // 바닥 클릭 이동 시 황금 링 피드백
       if (clickRing) {
@@ -1857,7 +2000,7 @@
         }
       }
 
-      // 통합 Y-깊이(앞/뒤 가림) 정렬: 모든 캐릭터와 모든 책상·의자 전경 마스크를 발 위치(y) 순으로 그림!
+      // 통합 Y-깊이(앞/뒤 가림) 정렬: 모든 캐릭터와 모든 책상·의자 전경 마스크 + 신관 샌드백을 발 위치(y) 순으로 그림!
       const drawList = [
         ...Object.values(npcs).map(n => ({ y: n.y, draw: () => drawNpc(n, t) })),
         ...PROPS.map(p => ({
@@ -1867,9 +2010,51 @@
             if (im) ctx.drawImage(im, (p.x0 / 100) * W, (p.y0 / 100) * H, ((p.x1 - p.x0) / 100) * W, ((p.y1 - p.y0) / 100) * H);
           }
         })),
+        {
+          y: BAG.cy,
+          draw: () => {
+            const im = imgs.punchBag;
+            if (!im) return;
+            const px = (BAG.pivotX / 100) * W;
+            const py = (BAG.pivotY / 100) * H;
+            const bw = ((BAG.x1 - BAG.x0) / 100) * W;
+            const bh = ((BAG.y1 - BAG.y0) / 100) * H;
+            // 바닥 동적 그림자 (샌드백 흔들림에 따라 같이 이동!)
+            const shX = px + Math.sin(bagState.angle) * bh * 0.72;
+            ctx.save();
+            ctx.fillStyle = 'rgba(0,0,0,0.28)';
+            ctx.beginPath();
+            ctx.ellipse(shX, (77.0 / 100) * H, bw * 0.44, 14, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+            // 체인 피벗 기준 진자 회전 + 타격 찌그러짐(스쿼시) 연출!
+            ctx.save();
+            ctx.translate(px, py);
+            ctx.rotate(-bagState.angle);
+            const sxBag = 1 + bagState.squash;
+            const syBag = 1 - bagState.squash * 0.45;
+            ctx.scale(sxBag, syBag);
+            ctx.drawImage(im, -bw * 0.5, 0, bw, bh);
+            ctx.restore();
+          }
+        },
       ];
       drawList.sort((a, b) => a.y - b.y);
       for (const item of drawList) item.draw();
+
+      // 🥊 샌드백 타격 충격파 링 렌더링
+      for (let i = bagState.shockwaves.length - 1; i >= 0; i--) {
+        const sw = bagState.shockwaves[i];
+        const age = (now - sw.born) / (sw.heavy ? 380 : 280);
+        if (age >= 1) { bagState.shockwaves.splice(i, 1); continue; }
+        ctx.save();
+        ctx.strokeStyle = sw.heavy ? `rgba(239, 68, 68, ${1 - age})` : `rgba(250, 204, 21, ${1 - age})`;
+        ctx.lineWidth = (sw.heavy ? 10 : 6) * (1 - age * 0.6);
+        ctx.beginPath();
+        ctx.arc(sw.x, sw.y, 18 + age * (sw.heavy ? 115 : 75), 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
 
       // 황금 파티클 & 플로팅 +EXP 텍스트 렌더링
       for (let i = bursts.length - 1; i >= 0; i--) {
@@ -2536,6 +2721,24 @@
       if (!hit) {
         touchCaptainInput();
         if (capRingOpen) setCapRing(false);
+        // 🥊 신관 복싱 짐 샌드백을 직접 클릭하면 앞으로 걸어가서 바로 주먹/발차기 타격!
+        if (Math.hypot(px - BAG.cx, py - 64.5) < 6.8) {
+          const cap = npcs.captain;
+          const standX = (cap.x <= BAG.cx) ? 112.2 : 122.8;
+          const standY = 76.0;
+          const act = (Math.random() < 0.5) ? 'punch' : 'kick';
+          SFX.walkClick();
+          clickRing = { x: standX, y: standY, born: performance.now() };
+          if (Math.hypot(cap.x - BAG.cx, cap.y - BAG.cy) < 10.5) {
+            playCaptainAction(act);
+          } else {
+            walkCaptainSafe(standX, standY, {
+              bubble: '🥊 샌드백 치러 가자!',
+              onArrive: () => { cap.mode = 'stand'; playCaptainAction(act); }
+            });
+          }
+          return;
+        }
         if (canWalk(px, py)) {
           SFX.walkClick();
           clickRing = { x: px, y: py, born: performance.now() };
