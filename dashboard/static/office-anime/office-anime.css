@@ -246,6 +246,12 @@
   100% { opacity: 0; transform: translate(-50%, -62%) scale(0.95) rotate(-8deg); }
 }
 
+/* 시각 정보 비서 카메라 촬영 플래시 연출 */
+.oa-flash-fx { position: absolute; inset: 0; z-index: 24; pointer-events: none; background: radial-gradient(circle at 22% 42%, rgba(255,255,255,0.92), rgba(255,255,255,0.35) 45%, rgba(255,255,255,0) 80%); }
+.oa-flash-fx[hidden] { display: none; }
+.oa-flash-fx.pop { animation: oaCamFlash 0.42s ease-out forwards; }
+@keyframes oaCamFlash { 0% { opacity: 0.95; } 100% { opacity: 0; } }
+
 /* 화면(회전 포함) 실제 폭이 아주 좁을 때만 넓게 — 가로 회전 전체화면은 여기에 안 걸림 */
 @container (max-width: 520px) {
   .oa-modal { width: 88%; min-width: 0; }

@@ -83,7 +83,7 @@
     });
     const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k6')];
     for (const [id, cfg] of Object.entries(CHARS)) {
-      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [] };
+      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], photo: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee', 'kick', 'praise', 'stamp']
         : id === 'claude' ? ['east', 'front', 'back', 'se', 'ne', 'dance', 'brew', 'carry', 'serve', 'bow']
         : id === 'reader' ? ['east', 'front', 'back', 'se', 'ne', 'dance']
@@ -102,6 +102,14 @@
       if (id === 'captain') {
         imgs.walk[id].punch = [];
         for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1`));
+      }
+      // 전 직원(캡틴 제외) 9명 정중 인사 12프레임 로드 (id 기준 파일명 — reader↔auditor 일치!)
+      if (id !== 'captain' && id !== 'claude') {
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].bow, i - 1, `/static/office-anime/assets/walk/${id}-bow-${i}.webp?v=bow1`));
+      }
+      // 시각 정보 비서 스튜디오 카메라 촬영 12프레임
+      if (id === 'finder') {
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].photo, i - 1, `/static/office-anime/assets/walk/finder-photo-${i}.webp?v=bow1`));
       }
       // 전 직원 10명 책상 맞춤 앉은 업무 동작(25° 내려다보는 각도 · 앞모습 6명 + 뒷모습 4명, 인력공급팀 8프레임/나머지 4프레임)
       imgs.walk[id].seat = [];
@@ -524,6 +532,12 @@
         [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 0.12, 'triangle', 0.08, i * 0.07));
         navigator.vibrate?.([15, 25, 25]);
       },
+      shutter:   () => {
+        // 카메라 셔터 "찰칵!" 효과음
+        tone(1850, 0.035, 'square', 0.06);
+        tone(920, 0.045, 'triangle', 0.08, 0.03);
+        tone(2200, 0.03, 'sine', 0.05, 0.055);
+      },
       dance:     () => {
         navigator.vibrate?.([15, 20, 15, 20, 30]);
         clipOr('dance', 0.8, () => [587.33, 739.99, 880.0, 1174.66, 1479.98].forEach((f, i) => tone(f, 0.14, 'triangle', 0.085, i * 0.065)));
@@ -712,8 +726,19 @@
          <button type="button" class="oa-cr-item i2" data-cr="stamp">🖋️ 결재 도장</button>
          <button type="button" class="oa-cr-item i3" data-cr="sit">🪑 대표석 복귀</button>
        </div>
-       <div class="oa-stamp-fx" data-stamp-fx hidden><span>✅ 결재 완료</span></div>`;
+       <div class="oa-stamp-fx" data-stamp-fx hidden><span>✅ 결재 완료</span></div>
+       <div class="oa-flash-fx" data-flash-fx hidden></div>`;
     const stampFxEl = hud.querySelector('[data-stamp-fx]');
+    const flashFxEl = hud.querySelector('[data-flash-fx]');
+    function triggerCameraFlash() {
+      SFX.shutter();
+      if (!flashFxEl) return;
+      flashFxEl.hidden = false;
+      flashFxEl.classList.remove('pop');
+      void flashFxEl.offsetWidth;
+      flashFxEl.classList.add('pop');
+      setTimeout(() => { flashFxEl.hidden = true; flashFxEl.classList.remove('pop'); }, 450);
+    }
     const capStatusEl = hud.querySelector('[data-cap-status]');
     const capHpEl = hud.querySelector('[data-cap-hp]');
     const capHp5h = hud.querySelector('[data-hp-5h]');
@@ -2617,36 +2642,36 @@
       voice('captain', 'end', 0, { interrupt: true });
       log('✋ 캡틴: "오늘은 여기까지 하지." — 보고 종료');
 
-      // 0.7초 뒤 비서실장(전용 claude-bow 12프레임 정중 인사!) + 전체 직원 동시 인사 + "네, 알겠습니다 캡틴!"
+      // 0.7초 뒤 전 직원 9명 전원 12프레임 실제 영상 정중 인사 (0.04초 미세 시차로 자연스럽게!)
       briefTimers.push(setTimeout(() => {
         const nowS = performance.now() / 1000;
         const allStaff = ['claude', ...staffIds];
         for (const sid of allStaff) {
           const n = npcs[sid];
           n.path = []; n.onArrive = null;
-          if (sid === 'claude' && imgs.walk.claude?.bow?.length === 12) {
-            n.dir = 'east';
+          const idx = staffIds.indexOf(sid);
+          const stagger = sid === 'claude' ? 0 : (idx >= 0 ? idx * 0.045 : 0);
+          if (imgs.walk[sid]?.bow?.length === 12) {
+            n.dir = (sid === 'claude') ? 'east' : 'back';
             n.mode = 'emote'; n.emote = 'bow'; n.emoteLoop = false;
-            n.emoteStart = nowS;
-            n.bubble = '🙇 수고하셨습니다, 캡틴!';
+            n.emoteStart = nowS + stagger;
+            n.bubble = sid === 'claude' ? '🙇 수고하셨습니다, 캡틴!' : '🙇 네, 알겠습니다 캡틴!';
             n.bubbleType = 'ok';
           } else {
-            const idx = staffIds.indexOf(sid);
-            const stagger = (idx >= 0 ? idx * 0.055 : 0) + Math.random() * 0.06;
             n.mode = 'stand';
             n.dir = (sid === 'claude') ? 'east' : 'back';
             n.bowStart = nowS + stagger;
-            n.bowUntil = n.bowStart + 1.95 + Math.random() * 0.22;
+            n.bowUntil = n.bowStart + 1.95;
             n.bubble = '🙇 네, 알겠습니다 캡틴!';
             n.bubbleType = 'ok';
           }
         }
         voice('claude', 'greet', 0.35);
-        log('🙇 비서실장 & 전체 직원: 캡틴께 정중히 인사 후 해산 준비');
+        log('🙇 비서실장 & 전 직원 9명: 캡틴께 정중히 인사 후 해산 준비');
         SFX.fanfare();
         spawnBurst(50.0, 29.8, '🎉 보고 완료 +50 EXP', 50);
 
-        // 비서실장 12프레임 인사 끝난 뒤(2.9초 후) 각자 자리로 A* 안전 복귀!
+        // 전 직원 12프레임 인사 끝난 뒤(3.1초 후) 각자 자리로 A* 안전 복귀!
         briefTimers.push(setTimeout(() => {
           cap.bubble = '';
           for (const sid of allStaff) {
@@ -2658,7 +2683,7 @@
               onArrive: () => seatNpc(sid)
             });
           }
-        }, 2900));
+        }, 3100));
       }, 650));
     }
 
@@ -2920,6 +2945,11 @@
             if (emoteKey === 'water') { SFX.water(); if (id === 'sorter') voice('sorter', 'water', 0.25); }
             else if (emoteKey === 'clean') { SFX.sweep(); if (id === 'staffing') voice('staffing', 'clean', 0.25); }
             else if (emoteKey === 'sweep') { SFX.sweep(); if (id === 'inspector') voice('inspector', 'sweep', 0.25); }
+            else if (emoteKey === 'photo') {
+              n.emoteLoop = false;
+              setTimeout(() => { if (!briefingActive && n.emote === 'photo') triggerCameraFlash(); }, 1050);
+              setTimeout(() => { if (!briefingActive && n.emote === 'photo') { triggerCameraFlash(); voice('finder', 'snap', 0.1); } }, 1850);
+            }
           } else {
             n.mode = 'stand';
             if (id === 'sorter' && workMsg.includes('포장')) voice('sorter', 'check', 0.2);
@@ -2990,9 +3020,9 @@
         if (!isFree('claude')) return false;
         serveCoffee(); return true;
       },
-      // 5. 시각 정보 비서: 스튜디오 조명·카메라 점검
-      () => doChore('finder', 20.6, 43.2, 'east',
-        '💡 스튜디오 조명 점검 중…', '📷 크로마키 조명·카메라 각도 완벽!', 2800),
+      // 5. 시각 정보 비서: 스튜디오 카메라 촬영 (12프레임 + 하얀 플래시 + '찰칵! 완벽해요!')
+      () => doChore('finder', 20.6, 43.2, 'front',
+        '📷 카메라 들고 스튜디오 촬영 준비 중…', '📸 찰칵! 완벽한 메뉴판 사진이에요!', 3400, '', 'photo'),
       // 6. 감사실 2인방(운영 감찰관 + 데이터 감사관): 좌측 복도 또는 커피 라운지 교차 토론
       () => {
         const atLounge = Math.random() < 0.5;
