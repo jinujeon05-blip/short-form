@@ -3477,7 +3477,7 @@
             }
             if (tn && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
               tn.bubble = st.npcSay; tn.bubbleType = 'ok';
-              voice(st.id, 'greet', 0.1);
+              voice(st.id, st.id === 'claude' ? 'greet-vip' : 'greet', 0.1);
             }
           }, 2200);
 
