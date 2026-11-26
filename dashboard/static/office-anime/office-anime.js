@@ -1451,7 +1451,6 @@
         if (cap.mode === 'idle') cap.mode = 'stand';
         const say = isPunch ? '👊 원투! 연속 펀치!' : '🥋 얍! 이동 발차기!';
         if (isPunch) SFX.punch(); else SFX.kick();
-        voice('captain', isPunch ? 'punch' : 'kick');
         cap.bubble = say;
         cap.bubbleType = 'ok';
         spawnBurst(cap.x, cap.y - 4, isPunch ? '👊 퍽!' : '🥋 얍!', 0);
@@ -2963,7 +2962,6 @@
           ins.bubble = '👍✨ 운영 감찰관 솔로 댄스 타임!';
           ins.bubbleType = 'meet';
           playDanceMusic('inspector');
-          voice('inspector', 'dance', 0.1);
           spawnBurst(st.pos[0], st.pos[1] - 1.8, '👍 감찰관 솔로 댄스! +25 EXP', 25);
           soloDanceTimer = setTimeout(() => {
             soloDanceTimer = null;
