@@ -1891,7 +1891,7 @@
       return { x0: tx + (p.x - 5) * z, x1: tx + (p.x + 5) * z, y0: ty + (p.y - 24) * z, y1: ty + (p.y + 4) * z };
     }
     function placeModal() {
-      if (modalBack.hidden || !modalTargets.length) return;
+      if (modalBack.hidden || !modalTargets.length || modal.classList.contains('kbd-top')) return;
       const wrap = root.querySelector('.oa-rot-wrap');
       const W = wrap.clientWidth || 1, H = wrap.clientHeight || 1;
       const mw = modal.offsetWidth / W * 100, mh = modal.offsetHeight / H * 100;
@@ -1925,9 +1925,34 @@
 
     function closeTalkModal(keepOrderBubble = false) {
       if (!modalBack.hidden) SFX.close();
+      modal.classList.remove('kbd-top');
       modalBack.hidden = true;
       resumeTalkNpc(keepOrderBubble);
     }
+
+    // 모바일·낮은 화면에서 입력창에 포커스(키보드 올라옴) 시 대화창을 화면 최상단 슬림 입력바로 고정해 키보드 가림 방지!
+    const isCompactKbd = () => window.matchMedia('(pointer: coarse), (max-width: 960px), (max-height: 540px)').matches;
+    let kbdBlurTimer = null;
+    modal.addEventListener('focusin', e => {
+      if (!e.target?.matches?.('input, textarea')) return;
+      if (kbdBlurTimer) { clearTimeout(kbdBlurTimer); kbdBlurTimer = null; }
+      if (isCompactKbd()) {
+        modal.classList.add('kbd-top');
+        modal.scrollTop = 0;
+        // 모바일 키보드에서 커서 앞쪽('<가게명>')이 보이도록 좌측 스크롤 보정
+        requestAnimationFrame(() => { try { e.target.scrollLeft = 0; } catch {} });
+      }
+    });
+    modal.addEventListener('focusout', e => {
+      if (!e.target?.matches?.('input, textarea')) return;
+      if (kbdBlurTimer) clearTimeout(kbdBlurTimer);
+      kbdBlurTimer = setTimeout(() => {
+        if (!modal.contains(document.activeElement) || !document.activeElement?.matches?.('input, textarea')) {
+          modal.classList.remove('kbd-top');
+          if (!modalBack.hidden) placeModal();
+        }
+      }, 220);
+    });
 
     function openTalkModal(hit) {
       // 이전 대화 중인 직원이 있었다면 먼저 자기 자리로 복귀

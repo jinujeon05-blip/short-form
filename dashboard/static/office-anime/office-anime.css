@@ -209,6 +209,30 @@
 .oa-appr-lbl { font: 700 11px/1.25 "Malgun Gothic", sans-serif; color: #fff; }
 .oa-q-btn.appr-link { background: linear-gradient(135deg, rgba(245,158,11,0.28), rgba(234,88,12,0.24)); border-color: rgba(250,204,21,0.75); color: #fef08a; font-weight: 800; }
 
+/* 모바일 가상 키보드 올라올 때 대화창 최상단 슬림 도킹 — 입력창·전송 버튼이 키보드에 절대 가려지지 않게 */
+.oa-modal.kbd-top {
+  left: 50% !important;
+  top: 6px !important;
+  transform: translate(-50%, 0) !important;
+  width: min(580px, 94%) !important;
+  min-width: 0 !important;
+  max-height: 44% !important;
+  padding: 8px 10px !important;
+  border-radius: 12px !important;
+  z-index: 30;
+}
+.oa-modal.kbd-top .oa-m-head img,
+.oa-modal.kbd-top .oa-m-say,
+.oa-modal.kbd-top .oa-m-quick,
+.oa-modal.kbd-top .oa-m-quest,
+.oa-modal.kbd-top .oa-m-appr { display: none !important; }
+.oa-modal.kbd-top .oa-m-head { align-items: center; gap: 6px; }
+.oa-modal.kbd-top .oa-m-head h3 { font-size: 12.5px; margin: 0; }
+.oa-modal.kbd-top .oa-m-form { margin-top: 6px !important; gap: 6px !important; }
+.oa-modal.kbd-top .oa-m-form input { padding: 8px 10px !important; font-size: 13.5px !important; }
+.oa-modal.kbd-top .oa-m-form button { padding: 8px 12px !important; font-size: 12px !important; }
+.oa-modal.kbd-top .oa-m-res { margin-top: 4px !important; font-size: 11px !important; }
+
 /* 화면(회전 포함) 실제 폭이 아주 좁을 때만 넓게 — 가로 회전 전체화면은 여기에 안 걸림 */
 @container (max-width: 520px) {
   .oa-modal { width: 88%; min-width: 0; }
