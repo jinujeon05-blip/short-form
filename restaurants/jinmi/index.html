@@ -208,11 +208,12 @@
     if (SUPPORTED.includes(q)) return q;
     const saved = storage((s) => s.getItem("menu-lang"));
     if (SUPPORTED.includes(saved)) return saved;
-    for (const l of navigator.languages || [navigator.language]) {
-      const code = (l || "").toLowerCase().split("-")[0];
-      if (SUPPORTED.includes(code)) return code;
-    }
-    return "en";
+    // 휴대폰 언어 목록에서 지원 언어 중 첫 번째. 단, 중국어가 먼저여도 목록에 베트남어가 있으면 베트남어
+    // (베트남 폰의 QR 앱·앱 안 브라우저가 중국어를 앞에 알려 주는 경우, 2026-11-26 진미 건)
+    const codes = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language])
+      .map((l) => (l || "").toLowerCase().split("-")[0]).filter((c) => SUPPORTED.includes(c));
+    if (codes[0] === "zh" && codes.includes("vi")) return "vi";
+    return codes[0] || "en";
   }
 
   const fmt = (n) => n.toLocaleString("en-US");

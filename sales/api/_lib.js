@@ -40,14 +40,24 @@ function visitorId(ip, ua, date, shop) {
   return crypto.createHash('sha256').update([process.env.HASH_SALT || 'x', date, shop, ip, ua].join('|')).digest('hex').slice(0, 10);
 }
 
-const encodeHit = (h) => `hits/${h.date}/${h.shop}/${[h.vid, slug(h.lang, 8), slug(h.cc, 2), h.dev, slug(h.src, 14), crypto.randomBytes(3).toString('hex')].join('.')}`;
+// 어느 앱·브라우저로 열었는지(언어가 이상하게 나올 때 원인 찾기용, 2026-11-26 진미 건). 개인 정보 아님.
+function appOf(ua) {
+  const t = [[/zalo/i, 'zalo'], [/FBAN|FBAV|FB_IAB|FBIOS/i, 'facebook'], [/Instagram/i, 'instagram'], [/MicroMessenger/i, 'wechat'], [/KAKAOTALK/i, 'kakao'], [/\bLine\//i, 'line'], [/musical_ly|Bytedance|TikTok/i, 'tiktok'], [/XiaoMi|MiuiBrowser/i, 'mibrowser'], [/HeyTap|OppoBrowser/i, 'heytap'], [/VivoBrowser/i, 'vivo'], [/HuaweiBrowser|HMSCore/i, 'huawei'], [/SamsungBrowser/i, 'samsung'], [/coc_coc|CocCoc/i, 'coccoc'], [/UCBrowser/i, 'uc'], [/OPR\/|Opera/i, 'opera'], [/EdgA?\//i, 'edge'], [/Firefox|FxiOS/i, 'firefox'], [/; wv\)/i, 'webview'], [/CriOS|Chrome\//i, 'chrome'], [/Safari/i, 'safari']];
+  for (const [re, n] of t) if (re.test(ua)) return n;
+  return 'other';
+}
+// 폰이 알려 준 언어 앞 2개(Accept-Language, 예: 'zh-vi')
+const phoneLangOf = (al) => String(al || '').split(',').map((x) => x.split(';')[0].trim().toLowerCase().split('-')[0]).filter((x) => /^[a-z]{2,3}$/.test(x)).filter((x, i, a) => a.indexOf(x) === i).slice(0, 2).join('-');
+
+// 맨 뒤 두 칸(앱·폰 언어)은 2026-11-26에 붙임 — 옛 기록은 6칸이라 decodeHit에서 비어 있음
+const encodeHit = (h) => `hits/${h.date}/${h.shop}/${[h.vid, slug(h.lang, 8), slug(h.cc, 2), h.dev, slug(h.src, 14), crypto.randomBytes(3).toString('hex'), slug(h.app, 10), slug(h.pl, 7)].join('.')}`;
 
 function decodeHit(pathname) {
   const m = pathname.match(/^hits\/(\d{4}-\d{2}-\d{2})\/([a-z0-9]+)\/([^/]+)$/);
   if (!m) return null;
   const f = m[3].split('.');
   if (f.length < 6) return null;
-  return { date: m[1], shop: m[2], vid: f[0], lang: f[1], cc: f[2], dev: f[3], src: f[4] };
+  return { date: m[1], shop: m[2], vid: f[0], lang: f[1], cc: f[2], dev: f[3], src: f[4], app: f[6] || '', pl: f[7] || '' };
 }
 
 const bump = (o, k, n = 1) => { o[k] = (o[k] || 0) + n; };
@@ -59,12 +69,12 @@ function aggregate(pathnames, dates) {
   for (const p of pathnames) {
     const h = decodeHit(p);
     if (!h) continue;
-    const s = (shops[h.shop] ||= { pv: 0, vis: 0, days: {}, lang: {}, dev: {}, src: {}, cc: {} });
+    const s = (shops[h.shop] ||= { pv: 0, vis: 0, days: {}, lang: {}, dev: {}, src: {}, cc: {}, app: {}, langApp: {} });
     s.pv++;
     const d = (s.days[h.date] ||= { pv: 0, vis: 0 });
     d.pv++;
     const key = h.date + '|' + h.shop + '|' + h.vid;
-    if (!seen.has(key)) { seen.add(key); s.vis++; d.vis++; bump(s.lang, h.lang); bump(s.dev, h.dev); bump(s.src, h.src); bump(s.cc, h.cc); }
+    if (!seen.has(key)) { seen.add(key); s.vis++; d.vis++; bump(s.lang, h.lang); bump(s.dev, h.dev); bump(s.src, h.src); bump(s.cc, h.cc); if (h.app) { bump(s.app, h.app); bump(s.langApp, `${h.lang} ${h.app} ${h.pl} ${h.cc}`); } }
   }
   return { dates, shops };
 }
@@ -76,7 +86,7 @@ function checkAdmin(req) {
   return crypto.timingSafeEqual(Buffer.from(given), Buffer.from(real));
 }
 
-module.exports = { dateOf, BOT, slug, shopFrom, srcOf, deviceOf, visitorId, encodeHit, decodeHit, aggregate, checkAdmin, TZ_OFFSET_MS };
+module.exports = { dateOf, BOT, slug, shopFrom, srcOf, deviceOf, visitorId, appOf, phoneLangOf, encodeHit, decodeHit, aggregate, checkAdmin, TZ_OFFSET_MS };
 
 // ───────────────────────── 로그인 · 보안 (관리자·점주·리포트 링크) ─────────────────────────
 const S = require('./_store');

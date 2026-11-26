@@ -26,6 +26,8 @@ module.exports = async (req, res) => {
       cc: String(req.headers['x-vercel-ip-country'] || '').slice(0, 2),
       dev: L.deviceOf(ua, Number(b.w) || 0),
       src: L.srcOf(String(b.s || ''), refHost || String(b.r || ''), String(b.h || '')),
+      app: L.appOf(ua),
+      pl: L.phoneLangOf(req.headers['accept-language']),
     };
     await put(L.encodeHit(hit), '1', { access: 'public', addRandomSuffix: false, contentType: 'text/plain' });
     return res.status(204).end();
