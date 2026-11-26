@@ -3312,7 +3312,8 @@
       log('🤝 NANA VINA 정은수 대표님(VIP)이 사무실에 방문하셨습니다!');
 
       const cap = npcs.captain;
-      const greetSpot = [50.0, 29.8];
+      // 캡틴이 자리에 앉아 있으면 단상 앞, 돌아다니고 있으면 실제 캡틴 캐릭터 바로 앞으로 찾아감!
+      const greetSpot = getSpotNearCaptain();
       const coffeeSpot = [15.5, 22.0];
       // 대표님이 담당자 standPos 바로 옆(4.5~5% 거리)에 서서, 담당자가 일어났을 때 깔끔하게 마주 보고 대화!
       const tourStops = [
@@ -3465,7 +3466,9 @@
         bubble: '🤝 아우님! NANA VINA 정은수 왔어!',
         bubbleType: 'meet',
         onArrive: () => {
-          v.dir = 'back'; v.mode = 'stand';
+          v.mode = 'stand';
+          if (cap) faceEachOther(v, cap);
+          else v.dir = 'back';
           v.bubble = '🤝 아우님! 요즘 사업 잘 되지? 잠깐 들렀어!';
           v.bubbleType = 'meet';
           spawnBurst(v.x, v.y - 4, '🤝 NANA VINA VIP 방문!', 0);
