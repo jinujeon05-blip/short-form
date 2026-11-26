@@ -249,6 +249,8 @@ window.DEMOS = [
     name: "미카도 스시 미딩점 MIKADO SUSHI", type: { ko: "회전초밥 · 일식 · 퓨전 초밥 · 딤섬", vi: "Sushi băng chuyền · Món Nhật · Sushi fusion · Dimsum", en: "Conveyor-belt sushi · Japanese · Fusion sushi · Dim sum", zh: "回转寿司 · 日料 · 创意寿司 · 点心", ja: "回転寿司・日本料理・フュージョン寿司・飲茶" } },
   { id: "rumor", hidden: true, url: "https://rumor.qrmenuasia.com", shot: "img/demo-rumor.jpg", qr: "img/qr-rumor.svg",
     name: "루머 RUMOR", type: { ko: "레스토랑 & 펍 · 피자 · 치킨 · 수제맥주", vi: "Nhà hàng & Pub · Pizza · Gà rán · Bia thủ công", en: "Restaurant & pub · Pizza · Fried chicken · Craft beer", zh: "餐厅酒吧 · 披萨 · 炸鸡 · 精酿啤酒", ja: "レストラン＆パブ・ピザ・チキン・クラフトビール" } },
+  { id: "highba23", hidden: true, url: "https://highba23.qrmenuasia.com", shot: "img/demo-highba23.jpg", qr: "img/qr-highba23.svg",
+    name: "하이바23 펍 HIGHBA23", type: { ko: "펍 · 수제맥주 · 하이볼 · 안주", vi: "Pub · Bia thủ công · Highball · Đồ nhắm", en: "Pub · Craft beer · Highball · Bar bites", zh: "酒吧 · 精酿啤酒 · 嗨棒 · 下酒菜", ja: "パブ・クラフトビール・ハイボール・おつまみ" } },
 ];
 
 window.T = {

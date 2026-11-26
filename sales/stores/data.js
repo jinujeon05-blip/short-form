@@ -953,6 +953,12 @@ window.STORES = [
     type: { ko: "레스토랑 & 펍 · 피자 · 치킨 · 수제맥주", vi: "Nhà hàng & Pub · Pizza · Gà rán · Bia thủ công", en: "Restaurant & pub · Pizza · Fried chicken · Craft beer", zh: "餐厅酒吧 · 披萨 · 炸鸡 · 精酿啤酒", ja: "レストラン＆パブ・ピザ・チキン・クラフトビール" },
     keywords: "루머 rumor 하노이 더마노 The Manor Từ Liêm 펍 호프 수제맥주 피자 치킨 스테이크 폭립 칵테일 소주 한식 안주 떡볶이 quán nhậu pub bia thủ công gà rán pizza 餐厅 酒吧 精酿啤酒 パブ クラフトビール"
   },
+  { id: "highba23", name: "하이바23 펍 HIGHBA23", sub: "수제맥주 · 하이볼 · 타코 · 소시지 · 나초 · 안주", url: "https://highba23.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bar","western"], tags: ["photos"],
+    address: "The Manor, tháp B/B009 P. Đỗ Đình Thiện, The Manor - Hà Nội, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Highba23.pub/@21.0146719,105.7764359,21z/data=!4m6!3m5!1s0x31345541aad51a3d:0x154e2a3e65a05a79!8m2!3d21.0146719!4d105.7765968",
+    type: { ko: "펍 · 수제맥주 · 하이볼 · 안주", vi: "Pub · Bia thủ công · Highball · Đồ nhắm", en: "Pub · Craft beer · Highball · Bar bites", zh: "酒吧 · 精酿啤酒 · 嗨棒 · 下酒菜", ja: "パブ・クラフトビール・ハイボール・おつまみ" },
+    keywords: "하이바23 펍 Highba23 Highba23.pub HIGHBA23 PUB 하노이 미딩 The Manor 수제맥주 하이볼 타코 소시지 나초 감바스 먹태 craft beer highball pub Hanoi My Dinh bia thủ công quán nhậu"
+  },
 ];
 window.SI = {
   ko: {
