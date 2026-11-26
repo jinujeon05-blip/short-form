@@ -31,9 +31,9 @@
     finder:     { x: 141.9, y: 38.0, headTopY: 28.6, clipY: 35.8, h: 215, facing: 'front', stand: [130.5, 44.5] },
     claude:     { x: 149.3, y: 38.0, headTopY: 28.6, clipY: 35.8, h: 215, facing: 'front', stand: [132.5, 44.5] },
     translator: { x: 156.5, y: 38.0, headTopY: 28.6, clipY: 35.8, h: 215, facing: 'front', stand: [134.5, 44.5] },
-    inspector:  { x: 141.2, y: 46.2, headTopY: 33.4, clipY: 43.2, h: 210, facing: 'back',  stand: [139.0, 46.8] },
-    auditor:    { x: 149.2, y: 46.4, headTopY: 33.6, clipY: 43.6, h: 210, facing: 'back',  stand: [149.2, 46.8] },
-    reader:     { x: 157.1, y: 46.4, headTopY: 33.6, clipY: 43.6, h: 210, facing: 'back',  stand: [157.5, 46.8] },
+    inspector:  { x: 141.2, y: 46.2, headTopY: 33.9, clipY: 43.2, h: 210, facing: 'back',  stand: [139.0, 46.8] },
+    auditor:    { x: 149.2, y: 46.4, headTopY: 34.3, clipY: 43.6, h: 210, facing: 'back',  stand: [149.2, 46.8] },
+    reader:     { x: 157.1, y: 46.4, headTopY: 34.2, clipY: 43.6, h: 210, facing: 'back',  stand: [157.5, 46.8] },
   };
   const CONF_IDS = ['finder', 'claude', 'translator', 'inspector', 'auditor', 'reader'];
 
@@ -54,6 +54,10 @@
     { key: 'navy-desk',          x0: 32.69, y0: 69.18, x1: 42.59, y1: 78.45, sortY: 78.00 },
     { key: 'sky-desk',           x0: 59.92, y0: 69.25, x1: 69.37, y1: 78.52, sortY: 78.07 },
     { key: 'orange-desk',        x0: 80.99, y0: 68.56, x1: 89.41, y1: 77.81, sortY: 77.34 },
+    // 신관 대회의실 아랫줄 의자 3개 전경 마스크 (운영감찰관·데이터감사관·자료해석비서가 등받이 안쪽에 자연스럽게 착석!)
+    { key: 'conf-chair-1',       x0: 138.80, y0: 38.50, x1: 143.80, y1: 47.40, sortY: 46.80 },
+    { key: 'conf-chair-2',       x0: 146.80, y0: 38.90, x1: 151.80, y1: 47.60, sortY: 46.80 },
+    { key: 'conf-chair-3',       x0: 154.70, y0: 38.90, x1: 159.70, y1: 47.60, sortY: 46.80 },
   ];
 
   const SIGNS = [
