@@ -2569,6 +2569,7 @@
     function startBriefing() {
       if (briefingActive) return;
       stopInspectorSolo(false);
+      dismissVipForBriefing();
       briefingActive = true;
       SFX.brief();
       voice('captain', 'brief', 0.5);
@@ -3322,9 +3323,38 @@
       npcs.vip_jung.mode = 'stand';
     }
     let vipActive = false;
+    let vipTimers = [];
+    const vipSetTimeout = (fn, ms) => { const id = setTimeout(fn, ms); vipTimers.push(id); return id; };
+    const clearVipTimers = () => { vipTimers.forEach(id => { clearTimeout(id); clearInterval(id); }); vipTimers = []; };
+    function dismissVipForBriefing() {
+      clearVipTimers();
+      // 모든 직원의 VIP 예약 플래그 즉시 해제 → 보고 정렬에 100% 정상 합류!
+      for (const n of Object.values(npcs)) { n.vipReserved = false; }
+      const v = npcs.vip_jung;
+      if (!v || v.hidden) { vipActive = false; return; }
+      v.emote = null; v.emoteLoop = false;
+      v.path = []; v.onArrive = null;
+      log('👋 전체 보고 시작 — 정은수 대표님께서 자리를 비워주시고 사무실 밖으로 나가십니다.');
+      const ok = walkNpcSafe('vip_jung', 50.0, 96.5, {
+        force: true,
+        bubble: '👋 회의 시작하네! 아우님, 나 먼저 나가 있을게~',
+        bubbleType: 'meet',
+        onArrive: () => {
+          v.hidden = true; v.bubble = ''; v.mode = 'stand';
+          vipActive = false;
+          scheduleNextVip();
+        }
+      });
+      if (!ok) {
+        v.hidden = true; v.bubble = ''; v.mode = 'stand';
+        vipActive = false;
+        scheduleNextVip();
+      }
+    }
     function startVipVisit() {
       const v = npcs.vip_jung;
       if (!v || vipActive || briefingActive) return false;
+      clearVipTimers();
       vipActive = true;
       v.hidden = false;
       v.x = 50.0; v.y = 96.5; v.dir = 'back'; v.mode = 'walk';
@@ -3352,7 +3382,7 @@
         v.bubble = '👋 아우님, 나 먼저 들어가 볼게! 조만간 한잔하자!';
         v.bubbleType = 'meet';
         // 말풍선 겹침 방지: 대표님 작별 인사(2.0초) → 대표님 말풍선 닫고 캡틴 화답(2.2초)
-        setTimeout(() => {
+        vipSetTimeout(() => {
           v.bubble = '';
           if (cap && !briefingActive) {
             const prev = cap.bubble;
@@ -3374,6 +3404,7 @@
       };
 
       const visitStop = idx => {
+        if (briefingActive) return;
         if (idx >= picked.length) { exitOffice(); return; }
         const st = picked[idx];
         const tn = npcs[st.id];
@@ -3390,7 +3421,6 @@
           if (guardTimer) { clearTimeout(guardTimer); guardTimer = null; }
           if (briefingActive) {
             if (tn) tn.vipReserved = false;
-            exitOffice();
             return;
           }
           v.dir = st.dir; v.mode = 'stand';
@@ -3405,7 +3435,7 @@
           }
 
           // 2) 2.2초 뒤: 대표님 말풍선을 닫고 담당자가 대답(순차 티키타카 -> 말풍선 절대 안 겹침!)
-          setTimeout(() => {
+          vipSetTimeout(() => {
             v.bubble = '';
             if (tn && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
               tn.bubble = st.npcSay; tn.bubbleType = 'ok';
@@ -3414,7 +3444,7 @@
           }, 2200);
 
           // 3) 4.5초 뒤: 대화 종료 → 담당자 착석 + 예약 해제, 대표님은 다음 담당자로!
-          setTimeout(() => {
+          vipSetTimeout(() => {
             v.bubble = '';
             if (tn) {
               tn.vipReserved = false;
@@ -3428,6 +3458,7 @@
         };
 
         const markNpcReady = () => {
+          if (briefingActive) return;
           npcReady = true;
           if (tn && !started) {
             seatNpc(st.id);
@@ -3454,6 +3485,7 @@
           force: true,
           bubble: `🚶 ${tc?.name || '직원'} 자리 들르는 중…`,
           onArrive: () => {
+            if (briefingActive) return;
             v.dir = st.dir; v.mode = 'stand';
             vipArrived = true;
             if (npcReady) {
@@ -3463,14 +3495,15 @@
               v.bubbleType = '';
               // 0.3초마다 담당자가 자리에 도착했는지 재확인 + 최대 8초 뒤 자동 진행
               const poll = setInterval(() => {
-                if (started) { clearInterval(poll); return; }
+                if (started || briefingActive) { clearInterval(poll); return; }
                 if (!tn || tn.mode === 'idle' || Math.hypot(tn.x - tc.home[0], tn.y - tc.home[1]) < 4.0) {
                   clearInterval(poll);
                   npcReady = true;
                   startMeeting();
                 }
               }, 300);
-              guardTimer = setTimeout(() => { clearInterval(poll); startMeeting(); }, 8000);
+              vipTimers.push(poll);
+              guardTimer = vipSetTimeout(() => { clearInterval(poll); startMeeting(); }, 8000);
             }
           }
         });
@@ -3486,6 +3519,7 @@
         bubble: '🤝 아우님! NANA VINA 정은수 왔어!',
         bubbleType: 'meet',
         onArrive: () => {
+          if (briefingActive) return;
           v.mode = 'stand';
           if (cap) faceEachOther(v, cap);
           else v.dir = 'back';
@@ -3493,7 +3527,7 @@
           v.bubbleType = 'meet';
           spawnBurst(v.x, v.y - 4, '🤝 NANA VINA VIP 방문!', 0);
           // 2.0초 뒤 대표님 말풍선 닫고 캡틴 화답 (겹침 방지!)
-          setTimeout(() => {
+          vipSetTimeout(() => {
             v.bubble = '';
             if (cap && !briefingActive) {
               const prev = cap.bubble;
@@ -3502,11 +3536,13 @@
               setTimeout(() => { if (cap.bubble.startsWith('😄 형님')) cap.bubble = prev || ''; }, 2400);
             }
           }, 2000);
-          setTimeout(() => {
+          vipSetTimeout(() => {
+            if (briefingActive) return;
             walkNpcSafe('vip_jung', coffeeSpot[0], coffeeSpot[1], {
               force: true,
               bubble: '☕ 커피 한 잔 마시러 가는 중…',
               onArrive: () => {
+                if (briefingActive) return;
                 v.dir = 'front';
                 if (imgs.walk.vip_jung?.coffee?.length === 12) {
                   v.mode = 'emote'; v.emote = 'coffee'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
@@ -3516,7 +3552,7 @@
                 SFX.coffee();
                 v.bubble = '☕ 여기 사무실 커피 향이 진짜 좋네~';
                 v.bubbleType = 'ok';
-                setTimeout(() => {
+                vipSetTimeout(() => {
                   v.emote = null; v.emoteLoop = false; v.bubble = '';
                   visitStop(0);
                 }, 3800);
