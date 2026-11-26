@@ -87,8 +87,8 @@
       im.src = url;
     });
     const jobs = [
-      load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k6'),
-      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing3'),
+      load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k7'),
+      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing4'),
       load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing2'),
     ];
     for (const [id, cfg] of Object.entries(CHARS)) {
@@ -1407,8 +1407,7 @@
       { x0:  7.8, y0:  0.0, x1: 23.8, y1: 21.2 }, // 커피바 + 정수기(장 바닥선 20.6까지 — 위에 올라선 것처럼 안 보이게)
       { x0: 23.5, y0:  0.0, x1: 36.5, y1: 19.2 }, // 좌측 상단 통유리 창가(정수기~단상 계단 사이 — 창틀 위로 못 올라가게!)
       { x0: 63.5, y0:  0.0, x1: 72.0, y1: 19.2 }, // 우측 상단 통유리 창가(단상 계단~테라스 난간 사이 — 창틀 위로 못 올라가게!)
-      { x0: 71.5, y0:  0.0, x1: 100., y1: 19.0 }, // 우측 테라스 난간(기둥 바닥 18.2까지)
-      { x0: 93.0, y0:  0.0, x1: 99.0, y1: 20.2 }, // 우측 상단 화분(아래쪽 통로 열어 신관 연결!)
+      { x0: 71.5, y0:  0.0, x1: 100., y1: 19.0 }, // 우측 테라스 난간·신관 연결 통유리 창가(기둥 바닥 18.2까지 — 화분 제거로 신관 복도 완전 개방!)
       { x0: 42.3, y0: 17.2, x1: 58.0, y1: 21.8 }, // 캡틴 대표 책상
       { x0: 36.8, y0: 23.4, x1: 63.2, y1: 27.8 }, // 단상 앞쪽 턱 (좌우 계단으로만 내려오게)
       // 중앙 복도 책상·화분
