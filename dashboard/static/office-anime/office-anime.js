@@ -96,49 +96,49 @@
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
           const v = (id === 'vip_jung') ? 'vip2' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new1' : id === 'captain' ? (dir === 'kick' ? 'kick1' : 'cap8dir') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
-          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
+          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}_df3`));
         }
       }
       // 캡틴 주먹 격투(복싱 연속 공격)는 15프레임 — 챗GPT 3명씩 5장(가드·잽·스트레이트·훅·어퍼컷)
       if (id === 'captain') {
         imgs.walk[id].punch = [];
-        for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1`));
+        for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1_df3`));
       }
       // 전 직원(캡틴·외부 손님 제외) 9명 정중 인사 12프레임 로드 (id 기준 파일명 — reader↔auditor 일치!)
       if (id !== 'captain' && id !== 'claude' && !cfg.guest) {
-        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].bow, i - 1, `/static/office-anime/assets/walk/${id}-bow-${i}.webp?v=bow1`));
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].bow, i - 1, `/static/office-anime/assets/walk/${id}-bow-${i}.webp?v=bow1_df3`));
       }
       // 시각 정보 비서 스튜디오 카메라 촬영 12프레임
       if (id === 'finder') {
-        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].photo, i - 1, `/static/office-anime/assets/walk/finder-photo-${i}.webp?v=bow1`));
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].photo, i - 1, `/static/office-anime/assets/walk/finder-photo-${i}.webp?v=bow1_df3`));
       }
       // 수석 번역관(review)·메뉴 검사관(inspect)·자료 해석 비서 4종(analyze/cheer/coffee/stretch) 특기 동작 12프레임
       if (id === 'translator') {
-        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].review, i - 1, `/static/office-anime/assets/walk/translator-review-${i}.webp?v=act4`));
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].review, i - 1, `/static/office-anime/assets/walk/translator-review-${i}.webp?v=act4_df3`));
       }
       if (id === 'agy') {
-        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].inspect, i - 1, `/static/office-anime/assets/walk/agy-inspect-${i}.webp?v=act4`));
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].inspect, i - 1, `/static/office-anime/assets/walk/agy-inspect-${i}.webp?v=act4_df3`));
       }
       if (id === 'reader') {
         for (const act of ['analyze', 'cheer', 'coffee', 'stretch']) {
-          for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id][act], i - 1, `/static/office-anime/assets/walk/reader-${act}-${i}.webp?v=act4`));
+          for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id][act], i - 1, `/static/office-anime/assets/walk/reader-${act}-${i}.webp?v=act4_df3`));
         }
       }
       // 전 직원 10명 책상 맞춤 앉은 업무 동작(외부 손님 제외)
       if (!cfg.guest) {
         imgs.walk[id].seat = [];
         const seatCnt = (id === 'staffing') ? 8 : 4;
-        for (let i = 1; i <= seatCnt; i++) jobs.push(load(imgs.walk[id].seat, i - 1, `/static/office-anime/assets/walk/${id}-seat-${i}.webp?v=seat1`));
+        for (let i = 1; i <= seatCnt; i++) jobs.push(load(imgs.walk[id].seat, i - 1, `/static/office-anime/assets/walk/${id}-seat-${i}.webp?v=seat1_df3`));
       }
       // 비서실장 책상 업무(구 12프레임 백업 유지)
       if (id === 'claude') {
         imgs.walk[id].write = [];
-        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].write, i - 1, `/static/office-anime/assets/walk/claude-write-${i}.webp?v=write1`));
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].write, i - 1, `/static/office-anime/assets/walk/claude-write-${i}.webp?v=write1_df3`));
       }
       // 운영 감찰관 솔로 댄스 36프레임 (127 BPM 전용 BGM 17.35초 칼박 싱크: 인트로6 + 메인24×2 + 엔딩6)
       if (id === 'inspector') {
         imgs.walk[id].dance = [];
-        for (let i = 1; i <= 36; i++) jobs.push(load(imgs.walk[id].dance, i - 1, `/static/office-anime/assets/walk/inspector-dance-${i}.webp?v=idance1`));
+        for (let i = 1; i <= 36; i++) jobs.push(load(imgs.walk[id].dance, i - 1, `/static/office-anime/assets/walk/inspector-dance-${i}.webp?v=idance1_df3`));
       }
     }
     for (const p of PROPS) {
