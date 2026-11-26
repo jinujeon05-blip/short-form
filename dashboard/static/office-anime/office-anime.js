@@ -1189,21 +1189,39 @@
       const targetW = targetH * (im.naturalWidth / im.naturalHeight);
       const bob = walking ? Math.sin(n.walkDist * 1.1) * 1.8 : 0;
 
-      // 캡틴에게 공손히 허리 숙여 인사하는 보우(Bow) 모션!
-      let bowScaleY = 1, bowScaleX = 1;
-      if (n.bowStart && n.bowUntil && t < n.bowUntil) {
+      // 캡틴에게 공손히 허리 숙여 인사하는 2분할 허리 축 보우(Bow) 모션 (하체·다리는 꼿꼿이 고정, 상체만 허리에서 숙였다 잠깐 멈춘 뒤 복귀!)
+      let bowDip = 0;
+      if (n.bowStart && n.bowUntil && t >= n.bowStart && t < n.bowUntil) {
         const p = Math.min(1, Math.max(0, (t - n.bowStart) / (n.bowUntil - n.bowStart)));
-        const dip = Math.sin(p * Math.PI); // 0 -> 1 -> 0 부드러운 인사 곡선
-        bowScaleY = 1 - dip * 0.14;
-        bowScaleX = 1 + dip * 0.04;
+        const ease = x => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+        if (p < 0.30) bowDip = ease(p / 0.30);           // 0..30%: 부드럽게 숙임
+        else if (p < 0.64) bowDip = 1.0;                 // 30..64%: 정중히 숙인 채 잠깐 멈춤(홀드)
+        else bowDip = 1 - ease((p - 0.64) / 0.36);       // 64..100%: 천천히 고개 들며 복귀
       }
 
       ctx.save();
       ctx.fillStyle = 'rgba(15, 23, 42, 0.28)';
       ctx.beginPath(); ctx.ellipse(cx, cy + 6, 26 * sizeK, 7.5 * sizeK, 0, 0, Math.PI * 2); ctx.fill();
       ctx.translate(cx, cy + bob);
-      ctx.scale((flipX ? -1 : 1) * bowScaleX, bowScaleY);
-      ctx.drawImage(im, -targetW / 2, -targetH, targetW, targetH);
+      ctx.scale(flipX ? -1 : 1, 1);
+      if (bowDip > 0.005) {
+        const iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
+        const waistRatio = 0.48; // 위 48% = 상체(머리~허리), 아래 52% = 하체(골반~구두, 고정!)
+        const srcSplit = Math.round(ih * waistRatio);
+        const dstUpperH = targetH * waistRatio;
+        const dstLowerH = targetH - dstUpperH;
+        // 1) 하체(다리·치마/바지·구두): 절대 찌그러지지 않고 꼿꼿이 서 있음
+        ctx.drawImage(im, 0, srcSplit, iw, ih - srcSplit, -targetW / 2, -dstLowerH, targetW, dstLowerH);
+        // 2) 상체(머리~허리): 허리 축(-dstLowerH)을 기준으로 원근감 있게 앞으로 숙임!
+        const upScaleY = 1 - bowDip * 0.36;
+        const upScaleX = 1 + bowDip * 0.05;
+        const upH = dstUpperH * upScaleY;
+        const upW = targetW * upScaleX;
+        // 이음매 1.5px 살짝 겹쳐 틈새 0%
+        ctx.drawImage(im, 0, 0, iw, srcSplit + 2, -upW / 2, -dstLowerH - upH + 1.5, upW, upH + 1.5);
+      } else {
+        ctx.drawImage(im, -targetW / 2, -targetH, targetW, targetH);
+      }
       ctx.restore();
     }
 
@@ -2613,10 +2631,12 @@
             n.bubble = '🙇 수고하셨습니다, 캡틴!';
             n.bubbleType = 'ok';
           } else {
+            const idx = staffIds.indexOf(sid);
+            const stagger = (idx >= 0 ? idx * 0.055 : 0) + Math.random() * 0.06;
             n.mode = 'stand';
             n.dir = (sid === 'claude') ? 'east' : 'back';
-            n.bowStart = nowS;
-            n.bowUntil = nowS + 1.45;
+            n.bowStart = nowS + stagger;
+            n.bowUntil = n.bowStart + 1.95 + Math.random() * 0.22;
             n.bubble = '🙇 네, 알겠습니다 캡틴!';
             n.bubbleType = 'ok';
           }
