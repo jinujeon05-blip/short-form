@@ -126,6 +126,7 @@ name() {
     dungcua) echo "중꾸아 해산물 식당" ;;
     osaka) echo "오사카" ;;
     mikadosushi) echo "미카도 스시 미딩점" ;;
+    rumor) echo "루머" ;;
     *) echo "$1" ;;
   esac
 }

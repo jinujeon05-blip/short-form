@@ -947,6 +947,12 @@ window.STORES = [
     type: { ko: "회전초밥 · 일식 · 퓨전 초밥 · 딤섬", vi: "Sushi băng chuyền · Món Nhật · Sushi fusion · Dimsum", en: "Conveyor-belt sushi · Japanese · Fusion sushi · Dim sum", zh: "回转寿司 · 日料 · 创意寿司 · 点心", ja: "回転寿司・日本料理・フュージョン寿司・飲茶" },
     keywords: "미카도 스시 미딩점 미카도스시 Mikado Sushi Mỹ Đình 미딩 The Manor 회전초밥 스시 초밥 아부리 딤섬 우동 사시미 하노이 sushi băng chuyền"
   },
+  { id: "rumor", name: "루머 RUMOR", sub: "피자 · 치킨 · 스테이크 · 수제맥주 · 칵테일", url: "https://rumor.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bar","western","chicken","korean"], tags: ["photos"],
+    address: "CT1, The Manor, Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Rumor/@21.0145065,105.7744368,21z/data=!4m6!3m5!1s0x31345300499287b9:0x6f9e21caabb09c9!8m2!3d21.0145065!4d105.7744368!16s%2Fg%2F11y22wc5cg",
+    type: { ko: "레스토랑 & 펍 · 피자 · 치킨 · 수제맥주", vi: "Nhà hàng & Pub · Pizza · Gà rán · Bia thủ công", en: "Restaurant & pub · Pizza · Fried chicken · Craft beer", zh: "餐厅酒吧 · 披萨 · 炸鸡 · 精酿啤酒", ja: "レストラン＆パブ・ピザ・チキン・クラフトビール" },
+    keywords: "루머 rumor 하노이 더마노 The Manor Từ Liêm 펍 호프 수제맥주 피자 치킨 스테이크 폭립 칵테일 소주 한식 안주 떡볶이 quán nhậu pub bia thủ công gà rán pizza 餐厅 酒吧 精酿啤酒 パブ クラフトビール"
+  },
 ];
 window.SI = {
   ko: {

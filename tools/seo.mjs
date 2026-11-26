@@ -181,6 +181,7 @@ const SHOPS = {
   dungcua: { type: 'Restaurant', cuisine: ['Seafood', 'Lobster', 'King Crab', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/kingcrab.jpg' },
   osaka: { type: 'Restaurant', cuisine: ['Japanese', 'Yakiniku', 'Sashimi', 'Sushi'], country: 'VN', currency: 'VND', og: 'img/sushi.jpg' },
   mikadosushi: { type: 'Restaurant', cuisine: ['Japanese', 'Sushi', 'Conveyor Belt Sushi'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  rumor: { type: 'BarOrPub', cuisine: ['Korean', 'Pizza', 'Fried Chicken', 'Steak', 'Craft Beer'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

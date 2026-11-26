@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://rumor.qrmenuasia.com/sitemap.xml
