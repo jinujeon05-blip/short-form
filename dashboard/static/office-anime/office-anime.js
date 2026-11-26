@@ -84,18 +84,19 @@
     });
     const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k6')];
     for (const [id, cfg] of Object.entries(CHARS)) {
-      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], photo: [], review: [], inspect: [], analyze: [], cheer: [], stretch: [] };
+      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], photo: [], review: [], inspect: [], analyze: [], cheer: [], stretch: [], talk: [], thumb: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee', 'kick', 'praise', 'stamp']
         : id === 'claude' ? ['east', 'front', 'back', 'se', 'ne', 'dance', 'brew', 'carry', 'serve', 'bow']
         : id === 'reader' ? ['east', 'front', 'back', 'se', 'ne', 'dance']
         : id === 'sorter' ? ['east', 'front', 'back', 'water']
         : id === 'staffing' ? ['east', 'front', 'back', 'clean']
         : id === 'inspector' ? ['east', 'front', 'back', 'sweep']
+        : id === 'vip_jung' ? ['east', 'front', 'back', 'greet', 'coffee', 'talk', 'thumb']
         : ['east', 'front', 'back'];
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = (id === 'vip_jung') ? 'vip2' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new1' : id === 'captain' ? (dir === 'kick' ? 'kick1' : 'cap8dir') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
+          const v = (id === 'vip_jung') ? 'vip3' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new2' : id === 'captain' ? (dir === 'kick' ? 'kick2' : 'cap8dir2') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}_df3`));
         }
       }
@@ -2241,7 +2242,7 @@
         const isDeployOnly = !ord.approval && ord.deploy?.length && ord.deployState !== 'done';
         return [
           isDeployOnly
-            ? { num: '1', label: '배포 확정 창 바로 열기', action: 'openOrder' }
+            ? { num: '1', label: '배포 확정', action: 'deploy' }
             : { num: '1', label: '✅ 확정 진행 (승인)', replyText: '확정합니다. 진행해 주세요.', approve: true },
           { num: '2', label: '✏️ 수정 요청 (직접 입력)', action: 'edit' },
           { num: '3', label: '📋 결재 내용 자세히 보기', action: 'openOrder' },
@@ -2322,6 +2323,31 @@
         btn.addEventListener('click', async () => {
           const ch = apprChoices[Number(btn.dataset.apprIdx)];
           if (!ch || !npcAppr) return;
+          if (ch.action === 'deploy') {
+            btn.disabled = true;
+            const resEl = modal.querySelector('[data-res]');
+            if (resEl) { resEl.hidden = false; resEl.textContent = '🚀 배포 확정을 서버에 전달하고 있습니다…'; }
+            if (opts.onDeployOrder) {
+              const r = await opts.onDeployOrder(npcAppr.id);
+              if (r?.error) {
+                btn.disabled = false;
+                if (resEl) resEl.textContent = `⚠️ ${r.error}`;
+                return;
+              }
+            } else if (opts.onOpenOrder) {
+              closeTalkModal(false);
+              opts.onOpenOrder(npcAppr.id);
+              return;
+            }
+            SFX.fanfare();
+            playCaptainAction('stamp');
+            spawnBurst(n.x, n.y, '🚀 배포 시작! +150 EXP', 150);
+            n.bubble = `🚀 [${(npcAppr.deploy || []).join(', ') || '가게'}] 배포를 바로 시작합니다!`;
+            n.bubbleType = 'ok';
+            if (resEl) resEl.textContent = '✅ 배포 확정 완료! 배포가 진행 중입니다.';
+            setTimeout(() => closeTalkModal(true), 900);
+            return;
+          }
           if (ch.action === 'openOrder') {
             SFX.tap();
             closeTalkModal(false);
@@ -3378,11 +3404,17 @@
 
       const exitOffice = () => {
         if (!v || v.hidden) { vipActive = false; return; }
-        v.emote = null; v.emoteLoop = false;
+        v.dir = 'front';
+        if (imgs.walk.vip_jung?.greet?.length === 12) {
+          v.mode = 'emote'; v.emote = 'greet'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
+        } else {
+          v.emote = null; v.emoteLoop = false;
+        }
         v.bubble = '👋 아우님, 나 먼저 들어가 볼게! 조만간 한잔하자!';
         v.bubbleType = 'meet';
         // 말풍선 겹침 방지: 대표님 작별 인사(2.0초) → 대표님 말풍선 닫고 캡틴 화답(2.2초)
         vipSetTimeout(() => {
+          v.emote = null; v.emoteLoop = false;
           v.bubble = '';
           if (cap && !briefingActive) {
             const prev = cap.bubble;
@@ -3424,7 +3456,10 @@
             return;
           }
           v.dir = st.dir; v.mode = 'stand';
-          // 1) 대표님이 먼저 말풍선 표시 + 담당자는 일어서서 대표님 쪽을 마주 보며 경청! (말풍선 겹침 0%)
+          // 1) 대표님이 먼저 말풍선 표시 + 친근한 대화(talk) 동작 + 담당자는 일어서서 대표님 쪽을 마주 보며 경청! (말풍선 겹침 0%)
+          if (imgs.walk.vip_jung?.talk?.length === 12) {
+            v.mode = 'emote'; v.emote = 'talk'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
+          }
           v.bubble = st.vipSay; v.bubbleType = 'meet';
           if (tn && tc && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
             tn.bubble = ''; // 이전 "기다리는 중" 말풍선 제거해 겹침 방지
@@ -3434,9 +3469,12 @@
             faceEachOther(v, tn);
           }
 
-          // 2) 2.2초 뒤: 대표님 말풍선을 닫고 담당자가 대답(순차 티키타카 -> 말풍선 절대 안 겹침!)
+          // 2) 2.2초 뒤: 대표님 말풍선을 닫고 담당자가 대답 + 대표님은 시원한 엄지척(thumb) 격려!
           vipSetTimeout(() => {
             v.bubble = '';
+            if (imgs.walk.vip_jung?.thumb?.length === 12) {
+              v.mode = 'emote'; v.emote = 'thumb'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
+            }
             if (tn && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
               tn.bubble = st.npcSay; tn.bubbleType = 'ok';
               voice(st.id, 'greet', 0.1);
@@ -3445,6 +3483,7 @@
 
           // 3) 4.5초 뒤: 대화 종료 → 담당자 착석 + 예약 해제, 대표님은 다음 담당자로!
           vipSetTimeout(() => {
+            v.emote = null; v.emoteLoop = false;
             v.bubble = '';
             if (tn) {
               tn.vipReserved = false;
@@ -3523,12 +3562,18 @@
           v.mode = 'stand';
           if (cap) faceEachOther(v, cap);
           else v.dir = 'back';
+          if (imgs.walk.vip_jung?.greet?.length === 12) {
+            v.mode = 'emote'; v.emote = 'greet'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
+          }
           v.bubble = '🤝 아우님! 요즘 사업 잘 되지? 잠깐 들렀어!';
           v.bubbleType = 'meet';
           spawnBurst(v.x, v.y - 4, '🤝 NANA VINA VIP 방문!', 0);
-          // 2.0초 뒤 대표님 말풍선 닫고 캡틴 화답 (겹침 방지!)
+          // 2.0초 뒤 대표님 말풍선 닫고 캡틴 화답 + 대표님 엄지척 격려 (겹침 방지!)
           vipSetTimeout(() => {
             v.bubble = '';
+            if (imgs.walk.vip_jung?.thumb?.length === 12) {
+              v.mode = 'emote'; v.emote = 'thumb'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
+            }
             if (cap && !briefingActive) {
               const prev = cap.bubble;
               cap.bubble = '😄 형님 오셨어요! 커피 한 잔 하시고 편히 보세요!';
@@ -3538,6 +3583,7 @@
           }, 2000);
           vipSetTimeout(() => {
             if (briefingActive) return;
+            v.emote = null; v.emoteLoop = false;
             walkNpcSafe('vip_jung', coffeeSpot[0], coffeeSpot[1], {
               force: true,
               bubble: '☕ 커피 한 잔 마시러 가는 중…',

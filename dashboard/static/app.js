@@ -195,6 +195,14 @@ function mountOfficeGame() {
         await loadOrders();
         return r;
       },
+      onDeployOrder: async id => {
+        if (!id) return { error: '배포 대상 ID가 없습니다.' };
+        const r = await post('/api/deploy', { id }).catch(() => ({ error: '대시보드 서버에 닿지 않았어요.' }));
+        if (r.error) return r;
+        toast('🚀 배포를 시작했습니다.');
+        await loadOrders();
+        return r;
+      },
       onMarkSeen: async id => {
         if (!id) return;
         await post('/api/order/seen', { id });
