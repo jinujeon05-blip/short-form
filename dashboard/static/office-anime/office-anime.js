@@ -84,7 +84,7 @@
     });
     const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k6')];
     for (const [id, cfg] of Object.entries(CHARS)) {
-      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], photo: [] };
+      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], photo: [], review: [], inspect: [], analyze: [], cheer: [], stretch: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee', 'kick', 'praise', 'stamp']
         : id === 'claude' ? ['east', 'front', 'back', 'se', 'ne', 'dance', 'brew', 'carry', 'serve', 'bow']
         : id === 'reader' ? ['east', 'front', 'back', 'se', 'ne', 'dance']
@@ -95,7 +95,7 @@
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = (id === 'vip_jung') ? 'vip1' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new1' : id === 'captain' ? (dir === 'kick' ? 'kick1' : 'cap8dir') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
+          const v = (id === 'vip_jung') ? 'vip2' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new1' : id === 'captain' ? (dir === 'kick' ? 'kick1' : 'cap8dir') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
         }
       }
@@ -111,6 +111,18 @@
       // 시각 정보 비서 스튜디오 카메라 촬영 12프레임
       if (id === 'finder') {
         for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].photo, i - 1, `/static/office-anime/assets/walk/finder-photo-${i}.webp?v=bow1`));
+      }
+      // 수석 번역관(review)·메뉴 검사관(inspect)·자료 해석 비서 4종(analyze/cheer/coffee/stretch) 특기 동작 12프레임
+      if (id === 'translator') {
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].review, i - 1, `/static/office-anime/assets/walk/translator-review-${i}.webp?v=act4`));
+      }
+      if (id === 'agy') {
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].inspect, i - 1, `/static/office-anime/assets/walk/agy-inspect-${i}.webp?v=act4`));
+      }
+      if (id === 'reader') {
+        for (const act of ['analyze', 'cheer', 'coffee', 'stretch']) {
+          for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id][act], i - 1, `/static/office-anime/assets/walk/reader-${act}-${i}.webp?v=act4`));
+        }
       }
       // 전 직원 10명 책상 맞춤 앉은 업무 동작(외부 손님 제외)
       if (!cfg.guest) {
@@ -2966,6 +2978,12 @@
               setTimeout(() => { if (!briefingActive && n.emote === 'photo') triggerCameraFlash(); }, 1050);
               setTimeout(() => { if (!briefingActive && n.emote === 'photo') { triggerCameraFlash(); voice('finder', 'snap', 0.1); } }, 1850);
             }
+            else if (emoteKey === 'review') { n.emoteLoop = false; voice('translator', 'chat', 0.25); }
+            else if (emoteKey === 'inspect') { n.emoteLoop = false; voice('agy', 'wow', 1.2); }
+            else if (emoteKey === 'analyze') { n.emoteLoop = false; voice('reader', 'work', 0.2); }
+            else if (emoteKey === 'cheer') { n.emoteLoop = false; voice('reader', 'aha', 0.35); }
+            else if (emoteKey === 'coffee') { n.emoteLoop = false; SFX.coffee(); }
+            else if (emoteKey === 'stretch') { n.emoteLoop = false; }
           } else {
             n.mode = 'stand';
             if (id === 'sorter' && workMsg.includes('포장')) voice('sorter', 'check', 0.2);
@@ -3047,11 +3065,11 @@
           atLounge ? 27.5 : 36.5, atLounge ? 20.0 : 45.5,
           '🛡️ 방금 검수한 가격표 교차 확인했나요?', '📊 네! 오타 0건, 100% 일치합니다!');
       },
-      // 7. 수석 번역관 + 비서실장: 번역 톤 상의
+      // 7. 수석 번역관: 5개 언어 번역 검수 & 표현 다듬기 (12프레임 전용 모션!)
       () => {
         if (!isFree('translator')) return false;
-        return doChore('translator', 49.8, 46.5, 'back',
-          '🌐 번역 톤 상의하러 가는 중…', '💬 베트남어·영어 메뉴 표현 자연스럽게 다듬었어요!', 3000);
+        return doChore('translator', 49.8, 46.5, 'front',
+          '🌐 번역 톤 상의하러 가는 중…', '💬 베트남어·영어 메뉴 표현 자연스럽게 다듬었어요!', 3600, '', 'review');
       },
       // 8. 디지털 메뉴 통제실 2인방(메뉴 검사관 + 자료 해석 비서): 우측 테라스 또는 우측 복도 데이터 수다
       () => {
@@ -3069,15 +3087,15 @@
         const hr = new Date().getHours();
         const msg = (hr >= 11 && hr <= 13) ? '☕ 점심 식후 아아 한 잔 추출 중…' : '☕ 시원한 커피 한 잔 하며 스트레칭 중…';
         const cx = [10.5, 15.0, 19.5][Math.floor(Math.random() * 3)];
-        return doChore(pick, cx, 22.0, 'back', '☕ 커피바 휴식 가는 중…', msg, 3000);
+        return doChore(pick, cx, 22.0, pick === 'reader' ? 'front' : 'back', '☕ 커피바 휴식 가는 중…', msg, 3400, '', pick === 'reader' ? 'coffee' : '');
       },
-      // 10. 랜덤 대기 직원: 우측 테라스 창밖 구경(환기, 위치 분산)
+      // 10. 랜덤 대기 직원: 우측 테라스 창밖 구경(환기, 자료 해석 비서는 우아한 기지개 12프레임!)
       () => {
         const pool = ['finder', 'agy', 'translator', 'sorter', 'inspector', 'staffing', 'reader', 'auditor'].filter(isFree);
         if (!pool.length) return false;
         const pick = pool[Math.floor(Math.random() * pool.length)];
         const tx = [76.5, 82.5, 88.5][Math.floor(Math.random() * 3)];
-        return doChore(pick, tx, 19.8, 'back', '🌤️ 테라스 바람 좀 쐬러 가는 중…', '🌤️ 창밖 풍경이 좋네요… 잠시 환기 중!', 3200);
+        return doChore(pick, tx, 19.8, pick === 'reader' ? 'front' : 'back', '🌤️ 테라스 바람 좀 쐬러 가는 중…', pick === 'reader' ? '🙆‍♀️ 후~ 기지개 쭉! 상쾌해요!' : '🌤️ 창밖 풍경이 좋네요… 잠시 환기 중!', 3400, '', pick === 'reader' ? 'stretch' : '');
       },
       // 11. 서로 다른 부서 2명 사무실 전역 빈 공간 분산 수다(Banter)
       () => {
@@ -3109,6 +3127,17 @@
         '📦 컨베이어 분류 상태 확인 중…', '✅ 포장 라인·분류함 이상 없음!', 2800),
       // 13. 비서실장 + 자료 해석 비서: 분산 무대 합동 아이돌 댄스 타임!
       () => (isFree('claude') && isFree('reader')) ? danceParty() : false,
+      // 14. 메뉴 검사관: 복도에서 스마트폰 메뉴판 정밀 점검 & 엄지척! (12프레임)
+      () => doChore('agy', 63.0, 45.5, 'front',
+        '📱 모바일 메뉴판 점검하러 가는 중…', '👍 우와, 모바일 메뉴판 진짜 깔끔하네요!', 3600, '', 'inspect'),
+      // 15. 자료 해석 비서: 복도에서 메뉴 데이터 정밀 해석(analyze) 또는 아하! 기쁨(cheer) (12프레임)
+      () => {
+        const isCheer = Math.random() < 0.5;
+        return doChore('reader', isCheer ? 60.0 : 37.5, 45.5, 'front',
+          isCheer ? '💡 데이터 정리 완료! 잠깐 기분 전환 중…' : '📑 메뉴 가격표 데이터 해석 점검 중…',
+          isCheer ? '✨ 아하! 딱 맞아떨어졌어요! 👍' : '👓 메뉴랑 가격표 빠짐없이 해석 완료!',
+          3600, '', isCheer ? 'cheer' : 'analyze');
+      },
     ];
 
     let lastDanceStage = -1;
