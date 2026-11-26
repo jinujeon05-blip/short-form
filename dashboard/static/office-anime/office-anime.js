@@ -83,9 +83,9 @@
     });
     const jobs = [load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k6')];
     for (const [id, cfg] of Object.entries(CHARS)) {
-      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [] };
-      const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee', 'kick']
-        : id === 'claude' ? ['east', 'front', 'back', 'se', 'ne', 'dance', 'brew', 'carry', 'serve']
+      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [] };
+      const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee', 'kick', 'praise', 'stamp']
+        : id === 'claude' ? ['east', 'front', 'back', 'se', 'ne', 'dance', 'brew', 'carry', 'serve', 'bow']
         : id === 'reader' ? ['east', 'front', 'back', 'se', 'ne', 'dance']
         : id === 'sorter' ? ['east', 'front', 'back', 'water']
         : id === 'staffing' ? ['east', 'front', 'back', 'clean']
@@ -94,7 +94,7 @@
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = id === 'captain' ? (dir === 'kick' ? 'kick1' : 'cap8dir') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
+          const v = (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new1' : id === 'captain' ? (dir === 'kick' ? 'kick1' : 'cap8dir') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}`));
         }
       }
@@ -152,7 +152,7 @@
             <button type="button" class="oa-snd-btn" data-bgm-btn title="사무실 BGM 켜기/끄기">🎵 BGM</button>
           </div>
           <div class="oa-dock" data-dock-bar aria-label="직원 빠른 호출">${dockHtml}</div>
-          <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 2 커피 · 3 발차기 · 4 주먹 · E 착석</div>
+          <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 2 커피 · 3 발차기 · 4 주먹 · 5 칭찬 · 6 결재 · E 착석</div>
           <div class="oa-skills" aria-label="액션 스킬창">
             <button type="button" class="oa-sk sk-sit" data-cap-sit title="캡틴 대표석 복귀(E)"><i>🪑</i><span>착석</span></button>
             <button type="button" class="oa-sk sk-cof" data-brief-cof title="비서실장 커피 서빙"><i>☕</i><span>서빙</span></button>
@@ -512,6 +512,18 @@
       sit:       () => clipOr('sit', 0.7, () => { tone(260, 0.07, 'triangle', 0.065); tone(196, 0.09, 'sine', 0.05, 0.05); }),
       water:     () => clipOr('water', 0.7, () => { [740, 920, 1120, 880].forEach((f, i) => tone(f, 0.07, 'sine', 0.045, i * 0.075)); }),
       sweep:     () => clipOr('sweep', 0.7, () => { noiseBurst(0.14, 0.032, 0); noiseBurst(0.14, 0.028, 0.22); }),
+      stamp:     () => {
+        // 묵직한 결재 도장 쾅! 임팩트 사운드
+        tone(110, 0.14, 'triangle', 0.22);
+        tone(68, 0.18, 'sine', 0.24, 0.02);
+        tone(680, 0.06, 'triangle', 0.08, 0.04);
+        navigator.vibrate?.([30, 20, 40]);
+      },
+      praise:    () => {
+        // 따뜻한 박수·칭찬 팡파르
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 0.12, 'triangle', 0.08, i * 0.07));
+        navigator.vibrate?.([15, 25, 25]);
+      },
       dance:     () => {
         navigator.vibrate?.([15, 20, 15, 20, 30]);
         clipOr('dance', 0.8, () => [587.33, 739.99, 880.0, 1174.66, 1479.98].forEach((f, i) => tone(f, 0.14, 'triangle', 0.085, i * 0.065)));
@@ -696,10 +708,12 @@
        </div>
        <div class="oa-cap-ring" data-cap-ring>
          <button type="button" class="oa-cr-item i0" data-cr="newshop">🏪 새 가게 제작</button>
-         <button type="button" class="oa-cr-item i1" data-cr="greet">👋 격려 인사</button>
-         <button type="button" class="oa-cr-item i2" data-cr="coffee">☕ 커피 휴식</button>
+         <button type="button" class="oa-cr-item i1" data-cr="praise">👍 직원 칭찬</button>
+         <button type="button" class="oa-cr-item i2" data-cr="stamp">🖋️ 결재 도장</button>
          <button type="button" class="oa-cr-item i3" data-cr="sit">🪑 대표석 복귀</button>
-       </div>`;
+       </div>
+       <div class="oa-stamp-fx" data-stamp-fx hidden><span>✅ 결재 완료</span></div>`;
+    const stampFxEl = hud.querySelector('[data-stamp-fx]');
     const capStatusEl = hud.querySelector('[data-cap-status]');
     const capHpEl = hud.querySelector('[data-cap-hp]');
     const capHp5h = hud.querySelector('[data-hp-5h]');
@@ -743,6 +757,8 @@
       const act = btn.dataset.cr;
       setCapRing(false);
       if (act === 'greet') playCaptainAction('greet');
+      else if (act === 'praise') playCaptainAction('praise');
+      else if (act === 'stamp') playCaptainAction('stamp');
       else if (act === 'coffee') playCaptainAction('coffee');
       else if (act === 'sit') sitCaptainBack();
       else if (act === 'approval' && pendingApprovals.length) {
@@ -1094,12 +1110,15 @@
       let im = wset[dirKey]?.[fIdx] || wset.front?.[0];
       if (!im) return;
 
-      const seated = (n.mode === 'idle' || n.mode === 'work' || (n.id === 'captain' && n.idleCoffeeSeated && n.mode === 'emote' && n.emote === 'coffee'));
       const capSipping = (n.id === 'captain' && n.idleCoffeeSeated && n.mode === 'emote' && n.emote === 'coffee');
+      const capStamping = (n.id === 'captain' && n.mode === 'emote' && n.emote === 'stamp' && wset.stamp?.length === 12);
+      const seated = (n.mode === 'idle' || n.mode === 'work' || capSipping || capStamping);
       // 전 직원 10명 책상 맞춤 앉은 업무 포즈 루프 (직원별 위상 분산, 실제 작업 중엔 더 부지런히 전환!)
       let seatPose = false;
       const working = (n.mode === 'idle' || n.mode === 'work') && realBusySet.has(n.id);
-      if (seated && !capSipping && cfg.seat && wset.seat?.length >= 4 && wset.seat.every(Boolean)) {
+      if (capStamping) {
+        seatPose = true;
+      } else if (seated && !capSipping && cfg.seat && wset.seat?.length >= 4 && wset.seat.every(Boolean)) {
         const cnt = wset.seat.length;
         const stepSec = working ? 1.45 : 2.85;
         const phase = (cfg.seat.x * 0.37 + cfg.seat.headTopY * 0.19);
@@ -1522,6 +1541,63 @@
         cap.bubble = '☕ 커피 한 잔 하며 상황 점검 중…';
         cap.bubbleType = '';
         log('☕ 캡틴이 커피를 마시며 잠시 휴식 중입니다');
+      } else if (action === 'praise') {
+        // 캡틴이 대표석에 앉아 있으면 책상 앞으로 걸어 나온 뒤 칭찬·박수·엄지척!
+        if (!cap._praiseWalked && Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]) < 4.0) {
+          cap.mode = 'stand'; cap.emote = null;
+          const ok = walkCaptainSafe(KICK_SPOT[0], KICK_SPOT[1], {
+            bubble: '👏 수고한 직원 칭찬하러 가는 중…',
+            onArrive: () => { cap._praiseWalked = true; playCaptainAction('praise'); cap._praiseWalked = false; },
+          });
+          if (ok) return;
+        }
+        cap.emoteUntil = cap.emoteStart + 3.2;
+        SFX.praise();
+        voice('captain', 'nice');
+        cap.bubble = '👍 오, 잘했어! 아주 깔끔하네!';
+        cap.bubbleType = 'ok';
+        spawnBurst(cap.x, cap.y - 5, '👏 칭찬 +30 EXP', 30);
+        // 가장 가까운 직원 찾아 기뻐하는 반응 + 하트 파티클!
+        let near = null, minD = Infinity;
+        for (const [sid, sn] of Object.entries(npcs)) {
+          if (sid === 'captain') continue;
+          const d = Math.hypot(sn.x - cap.x, sn.y - cap.y);
+          if (d < minD) { minD = d; near = sn; }
+        }
+        if (near) {
+          const prevBub = near.bubble;
+          near.bubble = '💖 감사합니다 캡틴! 더 열심히 하겠습니다!';
+          near.bubbleType = 'meet';
+          voice(near.id, 'done', 0.4);
+          spawnBurst(near.x, near.y - 4, '💖 기쁨 +30 EXP', 30);
+          setTimeout(() => { if (near.bubble.startsWith('💖 감사합니다')) near.bubble = prevBub || ''; }, 3600);
+        }
+        log('👏 캡틴이 직원을 칭찬하며 박수·엄지척을 보냈습니다');
+      } else if (action === 'stamp') {
+        // 캡틴 대표석 결재 도장 쾅! 모션 + 화면 황금 스탬프 오버레이
+        cap.x = CHARS.captain.home[0];
+        cap.y = CHARS.captain.home[1];
+        cap.emoteUntil = cap.emoteStart + 3.0;
+        cap.bubble = '🖋️ 좋아, 그대로 확정하고 진행해!';
+        cap.bubbleType = 'meet';
+        voice('captain', 'approve');
+        setTimeout(() => {
+          SFX.stamp();
+          spawnBurst(50.0, 14.0, '✅ 결재 완료! +50 EXP', 50);
+          if (stampFxEl) {
+            stampFxEl.hidden = false;
+            stampFxEl.classList.remove('pop');
+            void stampFxEl.offsetWidth;
+            stampFxEl.classList.add('pop');
+            setTimeout(() => { stampFxEl.hidden = true; stampFxEl.classList.remove('pop'); }, 1850);
+          }
+        }, 950);
+        setTimeout(() => {
+          if (cap.mode === 'emote' && cap.emote === 'stamp') {
+            cap.emote = null; cap.mode = 'idle'; cap.bubble = '';
+          }
+        }, 3050);
+        log('🖋️ 캡틴이 대표석에서 결재 도장을 쾅! 찍었습니다');
       }
     }
 
@@ -1559,6 +1635,12 @@
       } else if (k === '4' || k === 'f') {
         e.preventDefault();
         playCaptainAction('punch');
+      } else if (k === '5') {
+        e.preventDefault();
+        playCaptainAction('praise');
+      } else if (k === '6') {
+        e.preventDefault();
+        playCaptainAction('stamp');
       }
     });
     window.addEventListener('keyup', e => {
@@ -2184,7 +2266,7 @@
             if (r?.error) { if (resEl) resEl.textContent = `⚠️ ${r.error}`; return; }
           }
           SFX.fanfare();
-          if (ch.approve) voice('captain', 'approve');
+          if (ch.approve) playCaptainAction('stamp');
           else if (hit !== 'captain') voice(hit, 'ok', 0.25);
           spawnBurst(n.x, n.y, '✅ 결재 완료! +100 EXP', 100);
           n.bubble = `✅ [${ch.num}번] 결재 확인했습니다! 바로 진행합니다!`;
@@ -2517,37 +2599,46 @@
       voice('captain', 'end', 0, { interrupt: true });
       log('✋ 캡틴: "오늘은 여기까지 하지." — 보고 종료');
 
-      // 0.7초 뒤 비서실장 + 전체 직원 동시 인사(Bow 모션) + "네, 알겠습니다 캡틴!"
-      const bowT = performance.now() / 1000 + 0.65;
+      // 0.7초 뒤 비서실장(전용 claude-bow 12프레임 정중 인사!) + 전체 직원 동시 인사 + "네, 알겠습니다 캡틴!"
       briefTimers.push(setTimeout(() => {
         const nowS = performance.now() / 1000;
         const allStaff = ['claude', ...staffIds];
         for (const sid of allStaff) {
           const n = npcs[sid];
           n.path = []; n.onArrive = null;
-          n.mode = 'stand';
-          n.dir = (sid === 'claude') ? 'east' : 'back';
-          n.bowStart = nowS;
-          n.bowUntil = nowS + 1.45;
-          n.bubble = '🙇 네, 알겠습니다 캡틴!';
-          n.bubbleType = 'ok';
+          if (sid === 'claude' && imgs.walk.claude?.bow?.length === 12) {
+            n.dir = 'east';
+            n.mode = 'emote'; n.emote = 'bow'; n.emoteLoop = false;
+            n.emoteStart = nowS;
+            n.bubble = '🙇 수고하셨습니다, 캡틴!';
+            n.bubbleType = 'ok';
+          } else {
+            n.mode = 'stand';
+            n.dir = (sid === 'claude') ? 'east' : 'back';
+            n.bowStart = nowS;
+            n.bowUntil = nowS + 1.45;
+            n.bubble = '🙇 네, 알겠습니다 캡틴!';
+            n.bubbleType = 'ok';
+          }
         }
-        log('🙇 전체 직원: "네, 알겠습니다 캡틴!" (일동 인사)');
+        voice('claude', 'greet', 0.35);
+        log('🙇 비서실장 & 전체 직원: 캡틴께 정중히 인사 후 해산 준비');
         SFX.fanfare();
         spawnBurst(50.0, 29.8, '🎉 보고 완료 +50 EXP', 50);
 
-        // 인사 끝난 뒤(1.8초 후) 각자 자리로 A* 안전 복귀!
+        // 비서실장 12프레임 인사 끝난 뒤(2.9초 후) 각자 자리로 A* 안전 복귀!
         briefTimers.push(setTimeout(() => {
           cap.bubble = '';
           for (const sid of allStaff) {
             const n = npcs[sid];
             const c = CHARS[sid];
+            n.emote = null; n.emoteLoop = false;
             n.bubble = '';
             walkNpcSafe(sid, c.home[0], c.home[1], {
               onArrive: () => seatNpc(sid)
             });
           }
-        }, 1800));
+        }, 2900));
       }, 650));
     }
 
