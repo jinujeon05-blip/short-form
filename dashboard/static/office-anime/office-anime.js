@@ -25,15 +25,15 @@
     vip_jung:   { name: '정은수 대표님', role: 'NANA VINA · VIP', guest: true, home: [50.0, 96.5], standPos: [50.0, 96.5], facing: 'back', scale: 1.0, seat: null },
   };
 
-  // 신관 대회의실 6석 실측 착석 좌표 (배포 대기 중 6명 자동 회의 연출!)
+  // 신관 대회의실 6석 실측 착석 좌표 (상단 창틀로 올린 새 대회의실 기준 — 배포 대기 중 6명 자동 회의 연출!)
   // 윗줄(앞모습): 시각정보비서 · 비서실장 · 수석번역관 / 아랫줄(뒷모습): 운영감찰관 · 데이터감사관 · 자료해석비서
   const CONF_SEATS = {
-    finder:     { x: 141.9, y: 38.0, headTopY: 30.0, clipY: 36.2, h: 225, facing: 'front', stand: [130.5, 44.5] },
-    claude:     { x: 149.3, y: 38.0, headTopY: 30.0, clipY: 36.2, h: 225, facing: 'front', stand: [132.5, 44.5] },
-    translator: { x: 156.5, y: 38.0, headTopY: 30.0, clipY: 36.2, h: 225, facing: 'front', stand: [134.5, 44.5] },
-    inspector:  { x: 141.2, y: 46.2, headTopY: 33.9, clipY: 43.2, h: 210, facing: 'back',  stand: [139.0, 46.8] },
-    auditor:    { x: 149.2, y: 46.4, headTopY: 34.3, clipY: 43.6, h: 210, facing: 'back',  stand: [149.2, 46.8] },
-    reader:     { x: 157.1, y: 46.4, headTopY: 34.2, clipY: 43.6, h: 210, facing: 'back',  stand: [157.5, 46.8] },
+    finder:     { x: 143.7, y: 23.0, headTopY: 14.8, clipY: 21.2, h: 215, facing: 'front', stand: [134.0, 32.0] },
+    claude:     { x: 150.6, y: 23.0, headTopY: 14.8, clipY: 21.2, h: 215, facing: 'front', stand: [136.0, 32.0] },
+    translator: { x: 157.5, y: 23.0, headTopY: 14.8, clipY: 21.2, h: 215, facing: 'front', stand: [138.0, 32.0] },
+    inspector:  { x: 143.1, y: 31.2, headTopY: 19.3, clipY: 28.4, h: 205, facing: 'back',  stand: [143.1, 33.5] },
+    auditor:    { x: 150.5, y: 31.2, headTopY: 19.6, clipY: 28.5, h: 205, facing: 'back',  stand: [150.5, 33.5] },
+    reader:     { x: 158.0, y: 31.2, headTopY: 19.5, clipY: 28.5, h: 205, facing: 'back',  stand: [158.0, 33.5] },
   };
   const CONF_IDS = ['finder', 'claude', 'translator', 'inspector', 'auditor', 'reader'];
 
@@ -55,9 +55,9 @@
     { key: 'sky-desk',           x0: 59.92, y0: 69.25, x1: 69.37, y1: 78.52, sortY: 78.07 },
     { key: 'orange-desk',        x0: 80.99, y0: 68.56, x1: 89.41, y1: 77.81, sortY: 77.34 },
     // 신관 대회의실 아랫줄 의자 3개 전경 마스크 (운영감찰관·데이터감사관·자료해석비서가 등받이 안쪽에 자연스럽게 착석!)
-    { key: 'conf-chair-1',       x0: 138.80, y0: 38.50, x1: 143.80, y1: 47.40, sortY: 46.80 },
-    { key: 'conf-chair-2',       x0: 146.80, y0: 38.90, x1: 151.80, y1: 47.60, sortY: 46.80 },
-    { key: 'conf-chair-3',       x0: 154.70, y0: 38.90, x1: 159.70, y1: 47.60, sortY: 46.80 },
+    { key: 'conf-chair-1',       x0: 140.90, y0: 23.20, x1: 145.40, y1: 31.80, sortY: 31.60 },
+    { key: 'conf-chair-2',       x0: 148.20, y0: 23.40, x1: 152.80, y1: 31.80, sortY: 31.60 },
+    { key: 'conf-chair-3',       x0: 155.70, y0: 23.40, x1: 160.30, y1: 31.80, sortY: 31.60 },
   ];
 
   const SIGNS = [
@@ -68,7 +68,7 @@
     { text: '인력 공급팀',       x: 63.6, y: 49.4, bg: '#0284c7' },
     { text: '선별팀',           x: 88.5, y: 49.4, bg: '#ea580c' },
     // 오른쪽 4K 신관(x 100~200): 대회의실·VIP 접견실, 복싱 짐, 직원 휴게실
-    { text: '대회의실 · VIP 접견실', x: 158.0, y: 21.8, bg: '#0f766e' },
+    { text: '대회의실 · VIP 접견실', x: 158.0, y: 10.6, bg: '#0f766e' },
     { text: '트레이닝 · 복싱 짐',    x: 124.0, y: 49.4, bg: '#b91c1c' },
     { text: '직원 휴게실 · 라운지',  x: 176.0, y: 49.4, bg: '#059669' },
   ];
@@ -104,7 +104,7 @@
     });
     const jobs = [
       load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k9'),
-      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing4'),
+      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing5'),
       load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing2'),
     ];
     for (const [id, cfg] of Object.entries(CHARS)) {
@@ -169,7 +169,7 @@
       }
     }
     for (const p of PROPS) {
-      jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq4k2`));
+      jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq4k3`));
     }
     return Promise.all(jobs).then(() => imgs);
   }
@@ -1547,14 +1547,14 @@
       { x0: 75.4, y0: 78.4, x1: 79.2, y1: 85.0 }, // 좌하단 화분
       { x0: 74.0, y0: 84.6, x1: 100., y1: 89.8 }, // 앞벽
       // 맨 아래 넓은 나무 바닥(y 89.8~97.5)은 본관~신관(x 2~198) 전부 걸을 수 있음!
-      // ---- 오른쪽 4K 신관 (x 100~200): 대회의실·VIP 접견실, 트레이닝·복싱 짐, 직원 휴게실·라운지 ----
-      { x0: 100.0, y0:  0.0, x1: 200.0, y1: 18.8 }, // 신관 상단 통유리 창가 + 양쪽 화분
-      // 대회의실 & VIP 접견실 (왼쪽 아래 출입구 y 40.5~48.0 활짝 열림!)
-      { x0: 121.0, y0: 21.0, x1: 196.0, y1: 31.8 }, // 윗벽 + 대형 스크린 + 뒷화분
-      { x0: 120.0, y0: 21.0, x1: 124.0, y1: 40.5 }, // 왼쪽 윗벽 (아래쪽 출입구 개방)
-      { x0: 193.0, y0: 21.0, x1: 200.0, y1: 48.5 }, // 오른쪽 벽
-      { x0: 135.5, y0: 33.5, x1: 163.5, y1: 45.5 }, // 대회의실 원목 테이블·의자
-      { x0: 170.0, y0: 30.0, x1: 186.0, y1: 44.0 }, // VIP 가죽 소파·티테이블
+      // ---- 오른쪽 4K 신관 (x 100~200): 대회의실·VIP 접견실(상단 창틀 밀착 + 앞쪽 대복도 완전 개방!), 트레이닝·복싱 짐, 직원 휴게실·라운지 ----
+      { x0: 100.0, y0:  0.0, x1: 200.0, y1: 16.0 }, // 신관 상단 통유리 창가
+      // 대회의실 & VIP 접견실 (앞쪽 전체 y 31.8~48.5 완전 개방 — 사방에서 시원하게 출입!)
+      { x0: 123.5, y0: 10.0, x1: 192.5, y1: 19.6 }, // 윗벽 + 대형 스크린 + 화분
+      { x0: 121.8, y0: 10.0, x1: 124.8, y1: 30.0 }, // 왼쪽 짧은 벽 (아래쪽 완전 개방!)
+      { x0: 190.5, y0: 10.0, x1: 196.0, y1: 30.2 }, // 오른쪽 짧은 벽
+      { x0: 138.0, y0: 20.5, x1: 163.5, y1: 31.4 }, // 대회의실 원목 테이블·의자
+      { x0: 170.0, y0: 16.0, x1: 185.5, y1: 29.5 }, // VIP 가죽 소파·티테이블
       // 트레이닝 · 복싱 짐 (오른쪽 아래 출입구 y 74.5~85.0 활짝 열림!)
       { x0: 100.0, y0: 48.5, x1: 148.0, y1: 65.5 }, // 윗벽 + 거울 + 덤벨 랙 + 샌드백 기둥
       { x0: 100.0, y0: 48.5, x1: 107.0, y1: 88.5 }, // 왼쪽 벽 + 요가매트
