@@ -513,6 +513,7 @@
 
     // ---- 새로고침 시 캡틴·직원·카메라 위치 유지 (localStorage 자동 저장 & 복원!)
     const POS_KEY = 'jinwoo_oa_pos_v1';
+    const restoredResumeQueue = []; // 새로고침 직후 걷던/서 있던 직원들의 움직임을 자연스럽게 이어가기 위한 복원 큐
     function restoreOfficePositions() {
       try {
         const raw = localStorage.getItem(POS_KEY);
@@ -528,12 +529,22 @@
             if (sv.mode === 'conf' && CONF_SEATS[id]) {
               n.x = CONF_SEATS[id].x; n.y = CONF_SEATS[id].y;
               n.mode = 'conf'; n.dir = CONF_SEATS[id].facing;
+            } else if (sv.customSeat && Number.isFinite(sv.customSeat.x) && Number.isFinite(sv.customSeat.y)) {
+              n.customSeat = sv.customSeat;
+              n.x = sv.customSeat.x; n.y = sv.customSeat.y;
+              n.mode = 'idle'; n.dir = sv.customSeat.facing || 'front';
+              if (id !== 'captain') restoredResumeQueue.push({ id, kind: 'sofa' });
             } else if (sv.mode === 'idle') {
               n.x = CHARS[id].home[0]; n.y = CHARS[id].home[1];
               n.mode = 'idle'; n.dir = CHARS[id].facing;
+            } else if (sv.mode === 'walk' && Array.isArray(sv.path) && sv.path.length) {
+              n.x = x; n.y = y;
+              n.mode = 'stand'; n.dir = sv.dir || CHARS[id].facing;
+              restoredResumeQueue.push({ id, kind: 'walk', path: sv.path, bubble: sv.bubble || '' });
             } else {
               n.x = x; n.y = y;
               n.mode = 'stand'; n.dir = sv.dir || CHARS[id].facing;
+              if (id !== 'captain') restoredResumeQueue.push({ id, kind: 'return' });
             }
           }
         }
@@ -557,13 +568,66 @@
         const out = { npcs: {}, cam: { fx: cam.fx, fy: cam.fy, z: cam.z, mode: camMode } };
         for (const [id, n] of Object.entries(npcs)) {
           if (CHARS[id]?.guest) continue;
-          const m = (n.mode === 'idle' || n.mode === 'conf') ? n.mode : 'stand';
-          out.npcs[id] = { x: Math.round(n.x * 10) / 10, y: Math.round(n.y * 10) / 10, mode: m, dir: n.dir };
+          const m = (n.mode === 'idle' || n.mode === 'conf' || n.mode === 'walk') ? n.mode : 'stand';
+          const rec = { x: Math.round(n.x * 10) / 10, y: Math.round(n.y * 10) / 10, mode: m, dir: n.dir };
+          if (n.customSeat) {
+            const s = n.customSeat;
+            rec.customSeat = { id: s.id, pose: s.pose, x: s.x, y: s.y, headTopY: s.headTopY, clipY: s.clipY, h: s.h, facing: s.facing, stand: s.stand };
+          }
+          if (m === 'walk' && n.path && n.path.length) {
+            rec.path = n.path.map(p => [Math.round(p[0] * 10) / 10, Math.round(p[1] * 10) / 10]);
+            if (n.bubble) rec.bubble = n.bubble;
+          }
+          out.npcs[id] = rec;
         }
         localStorage.setItem(POS_KEY, JSON.stringify(out));
       } catch {}
     }
     restoreOfficePositions();
+    // 새로고침 후 멈춰 있지 않도록 걷던 경로·소파 휴식·복귀 동선을 자연스럽게 이어서 실행!
+    setTimeout(() => {
+      restoredResumeQueue.forEach((item, idx) => {
+        const n = npcs[item.id];
+        if (!n || briefingActive) return;
+        if (item.kind === 'walk' && item.path?.length) {
+          const pts = item.path.filter(p => Array.isArray(p) && Number.isFinite(p[0]) && Number.isFinite(p[1]));
+          if (!pts.length) return;
+          if (item.id === 'captain') {
+            n.path = pts; n.mode = 'walk'; n.bubble = item.bubble || '';
+            n.onArrive = () => { n.mode = 'stand'; n.bubble = ''; };
+          } else {
+            const dest = pts[pts.length - 1];
+            const isHome = Math.hypot(dest[0] - CHARS[item.id].home[0], dest[1] - CHARS[item.id].home[1]) < 3.0;
+            n.path = pts; n.mode = 'walk'; n.bubble = item.bubble || '';
+            n.onArrive = () => {
+              if (briefingActive) return;
+              if (isHome) { seatNpc(item.id); return; }
+              n.mode = 'stand';
+              setTimeout(() => {
+                if (briefingActive || (activeTalkNpc && activeTalkNpc.id === item.id)) return;
+                walkNpcSafe(item.id, CHARS[item.id].home[0], CHARS[item.id].home[1], {
+                  bubble: '', onArrive: () => seatNpc(item.id)
+                });
+              }, 2200 + Math.random() * 1800);
+            };
+          }
+        } else if (item.kind === 'sofa') {
+          setTimeout(() => {
+            if (briefingActive || !n.customSeat || (activeTalkNpc && activeTalkNpc.id === item.id)) return;
+            walkNpcSafe(item.id, CHARS[item.id].home[0], CHARS[item.id].home[1], {
+              bubble: '↩ 휴식 끝! 자리로 복귀해요', onArrive: () => seatNpc(item.id)
+            });
+          }, 6000 + idx * 1400);
+        } else if (item.kind === 'return') {
+          setTimeout(() => {
+            if (briefingActive || n.mode !== 'stand' || (activeTalkNpc && activeTalkNpc.id === item.id)) return;
+            walkNpcSafe(item.id, CHARS[item.id].home[0], CHARS[item.id].home[1], {
+              bubble: '', onArrive: () => seatNpc(item.id)
+            });
+          }, 700 + idx * 450);
+        }
+      });
+    }, 350);
     setInterval(saveOfficePositions, 1500);
     window.addEventListener('beforeunload', saveOfficePositions);
     window.addEventListener('pagehide', saveOfficePositions);
