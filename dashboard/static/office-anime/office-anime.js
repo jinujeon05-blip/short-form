@@ -128,21 +128,22 @@
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}_df3`));
         }
       }
-      // 캡틴 주먹 격투(복싱 연속 공격) 15프레임 + 화랑 스타일 태권도 10단 콤보 48프레임 + 신관 ChatGPT 12컷(소파 4+4 · 음료 2 · 스낵 2)!
+      // 캡틴 주먹 격투(복싱 연속 공격) 15프레임 + 화랑 스타일 태권도 10단 콤보 48프레임!
       if (id === 'captain') {
         imgs.walk[id].punch = [];
         for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1_df3`));
         imgs.walk[id].combo = [];
         for (let i = 1; i <= 48; i++) jobs.push(load(imgs.walk[id].combo, i - 1, `/static/office-anime/assets/walk/captain-combo-${i}.webp?v=combo1`));
-        imgs.walk[id].sofa_front = [];
-        for (let i = 1; i <= 4; i++) jobs.push(load(imgs.walk[id].sofa_front, i - 1, `/static/office-anime/assets/walk/captain-sofa_front-${i}.webp?v=lng2`));
-        imgs.walk[id].sofa_left = [];
-        for (let i = 1; i <= 4; i++) jobs.push(load(imgs.walk[id].sofa_left, i - 1, `/static/office-anime/assets/walk/captain-sofa_left-${i}.webp?v=lng2`));
-        imgs.walk[id].drink = [];
-        for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].drink, i - 1, `/static/office-anime/assets/walk/captain-drink-${i}.webp?v=lng2`));
-        imgs.walk[id].snack = [];
-        for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].snack, i - 1, `/static/office-anime/assets/walk/captain-snack-${i}.webp?v=lng2`));
       }
+      // 전 캐릭터 11명(캡틴·직원 9명·정은수 대표님) 신관 ChatGPT 12컷(소파 정면4·측면4·음료2·스낵2)!
+      imgs.walk[id].sofa_front = [];
+      for (let i = 1; i <= 4; i++) jobs.push(load(imgs.walk[id].sofa_front, i - 1, `/static/office-anime/assets/walk/${assetId}-sofa_front-${i}.webp?v=lng3`));
+      imgs.walk[id].sofa_left = [];
+      for (let i = 1; i <= 4; i++) jobs.push(load(imgs.walk[id].sofa_left, i - 1, `/static/office-anime/assets/walk/${assetId}-sofa_left-${i}.webp?v=lng3`));
+      imgs.walk[id].drink = [];
+      for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].drink, i - 1, `/static/office-anime/assets/walk/${assetId}-drink-${i}.webp?v=lng3`));
+      imgs.walk[id].snack = [];
+      for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].snack, i - 1, `/static/office-anime/assets/walk/${assetId}-snack-${i}.webp?v=lng3`));
       // 전 직원(캡틴·외부 손님 제외) 9명 정중 인사 12프레임 로드 (id 기준 파일명 — reader↔auditor 일치!)
       if (id !== 'captain' && id !== 'claude' && !cfg.guest) {
         for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].bow, i - 1, `/static/office-anime/assets/walk/${id}-bow-${i}.webp?v=bow1_df3`));
@@ -1068,6 +1069,7 @@
     function seatNpc(id) {
       const n = npcs[id], c = CHARS[id];
       if (!n || !c) return;
+      n.customSeat = null;
       n.x = c.home[0];
       n.y = c.home[1];
       n.mode = 'idle';
@@ -1395,7 +1397,7 @@
       const capSipping = (n.id === 'captain' && n.idleCoffeeSeated && n.mode === 'emote' && n.emote === 'coffee');
       const capStamping = (n.id === 'captain' && n.mode === 'emote' && n.emote === 'stamp' && wset.stamp?.length === 12);
       const isConfSeat = (n.mode === 'conf' && !!CONF_SEATS[n.id]);
-      const isCustomSeat = (n.id === 'captain' && (n.mode === 'idle' || capSipping) && !!n.customSeat);
+      const isCustomSeat = ((n.mode === 'idle' || (n.id === 'captain' && capSipping)) && !!n.customSeat);
       const activeSeat = isCustomSeat ? n.customSeat : (isConfSeat ? CONF_SEATS[n.id] : cfg.seat);
       const activeFacing = isCustomSeat ? (n.customSeat.facing === 'west' ? 'front' : n.customSeat.facing) : (isConfSeat ? CONF_SEATS[n.id].facing : cfg.facing);
       const seated = (n.mode === 'idle' || n.mode === 'work' || isConfSeat || capSipping || capStamping);
@@ -2314,15 +2316,17 @@
         tagEls[id].style.transform = tagTf; tagEls[id].style.transformOrigin = tagTf ? '50% 0' : '';
         bubEls[id].style.transform = bubTf; bubEls[id].style.transformOrigin = bubTf ? '50% 100%' : '';
         tagEls[id].style.left = `${n.x}%`;
-        const tagTop = (id === 'captain' && n.mode === 'idle')
-          ? (n.customSeat ? (n.y + 1.4) : 16.8)
-          : (n.y + (walking ? 1.4 : (CHARS[id].facing === 'front' ? 4.8 : 1.5)));
+        const tagTop = n.customSeat
+          ? (n.y + 1.4)
+          : ((id === 'captain' && n.mode === 'idle')
+            ? 16.8
+            : (n.y + (walking ? 1.4 : (CHARS[id].facing === 'front' ? 4.8 : 1.5))));
         tagEls[id].style.top  = `${tagTop}%`;
-        // RPG 퀘스트 마커(! / ?) 머리 위 표시 (말풍선이 없을 때 깔끔하게 통통 뜀 — 착석·회의실 시 실측 headTopY 기준 머리 위로 띄움!)
+        // RPG 퀘스트 마커(! / ?) 머리 위 표시 (말풍선이 없을 때 깔끔하게 통통 뜀 — 착석·회의실·신관 소파 시 실측 headTopY 기준 머리 위로 띄움!)
         const q = activeQuests[id];
         const qEl = questEls[id];
         const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
-        const curSeat = (id === 'captain' && n.customSeat) ? n.customSeat : ((n.mode === 'conf' && CONF_SEATS[id]) ? CONF_SEATS[id] : CHARS[id]?.seat);
+        const curSeat = n.customSeat ? n.customSeat : ((n.mode === 'conf' && CONF_SEATS[id]) ? CONF_SEATS[id] : CHARS[id]?.seat);
         const headY = standing ? (n.y - standPct(id)) : (curSeat?.headTopY ?? (n.y - 12.0));
         if (q && qEl && !n.bubble) {
           qEl.hidden = false;
@@ -3096,20 +3100,22 @@
     function walkNpcSafe(id, tx, ty, opts2 = {}) {
       const n = npcs[id], c = CHARS[id];
       if (busyBlocked(id, [[tx, ty]], opts2.force)) return false;
-      // 이미 자기 자리에 앉아 있는데 '자리로 돌아가기'가 또 오면(늦게 도착한 타이머) 일어서지 않음
-      if (n.mode === 'idle' && c && Math.hypot(tx - c.home[0], ty - c.home[1]) < 0.6) return true;
-      // 착석 상태에서 출발할 때는 의자/책상 옆 바닥(standPos)에서 출발해 절대 벽·책상을 뚫지 않음!
-      const sx = (n.mode === 'idle' && c?.standPos) ? c.standPos[0] : n.x;
-      const sy = (n.mode === 'idle' && c?.standPos) ? c.standPos[1] : n.y;
+      // 이미 자기 자리에 앉아 있는데 '자리로 돌아가기'가 또 오면(늦게 도착한 타이머) 일어서지 않음 (신관 소파 착석 중엔 정상 출발!)
+      if (n.mode === 'idle' && !n.customSeat && c && Math.hypot(tx - c.home[0], ty - c.home[1]) < 0.6) return true;
+      // 착석 상태에서 출발할 때는 소파 앞 바닥(customSeat.stand) 또는 의자 옆 바닥(standPos)에서 출발해 절대 벽·책상을 뚫지 않음!
+      const exitPt = (n.customSeat && n.customSeat.stand) ? n.customSeat.stand : ((n.mode === 'idle' && c?.standPos) ? c.standPos : null);
+      const sx = exitPt ? exitPt[0] : n.x;
+      const sy = exitPt ? exitPt[1] : n.y;
       const pts = findPath(sx, sy, tx, ty);
       if (!pts) {
         // 경로를 못 찾으면 절대 벽을 직선 통과하지 않고 안전하게 제자리 유지!
         if (opts2.onArrive) opts2.onArrive();
         return false;
       }
-      if (n.mode === 'idle' && c?.standPos) {
+      if (exitPt) {
         n.x = sx; n.y = sy;
       }
+      n.customSeat = null;
       sendPath(id, pts, opts2);
       return true;
     }
@@ -3693,6 +3699,55 @@
         '📦 컨베이어 분류 상태 확인 중…', '✅ 포장 라인·분류함 이상 없음!', 2800),
       // 13. 비서실장 + 자료 해석 비서: 분산 무대 합동 아이돌 댄스 타임!
       () => (isFree('claude') && isFree('reader')) ? danceParty() : false,
+      // 14. 신관 직원 휴게실 소파 휴식 (전 직원 9명 ChatGPT 12컷 sofa_front / sofa_left 활용!)
+      () => {
+        const pool = ['claude', 'finder', 'agy', 'translator', 'sorter', 'inspector', 'staffing', 'reader', 'auditor'].filter(id => isFree(id) && !npcs[id].customSeat);
+        if (!pool.length) return false;
+        const sofaSpots = [
+          { id: 'lounge_top_l',  pose: 'sofa_front', x: 161.2, y: 69.5, headTopY: 58.8, clipY: 69.2, h: 158, facing: 'front', stand: [173.5, 69.5], msg: '🛋️ 휴게실 소파에서 잠깐 쉬고 갈게요~' },
+          { id: 'lounge_top_r',  pose: 'sofa_front', x: 167.8, y: 69.5, headTopY: 58.8, clipY: 69.2, h: 158, facing: 'front', stand: [173.5, 69.5], msg: '☕ 소파에 앉으니 피로가 싹 풀리네요!' },
+          { id: 'lounge_r_sofa', pose: 'sofa_left',  x: 193.6, y: 76.0, headTopY: 64.6, clipY: 100.0, h: 168, facing: 'west',  stand: [189.2, 81.5], msg: '🛋️ 창가 소파 자리 너무 편해요~' },
+          { id: 'vip_sofa_l',    pose: 'sofa_front', x: 173.0, y: 24.0, headTopY: 13.8, clipY: 23.8, h: 162, facing: 'front', stand: [173.0, 32.5], msg: '📋 VIP 접견실 소파에서 자료 정리 중…' },
+        ];
+        const freeSpots = sofaSpots.filter(sp => !Object.values(npcs).some(o => o.customSeat && Math.hypot(o.customSeat.x - sp.x, o.customSeat.y - sp.y) < 2.2));
+        if (!freeSpots.length) return false;
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        const sp = freeSpots[Math.floor(Math.random() * freeSpots.length)];
+        return walkNpcSafe(pick, sp.stand[0], sp.stand[1], {
+          bubble: '🚶 신관 라운지 휴식 가는 중…',
+          onArrive: () => {
+            if (briefingActive) return;
+            const n = npcs[pick];
+            n.x = sp.x; n.y = sp.y; n.dir = sp.facing; n.mode = 'idle';
+            n.customSeat = sp; n.bubble = sp.msg; n.bubbleType = 'ok';
+            setTimeout(() => {
+              if (briefingActive || (activeTalkNpc && activeTalkNpc.id === pick)) return;
+              if (n.customSeat === sp) {
+                n.x = sp.stand[0]; n.y = sp.stand[1];
+                n.customSeat = null; n.mode = 'stand';
+              }
+              walkNpcSafe(pick, CHARS[pick].home[0], CHARS[pick].home[1], {
+                bubble: '↩ 충전 완료! 자리로 복귀해요',
+                onArrive: () => seatNpc(pick)
+              });
+            }, 9500 + Math.random() * 4500);
+          }
+        });
+      },
+      // 15. 신관 휴게실 음료 냉장고(drink) & 스낵바 커피·크루아상(snack) 체험!
+      () => {
+        const pool = ['claude', 'finder', 'agy', 'translator', 'sorter', 'inspector', 'staffing', 'reader', 'auditor'].filter(id => isFree(id) && !npcs[id].customSeat);
+        if (!pool.length) return false;
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        const isDrink = Math.random() < 0.5;
+        return doChore(
+          pick,
+          isDrink ? 186.0 : 176.5, 69.2, 'front',
+          isDrink ? '🥤 휴게실 냉장고 음료 마시러 가는 중…' : '🥐 스낵바 커피랑 크루아상 챙기러 가는 중…',
+          isDrink ? '🥤 와~ 시원한 캔 음료 한 잔 최고예요!' : '☕ 갓 구운 크루아상이랑 커피 꿀맛이에요!',
+          4800, '↩ 간식 충전 끝! 복귀해요', isDrink ? 'drink' : 'snack'
+        );
+      },
       // 14. 메뉴 검사관: 복도에서 스마트폰 메뉴판 정밀 점검 & 엄지척! (12프레임)
       () => doChore('agy', 63.0, 45.5, 'front',
         '📱 모바일 메뉴판 점검하러 가는 중…', '👍 우와, 모바일 메뉴판 진짜 깔끔하네요!', 3600, '', 'inspect'),
