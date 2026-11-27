@@ -134,6 +134,7 @@ name() {
     phothanh) echo "퍼 탄" ;;
     yosakura) echo "요사쿠라" ;;
     unatoto) echo "우나토토" ;;
+    nikusho) echo "니쿠쇼" ;;
     *) echo "$1" ;;
   esac
 }

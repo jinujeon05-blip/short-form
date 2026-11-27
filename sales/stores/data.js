@@ -995,6 +995,12 @@ window.STORES = [
     type: { ko: "일식 이자카야 · 장어 덮밥 · 숯불 꼬치 · 사시미", vi: "Izakaya Nhật · Cơm lươn · Xiên nướng than · Sashimi", en: "Japanese izakaya · Eel rice bowls · Charcoal skewers · Sashimi", zh: "日式居酒屋 · 鳗鱼盖饭 · 炭火串烧 · 刺身", ja: "居酒屋・うな丼・炭火串焼き・刺身" },
     keywords: "우나토토 이자카야 Unatoto UNATOTO VIETNAM 宇奈とと 장어 덮밥 우나주 히츠마부시 꼬치 사시미 하이볼 사케 일식 하노이 Kim Mã"
   },
+  { id: "nikusho", name: "니쿠쇼 肉昌 NIKUSHO", sub: "와규 야키니쿠 · 우설 · 스테이크 · 런치 세트", url: "https://nikusho.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese","bbq"], tags: ["photos"],
+    address: "42H Yên Phụ, Ba Đình, Hà Nội", map: "https://maps.app.goo.gl/piKVG8u3QbK9FfFQ7",
+    type: { ko: "일본식 와규 야키니쿠 · 우설 · 스테이크", vi: "Thịt nướng Wagyu kiểu Nhật · Lưỡi bò · Bít tết", en: "Japanese Wagyu BBQ · Beef tongue · Steak", zh: "日式和牛烧肉 · 牛舌 · 牛排", ja: "和牛焼肉・牛タン・ステーキ" },
+    keywords: "니쿠쇼 肉昌 NIKUSHO Nikusho 와규 야키니쿠 Japanese Wagyu BBQ 우설 스테이크 하노이 Hà Nội Ba Đình Yên Phụ"
+  },
 ];
 window.SI = {
   ko: {

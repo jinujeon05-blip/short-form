@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nikusho.qrmenuasia.com/sitemap.xml

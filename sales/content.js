@@ -263,6 +263,8 @@ window.DEMOS = [
     name: "규카츠 요사쿠라 GYUKATSU YOSAKURA", type: { ko: "일식 · 규카츠 · 장어 히츠마부시", vi: "Món Nhật · Bò chiên xù Gyukatsu · Lươn Hitsumabushi", en: "Japanese · Gyukatsu · Unagi Hitsumabushi", zh: "日料 · 炸牛排 · 鳗鱼三吃", ja: "日本料理・牛カツ・鰻ひつまぶし" } },
   { id: "unatoto", hidden: true, url: "https://unatoto.qrmenuasia.com", shot: "img/demo-unatoto.jpg", qr: "img/qr-unatoto.svg",
     name: "이자카야 우나토토 UNATOTO", type: { ko: "일식 이자카야 · 장어 덮밥 · 숯불 꼬치 · 사시미", vi: "Izakaya Nhật · Cơm lươn · Xiên nướng than · Sashimi", en: "Japanese izakaya · Eel rice bowls · Charcoal skewers · Sashimi", zh: "日式居酒屋 · 鳗鱼盖饭 · 炭火串烧 · 刺身", ja: "居酒屋・うな丼・炭火串焼き・刺身" } },
+  { id: "nikusho", hidden: true, url: "https://nikusho.qrmenuasia.com", shot: "img/demo-nikusho.jpg", qr: "img/qr-nikusho.svg",
+    name: "니쿠쇼 肉昌 NIKUSHO", type: { ko: "일본식 와규 야키니쿠 · 우설 · 스테이크", vi: "Thịt nướng Wagyu kiểu Nhật · Lưỡi bò · Bít tết", en: "Japanese Wagyu BBQ · Beef tongue · Steak", zh: "日式和牛烧肉 · 牛舌 · 牛排", ja: "和牛焼肉・牛タン・ステーキ" } },
 ];
 
 window.T = {
