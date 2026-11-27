@@ -2323,7 +2323,8 @@ class RemoteHandler(Handler):
 
     def guard(self):
         ip = self.client_address[0]
-        if ipaddress.ip_address(ip) not in TAILSCALE_NET:
+        # 127.0.0.1 = tailscale serve(https 주소)가 넘겨준 폰 요청. 여기도 PIN은 똑같이 받는다(2026-11-27)
+        if ipaddress.ip_address(ip) not in TAILSCALE_NET and not ipaddress.ip_address(ip).is_loopback:
             self.send_error(403)
             return False
         p = urlparse(self.path).path
@@ -2352,7 +2353,9 @@ class RemoteHandler(Handler):
     def same_origin(self):
         # 다른 사이트에서 이 양식을 보내지 못하게 (보통 양식 전송이라 X-Dashboard 머리글을 못 씀)
         origin = self.headers.get("Origin")
-        return origin is None or origin == "http://" + self.headers.get("Host", "")
+        # https 주소(tailscale serve, 2026-11-27 캡틴 다-1)로 열면 Origin이 https://로 온다
+        host = self.headers.get("Host", "")
+        return origin is None or origin in ("http://" + host, "https://" + host)
 
     def check_pin(self, ip):
         """보통 양식 전송 → 성공하면 쿠키를 주면서 첫 화면으로 보낸다(303).
@@ -2410,6 +2413,14 @@ def start_remote():
             continue
         threading.Thread(target=srv.serve_forever, daemon=True).start()
         print(f"휴대폰(Tailscale): http://{socket.gethostname().lower()}:{REMOTE_PORT}  또는 http://{ip}:{REMOTE_PORT}  (PIN은 사진 수집기와 같음)")
+    # https 주소용 입구: tailscale 서비스는 PC 자기 Tailscale 주소로 못 붙어서(502) PC 안 주소로 받는다.
+    # 'tailscale serve --https=443 http://127.0.0.1:8901' 이 여기로 보낸다(docs/dashboard.md 휴대폰 칸).
+    try:
+        srv = OneServer(("127.0.0.1", REMOTE_PORT + 1), RemoteHandler)
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        print(f"휴대폰(https 앱): https://<PC 이름>.<tailnet>.ts.net  → 127.0.0.1:{REMOTE_PORT + 1}")
+    except OSError as e:
+        print(f"https 입구 실패(127.0.0.1:{REMOTE_PORT + 1}): {e}")
 
 
 if __name__ == "__main__":
