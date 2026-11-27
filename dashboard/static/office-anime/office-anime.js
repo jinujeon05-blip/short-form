@@ -104,7 +104,7 @@
     });
     const jobs = [
       load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k9'),
-      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing5'),
+      load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing6'),
       load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing2'),
     ];
     for (const [id, cfg] of Object.entries(CHARS)) {
