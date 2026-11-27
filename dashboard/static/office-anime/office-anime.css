@@ -287,7 +287,8 @@ body.oa-fs-lock > *:not(.oa-stage) { display: none !important; }
 /* ===== 전체화면 직원 상태창 (2026-11-27) — 배경 그림(status-bg-pc) + 판·탭·버튼은 코드(개수 자유) ===== */
 .oa-modal.oa-full { --oa-font: var(--font, var(--f, "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif)); left: 0 !important; top: 0 !important; transform: none !important; width: 100% !important; height: 100% !important; min-width: 0 !important; max-height: none !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important; background: #f4d9a8; box-shadow: none; backdrop-filter: none; overflow: hidden; container-type: size; transition: none; font-family: var(--oa-font); }
 .oa-modal.oa-full, .oa-modal.oa-full * { font-family: var(--oa-font) !important; }
-.oa-full .oa-f-bg { position: absolute; inset: 0; background: url(/static/office-anime/assets/status-bg-pc.webp?v=1) center / cover no-repeat; }
+.oa-full .oa-f-bg { position: absolute; inset: 0; background: url(/static/office-anime/assets/status-bg-pc.webp?v=1) center / cover no-repeat; overflow: hidden; }
+.oa-full .oa-f-bgvid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; display: block; }
 .oa-full .oa-f-close { position: absolute; right: 2.2cqw; top: 3cqh; width: 6.4cqh; height: 6.4cqh; min-width: 28px; min-height: 28px; border-radius: 50%; border: 0.45cqh solid #f3c552; background: radial-gradient(circle at 40% 35%, #3a4a7a, #172142); color: #ffe7a0; font: 900 4.6cqh/1 var(--oa-font); cursor: pointer; z-index: 3; box-shadow: 0 0.6cqh 1.6cqh rgba(10,15,35,.45); display: flex; align-items: center; justify-content: center; padding: 0; }
 .oa-full .oa-f-close:hover { transform: scale(1.06); }
 .oa-full .oa-f-panel, .oa-full .oa-f-right { background: linear-gradient(160deg, rgba(36,48,88,.86), rgba(18,26,54,.9)); border: 0.4cqh solid #e9b949; border-radius: 2.4cqh; box-shadow: inset 0 0 0 0.25cqh rgba(255,231,160,.22), 0 1cqh 3cqh rgba(10,15,35,.4); backdrop-filter: blur(3px); }
@@ -308,7 +309,7 @@ body.oa-fs-lock > *:not(.oa-stage) { display: none !important; }
 .oa-full .oa-m-quest-txt, .oa-full .oa-appr-lbl, .oa-full .oa-appr-desc { font-size: clamp(10px, 2.1cqh, 15px); }
 .oa-full .oa-appr-title { font-size: clamp(10.5px, 2.3cqh, 16px); white-space: normal; }
 .oa-full .oa-f-char { position: absolute; left: 50%; bottom: 14.5cqh; height: 70cqh; transform: translateX(-50%); z-index: 1; pointer-events: none; display: flex; align-items: flex-end; }
-.oa-full .oa-f-body { height: 100%; width: auto; object-fit: contain; filter: drop-shadow(0 1.2cqh 1.4cqh rgba(80,50,10,.3)); transform-origin: 50% 100%; animation: oaBreath 3.6s ease-in-out infinite; }
+.oa-full .oa-f-body { height: 100%; width: auto; object-fit: contain; filter: drop-shadow(0 1.2cqh 1.4cqh rgba(80,50,10,.3)); }
 @keyframes oaBreath { 0%,100% { transform: scale(1, 1); } 50% { transform: scale(1.006, 1.012); } }
 .oa-full .oa-f-right { position: absolute; right: 2.2cqw; top: 13cqh; width: 21cqw; max-height: 67cqh; padding: 2cqh 1.2cqw; display: flex; flex-direction: column; gap: 2cqh; z-index: 2; box-sizing: border-box; }
 .oa-full .oa-f-name { padding: 1.6cqh 1cqw; border: 0.4cqh solid #f3c552; border-radius: 1.4cqh; background: linear-gradient(180deg, #1b2550, #111a3c); text-align: center; display: flex; flex-direction: column; gap: 0.5cqh; }

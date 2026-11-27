@@ -2836,7 +2836,7 @@
 
     // 전체화면 상태창 가운데 캐릭터: 기본은 걷기 그림 정면 1장. 제미나이 영상을 넣으면 video: 'fullbody/<파일>.mp4'
     const FULLBODY = {
-      // claude: { video: 'fullbody/비서실장-전체-대기.mp4' },
+      claude: { bgVideo: 'status/claude-full.mp4?v=1', idleVideo: 'status/claude-idle.mp4?v=1', talkVideo: 'status/claude-talk.mp4?v=1' },
       agy: { dir: 'front' }, reader: { dir: 'front' }, auditor: { dir: 'front' }, inspector: { dir: 'front' },
     };
 
@@ -3155,13 +3155,17 @@
       const tabs = [{ id: 'work', label: '대화' }];
       const firstTab = 'work';
       const fb = FULLBODY[hit] || {};
-      const bodyImg = `/static/office-anime/assets/walk/${c.asset || hit}-${fb.dir || 'front'}-${fb.frame || 1}.webp?v=orig2k_df4`;
-      const bodyHtml = fb.video
+      const bodyV = (hit === 'claude' || hit === 'inspector') ? 'swap1' : 'orig2k_df4';
+      const bodyImg = `/static/office-anime/assets/walk/${c.asset || hit}-${fb.dir || 'front'}-${fb.frame || 1}.webp?v=${bodyV}`;
+      const bgVidHtml = fb.bgVideo
+        ? `<video class="oa-f-bgvid" src="/static/office-anime/assets/${fb.bgVideo}" autoplay muted loop playsinline></video>`
+        : '';
+      const bodyHtml = fb.bgVideo ? '' : (fb.video
         ? `<video class="oa-f-body" src="/static/office-anime/assets/${fb.video}" poster="${bodyImg}" autoplay muted loop playsinline></video>`
-        : `<img class="oa-f-body" src="${bodyImg}" alt="${c.name}">`;
+        : `<img class="oa-f-body" src="${bodyImg}" alt="${c.name}">`);
       modal.classList.add('oa-full');
       modal.innerHTML = `
-        <div class="oa-f-bg"></div>
+        <div class="oa-f-bg">${bgVidHtml}</div>
         <button type="button" class="oa-f-close" data-close aria-label="닫기">×</button>
         <div class="oa-f-left">
           <div class="oa-f-tabs">
