@@ -125,7 +125,7 @@
       load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k9'),
       load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing6'),
       load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing2'),
-      ...TV_STORES.map(st => load(imgs.tv, st.slug, `/static/office-anime/assets/tv/${st.slug}.webp?v=tv1`)),
+      ...TV_STORES.map(st => load(imgs.tv, st.slug, `/static/office-anime/assets/tv/${st.slug}.webp?v=tv2`)),
     ];
     imgs.tvStores = TV_STORES;
     for (const [id, cfg] of Object.entries(CHARS)) {
@@ -185,7 +185,7 @@
       if (!cfg.guest) {
         imgs.walk[id].seat = [];
         const seatCnt = (id === 'staffing') ? 8 : 4;
-        for (let i = 1; i <= seatCnt; i++) jobs.push(load(imgs.walk[id].seat, i - 1, `/static/office-anime/assets/walk/${id}-seat-${i}.webp?v=seat1_df3`));
+        for (let i = 1; i <= seatCnt; i++) jobs.push(load(imgs.walk[id].seat, i - 1, `/static/office-anime/assets/walk/${id}-seat-${i}.webp?v=seat2_df3`));
       }
       // 비서실장 책상 업무(구 12프레임 백업 유지)
       if (id === 'claude') {
@@ -2274,7 +2274,111 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.setTransform(s * z, 0, 0, s * z, (cam.tx || 0) / 100 * W * s + shX, (cam.ty || 0) / 100 * H * s + shY);
       }
-      if (imgs.bg) ctx.drawImage(imgs.bg, 0, 0, W, H);
+      if (imgs.bg) {
+        ctx.drawImage(imgs.bg, 0, 0, W, H);
+        // 🖥️ 본관 4대 PC 모니터(디지털 메뉴 통제실 2대 + 감사실 2대) 실시간 작업 화면 연출!
+        const pcMons = [
+          { id: 'agy',       kind: 'menu',  x0: 80.15, y0: 32.45, x1: 85.38, y1: 36.10, acc: '#38bdf8' },
+          { id: 'reader',    kind: 'code',  x0: 89.88, y0: 32.41, x1: 95.08, y1: 36.10, acc: '#34d399' },
+          { id: 'inspector', kind: 'qa',    x0:  4.90, y0: 61.64, x1: 10.08, y1: 66.09, acc: '#c084fc' },
+          { id: 'auditor',   kind: 'chart', x0: 14.60, y0: 61.64, x1: 19.78, y1: 66.09, acc: '#fbbf24' },
+        ];
+        for (const m of pcMons) {
+          const mx = (m.x0 / 100) * W, my = (m.y0 / 100) * H;
+          const mw = ((m.x1 - m.x0) / 100) * W, mh = ((m.y1 - m.y0) / 100) * H;
+          const busy = realBusySet.has(m.id);
+          const spd = busy ? 2.4 : 1.0;
+          ctx.save();
+          ctx.beginPath(); ctx.rect(mx, my, mw, mh); ctx.clip();
+          // 다크 모드 업무 UI 배경
+          const mg = ctx.createLinearGradient(mx, my, mx, my + mh);
+          mg.addColorStop(0, '#0f1c38');
+          mg.addColorStop(1, '#0b1326');
+          ctx.fillStyle = mg;
+          ctx.fillRect(mx, my, mw, mh);
+          // 상단 윈도우 타이틀바 + 3색 점
+          ctx.fillStyle = 'rgba(30,41,59,0.92)';
+          ctx.fillRect(mx, my, mw, 7);
+          ctx.fillStyle = '#f87171'; ctx.fillRect(mx + 4, my + 2.5, 2.5, 2.5);
+          ctx.fillStyle = '#fbbf24'; ctx.fillRect(mx + 8.5, my + 2.5, 2.5, 2.5);
+          ctx.fillStyle = '#4ade80'; ctx.fillRect(mx + 13, my + 2.5, 2.5, 2.5);
+          ctx.fillStyle = m.acc;
+          ctx.fillRect(mx + 22, my + 2.5, mw * 0.36, 2.2);
+          // 모니터별 살아 움직이는 업무 화면
+          const by = my + 10, bh = mh - 12;
+          if (m.kind === 'menu') {
+            // 메뉴 검사관: 좌측 QR메뉴 카드 썸네일 + 우측 스크롤 가격표 체크리스트
+            ctx.fillStyle = 'rgba(56,189,248,0.22)';
+            ctx.fillRect(mx + 5, by, mw * 0.34, bh * 0.55);
+            ctx.fillStyle = '#fde047';
+            ctx.fillRect(mx + 8, by + 3, mw * 0.22, 3);
+            ctx.fillStyle = 'rgba(255,255,255,0.65)';
+            ctx.fillRect(mx + 8, by + 9, mw * 0.26, 2.2);
+            ctx.fillRect(mx + 8, by + 14, mw * 0.18, 2.2);
+            const sc = (t * 9 * spd) % 10;
+            for (let r = 0; r < 5; r++) {
+              const ry = by + r * 8 - sc * 0.6;
+              if (ry < by - 4 || ry > my + mh) continue;
+              ctx.fillStyle = '#4ade80'; ctx.fillRect(mx + mw * 0.44, ry, 3.5, 3.5);
+              ctx.fillStyle = 'rgba(226,232,240,0.75)';
+              ctx.fillRect(mx + mw * 0.50, ry + 0.5, mw * (0.28 + ((r * 13) % 16) * 0.01), 2.6);
+            }
+          } else if (m.kind === 'code') {
+            // 자료 해석 비서: 신택스 컬러 JSON·코드 스크롤 + 하단 진행바
+            const sc = (t * 14 * spd) % 9;
+            const cols = ['#38bdf8', '#34d399', '#fbbf24', '#f472b6', '#e2e8f0'];
+            for (let r = 0; r < 6; r++) {
+              const ry = by + r * 6.5 - sc * 0.5;
+              if (ry < by - 3 || ry > my + mh - 7) continue;
+              const indent = (r % 3) * 6;
+              ctx.fillStyle = cols[r % cols.length];
+              ctx.fillRect(mx + 6 + indent, ry, mw * (0.18 + ((r * 7) % 10) * 0.025), 2.6);
+              ctx.fillStyle = 'rgba(148,163,184,0.65)';
+              ctx.fillRect(mx + 36 + indent, ry, mw * 0.28, 2.4);
+            }
+            const prog = (0.35 + 0.65 * ((t * 0.28 * spd) % 1));
+            ctx.fillStyle = 'rgba(51,65,85,0.8)'; ctx.fillRect(mx + 6, my + mh - 6, mw - 12, 3);
+            ctx.fillStyle = '#34d399'; ctx.fillRect(mx + 6, my + mh - 6, (mw - 12) * prog, 3);
+          } else if (m.kind === 'qa') {
+            // 운영 감찰관: 보라·시안 원형 게이지 + 실시간 검수 체크 리스트
+            const cx = mx + mw * 0.23, cy = by + bh * 0.46, rad = Math.min(mw, bh) * 0.28;
+            ctx.strokeStyle = 'rgba(192,132,252,0.28)'; ctx.lineWidth = 3.5;
+            ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.stroke();
+            ctx.strokeStyle = '#c084fc';
+            ctx.beginPath(); ctx.arc(cx, cy, rad, -Math.PI / 2, -Math.PI / 2 + Math.PI * (1.2 + 0.5 * Math.sin(t * 1.4 * spd))); ctx.stroke();
+            const sc = (t * 8 * spd) % 10;
+            for (let r = 0; r < 5; r++) {
+              const ry = by + r * 9 - sc * 0.5;
+              if (ry < by - 4 || ry > my + mh) continue;
+              ctx.fillStyle = (r % 3 === 0) ? '#38bdf8' : '#4ade80';
+              ctx.fillRect(mx + mw * 0.46, ry, 5, 3.2);
+              ctx.fillStyle = 'rgba(226,232,240,0.78)';
+              ctx.fillRect(mx + mw * 0.54, ry, mw * (0.26 + ((r * 11) % 12) * 0.012), 2.8);
+            }
+          } else {
+            // 데이터 감사관: 실시간 상승 막대 그래프 + 지표 라인
+            const bars = 6, bw = (mw * 0.52) / bars;
+            for (let b = 0; b < bars; b++) {
+              const frac = 0.28 + 0.58 * (0.5 + 0.5 * Math.sin(t * 1.8 * spd + b * 0.9));
+              const bh2 = (bh - 6) * frac;
+              ctx.fillStyle = b % 2 === 0 ? '#34d399' : '#fbbf24';
+              ctx.fillRect(mx + 6 + b * bw, my + mh - 4 - bh2, bw - 3, bh2);
+            }
+            for (let r = 0; r < 4; r++) {
+              ctx.fillStyle = r === 0 ? '#fde047' : 'rgba(148,163,184,0.75)';
+              ctx.fillRect(mx + mw * 0.63, by + 3 + r * 9, mw * (0.26 - (r % 2) * 0.06), 3);
+            }
+          }
+          // 모니터 유리 반사광 + 은은한 화면 발광
+          const gl = ctx.createLinearGradient(mx, my, mx + mw * 0.65, my + mh);
+          gl.addColorStop(0, 'rgba(255,255,255,0.14)');
+          gl.addColorStop(0.4, 'rgba(255,255,255,0)');
+          gl.addColorStop(1, 'rgba(0,0,0,0.16)');
+          ctx.fillStyle = gl;
+          ctx.fillRect(mx, my, mw, mh);
+          ctx.restore();
+        }
+      }
       if (imgs.bgRight) {
         ctx.drawImage(imgs.bgRight, W, 0, W, H);
         // 📺 신관 대회의실 대형 TV 디스플레이: 정식 계약 매장 QR메뉴 자동 롤링 쇼케이스!
