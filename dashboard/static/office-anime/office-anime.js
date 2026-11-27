@@ -2817,17 +2817,18 @@
 
     // 역할별 RPG 대화 멘트 + 빠른 지시 버튼
     const DIALOG_CFG = {
-      captain:    { greet: '오늘 사무실 전체 현황을 점검 중입니다. 어떤 지시를 내릴까요?', quick: ['🏪 새 가게 찾기 제작 지시', '☕ 커피 한 잔 하며 휴식', '👋 전체 직원 격려 인사', '🪑 대표석으로 복귀'] },
-      claude:     { greet: '캡틴, 오셨어요? 오늘 진행할 업무나 지시하실 사항이 있으신가요?', quick: ['☕ 캡틴 커피 서빙해 줘', '📋 현재 전체 진행 현황 보고', '💬 팀장급 복도 회의 소집'] },
-      finder:     { greet: '캡틴! 음식 사진 선별이나 이미지 보정 지시하실 게 있으신가요?', quick: ['📸 새 가게 음식 사진 고르기', '✨ 흐린 메뉴 사진 화질 개선', '📋 현재 사진 작업 현황 보고'] },
-      agy:        { greet: '캡틴! 어떤 가게의 디지털 메뉴판을 점검할까요?', quick: ['🔍 메뉴판 가격·오타 전수 점검', '📱 모바일 화면 깨짐 확인', '📋 검수 완료 리스트 보고'] },
-      translator: { greet: '캡틴! 베트남어·영어·한국어 메뉴 번역 지시하실 내용이 있으신가요?', quick: ['🌐 새 메뉴 4개국어 번역 시작', '✍️ 베트남어 현지 표현 자연스럽게 다듬기', '📋 번역 완료 현황 보고'] },
-      sorter:     { greet: '캡틴! 오늘 메뉴판 방문 현황을 30분마다 보고드려요(08~22시).', quick: ['📊 지금 보고해', '🔍 상세 보기', '📅 어제와 비교'] },
-      inspector:  { greet: '캡틴! 배포 전 2차 교차 감찰이 필요한 가게나 메뉴판이 있으신가요?', quick: ['🛡️ 배포 예정 가게 2차 교차 감찰', '🔎 오타·링크 깨짐 최종 확인', '📋 감찰 통과 현황 보고'] },
-      staffing:   { greet: '캡틴! 오늘 거래처 주·야간 인력 배치나 근태 현황 확인하실까요?', quick: ['📅 오늘 주·야간 인력 배치 보고', '📊 이번 달 거래처 실적 확인', '📋 미보고 거래처 점검'] },
-      reader:     { greet: '캡틴! 새로 들어온 메뉴판 사진에서 글자·가격 데이터를 추출할까요?', quick: ['📑 신규 메뉴판 원문 해석 시작', '💰 가격·옵션 누락 정밀 대조', '📋 해석 완료 리스트 보고'] },
-      auditor:    { greet: '캡틴! 배포 전 마지막 데이터 감사·오류 점검을 진행할까요?', quick: ['📊 전체 메뉴 데이터 최종 감사', '🔗 배포 링크·이미지 깨짐 점검', '📋 감사 완료 보고서 제출'] },
-      vip_jung:   { greet: '아우님! NANA VINA 정은수 형님이야. 오늘 사무실 분위기 좋네! 커피 한 잔 하면서 얘기 좀 할까?', quick: ['☕ 형님 커피 한 잔 대접하기', '🤝 직원들 둘러보시게 안내'] },
+      // 상태창에서 PC·폰 모두 한 줄로 보이게 짧게(캡틴 지시 2026-11-27). 버튼 = [보이는 말, 실제로 보내는 지시 글]
+      captain:    { greet: '오늘 어떤 지시를 내릴까요?', quick: [['새 가게 지시', '🏪 새 가게 찾기 제작 지시'], ['커피 휴식', '☕ 커피 한 잔 하며 휴식'], ['직원 격려', '👋 전체 직원 격려 인사'], ['대표석 복귀', '🪑 대표석으로 복귀']] },
+      claude:     { greet: '캡틴, 지시하실 일 있으세요?', quick: [['커피 서빙', '☕ 캡틴 커피 서빙해 줘'], ['진행 현황 보고', '📋 현재 전체 진행 현황 보고'], ['팀장 회의 소집', '💬 팀장급 복도 회의 소집']] },
+      finder:     { greet: '캡틴, 사진 작업 있으세요?', quick: [['사진 고르기', '📸 새 가게 음식 사진 고르기'], ['사진 화질 개선', '✨ 흐린 메뉴 사진 화질 개선'], ['작업 현황 보고', '📋 현재 사진 작업 현황 보고']] },
+      agy:        { greet: '어느 가게 메뉴판 볼까요?', quick: [['가격·오타 점검', '🔍 메뉴판 가격·오타 전수 점검'], ['폰 화면 확인', '📱 모바일 화면 깨짐 확인'], ['검수 현황 보고', '📋 검수 완료 리스트 보고']] },
+      translator: { greet: '캡틴, 번역할 메뉴 있으세요?', quick: [['새 메뉴 번역', '🌐 새 메뉴 4개국어 번역 시작'], ['베트남어 다듬기', '✍️ 베트남어 현지 표현 자연스럽게 다듬기'], ['번역 현황 보고', '📋 번역 완료 현황 보고']] },
+      sorter:     { greet: '방문 현황은 30분마다 보고해요.', quick: [['지금 보고해', '📊 지금 보고해'], ['상세 보기', '🔍 상세 보기'], ['어제와 비교', '📅 어제와 비교']] },
+      inspector:  { greet: '2차 감찰할 가게 있으세요?', quick: [['2차 교차 감찰', '🛡️ 배포 예정 가게 2차 교차 감찰'], ['오타·링크 확인', '🔎 오타·링크 깨짐 최종 확인'], ['감찰 현황 보고', '📋 감찰 통과 현황 보고']] },
+      staffing:   { greet: '오늘 인력 현황 보실까요?', quick: [['인력 배치 보고', '📅 오늘 주·야간 인력 배치 보고'], ['거래처 실적', '📊 이번 달 거래처 실적 확인'], ['미보고 거래처', '📋 미보고 거래처 점검']] },
+      reader:     { greet: '새 메뉴판 사진 읽을까요?', quick: [['메뉴판 해석', '📑 신규 메뉴판 원문 해석 시작'], ['가격 누락 대조', '💰 가격·옵션 누락 정밀 대조'], ['해석 현황 보고', '📋 해석 완료 리스트 보고']] },
+      auditor:    { greet: '배포 전 최종 점검할까요?', quick: [['최종 데이터 감사', '📊 전체 메뉴 데이터 최종 감사'], ['링크·사진 점검', '🔗 배포 링크·이미지 깨짐 점검'], ['감사 보고서 제출', '📋 감사 완료 보고서 제출']] },
+      vip_jung:   { greet: '아우님! 커피 한잔 할까?', quick: [['커피 대접', '☕ 형님 커피 한 잔 대접하기'], ['사무실 안내', '🤝 직원들 둘러보시게 안내']] },
     };
 
     // 전체화면 상태창 가운데 캐릭터: 기본은 걷기 그림 정면 1장. 제미나이 영상을 넣으면 video: 'fullbody/<파일>.mp4'
@@ -3010,7 +3011,7 @@
       if (activeTalkNpc && activeTalkNpc.id !== hit) resumeTalkNpc(false);
 
       const c = CHARS[hit], n = npcs[hit], cap = npcs.captain;
-      const dcfg = DIALOG_CFG[hit] || { greet: '캡틴, 지시하실 업무가 있으신가요?', quick: ['📋 현재 업무 보고'] };
+      const dcfg = DIALOG_CFG[hit] || { greet: '캡틴, 지시하실 일 있으세요?', quick: [['업무 보고', '📋 현재 업무 보고']] };
 
       if (hit !== 'captain') {
         const wasSeated = (n.mode === 'idle' || n.mode === 'work');
@@ -3115,7 +3116,7 @@
 
       const fallbackOrder = npcAppr || latestOrders.find(o => (o.worked || []).includes(dashId)) || latestOrders[0];
       const orderBtn = (opts.onOpenOrder && fallbackOrder)
-        ? `<button type="button" class="oa-q-btn appr-link" data-open-order="${escHtml(fallbackOrder.id)}">📋 ${npcAppr ? '결재 내용 보기' : '최근 결재·지시 보기'}</button>` : '';
+        ? `<button type="button" class="oa-q-btn appr-link" data-open-order="${escHtml(fallbackOrder.id)}">📋 ${npcAppr ? '결재 내용 보기' : '결재·지시 보기'}</button>` : '';
       const detailBtn = opts.onOpenDetail
         ? `<button type="button" class="oa-q-btn detail" data-open-detail>👤 직원 상세</button>` : '';
       const q = activeQuests[hit];
@@ -3133,16 +3134,18 @@
       const talk = [];
       let choices = '';
       if (npcAppr) {
-        talk.push(`캡틴, "${cut(npcAppr.title || npcAppr.text || '결재 건', 18)}" 결재를 기다리고 있어요. 어떻게 할까요?`);
-        choices = apprChoices.map((ch, idx) => `<button type="button" class="oa-f-choice" data-appr-idx="${idx}">${escHtml(cut(ch.label, 16))}</button>`).join('');
+        talk.push('결재 기다리는 게 있어요.');
+        talk.push(`"${cut(npcAppr.title || npcAppr.text || '결재 건', 13)}"`);
+        choices = apprChoices.map((ch, idx) => `<button type="button" class="oa-f-choice" data-appr-idx="${idx}">${escHtml(cut(ch.label, 12))}</button>`).join('');
       } else if (hit === 'sorter' && latestVisits) {
         const v = latestVisits;
         const diff = v.ydayVis == null ? null : v.vis - v.ydayVis;
-        talk.push(`${v.hm} 기준으로 오늘 ${v.vis}명 다녀갔어요.` + (diff == null ? '' : diff > 0 ? ` 어제 이맘때보다 ${diff}명 많아요!` : diff < 0 ? ` 어제 이맘때보다 ${-diff}명 적어요.` : ' 어제랑 똑같아요.'));
-        talk.push('자세한 건 대시보드 방문 기록에 올려 뒀어요.');
+        talk.push(`오늘 ${v.vis}명 다녀갔어요. (${v.hm})`);
+        if (diff != null) talk.push(diff > 0 ? `어제보다 ${diff}명 많아요!` : diff < 0 ? `어제보다 ${-diff}명 적어요.` : '어제랑 똑같아요.');
       } else if (q && q.kind !== 'visits') {
-        talk.push(q.type === 'exc' ? `캡틴, 확인하실 게 있어요. ${cut(q.title, 26)}` : `${cut(q.title, 26)} 다 끝냈어요!`);
-        choices = `<button type="button" class="oa-f-choice" data-quest-act>${escHtml(cut(q.actionLabel, 16))}</button>`;
+        talk.push(q.type === 'exc' ? '확인하실 게 있어요!' : '작업 하나 끝냈어요!');
+        talk.push(cut(q.title, 15));
+        choices = `<button type="button" class="oa-f-choice" data-quest-act>${escHtml(cut(q.actionLabel, 12))}</button>`;
       } else {
         talk.push(dcfg.greet);
       }
@@ -3174,7 +3177,7 @@
           <div class="oa-f-name"><b>${c.name}</b><span>${c.role}</span></div>
           <div class="oa-f-btns">
             ${orderBtn}
-            ${dcfg.quick.map(q => `<button type="button" class="oa-q-btn" data-q="${q}">${q}</button>`).join('')}
+            ${dcfg.quick.map(q => { const [lb, od] = Array.isArray(q) ? q : [q, q]; return `<button type="button" class="oa-q-btn" data-q="${escHtml(od)}">${escHtml(lb)}</button>`; }).join('')}
             ${detailBtn}
           </div>
         </div>
@@ -3215,7 +3218,7 @@
               const r = await opts.onDeployOrder(npcAppr.id);
               if (r?.error) {
                 btn.disabled = false;
-                if (resEl) resEl.textContent = `⚠️ ${r.error}`;
+                if (resEl) resEl.textContent = '잘 안 됐어요. 다시 해 주세요.';
                 return;
               }
             } else if (opts.onOpenOrder) {
@@ -3228,7 +3231,7 @@
             spawnBurst(n.x, n.y, '🚀 배포 시작! +150 EXP', 150);
             n.bubble = `🚀 [${(npcAppr.deploy || []).join(', ') || '가게'}] 배포를 바로 시작합니다!`;
             n.bubbleType = 'ok';
-            if (resEl) resEl.textContent = '배포 시작했어요! 끝나면 바로 알려 드릴게요.';
+            if (resEl) resEl.textContent = '배포 시작했어요!';
             setTimeout(() => closeTalkModal(true), 900);
             return;
           }
@@ -3243,14 +3246,14 @@
             const inp = modal.querySelector('input[name="msg"]');
             if (inp) { inp.value = '수정 요청: '; inp.focus(); }
             const resEl = modal.querySelector('[data-res]');
-            if (resEl) { resEl.hidden = false; resEl.textContent = '어떻게 고칠까요? 아래에 적어 주세요.'; }
+            if (resEl) { resEl.hidden = false; resEl.textContent = '어떻게 고칠까요? 적어 주세요.'; }
             return;
           }
           const resEl = modal.querySelector('[data-res]');
           if (resEl) { resEl.hidden = false; resEl.textContent = '네, 전달할게요…'; }
           if (opts.onReplyOrder) {
             const r = await opts.onReplyOrder({ id: npcAppr.id, text: ch.replyText || ch.label, approve: !!ch.approve });
-            if (r?.error) { if (resEl) resEl.textContent = `⚠️ ${r.error}`; return; }
+            if (r?.error) { if (resEl) resEl.textContent = '잘 안 됐어요. 다시 해 주세요.'; return; }
           }
           SFX.fanfare();
           if (ch.approve) playCaptainAction('stamp');
@@ -3258,7 +3261,7 @@
           spawnBurst(n.x, n.y, '✅ 결재 완료! +100 EXP', 100);
           n.bubble = `✅ [${ch.num}번] 결재 확인했습니다! 바로 진행합니다!`;
           n.bubbleType = 'ok';
-          if (resEl) resEl.textContent = '알겠습니다, 캡틴! 그대로 진행할게요.';
+          if (resEl) resEl.textContent = '알겠습니다, 진행할게요!';
           setTimeout(() => closeTalkModal(true), 850);
         });
       });
@@ -3310,7 +3313,7 @@
               inp.setSelectionRange(0, 3); // '가게명'만 바로 선택되어 치자마자 교체 가능!
             }
             resEl.hidden = false;
-            resEl.textContent = '✏️ 맨 앞 "가게명"만 바꿔서 [지시 전달]을 눌러주세요!';
+            resEl.textContent = '"가게명"만 바꿔서 보내 주세요.';
             return;
           }
           if (text.includes('커피')) { closeTalkModal(false); playCaptainAction('coffee'); return; }
@@ -3323,8 +3326,8 @@
         if (hit === 'sorter' && text === '📅 어제와 비교') {
           const v = latestVisits;
           resEl.textContent = !v ? '아직 오늘 방문 기록이 없어요.'
-            : v.ydayVis == null ? `오늘 ${v.hm}까지 ${v.vis}명이에요. 어제 기록은 아직 없어요.`
-            : `어제 이맘때(${v.ydayHm})는 ${v.ydayVis}명이었어요. ${v.vis - v.ydayVis > 0 ? `오늘이 ${v.vis - v.ydayVis}명 더 많아요!` : v.vis - v.ydayVis < 0 ? `오늘이 ${v.ydayVis - v.vis}명 적어요.` : '오늘이랑 똑같아요.'}`;
+            : v.ydayVis == null ? '어제 기록은 아직 없어요.'
+            : (v.vis - v.ydayVis > 0 ? `어제보다 ${v.vis - v.ydayVis}명 많아요!` : v.vis - v.ydayVis < 0 ? `어제보다 ${v.ydayVis - v.vis}명 적어요.` : '어제랑 똑같아요.');
           return;
         }
         if (hit === 'sorter' && text === '📊 지금 보고해') {
@@ -3335,7 +3338,7 @@
           lsSet('oa_visit_shown', r.report.id); lsSet('oa_visit_read', r.report.id);
           const box = modal.querySelector('[data-visit]');
           if (box) box.outerHTML = visitBlock();
-          resEl.textContent = `${r.report.hm} 기준으로 오늘 ${r.report.vis}명이에요. 자세한 건 대시보드에서 보세요.`;
+          resEl.textContent = `오늘 ${r.report.vis}명이에요. (${r.report.hm})`;
           voice(hit, 'done', 0.2);
           n.bubble = r.report.speech; n.bubbleType = 'ok';
           setTimeout(() => { if (n.bubble === r.report.speech) n.bubble = ''; }, 9000);
@@ -3350,17 +3353,17 @@
         try {
           if (opts.onSendOrder) {
             const r = await opts.onSendOrder({ text: fullOrder, when: '', argon: false });
-            resEl.textContent = r?.error ? `죄송해요, 전달이 안 됐어요. (${String(r.error).slice(0, 40)})` : '네, 캡틴! 바로 시작하겠습니다.';
+            resEl.textContent = r?.error ? '전달이 안 됐어요. 다시 해 주세요.' : '네, 바로 시작할게요!';
           } else {
             const r = await fetch('/api/order', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'X-Dashboard': '1' },
               body: JSON.stringify({ text: fullOrder })
             });
-            resEl.textContent = r.ok ? '네, 캡틴! 바로 시작하겠습니다.' : '네, 캡틴! 알겠습니다. (시연 모드)';
+            resEl.textContent = r.ok ? '네, 바로 시작할게요!' : '네, 알겠습니다! (시연)';
           }
         } catch {
-          resEl.textContent = '네, 캡틴! 알겠습니다.';
+          resEl.textContent = '네, 알겠습니다!';
         }
         SFX.send();
         if (hit !== 'captain') voice(hit, 'ok', 0.25);

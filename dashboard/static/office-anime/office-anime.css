@@ -350,3 +350,14 @@ body.oa-fs-lock > *:not(.oa-stage) { display: none !important; }
 .oa-full .oa-f-choice::before { content: '▶ '; color: #f3c552; }
 .oa-full .oa-f-choice:hover { background: linear-gradient(180deg, #ffe38a, #f2b23a); color: #2a1d05; }
 .oa-full .oa-f-choice:hover::before { color: #2a1d05; }
+
+/* ===== 한 줄 고정(2026-11-27) — PC·폰 같은 비율(글자 크기를 화면 높이 비율로), 줄바꿈 없음 ===== */
+.oa-full .oa-f-say p, .oa-full .oa-f-reply { font-size: 2.5cqh; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.oa-full .oa-f-who { font-size: 2cqh; }
+.oa-full .oa-f-choice { font-size: 2.3cqh; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.oa-full .oa-f-btns .oa-q-btn { font-size: 2.3cqh; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 1.5cqh 0.8cqw; }
+.oa-full .oa-f-name b { font-size: 3.2cqh; white-space: nowrap; }
+.oa-full .oa-f-name span { font-size: 1.9cqh; white-space: nowrap; }
+.oa-full .oa-f-tab { font-size: 2.4cqh; }
+.oa-full .oa-f-form input { font-size: 2.4cqh; }
+.oa-full .oa-f-form button { font-size: 2.8cqh; }
