@@ -28,9 +28,9 @@
   // 신관 대회의실 6석 실측 착석 좌표 (배포 대기 중 6명 자동 회의 연출!)
   // 윗줄(앞모습): 시각정보비서 · 비서실장 · 수석번역관 / 아랫줄(뒷모습): 운영감찰관 · 데이터감사관 · 자료해석비서
   const CONF_SEATS = {
-    finder:     { x: 141.9, y: 38.0, headTopY: 28.6, clipY: 35.8, h: 215, facing: 'front', stand: [130.5, 44.5] },
-    claude:     { x: 149.3, y: 38.0, headTopY: 28.6, clipY: 35.8, h: 215, facing: 'front', stand: [132.5, 44.5] },
-    translator: { x: 156.5, y: 38.0, headTopY: 28.6, clipY: 35.8, h: 215, facing: 'front', stand: [134.5, 44.5] },
+    finder:     { x: 141.9, y: 38.0, headTopY: 30.0, clipY: 36.2, h: 225, facing: 'front', stand: [130.5, 44.5] },
+    claude:     { x: 149.3, y: 38.0, headTopY: 30.0, clipY: 36.2, h: 225, facing: 'front', stand: [132.5, 44.5] },
+    translator: { x: 156.5, y: 38.0, headTopY: 30.0, clipY: 36.2, h: 225, facing: 'front', stand: [134.5, 44.5] },
     inspector:  { x: 141.2, y: 46.2, headTopY: 33.9, clipY: 43.2, h: 210, facing: 'back',  stand: [139.0, 46.8] },
     auditor:    { x: 149.2, y: 46.4, headTopY: 34.3, clipY: 43.6, h: 210, facing: 'back',  stand: [149.2, 46.8] },
     reader:     { x: 157.1, y: 46.4, headTopY: 34.2, clipY: 43.6, h: 210, facing: 'back',  stand: [157.5, 46.8] },
@@ -103,7 +103,7 @@
       im.src = url;
     });
     const jobs = [
-      load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k8'),
+      load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k9'),
       load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing4'),
       load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing2'),
     ];
