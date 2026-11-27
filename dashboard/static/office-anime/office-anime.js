@@ -3767,7 +3767,45 @@
       clearVipTimers();
       if (nextVipTimer) { clearTimeout(nextVipTimer); nextVipTimer = null; }
       vipActive = true;
+      lsSet('oa_vip_last_at', String(Date.now()));
       let vipGreetVoiced = false;
+      const pickOne = arr => arr[Math.floor(Math.random() * arr.length)];
+      const arriveSay = pickOne([
+        '🤝 아우님! NANA VINA 정은수 왔어!',
+        '👋 아우님~ 지나가는 길에 얼굴 보러 들렀어!',
+        '😊 아우님! 오늘도 열심히 일하고 있나 보네!',
+        '🤝 NANA VINA 정은수 형님이야! 잠깐 들렀어!',
+      ]);
+      const greetSay = pickOne([
+        '🤝 아우님! 요즘 사업 잘 되지? 잠깐 들렀어!',
+        '😄 아우님, QR메뉴 사업 날로 번창하네! 멋지다!',
+        '✨ 오늘 사무실 분위기 진짜 활기차네! 잘하고 있어!',
+        '🤝 아우님, 바쁜데 잠깐 얼굴만 보고 갈게!',
+      ]);
+      const capGreetReply = pickOne([
+        '😄 형님 오셨어요! 커피 한 잔 하시고 편히 보세요!',
+        '😄 어서 오세요 형님! 마침 잘 오셨습니다!',
+        '😊 형님, 늘 응원해 주셔서 감사해요! 커피 한 잔 하세요!',
+        '😄 정은수 형님! 오늘도 편하게 둘러보고 가세요!',
+      ]);
+      const coffeeSay = pickOne([
+        '☕ 여기 사무실 커피 향이 진짜 좋네~',
+        '☕ 크~ 역시 아우님네 사무실 커피가 제일 맛있어!',
+        '☕ 커피 한 잔 마시니까 피로가 싹 풀리네~',
+        '☕ 이 원두 어디 거지? 향이 끝내주는데!',
+      ]);
+      const byeSay = pickOne([
+        '👋 아우님, 나 먼저 들어가 볼게! 조만간 한잔하자!',
+        '👋 잘 쉬다 간다 아우님! 저녁에 연락할게!',
+        '👋 아우님, 오늘도 대박 나라! 또 놀러 올게!',
+        '👋 다들 고생 많고, 아우님 조만간 식사 한번 하자!',
+      ]);
+      const capByeReply = pickOne([
+        '😄 조심히 들어가세요 형님! 곧 연락드릴게요!',
+        '😄 형님, 들어가세요! 조만간 한잔 모시겠습니다!',
+        '😊 와주셔서 감사해요 형님! 또 들러 주세요!',
+        '😄 네 형님! 안전 운전하시고 이따 연락드릴게요!',
+      ]);
       v.hidden = false;
       v.x = 50.0; v.y = 96.5; v.dir = 'back'; v.mode = 'walk';
       v.emote = null; v.emoteLoop = false;
@@ -3779,12 +3817,32 @@
       const coffeeSpot = [15.5, 22.0];
       // 대표님이 담당자 standPos 바로 옆(4.5~5% 거리)에 서서, 담당자가 일어났을 때 깔끔하게 마주 보고 대화!
       const tourStops = [
-        { id: 'claude',     pos: [38.5, 35.2], dir: 'east', vipSay: '✨ 비서실장님, 우리 아우님 잘 보좌해 주셔서 감사해요!', npcSay: '😊 정은수 대표님, 언제든 편히 쉬다 가세요!' },
-        { id: 'finder',     pos: [25.5, 43.2], dir: 'west', vipSay: '📷 스튜디오 시설이 아주 끝내주네요! 고생 많으세요!', npcSay: '😊 감사합니다 정은수 대표님!' },
-        { id: 'translator', pos: [48.0, 71.5], dir: 'west', vipSay: '🌐 5개국어 번역 퀄리티가 정말 대단하시던데요!', npcSay: '😊 좋게 봐주셔서 감사합니다 대표님!' },
-        { id: 'staffing',   pos: [53.5, 71.4], dir: 'east', vipSay: '💪 현장 인력 관리 꼼꼼하시네요! 파이팅입니다!', npcSay: '😄 감사합니다! NANA VINA도 파이팅입니다!' },
-        { id: 'sorter',     pos: [74.5, 70.6], dir: 'east', vipSay: '📦 선별팀이랑 방문 현황까지 완벽하군요!', npcSay: '😊 정은수 대표님 또 놀러 오세요!' },
-      ];
+        {
+          id: 'claude', pos: [38.5, 35.2], dir: 'east',
+          vipSays: ['✨ 비서실장님, 우리 아우님 잘 보좌해 주셔서 감사해요!', '✨ 비서실장님 덕분에 회사가 척척 돌아가네요!', '😊 오늘도 일정 관리하느라 고생 많으시죠?'],
+          npcSays: ['😊 정은수 대표님, 언제든 편히 쉬다 가세요!', '😊 감사합니다 대표님! 커피 한 잔 더 드릴까요?', '😊 늘 응원해 주셔서 감사합니다, 정은수 대표님!'],
+        },
+        {
+          id: 'finder', pos: [25.5, 43.2], dir: 'west',
+          vipSays: ['📷 스튜디오 시설이 아주 끝내주네요! 고생 많으세요!', '📷 사진 보정 퀄리티가 전문 스튜디오급이네요!', '✨ 오늘도 예쁜 메뉴 사진 많이 고르셨나요?'],
+          npcSays: ['😊 감사합니다 정은수 대표님!', '😄 좋게 봐주셔서 기분 좋네요 대표님!', '😊 대표님, 다음에 프로필 사진도 한 장 찍어드릴게요!'],
+        },
+        {
+          id: 'translator', pos: [48.0, 71.5], dir: 'west',
+          vipSays: ['🌐 5개국어 번역 퀄리티가 정말 대단하시던데요!', '🌐 베트남 현지 손님들도 메뉴판 보고 감탄하겠어요!', '✨ 번역팀 덕분에 글로벌 진출도 문제없겠네요!'],
+          npcSays: ['😊 좋게 봐주셔서 감사합니다 대표님!', '😄 현지 말투까지 꼼꼼히 다듬고 있어요!', '😊 응원 감사합니다 정은수 대표님!'],
+        },
+        {
+          id: 'staffing', pos: [53.5, 71.4], dir: 'east',
+          vipSays: ['💪 현장 인력 관리 꼼꼼하시네요! 파이팅입니다!', '💪 일정이랑 인력 배치가 아주 빈틈없군요!', '✨ 오늘도 현장 지원하느라 수고 많으세요!'],
+          npcSays: ['😄 감사합니다! NANA VINA도 파이팅입니다!', '😊 덕분에 힘이 나네요, 대표님!', '😄 늘 격려해 주셔서 감사합니다 대표님!'],
+        },
+        {
+          id: 'sorter', pos: [74.5, 70.6], dir: 'east',
+          vipSays: ['📦 선별팀이랑 방문 현황까지 완벽하군요!', '📦 오늘도 신규 가게 자료 엄청 많이 들어왔네요!', '✨ 방문 현황 실시간으로 챙기시느라 고생 많으세요!'],
+          npcSays: ['😊 정은수 대표님 또 놀러 오세요!', '😄 감사합니다 대표님! 오늘 방문자도 쑥쑥 늘고 있어요!', '😊 다음에도 편하게 들러 주세요 대표님!'],
+        },
+      ].map(s => ({ ...s, vipSay: pickOne(s.vipSays), npcSay: pickOne(s.npcSays) }));
       // 매 방문마다 2곳의 담당자 공간을 랜덤 선택해 순회 방문!
       const picked = [...tourStops].sort(() => Math.random() - 0.5).slice(0, 2);
 
@@ -3796,7 +3854,7 @@
         } else {
           v.emote = null; v.emoteLoop = false;
         }
-        v.bubble = '👋 아우님, 나 먼저 들어가 볼게! 조만간 한잔하자!';
+        v.bubble = byeSay;
         voice('vip_jung', 'bye');
         v.bubbleType = 'meet';
         // 말풍선 겹침 방지: 대표님 작별 인사(2.0초) → 대표님 말풍선 닫고 캡틴 화답(2.2초)
@@ -3805,9 +3863,9 @@
           v.bubble = '';
           if (cap && !briefingActive) {
             const prev = cap.bubble;
-            cap.bubble = '😄 조심히 들어가세요 형님! 곧 연락드릴게요!';
+            cap.bubble = capByeReply;
             cap.bubbleType = 'ok';
-            setTimeout(() => { if (cap.bubble.startsWith('😄 조심히')) cap.bubble = prev || ''; }, 2400);
+            setTimeout(() => { if (cap.bubble === capByeReply) cap.bubble = prev || ''; }, 2400);
           }
           walkNpcSafe('vip_jung', 50.0, 96.5, {
             force: true,
@@ -3961,7 +4019,7 @@
         if (imgs.walk.vip_jung?.greet?.length === 12) {
           v.mode = 'emote'; v.emote = 'greet'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
         }
-        v.bubble = '🤝 아우님! 요즘 사업 잘 되지? 잠깐 들렀어!';
+        v.bubble = greetSay;
         voice('vip_jung', 'greet');
         v.bubbleType = 'meet';
         spawnBurst(v.x, v.y - 4, '🤝 NANA VINA VIP 방문!', 0);
@@ -3973,9 +4031,9 @@
           }
           if (cap && !briefingActive) {
             const prev = cap.bubble;
-            cap.bubble = '😄 형님 오셨어요! 커피 한 잔 하시고 편히 보세요!';
+            cap.bubble = capGreetReply;
             cap.bubbleType = 'ok';
-            setTimeout(() => { if (cap.bubble.startsWith('😄 형님')) cap.bubble = prev || ''; }, 2400);
+            setTimeout(() => { if (cap.bubble === capGreetReply) cap.bubble = prev || ''; }, 2400);
           }
         }, 2000);
         vipSetTimeout(() => {
@@ -3993,7 +4051,7 @@
                 v.mode = 'stand';
               }
               SFX.coffee();
-              v.bubble = '☕ 여기 사무실 커피 향이 진짜 좋네~';
+              v.bubble = coffeeSay;
               voice('vip_jung', 'coffee');
               v.bubbleType = 'ok';
               vipSetTimeout(() => {
@@ -4009,7 +4067,7 @@
         capTarget = spot;
         const ok = walkNpcSafe('vip_jung', spot[0], spot[1], {
           force: true,
-          bubble: '🤝 아우님! NANA VINA 정은수 왔어!',
+          bubble: arriveSay,
           bubbleType: 'meet',
           onArrive: () => {
             if (greetedCap || briefingActive) return;
@@ -4039,16 +4097,25 @@
       vipTimers.push(capTrackPoll);
       return true;
     }
+    // 정은수 대표님 방문 주기: 15분~20분마다 한 번씩 등장 (새로고침해도 마지막 방문 시각 기억!)
+    const VIP_MIN_MS = 15 * 60 * 1000;
+    const VIP_MAX_MS = 20 * 60 * 1000;
     function scheduleNextVip(delayMs) {
       if (nextVipTimer) { clearTimeout(nextVipTimer); nextVipTimer = null; }
-      const wait = delayMs ?? (38000 + Math.floor(Math.random() * 18000));
+      const wait = delayMs ?? (VIP_MIN_MS + Math.floor(Math.random() * (VIP_MAX_MS - VIP_MIN_MS)));
       nextVipTimer = setTimeout(() => {
         nextVipTimer = null;
-        if (document.hidden || briefingActive || vipActive) { scheduleNextVip(12000); return; }
+        if (document.hidden || briefingActive || vipActive) { scheduleNextVip(60 * 1000); return; }
         startVipVisit();
       }, wait);
     }
-    scheduleNextVip(12000); // 사무실 열리고 12초 뒤 첫 방문 시작, 이후 퇴장마다 반복!
+    (() => {
+      const lastAt = Number(lsGet('oa_vip_last_at') || 0);
+      const elapsed = lastAt ? (Date.now() - lastAt) : VIP_MIN_MS;
+      const rem = Math.max(0, VIP_MIN_MS - elapsed);
+      const initWait = rem + Math.floor(Math.random() * (VIP_MAX_MS - VIP_MIN_MS));
+      scheduleNextVip(lastAt ? Math.max(60 * 1000, initWait) : (VIP_MIN_MS + Math.floor(Math.random() * (VIP_MAX_MS - VIP_MIN_MS))));
+    })();
 
     if (opts.autoDemo !== false) setTimeout(runDemo, 1500);
     return { runDemo, serveCoffee, captainWalk, hallChat, sitCaptainBack, playCaptainAction, startBriefing, endBriefing, syncReal, stroll, danceParty, inspectorSoloDance, startVipVisit };
