@@ -2278,10 +2278,10 @@
         ctx.drawImage(imgs.bg, 0, 0, W, H);
         // 🖥️ 본관 4대 PC 모니터(디지털 메뉴 통제실 2대 + 감사실 2대) 실시간 작업 화면 연출!
         const pcMons = [
-          { id: 'agy',       kind: 'menu',  x0: 80.15, y0: 32.45, x1: 85.38, y1: 36.10, acc: '#38bdf8' },
-          { id: 'reader',    kind: 'code',  x0: 89.88, y0: 32.41, x1: 95.08, y1: 36.10, acc: '#34d399' },
-          { id: 'inspector', kind: 'qa',    x0:  4.90, y0: 61.64, x1: 10.08, y1: 66.09, acc: '#c084fc' },
-          { id: 'auditor',   kind: 'chart', x0: 14.60, y0: 61.64, x1: 19.78, y1: 66.09, acc: '#fbbf24' },
+          { id: 'agy',       kind: 'menu',  x0: 80.83, y0: 32.65, x1: 84.58, y1: 36.21, acc: '#38bdf8' },
+          { id: 'reader',    kind: 'code',  x0: 90.52, y0: 32.43, x1: 94.34, y1: 36.17, acc: '#34d399' },
+          { id: 'inspector', kind: 'qa',    x0:  5.46, y0: 65.12, x1:  9.28, y1: 68.82, acc: '#c084fc' },
+          { id: 'auditor',   kind: 'chart', x0: 15.48, y0: 65.12, x1: 19.30, y1: 68.82, acc: '#fbbf24' },
         ];
         for (const m of pcMons) {
           const mx = (m.x0 / 100) * W, my = (m.y0 / 100) * H;
