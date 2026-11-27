@@ -329,3 +329,12 @@ body.oa-fs-lock > *:not(.oa-stage) { display: none !important; }
 .oa-modal.oa-full.kbd-top .oa-f-left, .oa-modal.oa-full.kbd-top .oa-f-right, .oa-modal.oa-full.kbd-top .oa-f-char { display: none; }
 .oa-modal.oa-full.kbd-top .oa-f-form { top: 2cqh; bottom: auto; height: 13cqh; }
 .oa-modal.oa-full.kbd-top .oa-f-res { top: 17cqh; bottom: auto; }
+
+/* ===== 메뉴 하나로 접기 (가-1, 2026-11-27) — 평소엔 메뉴·직원 얼굴 줄·전체화면만 ===== */
+.oa-menu-btn { display: inline-flex; align-items: center; gap: 3px; }
+.oa-menu-btn svg { width: 1.15em; height: 1.15em; }
+.oa-stage:not(.oa-menu-open) .oa-rpg-hud > :not(.oa-menu-btn),
+.oa-stage:not(.oa-menu-open) .oa-snd-bar,
+.oa-stage:not(.oa-menu-open) .oa-ctrl-hint,
+.oa-stage:not(.oa-menu-open):not(.oa-briefing) .oa-skills { display: none !important; }
+.oa-stage.oa-briefing:not(.oa-menu-open) .oa-skills > :not([data-brief-stop]) { display: none !important; }

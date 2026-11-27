@@ -218,6 +218,10 @@
       .then(() => imgs);
   }
 
+  // 게임 안 글자에서 이모지 빼기(캡틴 지시 2026-11-27)
+  const EMOJI_RE = /[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}\u{FE0F}\u{200D}\u{20E3}]/gu;
+  const noEmoji = t => String(t || '').replace(EMOJI_RE, '').replace(/^\s+/, '').replace(/\s{2,}/g, ' ');
+
   function create(root, opts = {}) {
     let realBusySet = new Set(); // 대시보드에서 실제로 일하는 중인 직원(syncReal이 채움) — 위쪽 함수들이 먼저 쓰므로 맨 앞에 둠
     const DOCK_IDS = ['claude', 'finder', 'agy', 'reader', 'inspector', 'auditor', 'translator', 'staffing', 'sorter'];
@@ -238,6 +242,7 @@
           </div>
           <div class="oa-joy" data-joy aria-label="캡틴 이동 조이스틱"><div class="oa-joy-knob" data-joy-knob></div></div>
           <div class="oa-rpg-hud">
+            <button type="button" class="oa-cam-btn oa-menu-btn" data-menu-btn title="메뉴 펼치기/접기" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>메뉴</span></button>
             <span class="oa-rpg-pill" data-rpg-stat>👑 <b>Lv.1</b> 캡틴 · 퀘스트 <span class="oa-rpg-qcnt zero" data-qcnt>0</span></span>
             <button type="button" class="oa-cam-btn on" data-cam-btn title="게임 카메라(캡틴 확대 추적) / 전체 보기 전환">🗺 전체 보기</button>
             <button type="button" class="oa-cam-btn" data-wing-btn title="오른쪽 신관(복싱짐·회의실·휴게실) ↔ 본관 이동">🥊 신관·복싱짐</button>
@@ -296,6 +301,25 @@
         </div>
       </div>`;
     const stage = root.querySelector('.oa-stage');
+    // 가-1(캡틴 2026-11-27): 칩·소리·안내·액션 버튼은 '메뉴' 하나에 접어 둠(평소엔 직원 얼굴 줄·전체화면만)
+    const menuBtn = root.querySelector('[data-menu-btn]');
+    const setMenu = open => {
+      stage.classList.toggle('oa-menu-open', open);
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      menuBtn.querySelector('span').textContent = open ? '접기' : '메뉴';
+      try { localStorage.setItem('oa_menu_open', open ? '1' : ''); } catch {}
+    };
+    // 메뉴 안 칩·소리·안내 글에서도 이모지 빼기(글이 나중에 바뀌어도)
+    for (const sel of ['.oa-rpg-hud', '.oa-snd-bar', '.oa-ctrl-hint']) {
+      const el = root.querySelector(sel);
+      if (!el) continue;
+      stripEmoji(el);
+      new MutationObserver(() => stripEmoji(el)).observe(el, { childList: true, subtree: true, characterData: true });
+    }
+    let menuInit = false;
+    try { menuInit = localStorage.getItem('oa_menu_open') === '1'; } catch {}
+    setMenu(menuInit);
+    menuBtn.addEventListener('click', e => { e.stopPropagation(); setMenu(!stage.classList.contains('oa-menu-open')); });
     const camEl = root.querySelector('[data-cam]');
     const camBtn = root.querySelector('[data-cam-btn]');
     const wingBtn = root.querySelector('[data-wing-btn]');
@@ -2708,7 +2732,7 @@
         const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
         const curSeat = n.customSeat ? n.customSeat : ((n.mode === 'conf' && CONF_SEATS[id]) ? CONF_SEATS[id] : CHARS[id]?.seat);
         const headY = standing ? (n.y - standPct(id)) : (curSeat?.headTopY ?? (n.y - 12.0));
-        if (q && qEl && !n.bubble) {
+        if (q && qEl && !(n.bubble && (n.bubbleType === 'ok' || (n.bubbleType === 'meet' && activeTalkNpc === n)))) {
           qEl.hidden = false;
           qEl.textContent = q.type === 'exc' ? '!' : '?';
           qEl.className = `oa-quest ${q.type === 'exc' ? 'exc' : 'ask'}`;
@@ -2717,10 +2741,12 @@
         } else if (qEl) {
           qEl.hidden = true;
         }
-        if (n.bubble) {
+        const showBub = n.bubble && (n.bubbleType === 'ok' || (n.bubbleType === 'meet' && activeTalkNpc === n));
+        if (showBub) {
           tagEls[id].classList.add('speaking');
           bubEls[id].hidden = false;
-          bubEls[id].textContent = n.bubble;
+          const bt = noEmoji(n.bubble);
+          if (bubEls[id].textContent !== bt) bubEls[id].textContent = bt;
           bubEls[id].className = `oa-bub ${n.bubbleType}`;
           let bx = n.x;
           let by = Math.max(5.0, headY - (standing ? 1.8 : 1.5));
@@ -2810,7 +2836,6 @@
     };
 
     // 상태창 글자에서 이모지 빼기(캡틴 지시 2026-11-27). 버튼의 data-q 값(지시 판단용)은 그대로 둔다
-    const EMOJI_RE = /[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}\u{FE0F}\u{200D}\u{20E3}]/gu;
     function stripEmoji(el) {
       const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
       for (let t = w.nextNode(); t; t = w.nextNode()) {
@@ -3576,6 +3601,7 @@
       if (activeTalkNpc) closeTalkModal(false);
       briefStartBtn.hidden = true;
       briefStopBtn.hidden = false;
+      stage.classList.add('oa-briefing');
 
       const cap = npcs.captain;
       const cl = npcs.claude;
@@ -3666,6 +3692,7 @@
       clearBriefTimers();
       briefStartBtn.hidden = false;
       briefStopBtn.hidden = true;
+      stage.classList.remove('oa-briefing');
 
       const cap = npcs.captain;
       const cl = npcs.claude;
