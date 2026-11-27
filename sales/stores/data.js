@@ -989,6 +989,12 @@ window.STORES = [
     type: { ko: "일식 · 규카츠 · 장어 히츠마부시", vi: "Món Nhật · Bò chiên xù Gyukatsu · Lươn Hitsumabushi", en: "Japanese · Gyukatsu · Unagi Hitsumabushi", zh: "日料 · 炸牛排 · 鳗鱼三吃", ja: "日本料理・牛カツ・鰻ひつまぶし" },
     keywords: "요사쿠라 규카츠 요사쿠라 世桜 夜桜 yosakura gyukatsu gyukatsu yosakura 규카츠 와규 wagyu 장어 히츠마부시 hitsumabushi unagi 장어덮밥 연어알 일식 하노이 ngoc ha phan ke binh bò chiên xù lươn nhật 牛カツ 鰻ひつまぶし 炸牛排 鳗鱼"
   },
+  { id: "unatoto", name: "이자카야 우나토토 UNATOTO", sub: "장어 덮밥 · 숯불 꼬치 · 사시미 · 하이볼", url: "https://unatoto.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese","bar","seafood"], tags: ["photos"],
+    address: "531 P. Kim Mã, Giảng Võ, Hà Nội", map: "https://www.google.com/maps/place/Izakaya+Unatoto+Kim+M%C3%A3/@21.0296996,105.8106073,17z/data=!4m6!3m5!1s0x3135ab2cd8ea42e5:0xe90967cb29c9aae4!8m2!3d21.0296996!4d105.8106073!16s%2Fg%2F11s1pmml_c",
+    type: { ko: "일식 이자카야 · 장어 덮밥 · 숯불 꼬치 · 사시미", vi: "Izakaya Nhật · Cơm lươn · Xiên nướng than · Sashimi", en: "Japanese izakaya · Eel rice bowls · Charcoal skewers · Sashimi", zh: "日式居酒屋 · 鳗鱼盖饭 · 炭火串烧 · 刺身", ja: "居酒屋・うな丼・炭火串焼き・刺身" },
+    keywords: "우나토토 이자카야 Unatoto UNATOTO VIETNAM 宇奈とと 장어 덮밥 우나주 히츠마부시 꼬치 사시미 하이볼 사케 일식 하노이 Kim Mã"
+  },
 ];
 window.SI = {
   ko: {

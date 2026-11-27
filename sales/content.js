@@ -261,6 +261,8 @@ window.DEMOS = [
     name: "퍼 탄 Phở Thành", type: { ko: "하노이 소고기 쌀국수 · 포장 · 전골 육수", vi: "Phở bò Hà Nội · Mang về · Nước lẩu", en: "Hanoi beef phở · Takeaway · Hotpot broth", zh: "河内牛肉河粉 · 外带 · 火锅汤底", ja: "ハノイの牛肉フォー・テイクアウト・鍋スープ" } },
   { id: "yosakura", hidden: true, url: "https://yosakura.qrmenuasia.com", shot: "img/demo-yosakura.jpg", qr: "img/qr-yosakura.svg",
     name: "규카츠 요사쿠라 GYUKATSU YOSAKURA", type: { ko: "일식 · 규카츠 · 장어 히츠마부시", vi: "Món Nhật · Bò chiên xù Gyukatsu · Lươn Hitsumabushi", en: "Japanese · Gyukatsu · Unagi Hitsumabushi", zh: "日料 · 炸牛排 · 鳗鱼三吃", ja: "日本料理・牛カツ・鰻ひつまぶし" } },
+  { id: "unatoto", hidden: true, url: "https://unatoto.qrmenuasia.com", shot: "img/demo-unatoto.jpg", qr: "img/qr-unatoto.svg",
+    name: "이자카야 우나토토 UNATOTO", type: { ko: "일식 이자카야 · 장어 덮밥 · 숯불 꼬치 · 사시미", vi: "Izakaya Nhật · Cơm lươn · Xiên nướng than · Sashimi", en: "Japanese izakaya · Eel rice bowls · Charcoal skewers · Sashimi", zh: "日式居酒屋 · 鳗鱼盖饭 · 炭火串烧 · 刺身", ja: "居酒屋・うな丼・炭火串焼き・刺身" } },
 ];
 
 window.T = {

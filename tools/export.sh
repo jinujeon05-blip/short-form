@@ -133,6 +133,7 @@ name() {
     veteranhoankiem) echo "베테랑 호안끼엠" ;;
     phothanh) echo "퍼 탄" ;;
     yosakura) echo "요사쿠라" ;;
+    unatoto) echo "우나토토" ;;
     *) echo "$1" ;;
   esac
 }
