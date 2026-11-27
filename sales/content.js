@@ -257,6 +257,8 @@ window.DEMOS = [
     name: "피자앤펍 PIZZA & PUB", type: { ko: "한국식 피자 · 치킨 · 스파게티 · 떡볶이", vi: "Pizza kiểu Hàn · Gà rán · Mỳ Ý · Tokbokki", en: "Korean-style pizza · Chicken · Spaghetti · Tteokbokki", zh: "韩式披萨 · 炸鸡 · 意面 · 炒年糕", ja: "韓国風ピザ・チキン・スパゲッティ・トッポッキ" } },
   { id: "veteranhoankiem", hidden: true, url: "https://veteranhoankiem.qrmenuasia.com", shot: "img/demo-veteranhoankiem.jpg", qr: "img/qr-veteranhoankiem.svg",
     name: "Veteran Hoan Kiem 베테랑", type: { ko: "한식 · 프리미엄 소고기·돼지고기 구이", vi: "Quán nướng Hàn Quốc · Bò Wagyu · Heo Đà Lạt", en: "Korean BBQ · Wagyu · Da Lat pork", zh: "韩式烤肉 · 和牛 · 大叻猪肉", ja: "韓国焼肉・和牛・ダラット豚" } },
+  { id: "phothanh", hidden: true, url: "https://phothanh.qrmenuasia.com", shot: "img/demo-phothanh.jpg", qr: "img/qr-phothanh.svg",
+    name: "퍼 탄 Phở Thành", type: { ko: "하노이 소고기 쌀국수 · 포장 · 전골 육수", vi: "Phở bò Hà Nội · Mang về · Nước lẩu", en: "Hanoi beef phở · Takeaway · Hotpot broth", zh: "河内牛肉河粉 · 外带 · 火锅汤底", ja: "ハノイの牛肉フォー・テイクアウト・鍋スープ" } },
 ];
 
 window.T = {

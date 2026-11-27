@@ -977,6 +977,12 @@ window.STORES = [
     type: { ko: "한식 · 프리미엄 소고기·돼지고기 구이", vi: "Quán nướng Hàn Quốc · Bò Wagyu · Heo Đà Lạt", en: "Korean BBQ · Wagyu · Da Lat pork", zh: "韩式烤肉 · 和牛 · 大叻猪肉", ja: "韓国焼肉・和牛・ダラット豚" },
     keywords: "베테랑 호안끼엠 Veteran Korean BBQ Hoan Kiem Veteran Restaurant 하노이 한식 고기구이 와규 육회 냉면 달랏 삼겹살 Hà Nội"
   },
+  { id: "phothanh", name: "퍼 탄 Phở Thành", sub: "소고기 쌀국수 · 소고기 와인 스튜 쌀국수 · 꽈이 · 포장 고기", url: "https://phothanh.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["vietnamese","noodle"], tags: ["photos"],
+    address: "64 P. Quán Sứ, Cửa Nam, Hà Nội", map: "https://www.google.com/maps/place/Ph%E1%BB%9F+Th%C3%A0nh/@21.025577,105.8450762,21z/data=!4m6!3m5!1s0x3135ab01aae16d2d:0x7f9eca29efad5775!8m2!3d21.0256626!4d105.8451664",
+    type: { ko: "하노이 소고기 쌀국수 · 포장 · 전골 육수", vi: "Phở bò Hà Nội · Mang về · Nước lẩu", en: "Hanoi beef phở · Takeaway · Hotpot broth", zh: "河内牛肉河粉 · 外带 · 火锅汤底", ja: "ハノイの牛肉フォー・テイクアウト・鍋スープ" },
+    keywords: "퍼 탄 퍼탄 Phở Thành Pho Thanh Phở Ông Thành Mai Động 하노이 쌀국수 소고기 쌀국수 퍼 보 Quán Sứ Hanoi beef pho"
+  },
 ];
 window.SI = {
   ko: {

@@ -186,6 +186,7 @@ const SHOPS = {
   obcchicken: { type: 'Restaurant', cuisine: ['Korean', 'Chicken', 'Pub'], country: 'VN', currency: 'VND', og: 'img/blackalio.jpg' },
   pizzapub: { type: 'Restaurant', cuisine: ['Pizza', 'Korean', 'Chicken', 'Spaghetti'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   veteranhoankiem: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Wagyu'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  phothanh: { type: 'Restaurant', cuisine: ['Vietnamese', 'Pho', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/sotvang.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
