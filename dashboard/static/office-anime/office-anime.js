@@ -135,17 +135,17 @@
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], photo: [], review: [], inspect: [], analyze: [], cheer: [], stretch: [], talk: [], thumb: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee', 'kick', 'praise', 'stamp']
-        : id === 'claude' ? ['east', 'front', 'back', 'se', 'ne', 'dance', 'brew', 'carry', 'serve', 'bow']
+        : id === 'claude' ? ['east', 'front', 'back', 'bow', 'sweep']
         : id === 'reader' ? ['east', 'front', 'back', 'se', 'ne', 'dance']
         : id === 'sorter' ? ['east', 'front', 'back', 'water']
         : id === 'staffing' ? ['east', 'front', 'back', 'clean']
-        : id === 'inspector' ? ['east', 'front', 'back', 'sweep']
+        : id === 'inspector' ? ['east', 'front', 'back', 'se', 'ne', 'dance', 'brew', 'carry', 'serve']
         : id === 'vip_jung' ? ['east', 'front', 'back', 'greet', 'coffee', 'talk', 'thumb']
         : ['east', 'front', 'back'];
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = (id === 'vip_jung') ? 'vip3' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new2' : id === 'captain' ? (dir === 'kick' ? 'kick2' : 'cap8dir2') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
+          const v = (id === 'claude' || id === 'inspector') ? 'swap1' : (id === 'vip_jung') ? 'vip3' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new2' : id === 'captain' ? (dir === 'kick' ? 'kick2' : 'cap8dir2') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}_df4`));
         }
       }
@@ -157,17 +157,19 @@
         for (let i = 1; i <= 48; i++) jobs.push(load(imgs.walk[id].combo, i - 1, `/static/office-anime/assets/walk/captain-combo-${i}.webp?v=combo1`));
       }
       // 전 캐릭터 11명(캡틴·직원 9명·정은수 대표님) 신관 ChatGPT 12컷(소파 정면4·측면4·음료2·스낵2)!
+      const lngV = (id === 'claude' || id === 'inspector') ? 'swap1' : 'lng3';
       imgs.walk[id].sofa_front = [];
-      for (let i = 1; i <= 4; i++) jobs.push(load(imgs.walk[id].sofa_front, i - 1, `/static/office-anime/assets/walk/${assetId}-sofa_front-${i}.webp?v=lng3`));
+      for (let i = 1; i <= 4; i++) jobs.push(load(imgs.walk[id].sofa_front, i - 1, `/static/office-anime/assets/walk/${assetId}-sofa_front-${i}.webp?v=${lngV}`));
       imgs.walk[id].sofa_left = [];
-      for (let i = 1; i <= 4; i++) jobs.push(load(imgs.walk[id].sofa_left, i - 1, `/static/office-anime/assets/walk/${assetId}-sofa_left-${i}.webp?v=lng3`));
+      for (let i = 1; i <= 4; i++) jobs.push(load(imgs.walk[id].sofa_left, i - 1, `/static/office-anime/assets/walk/${assetId}-sofa_left-${i}.webp?v=${lngV}`));
       imgs.walk[id].drink = [];
-      for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].drink, i - 1, `/static/office-anime/assets/walk/${assetId}-drink-${i}.webp?v=lng3`));
+      for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].drink, i - 1, `/static/office-anime/assets/walk/${assetId}-drink-${i}.webp?v=${lngV}`));
       imgs.walk[id].snack = [];
-      for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].snack, i - 1, `/static/office-anime/assets/walk/${assetId}-snack-${i}.webp?v=lng3`));
+      for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].snack, i - 1, `/static/office-anime/assets/walk/${assetId}-snack-${i}.webp?v=${lngV}`));
       // 전 직원(캡틴·외부 손님 제외) 9명 정중 인사 12프레임 로드 (id 기준 파일명 — reader↔auditor 일치!)
       if (id !== 'captain' && id !== 'claude' && !cfg.guest) {
-        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].bow, i - 1, `/static/office-anime/assets/walk/${id}-bow-${i}.webp?v=bow1_df3`));
+        const bowV = (id === 'inspector') ? 'swap1' : 'bow1_df3';
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].bow, i - 1, `/static/office-anime/assets/walk/${id}-bow-${i}.webp?v=${bowV}`));
       }
       // 시각 정보 비서 스튜디오 카메라 촬영 12프레임
       if (id === 'finder') {
@@ -189,17 +191,18 @@
       if (!cfg.guest) {
         imgs.walk[id].seat = [];
         const seatCnt = (id === 'staffing') ? 8 : 4;
-        for (let i = 1; i <= seatCnt; i++) jobs.push(load(imgs.walk[id].seat, i - 1, `/static/office-anime/assets/walk/${id}-seat-${i}.webp?v=seat2_df3`));
+        const seatV = (id === 'claude' || id === 'inspector') ? 'swap1' : 'seat2_df3';
+        for (let i = 1; i <= seatCnt; i++) jobs.push(load(imgs.walk[id].seat, i - 1, `/static/office-anime/assets/walk/${id}-seat-${i}.webp?v=${seatV}`));
       }
-      // 비서실장 책상 업무(구 12프레임 백업 유지)
+      // 비서실장 댄스 36프레임 (구 운영감찰관 캐릭터 교체 반영!)
       if (id === 'claude') {
-        imgs.walk[id].write = [];
-        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].write, i - 1, `/static/office-anime/assets/walk/claude-write-${i}.webp?v=write1_df3`));
-      }
-      // 운영 감찰관 솔로 댄스 36프레임 (127 BPM 전용 BGM 17.35초 칼박 싱크: 인트로6 + 메인24×2 + 엔딩6)
-      if (id === 'inspector') {
         imgs.walk[id].dance = [];
-        for (let i = 1; i <= 36; i++) jobs.push(load(imgs.walk[id].dance, i - 1, `/static/office-anime/assets/walk/inspector-dance-${i}.webp?v=idance1_df3`));
+        for (let i = 1; i <= 36; i++) jobs.push(load(imgs.walk[id].dance, i - 1, `/static/office-anime/assets/walk/claude-dance-${i}.webp?v=swap1`));
+      }
+      // 운영 감찰관 구 책상 업무(백업 유지)
+      if (id === 'inspector') {
+        imgs.walk[id].write = [];
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].write, i - 1, `/static/office-anime/assets/walk/inspector-write-${i}.webp?v=swap1`));
       }
     }
     for (const p of PROPS) {
@@ -229,7 +232,7 @@
     const dockHtml = DOCK_IDS.map(id => {
       const c = CHARS[id];
       return `<button type="button" class="oa-dock-btn" data-dock="${id}" title="${c.name}(${c.role}) 캡틴 앞으로 호출">
-        <img src="/static/office-anime/assets/portraits/${c.asset || id}.webp?v=cap3" alt="${c.name}">
+        <img src="/static/office-anime/assets/portraits/${c.asset || id}.webp?v=swap1" alt="${c.name}">
         <span>${DOCK_SHORT[id]}</span><i class="oa-dock-q" hidden></i>
       </button>`;
     }).join('');
@@ -1288,15 +1291,15 @@
         bubble: '☕ 캡틴 커피 타러 가는 중…',
         onArrive: () => {
           if (briefingActive) return;
-          cl.dir = 'back';
-          cl.mode = 'emote'; cl.emote = 'brew'; cl.emoteLoop = true;
+          cl.dir = imgs.walk.claude.brew?.length ? 'back' : 'front';
+          cl.mode = 'emote'; cl.emote = imgs.walk.claude.brew?.length ? 'brew' : 'snack'; cl.emoteLoop = true;
           cl.emoteStart = performance.now() / 1000;
           cl.bubble = '☕ 원두 커피 추출 중…';
           SFX.coffee();
           setTimeout(() => {
             if (briefingActive) return;
             cl.emote = null; cl.emoteLoop = false;
-            cl.walkOverride = 'carry';
+            cl.walkOverride = imgs.walk.claude.carry?.length ? 'carry' : null;
             sendPath('claude', safeRoute(ROUTES.cofToCap), {
               bubble: '☕ 캡틴, 커피 가져왔습니다!', bubbleType: 'ok',
               onArrive: () => {
@@ -1305,8 +1308,8 @@
                 if (briefingActive) { cl.walkOverride = null; return; }
                 cl.walkOverride = null;
                 cl.x = 43.0; cl.y = 22.8; // 캡틴 책상 바로 앞 밀착!
-                cl.dir = 'east';
-                cl.mode = 'emote'; cl.emote = 'serve'; cl.emoteLoop = false;
+                cl.dir = imgs.walk.claude.serve?.length ? 'east' : 'front';
+                cl.mode = 'emote'; cl.emote = imgs.walk.claude.serve?.length ? 'serve' : 'snack'; cl.emoteLoop = false;
                 cl.emoteStart = performance.now() / 1000;
                 cl.bubble = '☕ 캡틴, 따뜻한 커피 내려놓았습니다!'; cl.bubbleType = 'ok';
                 SFX.coffee();
@@ -2329,7 +2332,7 @@
             n.x = nx; n.y = ny;
           }
           n.walkDist += step;
-          const has8 = (n.id === 'captain' || n.id === 'claude' || n.id === 'reader');
+          const has8 = (n.id === 'captain' || n.id === 'inspector' || n.id === 'reader');
           n.dir = vecToDir(dx, dy, has8);
         }
       }
