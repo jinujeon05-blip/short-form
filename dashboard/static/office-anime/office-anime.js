@@ -2745,7 +2745,8 @@
         if (showBub) {
           tagEls[id].classList.add('speaking');
           bubEls[id].hidden = false;
-          const bt = noEmoji(n.bubble);
+          let bt = noEmoji(n.bubble);
+          if (bt.length > 34) bt = bt.slice(0, 34) + '…';
           if (bubEls[id].textContent !== bt) bubEls[id].textContent = bt;
           bubEls[id].className = `oa-bub ${n.bubbleType}`;
           let bx = n.x;
@@ -3127,20 +3128,26 @@
       if (hit === 'sorter' && latestVisits) { lsSet('oa_visit_read', latestVisits.id); if (activeQuests.sorter?.kind === 'visits') { delete activeQuests.sorter; updateRpgHud(); } }
       SFX.tap();
       if (hit !== 'captain') voice(hit, 'call', 0.12, { interrupt: true });
-      // 전체화면 상태창(2026-11-27): 배경 그림 1장 + 판·탭·버튼은 코드로 그려 직원마다 개수가 달라도 맞춤
-      const myOrders = latestOrders.filter(o => (hit === 'claude' || hit === 'captain') || (o.worked || []).includes(dashId)).slice(0, 5);
-      const ST_LBL = { running: '진행 중', stopping: '멈추는 중', done: '완료', wait: '답 대기', error: '실패' };
-      const logHtml = myOrders.map(o => `
-        <button type="button" class="oa-f-card oa-f-log" data-open-order="${escHtml(o.id)}">
-          <span class="oa-f-card-t">${escHtml((o.title || o.text || '지시').slice(0, 34))}</span>
-          <span class="oa-f-card-s">${escHtml(ST_LBL[o.status] || o.status || '')}</span>
-        </button>`).join('');
-      const tabs = [
-        { id: 'work', label: '업무' },
-        ...(npcAppr ? [{ id: 'appr', label: '결재' }] : []),
-        ...(myOrders.length ? [{ id: 'log', label: '지시 기록' }] : []),
-      ];
-      const firstTab = npcAppr ? 'appr' : 'work';
+      // 전체화면 상태창: 게임 안에서는 NPC처럼 짧게 말하고, 자세한 내용은 대시보드에서(캡틴 지시 2026-11-27)
+      const cut = (t, n) => { t = noEmoji(t).replace(/["“”]/g, ''); return t.length > n ? t.slice(0, n) + '…' : t; };
+      const talk = [];
+      let choices = '';
+      if (npcAppr) {
+        talk.push(`캡틴, "${cut(npcAppr.title || npcAppr.text || '결재 건', 18)}" 결재를 기다리고 있어요. 어떻게 할까요?`);
+        choices = apprChoices.map((ch, idx) => `<button type="button" class="oa-f-choice" data-appr-idx="${idx}">${escHtml(cut(ch.label, 16))}</button>`).join('');
+      } else if (hit === 'sorter' && latestVisits) {
+        const v = latestVisits;
+        const diff = v.ydayVis == null ? null : v.vis - v.ydayVis;
+        talk.push(`${v.hm} 기준으로 오늘 ${v.vis}명 다녀갔어요.` + (diff == null ? '' : diff > 0 ? ` 어제 이맘때보다 ${diff}명 많아요!` : diff < 0 ? ` 어제 이맘때보다 ${-diff}명 적어요.` : ' 어제랑 똑같아요.'));
+        talk.push('자세한 건 대시보드 방문 기록에 올려 뒀어요.');
+      } else if (q && q.kind !== 'visits') {
+        talk.push(q.type === 'exc' ? `캡틴, 확인하실 게 있어요. ${cut(q.title, 26)}` : `${cut(q.title, 26)} 다 끝냈어요!`);
+        choices = `<button type="button" class="oa-f-choice" data-quest-act>${escHtml(cut(q.actionLabel, 16))}</button>`;
+      } else {
+        talk.push(dcfg.greet);
+      }
+      const tabs = [{ id: 'work', label: '대화' }];
+      const firstTab = 'work';
       const fb = FULLBODY[hit] || {};
       const bodyImg = `/static/office-anime/assets/walk/${c.asset || hit}-${fb.dir || 'front'}-${fb.frame || 1}.webp?v=orig2k_df3`;
       const bodyHtml = fb.video
@@ -3155,13 +3162,11 @@
             ${tabs.map(t => `<button type="button" class="oa-f-tab ${t.id === firstTab ? 'on' : ''}" data-tab="${t.id}">${t.label}</button>`).join('')}
           </div>
           <div class="oa-f-panel">
-            <div class="oa-f-page" data-page="work" ${firstTab === 'work' ? '' : 'hidden'}>
-              <div class="oa-f-card oa-f-say"><span class="oa-f-card-t">${c.name}</span><p>“${dcfg.greet}”</p></div>
-              ${visitHtml}
-              ${questHtml}
+            <div class="oa-f-page" data-page="work">
+              <div class="oa-f-say"><span class="oa-f-who">${c.name}</span>${talk.map(t => `<p>${escHtml(t)}</p>`).join('')}</div>
+              <div class="oa-m-res oa-f-say oa-f-reply" data-res hidden></div>
+              ${choices ? `<div class="oa-f-choices">${choices}</div>` : ''}
             </div>
-            ${npcAppr ? `<div class="oa-f-page" data-page="appr" ${firstTab === 'appr' ? '' : 'hidden'}>${apprHtml}</div>` : ''}
-            ${myOrders.length ? `<div class="oa-f-page" data-page="log" hidden>${logHtml}</div>` : ''}
           </div>
         </div>
         <div class="oa-f-char">${bodyHtml}</div>
@@ -3173,7 +3178,6 @@
             ${detailBtn}
           </div>
         </div>
-        <div class="oa-m-res oa-f-res" data-res hidden></div>
         <form class="oa-m-form oa-f-form" data-order-form>
           <input type="text" name="msg" placeholder="${c.name}에게 직접 지시할 내용을 입력하세요…" autocomplete="off" required>
           <button type="submit">📣 지시 전달</button>
@@ -3206,7 +3210,7 @@
           if (ch.action === 'deploy') {
             btn.disabled = true;
             const resEl = modal.querySelector('[data-res]');
-            if (resEl) { resEl.hidden = false; resEl.textContent = '🚀 배포 확정을 서버에 전달하고 있습니다…'; }
+            if (resEl) { resEl.hidden = false; resEl.textContent = '배포 준비할게요, 잠시만요…'; }
             if (opts.onDeployOrder) {
               const r = await opts.onDeployOrder(npcAppr.id);
               if (r?.error) {
@@ -3224,7 +3228,7 @@
             spawnBurst(n.x, n.y, '🚀 배포 시작! +150 EXP', 150);
             n.bubble = `🚀 [${(npcAppr.deploy || []).join(', ') || '가게'}] 배포를 바로 시작합니다!`;
             n.bubbleType = 'ok';
-            if (resEl) resEl.textContent = '✅ 배포 확정 완료! 배포가 진행 중입니다.';
+            if (resEl) resEl.textContent = '배포 시작했어요! 끝나면 바로 알려 드릴게요.';
             setTimeout(() => closeTalkModal(true), 900);
             return;
           }
@@ -3239,11 +3243,11 @@
             const inp = modal.querySelector('input[name="msg"]');
             if (inp) { inp.value = '수정 요청: '; inp.focus(); }
             const resEl = modal.querySelector('[data-res]');
-            if (resEl) { resEl.hidden = false; resEl.textContent = '✏️ 수정할 내용을 입력하고 [지시 전달]을 눌러주세요!'; }
+            if (resEl) { resEl.hidden = false; resEl.textContent = '어떻게 고칠까요? 아래에 적어 주세요.'; }
             return;
           }
           const resEl = modal.querySelector('[data-res]');
-          if (resEl) { resEl.hidden = false; resEl.textContent = `📡 [${ch.num}번] 결재 응답을 전달하는 중…`; }
+          if (resEl) { resEl.hidden = false; resEl.textContent = '네, 전달할게요…'; }
           if (opts.onReplyOrder) {
             const r = await opts.onReplyOrder({ id: npcAppr.id, text: ch.replyText || ch.label, approve: !!ch.approve });
             if (r?.error) { if (resEl) resEl.textContent = `⚠️ ${r.error}`; return; }
@@ -3254,7 +3258,7 @@
           spawnBurst(n.x, n.y, '✅ 결재 완료! +100 EXP', 100);
           n.bubble = `✅ [${ch.num}번] 결재 확인했습니다! 바로 진행합니다!`;
           n.bubbleType = 'ok';
-          if (resEl) resEl.textContent = `✅ [${ch.num}번] "${ch.label}" 전달 완료!`;
+          if (resEl) resEl.textContent = '알겠습니다, 캡틴! 그대로 진행할게요.';
           setTimeout(() => closeTalkModal(true), 850);
         });
       });
@@ -3294,7 +3298,7 @@
       const sendOrder = async text => {
         const resEl = modal.querySelector('[data-res]');
         resEl.hidden = false;
-        resEl.textContent = '📡 지시를 전달하는 중…';
+        resEl.textContent = '잠시만요, 전달할게요…';
         log(`📣 캡틴 → ${c.name}: "${text}"`);
 
         if (hit === 'captain') {
@@ -3319,8 +3323,8 @@
         if (hit === 'sorter' && text === '📅 어제와 비교') {
           const v = latestVisits;
           resEl.textContent = !v ? '아직 오늘 방문 기록이 없어요.'
-            : v.ydayVis == null ? `오늘 ${v.hm}까지 ${v.vis}명이에요. 어제 같은 시각 기록은 아직 없어요(기록은 오늘부터 쌓여요).`
-            : `오늘 ${v.hm}까지 ${v.vis}명 · 어제 ${v.ydayHm}까지 ${v.ydayVis}명 → ${v.vis - v.ydayVis > 0 ? (v.vis - v.ydayVis) + '명 많아요 ▲' : v.vis - v.ydayVis < 0 ? (v.ydayVis - v.vis) + '명 적어요 ▼' : '똑같아요'}`;
+            : v.ydayVis == null ? `오늘 ${v.hm}까지 ${v.vis}명이에요. 어제 기록은 아직 없어요.`
+            : `어제 이맘때(${v.ydayHm})는 ${v.ydayVis}명이었어요. ${v.vis - v.ydayVis > 0 ? `오늘이 ${v.vis - v.ydayVis}명 더 많아요!` : v.vis - v.ydayVis < 0 ? `오늘이 ${v.ydayVis - v.vis}명 적어요.` : '오늘이랑 똑같아요.'}`;
           return;
         }
         if (hit === 'sorter' && text === '📊 지금 보고해') {
@@ -3331,7 +3335,7 @@
           lsSet('oa_visit_shown', r.report.id); lsSet('oa_visit_read', r.report.id);
           const box = modal.querySelector('[data-visit]');
           if (box) box.outerHTML = visitBlock();
-          resEl.textContent = r.fresh ? `✅ ${r.report.hm} 기준으로 새로 읽었어요.` : `ℹ️ 2분 안에 읽은 결과라 그대로 보여 드려요(${r.report.hm} 기준).`;
+          resEl.textContent = `${r.report.hm} 기준으로 오늘 ${r.report.vis}명이에요. 자세한 건 대시보드에서 보세요.`;
           voice(hit, 'done', 0.2);
           n.bubble = r.report.speech; n.bubbleType = 'ok';
           setTimeout(() => { if (n.bubble === r.report.speech) n.bubble = ''; }, 9000);
@@ -3346,19 +3350,17 @@
         try {
           if (opts.onSendOrder) {
             const r = await opts.onSendOrder({ text: fullOrder, when: '', argon: false });
-            resEl.textContent = r?.error ? `⚠️ ${r.error}` : `✅ ${c.name}에게 실전 지시가 접수되었습니다!`;
+            resEl.textContent = r?.error ? `죄송해요, 전달이 안 됐어요. (${String(r.error).slice(0, 40)})` : '네, 캡틴! 바로 시작하겠습니다.';
           } else {
             const r = await fetch('/api/order', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'X-Dashboard': '1' },
               body: JSON.stringify({ text: fullOrder })
             });
-            resEl.textContent = r.ok
-              ? `✅ ${c.name}에게 지시가 접수되었습니다!`
-              : `✅ ${c.name}에게 현장 지시 전달 완료 (시연 모드)`;
+            resEl.textContent = r.ok ? '네, 캡틴! 바로 시작하겠습니다.' : '네, 캡틴! 알겠습니다. (시연 모드)';
           }
         } catch {
-          resEl.textContent = `✅ ${c.name}에게 현장 지시 전달 완료`;
+          resEl.textContent = '네, 캡틴! 알겠습니다.';
         }
         SFX.send();
         if (hit !== 'captain') voice(hit, 'ok', 0.25);
