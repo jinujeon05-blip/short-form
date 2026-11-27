@@ -216,19 +216,48 @@
             <button type="button" class="oa-snd-btn" data-bgm-btn title="사무실 BGM 켜기/끄기">🎵 BGM</button>
           </div>
           <div class="oa-dock" data-dock-bar aria-label="직원 빠른 호출">${dockHtml}</div>
-          <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 2 커피 · 3 발차기 · 4 주먹 · 5 칭찬 · 6 결재 · 7 10콤보 · E 착석</div>
+          <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 3 발차기 · 4 주먹 · 7 10콤보</div>
           <div class="oa-skills" aria-label="액션 스킬창">
-            <button type="button" class="oa-sk sk-sit" data-cap-sit title="캡틴 대표석 복귀(E)"><i>🪑</i><span>착석</span></button>
-            <button type="button" class="oa-sk sk-cof" data-brief-cof title="비서실장 커피 서빙"><i>☕</i><span>서빙</span></button>
-            <button type="button" class="oa-sk sk-dance" data-brief-dance title="비서실장·자료해석 합동 댄스"><i>💃</i><span>댄스</span></button>
-            <button type="button" class="oa-sk sk-solo" data-inspector-dance title="운영 감찰관 솔로 댄스 (전용 BGM)"><i>👍</i><span>솔로</span></button>
-            <button type="button" class="oa-sk sk-capcof" data-cap-coffee title="캡틴 커피 마시기(2)"><i>☕</i><span>커피</span></button>
-            <button type="button" class="oa-sk sk-combo" data-cap-combo title="캡틴 화랑 태권도 10단 콤보(7)"><i>🔥</i><span>10콤보</span></button>
-            <button type="button" class="oa-sk sk-kick" data-cap-kick title="캡틴 태권도 발차기 시범(3)"><i>🥋</i><span>발차기</span></button>
-            <button type="button" class="oa-sk sk-punch" data-cap-punch title="캡틴 주먹 격투 연속 공격(4)"><i>👊</i><span>주먹</span></button>
-            <button type="button" class="oa-sk sk-greet" data-cap-greet title="캡틴 격려 인사(1)"><i>👋</i><span>인사</span></button>
-            <button type="button" class="oa-sk sk-main start" data-brief-start title="전 직원 단상 앞 보고"><i>📋</i><span>보고해</span></button>
-            <button type="button" class="oa-sk sk-main stop" data-brief-stop hidden title="보고 종료 및 해산"><i>✋</i><span>종료</span></button>
+            <button type="button" class="oa-sk sk-cof" data-brief-cof title="비서실장 커피 서빙">
+              <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v3M10 2v3M14 2v3"/></svg></i>
+              <span>서빙</span>
+            </button>
+            <button type="button" class="oa-sk sk-dance" data-brief-dance title="비서실장·자료해석 합동 댄스">
+              <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></i>
+              <span>댄스</span>
+            </button>
+            <button type="button" class="oa-sk sk-solo" data-inspector-dance title="운영 감찰관 솔로 댄스 (전용 BGM)">
+              <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></i>
+              <span>솔로</span>
+            </button>
+            <button type="button" class="oa-sk sk-combo" data-cap-combo title="캡틴 화랑 태권도 10단 콤보(7)">
+              <em class="oa-key">7</em>
+              <i class="oa-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.7 2.3c.6 2.8-1 4.6-2.4 6.1-1.3 1.4-2.3 2.7-2.3 4.6a4 4 0 0 0 8 0c0-1.4-.6-2.7-1.5-3.7 1.9.7 4.5 2.7 4.5 6.2a7 7 0 1 1-14 0c0-4.2 3.1-7.4 5.4-9.8 1.2-1.2 2-2.2 2.3-3.4Z"/></svg></i>
+              <span>10콤보</span>
+            </button>
+            <button type="button" class="oa-sk sk-kick" data-cap-kick title="캡틴 태권도 발차기 시범(3)">
+              <em class="oa-key">3</em>
+              <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg></i>
+              <span>발차기</span>
+            </button>
+            <button type="button" class="oa-sk sk-punch" data-cap-punch title="캡틴 주먹 격투 연속 공격(4)">
+              <em class="oa-key">4</em>
+              <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V7a2 2 0 0 0-4 0v3"/><path d="M14 10V5a2 2 0 0 0-4 0v5"/><path d="M10 10V6a2 2 0 0 0-4 0v8a6 6 0 0 0 6 6h2a6 6 0 0 0 6-6v-3a2 2 0 0 0-2-2h-2"/></svg></i>
+              <span>주먹</span>
+            </button>
+            <button type="button" class="oa-sk sk-greet" data-cap-greet title="캡틴 격려 인사(1)">
+              <em class="oa-key">1</em>
+              <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11V6a2 2 0 0 1 4 0v3"/><path d="M11 9V4a2 2 0 0 1 4 0v5"/><path d="M15 9V6a2 2 0 0 1 4 0v8a7 7 0 0 1-7 7h-1a7 7 0 0 1-6.5-4.4L3.2 13a2 2 0 0 1 3.4-2.1L7 11.5"/></svg></i>
+              <span>인사</span>
+            </button>
+            <button type="button" class="oa-sk sk-main start" data-brief-start title="전 직원 단상 앞 보고">
+              <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg></i>
+              <span>보고해</span>
+            </button>
+            <button type="button" class="oa-sk sk-main stop" data-brief-stop hidden title="보고 종료 및 해산">
+              <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></i>
+              <span>종료</span>
+            </button>
           </div>
           <button type="button" class="oa-fs-btn" title="전체화면 전환">⛶ 전체화면</button>
           <div class="oa-modal-back" hidden><div class="oa-modal"></div></div>
