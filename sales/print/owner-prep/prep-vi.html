@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Hướng dẫn chuẩn bị cho chủ quán — QR MENU</title>
+<!-- 베트남어판(prep-vi). 한국어판 prep-ko.html과 같은 구조·내용으로 유지한다. 정식 계약 가게 사장님께 드리는 준비 항목 안내서(2026-11-27). PDF: node tools/pdf.mjs sales/print/owner-prep/prep-ko.html sales/print/owner-prep/prep-ko.pdf
+     가격은 sales/content.js PRICES(2026-11-19) 값. 소개서 가격이 바뀌면 6쪽 표도 고친다. PPT 원본은 같은 폴더 make-pptx.cjs -->
+<style>
+  @page { size: A4; margin: 0; }
+  :root { --ink:#16130f; --paper:#faf7f2; --card:#ffffff; --line:#e9e2d7; --muted:#6f675d; --accent:#e0452b; --gold:#c99a3e; --soft:#fbeae6; --ok:#2f7d4f; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:Arial,"Segoe UI",sans-serif; color:var(--ink); font-size:10.4pt; line-height:1.55;  background:#fff; }
+  .page { width:210mm; height:297mm; padding:17mm 16mm 14mm; position:relative; overflow:hidden; page-break-after:always; background:var(--paper); }
+  .page:last-child { page-break-after:auto; }
+  .foot { position:absolute; left:16mm; right:16mm; bottom:8mm; display:flex; justify-content:space-between; font-size:8pt; color:var(--muted); }
+  .brand { font-weight:800; letter-spacing:.08em; color:var(--accent); }
+  h1 { font-size:27pt; line-height:1.25; margin:0 0 4mm; letter-spacing:-.02em; }
+  h2 { font-size:17pt; margin:0 0 2mm; letter-spacing:-.01em; }
+  .lead { color:var(--muted); margin:0 0 6mm; font-size:10.6pt; }
+  .kicker { font-size:9pt; font-weight:700; color:var(--accent); letter-spacing:.06em; margin-bottom:2mm; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:4mm; padding:4.5mm 5mm; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:4mm; }
+  .grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:3.5mm; }
+  .num { display:inline-flex; width:8mm; height:8mm; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; align-items:center; justify-content:center; font-size:10.5pt; flex:none; }
+  .num.gold { background:var(--gold); }
+  .tag { display:inline-block; font-size:8pt; font-weight:700; padding:.4mm 2.2mm; border-radius:10mm; background:var(--soft); color:var(--accent); vertical-align:middle; }
+  .tag.opt { background:#f3ecdf; color:#8a6a2a; }
+  ul { margin:1.5mm 0 0; padding-left:4.5mm; } li { margin:.6mm 0; }
+  .muted { color:var(--muted); }
+  b, strong { font-weight:800; }
+
+  /* 표지 */
+  .cover { background:var(--ink); color:#fff; padding:24mm 18mm; }
+  .cover .brand { font-size:12pt; }
+  .cover h1 { font-size:34pt; margin-top:36mm; }
+  .cover .sub { font-size:13pt; color:#d9d2c6; margin:0 0 14mm; }
+  .cover .pill { display:inline-block; border:1px solid #4a4238; border-radius:20mm; padding:2.5mm 6mm; margin:0 2mm 3mm 0; font-size:10.5pt; color:#efe8dc; }
+  .cover .promise { position:absolute; left:18mm; right:18mm; bottom:26mm; background:#221d17; border-radius:5mm; padding:7mm 8mm; }
+  .cover .promise b { color:#ffb7a8; }
+  .cover .promise p { margin:1mm 0; font-size:11pt; }
+  .cover .foot { color:#9a9184; }
+
+  /* 진행 순서 */
+  .steps { display:grid; grid-template-columns:repeat(5,1fr); gap:2.5mm; margin-top:3mm; }
+  .step { background:var(--card); border:1px solid var(--line); border-radius:4mm; padding:4mm 3mm; text-align:center; }
+  .step .num { margin:0 auto 2mm; }
+  .step b { display:block; font-size:10.5pt; margin-bottom:1mm; }
+  .step span:not(.num):not(.who) { font-size:8.6pt; color:var(--muted); line-height:1.45; display:block; }
+  .who { font-size:8pt; font-weight:700; margin-top:2mm; display:inline-block; padding:.3mm 2mm; border-radius:8mm; }
+  .who.me { background:var(--soft); color:var(--accent); } .who.us { background:#e7f1ea; color:var(--ok); }
+
+  .deliv { display:flex; gap:3mm; align-items:flex-start; }
+  .deliv .ic { width:9mm; height:9mm; border-radius:2.5mm; background:var(--soft); display:flex; align-items:center; justify-content:center; font-size:13pt; flex:none; }
+  .deliv b:first-child { display:block; font-size:10.4pt; }
+  .deliv span { font-size:9pt; color:var(--muted); line-height:1.45; display:block; }
+
+  /* 필수 항목 */
+  .item { display:flex; gap:4mm; background:var(--card); border:1px solid var(--line); border-radius:4mm; padding:4mm 5mm; margin-bottom:3.2mm; }
+  .item h3 { margin:0 0 .5mm; font-size:12pt; }
+  .item .why { font-size:9pt; color:var(--muted); margin:0; }
+  .item ul { font-size:9.6pt; }
+  .ex { font-size:8.8pt; background:var(--paper); border-radius:2mm; padding:1.6mm 3mm; margin-top:1.8mm; color:#4b443b; }
+
+  /* 사진 팁 */
+  .dodont { display:grid; grid-template-columns:1fr 1fr; gap:4mm; }
+  .do h3, .dont h3 { font-size:11.5pt; margin:0 0 1mm; }
+  .do h3 { color:var(--ok); } .dont h3 { color:var(--accent); }
+  .frame { display:flex; gap:3mm; margin-top:2mm; align-items:center; }
+  .ratio { width:32mm; height:24mm; border:1.6mm solid var(--ink); border-radius:2mm; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:10pt; background:#fff; flex:none; }
+
+  /* 신뢰 */
+  .trust { display:flex; gap:4mm; align-items:flex-start; }
+  .trust .ic { width:11mm; height:11mm; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13pt; flex:none; }
+  .trust h3 { margin:0 0 .6mm; font-size:11.5pt; }
+  .trust p { margin:0; font-size:9.4pt; color:#4b443b; }
+
+  /* 체크리스트 */
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:4mm; overflow:hidden; font-size:9.6pt; }
+  th, td { border-bottom:1px solid var(--line); padding:2.1mm 3mm; text-align:left; vertical-align:top; }
+  th { background:var(--ink); color:#fff; font-size:9pt; font-weight:700; }
+  td.box { width:9mm; text-align:center; } .box i { display:inline-block; width:4.2mm; height:4.2mm; border:1.4px solid var(--ink); border-radius:1mm; }
+  td.need { width:22mm; }
+  tr:last-child td { border-bottom:0; }
+  .price td, .price th { padding:2mm 3mm; }
+  .price td.v { text-align:right; font-weight:800; white-space:nowrap; }
+  .contact { background:var(--ink); color:#fff; border-radius:4mm; padding:5mm 6mm; display:grid; grid-template-columns:1fr 1fr; gap:4mm; }
+  .contact b { color:#ffb7a8; } .contact p { margin:.6mm 0; font-size:10pt; }
+  /* 베트남어는 글이 길어 4·6쪽만 조금 줄임 */
+  .p4 .card ul { font-size:9.2pt; } .p4 .card { padding:3.6mm 4.5mm; } .p4 .lead { margin-bottom:4mm; }
+  .tag { white-space:nowrap; } .p6 .price td:first-child { white-space:nowrap; }
+  .p6 table { font-size:8.9pt; } .p6 th, .p6 td { padding:1.4mm 2.6mm; } .p6 .price td, .p6 .price th { padding:1.3mm 2.6mm; }
+  .p6 .lead { margin-bottom:3.5mm; } .p6 .contact { padding:3.5mm 6mm; } .p6 .contact p { font-size:9.4pt; margin:.3mm 0; }
+</style>
+</head>
+<body>
+
+<!-- 1. Bìa -->
+<section class="page cover">
+  <div class="brand">QR MENU · qrmenuasia.com</div>
+  <h1>Hướng dẫn chuẩn bị<br>dành cho chủ quán</h1>
+  <p class="sub">Những gì anh/chị cần gửi và các bước thực hiện<br>để có thực đơn QR 5 ngôn ngữ chất lượng cao.</p>
+  <span class="pill">Hàn · Việt · Anh · Trung · Nhật</span>
+  <span class="pill">Không cần cài ứng dụng</span>
+  <span class="pill">Tự sửa trên điện thoại</span>
+  <div class="promise">
+    <p><b>Anh/chị chỉ cần gửi ảnh và thông tin.</b></p>
+    <p>Dịch thuật, thiết kế, thẻ QR và ảnh quảng cáo do chúng tôi làm.</p>
+    <p>Mọi giá món đều được anh/chị xác nhận lại trước khi đưa vào sử dụng.</p>
+  </div>
+  <div class="foot"><span>Bản tháng 11/2026</span><span>1 / 6</span></div>
+</section>
+
+<!-- 2. Tổng quan -->
+<section class="page">
+  <div class="kicker">TỔNG QUAN</div>
+  <h2>Các bước thực hiện</h2>
+  <p class="lead">Anh/chị chỉ cần làm bước ① và ③. Phần còn lại chúng tôi lo.</p>
+  <div class="steps">
+    <div class="step"><span class="num">1</span><b>Gửi tài liệu</b><span>Ảnh thực đơn, thông tin quán qua Zalo</span><span class="who me">Chủ quán</span></div>
+    <div class="step"><span class="num">2</span><b>Làm & kiểm tra</b><span>Sắp xếp món, dịch 5 ngôn ngữ, thiết kế, đối chiếu giá</span><span class="who us">Chúng tôi</span></div>
+    <div class="step"><span class="num">3</span><b>Xem bản mẫu</b><span>Mở link trên điện thoại, chỉ cần báo chỗ cần sửa</span><span class="who me">Chủ quán</span></div>
+    <div class="step"><span class="num">4</span><b>Đưa vào dùng</b><span>Gắn địa chỉ web, gửi thẻ QR và ảnh SNS</span><span class="who us">Chúng tôi</span></div>
+    <div class="step"><span class="num">5</span><b>Vận hành</b><span>Tự sửa giá, hết món hoặc nhắn tin nhờ sửa</span><span class="who me">Cùng nhau</span></div>
+  </div>
+
+  <h2 style="margin-top:9mm">Anh/chị nhận được</h2>
+  <p class="lead">Quán ký hợp đồng chính thức nhận đầy đủ các sản phẩm dưới đây.</p>
+  <div class="grid2">
+    <div class="card deliv"><div class="ic">🌐</div><div><b>Trang thực đơn 5 ngôn ngữ</b><span>Địa chỉ riêng của quán (tenquan.qrmenuasia.com). Tự mở theo ngôn ngữ điện thoại của khách.</span></div></div>
+    <div class="card deliv"><div class="ic">🎨</div><div><b>Thiết kế theo phong cách quán</b><span>Màu sắc và không khí giống biển hiệu, thực đơn hiện tại của quán.</span></div></div>
+    <div class="card deliv"><div class="ic">🔳</div><div><b>Thẻ QR để bàn (PDF)</b><span>Khổ A6, 4 thẻ trên một tờ A4. Mang ra tiệm in là in được ngay.</span></div></div>
+    <div class="card deliv"><div class="ic">📣</div><div><b>2 ảnh quảng cáo SNS</b><span>Vuông (1080×1080) và story (1080×1920), dùng cho Facebook, Instagram, Zalo.</span></div></div>
+    <div class="card deliv"><div class="ic">✏️</div><div><b>Trang sửa của chủ quán</b><span>Tự sửa giá, món, ảnh, giờ mở cửa, hết món trên điện thoại. Cập nhật trong khoảng 1 phút.</span></div></div>
+    <div class="card deliv"><div class="ic">📊</div><div><b>Báo cáo lượt xem</b><span>30 ngày gần nhất có bao nhiêu khách xem, đến từ nước nào, dùng ngôn ngữ gì.</span></div></div>
+    <div class="card deliv"><div class="ic">📍</div><div><b>3 nút tiện ích</b><span>Sao chép mật khẩu Wi-Fi, gọi điện, chỉ đường Google Maps.</span></div></div>
+    <div class="card deliv"><div class="ic">🔎</div><div><b>Hiện trên tìm kiếm</b><span>Quán xuất hiện trên Google và mục "Tìm quán" của QR MENU.</span></div></div>
+  </div>
+  <p class="muted" style="font-size:8.6pt;margin-top:4mm">※ Địa chỉ QR không bao giờ đổi. Sửa món hay giá cũng không cần in lại thẻ.</p>
+  <div class="foot"><span class="brand">QR MENU</span><span>2 / 6</span></div>
+</section>
+
+<!-- 3. Bắt buộc -->
+<section class="page">
+  <div class="kicker">BẮT BUỘC · KHOẢNG 30 PHÚT</div>
+  <h2>5 thứ cần gửi</h2>
+  <p class="lead">Đủ 5 thứ này là chúng tôi bắt đầu làm ngay. Càng chính xác, càng ít phải sửa bản mẫu.</p>
+
+  <div class="item"><span class="num">1</span><div>
+    <h3>Ảnh thực đơn quán đang dùng — tất cả các trang</h3>
+    <p class="why">Đây là căn cứ cho tên món và giá. Chúng tôi chỉ đưa lên những gì có trong ảnh.</p>
+    <ul><li><b>Mọi mặt</b>: trước, sau, tờ rời, thực đơn trên tường, bảng đồ uống — mỗi ảnh một trang</li>
+      <li>Chụp thẳng, không cắt mép, không lóa sáng — phóng to vẫn đọc rõ con số giá</li>
+      <li>Nếu giá thực tế khác thực đơn, xin nhắn kèm <b>giá hiện tại</b></li></ul>
+    <div class="ex">Nếu chưa có thực đơn in: gửi danh sách "tên món – giá" bằng Excel, ghi chú hoặc tin nhắn cũng được.</div>
+  </div></div>
+
+  <div class="item"><span class="num">2</span><div>
+    <h3>Thông tin về giá</h3>
+    <p class="why">Để khách không bất ngờ khi thanh toán, chúng tôi ghi giá đúng cách quán tính.</p>
+    <ul><li>Giá theo cỡ/suất (nhỏ/vừa/lớn, 1 người/2 người), combo, món thêm, món theo thời giá</li>
+      <li>Giá <b>đã gồm hay chưa gồm</b> VAT và phí phục vụ, món theo mùa, món đang hết</li></ul>
+  </div></div>
+
+  <div class="item"><span class="num">3</span><div>
+    <h3>Thông tin cơ bản của quán</h3>
+    <p class="why">Được đưa nguyên vào phần thông tin quán cuối thực đơn và trên Google.</p>
+    <ul><li>Tên quán — đúng như trên biển hiệu (tiếng Việt/tiếng Anh, tên tiếng Hàn nếu có)</li>
+      <li>Địa chỉ, <b>số điện thoại của quán</b> (số khách gọi), giờ mở cửa, ngày nghỉ, giờ nghỉ trưa, giờ nhận món cuối</li></ul>
+  </div></div>
+
+  <div class="item"><span class="num">4</span><div>
+    <h3>File logo hoặc ảnh biển hiệu</h3>
+    <p class="why">Là "gương mặt" ở đầu thực đơn, cũng là nơi chúng tôi lấy màu thiết kế.</p>
+    <ul><li>Tốt nhất là file logo gốc (PNG nền trong suốt, AI, PDF) — file anh/chị nhận từ tiệm in hoặc người thiết kế</li>
+      <li>Nếu chưa có logo: 1–2 ảnh chụp ban ngày, thấy rõ biển hiệu từ chính diện</li></ul>
+  </div></div>
+
+  <div class="item"><span class="num">5</span><div>
+    <h3>4–6 ảnh món tiêu biểu</h3>
+    <p class="why">Đây là phần khách nhìn đầu tiên. Chúng tôi <b>chỉ dùng ảnh món thật của quán</b> (không dùng ảnh do AI vẽ).</p>
+    <ul><li>Ưu tiên món bán chạy, món tự hào nhất, xin ghi kèm tên món</li>
+      <li>Cách chụp xem trang sau. Nếu chưa có ảnh, chúng tôi làm trước bằng ảnh công khai trên Google Maps rồi thay sau</li></ul>
+  </div></div>
+  <div class="foot"><span class="brand">QR MENU</span><span>3 / 6</span></div>
+</section>
+
+<!-- 4. Tùy chọn + cách chụp -->
+<section class="page p4">
+  <div class="kicker">CÓ THÌ TỐT HƠN</div>
+  <h2>Thông tin bổ sung</h2>
+  <p class="lead">Không có vẫn làm được. Có thì thực đơn sẽ chu đáo hơn với khách.</p>
+  <div class="grid2">
+    <div class="card"><span class="tag opt">Tùy chọn</span> <b>Wi-Fi cho khách</b><ul><li>Tên và mật khẩu → hiện trên thực đơn kèm nút "sao chép"</li></ul></div>
+    <div class="card"><span class="tag opt">Tùy chọn</span> <b>Gợi ý & lưu ý món</b><ul><li>Món đặc trưng, món gợi ý, độ cay</li><li>Lưu ý nguyên liệu (hải sản, đậu phộng...), có thể bỏ rau mùi</li></ul></div>
+    <div class="card"><span class="tag opt">Tùy chọn</span> <b>Một hai câu giới thiệu</b><ul><li>Điều quán tự hào, ví dụ "nướng than hoa 30 năm"</li><li>Màu sắc, phong cách mong muốn, quán muốn tham khảo</li></ul></div>
+    <div class="card"><span class="tag opt">Tùy chọn</span> <b>Số bàn</b><ul><li>Để chuẩn bị đúng số thẻ QR cần in</li><li>Cần kệ mica để thẻ QR thì báo chúng tôi (tư vấn riêng)</li></ul></div>
+    <div class="card"><span class="tag opt">Gói thêm</span> <b>Đặt món qua Zalo (giỏ hàng)</b><ul><li>Khách chọn món rồi gửi đơn vào Zalo của quán</li><li>Cần <b>số Zalo của quán</b> để nhận đơn</li></ul></div>
+    <div class="card"><span class="tag opt">Tùy chọn</span> <b>Gắn vào Google Maps</b><ul><li>Chúng tôi thêm link thực đơn vào trang quán trên Google Maps</li><li>Anh/chị chỉ cần mời chúng tôi làm "quản lý" — <b>không cần mật khẩu</b></li></ul></div>
+  </div>
+
+  <h2 style="margin-top:6mm">Cách chụp ảnh món đẹp</h2>
+  <p class="lead">Camera điện thoại là đủ. Chỉ cần nhớ mấy điều sau.</p>
+  <div class="dodont">
+    <div class="card do"><h3>✓ Nên</h3><ul>
+      <li>Chụp <b>ngang</b>, món ăn lấp đầy khung hình</li>
+      <li><b>Ánh sáng tự nhiên</b> gần cửa sổ, ban ngày, chụp chéo 45 độ</li>
+      <li>Chụp ngay khi món vừa ra, lúc trông ngon nhất</li>
+      <li>Gửi qua Zalo chọn <b>"HD"</b> (KakaoTalk chọn <b>"ảnh gốc"</b>)</li></ul>
+      <div class="frame"><div class="ratio">4 : 3</div><span class="muted" style="font-size:8.8pt">Ô món ăn có tỉ lệ ngang 4:3. Chụp ngang thì ảnh không bị cắt.</span></div>
+    </div>
+    <div class="card dont"><h3>✕ Không nên</h3><ul>
+      <li>Ảnh dọc, ảnh bị cắt mất một phần đĩa</li>
+      <li>Ảnh tối, dưới đèn vàng</li>
+      <li>Ảnh có filter, chữ hoặc logo chèn lên</li>
+      <li>Ảnh lấy từ quán khác hoặc trên mạng</li>
+      <li>Ảnh chụp màn hình (bị giảm chất lượng)</li></ul></div>
+  </div>
+  <div class="foot"><span class="brand">QR MENU</span><span>4 / 6</span></div>
+</section>
+
+<!-- 5. Cam kết -->
+<section class="page">
+  <div class="kicker">CAM KẾT CỦA CHÚNG TÔI</div>
+  <h2>Cách chúng tôi làm và những điều chúng tôi giữ</h2>
+  <p class="lead">Thực đơn là gương mặt và cũng là bảng giá của quán. Chúng tôi đặt sự chính xác và bảo vệ thông tin lên đầu.</p>
+  <div style="display:grid;gap:4mm">
+    <div class="card trust"><div class="ic">₫</div><div><h3>Giá được đối chiếu hai lần, chủ quán xác nhận lần cuối</h3>
+      <p>Sau khi đọc ảnh thực đơn, chúng tôi đối chiếu lại thêm một lần nữa. Chữ nào khó đọc, chúng tôi không đoán mà hỏi lại anh/chị. Chỉ cần một giá chưa được xác nhận, chúng tôi chưa đưa vào sử dụng.</p></div></div>
+    <div class="card trust"><div class="ic">🔒</div><div><h3>Chỉ dùng thông tin của quán</h3>
+      <p>Chúng tôi chỉ nhận số điện thoại, địa chỉ và thực đơn của quán. Không nhận, không lưu số điện thoại cá nhân, giấy tờ tùy thân hay mật khẩu tài khoản của anh/chị. Gắn Google Maps cũng là anh/chị tự mời chúng tôi.</p></div></div>
+    <div class="card trust"><div class="ic">📷</div><div><h3>Chỉ dùng ảnh món thật</h3>
+      <p>Không dùng ảnh món ăn do AI tạo làm ảnh thực đơn. Ảnh phải giống món khách thật sự nhận thì khách mới tin.</p></div></div>
+    <div class="card trust"><div class="ic">🌏</div><div><h3>Dịch để khách hiểu được</h3>
+      <p>Mỗi món đều có tên tiếng Hàn và tiếng Việt, nhân viên nhìn màn hình của khách là hiểu ngay. Bản tiếng Anh, Trung, Nhật có giải thích món ăn là gì.</p></div></div>
+    <div class="card trust"><div class="ic">↺</div><div><h3>Sau khi đưa vào dùng vẫn tiếp tục hỗ trợ</h3>
+      <p>Giá và món hết, anh/chị tự sửa ngay trên điện thoại, hoặc chỉ cần nhắn tin, gửi ảnh để chúng tôi sửa giúp (gói quản lý: tự sửa không giới hạn, nhờ sửa 2 lần/tháng). Mã QR giữ nguyên.</p></div></div>
+  </div>
+  <div class="card" style="margin-top:5mm;background:var(--soft);border-color:#f2cfc6">
+    <b>Khi xem bản mẫu, anh/chị chỉ cần kiểm tra</b>
+    <ul style="font-size:9.6pt"><li>Tên món và <b>giá</b> có đúng không — quan trọng nhất</li><li>Có thiếu món nào, hay còn món đã ngừng bán không</li><li>Giờ mở cửa, số điện thoại, địa chỉ, ảnh có đúng món không</li></ul>
+  </div>
+  <div class="foot"><span class="brand">QR MENU</span><span>5 / 6</span></div>
+</section>
+
+<!-- 6. Danh sách + giá + liên hệ -->
+<section class="page p6">
+  <div class="kicker">KIỂM TRA TRƯỚC KHI GỬI</div>
+  <h2>Danh sách chuẩn bị</h2>
+  <p class="lead">Kiểm tra rồi gửi một lần. Gửi làm nhiều lần cũng không sao.</p>
+  <table>
+    <tr><th></th><th>Nội dung</th><th>Loại</th></tr>
+    <tr><td class="box"><i></i></td><td>Ảnh thực đơn — tất cả các mặt (gồm đồ uống, tờ rời, thực đơn trên tường)</td><td class="need"><span class="tag">Bắt buộc</span></td></tr>
+    <tr><td class="box"><i></i></td><td>Giá đã đổi, món hết, món theo mùa; giá đã gồm VAT/phí phục vụ chưa</td><td class="need"><span class="tag">Bắt buộc</span></td></tr>
+    <tr><td class="box"><i></i></td><td>Tên quán (như biển hiệu), địa chỉ, số điện thoại quán, giờ mở cửa, ngày nghỉ, giờ nhận món cuối</td><td class="need"><span class="tag">Bắt buộc</span></td></tr>
+    <tr><td class="box"><i></i></td><td>File logo gốc hoặc ảnh biển hiệu chụp chính diện</td><td class="need"><span class="tag">Bắt buộc</span></td></tr>
+    <tr><td class="box"><i></i></td><td>4–6 ảnh món tiêu biểu (chụp ngang, ánh sáng tự nhiên) + tên món</td><td class="need"><span class="tag">Bắt buộc</span></td></tr>
+    <tr><td class="box"><i></i></td><td>Tên và mật khẩu Wi-Fi cho khách</td><td class="need"><span class="tag opt">Tùy chọn</span></td></tr>
+    <tr><td class="box"><i></i></td><td>Món gợi ý, độ cay, lưu ý nguyên liệu, lời giới thiệu, phong cách mong muốn</td><td class="need"><span class="tag opt">Tùy chọn</span></td></tr>
+    <tr><td class="box"><i></i></td><td>Số bàn; số Zalo của quán nếu dùng đặt món qua Zalo</td><td class="need"><span class="tag opt">Tùy chọn</span></td></tr>
+    <tr><td class="box"><i></i></td><td>Mời "quản lý" Google Maps nếu muốn gắn link (không cần mật khẩu)</td><td class="need"><span class="tag opt">Tùy chọn</span></td></tr>
+  </table>
+
+  <h2 style="margin-top:4.5mm;font-size:14pt">Bảng giá <span class="muted" style="font-size:9pt;font-weight:400">đơn vị: đồng (VND), tháng 11/2026</span></h2>
+  <table class="price" style="margin-top:2mm">
+    <tr><th>Gói</th><th>Bao gồm</th><th style="text-align:right">Giá</th></tr>
+    <tr><td><b>Cơ bản</b></td><td>Thực đơn 5 ngôn ngữ, dùng ảnh thực đơn và logo sẵn có, thẻ QR (PDF), 2 ảnh SNS, nút Wi-Fi · gọi điện · bản đồ</td><td class="v">2.500.000 (1 lần)</td></tr>
+    <tr><td><b>Cao cấp</b></td><td>Toàn bộ gói Cơ bản + thiết kế riêng theo quán, chỉnh sửa và sắp xếp ảnh món, sửa bản mẫu, 2 video quảng cáo SNS</td><td class="v">5.000.000 (1 lần)</td></tr>
+    <tr><td><b>Quản lý</b></td><td>Duy trì trang web, trang sửa của chủ quán, tự sửa không giới hạn, nhờ sửa 2 lần/tháng, báo cáo lượt xem</td><td class="v">350.000 / tháng<br><span class="muted" style="font-weight:400;font-size:8.4pt">3.500.000 / năm (tặng 2 tháng)</span></td></tr>
+    <tr><td><b>Gói thêm</b></td><td>Trang đặt món qua Zalo (giỏ hàng)</td><td class="v">+2.500.000</td></tr>
+    <tr><td></td><td>Tên miền riêng <span class="muted">(kệ mica QR, hệ thống gọi món tại bàn: tư vấn riêng)</span></td><td class="v">từ 500.000 / năm</td></tr>
+  </table>
+  <p class="muted" style="font-size:8.2pt;margin:1.2mm 0 3mm">※ Khi ngừng gói quản lý, trang thực đơn cũng ngừng hoạt động.</p>
+
+  <div class="contact">
+    <div><p><b>Tư vấn tiếng Việt</b></p><p>Điện thoại · Zalo 0937 250 787</p><p>Xem mẫu: qrmenuasia.com</p></div>
+    <div><p><b>Tư vấn tiếng Hàn (한국어)</b></p><p>Điện thoại · Zalo 0917 302 200</p><p>KakaoTalk ID jjw4164</p></div>
+  </div>
+  <div class="foot"><span class="brand">QR MENU</span><span>6 / 6</span></div>
+</section>
+</body>
+</html>
