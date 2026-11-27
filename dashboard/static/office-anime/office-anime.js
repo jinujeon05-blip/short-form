@@ -197,6 +197,7 @@
             <span class="oa-rpg-pill" data-rpg-stat>👑 <b>Lv.1</b> 캡틴 · 퀘스트 <span class="oa-rpg-qcnt zero" data-qcnt>0</span></span>
             <button type="button" class="oa-cam-btn on" data-cam-btn title="게임 카메라(캡틴 확대 추적) / 전체 보기 전환">🗺 전체 보기</button>
             <button type="button" class="oa-cam-btn" data-wing-btn title="오른쪽 신관(복싱짐·회의실·휴게실) ↔ 본관 이동">🥊 신관·복싱짐</button>
+            <button type="button" class="oa-cam-btn" data-relax-btn title="신관 회의실 의자 · VIP 소파 · 휴게실 소파 · 냉장고 음료 순회 체험">🛋️ 휴식·음료</button>
           </div>
           <div class="oa-snd-bar">
             <button type="button" class="oa-snd-btn on" data-sfx-btn title="게임 효과음 켜기/끄기">🔊 효과음</button>
@@ -225,6 +226,7 @@
     const camEl = root.querySelector('[data-cam]');
     const camBtn = root.querySelector('[data-cam-btn]');
     const wingBtn = root.querySelector('[data-wing-btn]');
+    const relaxBtn = root.querySelector('[data-relax-btn]');
     const canvas = root.querySelector('.oa-canvas');
     const hud = root.querySelector('.oa-hud');
     const fsBtn = root.querySelector('.oa-fs-btn');
@@ -242,6 +244,59 @@
       camBtn.classList.toggle('on', camMode === 'follow');
       camBtn.textContent = camMode === 'follow' ? '🗺 전체 보기' : '🎥 추적 카메라';
       SFX.tap();
+    });
+    // 🛋️ 캡틴 신관 인터랙티브 착석·음료 스팟 (회의실 의자 · 상단 VIP 소파 · 휴게실 위/오른쪽 소파 · 스낵바/냉장고!)
+    const CAP_SPOTS = [
+      { id: 'conf_mid',        kind: 'seat',  name: '대회의실 의자',      x: 150.6, y: 23.0, headTopY: 14.5, clipY: 21.2, h: 225, facing: 'front', stand: [150.6, 33.5], box: [138, 16, 163, 25], say: '📋 대회의실 자리에서 브리핑 준비 중…' },
+      { id: 'vip_sofa',        kind: 'seat',  name: 'VIP 접견실 소파',    x: 177.5, y: 23.8, headTopY: 13.8, clipY: 22.8, h: 230, facing: 'front', stand: [177.5, 31.8], box: [169, 15, 186, 25], say: '🛋️ VIP 접견실 소파에서 여유롭게 휴식 중…' },
+      { id: 'lounge_top_sofa', kind: 'seat',  name: '휴게실 위쪽 소파',   x: 164.5, y: 69.5, headTopY: 59.5, clipY: 68.5, h: 230, facing: 'front', stand: [157.5, 72.0], box: [158, 61, 171, 70], say: '☕ 휴게실 소파에 앉아 잠깐 쉬는 중…' },
+      { id: 'lounge_r_sofa',   kind: 'seat',  name: '휴게실 오른쪽 소파', x: 193.5, y: 76.5, headTopY: 66.0, clipY: 76.0, h: 225, facing: 'west',  stand: [189.2, 76.5], box: [190, 67, 198, 82], say: '🛋️ 휴게실 창가 소파에서 한숨 돌리는 중…' },
+      { id: 'lounge_fridge',   kind: 'drink', name: '휴게실 음료 냉장고', x: 186.0, y: 69.2, facing: 'front', stand: [186.0, 69.2], box: [183, 54, 189, 68], say: '🥤 냉장고에서 시원한 음료 한 잔 꺼내 마시는 중!' },
+      { id: 'lounge_snack',    kind: 'drink', name: '휴게실 스낵바',      x: 176.5, y: 69.2, facing: 'front', stand: [176.5, 69.2], box: [170, 54, 183, 68], say: '☕ 스낵바에서 간식이랑 커피 챙기는 중!' },
+    ];
+    let relaxIdx = 0;
+    function goCaptainSpot(sp) {
+      if (!sp) return;
+      touchCaptainInput();
+      const cap = npcs.captain;
+      const finishSpot = () => {
+        if (sp.kind === 'seat') {
+          cap.x = sp.x; cap.y = sp.y;
+          cap.dir = sp.facing;
+          cap.mode = 'idle';
+          cap.customSeat = sp;
+          cap.bubble = sp.say; cap.bubbleType = 'ok';
+          SFX.sit();
+          spawnBurst(cap.x, cap.y - 6, `🛋️ ${sp.name} 착석!`, 10);
+          log(`🛋️ 캡틴이 ${sp.name}에 앉아 휴식합니다.`);
+          setTimeout(() => { if (cap.bubble === sp.say) cap.bubble = ''; }, 3600);
+        } else {
+          cap.dir = 'front';
+          cap.mode = 'emote';
+          cap.emote = 'coffee';
+          cap.emoteLoop = false;
+          cap.emoteStart = performance.now() / 1000;
+          cap.emoteUntil = cap.emoteStart + 3.6;
+          cap.customSeat = null;
+          cap.bubble = sp.say; cap.bubbleType = 'ok';
+          SFX.coffee();
+          spawnBurst(cap.x, cap.y - 6, `🥤 ${sp.name} 이용! +15 EXP`, 15);
+          log(`🥤 캡틴이 ${sp.name}에서 음료를 꺼내 마셨습니다.`);
+          setTimeout(() => { if (cap.bubble === sp.say) cap.bubble = ''; }, 3600);
+        }
+      };
+      cap.customSeat = null;
+      const ok = walkCaptainSafe(sp.stand[0], sp.stand[1], {
+        bubble: `🚶 ${sp.name}(으)로 이동 중…`,
+        onArrive: finishSpot,
+      });
+      if (!ok) finishSpot();
+    }
+    relaxBtn?.addEventListener('click', () => {
+      SFX.tap();
+      const sp = CAP_SPOTS[relaxIdx % CAP_SPOTS.length];
+      relaxIdx++;
+      goCaptainSpot(sp);
     });
     wingBtn?.addEventListener('click', () => {
       SFX.tap();
@@ -1294,8 +1349,9 @@
       const capSipping = (n.id === 'captain' && n.idleCoffeeSeated && n.mode === 'emote' && n.emote === 'coffee');
       const capStamping = (n.id === 'captain' && n.mode === 'emote' && n.emote === 'stamp' && wset.stamp?.length === 12);
       const isConfSeat = (n.mode === 'conf' && !!CONF_SEATS[n.id]);
-      const activeSeat = isConfSeat ? CONF_SEATS[n.id] : cfg.seat;
-      const activeFacing = isConfSeat ? CONF_SEATS[n.id].facing : cfg.facing;
+      const isCustomSeat = (n.id === 'captain' && n.mode === 'idle' && !!n.customSeat);
+      const activeSeat = isCustomSeat ? n.customSeat : (isConfSeat ? CONF_SEATS[n.id] : cfg.seat);
+      const activeFacing = isCustomSeat ? (n.customSeat.facing === 'west' ? 'front' : n.customSeat.facing) : (isConfSeat ? CONF_SEATS[n.id].facing : cfg.facing);
       const seated = (n.mode === 'idle' || n.mode === 'work' || isConfSeat || capSipping || capStamping);
       // 전 직원 10명 책상·회의실 맞춤 앉은 포즈 루프 (직원별 위상 분산, 실제 작업 중엔 더 부지런히 전환!)
       let seatPose = false;
@@ -1417,6 +1473,11 @@
     function touchCaptainInput() {
       lastCapInput = performance.now() / 1000;
       const cap = npcs.captain;
+      if (cap && cap.customSeat) {
+        if (cap.customSeat.stand) { cap.x = cap.customSeat.stand[0]; cap.y = cap.customSeat.stand[1]; }
+        cap.customSeat = null;
+        cap.mode = 'stand';
+      }
       if (cap && cap.idleCoffee) {
         cap.idleCoffee = false;
         const wasSeated = cap.idleCoffeeSeated;
@@ -1704,6 +1765,7 @@
 
     function sitCaptainBack() {
       const cap = npcs.captain;
+      cap.customSeat = null;
       cap.path = [];
       cap.onArrive = null;
       cap.x = CHARS.captain.home[0];
@@ -2835,7 +2897,16 @@
           }
           return;
         }
+        // 🛋️ 신관 회의실 의자 · VIP 소파 · 휴게실 소파 · 스낵바/냉장고 직접 클릭 시 바로 이동해 착석·음료 마시기!
+        const hitSpot = CAP_SPOTS.find(sp => sp.box && px >= sp.box[0] && px <= sp.box[2] && py >= sp.box[1] && py <= sp.box[3]);
+        if (hitSpot) {
+          SFX.walkClick();
+          clickRing = { x: hitSpot.stand[0], y: hitSpot.stand[1], born: performance.now() };
+          goCaptainSpot(hitSpot);
+          return;
+        }
         if (canWalk(px, py)) {
+          npcs.captain.customSeat = null;
           SFX.walkClick();
           clickRing = { x: px, y: py, born: performance.now() };
           walkCaptainSafe(px, py, { bubble: '', onArrive: () => { npcs.captain.mode = 'stand'; } });
