@@ -201,7 +201,17 @@
     for (const p of PROPS) {
       jobs.push(load(imgs.masks, p.key, `/static/office-anime/assets/masks/${p.key}.webp?v=hq4k3`));
     }
-    return Promise.all(jobs).then(() => imgs);
+    // 📱 폰 앱(안드로이드 크롬)에서 캐릭터가 사라지는 문제(2026-11-27): 3996×2248 배경 2장(풀면 장당 약 36MB)을
+    // 매 프레임 <img> 그대로 그리면 브라우저 그림 풀기 공간(디코드 캐시)이 넘쳐, 뒤에 그리는 캐릭터 그림이 빠짐.
+    // → 배경은 미리 풀어 둔 ImageBitmap으로 바꿔 캐시를 쓰지 않게 함(실패하면 원래 그림 그대로).
+    const toBitmap = async key => {
+      const im = imgs[key];
+      if (!im || typeof createImageBitmap !== 'function') return;
+      try { imgs[key] = await createImageBitmap(im); } catch {}
+    };
+    return Promise.all(jobs)
+      .then(() => Promise.all([toBitmap('bg'), toBitmap('bgRight')]))
+      .then(() => imgs);
   }
 
   function create(root, opts = {}) {
@@ -2274,7 +2284,10 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.setTransform(s * z, 0, 0, s * z, (cam.tx || 0) / 100 * W * s + shX, (cam.ty || 0) / 100 * H * s + shY);
       }
-      if (imgs.bg) {
+      // 화면에 보이는 세로 띠(월드 x)만 계산 → 안 보이는 본관/신관 배경은 그리지 않음(폰 메모리·속도)
+      const viewX0 = -((cam.tx || 0) / 100) * W / (cam.z || 1) - 40;
+      const viewX1 = viewX0 + W / (cam.z || 1) + 80;
+      if (imgs.bg && viewX0 < W) {
         ctx.drawImage(imgs.bg, 0, 0, W, H);
         // 🖥️ 본관 4대 PC 모니터(디지털 메뉴 통제실 2대 + 감사실 2대) 실시간 작업 화면 연출!
         const pcMons = [
@@ -2379,7 +2392,7 @@
           ctx.restore();
         }
       }
-      if (imgs.bgRight) {
+      if (imgs.bgRight && viewX1 > W) {
         ctx.drawImage(imgs.bgRight, W, 0, W, H);
         // 📺 신관 대회의실 대형 TV 디스플레이: 정식 계약 매장 QR메뉴 자동 롤링 쇼케이스!
         if (imgs.tvStores?.length) {
