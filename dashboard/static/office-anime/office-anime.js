@@ -2807,7 +2807,13 @@
       vip_jung:   { greet: '아우님! NANA VINA 정은수 형님이야. 오늘 사무실 분위기 좋네! 커피 한 잔 하면서 얘기 좀 할까?', quick: ['☕ 형님 커피 한 잔 대접하기', '🤝 직원들 둘러보시게 안내'] },
     };
 
-    const vEsc = s => String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+    // 전체화면 상태창 가운데 캐릭터: 기본은 걷기 그림 정면 1장. 제미나이 영상을 넣으면 video: 'fullbody/<파일>.mp4'
+    const FULLBODY = {
+      // claude: { video: 'fullbody/비서실장-전체-대기.mp4' },
+      agy: { dir: 'front' }, reader: { dir: 'front' }, auditor: { dir: 'front' }, inspector: { dir: 'front' },
+    };
+
+    const vEsc = s =>String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
     function visitBlock() {
       const v = latestVisits;
       if (!v) return `<div class="oa-m-visit" data-visit><p class="oa-v-empty">아직 오늘 방문 기록이 없어요. [📊 지금 보고해]를 누르면 바로 읽어 와요.</p></div>`;
@@ -2899,7 +2905,7 @@
       return { x0: tx + (p.x - 5) * z, x1: tx + (p.x + 5) * z, y0: ty + (p.y - 24) * z, y1: ty + (p.y + 4) * z };
     }
     function placeModal() {
-      if (modalBack.hidden || !modalTargets.length || modal.classList.contains('kbd-top')) return;
+      if (modalBack.hidden || !modalTargets.length || modal.classList.contains('kbd-top') || modal.classList.contains('oa-full')) return;
       const wrap = root.querySelector('.oa-rot-wrap');
       const W = wrap.clientWidth || 1, H = wrap.clientHeight || 1;
       const mw = modal.offsetWidth / W * 100, mh = modal.offsetHeight / H * 100;
@@ -3085,28 +3091,63 @@
       if (hit === 'sorter' && latestVisits) { lsSet('oa_visit_read', latestVisits.id); if (activeQuests.sorter?.kind === 'visits') { delete activeQuests.sorter; updateRpgHud(); } }
       SFX.tap();
       if (hit !== 'captain') voice(hit, 'call', 0.12, { interrupt: true });
+      // 전체화면 상태창(2026-11-27): 배경 그림 1장 + 판·탭·버튼은 코드로 그려 직원마다 개수가 달라도 맞춤
+      const myOrders = latestOrders.filter(o => (hit === 'claude' || hit === 'captain') || (o.worked || []).includes(dashId)).slice(0, 5);
+      const ST_LBL = { running: '진행 중', stopping: '멈추는 중', done: '완료', wait: '답 대기', error: '실패' };
+      const logHtml = myOrders.map(o => `
+        <button type="button" class="oa-f-card oa-f-log" data-open-order="${escHtml(o.id)}">
+          <span class="oa-f-card-t">${escHtml((o.title || o.text || '지시').slice(0, 34))}</span>
+          <span class="oa-f-card-s">${escHtml(ST_LBL[o.status] || o.status || '')}</span>
+        </button>`).join('');
+      const tabs = [
+        { id: 'work', label: '업무' },
+        ...(npcAppr ? [{ id: 'appr', label: '결재', dot: true }] : []),
+        ...(myOrders.length ? [{ id: 'log', label: '지시 기록' }] : []),
+      ];
+      const firstTab = npcAppr ? 'appr' : 'work';
+      const fb = FULLBODY[hit] || {};
+      const bodyImg = `/static/office-anime/assets/walk/${c.asset || hit}-${fb.dir || 'front'}-${fb.frame || 1}.webp?v=orig2k_df3`;
+      const bodyHtml = fb.video
+        ? `<video class="oa-f-body" src="/static/office-anime/assets/${fb.video}" poster="${bodyImg}" autoplay muted loop playsinline></video>`
+        : `<img class="oa-f-body" src="${bodyImg}" alt="${c.name}">`;
+      modal.classList.add('oa-full');
       modal.innerHTML = `
-        <div class="oa-m-head">
-          <img src="/static/office-anime/assets/portraits/${c.asset || hit}.webp?v=cap3" alt="${c.name}">
-          <div>
-            <h3>${c.name} <span class="oa-m-role">${c.role}</span></h3>
-            <p class="oa-m-say">“${dcfg.greet}”</p>
+        <div class="oa-f-bg"></div>
+        <button type="button" class="oa-f-close" data-close aria-label="닫기">×</button>
+        <div class="oa-f-left">
+          <div class="oa-f-tabs">
+            ${tabs.map(t => `<button type="button" class="oa-f-tab ${t.id === firstTab ? 'on' : ''}" data-tab="${t.id}">${t.label}${t.dot ? '<i></i>' : ''}</button>`).join('')}
           </div>
-          <button type="button" data-close>×</button>
+          <div class="oa-f-panel">
+            <div class="oa-f-page" data-page="work" ${firstTab === 'work' ? '' : 'hidden'}>
+              <div class="oa-f-card oa-f-say"><span class="oa-f-card-t">${c.name}</span><p>“${dcfg.greet}”</p></div>
+              ${visitHtml}
+              ${questHtml}
+              ${!visitHtml && !questHtml && myOrders[0] ? `<button type="button" class="oa-f-card oa-f-log" data-open-order="${escHtml(myOrders[0].id)}"><span class="oa-f-card-t">최근 지시</span><span class="oa-f-card-s">${escHtml((myOrders[0].title || myOrders[0].text || '').slice(0, 40))}</span></button>` : ''}
+            </div>
+            ${npcAppr ? `<div class="oa-f-page" data-page="appr" ${firstTab === 'appr' ? '' : 'hidden'}>${apprHtml}</div>` : ''}
+            ${myOrders.length ? `<div class="oa-f-page" data-page="log" hidden>${logHtml}</div>` : ''}
+          </div>
         </div>
-        ${apprHtml}
-        ${visitHtml}
-        ${questHtml}
-        <div class="oa-m-quick">
-          ${orderBtn}
-          ${dcfg.quick.map(q => `<button type="button" class="oa-q-btn" data-q="${q}">${q}</button>`).join('')}
-          ${detailBtn}
+        <div class="oa-f-char">${bodyHtml}</div>
+        <div class="oa-f-right">
+          <div class="oa-f-name"><b>${c.name}</b><span>${c.role}</span></div>
+          <div class="oa-f-btns">
+            ${orderBtn}
+            ${dcfg.quick.map(q => `<button type="button" class="oa-q-btn" data-q="${q}">${q}</button>`).join('')}
+            ${detailBtn}
+          </div>
         </div>
-        <form class="oa-m-form" data-order-form>
+        <div class="oa-m-res oa-f-res" data-res hidden></div>
+        <form class="oa-m-form oa-f-form" data-order-form>
           <input type="text" name="msg" placeholder="${c.name}에게 직접 지시할 내용을 입력하세요…" autocomplete="off" required>
           <button type="submit">📣 지시 전달</button>
-        </form>
-        <div class="oa-m-res" data-res hidden></div>`;
+        </form>`;
+      modal.querySelectorAll('[data-tab]').forEach(tb => tb.addEventListener('click', () => {
+        SFX.tap();
+        modal.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('on', x === tb));
+        modal.querySelectorAll('[data-page]').forEach(p => { p.hidden = p.dataset.page !== tb.dataset.tab; });
+      }));
 
       modal.querySelectorAll('[data-open-order]').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -3298,6 +3339,9 @@
       modalTargets = (hit === 'captain') ? [cap] : [cap, n];
       modalSlot = null;
       modalBack.hidden = false;
+      // 전체화면 상태창이 잘리지 않게, 밀려 있던 사무실 틀 스크롤을 맨 위로
+      const rotWrap = root.querySelector('.oa-rot-wrap');
+      if (rotWrap) { rotWrap.scrollTop = 0; rotWrap.scrollLeft = 0; }
       placeModal();
       // 모바일에서 캐릭 터치 시 키보드가 자동 팝업되지 않도록 자동 focus 제거 (입력창을 직접 터치할 때만 자판 열림!)
     }

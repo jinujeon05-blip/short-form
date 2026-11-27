@@ -283,3 +283,49 @@ body.oa-fs-lock > *:not(.oa-stage) { display: none !important; }
   .oa-m-visit .oa-v-head { font-size: 11px; }
   .oa-m-visit ul { font-size: 10px; line-height: 1.3; max-height: 72px; }
 }
+
+/* ===== 전체화면 직원 상태창 (2026-11-27) — 배경 그림(status-bg-pc) + 판·탭·버튼은 코드(개수 자유) ===== */
+.oa-modal.oa-full { left: 0 !important; top: 0 !important; transform: none !important; width: 100% !important; height: 100% !important; min-width: 0 !important; max-height: none !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important; background: #f4d9a8; box-shadow: none; backdrop-filter: none; overflow: hidden; container-type: size; transition: none; font-family: "Malgun Gothic", sans-serif; }
+.oa-full .oa-f-bg { position: absolute; inset: 0; background: url(/static/office-anime/assets/status-bg-pc.webp?v=1) center / cover no-repeat; }
+.oa-full .oa-f-close { position: absolute; right: 2.2cqw; top: 3cqh; width: 6.4cqh; height: 6.4cqh; min-width: 28px; min-height: 28px; border-radius: 50%; border: 0.45cqh solid #f3c552; background: radial-gradient(circle at 40% 35%, #3a4a7a, #172142); color: #ffe7a0; font: 900 4.6cqh/1 "Malgun Gothic", sans-serif; cursor: pointer; z-index: 3; box-shadow: 0 0.6cqh 1.6cqh rgba(10,15,35,.45); display: flex; align-items: center; justify-content: center; padding: 0; }
+.oa-full .oa-f-close:hover { transform: scale(1.06); }
+.oa-full .oa-f-panel, .oa-full .oa-f-right { background: linear-gradient(160deg, rgba(36,48,88,.86), rgba(18,26,54,.9)); border: 0.4cqh solid #e9b949; border-radius: 2.4cqh; box-shadow: inset 0 0 0 0.25cqh rgba(255,231,160,.22), 0 1cqh 3cqh rgba(10,15,35,.4); backdrop-filter: blur(3px); }
+.oa-full .oa-f-left { position: absolute; left: 2.2cqw; top: 6cqh; width: 28cqw; bottom: 17cqh; display: flex; flex-direction: column; z-index: 2; }
+.oa-full .oa-f-tabs { display: flex; gap: 0.6cqw; padding-left: 1.6cqw; margin-bottom: -0.4cqh; position: relative; z-index: 1; }
+.oa-full .oa-f-tab { position: relative; min-width: 7.2cqw; padding: 1.1cqh 1.2cqw 1.3cqh; border: 0.4cqh solid #e9b949; border-bottom: 0; border-radius: 1.8cqh 1.8cqh 0 0; background: linear-gradient(180deg, #2c3a6c, #1b2550); color: #e6ebff; font: 800 clamp(10px, 2.5cqh, 18px)/1 "Malgun Gothic", sans-serif; cursor: pointer; }
+.oa-full .oa-f-tab.on { background: linear-gradient(180deg, #ffe38a, #f2b23a); color: #2a1d05; }
+.oa-full .oa-f-tab i { position: absolute; right: 0.6cqw; top: 0.7cqh; width: 1.2cqh; height: 1.2cqh; border-radius: 50%; background: #ef4444; box-shadow: 0 0 0 0.25cqh #fff; }
+.oa-full .oa-f-panel { flex: 1; padding: 2.2cqh 1.4cqw; overflow-y: auto; min-height: 0; }
+.oa-full .oa-f-page { display: flex; flex-direction: column; gap: 1.6cqh; }
+.oa-full .oa-f-page[hidden] { display: none; }
+.oa-full .oa-f-card { display: flex; flex-direction: column; gap: 0.8cqh; width: 100%; box-sizing: border-box; text-align: left; padding: 1.8cqh 1.2cqw; border-radius: 1.6cqh; border: 0.25cqh solid rgba(203,213,255,.32); background: rgba(10,16,40,.42); color: #f1f5ff; font-family: inherit; }
+.oa-full button.oa-f-card { cursor: pointer; }
+.oa-full button.oa-f-card:hover { border-color: #f3c552; background: rgba(243,197,82,.14); }
+.oa-full .oa-f-card-t { font: 800 clamp(10.5px, 2.5cqh, 18px)/1.25 "Malgun Gothic", sans-serif; color: #ffe39a; }
+.oa-full .oa-f-card-s { font: 600 clamp(9.5px, 2.1cqh, 15px)/1.35 "Malgun Gothic", sans-serif; color: #c9d2f0; }
+.oa-full .oa-f-say p { margin: 0; font: 600 clamp(10px, 2.3cqh, 16.5px)/1.5 "Malgun Gothic", sans-serif; color: #f8faff; }
+.oa-full .oa-m-quest, .oa-full .oa-m-appr { margin-top: 0; }
+.oa-full .oa-m-quest-txt, .oa-full .oa-appr-lbl, .oa-full .oa-appr-desc { font-size: clamp(10px, 2.1cqh, 15px); }
+.oa-full .oa-appr-title { font-size: clamp(10.5px, 2.3cqh, 16px); white-space: normal; }
+.oa-full .oa-f-char { position: absolute; left: 50%; bottom: 14.5cqh; height: 70cqh; transform: translateX(-50%); z-index: 1; pointer-events: none; display: flex; align-items: flex-end; }
+.oa-full .oa-f-body { height: 100%; width: auto; object-fit: contain; filter: drop-shadow(0 1.2cqh 1.4cqh rgba(80,50,10,.3)); transform-origin: 50% 100%; animation: oaBreath 3.6s ease-in-out infinite; }
+@keyframes oaBreath { 0%,100% { transform: scale(1, 1); } 50% { transform: scale(1.006, 1.012); } }
+.oa-full .oa-f-right { position: absolute; right: 2.2cqw; top: 13cqh; width: 21cqw; max-height: 67cqh; padding: 2cqh 1.2cqw; display: flex; flex-direction: column; gap: 2cqh; z-index: 2; box-sizing: border-box; }
+.oa-full .oa-f-name { padding: 1.6cqh 1cqw; border: 0.4cqh solid #f3c552; border-radius: 1.4cqh; background: linear-gradient(180deg, #1b2550, #111a3c); text-align: center; display: flex; flex-direction: column; gap: 0.5cqh; }
+.oa-full .oa-f-name b { font: 900 clamp(12px, 3.4cqh, 24px)/1.1 "Malgun Gothic", sans-serif; color: #fff; }
+.oa-full .oa-f-name span { font: 700 clamp(9.5px, 2cqh, 14px)/1 "Malgun Gothic", sans-serif; color: #ffd978; }
+.oa-full .oa-f-btns { display: flex; flex-direction: column; gap: 1.4cqh; overflow-y: auto; min-height: 0; padding: 0.4cqh 0.4cqh 1cqh; }
+.oa-full .oa-f-btns .oa-q-btn { width: 100%; flex-shrink: 0; padding: 1.5cqh 1cqw; border-radius: 99px; border: 0.35cqh solid #fff0b8; background: linear-gradient(180deg, #ffe07a 0%, #f6b232 60%, #e89a1e 100%); color: #2a1d05; font: 800 clamp(10px, 2.3cqh, 16px)/1.2 "Malgun Gothic", sans-serif; text-align: center; box-shadow: 0 0.5cqh 0 #b9741a, 0 0.8cqh 1.4cqh rgba(10,15,35,.35); cursor: pointer; }
+.oa-full .oa-f-btns .oa-q-btn:hover { filter: brightness(1.07); }
+.oa-full .oa-f-btns .oa-q-btn.appr-link { background: linear-gradient(180deg, #fff3b0, #ffd04a); }
+.oa-full .oa-f-btns .oa-q-btn.detail { background: linear-gradient(180deg, #e6f0ff, #b9cdf5); border-color: #fff; color: #18254d; box-shadow: 0 0.5cqh 0 #7f93c4, 0 0.8cqh 1.4cqh rgba(10,15,35,.3); }
+.oa-full .oa-f-res { position: absolute; left: 2.2cqw; right: 24cqw; bottom: 14cqh; margin: 0; padding: 1cqh 1.4cqw; border-radius: 99px; background: rgba(10,16,40,.85); border: 0.25cqh solid #86efac; color: #bbf7d0; font: 700 clamp(10px, 2.2cqh, 15px)/1.3 "Malgun Gothic", sans-serif; z-index: 3; }
+.oa-full .oa-f-res[hidden] { display: none; }
+.oa-full .oa-f-form { position: absolute; left: 2.2cqw; right: 2.2cqw; bottom: 3cqh; height: 9cqh; margin: 0; gap: 2.4cqw; z-index: 3; }
+.oa-full .oa-f-form input { height: 100%; box-sizing: border-box; padding: 0 2cqw; border-radius: 99px; border: 0.4cqh solid #e9b949; background: linear-gradient(180deg, rgba(36,48,88,.92), rgba(18,26,54,.95)); color: #fff; font: 600 clamp(11px, 2.5cqh, 17px) "Malgun Gothic", sans-serif; }
+.oa-full .oa-f-form input::placeholder { color: #aab5da; }
+.oa-full .oa-f-form button { width: 19cqw; height: 100%; padding: 0; border-radius: 99px; border: 0.4cqh solid #fff0b8; background: linear-gradient(180deg, #ffc24a, #ff9415); color: #2a1300; font: 900 clamp(11px, 2.9cqh, 20px) "Malgun Gothic", sans-serif; box-shadow: 0 0.5cqh 0 #b65d0c, 0 0.8cqh 1.6cqh rgba(10,15,35,.35); }
+.oa-modal.oa-full.kbd-top { left: 0 !important; top: 0 !important; transform: none !important; width: 100% !important; height: 100% !important; max-height: none !important; padding: 0 !important; border-radius: 0 !important; }
+.oa-modal.oa-full.kbd-top .oa-f-left, .oa-modal.oa-full.kbd-top .oa-f-right, .oa-modal.oa-full.kbd-top .oa-f-char { display: none; }
+.oa-modal.oa-full.kbd-top .oa-f-form { top: 2cqh; bottom: auto; height: 13cqh; }
+.oa-modal.oa-full.kbd-top .oa-f-res { top: 17cqh; bottom: auto; }
