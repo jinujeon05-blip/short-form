@@ -930,7 +930,7 @@ window.STORES = [
     keywords: "흥비식당 흥비맛집 Hương Bi Huong Bi 888 백반 한식 찌개 부대찌개 전골 박닌 Bắc Ninh Võ Cường Hoàng Hoa Thám"
   },
   { id: "dungcua", name: "중꾸아 해산물 식당 DUNG CUA", sub: "랍스터 · 킹크랩 · 갯가재 · 굴 · 전복 · 활어회 · 해산물 시세 메뉴", url: "https://dungcua.qrmenuasia.com", listing: true,
-    region: "bacninh", cats: ["seafood"], tags: ["photos"],
+    region: "bacninh", cats: ["seafood", "vietnamese"], tags: ["photos"],
     address: "21C4 Trần Quốc Toản, Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/%ED%95%B4%EC%82%B0%EB%AC%BC+%EC%8B%9D%EB%8B%B9/@21.1762483,106.0656734,17z/data=!3m1!4b1!4m6!3m5!1s0x31350c01bfbc7ad3:0x2a5eb644f283e50!8m2!3d21.1762483!4d106.0656734",
     type: { ko: "활 해산물 · 랍스터 · 킹크랩 · 회", vi: "Nhà hàng hải sản tươi sống · Tôm hùm · Cua hoàng đế · Gỏi cá", en: "Live seafood · Lobster · King crab · Sashimi", zh: "活海鲜 · 龙虾 · 帝王蟹 · 刺身", ja: "活き海鮮・ロブスター・タラバガニ・刺身" },
     keywords: "중꾸아 해산물 식당 중꾸아 Dung Cua Dũng Cua Nhà hàng hải sản Dung Cua 박닌 Bắc Ninh 해산물 랍스터 킹크랩 갯가재 굴 전복 활어회 시세 seafood lobster king crab"
