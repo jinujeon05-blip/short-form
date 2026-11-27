@@ -439,6 +439,7 @@
       const isPortraitMobile = (window.innerHeight > window.innerWidth) && (window.innerWidth <= 920);
       stage.classList.toggle('oa-fs-rot', isActive && isPortraitMobile);
       stage.classList.toggle('oa-fs-mock', fakeFs && !isPortraitMobile);
+      document.body.classList.toggle('oa-fs-lock', isActive);
       fsBtn.textContent = isActive ? '✕ 전체화면 닫기' : '⛶ 전체화면';
     }
 
