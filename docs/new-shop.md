@@ -33,6 +33,7 @@
      - 디자인 틀 고르기(2026-11-14): `node tools/promo-designs.mjs --recommend <지역키> <모양 스타일> <사진 수>`로 같은 도시와 겹치지 않는 것을 캡틴에게 번호 보기로 묻고 `card.mjs`·`sns.mjs`에 `--design <id>`(상세 `docs/tools.md` 'SNS·카드 디자인 틀')
      - SNS 이미지: `node tools/sns.mjs <가게> ko`(한국 매장, 그 밖 `vi`) → `print/sns-square.png`(1080×1080)·`print/sns-story.png`(1080×1920). 두 장을 직접 열어 잘림·5개 언어 확인
      - 점주 자료(사용자가 원할 때): `print/guide.html` → `node tools/pdf.mjs restaurants/<가게>/print/guide.html restaurants/<가게>/print/guide-<가게>.pdf`(예: `restaurants/gamasot/print/`)
+     - 계약 전 사장님께 드릴 '준비 안내서'(필수 5·선택 6·체크리스트·요금): `sales/print/owner-prep/prep-ko.pdf`·`.pptx`(원본 `prep-ko.html`·`make-pptx.cjs`, 2026-11-27)
      - 정식 가게 전부의 빠짐 확인: `node tools/check-shop.mjs --print-all`
    - **가게 찾기용**:
      - 메뉴 보기만. Zalo·장바구니·주문서는 넣지 않는다.
