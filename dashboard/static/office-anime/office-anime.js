@@ -124,12 +124,20 @@
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}_df3`));
         }
       }
-      // 캡틴 주먹 격투(복싱 연속 공격) 15프레임 + 화랑 스타일 태권도 10단 콤보 48프레임!
+      // 캡틴 주먹 격투(복싱 연속 공격) 15프레임 + 화랑 스타일 태권도 10단 콤보 48프레임 + 신관 소파 착석·음료·스낵 36프레임!
       if (id === 'captain') {
         imgs.walk[id].punch = [];
         for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1_df3`));
         imgs.walk[id].combo = [];
         for (let i = 1; i <= 48; i++) jobs.push(load(imgs.walk[id].combo, i - 1, `/static/office-anime/assets/walk/captain-combo-${i}.webp?v=combo1`));
+        imgs.walk[id].sofa_front = [];
+        for (let i = 1; i <= 6; i++) jobs.push(load(imgs.walk[id].sofa_front, i - 1, `/static/office-anime/assets/walk/captain-sofa_front-${i}.webp?v=lng1`));
+        imgs.walk[id].sofa_left = [];
+        for (let i = 1; i <= 6; i++) jobs.push(load(imgs.walk[id].sofa_left, i - 1, `/static/office-anime/assets/walk/captain-sofa_left-${i}.webp?v=lng1`));
+        imgs.walk[id].drink = [];
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].drink, i - 1, `/static/office-anime/assets/walk/captain-drink-${i}.webp?v=lng1`));
+        imgs.walk[id].snack = [];
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].snack, i - 1, `/static/office-anime/assets/walk/captain-snack-${i}.webp?v=lng1`));
       }
       // 전 직원(캡틴·외부 손님 제외) 9명 정중 인사 12프레임 로드 (id 기준 파일명 — reader↔auditor 일치!)
       if (id !== 'captain' && id !== 'claude' && !cfg.guest) {
@@ -248,11 +256,11 @@
     // 🛋️ 캡틴 신관 인터랙티브 착석·음료 스팟 (회의실 의자 · 상단 VIP 소파 · 휴게실 위/오른쪽 소파 · 스낵바/냉장고!)
     const CAP_SPOTS = [
       { id: 'conf_mid',        kind: 'seat',  name: '대회의실 의자',      x: 150.6, y: 23.0, headTopY: 14.5, clipY: 21.2, h: 225, facing: 'front', stand: [150.6, 33.5], box: [138, 16, 163, 25], say: '📋 대회의실 자리에서 브리핑 준비 중…' },
-      { id: 'vip_sofa',        kind: 'seat',  name: 'VIP 접견실 소파',    x: 177.5, y: 23.8, headTopY: 13.8, clipY: 22.8, h: 230, facing: 'front', stand: [177.5, 31.8], box: [169, 15, 186, 25], say: '🛋️ VIP 접견실 소파에서 여유롭게 휴식 중…' },
-      { id: 'lounge_top_sofa', kind: 'seat',  name: '휴게실 위쪽 소파',   x: 164.5, y: 69.5, headTopY: 59.5, clipY: 68.5, h: 230, facing: 'front', stand: [157.5, 72.0], box: [158, 61, 171, 70], say: '☕ 휴게실 소파에 앉아 잠깐 쉬는 중…' },
-      { id: 'lounge_r_sofa',   kind: 'seat',  name: '휴게실 오른쪽 소파', x: 193.5, y: 76.5, headTopY: 66.0, clipY: 76.0, h: 225, facing: 'west',  stand: [189.2, 76.5], box: [190, 67, 198, 82], say: '🛋️ 휴게실 창가 소파에서 한숨 돌리는 중…' },
-      { id: 'lounge_fridge',   kind: 'drink', name: '휴게실 음료 냉장고', x: 186.0, y: 69.2, facing: 'front', stand: [186.0, 69.2], box: [183, 54, 189, 68], say: '🥤 냉장고에서 시원한 음료 한 잔 꺼내 마시는 중!' },
-      { id: 'lounge_snack',    kind: 'drink', name: '휴게실 스낵바',      x: 176.5, y: 69.2, facing: 'front', stand: [176.5, 69.2], box: [170, 54, 183, 68], say: '☕ 스낵바에서 간식이랑 커피 챙기는 중!' },
+      { id: 'vip_sofa',        kind: 'seat',  pose: 'sofa_front', name: 'VIP 접견실 소파',    x: 177.5, y: 23.8, headTopY: 12.2, clipY: 26.0, h: 175, facing: 'front', stand: [177.5, 31.8], box: [169, 15, 186, 25], say: '🛋️ VIP 접견실 소파에서 여유롭게 휴식 중…' },
+      { id: 'lounge_top_sofa', kind: 'seat',  pose: 'sofa_front', name: '휴게실 위쪽 소파',   x: 164.5, y: 70.5, headTopY: 58.2, clipY: 73.0, h: 175, facing: 'front', stand: [157.5, 72.0], box: [158, 61, 171, 70], say: '☕ 휴게실 소파에 앉아 잠깐 쉬는 중…' },
+      { id: 'lounge_r_sofa',   kind: 'seat',  pose: 'sofa_left',  name: '휴게실 오른쪽 소파', x: 193.0, y: 77.5, headTopY: 64.5, clipY: 81.0, h: 185, facing: 'west',  stand: [189.2, 76.5], box: [190, 67, 198, 82], say: '🛋️ 휴게실 창가 소파에서 다리 꼬고 휴식 중…' },
+      { id: 'lounge_fridge',   kind: 'drink', emote: 'drink',     name: '휴게실 음료 냉장고', x: 186.0, y: 69.2, facing: 'front', stand: [186.0, 69.2], box: [183, 54, 189, 68], say: '🥤 냉장고에서 시원한 캔 음료 꺼내 마시는 중!' },
+      { id: 'lounge_snack',    kind: 'drink', emote: 'snack',     name: '휴게실 스낵바',      x: 176.5, y: 69.2, facing: 'front', stand: [176.5, 69.2], box: [170, 54, 183, 68], say: '☕ 스낵바에서 간식이랑 커피 챙기는 중!' },
     ];
     let relaxIdx = 0;
     function goCaptainSpot(sp) {
@@ -273,7 +281,7 @@
         } else {
           cap.dir = 'front';
           cap.mode = 'emote';
-          cap.emote = 'coffee';
+          cap.emote = (sp.emote && imgs.walk.captain?.[sp.emote]?.length) ? sp.emote : 'coffee';
           cap.emoteLoop = false;
           cap.emoteStart = performance.now() / 1000;
           cap.emoteUntil = cap.emoteStart + 3.6;
@@ -1358,6 +1366,10 @@
       const working = (n.mode === 'idle' || n.mode === 'work') && realBusySet.has(n.id);
       if (capStamping) {
         seatPose = true;
+      } else if (isCustomSeat && n.customSeat.pose && wset[n.customSeat.pose]?.length) {
+        const arrP = wset[n.customSeat.pose];
+        im = arrP[Math.floor(t * 2.2) % arrP.length];
+        seatPose = false;
       } else if (seated && !capSipping && activeSeat && wset.seat?.length >= 4 && wset.seat.every(Boolean)) {
         const cnt = wset.seat.length;
         const stepSec = working ? 1.45 : (isConfSeat ? 2.2 : 2.85);
@@ -1384,11 +1396,13 @@
         const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
         ctx.save();
-        // 책상/회의 테이블 상단 경계선(남향) 또는 의자 좌판 하단(북향)에서 깔끔하게 클리핑 (본관+신관 W*2 전체 지원!)
-        ctx.beginPath();
-        const maxClip = (seatPose && activeFacing === 'front') ? Math.max(clipY + 14, topY + targetH) : clipY;
-        ctx.rect(0, 0, W * 2, maxClip);
-        ctx.clip();
+        // 책상/회의 테이블 상단 경계선(남향) 또는 의자 좌판 하단(북향)에서 깔끔하게 클리핑 (전신 소파 착석은 다리까지 전부 표시!)
+        if (!(isCustomSeat && n.customSeat.pose)) {
+          ctx.beginPath();
+          const maxClip = (seatPose && activeFacing === 'front') ? Math.max(clipY + 14, topY + targetH) : clipY;
+          ctx.rect(0, 0, W * 2, maxClip);
+          ctx.clip();
+        }
         ctx.drawImage(im, sx - targetW / 2 + (seatPose ? sway * 0.35 : sway), topY + (seatPose ? bob * 0.45 : bob), targetW, targetH);
         ctx.restore();
         if (working) {
