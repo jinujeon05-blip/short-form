@@ -449,15 +449,20 @@
         try { history.pushState({ oaFs: 1 }, ''); fsHistoryPushed = true; } catch {}
       }
       let nativeOk = false;
-      try {
-        if (stage.requestFullscreen) {
-          await stage.requestFullscreen();
-          nativeOk = true;
-        } else if (stage.webkitRequestFullscreen) {
-          stage.webkitRequestFullscreen();
-          nativeOk = true;
-        }
-      } catch {}
+      // 모바일(안드로이드 크롬 등)에서 requestFullscreen()을 부르면 하단에 회색 안내 문구가 오래 떠서 화면을 가리므로
+      // 모바일 터치 기기는 자체 CSS 전체화면(fakeFs)으로 바로 진입해 안내 문구가 아예 안 뜨게 함!
+      const isMobileTouch = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && Math.min(window.screen.width, window.screen.height) <= 920;
+      if (!isMobileTouch) {
+        try {
+          if (stage.requestFullscreen) {
+            await stage.requestFullscreen();
+            nativeOk = true;
+          } else if (stage.webkitRequestFullscreen) {
+            stage.webkitRequestFullscreen();
+            nativeOk = true;
+          }
+        } catch {}
+      }
       if (!nativeOk) fakeFs = true;
       // 안드로이드 등 지원 기기에서는 OS 가로 회전 자동 잠금!
       try {
@@ -1028,6 +1033,37 @@
     const bursts = []; // { x, y, vx, vy, life, max, color, size }
     const floats = []; // { x, y, text, life, max }
     let bonusExp = parseInt(localStorage.getItem('jinwoo_oa_exp') || '0', 10) || 0;
+    let expPushTimer = null;
+    function pushRpgExp() {
+      clearTimeout(expPushTimer);
+      expPushTimer = setTimeout(() => {
+        fetch('/api/rpg-exp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Dashboard': '1' },
+          body: JSON.stringify({ exp: bonusExp }),
+        }).then(r => r.ok ? r.json() : null).then(d => {
+          if (d && Number.isFinite(d.exp) && d.exp > bonusExp) {
+            bonusExp = d.exp;
+            try { localStorage.setItem('jinwoo_oa_exp', String(bonusExp)); } catch {}
+            updateRpgHud();
+          }
+        }).catch(() => {});
+      }, 600);
+    }
+    function pullRpgExp() {
+      fetch('/api/rpg-exp').then(r => r.ok ? r.json() : null).then(d => {
+        if (!d || !Number.isFinite(d.exp)) return;
+        if (d.exp > bonusExp) {
+          bonusExp = d.exp;
+          try { localStorage.setItem('jinwoo_oa_exp', String(bonusExp)); } catch {}
+          updateRpgHud();
+        } else if (bonusExp > d.exp) {
+          pushRpgExp();
+        }
+      }).catch(() => {});
+    }
+    pullRpgExp();
+    setInterval(pullRpgExp, 25000);
     let totalStoresCount = 0;
     let activeQuests = {}; // { [oaId]: { type:'exc'|'ask', title, actionLabel, orderId?, shopName? } }
 
@@ -1045,6 +1081,7 @@
         bonusExp += expGain;
         try { localStorage.setItem('jinwoo_oa_exp', String(bonusExp)); } catch {}
         updateRpgHud();
+        pushRpgExp();
       }
       const cx = (xp / 100) * W, cy = ((yp - 8) / 100) * H;
       const colors = ['#fde047', '#f59e0b', '#fef08a', '#4ade80', '#38bdf8'];

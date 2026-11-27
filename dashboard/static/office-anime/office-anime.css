@@ -60,12 +60,12 @@
 .oa-cam-btn.on { border-color: rgba(56,189,248,0.65); color: #bae6fd; background: rgba(12,74,110,0.88); }
 .oa-cam-btn:hover { background: rgba(37,99,235,0.92); color: #fff; }
 /* 하단 중앙 9명 직원 빠른 호출 프로필 바 */
-.oa-dock { position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%); z-index: 16; display: flex; align-items: center; gap: 3px; padding: 3px 6px; border-radius: 99px; background: rgba(15,23,42,0.82); border: 1px solid rgba(255,255,255,0.22); backdrop-filter: blur(6px); box-shadow: 0 4px 14px rgba(0,0,0,0.45); max-width: 56%; overflow-x: auto; scrollbar-width: none; }
+.oa-dock { position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%); z-index: 16; display: flex; align-items: center; gap: 7px; padding: 5px 12px; border-radius: 99px; background: rgba(15,23,42,0.86); border: 1.5px solid rgba(255,255,255,0.26); backdrop-filter: blur(8px); box-shadow: 0 5px 18px rgba(0,0,0,0.52); max-width: 72%; overflow-x: auto; scrollbar-width: none; }
 .oa-dock::-webkit-scrollbar { display: none; }
-.oa-dock-btn { position: relative; display: flex; flex-direction: column; align-items: center; gap: 1px; border: 0; background: transparent; padding: 1px 2px; cursor: pointer; flex: none; transition: transform .12s ease; }
-.oa-dock-btn:hover { transform: translateY(-2px) scale(1.06); }
-.oa-dock-btn img { width: clamp(20px, 2.3cqw, 28px); height: clamp(20px, 2.3cqw, 28px); border-radius: 50%; object-fit: cover; object-position: center top; border: 1.5px solid rgba(255,255,255,0.45); background: #1e293b; display: block; }
-.oa-dock-btn span { font: 700 clamp(7px, 0.72cqw, 9px)/1 "Malgun Gothic", sans-serif; color: #e2e8f0; white-space: nowrap; }
+.oa-dock-btn { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; border: 0; background: transparent; padding: 1px 3px; cursor: pointer; flex: none; transition: transform .12s ease; }
+.oa-dock-btn:hover { transform: translateY(-2px) scale(1.08); }
+.oa-dock-btn img { width: clamp(28px, 3.2cqw, 40px); height: clamp(28px, 3.2cqw, 40px); border-radius: 50%; object-fit: cover; object-position: center top; border: 2px solid rgba(255,255,255,0.52); background: #1e293b; display: block; }
+.oa-dock-btn span { font: 800 clamp(9px, 0.95cqw, 12px)/1 "Malgun Gothic", sans-serif; color: #f1f5f9; white-space: nowrap; text-shadow: 0 1px 3px rgba(0,0,0,0.9); }
 .oa-dock-btn.work img { border-color: #38bdf8; box-shadow: 0 0 8px rgba(56,189,248,0.85); }
 .oa-dock-btn.done img { border-color: #4ade80; box-shadow: 0 0 8px rgba(74,222,128,0.85); }
 .oa-dock-btn.calling img { border-color: #facc15; box-shadow: 0 0 9px rgba(250,204,21,0.9); }
@@ -170,9 +170,9 @@
 .oa-m-form button:hover { background: #fbbf24; }
 .oa-m-res { margin-top: 8px; font-size: 12px; font-weight: 700; color: #86efac; }
 @media (max-width: 960px), (max-height: 540px) {
-  .oa-dock { left: 42%; gap: 2px; padding: 2px 5px; max-width: 48%; }
-  .oa-dock-btn img { width: 19px; height: 19px; }
-  .oa-dock-btn span { font-size: 7px; }
+  .oa-dock { left: 43%; gap: 5px; padding: 4px 10px; max-width: 60%; }
+  .oa-dock-btn img { width: 26px; height: 26px; }
+  .oa-dock-btn span { font-size: 9px; }
 }
 @media (max-width: 720px), (max-height: 540px) {
   .oa-ctrl-hint { display: none; }

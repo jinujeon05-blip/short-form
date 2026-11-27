@@ -2121,6 +2121,13 @@ class Handler(BaseHTTPRequestHandler):
             return self.json(visits.today(d if re.fullmatch(r"\d{4}-\d{2}-\d{2}", d) else None))
         if p == "/api/quota":
             return self.json(cached("quota", 60, build_quota))
+        if p == "/api/rpg-exp":
+            ef = OUT / "rpg_exp.json"
+            try:
+                cur = int(json.loads(ef.read_text("utf-8")).get("exp") or 0) if ef.exists() else 0
+            except Exception:
+                cur = 0
+            return self.json({"exp": cur})
         if p == "/api/collector":
             return self.json(cached("collector", 3, build_collector))
         if p == "/api/jobs":
@@ -2209,6 +2216,20 @@ class Handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(length) or b"{}")
         except Exception:
             body = {}
+        if urlparse(self.path).path == "/api/rpg-exp":
+            ef = OUT / "rpg_exp.json"
+            try:
+                cur = int(json.loads(ef.read_text("utf-8")).get("exp") or 0) if ef.exists() else 0
+            except Exception:
+                cur = 0
+            inc = max(0, int(body.get("exp") or 0))
+            merged = max(cur, inc)
+            try:
+                ef.parent.mkdir(parents=True, exist_ok=True)
+                ef.write_text(json.dumps({"exp": merged}), encoding="utf-8")
+            except Exception:
+                pass
+            return self.json({"exp": merged})
         if urlparse(self.path).path.startswith("/api/builder/"):
             return self.builder_post(urlparse(self.path).path, body)
         if urlparse(self.path).path == "/api/sales/draft":
