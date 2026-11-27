@@ -310,8 +310,8 @@
       { id: 'vip_sofa',        kind: 'seat',  pose: 'sofa_front', name: 'VIP 접견실 소파',    x: 177.5, y: 24.0, headTopY: 13.8, clipY: 23.8, h: 162, facing: 'front', stand: [177.5, 32.5], box: [169, 15, 186, 25], say: '🛋️ VIP 접견실 소파에서 여유롭게 휴식 중…' },
       { id: 'lounge_top_sofa', kind: 'seat',  pose: 'sofa_front', name: '휴게실 위쪽 소파',   x: 164.5, y: 69.5, headTopY: 58.8, clipY: 69.2, h: 158, facing: 'front', stand: [173.5, 69.5], box: [158, 61, 171, 70], say: '☕ 휴게실 소파에 앉아 잠깐 쉬는 중…' },
       { id: 'lounge_r_sofa',   kind: 'seat',  pose: 'sofa_left',  name: '휴게실 오른쪽 소파', x: 192.7, y: 76.0, headTopY: 64.6, clipY: 100.0, h: 168, facing: 'west',  stand: [189.2, 81.5], box: [190, 67, 198, 82], say: '🛋️ 휴게실 창가 소파에서 다리 꼬고 휴식 중…' },
-      { id: 'lounge_fridge',   kind: 'drink', emote: 'drink',     name: '휴게실 음료 냉장고', x: 186.0, y: 69.2, facing: 'front', stand: [186.0, 69.2], box: [183, 54, 189, 68], say: '🥤 냉장고에서 시원한 캔 음료 꺼내 마시는 중!' },
-      { id: 'lounge_snack',    kind: 'drink', emote: 'snack',     name: '휴게실 스낵바',      x: 176.5, y: 69.2, facing: 'front', stand: [176.5, 69.2], box: [170, 54, 183, 68], say: '☕ 스낵바에서 간식이랑 커피 챙기는 중!' },
+      { id: 'lounge_fridge',   kind: 'drink', emote: 'drink',     name: '휴게실 음료 냉장고', x: 186.0, y: 68.4, facing: 'front', stand: [186.0, 68.4], box: [183, 54, 189, 68], say: '🥤 냉장고에서 시원한 캔 음료 꺼내 마시는 중!' },
+      { id: 'lounge_snack',    kind: 'drink', emote: 'snack',     name: '휴게실 스낵바',      x: 176.5, y: 68.4, facing: 'front', stand: [176.5, 68.4], box: [170, 54, 183, 68], say: '☕ 스낵바에서 간식이랑 커피 챙기는 중!' },
     ];
     let relaxIdx = 0;
     function goCaptainSpot(sp) {
@@ -1763,8 +1763,8 @@
       { x0: 191.2, y0: 48.5, x1: 200.0, y1: 88.5 }, // 오른쪽 벽 + 소파
       { x0: 152.5, y0: 85.0, x1: 200.0, y1: 88.8 }, // 아래 벽
       { x0: 152.2, y0: 48.5, x1: 154.8, y1: 74.5 }, // 왼쪽 윗벽 (아래쪽 넓은 출입구 개방!)
-      { x0: 161.2, y0: 71.2, x1: 169.8, y1: 79.0 }, // 좌측 원형 카페 테이블 (주변 보행 통로 넉넉하게 확보)
-      { x0: 178.8, y0: 71.2, x1: 187.4, y1: 79.0 }, // 우측 원형 카페 테이블 (오른쪽 소파 탈출 시 걸림 해소!)
+      { x0: 159.5, y0: 67.0, x1: 171.0, y1: 79.8 }, // 좌측 원형 카페 테이블 (위쪽 소파 y1=67.5와 빈틈없이 밀착 — 테이블·화분 위 보행 원천 차단!)
+      { x0: 178.5, y0: 69.8, x1: 188.0, y1: 79.8 }, // 우측 원형 카페 테이블 (상판·화분 차단 + 오른쪽 소파·냉장고 통로 확보)
     ];
     function canWalk(x, y) {
       if (x < 2.0 || x > 198.0 || y < 15.6 || y > 97.5) return false;
@@ -4046,7 +4046,7 @@
         const isDrink = Math.random() < 0.5;
         return doChore(
           pick,
-          isDrink ? 186.0 : 176.5, 69.2, 'front',
+          isDrink ? 186.0 : 176.5, 68.4, 'front',
           isDrink ? '🥤 휴게실 냉장고 음료 마시러 가는 중…' : '🥐 스낵바 커피랑 크루아상 챙기러 가는 중…',
           isDrink ? '🥤 와~ 시원한 캔 음료 한 잔 최고예요!' : '☕ 갓 구운 크루아상이랑 커피 꿀맛이에요!',
           4800, '↩ 간식 충전 끝! 복귀해요', isDrink ? 'drink' : 'snack'
