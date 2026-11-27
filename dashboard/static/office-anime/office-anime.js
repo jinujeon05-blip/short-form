@@ -124,20 +124,20 @@
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}_df3`));
         }
       }
-      // 캡틴 주먹 격투(복싱 연속 공격) 15프레임 + 화랑 스타일 태권도 10단 콤보 48프레임 + 신관 소파 착석·음료·스낵 36프레임!
+      // 캡틴 주먹 격투(복싱 연속 공격) 15프레임 + 화랑 스타일 태권도 10단 콤보 48프레임 + 신관 ChatGPT 12컷(소파 4+4 · 음료 2 · 스낵 2)!
       if (id === 'captain') {
         imgs.walk[id].punch = [];
         for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1_df3`));
         imgs.walk[id].combo = [];
         for (let i = 1; i <= 48; i++) jobs.push(load(imgs.walk[id].combo, i - 1, `/static/office-anime/assets/walk/captain-combo-${i}.webp?v=combo1`));
         imgs.walk[id].sofa_front = [];
-        for (let i = 1; i <= 6; i++) jobs.push(load(imgs.walk[id].sofa_front, i - 1, `/static/office-anime/assets/walk/captain-sofa_front-${i}.webp?v=lng1`));
+        for (let i = 1; i <= 4; i++) jobs.push(load(imgs.walk[id].sofa_front, i - 1, `/static/office-anime/assets/walk/captain-sofa_front-${i}.webp?v=lng2`));
         imgs.walk[id].sofa_left = [];
-        for (let i = 1; i <= 6; i++) jobs.push(load(imgs.walk[id].sofa_left, i - 1, `/static/office-anime/assets/walk/captain-sofa_left-${i}.webp?v=lng1`));
+        for (let i = 1; i <= 4; i++) jobs.push(load(imgs.walk[id].sofa_left, i - 1, `/static/office-anime/assets/walk/captain-sofa_left-${i}.webp?v=lng2`));
         imgs.walk[id].drink = [];
-        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].drink, i - 1, `/static/office-anime/assets/walk/captain-drink-${i}.webp?v=lng1`));
+        for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].drink, i - 1, `/static/office-anime/assets/walk/captain-drink-${i}.webp?v=lng2`));
         imgs.walk[id].snack = [];
-        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].snack, i - 1, `/static/office-anime/assets/walk/captain-snack-${i}.webp?v=lng1`));
+        for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].snack, i - 1, `/static/office-anime/assets/walk/captain-snack-${i}.webp?v=lng2`));
       }
       // 전 직원(캡틴·외부 손님 제외) 9명 정중 인사 12프레임 로드 (id 기준 파일명 — reader↔auditor 일치!)
       if (id !== 'captain' && id !== 'claude' && !cfg.guest) {
@@ -256,9 +256,9 @@
     // 🛋️ 캡틴 신관 인터랙티브 착석·음료 스팟 (회의실 의자 · 상단 VIP 소파 · 휴게실 위/오른쪽 소파 · 스낵바/냉장고!)
     const CAP_SPOTS = [
       { id: 'conf_mid',        kind: 'seat',  name: '대회의실 의자',      x: 150.6, y: 23.0, headTopY: 14.5, clipY: 21.2, h: 225, facing: 'front', stand: [150.6, 33.5], box: [138, 16, 163, 25], say: '📋 대회의실 자리에서 브리핑 준비 중…' },
-      { id: 'vip_sofa',        kind: 'seat',  pose: 'sofa_front', name: 'VIP 접견실 소파',    x: 177.5, y: 23.8, headTopY: 12.2, clipY: 26.0, h: 175, facing: 'front', stand: [177.5, 31.8], box: [169, 15, 186, 25], say: '🛋️ VIP 접견실 소파에서 여유롭게 휴식 중…' },
-      { id: 'lounge_top_sofa', kind: 'seat',  pose: 'sofa_front', name: '휴게실 위쪽 소파',   x: 164.5, y: 70.5, headTopY: 58.2, clipY: 73.0, h: 175, facing: 'front', stand: [157.5, 72.0], box: [158, 61, 171, 70], say: '☕ 휴게실 소파에 앉아 잠깐 쉬는 중…' },
-      { id: 'lounge_r_sofa',   kind: 'seat',  pose: 'sofa_left',  name: '휴게실 오른쪽 소파', x: 193.0, y: 77.5, headTopY: 64.5, clipY: 81.0, h: 185, facing: 'west',  stand: [189.2, 76.5], box: [190, 67, 198, 82], say: '🛋️ 휴게실 창가 소파에서 다리 꼬고 휴식 중…' },
+      { id: 'vip_sofa',        kind: 'seat',  pose: 'sofa_front', name: 'VIP 접견실 소파',    x: 177.5, y: 23.8, headTopY: 11.4, clipY: 25.0, h: 170, facing: 'front', stand: [177.5, 31.8], box: [169, 15, 186, 25], say: '🛋️ VIP 접견실 소파에서 여유롭게 휴식 중…' },
+      { id: 'lounge_top_sofa', kind: 'seat',  pose: 'sofa_front', name: '휴게실 위쪽 소파',   x: 164.5, y: 69.0, headTopY: 56.6, clipY: 69.5, h: 162, facing: 'front', stand: [157.5, 72.0], box: [158, 61, 171, 70], say: '☕ 휴게실 소파에 앉아 잠깐 쉬는 중…' },
+      { id: 'lounge_r_sofa',   kind: 'seat',  pose: 'sofa_left',  name: '휴게실 오른쪽 소파', x: 193.0, y: 76.5, headTopY: 63.5, clipY: 79.0, h: 172, facing: 'west',  stand: [189.2, 76.5], box: [190, 67, 198, 82], say: '🛋️ 휴게실 창가 소파에서 다리 꼬고 휴식 중…' },
       { id: 'lounge_fridge',   kind: 'drink', emote: 'drink',     name: '휴게실 음료 냉장고', x: 186.0, y: 69.2, facing: 'front', stand: [186.0, 69.2], box: [183, 54, 189, 68], say: '🥤 냉장고에서 시원한 캔 음료 꺼내 마시는 중!' },
       { id: 'lounge_snack',    kind: 'drink', emote: 'snack',     name: '휴게실 스낵바',      x: 176.5, y: 69.2, facing: 'front', stand: [176.5, 69.2], box: [170, 54, 183, 68], say: '☕ 스낵바에서 간식이랑 커피 챙기는 중!' },
     ];
@@ -1326,7 +1326,12 @@
             fIdx = 30 + Math.min(5, Math.floor(((elapsed - 15.40) / 1.95) * 6));
           }
         } else {
-          fIdx = n.emoteLoop ? (Math.floor(elapsed * 5.0) % 12) : Math.min(11, Math.floor(elapsed * 4.0));
+          const eLen = wset[n.emote]?.length || 12;
+          if (eLen <= 4) {
+            fIdx = Math.floor(elapsed * 1.15) % eLen;
+          } else {
+            fIdx = n.emoteLoop ? (Math.floor(elapsed * 5.0) % eLen) : Math.min(eLen - 1, Math.floor(elapsed * 4.0));
+          }
         }
       } else if (walking) {
         const stride = (n.id === 'captain') ? 1.05 : 1.65;
@@ -1368,7 +1373,7 @@
         seatPose = true;
       } else if (isCustomSeat && n.customSeat.pose && wset[n.customSeat.pose]?.length) {
         const arrP = wset[n.customSeat.pose];
-        im = arrP[Math.floor(t * 2.2) % arrP.length];
+        im = arrP[Math.floor(t * 0.72) % arrP.length];
         seatPose = false;
       } else if (seated && !capSipping && activeSeat && wset.seat?.length >= 4 && wset.seat.every(Boolean)) {
         const cnt = wset.seat.length;
