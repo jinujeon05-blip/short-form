@@ -154,7 +154,7 @@
         imgs.walk[id].punch = [];
         for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1_df3`));
         imgs.walk[id].combo = [];
-        for (let i = 1; i <= 48; i++) jobs.push(load(imgs.walk[id].combo, i - 1, `/static/office-anime/assets/walk/captain-combo-${i}.webp?v=combo1`));
+        for (let i = 1; i <= 48; i++) jobs.push(load(imgs.walk[id].combo, i - 1, `/static/office-anime/assets/walk/captain-combo-${i}.webp?v=combo2`));
       }
       // 전 캐릭터 11명(캡틴·직원 9명·정은수 대표님) 신관 ChatGPT 12컷(소파 정면4·측면4·음료2·스낵2)!
       const lngV = (id === 'claude' || id === 'inspector') ? 'swap1' : 'lng3';
@@ -1527,7 +1527,7 @@
       let fIdx = 0;
       if (kicking) {
         const elapsed = Math.max(0, t - (n.kickStart || 0));
-        const fpsK = (fightKey === 'combo') ? 9.5 : (fightKey === 'punch' ? 6.2 : 5.2);
+        const fpsK = (fightKey === 'combo') ? 14.0 : (fightKey === 'punch' ? 6.2 : 5.2);
         fIdx = Math.min(wset[fightKey].length - 1, Math.floor(elapsed * fpsK));
       } else if (emoting) {
         const elapsed = Math.max(0, t - (n.emoteStart || 0));
@@ -2077,7 +2077,7 @@
         const nowS = performance.now() / 1000;
         cap.fightKind = action;
         cap.kickStart = nowS;
-        cap.kickUntil = nowS + (isCombo ? 5.05 : (isPunch ? 2.55 : 2.35));
+        cap.kickUntil = nowS + (isCombo ? 3.45 : (isPunch ? 2.55 : 2.35));
         if (cap.mode === 'idle') cap.mode = 'stand';
         const say = isCombo
           ? (nearBag ? '🔥 화랑 10단 콤보!! 샌드백 폭파 10연타!' : '🔥 화랑 태권도 10단 콤보 발차기!!')
@@ -2085,16 +2085,16 @@
             ? (isPunch ? '🥊 샌드백 연타! 원투 훅 어퍼컷!' : '🥊 샌드백 강타! 회축 쾅!!')
             : (isPunch ? '👊 원투! 연속 펀치!' : '🥋 얍! 이동 발차기!'));
         if (nearBag) {
-          // 샌드백 타격 타이밍에 맞춰 다단 히트 임팩트 발동! (10콤보는 10연타 + 10타 피니시!)
+          // 샌드백 타격 타이밍에 맞춰 다단 히트 임팩트 발동! (10콤보 3.45초 고속 연타 + 10타 회오리 피니시!)
           const timings = isCombo
-            ? [[450, false], [850, true], [1300, false], [1750, false], [2150, true], [2650, false], [3150, true], [3600, false], [4050, true], [4550, true]]
+            ? [[260, false], [540, true], [840, false], [1140, false], [1440, true], [1740, false], [2060, true], [2380, false], [2720, true], [3100, true]]
             : (isPunch ? [[220, false], [680, false], [1180, true]] : [[280, true], [920, true]]);
           timings.forEach(([ms, heavy]) => setTimeout(() => {
             if (Math.hypot(npcs.captain.x - BAG.cx, npcs.captain.y - BAG.cy) < 13.5) hitPunchingBag(heavy);
           }, ms));
         } else {
           if (isCombo) {
-            [0.35, 0.85, 1.35, 1.85, 2.35, 2.85, 3.35, 3.85, 4.3, 4.7].forEach(d => noiseBurst(0.08, 0.055, d));
+            [0.22, 0.52, 0.82, 1.12, 1.42, 1.72, 2.04, 2.36, 2.70, 3.08].forEach(d => noiseBurst(0.08, 0.055, d));
             navigator.vibrate?.([15, 40, 15, 40, 15, 40, 35]);
             spawnBurst(cap.x, cap.y - 4, '🔥 10단 콤보!! +80 EXP', 80);
           } else {
