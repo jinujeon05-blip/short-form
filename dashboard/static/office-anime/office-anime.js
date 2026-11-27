@@ -434,12 +434,23 @@
       try { if (keepAwakeVideo) { keepAwakeVideo.pause(); } } catch {}
     }
 
+    const fsHome = document.createComment('oa-fs-home');
     function updateMobileRotClass() {
       const isActive = !!document.fullscreenElement || fakeFs;
       const isPortraitMobile = (window.innerHeight > window.innerWidth) && (window.innerWidth <= 920);
+      if (isActive && fakeFs) {
+        if (stage.parentNode && stage.parentNode !== document.body) {
+          stage.parentNode.insertBefore(fsHome, stage);
+          document.body.appendChild(stage);
+        }
+      } else if (!isActive && fsHome.parentNode) {
+        fsHome.parentNode.insertBefore(stage, fsHome);
+        fsHome.remove();
+      }
       stage.classList.toggle('oa-fs-rot', isActive && isPortraitMobile);
       stage.classList.toggle('oa-fs-mock', fakeFs && !isPortraitMobile);
-      document.body.classList.toggle('oa-fs-lock', isActive);
+      document.documentElement.classList.toggle('oa-fs-lock', isActive && fakeFs);
+      document.body.classList.toggle('oa-fs-lock', isActive && fakeFs);
       fsBtn.textContent = isActive ? '✕ 전체화면 닫기' : '⛶ 전체화면';
     }
 
