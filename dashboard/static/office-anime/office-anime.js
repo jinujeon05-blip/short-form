@@ -146,7 +146,7 @@
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
           const v = (id === 'vip_jung') ? 'vip3' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new2' : id === 'captain' ? (dir === 'kick' ? 'kick2' : 'cap8dir2') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
-          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}_df3`));
+          jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}_df4`));
         }
       }
       // 캡틴 주먹 격투(복싱 연속 공격) 15프레임 + 화랑 스타일 태권도 10단 콤보 48프레임!
@@ -3152,7 +3152,7 @@
       const tabs = [{ id: 'work', label: '대화' }];
       const firstTab = 'work';
       const fb = FULLBODY[hit] || {};
-      const bodyImg = `/static/office-anime/assets/walk/${c.asset || hit}-${fb.dir || 'front'}-${fb.frame || 1}.webp?v=orig2k_df3`;
+      const bodyImg = `/static/office-anime/assets/walk/${c.asset || hit}-${fb.dir || 'front'}-${fb.frame || 1}.webp?v=orig2k_df4`;
       const bodyHtml = fb.video
         ? `<video class="oa-f-body" src="/static/office-anime/assets/${fb.video}" poster="${bodyImg}" autoplay muted loop playsinline></video>`
         : `<img class="oa-f-body" src="${bodyImg}" alt="${c.name}">`;
