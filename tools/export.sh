@@ -135,6 +135,7 @@ name() {
     yosakura) echo "요사쿠라" ;;
     unatoto) echo "우나토토" ;;
     nikusho) echo "니쿠쇼" ;;
+    phoquanbo) echo "퍼 꾸언 보" ;;
     *) echo "$1" ;;
   esac
 }

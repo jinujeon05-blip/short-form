@@ -1001,6 +1001,12 @@ window.STORES = [
     type: { ko: "일본식 와규 야키니쿠 · 우설 · 스테이크", vi: "Thịt nướng Wagyu kiểu Nhật · Lưỡi bò · Bít tết", en: "Japanese Wagyu BBQ · Beef tongue · Steak", zh: "日式和牛烧肉 · 牛舌 · 牛排", ja: "和牛焼肉・牛タン・ステーキ" },
     keywords: "니쿠쇼 肉昌 NIKUSHO Nikusho 와규 야키니쿠 Japanese Wagyu BBQ 우설 스테이크 하노이 Hà Nội Ba Đình Yên Phụ"
   },
+  { id: "phoquanbo", name: "퍼 꾸언 보 Phở quân bò", sub: "소고기 쌀국수 · 와인 스튜 쌀국수 · 전골 · 반미", url: "https://phoquanbo.qrmenuasia.com", listing: true,
+    region: "bacninh", cats: ["vietnamese","noodle"], tags: [],
+    address: "56 P. Lương Ngọc Quyến, Kinh Bắc, Bắc Ninh", map: "https://www.google.com/maps/place/Ph%E1%BB%9F+qu%C3%A2n+b%C3%B2/@21.1904815,106.0584295,16z/data=!4m6!3m5!1s0x31350dff5b27b811:0xd97aff6f4782a57a!8m2!3d21.1904815!4d106.0679567",
+    type: { ko: "베트남식 · 소고기 쌀국수 · 와인 스튜", vi: "Phở bò · Phở sốt vang · Lẩu bò", en: "Vietnamese beef phở · Red-wine beef stew", zh: "越南牛肉河粉 · 红酒炖牛肉", ja: "ベトナム牛肉フォー・赤ワイン煮込み" },
+    keywords: "퍼 꾸언 보 Phở quân bò Pho quan bo 박닌 쌀국수 소고기 쌀국수 퍼보 솟방 Sốt vang Bắc Ninh"
+  },
 ];
 window.SI = {
   ko: {

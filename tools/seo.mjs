@@ -190,6 +190,7 @@ const SHOPS = {
   yosakura: { type: 'Restaurant', cuisine: ['Japanese', 'Gyukatsu', 'Unagi'], country: 'VN', currency: 'VND', og: 'img/yosakura-gyukatsu.jpg' },
   unatoto: { type: 'Restaurant', cuisine: ['Japanese', 'Izakaya', 'Eel', 'Yakitori', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   nikusho: { type: 'Restaurant', cuisine: ['Japanese', 'Yakiniku', 'Wagyu', 'Steak'], country: 'VN', currency: 'VND', og: 'img/yukke.jpg' },
+  phoquanbo: { type: 'Restaurant', cuisine: ['Vietnamese', 'Phở', 'Beef'], country: 'VN', currency: 'VND', og: 'img/tai.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
