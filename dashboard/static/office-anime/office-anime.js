@@ -461,20 +461,16 @@
         try { history.pushState({ oaFs: 1 }, ''); fsHistoryPushed = true; } catch {}
       }
       let nativeOk = false;
-      // 모바일(안드로이드 크롬 등)에서 requestFullscreen()을 부르면 하단에 회색 안내 문구가 오래 떠서 화면을 가리므로
-      // 모바일 터치 기기는 자체 CSS 전체화면(fakeFs)으로 바로 진입해 안내 문구가 아예 안 뜨게 함!
-      const isMobileTouch = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && Math.min(window.screen.width, window.screen.height) <= 920;
-      if (!isMobileTouch) {
-        try {
-          if (stage.requestFullscreen) {
-            await stage.requestFullscreen();
-            nativeOk = true;
-          } else if (stage.webkitRequestFullscreen) {
-            stage.webkitRequestFullscreen();
-            nativeOk = true;
-          }
-        } catch {}
-      }
+      // 모바일·PC 모두 네이티브 requestFullscreen()을 호출해야 안드로이드 상단 상태바·하단 내비바(주황 테두리)가 숨겨지는 진짜 영상식 전체화면으로 진입함!
+      try {
+        if (stage.requestFullscreen) {
+          await stage.requestFullscreen({ navigationUI: 'hide' }).catch(() => stage.requestFullscreen());
+          nativeOk = true;
+        } else if (stage.webkitRequestFullscreen) {
+          stage.webkitRequestFullscreen();
+          nativeOk = true;
+        }
+      } catch {}
       if (!nativeOk) fakeFs = true;
       // 안드로이드 등 지원 기기에서는 OS 가로 회전 자동 잠금!
       try {
@@ -2813,6 +2809,21 @@
       agy: { dir: 'front' }, reader: { dir: 'front' }, auditor: { dir: 'front' }, inspector: { dir: 'front' },
     };
 
+    // 상태창 글자에서 이모지 빼기(캡틴 지시 2026-11-27). 버튼의 data-q 값(지시 판단용)은 그대로 둔다
+    const EMOJI_RE = /[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}\u{FE0F}\u{200D}\u{20E3}]/gu;
+    function stripEmoji(el) {
+      const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      for (let t = w.nextNode(); t; t = w.nextNode()) {
+        const raw = t.nodeValue, cut = raw.replace(EMOJI_RE, '');
+        if (cut === raw) continue;
+        t.nodeValue = cut.replace(/^\s+/, '').replace(/\s{2,}/g, ' ');
+      }
+      el.querySelectorAll('input[placeholder]').forEach(i => {
+        const v = i.placeholder.replace(EMOJI_RE, '').trim();
+        if (v !== i.placeholder) i.placeholder = v;
+      });
+    }
+
     const vEsc = s =>String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
     function visitBlock() {
       const v = latestVisits;
@@ -3101,7 +3112,7 @@
         </button>`).join('');
       const tabs = [
         { id: 'work', label: '업무' },
-        ...(npcAppr ? [{ id: 'appr', label: '결재', dot: true }] : []),
+        ...(npcAppr ? [{ id: 'appr', label: '결재' }] : []),
         ...(myOrders.length ? [{ id: 'log', label: '지시 기록' }] : []),
       ];
       const firstTab = npcAppr ? 'appr' : 'work';
@@ -3116,14 +3127,13 @@
         <button type="button" class="oa-f-close" data-close aria-label="닫기">×</button>
         <div class="oa-f-left">
           <div class="oa-f-tabs">
-            ${tabs.map(t => `<button type="button" class="oa-f-tab ${t.id === firstTab ? 'on' : ''}" data-tab="${t.id}">${t.label}${t.dot ? '<i></i>' : ''}</button>`).join('')}
+            ${tabs.map(t => `<button type="button" class="oa-f-tab ${t.id === firstTab ? 'on' : ''}" data-tab="${t.id}">${t.label}</button>`).join('')}
           </div>
           <div class="oa-f-panel">
             <div class="oa-f-page" data-page="work" ${firstTab === 'work' ? '' : 'hidden'}>
               <div class="oa-f-card oa-f-say"><span class="oa-f-card-t">${c.name}</span><p>“${dcfg.greet}”</p></div>
               ${visitHtml}
               ${questHtml}
-              ${!visitHtml && !questHtml && myOrders[0] ? `<button type="button" class="oa-f-card oa-f-log" data-open-order="${escHtml(myOrders[0].id)}"><span class="oa-f-card-t">최근 지시</span><span class="oa-f-card-s">${escHtml((myOrders[0].title || myOrders[0].text || '').slice(0, 40))}</span></button>` : ''}
             </div>
             ${npcAppr ? `<div class="oa-f-page" data-page="appr" ${firstTab === 'appr' ? '' : 'hidden'}>${apprHtml}</div>` : ''}
             ${myOrders.length ? `<div class="oa-f-page" data-page="log" hidden>${logHtml}</div>` : ''}
@@ -3143,6 +3153,12 @@
           <input type="text" name="msg" placeholder="${c.name}에게 직접 지시할 내용을 입력하세요…" autocomplete="off" required>
           <button type="submit">📣 지시 전달</button>
         </form>`;
+      stripEmoji(modal);
+      if (!modal._noEmojiObs) {
+        // 나중에 바뀌는 안내 글(지시 전달 결과 등)에도 이모지가 들어가지 않게
+        modal._noEmojiObs = new MutationObserver(() => { if (modal.classList.contains('oa-full')) stripEmoji(modal); });
+        modal._noEmojiObs.observe(modal, { childList: true, subtree: true, characterData: true });
+      }
       modal.querySelectorAll('[data-tab]').forEach(tb => tb.addEventListener('click', () => {
         SFX.tap();
         modal.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('on', x === tb));
