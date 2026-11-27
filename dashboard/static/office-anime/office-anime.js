@@ -292,7 +292,7 @@
       { id: 'conf_mid',        kind: 'seat',  name: '대회의실 의자',      x: 150.6, y: 23.0, headTopY: 14.5, clipY: 21.2, h: 225, facing: 'front', stand: [150.6, 33.5], box: [138, 16, 163, 25], say: '📋 대회의실 자리에서 브리핑 준비 중…' },
       { id: 'vip_sofa',        kind: 'seat',  pose: 'sofa_front', name: 'VIP 접견실 소파',    x: 177.5, y: 24.0, headTopY: 13.8, clipY: 23.8, h: 162, facing: 'front', stand: [177.5, 32.5], box: [169, 15, 186, 25], say: '🛋️ VIP 접견실 소파에서 여유롭게 휴식 중…' },
       { id: 'lounge_top_sofa', kind: 'seat',  pose: 'sofa_front', name: '휴게실 위쪽 소파',   x: 164.5, y: 69.5, headTopY: 58.8, clipY: 69.2, h: 158, facing: 'front', stand: [173.5, 69.5], box: [158, 61, 171, 70], say: '☕ 휴게실 소파에 앉아 잠깐 쉬는 중…' },
-      { id: 'lounge_r_sofa',   kind: 'seat',  pose: 'sofa_left',  name: '휴게실 오른쪽 소파', x: 193.6, y: 76.0, headTopY: 64.6, clipY: 100.0, h: 168, facing: 'west',  stand: [189.2, 81.5], box: [190, 67, 198, 82], say: '🛋️ 휴게실 창가 소파에서 다리 꼬고 휴식 중…' },
+      { id: 'lounge_r_sofa',   kind: 'seat',  pose: 'sofa_left',  name: '휴게실 오른쪽 소파', x: 192.7, y: 76.0, headTopY: 64.6, clipY: 100.0, h: 168, facing: 'west',  stand: [189.2, 81.5], box: [190, 67, 198, 82], say: '🛋️ 휴게실 창가 소파에서 다리 꼬고 휴식 중…' },
       { id: 'lounge_fridge',   kind: 'drink', emote: 'drink',     name: '휴게실 음료 냉장고', x: 186.0, y: 69.2, facing: 'front', stand: [186.0, 69.2], box: [183, 54, 189, 68], say: '🥤 냉장고에서 시원한 캔 음료 꺼내 마시는 중!' },
       { id: 'lounge_snack',    kind: 'drink', emote: 'snack',     name: '휴게실 스낵바',      x: 176.5, y: 69.2, facing: 'front', stand: [176.5, 69.2], box: [170, 54, 183, 68], say: '☕ 스낵바에서 간식이랑 커피 챙기는 중!' },
     ];
@@ -3706,7 +3706,7 @@
         const sofaSpots = [
           { id: 'lounge_top_l',  pose: 'sofa_front', x: 161.2, y: 69.5, headTopY: 58.8, clipY: 69.2, h: 158, facing: 'front', stand: [173.5, 69.5], msg: '🛋️ 휴게실 소파에서 잠깐 쉬고 갈게요~' },
           { id: 'lounge_top_r',  pose: 'sofa_front', x: 167.8, y: 69.5, headTopY: 58.8, clipY: 69.2, h: 158, facing: 'front', stand: [173.5, 69.5], msg: '☕ 소파에 앉으니 피로가 싹 풀리네요!' },
-          { id: 'lounge_r_sofa', pose: 'sofa_left',  x: 193.6, y: 76.0, headTopY: 64.6, clipY: 100.0, h: 168, facing: 'west',  stand: [189.2, 81.5], msg: '🛋️ 창가 소파 자리 너무 편해요~' },
+          { id: 'lounge_r_sofa', pose: 'sofa_left',  x: 192.7, y: 76.0, headTopY: 64.6, clipY: 100.0, h: 168, facing: 'west',  stand: [189.2, 81.5], msg: '🛋️ 창가 소파 자리 너무 편해요~' },
           { id: 'vip_sofa_l',    pose: 'sofa_front', x: 173.0, y: 24.0, headTopY: 13.8, clipY: 23.8, h: 162, facing: 'front', stand: [173.0, 32.5], msg: '📋 VIP 접견실 소파에서 자료 정리 중…' },
         ];
         const freeSpots = sofaSpots.filter(sp => !Object.values(npcs).some(o => o.customSeat && Math.hypot(o.customSeat.x - sp.x, o.customSeat.y - sp.y) < 2.2));
