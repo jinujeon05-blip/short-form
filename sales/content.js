@@ -259,6 +259,8 @@ window.DEMOS = [
     name: "Veteran Hoan Kiem 베테랑", type: { ko: "한식 · 프리미엄 소고기·돼지고기 구이", vi: "Quán nướng Hàn Quốc · Bò Wagyu · Heo Đà Lạt", en: "Korean BBQ · Wagyu · Da Lat pork", zh: "韩式烤肉 · 和牛 · 大叻猪肉", ja: "韓国焼肉・和牛・ダラット豚" } },
   { id: "phothanh", hidden: true, url: "https://phothanh.qrmenuasia.com", shot: "img/demo-phothanh.jpg", qr: "img/qr-phothanh.svg",
     name: "퍼 탄 Phở Thành", type: { ko: "하노이 소고기 쌀국수 · 포장 · 전골 육수", vi: "Phở bò Hà Nội · Mang về · Nước lẩu", en: "Hanoi beef phở · Takeaway · Hotpot broth", zh: "河内牛肉河粉 · 外带 · 火锅汤底", ja: "ハノイの牛肉フォー・テイクアウト・鍋スープ" } },
+  { id: "yosakura", hidden: true, url: "https://yosakura.qrmenuasia.com", shot: "img/demo-yosakura.jpg", qr: "img/qr-yosakura.svg",
+    name: "규카츠 요사쿠라 GYUKATSU YOSAKURA", type: { ko: "일식 · 규카츠 · 장어 히츠마부시", vi: "Món Nhật · Bò chiên xù Gyukatsu · Lươn Hitsumabushi", en: "Japanese · Gyukatsu · Unagi Hitsumabushi", zh: "日料 · 炸牛排 · 鳗鱼三吃", ja: "日本料理・牛カツ・鰻ひつまぶし" } },
 ];
 
 window.T = {

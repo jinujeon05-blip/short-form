@@ -983,6 +983,12 @@ window.STORES = [
     type: { ko: "하노이 소고기 쌀국수 · 포장 · 전골 육수", vi: "Phở bò Hà Nội · Mang về · Nước lẩu", en: "Hanoi beef phở · Takeaway · Hotpot broth", zh: "河内牛肉河粉 · 外带 · 火锅汤底", ja: "ハノイの牛肉フォー・テイクアウト・鍋スープ" },
     keywords: "퍼 탄 퍼탄 Phở Thành Pho Thanh Phở Ông Thành Mai Động 하노이 쌀국수 소고기 쌀국수 퍼 보 Quán Sứ Hanoi beef pho"
   },
+  { id: "yosakura", name: "규카츠 요사쿠라 GYUKATSU YOSAKURA", sub: "규카츠 · 와규 · 장어 히츠마부시 · 연어알 덮밥 정식", url: "https://yosakura.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["japanese"], tags: ["photos"],
+    address: "146 P. Phan Kế Bính, Ngọc Hà, Hà Nội", map: "https://www.google.com/maps/place/GYUKATSU+YOSAKURA/@21.036283,105.8059044,17z/data=!4m6!3m5!1s0x3135ab0075deb3bf:0x83d204af39bf0d52!8m2!3d21.036278!4d105.8084793",
+    type: { ko: "일식 · 규카츠 · 장어 히츠마부시", vi: "Món Nhật · Bò chiên xù Gyukatsu · Lươn Hitsumabushi", en: "Japanese · Gyukatsu · Unagi Hitsumabushi", zh: "日料 · 炸牛排 · 鳗鱼三吃", ja: "日本料理・牛カツ・鰻ひつまぶし" },
+    keywords: "요사쿠라 규카츠 요사쿠라 世桜 夜桜 yosakura gyukatsu gyukatsu yosakura 규카츠 와규 wagyu 장어 히츠마부시 hitsumabushi unagi 장어덮밥 연어알 일식 하노이 ngoc ha phan ke binh bò chiên xù lươn nhật 牛カツ 鰻ひつまぶし 炸牛排 鳗鱼"
+  },
 ];
 window.SI = {
   ko: {

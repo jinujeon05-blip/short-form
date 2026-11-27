@@ -132,6 +132,7 @@ name() {
     pizzapub) echo "피자앤펍" ;;
     veteranhoankiem) echo "베테랑 호안끼엠" ;;
     phothanh) echo "퍼 탄" ;;
+    yosakura) echo "요사쿠라" ;;
     *) echo "$1" ;;
   esac
 }

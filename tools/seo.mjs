@@ -187,6 +187,7 @@ const SHOPS = {
   pizzapub: { type: 'Restaurant', cuisine: ['Pizza', 'Korean', 'Chicken', 'Spaghetti'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   veteranhoankiem: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Wagyu'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   phothanh: { type: 'Restaurant', cuisine: ['Vietnamese', 'Pho', 'Noodles'], country: 'VN', currency: 'VND', og: 'img/sotvang.jpg' },
+  yosakura: { type: 'Restaurant', cuisine: ['Japanese', 'Gyukatsu', 'Unagi'], country: 'VN', currency: 'VND', og: 'img/yosakura-gyukatsu.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
