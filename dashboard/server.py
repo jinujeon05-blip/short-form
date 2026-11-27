@@ -2399,6 +2399,9 @@ class OneServer(ThreadingHTTPServer):
     """윈도우에서 기본값(SO_REUSEADDR)이면 같은 포트에 서버가 두 개 켜져 요청이 아무 쪽으로나 간다(2026-11-23 분짜닥킴 건).
     두 번째로 켜면 포트를 못 잡고 실패하게 한다."""
     allow_reuse_address = False
+    # 연결 대기 줄 기본값 5칸 → https(tailscale serve)는 사무실 그림 1,150장을 한꺼번에 요청해서
+    # 600개 동시 시험에 124개가 끊김(폰 크롬 앱에서 캐릭터 그림이 빠져 사라짐, 2026-11-27). 넉넉히 늘림.
+    request_queue_size = 1024
 
 
 def start_remote():

@@ -100,10 +100,14 @@
 
   function loadAll() {
     const imgs = { walk: {}, masks: {} };
-    const load = (obj, k, url) => new Promise(res => {
+    // 실패한 그림은 3번까지 다시 받음(https 주소에서 한꺼번에 요청하다 일부가 끊겨 캐릭터가 사라진 건, 2026-11-27)
+    const load = (obj, k, url, tries = 0) => new Promise(res => {
       const im = new Image();
       im.onload = () => { obj[k] = im; res(); };
-      im.onerror = () => res();
+      im.onerror = () => {
+        if (tries >= 3) return res();
+        setTimeout(() => load(obj, k, url, tries + 1).then(res), 600 * (tries + 1) + Math.random() * 400);
+      };
       im.src = url;
     });
     const TV_STORES = [
@@ -508,6 +512,7 @@
     // 📱 크롬 안드로이드(삼성 인터넷은 정상)에서 가만히 두면 캐릭터만 안 그려지는 문제(2026-11-27, v=135 배경 고침으로도 안 됨):
     // 크롬은 그림판을 GPU 프로세스에서 그리며 그림 저장 공간 예산이 작아 캐릭터 그림을 빠뜨림 → 크롬 안드로이드만 CPU 그림판 사용.
     // 시험: 주소 뒤 ?canvas=cpu / ?canvas=gpu 로 강제(그 브라우저에 기억됨).
+    // → 진짜 원인은 https 주소에서 그림이 덜 들어온 것(서버 대기 줄)이라 기본은 다시 GPU. 비교 시험용 스위치만 남김.
     const CANVAS_MODE = (() => {
       try {
         const q = new URLSearchParams(location.search).get('canvas');
@@ -515,8 +520,7 @@
         const saved = localStorage.getItem('oa_canvas_mode');
         if (saved === 'cpu' || saved === 'gpu') return saved;
       } catch {}
-      const ua = navigator.userAgent || '';
-      return (/Android/i.test(ua) && /Chrome\//.test(ua) && !/SamsungBrowser/i.test(ua)) ? 'cpu' : 'gpu';
+      return 'gpu';
     })();
     const ctx = canvas.getContext('2d', CANVAS_MODE === 'cpu' ? { willReadFrequently: true } : undefined);
     window.__oaCanvasMode = CANVAS_MODE;
