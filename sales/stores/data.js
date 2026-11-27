@@ -971,6 +971,12 @@ window.STORES = [
     type: { ko: "한국식 피자 · 치킨 · 스파게티 · 떡볶이", vi: "Pizza kiểu Hàn · Gà rán · Mỳ Ý · Tokbokki", en: "Korean-style pizza · Chicken · Spaghetti · Tteokbokki", zh: "韩式披萨 · 炸鸡 · 意面 · 炒年糕", ja: "韓国風ピザ・チキン・スパゲッティ・トッポッキ" },
     keywords: "피자앤펍 피자 앤 펍 PIZZA & PUB Pizza n Pub 빈홈즈 스카이레이크 하노이 한국식 피자 고구마 피자 불고기 피자 치킨 스파게티 떡볶이 피치 세트"
   },
+  { id: "veteranhoankiem", name: "Veteran Hoan Kiem 베테랑", sub: "와규 · 달랏 돼지고기 · 육회 · 냉면 · 숯불구이", url: "https://veteranhoankiem.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean","bbq"], tags: ["photos"],
+    address: "29 Lê Duẩn, Cửa Nam, Hoàn Kiếm, Hà Nội", map: "https://www.google.com/maps/place/Veteran+Restaurant+Hoan+Kiem/@21.0271463,105.8415375,21z",
+    type: { ko: "한식 · 프리미엄 소고기·돼지고기 구이", vi: "Quán nướng Hàn Quốc · Bò Wagyu · Heo Đà Lạt", en: "Korean BBQ · Wagyu · Da Lat pork", zh: "韩式烤肉 · 和牛 · 大叻猪肉", ja: "韓国焼肉・和牛・ダラット豚" },
+    keywords: "베테랑 호안끼엠 Veteran Korean BBQ Hoan Kiem Veteran Restaurant 하노이 한식 고기구이 와규 육회 냉면 달랏 삼겹살 Hà Nội"
+  },
 ];
 window.SI = {
   ko: {

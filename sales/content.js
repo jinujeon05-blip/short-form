@@ -255,6 +255,8 @@ window.DEMOS = [
     name: "OBC 치킨 OBC Chicken", type: { ko: "한식 · 오븐구이 치킨 · 치킨주점", vi: "Gà nướng oven kiểu Hàn · Quán nhậu · Món Hàn", en: "Korean oven-baked chicken · Pub · Korean dishes", zh: "韩式烤箱烤鸡 · 酒馆 · 韩餐", ja: "韓国式オーブン焼きチキン・パブ・韓国料理" } },
   { id: "pizzapub", hidden: true, url: "https://pizzapub.qrmenuasia.com", shot: "img/demo-pizzapub.jpg", qr: "img/qr-pizzapub.svg",
     name: "피자앤펍 PIZZA & PUB", type: { ko: "한국식 피자 · 치킨 · 스파게티 · 떡볶이", vi: "Pizza kiểu Hàn · Gà rán · Mỳ Ý · Tokbokki", en: "Korean-style pizza · Chicken · Spaghetti · Tteokbokki", zh: "韩式披萨 · 炸鸡 · 意面 · 炒年糕", ja: "韓国風ピザ・チキン・スパゲッティ・トッポッキ" } },
+  { id: "veteranhoankiem", hidden: true, url: "https://veteranhoankiem.qrmenuasia.com", shot: "img/demo-veteranhoankiem.jpg", qr: "img/qr-veteranhoankiem.svg",
+    name: "Veteran Hoan Kiem 베테랑", type: { ko: "한식 · 프리미엄 소고기·돼지고기 구이", vi: "Quán nướng Hàn Quốc · Bò Wagyu · Heo Đà Lạt", en: "Korean BBQ · Wagyu · Da Lat pork", zh: "韩式烤肉 · 和牛 · 大叻猪肉", ja: "韓国焼肉・和牛・ダラット豚" } },
 ];
 
 window.T = {

@@ -185,6 +185,7 @@ const SHOPS = {
   highba23: { type: 'BarOrPub', cuisine: ['Pub', 'Craft Beer', 'Korean', 'Western'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   obcchicken: { type: 'Restaurant', cuisine: ['Korean', 'Chicken', 'Pub'], country: 'VN', currency: 'VND', og: 'img/blackalio.jpg' },
   pizzapub: { type: 'Restaurant', cuisine: ['Pizza', 'Korean', 'Chicken', 'Spaghetti'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
+  veteranhoankiem: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Wagyu'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);
