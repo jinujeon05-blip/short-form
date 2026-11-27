@@ -256,9 +256,9 @@
     // 🛋️ 캡틴 신관 인터랙티브 착석·음료 스팟 (회의실 의자 · 상단 VIP 소파 · 휴게실 위/오른쪽 소파 · 스낵바/냉장고!)
     const CAP_SPOTS = [
       { id: 'conf_mid',        kind: 'seat',  name: '대회의실 의자',      x: 150.6, y: 23.0, headTopY: 14.5, clipY: 21.2, h: 225, facing: 'front', stand: [150.6, 33.5], box: [138, 16, 163, 25], say: '📋 대회의실 자리에서 브리핑 준비 중…' },
-      { id: 'vip_sofa',        kind: 'seat',  pose: 'sofa_front', name: 'VIP 접견실 소파',    x: 177.5, y: 23.8, headTopY: 11.4, clipY: 25.0, h: 170, facing: 'front', stand: [177.5, 31.8], box: [169, 15, 186, 25], say: '🛋️ VIP 접견실 소파에서 여유롭게 휴식 중…' },
-      { id: 'lounge_top_sofa', kind: 'seat',  pose: 'sofa_front', name: '휴게실 위쪽 소파',   x: 164.5, y: 69.0, headTopY: 56.6, clipY: 69.5, h: 162, facing: 'front', stand: [157.5, 72.0], box: [158, 61, 171, 70], say: '☕ 휴게실 소파에 앉아 잠깐 쉬는 중…' },
-      { id: 'lounge_r_sofa',   kind: 'seat',  pose: 'sofa_left',  name: '휴게실 오른쪽 소파', x: 193.0, y: 76.5, headTopY: 63.5, clipY: 79.0, h: 172, facing: 'west',  stand: [189.2, 76.5], box: [190, 67, 198, 82], say: '🛋️ 휴게실 창가 소파에서 다리 꼬고 휴식 중…' },
+      { id: 'vip_sofa',        kind: 'seat',  pose: 'sofa_front', name: 'VIP 접견실 소파',    x: 177.5, y: 24.0, headTopY: 13.8, clipY: 23.8, h: 162, facing: 'front', stand: [177.5, 31.8], box: [169, 15, 186, 25], say: '🛋️ VIP 접견실 소파에서 여유롭게 휴식 중…' },
+      { id: 'lounge_top_sofa', kind: 'seat',  pose: 'sofa_front', name: '휴게실 위쪽 소파',   x: 164.5, y: 69.5, headTopY: 58.8, clipY: 69.2, h: 158, facing: 'front', stand: [157.5, 72.0], box: [158, 61, 171, 70], say: '☕ 휴게실 소파에 앉아 잠깐 쉬는 중…' },
+      { id: 'lounge_r_sofa',   kind: 'seat',  pose: 'sofa_left',  name: '휴게실 오른쪽 소파', x: 194.3, y: 78.5, headTopY: 67.3, clipY: 100.0, h: 172, facing: 'west',  stand: [189.2, 76.5], box: [190, 67, 198, 82], say: '🛋️ 휴게실 창가 소파에서 다리 꼬고 휴식 중…' },
       { id: 'lounge_fridge',   kind: 'drink', emote: 'drink',     name: '휴게실 음료 냉장고', x: 186.0, y: 69.2, facing: 'front', stand: [186.0, 69.2], box: [183, 54, 189, 68], say: '🥤 냉장고에서 시원한 캔 음료 꺼내 마시는 중!' },
       { id: 'lounge_snack',    kind: 'drink', emote: 'snack',     name: '휴게실 스낵바',      x: 176.5, y: 69.2, facing: 'front', stand: [176.5, 69.2], box: [170, 54, 183, 68], say: '☕ 스낵바에서 간식이랑 커피 챙기는 중!' },
     ];
@@ -1362,7 +1362,7 @@
       const capSipping = (n.id === 'captain' && n.idleCoffeeSeated && n.mode === 'emote' && n.emote === 'coffee');
       const capStamping = (n.id === 'captain' && n.mode === 'emote' && n.emote === 'stamp' && wset.stamp?.length === 12);
       const isConfSeat = (n.mode === 'conf' && !!CONF_SEATS[n.id]);
-      const isCustomSeat = (n.id === 'captain' && n.mode === 'idle' && !!n.customSeat);
+      const isCustomSeat = (n.id === 'captain' && (n.mode === 'idle' || capSipping) && !!n.customSeat);
       const activeSeat = isCustomSeat ? n.customSeat : (isConfSeat ? CONF_SEATS[n.id] : cfg.seat);
       const activeFacing = isCustomSeat ? (n.customSeat.facing === 'west' ? 'front' : n.customSeat.facing) : (isConfSeat ? CONF_SEATS[n.id].facing : cfg.facing);
       const seated = (n.mode === 'idle' || n.mode === 'work' || isConfSeat || capSipping || capStamping);
@@ -1401,8 +1401,8 @@
         const targetW = targetH * (im.naturalWidth / im.naturalHeight);
 
         ctx.save();
-        // 책상/회의 테이블 상단 경계선(남향) 또는 의자 좌판 하단(북향)에서 깔끔하게 클리핑 (전신 소파 착석은 다리까지 전부 표시!)
-        if (!(isCustomSeat && n.customSeat.pose)) {
+        // 책상/회의 테이블/소파 앞 테이블 경계선에서 깔끔하게 클리핑 (오른쪽 소파처럼 clipY>=99면 전신 표시!)
+        if (!(isCustomSeat && s.clipY >= 99)) {
           ctx.beginPath();
           const maxClip = (seatPose && activeFacing === 'front') ? Math.max(clipY + 14, topY + targetH) : clipY;
           ctx.rect(0, 0, W * 2, maxClip);
@@ -2073,7 +2073,7 @@
       } else if (!cap.path.length && cap.mode === 'walk') {
         // 키를 떼면 그 자리에 자연스럽게 서서 대기 (의자로 텔레포트하지 않음!)
         cap.mode = 'stand';
-      } else if (!briefingActive && modalBack.hidden && !cap.path.length &&
+      } else if (!briefingActive && modalBack.hidden && !cap.path.length && !cap.customSeat &&
                  !(cap.kickUntil && t < cap.kickUntil) &&
                  (cap.mode === 'idle' || cap.mode === 'stand') &&
                  (t - lastCapInput >= 10.0)) {
@@ -2282,14 +2282,14 @@
         bubEls[id].style.transform = bubTf; bubEls[id].style.transformOrigin = bubTf ? '50% 100%' : '';
         tagEls[id].style.left = `${n.x}%`;
         const tagTop = (id === 'captain' && n.mode === 'idle')
-          ? 16.8
+          ? (n.customSeat ? (n.y + 1.4) : 16.8)
           : (n.y + (walking ? 1.4 : (CHARS[id].facing === 'front' ? 4.8 : 1.5)));
         tagEls[id].style.top  = `${tagTop}%`;
         // RPG 퀘스트 마커(! / ?) 머리 위 표시 (말풍선이 없을 때 깔끔하게 통통 뜀 — 착석·회의실 시 실측 headTopY 기준 머리 위로 띄움!)
         const q = activeQuests[id];
         const qEl = questEls[id];
         const standing = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
-        const curSeat = (n.mode === 'conf' && CONF_SEATS[id]) ? CONF_SEATS[id] : CHARS[id]?.seat;
+        const curSeat = (id === 'captain' && n.customSeat) ? n.customSeat : ((n.mode === 'conf' && CONF_SEATS[id]) ? CONF_SEATS[id] : CHARS[id]?.seat);
         const headY = standing ? (n.y - standPct(id)) : (curSeat?.headTopY ?? (n.y - 12.0));
         if (q && qEl && !n.bubble) {
           qEl.hidden = false;
@@ -2307,10 +2307,15 @@
           bubEls[id].className = `oa-bub ${n.bubbleType}`;
           let bx = n.x;
           let by = Math.max(5.0, headY - (standing ? 1.8 : 1.5));
-          // 캡틴 착석 시 말풍선이 캡틴 얼굴·피통 게이지를 가리지 않도록 오른쪽 옆에 깔끔하게 배치!
+          // 캡틴 착석 시 말풍선이 캡틴 얼굴·피통 게이지를 가리지 않도록 배치!
           if (id === 'captain' && !standing) {
-            bx = 60.5;
-            by = 10.2;
+            if (n.customSeat) {
+              bx = n.x;
+              by = Math.max(4.5, headY - 4.4);
+            } else {
+              bx = 60.5;
+              by = 10.2;
+            }
           } else if (briefingActive && id === 'claude' && n.y < 24) {
             // 보고 진행 중 비서실장이 단상 위에 있을 때 좌측 상단 HUD(Lv/퀘스트/전체보기)에 가리지 않게 아래쪽 빈 창가로 배치!
             bx = 34.5;
@@ -2342,7 +2347,9 @@
       // 캡틴 머리 위 RPG HP/MP 피통 게이지 + 실시간 상태 표시 배지 + 타원형 링 메뉴 위치 추적
       if (capHpEl) {
         const capStanding = (cap.mode === 'walk' || cap.mode === 'stand' || cap.mode === 'emote');
-        const hpTop = Math.max(5.0, cap.y - (capStanding ? standPct('captain') + 0.6 : 12.2));
+        const hpTop = (cap.customSeat && !capStanding)
+          ? Math.max(4.5, cap.customSeat.headTopY - 2.6)
+          : Math.max(5.0, cap.y - (capStanding ? standPct('captain') + 0.6 : 12.2));
         capHpEl.style.left = `${cap.x}%`;
         capHpEl.style.top  = `${hpTop}%`;
         if (capStatusEl) {
