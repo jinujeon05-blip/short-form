@@ -505,7 +505,21 @@
         acquireWakeLock();
       }
     });
-    const ctx = canvas.getContext('2d');
+    // 📱 크롬 안드로이드(삼성 인터넷은 정상)에서 가만히 두면 캐릭터만 안 그려지는 문제(2026-11-27, v=135 배경 고침으로도 안 됨):
+    // 크롬은 그림판을 GPU 프로세스에서 그리며 그림 저장 공간 예산이 작아 캐릭터 그림을 빠뜨림 → 크롬 안드로이드만 CPU 그림판 사용.
+    // 시험: 주소 뒤 ?canvas=cpu / ?canvas=gpu 로 강제(그 브라우저에 기억됨).
+    const CANVAS_MODE = (() => {
+      try {
+        const q = new URLSearchParams(location.search).get('canvas');
+        if (q === 'cpu' || q === 'gpu') localStorage.setItem('oa_canvas_mode', q);
+        const saved = localStorage.getItem('oa_canvas_mode');
+        if (saved === 'cpu' || saved === 'gpu') return saved;
+      } catch {}
+      const ua = navigator.userAgent || '';
+      return (/Android/i.test(ua) && /Chrome\//.test(ua) && !/SamsungBrowser/i.test(ua)) ? 'cpu' : 'gpu';
+    })();
+    const ctx = canvas.getContext('2d', CANVAS_MODE === 'cpu' ? { willReadFrequently: true } : undefined);
+    window.__oaCanvasMode = CANVAS_MODE;
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
