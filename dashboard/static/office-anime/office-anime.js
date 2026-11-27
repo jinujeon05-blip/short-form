@@ -106,11 +106,28 @@
       im.onerror = () => res();
       im.src = url;
     });
+    const TV_STORES = [
+      { slug: 'kimshotel',      name: '킴스호텔',     sub: '박닌 · 호텔·한식' },
+      { slug: 'chibaengi',      name: '치뱅이 본점',   sub: '박닌 · 치킨·호프' },
+      { slug: 'phothin',        name: '퍼틴 미딩점',   sub: '하노이 · 쌀국수' },
+      { slug: 'jinmi',          name: '진미식당',     sub: '박닌 · 한식·찌개' },
+      { slug: 'bacninhbanjeom', name: '박닌반점',     sub: '박닌 · 중화요리' },
+      { slug: 'chibaengimin',   name: '치뱅이&민짬뽕', sub: '하노이 · 치킨·짬뽕' },
+      { slug: 'sutkkui',        name: '숯꾸이',       sub: '박닌 · 숯불구이' },
+      { slug: 'gamasot',        name: '가마솥',       sub: '하노이 · 한식당' },
+      { slug: 'eros',           name: 'EROS 바',      sub: '라운지 · 칵테일' },
+      { slug: 'anvoi',          name: 'Ăn Vội',       sub: '꽝응아이 · 비빔면' },
+      { slug: 'baekcheon',      name: '백천화덕아나고', sub: '경산 · 화덕아나고' },
+      { slug: 'biobeauty',      name: '바이오&뷰티',   sub: 'K-뷰티 · 화장품' },
+    ];
+    imgs.tv = {};
     const jobs = [
       load(imgs, 'bg', '/static/office-anime/assets/bg-office.webp?v=hq4k9'),
       load(imgs, 'bgRight', '/static/office-anime/assets/bg-office-right.webp?v=wing6'),
       load(imgs, 'punchBag', '/static/office-anime/assets/masks/punching-bag.webp?v=wing2'),
+      ...TV_STORES.map(st => load(imgs.tv, st.slug, `/static/office-anime/assets/tv/${st.slug}.webp?v=tv1`)),
     ];
+    imgs.tvStores = TV_STORES;
     for (const [id, cfg] of Object.entries(CHARS)) {
       imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], photo: [], review: [], inspect: [], analyze: [], cheer: [], stretch: [], talk: [], thumb: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee', 'kick', 'praise', 'stamp']
@@ -2258,7 +2275,126 @@
         ctx.setTransform(s * z, 0, 0, s * z, (cam.tx || 0) / 100 * W * s + shX, (cam.ty || 0) / 100 * H * s + shY);
       }
       if (imgs.bg) ctx.drawImage(imgs.bg, 0, 0, W, H);
-      if (imgs.bgRight) ctx.drawImage(imgs.bgRight, W, 0, W, H);
+      if (imgs.bgRight) {
+        ctx.drawImage(imgs.bgRight, W, 0, W, H);
+        // 📺 신관 대회의실 대형 TV 디스플레이: 정식 계약 매장 QR메뉴 자동 롤링 쇼케이스!
+        if (imgs.tvStores?.length) {
+          const tx = (143.64 / 100) * W, ty = (11.52 / 100) * H;
+          const tw = ((158.03 - 143.64) / 100) * W, th = ((17.17 - 11.52) / 100) * H;
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(tx, ty, tw, th);
+          ctx.clip();
+          // 1) 애니 오피스 감성 딥 사파이어 + 오로라 웨이브 배경
+          const bgG = ctx.createLinearGradient(tx, ty, tx + tw, ty + th);
+          bgG.addColorStop(0, '#091836');
+          bgG.addColorStop(0.5, '#12316b');
+          bgG.addColorStop(1, '#08142c');
+          ctx.fillStyle = bgG;
+          ctx.fillRect(tx, ty, tw, th);
+          // 은은한 흐르는 빛 웨이브
+          const wShift = Math.sin(t * 0.7) * 24;
+          const aura = ctx.createRadialGradient(tx + tw * 0.35 + wShift, ty + th * 0.6, 6, tx + tw * 0.35 + wShift, ty + th * 0.6, tw * 0.45);
+          aura.addColorStop(0, 'rgba(56,189,248,0.28)');
+          aura.addColorStop(1, 'rgba(56,189,248,0)');
+          ctx.fillStyle = aura;
+          ctx.fillRect(tx, ty, tw, th);
+          // 2) 상단 슬림 LIVE 헤더 바
+          const hdrH = 15;
+          ctx.fillStyle = 'rgba(4,11,26,0.72)';
+          ctx.fillRect(tx, ty, tw, hdrH);
+          ctx.fillStyle = 'rgba(56,189,248,0.32)';
+          ctx.fillRect(tx, ty + hdrH - 0.8, tw, 0.8);
+          // LIVE 깜빡임 점
+          const pulse = 0.55 + 0.45 * Math.sin(t * 4.5);
+          ctx.fillStyle = `rgba(52,211,153,${pulse.toFixed(2)})`;
+          ctx.beginPath(); ctx.arc(tx + 9, ty + hdrH * 0.5, 2.7, 0, Math.PI * 2); ctx.fill();
+          ctx.font = '800 8.5px "Malgun Gothic", sans-serif';
+          ctx.textBaseline = 'middle';
+          ctx.textAlign = 'left';
+          ctx.fillStyle = '#fde047';
+          ctx.fillText('LIVE', tx + 15, ty + hdrH * 0.52);
+          ctx.fillStyle = '#e0f2fe';
+          ctx.fillText('· JINWOO QR MENU 정식 계약 매장 쇼케이스', tx + 39, ty + hdrH * 0.52);
+          ctx.textAlign = 'right';
+          ctx.fillStyle = '#7dd3fc';
+          ctx.fillText(`총 ${imgs.tvStores.length}개 정식 운영`, tx + tw - 7, ty + hdrH * 0.52);
+          // 3) 정식 계약 가게 QR메뉴 카드 무한 부드러운 롤링 마키
+          const stores = imgs.tvStores;
+          const cardW = 116, cardH = th - hdrH - 8, gap = 8;
+          const step = cardW + gap, totalW = stores.length * step;
+          const scrollX = (t * 26) % totalW;
+          const cy = ty + hdrH + 4;
+          const startIdx = Math.floor(scrollX / step);
+          for (let k = -1; k <= Math.ceil(tw / step) + 1; k++) {
+            const idx = ((startIdx + k) % stores.length + stores.length) % stores.length;
+            const st = stores[idx];
+            const cx = tx + (startIdx + k) * step - scrollX;
+            if (cx + cardW < tx - 4 || cx > tx + tw + 4) continue;
+            // 카드 글래스 배경 + 테두리
+            ctx.save();
+            ctx.beginPath();
+            ctx.roundRect(cx, cy, cardW, cardH, 6);
+            const cG = ctx.createLinearGradient(cx, cy, cx, cy + cardH);
+            cG.addColorStop(0, 'rgba(30,58,138,0.82)');
+            cG.addColorStop(1, 'rgba(15,23,42,0.92)');
+            ctx.fillStyle = cG;
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(147,197,253,0.48)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.clip();
+            // 좌측 가게 대표 음식/간판 사진
+            const phW = 54, phH = cardH - 6;
+            const pim = imgs.tv?.[st.slug];
+            if (pim) {
+              ctx.save();
+              ctx.beginPath(); ctx.roundRect(cx + 3, cy + 3, phW, phH, 4); ctx.clip();
+              ctx.drawImage(pim, cx + 3, cy + 3, phW, phH);
+              ctx.restore();
+            }
+            // 우측 정식 배지 + 가게명 + 업종 + 미니 QR 아이콘
+            const rx = cx + phW + 7;
+            ctx.fillStyle = 'rgba(250,204,21,0.22)';
+            ctx.beginPath(); ctx.roundRect(rx, cy + 5, 24, 10, 3); ctx.fill();
+            ctx.strokeStyle = 'rgba(250,204,21,0.75)'; ctx.lineWidth = 0.7; ctx.stroke();
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.font = '800 6.8px "Malgun Gothic", sans-serif';
+            ctx.fillStyle = '#fef08a';
+            ctx.fillText('정식', rx + 12, cy + 10.3);
+            ctx.textAlign = 'left';
+            ctx.font = '800 8.8px "Malgun Gothic", sans-serif';
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(st.name.slice(0, 7), rx, cy + 25);
+            ctx.font = '600 6.8px "Malgun Gothic", sans-serif';
+            ctx.fillStyle = '#93c5fd';
+            ctx.fillText(st.sub.slice(0, 9), rx, cy + 37);
+            // 우측 하단 미니 QR 코드 심볼
+            const qx = cx + cardW - 14, qy = cy + cardH - 14;
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath(); ctx.roundRect(qx, qy, 10.5, 10.5, 1.5); ctx.fill();
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(qx + 1.5, qy + 1.5, 3, 3);
+            ctx.fillRect(qx + 6, qy + 1.5, 3, 3);
+            ctx.fillRect(qx + 1.5, qy + 6, 3, 3);
+            ctx.fillRect(qx + 6, qy + 6, 1.5, 1.5);
+            ctx.fillRect(qx + 7.5, qy + 7.5, 1.5, 1.5);
+            ctx.restore();
+          }
+          // 4) 4K 모니터 유리 반사광 + 베젤 안쪽 그림자 (애니 배경과 자연스럽게 일체화!)
+          const glare = ctx.createLinearGradient(tx, ty, tx + tw * 0.55, ty + th);
+          glare.addColorStop(0, 'rgba(255,255,255,0.13)');
+          glare.addColorStop(0.35, 'rgba(255,255,255,0.03)');
+          glare.addColorStop(0.36, 'rgba(255,255,255,0)');
+          glare.addColorStop(1, 'rgba(0,0,0,0.14)');
+          ctx.fillStyle = glare;
+          ctx.fillRect(tx, ty, tw, th);
+          ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(tx + 1, ty + 1, tw - 2, th - 2);
+          ctx.restore();
+        }
+      }
 
       // 바닥 클릭 이동 시 황금 링 피드백
       if (clickRing) {
