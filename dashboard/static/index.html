@@ -4,14 +4,45 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jinwoo 에이전트</title>
+<!-- 폰 홈 화면 앱(주소창 없이) · 아이콘 · 시작 화면 (2026-11-27 캡틴 지시) -->
+<link rel="manifest" href="/static/manifest.json" crossorigin="use-credentials">
+<meta name="theme-color" content="#F2552C">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Jinwoo">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="/static/app-icon/favicon-64.png">
+<link rel="apple-touch-icon" href="/static/app-icon/apple-touch-icon.png">
+<style>
+#splash{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+background:radial-gradient(circle at 30% 20%,#FF8A1F 0%,#F2552C 45%,#E0283A 100%);color:#fff;transition:opacity .45s ease,visibility .45s;
+font-family:system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif}
+#splash img{width:132px;height:132px;filter:drop-shadow(0 10px 24px rgba(0,0,0,.28));animation:sp-pop .7s cubic-bezier(.2,1.4,.4,1) both}
+#splash b{font-size:24px;letter-spacing:.5px;animation:sp-up .6s .25s ease both}
+#splash small{font-size:13px;opacity:.85;animation:sp-up .6s .4s ease both}
+#splash i{display:flex;gap:6px}#splash i span{width:7px;height:7px;border-radius:50%;background:#fff;opacity:.4;animation:sp-dot 1s infinite}
+#splash i span:nth-child(2){animation-delay:.15s}#splash i span:nth-child(3){animation-delay:.3s}
+#splash.out{opacity:0;visibility:hidden}html.nosplash #splash{display:none}
+@keyframes sp-pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes sp-up{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+@keyframes sp-dot{50%{opacity:1;transform:translateY(-4px)}}
+</style>
+<script>
+// 시작 화면은 폰(손가락 화면)이나 홈 화면 앱으로 열 때, 한 번 열 때마다 1번만 보여 준다. PC 브라우저에선 안 보임.
+(function(){var show=false;try{show=(matchMedia('(display-mode: standalone)').matches||navigator.standalone||matchMedia('(pointer: coarse)').matches)&&!sessionStorage.getItem('splashSeen');sessionStorage.setItem('splashSeen','1')}catch(e){}
+if(!show){document.documentElement.className+=' nosplash';return}
+var t0=Date.now();function hide(){var s=document.getElementById('splash');if(!s)return;setTimeout(function(){s.classList.add('out');setTimeout(function(){s.remove()},500)},Math.max(0,1300-(Date.now()-t0)))}
+addEventListener('load',hide);setTimeout(hide,3500)})();
+</script>
 <link rel="stylesheet" href="/static/style.css?v=visit1">
 <link rel="stylesheet" href="/static/builder.css">
 <link rel="stylesheet" href="/static/sales.css">
 <link rel="stylesheet" href="/static/office-anime/office-anime.css?v=33">
 </head>
 <body>
+<div id="splash" aria-hidden="true"><img src="/static/app-icon/splash.png" alt=""><b>Jinwoo 에이전트</b><small>AI 팀 사무실 여는 중</small><i><span></span><span></span><span></span></i></div>
 <header class="top">
-  <div class="brand"><span class="logo">J</span><div><b>Jinwoo 에이전트</b><small id="updated">불러오는 중…</small></div></div>
+  <div class="brand"><img class="logo-img" src="/static/app-icon/favicon-64.png" alt="Jinwoo 에이전트" width="38" height="38" style="border-radius:11px;flex:none"><div><b>Jinwoo 에이전트</b><small id="updated">불러오는 중…</small></div></div>
   <div class="topr"><div class="counts" id="counts"></div><button type="button" class="btn-bell" id="notify-btn" title="PC · 휴대폰(텔레그램) 알림 설정">🔔 알림</button><details class="qmini" id="quota" aria-label="Claude 사용량"></details></div>
 </header>
 

@@ -2302,7 +2302,10 @@ def tailscale_ips():
 
 
 PIN_PAGE = """<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Jinwoo 에이전트</title><style>body{font-family:system-ui,sans-serif;background:#f3f4f6;margin:0;display:grid;place-items:center;min-height:100vh}
+<title>Jinwoo 에이전트</title><link rel="manifest" href="/static/manifest.json"><meta name="theme-color" content="#F2552C">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Jinwoo">
+<link rel="icon" type="image/png" href="/static/app-icon/favicon-64.png"><link rel="apple-touch-icon" href="/static/app-icon/apple-touch-icon.png">
+<style>body{font-family:system-ui,sans-serif;background:#f3f4f6;margin:0;display:grid;place-items:center;min-height:100vh}
 form{background:#fff;padding:24px;border-radius:14px;box-shadow:0 2px 12px #0001;width:min(320px,90vw)}h1{font-size:18px;margin:0 0 6px}
 p{color:#666;font-size:13px;margin:0 0 14px}input,button{width:100%;box-sizing:border-box;font-size:18px;padding:10px;border-radius:8px}
 input{border:1px solid #ccc;margin-bottom:10px;letter-spacing:4px;text-align:center}button{border:0;background:#2563eb;color:#fff}#e{color:#c00}</style>
@@ -2324,6 +2327,9 @@ class RemoteHandler(Handler):
             self.send_error(403)
             return False
         p = urlparse(self.path).path
+        # 앱 아이콘·홈 화면 설정은 비밀이 아니고, 폰이 쿠키 없이 받아 가므로 PIN 없이 준다(2026-11-27)
+        if self.command == "GET" and (p == "/static/manifest.json" or re.fullmatch(r"/static/app-icon/[\w.-]+\.png", p)):
+            return True
         if self.authed():
             if self.command == "POST" and p == "/pin":  # 예전 PIN 화면에서 또 보낸 경우
                 self.go("/")
