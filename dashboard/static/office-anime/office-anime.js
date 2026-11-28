@@ -946,17 +946,21 @@
       step:      () => { tone(190, 0.03, 'sine', 0.018); },
     };
 
-    // 사무실 BGM 1곡 반복 재생 (2026-11-24 캡틴 지시: 'adventure tale' 1곡만, mp3는 모든 브라우저 재생)
-    const BGM_TRACKS = ['bgm-adventure'];
-    const bgmBufs = [null];
-    let bgmIdx = 0, bgmSrc = null, bgmGain = null, bgmLoading = false;
-    async function loadBgmTrack(c, idx) {
-      if (bgmBufs[idx]) return bgmBufs[idx];
+    // 사무실 BGM (2026-11-28 캡틴 지시):
+    // - 업무 지시·진행 중(realBusySet.size > 0): '퀘스트-바쁜 업무 모드'(bgm-quest-busy) 자동 반복 재생
+    // - 평상시·업무 종료 후(realBusySet.size === 0): '일상업무 모드'(bgm-daily-1) ↔ '일상업무 모드2'(bgm-daily-2) 번갈아 재생
+    const BGM_DAILY_TRACKS = ['bgm-daily-1', 'bgm-daily-2'];
+    const BGM_BUSY_TRACK = 'bgm-quest-busy';
+    const bgmBufs = {};
+    let bgmDailyIdx = 0, bgmMode = 'daily', bgmSrc = null, bgmGain = null, bgmSeq = 0;
+    let bgmUserMuted = false, lastWorkBusy = false;
+    async function loadBgmTrack(c, key) {
+      if (bgmBufs[key]) return bgmBufs[key];
       try {
-        const res = await fetch(`/static/office-anime/assets/${BGM_TRACKS[idx]}.mp3?v=1`);
+        const res = await fetch(`/static/office-anime/assets/${key}.mp3?v=2`);
         if (!res.ok) return null;
-        bgmBufs[idx] = await c.decodeAudioData(await res.arrayBuffer());
-        return bgmBufs[idx];
+        bgmBufs[key] = await c.decodeAudioData(await res.arrayBuffer());
+        return bgmBufs[key];
       } catch { return null; }
     }
     function stopBgmNode() {
@@ -975,36 +979,69 @@
         setTimeout(() => { try { oldSrc.stop(); oldSrc.disconnect(); } catch {} }, 280);
       }
     }
-    async function playBgmAt(idx) {
+    async function playBgmMode(mode, forceRestart = false) {
       if (!bgmOn) return;
+      if (!forceRestart && bgmSrc && bgmMode === mode) return;
       const c = ensureAudio();
-      if (!c || bgmLoading) return;
-      bgmLoading = true;
-      const buf = await loadBgmTrack(c, idx);
-      bgmLoading = false;
-      if (!buf || !bgmOn) return;
+      if (!c) return;
+      const mySeq = ++bgmSeq;
+      bgmMode = mode;
+      const key = (mode === 'busy') ? BGM_BUSY_TRACK : BGM_DAILY_TRACKS[bgmDailyIdx % BGM_DAILY_TRACKS.length];
+      const buf = await loadBgmTrack(c, key);
+      if (!buf || !bgmOn || mySeq !== bgmSeq) return;
       stopBgmNode();
       const src = c.createBufferSource();
       src.buffer = buf;
-      src.loop = true;
+      src.loop = (mode === 'busy');
       const g = c.createGain();
       const now = c.currentTime;
+      const targetVol = document.hidden ? 0.0001 : (danceSrc ? 0.05 : 0.42);
       g.gain.setValueAtTime(0.0001, now);
-      g.gain.linearRampToValueAtTime(0.42, now + 0.45);
+      g.gain.linearRampToValueAtTime(targetVol, now + 0.45);
       src.connect(g); g.connect(c.destination);
+      if (mode === 'daily') {
+        src.onended = () => {
+          if (bgmSrc === src && bgmOn && bgmMode === 'daily') {
+            bgmDailyIdx = (bgmDailyIdx + 1) % BGM_DAILY_TRACKS.length;
+            playBgmMode('daily', true);
+          }
+        };
+      }
       src.start(0);
       bgmSrc = src; bgmGain = g;
-      if (bgmBtn) bgmBtn.textContent = '🎵 BGM 켜짐';
+      if (bgmBtn) {
+        bgmBtn.textContent = mode === 'busy'
+          ? '🔥 업무 BGM'
+          : `🎵 일상 BGM ${(bgmDailyIdx % BGM_DAILY_TRACKS.length) + 1}`;
+      }
+    }
+    function syncBgmByWork(isBusy) {
+      const wantMode = isBusy ? 'busy' : 'daily';
+      // 업무 지시 시작(평상시 → 바쁜 업무 전환) 시 사용자가 직접 끈 게 아니면 퀘스트-바쁜 업무 모드 자동 재생!
+      if (isBusy && !lastWorkBusy && !bgmOn && !bgmUserMuted) {
+        bgmOn = true;
+        bgmBtn?.classList.toggle('on', true);
+        playBgmMode('busy', true);
+      } else if (bgmOn && wantMode !== bgmMode) {
+        if (wantMode === 'daily' && bgmMode === 'busy') {
+          bgmDailyIdx = (bgmDailyIdx + 1) % BGM_DAILY_TRACKS.length;
+        }
+        playBgmMode(wantMode, true);
+      }
+      lastWorkBusy = isBusy;
     }
     function toggleBgm() {
       bgmOn = !bgmOn;
       bgmBtn?.classList.toggle('on', bgmOn);
       if (!bgmOn) {
+        bgmUserMuted = true;
+        bgmSeq++;
         stopBgmNode();
         if (bgmBtn) bgmBtn.textContent = '🎵 BGM';
         return;
       }
-      playBgmAt(bgmIdx);
+      bgmUserMuted = false;
+      playBgmMode(realBusySet.size > 0 ? 'busy' : 'daily', true);
     }
     // 캐릭터별 7.20초 전용 아이돌 댄스 음악 재생 + 재생 중 BGM 자동 덕킹(볼륨 낮춤 → 끝나면 복원)
     const danceBufs = {};
@@ -3912,6 +3949,7 @@
         for (const d of (o.active || [])) if (DASH_TO_OA[d]) busy.add(DASH_TO_OA[d]);
       }
       realBusySet = busy;
+      syncBgmByWork(busy.size > 0);
       if (!briefingActive) {
         for (const id of busy) {
           const n = npcs[id], c = CHARS[id];
