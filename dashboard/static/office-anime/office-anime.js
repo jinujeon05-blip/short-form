@@ -803,6 +803,7 @@
       if (stopCurrent && voiceSrc) {
         try { voiceSrc.onended = null; voiceSrc.stop(); } catch {}
         voiceSrc = null; voiceBusy = false;
+        updateBgmDuck(0.25);
       }
     }
     async function pumpVoiceQueue() {
@@ -813,6 +814,7 @@
       const buf = await getClip(next.path);
       if (!buf || !sfxOn) {
         voiceBusy = false;
+        updateBgmDuck(0.25);
         try { next.onEnd?.(); } catch {}
         if (voiceQueue.length && sfxOn) pumpVoiceQueue();
         return;
@@ -820,17 +822,21 @@
       const src = await playClip(next.path, 1.0);
       if (!src) {
         voiceBusy = false;
+        updateBgmDuck(0.25);
         try { next.onEnd?.(); } catch {}
         if (voiceQueue.length && sfxOn) pumpVoiceQueue();
         return;
       }
       voiceSrc = src;
+      updateBgmDuck(0.12);
       src.onended = () => {
         if (voiceSrc === src) voiceSrc = null;
         voiceBusy = false;
         try { next.onEnd?.(); } catch {}
         if (voiceQueue.length && sfxOn) {
           voiceGapTimer = setTimeout(() => { voiceGapTimer = null; pumpVoiceQueue(); }, 220);
+        } else {
+          updateBgmDuck(0.32);
         }
       };
     }
@@ -979,6 +985,16 @@
         setTimeout(() => { try { oldSrc.stop(); oldSrc.disconnect(); } catch {} }, 280);
       }
     }
+    function getTargetBgmVol() {
+      if (document.hidden) return 0.0001;
+      if (danceSrc) return 0.05;
+      if (voiceSrc) return 0.14; // 직원·캡틴·VIP 목소리 재생 중 BGM 부드럽게 덕킹!
+      return 0.42;
+    }
+    function updateBgmDuck(tc = 0.18) {
+      if (!bgmGain || !actx || !bgmOn) return;
+      try { bgmGain.gain.setTargetAtTime(getTargetBgmVol(), actx.currentTime, tc); } catch {}
+    }
     async function playBgmMode(mode, forceRestart = false) {
       if (!bgmOn) return;
       if (!forceRestart && bgmSrc && bgmMode === mode) return;
@@ -995,7 +1011,7 @@
       src.loop = (mode === 'busy');
       const g = c.createGain();
       const now = c.currentTime;
-      const targetVol = document.hidden ? 0.0001 : (danceSrc ? 0.05 : 0.42);
+      const targetVol = getTargetBgmVol();
       g.gain.setValueAtTime(0.0001, now);
       g.gain.linearRampToValueAtTime(targetVol, now + 0.45);
       src.connect(g); g.connect(c.destination);
@@ -1048,9 +1064,7 @@
     let danceSrc = null, danceThemeIdx = 0;
     function stopDanceMusic() {
       if (danceSrc) { try { danceSrc.onended = null; danceSrc.stop(); danceSrc.disconnect(); } catch {} danceSrc = null; }
-      if (bgmGain && actx && bgmOn) {
-        try { bgmGain.gain.setTargetAtTime(0.42, actx.currentTime, 0.25); } catch {}
-      }
+      updateBgmDuck(0.25);
     }
     async function playDanceMusic(who = 'claude') {
       if (!sfxOn) return;
@@ -1085,9 +1099,7 @@
       src.connect(g); g.connect(c.destination);
       src.onended = () => {
         if (danceSrc === src) danceSrc = null;
-        if (bgmGain && actx && bgmOn) {
-          try { bgmGain.gain.setTargetAtTime(0.42, actx.currentTime, 0.28); } catch {}
-        }
+        updateBgmDuck(0.28);
       };
       src.start(0);
       danceSrc = src;
@@ -3904,24 +3916,30 @@
       briefTimers.push(setTimeout(() => {
         const nowS = performance.now() / 1000;
         const allStaff = ['claude', ...staffIds];
+        const midIdx = Math.floor(staffIds.length / 2);
+        const lastIdx = staffIds.length - 1;
         for (const sid of allStaff) {
           const n = npcs[sid];
           n.path = []; n.onArrive = null;
           const idx = staffIds.indexOf(sid);
           const stagger = sid === 'claude' ? 0 : (idx >= 0 ? idx * 0.045 : 0);
+          // 말풍선 겹침 방지: 단상 비서실장 + 대열 중앙 대표 1명 총 2곳에만 깔끔하게 표시!
+          const endBub = (sid === 'claude') ? '🙇 수고하셨습니다, 캡틴!'
+            : (idx === midIdx) ? '🙇 네, 알겠습니다 캡틴!'
+            : '';
           if (imgs.walk[sid]?.bow?.length === 12) {
             n.dir = (sid === 'claude') ? 'east' : 'back';
             n.mode = 'emote'; n.emote = 'bow'; n.emoteLoop = false;
             n.emoteStart = nowS + stagger;
-            n.bubble = sid === 'claude' ? '🙇 수고하셨습니다, 캡틴!' : '🙇 네, 알겠습니다 캡틴!';
-            n.bubbleType = 'ok';
+            n.bubble = endBub;
+            n.bubbleType = endBub ? 'ok' : '';
           } else {
             n.mode = 'stand';
             n.dir = (sid === 'claude') ? 'east' : 'back';
             n.bowStart = nowS + stagger;
             n.bowUntil = n.bowStart + 1.95;
-            n.bubble = '🙇 네, 알겠습니다 캡틴!';
-            n.bubbleType = 'ok';
+            n.bubble = endBub;
+            n.bubbleType = endBub ? 'ok' : '';
           }
         }
         voice('claude', 'greet', 0.35);
