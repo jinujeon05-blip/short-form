@@ -269,6 +269,8 @@ window.DEMOS = [
     name: "퍼 꾸언 보 Phở quân bò", type: { ko: "베트남식 · 소고기 쌀국수 · 와인 스튜", vi: "Phở bò · Phở sốt vang · Lẩu bò", en: "Vietnamese beef phở · Red-wine beef stew", zh: "越南牛肉河粉 · 红酒炖牛肉", ja: "ベトナム牛肉フォー・赤ワイン煮込み" } },
   { id: "zijincheng", hidden: true, url: "https://zijincheng.qrmenuasia.com", shot: "img/demo-zijincheng.jpg", qr: "img/qr-zijincheng.svg",
     name: "하노이 자금성 Jageumseong", type: { ko: "한국식 중화요리 · 짜장면 · 짬뽕 · 탕수육", vi: "Món Hoa kiểu Hàn · Mì tương đen · Mì hải sản cay · Thịt chiên chua ngọt", en: "Korean-Chinese restaurant · Jajangmyeon · Jjamppong · Tangsuyuk", zh: "韩式中餐 · 炸酱面 · 炒码面 · 糖醋肉", ja: "韓国式中華 · ジャジャン麺 · チャンポン · 酢豚" } },
+  { id: "midam", hidden: true, url: "https://midam.qrmenuasia.com", shot: "img/demo-midam.jpg", qr: "img/qr-midam.svg",
+    name: "미담 MI DAM", type: { ko: "한식 · 숯불구이 · 삼겹살 · 전골", vi: "Nhà hàng Hàn Quốc · Thịt nướng · Ba chỉ · Lẩu", en: "Korean BBQ · Pork belly · Hot pot", zh: "韩式烤肉 · 五花肉 · 火锅", ja: "韓国焼肉・サムギョプサル・鍋" } },
 ];
 
 window.T = {

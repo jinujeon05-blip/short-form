@@ -1013,6 +1013,12 @@ window.STORES = [
     type: { ko: "한국식 중화요리 · 짜장면 · 짬뽕 · 탕수육", vi: "Món Hoa kiểu Hàn · Mì tương đen · Mì hải sản cay · Thịt chiên chua ngọt", en: "Korean-Chinese restaurant · Jajangmyeon · Jjamppong · Tangsuyuk", zh: "韩式中餐 · 炸酱面 · 炒码面 · 糖醋肉", ja: "韓国式中華 · ジャジャン麺 · チャンポン · 酢豚" },
     keywords: "하노이 자금성 자금성 Jageumseong Zijincheng Hanoi 한국식 중식 짜장면 짬뽕 탕수육 반반 코스 Tây Hồ Tây Xuân Đỉnh"
   },
+  { id: "midam", name: "미담 MI DAM", sub: "삼겹살 · 소고기구이 · 무제한 돼지갈비 · 찌개·전골", url: "https://midam.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bbq","korean"], tags: ["photos"],
+    address: "LK.A02 Embassy Garden, Xuân Tảo, Bắc Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/Mi+dam+-+%EB%AF%B8%EB%8B%B4/@21.0640218,105.7981719,21z/data=!4m6!3m5!1s0x3135ab003072a107:0xfee5b85265902639!8m2!3d21.0640218!4d105.7981719!16s%2Fg%2F11x7xgwfch",
+    type: { ko: "한식 · 숯불구이 · 삼겹살 · 전골", vi: "Nhà hàng Hàn Quốc · Thịt nướng · Ba chỉ · Lẩu", en: "Korean BBQ · Pork belly · Hot pot", zh: "韩式烤肉 · 五花肉 · 火锅", ja: "韓国焼肉・サムギョプサル・鍋" },
+    keywords: "미담 Mi dam 미담 한식 숯불구이 삼겹살 무제한 돼지갈비 김치찌개 전골 Embassy Garden Bắc Từ Liêm 하노이 Hà Nội 한국 고기집"
+  },
 ];
 window.SI = {
   ko: {

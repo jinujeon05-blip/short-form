@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://midam.qrmenuasia.com/sitemap.xml
