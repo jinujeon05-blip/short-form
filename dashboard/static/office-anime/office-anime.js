@@ -1148,6 +1148,7 @@
                <div class="oa-bub" data-bub="${id}" hidden></div>`
       ).join('') +
       `<button type="button" class="oa-cap-status" data-cap-status hidden title="캡틴 실시간 업무·결재 상태 (클릭 시 바로 이동)"></button>
+       <button type="button" class="oa-near-btn" data-cap-near hidden title="가까운 장소에서 행동 실행 (단축키 F)"></button>
        <div class="oa-cap-hp" data-cap-hp title="클로드 잔여량 · 위: 5시간(녹색) / 아래: 주간(파랑)">
          <div class="oa-hp-track"><div class="oa-hp-fill h5" data-hp-5h style="width:100%"></div></div>
          <div class="oa-hp-track"><div class="oa-hp-fill wk" data-hp-wk style="width:100%"></div></div>
@@ -1172,6 +1173,50 @@
       setTimeout(() => { flashFxEl.hidden = true; flashFxEl.classList.remove('pop'); }, 450);
     }
     const capStatusEl = hud.querySelector('[data-cap-status]');
+    const capNearEl = hud.querySelector('[data-cap-near]');
+    let nearAction = null;
+    const NEAR_ASK = {
+      conf_mid:        '대회의실 의자에 앉을까요?',
+      vip_sofa:        'VIP 소파에 앉을까요?',
+      lounge_top_sofa: '휴게실 소파에 앉을까요?',
+      lounge_r_sofa:   '창가 소파에 앉을까요?',
+      lounge_fridge:   '냉장고 음료 마실까요?',
+      lounge_snack:    '스낵바 커피·간식 챙길까요?',
+    };
+    function findNearestCapAction() {
+      const cap = npcs.captain;
+      if (!cap || briefingActive || !modalBack.hidden || capRingOpen) return null;
+      if (cap.mode === 'emote' || (cap.kickUntil && performance.now() / 1000 < cap.kickUntil)) return null;
+      const cands = [];
+      for (const sp of CAP_SPOTS) {
+        if (cap.customSeat && cap.customSeat.id === sp.id) continue;
+        const dStand = Math.hypot(cap.x - sp.stand[0], cap.y - sp.stand[1]);
+        const dSpot  = Math.hypot(cap.x - sp.x, cap.y - sp.y);
+        const d = Math.min(dStand, dSpot);
+        const maxR = (sp.kind === 'drink') ? 8.2 : 11.5;
+        if (d <= maxR) cands.push({ id: sp.id, d, label: NEAR_ASK[sp.id] || `${sp.name} 이용할까요?`, run: () => goCaptainSpot(sp) });
+      }
+      // 복싱 짐 샌드백 근접 시
+      const dBag = Math.hypot(cap.x - BAG.cx, cap.y - BAG.cy);
+      if (dBag <= 12.0) cands.push({ id: 'punch_bag', d: dBag, label: '샌드백 타격할까요?', run: () => playCaptainAction('punch') });
+      // 본관 캡틴 대표석 근접 시 (서 있을 때만)
+      if (cap.mode !== 'idle') {
+        const dDesk = Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]);
+        if (dDesk <= 9.0) cands.push({ id: 'cap_desk', d: dDesk, label: '대표석에 앉을까요?', run: () => sitCaptainBack() });
+      }
+      if (!cands.length) return null;
+      cands.sort((a, b) => a.d - b.d);
+      return cands[0];
+    }
+    capNearEl?.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!nearAction) return;
+      SFX.tap();
+      const fn = nearAction.run;
+      nearAction = null;
+      capNearEl.hidden = true;
+      fn();
+    });
     const capHpEl = hud.querySelector('[data-cap-hp]');
     const capHp5h = hud.querySelector('[data-hp-5h]');
     const capHpWk = hud.querySelector('[data-hp-wk]');
@@ -2234,6 +2279,13 @@
       } else if (k === '7') {
         e.preventDefault();
         playCaptainAction('combo');
+      } else if (k === 'f' && nearAction) {
+        e.preventDefault();
+        SFX.tap();
+        const fn = nearAction.run;
+        nearAction = null;
+        if (capNearEl) capNearEl.hidden = true;
+        fn();
       }
     });
     window.addEventListener('keyup', e => {
@@ -2802,6 +2854,23 @@
         if (capStatusEl) {
           capStatusEl.style.left = `${cap.x}%`;
           capStatusEl.style.top  = `${Math.max(0.8, hpTop - 4.0)}%`;
+        }
+        if (capNearEl) {
+          const found = findNearestCapAction();
+          if (found) {
+            if (!nearAction || nearAction.id !== found.id) {
+              capNearEl.innerHTML = `<span class="oa-near-k">F</span><span class="oa-near-t">${found.label}</span>`;
+            }
+            nearAction = found;
+            capNearEl.hidden = false;
+            const flipLeft = (cap.x > 184) || (cap.x > 84 && cap.x < 100);
+            capNearEl.classList.toggle('flip-l', flipLeft);
+            capNearEl.style.left = `${cap.x + (flipLeft ? -2.8 : 2.8)}%`;
+            capNearEl.style.top  = `${Math.max(6.0, cap.y - 10.5)}%`;
+          } else {
+            nearAction = null;
+            capNearEl.hidden = true;
+          }
         }
         if (capRingEl) {
           capRingEl.style.left = `${cap.x}%`;
@@ -3446,6 +3515,7 @@
         if (hitSpot) {
           SFX.walkClick();
           clickRing = { x: hitSpot.stand[0], y: hitSpot.stand[1], born: performance.now() };
+          spawnBurst(hitSpot.stand[0], hitSpot.stand[1], `${hitSpot.name} 선택`, 0);
           goCaptainSpot(hitSpot);
           return;
         }

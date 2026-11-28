@@ -202,6 +202,15 @@ body.oa-fs-lock > *:not(.oa-stage) { display: none !important; }
 .oa-cap-status.st-wait { background: linear-gradient(135deg, #dc2626, #f59e0b); border-color: #fef08a; color: #fff; box-shadow: 0 0 12px rgba(245,158,11,0.75); animation: oaPulse 1.3s infinite; }
 .oa-cap-status.st-work { background: linear-gradient(135deg, #0284c7, #2563eb); border-color: #7dd3fc; color: #fff; box-shadow: 0 0 10px rgba(56,189,248,0.65); }
 .oa-cap-status.st-done { background: linear-gradient(135deg, #16a34a, #059669); border-color: #86efac; color: #fff; }
+/* 캡틴 근접 장소 상호작용 질문 버튼 (소파·스낵바·냉장고·샌드백·대표석 가까이 가면 자동 표시!) */
+.oa-near-btn { position: absolute; transform: translate(0, -50%); z-index: 15; pointer-events: auto; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; padding: 2.5px 7px 2.5px 4.5px; border-radius: 999px; border: 1.4px solid #fde047; background: linear-gradient(135deg, rgba(15,23,42,0.94), rgba(30,41,59,0.96)); color: #fffbeb; font: 800 clamp(7px, 0.74cqw, 9.2px)/1.2 "Malgun Gothic", sans-serif; white-space: nowrap; box-shadow: 0 3px 10px rgba(0,0,0,0.52), 0 0 10px rgba(250,204,21,0.42); backdrop-filter: blur(6px); animation: oaNearBob 1.8s ease-in-out infinite; }
+.oa-near-btn.flip-l { transform: translate(-100%, -50%); }
+.oa-near-btn:hover { background: linear-gradient(135deg, #1d4ed8, #1e40af); border-color: #fef08a; box-shadow: 0 4px 14px rgba(37,99,235,0.65), 0 0 12px rgba(250,204,21,0.75); }
+.oa-near-btn:active { transform: translate(0, -50%) scale(0.95); }
+.oa-near-btn.flip-l:active { transform: translate(-100%, -50%) scale(0.95); }
+.oa-near-btn[hidden] { display: none; }
+.oa-near-k { display: inline-flex; align-items: center; justify-content: center; width: clamp(11px, 1.15cqw, 14px); height: clamp(11px, 1.15cqw, 14px); border-radius: 4px; background: #facc15; color: #1e293b; font: 900 clamp(7px, 0.72cqw, 8.8px)/1 "Segoe UI", sans-serif; flex-shrink: 0; }
+@keyframes oaNearBob { 0%,100% { margin-top: 0; } 50% { margin-top: -3px; } }
 
 /* 직원 대화창 안 결재 카드 + 1·2·3 객관식 선택지 + 결재 내용 바로가기 */
 .oa-m-appr { margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(234,88,12,0.14)); border: 1.5px solid rgba(250,204,21,0.75); }
