@@ -273,6 +273,8 @@ window.DEMOS = [
     name: "미담 MI DAM", type: { ko: "한식 · 숯불구이 · 삼겹살 · 전골", vi: "Nhà hàng Hàn Quốc · Thịt nướng · Ba chỉ · Lẩu", en: "Korean BBQ · Pork belly · Hot pot", zh: "韩式烤肉 · 五花肉 · 火锅", ja: "韓国焼肉・サムギョプサル・鍋" } },
   { id: "arirang", hidden: true, url: "https://arirang.qrmenuasia.com", shot: "img/demo-arirang.jpg", qr: "img/qr-arirang.svg",
     name: "아리랑 ARIRANG", type: { ko: "한식 · 숯불구이 · 전골 · 솥밥", vi: "Nhà hàng Hàn Quốc · Thịt nướng · Lẩu · Cơm niêu", en: "Korean restaurant · BBQ · Hot pot · Stone-pot rice", zh: "韩餐 · 烤肉 · 火锅 · 石锅饭", ja: "韓国料理・焼肉・鍋・釜飯" } },
+  { id: "nangmangui", hidden: true, url: "https://nangmangui.qrmenuasia.com", shot: "img/demo-nangmangui.jpg", qr: "img/qr-nangmangui.svg",
+    name: "낭만구이 LANGMAN BBQ", type: { ko: "한식 · 고기구이 · 프리미엄 소고기 · A5 와규", vi: "Thịt nướng Hàn Quốc · Bò cao cấp · Wagyu A5", en: "Korean BBQ · Premium beef · A5 Wagyu", zh: "韩式烤肉 · 顶级牛肉 · A5和牛", ja: "韓国焼肉・プレミアム牛肉・A5和牛" } },
 ];
 
 window.T = {

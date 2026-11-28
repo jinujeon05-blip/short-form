@@ -139,6 +139,7 @@ name() {
     zijincheng) echo "하노이자금성" ;;
     midam) echo "미담" ;;
     arirang) echo "아리랑" ;;
+    nangmangui) echo "낭만구이" ;;
     *) echo "$1" ;;
   esac
 }

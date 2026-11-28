@@ -1025,6 +1025,12 @@ window.STORES = [
     type: { ko: "한식 · 숯불구이 · 전골 · 솥밥", vi: "Nhà hàng Hàn Quốc · Thịt nướng · Lẩu · Cơm niêu", en: "Korean restaurant · BBQ · Hot pot · Stone-pot rice", zh: "韩餐 · 烤肉 · 火锅 · 石锅饭", ja: "韓国料理・焼肉・鍋・釜飯" },
     keywords: "아리랑 Arirang Arirang Restaurant 한식 한식당 숯불구이 전골 솥밥 점심특선 김밥 치킨 Embassy Garden Xuân Đỉnh 하노이 Hà Nội 한국 고기집"
   },
+  { id: "nangmangui", name: "낭만구이 LANGMAN BBQ", sub: "프리미엄 소고기 · A5 와규 · 삼겹살 · 한우 소곱창 · 냉면", url: "https://nangmangui.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["bbq","korean"], tags: ["photos"],
+    address: "LK B22 Embassy Garden, KĐT Tây Hồ Tây, Xuân Đỉnh, Hà Nội", map: "https://www.google.com/maps/place/Langman+BBQ+%EB%82%AD%EB%A7%8C%EA%B5%AC%EC%9D%B4/@21.0639914,105.8003075,20z",
+    type: { ko: "한식 · 고기구이 · 프리미엄 소고기 · A5 와규", vi: "Thịt nướng Hàn Quốc · Bò cao cấp · Wagyu A5", en: "Korean BBQ · Premium beef · A5 Wagyu", zh: "韩式烤肉 · 顶级牛肉 · A5和牛", ja: "韓国焼肉・プレミアム牛肉・A5和牛" },
+    keywords: "낭만구이 Langman BBQ 랑만 하노이 한식 고기구이 소고기 와규 삼겹살 소곱창 냉면 Embassy Garden 서호 떠이호"
+  },
 ];
 window.SI = {
   ko: {
