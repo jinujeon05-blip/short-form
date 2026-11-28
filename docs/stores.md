@@ -347,5 +347,6 @@
 | `restaurants/phoquanbo` | 퍼 꾸언 보 Phở quân bò — 소고기 쌀국수·와인 스튜 쌀국수 (56 P. Lương Ngọc Quyến, Kinh Bắc, Bắc Ninh, 0367 006 833, 05:00–11:00 오전만) — **가게 찾기용**(2026-11-27). 맨 위는 벽 메뉴판 사진(원근 보정). 메뉴 29개, 요리 사진 5장 · **2026-11-27 배포**(대시보드 자동, 커밋 1c883d7, phoquanbo.qrmenuasia.com 열림 확인) |
 | `restaurants/zijincheng` | 하노이 자금성 Jageumseong (한국식 중식 짜장면·짬뽕·탕수육·반반·코스, LKC03 Khu đô thị Tây Hồ Tây, Xuân Đỉnh, Hà Nội, 098 645 8393, 10:20–22:00) — **가게 찾기용**(2026-11-28). 간판 사진 맨 위, 청화 남색 꾸밈. 메뉴 113개(새판 글자번호판 기준·가격 다르면 높은 쪽), 사진 5장, 가게 찾기 지역 `hanoi` |
 | `restaurants/midam` | 미담 Mi Dam — 한식 숯불구이·삼겹살·무제한 돼지갈비 (LK.A02 Embassy Garden, Xuân Tảo, Bắc Từ Liêm, 0904 089 306, 영업시간 지도에 없음·미확인) — **가게 찾기용**(2026-11-28). 맨 위는 간판 사진. 메뉴 50개 · **2026-11-28 배포**(대시보드 자동, 커밋 cfdfd59, midam.qrmenuasia.com 열림 확인) |
+| `restaurants/arirang` | 아리랑 Arirang — 한식·구이·전골·솥밥 (Liền Kề B02 Embassy Garden, Xuân Đỉnh, 하노이, 0968 736 465, 11:00–14:30 / 17:00–21:30) — **가게 찾기용**(2026-11-28). 맨 위는 간판 사진. 메뉴 118개 |
 - **2026-11-09 전체 배포**: 다산 배너 끄기 + 10-30 배포 모음(부뚜막·서서갈비·지지GO 사진, 부뚜막·낭만집·어수사 영업시간, 지지GO·최고집 seo)을 가게 122곳·qrmenu-intro에 배포(커밋 d34554f). 실제 주소 122곳 모두 꺼진 dasan.js 확인.
 - **2026-11-23 가게 찾기 '베트남식' 분류**: `sales/stores/data.js` CATS에 `vietnamese`(🥢) 추가, 퍼틴·호러이·분짜 제니맘·꽌안응온에 붙임(La Cherie Coffee는 카페라 뺌). qrmenu-intro 배포(커밋 c5575f3), qrmenuasia.com/stores 칩 '베트남식 4'·폰 폭 넘침 없음·사이트맵 160개(직전과 같음) 확인.

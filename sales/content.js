@@ -271,6 +271,8 @@ window.DEMOS = [
     name: "하노이 자금성 Jageumseong", type: { ko: "한국식 중화요리 · 짜장면 · 짬뽕 · 탕수육", vi: "Món Hoa kiểu Hàn · Mì tương đen · Mì hải sản cay · Thịt chiên chua ngọt", en: "Korean-Chinese restaurant · Jajangmyeon · Jjamppong · Tangsuyuk", zh: "韩式中餐 · 炸酱面 · 炒码面 · 糖醋肉", ja: "韓国式中華 · ジャジャン麺 · チャンポン · 酢豚" } },
   { id: "midam", hidden: true, url: "https://midam.qrmenuasia.com", shot: "img/demo-midam.jpg", qr: "img/qr-midam.svg",
     name: "미담 MI DAM", type: { ko: "한식 · 숯불구이 · 삼겹살 · 전골", vi: "Nhà hàng Hàn Quốc · Thịt nướng · Ba chỉ · Lẩu", en: "Korean BBQ · Pork belly · Hot pot", zh: "韩式烤肉 · 五花肉 · 火锅", ja: "韓国焼肉・サムギョプサル・鍋" } },
+  { id: "arirang", hidden: true, url: "https://arirang.qrmenuasia.com", shot: "img/demo-arirang.jpg", qr: "img/qr-arirang.svg",
+    name: "아리랑 ARIRANG", type: { ko: "한식 · 숯불구이 · 전골 · 솥밥", vi: "Nhà hàng Hàn Quốc · Thịt nướng · Lẩu · Cơm niêu", en: "Korean restaurant · BBQ · Hot pot · Stone-pot rice", zh: "韩餐 · 烤肉 · 火锅 · 石锅饭", ja: "韓国料理・焼肉・鍋・釜飯" } },
 ];
 
 window.T = {

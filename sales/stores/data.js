@@ -1019,6 +1019,12 @@ window.STORES = [
     type: { ko: "한식 · 숯불구이 · 삼겹살 · 전골", vi: "Nhà hàng Hàn Quốc · Thịt nướng · Ba chỉ · Lẩu", en: "Korean BBQ · Pork belly · Hot pot", zh: "韩式烤肉 · 五花肉 · 火锅", ja: "韓国焼肉・サムギョプサル・鍋" },
     keywords: "미담 Mi dam 미담 한식 숯불구이 삼겹살 무제한 돼지갈비 김치찌개 전골 Embassy Garden Bắc Từ Liêm 하노이 Hà Nội 한국 고기집"
   },
+  { id: "arirang", name: "아리랑 ARIRANG", sub: "한식 · 소고기·돼지고기 구이 · 전골 · 솥밥 · 점심특선", url: "https://arirang.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean","bbq"], tags: ["photos"],
+    address: "Liền Kề B02 Embassy Garden, Khu Ngoại giao đoàn, Xuân Đỉnh, Hà Nội", map: "https://www.google.com/maps/place/%EC%95%84%EB%A6%AC%EB%9E%91+-+Arirang+Restaurant/@21.0640212,105.7985099,20z/data=!4m6!3m5!1s0x3135ab00670c30e5:0x2de36afe4852c7ea!8m2!3d21.0640063!4d105.799012!16s%2Fg%2F11y6dmn901",
+    type: { ko: "한식 · 숯불구이 · 전골 · 솥밥", vi: "Nhà hàng Hàn Quốc · Thịt nướng · Lẩu · Cơm niêu", en: "Korean restaurant · BBQ · Hot pot · Stone-pot rice", zh: "韩餐 · 烤肉 · 火锅 · 石锅饭", ja: "韓国料理・焼肉・鍋・釜飯" },
+    keywords: "아리랑 Arirang Arirang Restaurant 한식 한식당 숯불구이 전골 솥밥 점심특선 김밥 치킨 Embassy Garden Xuân Đỉnh 하노이 Hà Nội 한국 고기집"
+  },
 ];
 window.SI = {
   ko: {
