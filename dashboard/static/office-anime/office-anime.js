@@ -2972,7 +2972,9 @@
 
     // 전체화면 상태창 가운데 캐릭터: 기본은 걷기 그림 정면 1장. 제미나이 영상을 넣으면 video: 'fullbody/<파일>.mp4'
     const FULLBODY = {
-      claude: { bgVideo: 'status/claude-full.mp4?v=1', idleVideo: 'status/claude-idle.mp4?v=1', talkVideo: 'status/claude-talk.mp4?v=1' },
+      claude:   { bgVideo: 'status/claude-full.mp4?v=1', idleVideo: 'status/claude-idle.mp4?v=1', talkVideo: 'status/claude-talk.mp4?v=1' },
+      sorter:   { bgVideo: 'status/sorter-full.mp4?v=1' },
+      staffing: { bgVideo: 'status/staffing-full.mp4?v=1' },
       agy: { dir: 'front' }, reader: { dir: 'front' }, auditor: { dir: 'front' }, inspector: { dir: 'front' },
     };
 
