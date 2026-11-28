@@ -374,3 +374,13 @@ body.oa-fs-lock > *:not(.oa-stage) { display: none !important; }
 .oa-full .oa-f-tab { font-size: 2.4cqh; }
 .oa-full .oa-f-form input { font-size: 2.4cqh; }
 .oa-full .oa-f-form button { font-size: 2.8cqh; }
+
+/* ===== 모바일 스킬 휠(2026-11-28 캡틴 지시) — 인사 빼고 그 자리에 화랑, 보고해 줄에 백두산, 서빙은 화랑 옛자리로 ===== */
+@media (pointer: coarse), (max-width: 720px), (max-height: 540px) {
+  .oa-sk.sk-greet { display: none; }
+  .oa-sk.sk-combo { right: 57px; bottom: 5px; width: 40px; height: 40px; }
+  .oa-sk.sk-baek  { right: 102px; bottom: 5px; width: 40px; height: 40px; }
+  .oa-sk.sk-cof   { right: 5px; bottom: 104px; }
+  /* 메뉴가 열려 스킬 휠이 보일 때 직원 얼굴 줄 끝이 백두산 밑에 깔리지 않게(얼굴 줄은 옆으로 밀어 봄) */
+  .oa-stage.oa-menu-open .oa-dock { max-width: min(60%, calc(114% - 330px)); }
+}

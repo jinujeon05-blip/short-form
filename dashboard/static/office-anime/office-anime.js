@@ -1663,7 +1663,11 @@
       if (kicking) {
         const elapsed = Math.max(0, t - (n.kickStart || 0));
         const fpsK = (fightKey === 'combo' || fightKey === 'baek') ? 13.8 : (fightKey === 'punch' ? 6.2 : 5.2);
-        fIdx = Math.min(wset[fightKey].length - 1, Math.floor(elapsed * fpsK));
+        // 화랑·백두산은 누른 단(comboStage)이 끝나는 프레임까지만 재생하고 그 자리에서 멈춤
+        const lastF = ((fightKey === 'combo' || fightKey === 'baek') && n.comboStage)
+          ? Math.min(wset[fightKey].length, comboStageEndF(n.comboStage)) - 1
+          : wset[fightKey].length - 1;
+        fIdx = Math.min(lastF, Math.floor(elapsed * fpsK));
       } else if (emoting) {
         const elapsed = Math.max(0, t - (n.emoteStart || 0));
         if (n.id === 'claude' && n.emote === 'dance' && wset.dance?.length === 36) {
@@ -2189,6 +2193,36 @@
       spawnBurst(BAG.cx, 58.0, `${word} +15 EXP`, 15);
     }
 
+    // ---- 화랑(7)·백두산(8) 10단 콤보: 클릭 한 번 = 1단 (2026-11-28 캡틴 지시) ----
+    const COMBO_FRAMES = 48, COMBO_STAGES = 10, COMBO_FPS = 13.8, COMBO_GRACE = 0.5;
+    // 단 k가 끝나는 프레임 수(48프레임을 10단으로 나눔: 5·10·14·19·24·29·34·38·43·48)
+    const comboStageEndF = k => Math.round(COMBO_FRAMES * k / COMBO_STAGES);
+    const comboStageEndT = k => comboStageEndF(k) / COMBO_FPS;
+    // 샌드백 타격 시각(콤보 시작 기준 ms)·강타 여부 — 단마다 한 번
+    const COMBO_HITS = [[260, false], [540, true], [840, false], [1140, false], [1440, true], [1740, false], [2060, true], [2380, false], [2720, true], [3100, true]];
+    function setComboStage(cap, action, stage) {
+      const from = cap.comboStage || 0;
+      const to = Math.min(COMBO_STAGES, stage);
+      cap.fightKind = action;
+      cap.comboStage = to;
+      cap.kickUntil = cap.kickStart + comboStageEndT(to) + COMBO_GRACE;
+      const nowS = performance.now() / 1000;
+      for (let k = from + 1; k <= to; k++) {
+        const [ms, heavy] = COMBO_HITS[k - 1];
+        const delay = Math.max(0, cap.kickStart + ms / 1000 - nowS);
+        if (Math.hypot(cap.x - BAG.cx, cap.y - BAG.cy) < 11.5) {
+          setTimeout(() => {
+            if (cap.comboStage >= k && Math.hypot(npcs.captain.x - BAG.cx, npcs.captain.y - BAG.cy) < 13.5) hitPunchingBag(heavy);
+          }, delay * 1000);
+        } else {
+          noiseBurst(0.08, 0.055, delay);
+        }
+      }
+      navigator.vibrate?.(to >= COMBO_STAGES ? [15, 40, 35] : 15);
+      if (to >= COMBO_STAGES && from < COMBO_STAGES) {
+        setTimeout(() => spawnBurst(npcs.captain.x, npcs.captain.y - 4, '🔥 10단 콤보!! +80 EXP', 80), Math.max(0, (cap.kickStart + comboStageEndT(to) - nowS) * 1000));
+      }
+    }
     function playCaptainAction(action) {
       touchCaptainInput();
       const cap = npcs.captain;
@@ -2197,55 +2231,64 @@
         const isPunch = action === 'punch';
         const isBaek  = action === 'baek';
         const isCombo = (action === 'combo' || isBaek);
+        // 말풍선 없음(캡틴 지시 2026-11-28) — 동작 애니메이션·효과음·샌드백 타격만
+        // 10단 콤보 = 연속 클릭: 한 번 누르면 1단, 다음 단이 끝나기 전(또는 직후 COMBO_GRACE 안)에 또 누르면 2단·3단… 10단까지
+        // 걷기가 다른 조작(방향키·바닥 클릭)으로 끊겼으면 모아 둔 횟수는 버림
+        if (cap._comboWalk && !(cap.path.length && cap.onArrive)) cap._comboWalk = null;
+        if (isCombo && cap._comboWalk && cap._comboWalk.action === action) {
+          // 대표석에서 단상 앞으로 걸어 나오는 중에 누른 횟수는 모아 두었다가 도착하면 그 단까지 이어서
+          cap._comboWalk.n = Math.min(COMBO_STAGES, cap._comboWalk.n + 1);
+          return;
+        }
+        const nowS = performance.now() / 1000;
+        if (isCombo && cap.fightKind === action && cap.kickUntil && nowS < cap.kickUntil && (cap.comboStage || 0) > 0) {
+          if (cap.comboStage >= COMBO_STAGES) return;
+          const curEnd = comboStageEndT(cap.comboStage);
+          // 그 단이 이미 끝나 멈춰 있던 중이면, 멈춘 자리부터 이어서 재생
+          if (nowS - cap.kickStart > curEnd) cap.kickStart = nowS - curEnd;
+          setComboStage(cap, action, cap.comboStage + 1);
+          return;
+        }
         // 캡틴 이동 중 발차기·주먹·10콤보 지원! 앉아 있을 때만 대표석 앞으로 나온 뒤 동작, 서 있거나 이동 중이면 멈추지 않고 바로 동작!
         if (!cap._kickWalked && cap.mode === 'idle' &&
             Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]) < 4.0) {
+          if (isCombo) cap._comboWalk = { action, n: 1 };
           const ok = walkCaptainSafe(KICK_SPOT[0], KICK_SPOT[1], {
-            bubble: isBaek ? '⚡ 백두산 10단 콤보 시범 보일게요!' : (isCombo ? '🔥 화랑 10단 콤보 시범 보일게요!' : (isPunch ? '👊 잠깐 몸 좀 풀게요!' : '🥋 잠깐 시범 보일게요!')),
-            onArrive: () => { cap._kickWalked = true; cap.dir = 'east'; playCaptainAction(action); cap._kickWalked = false; },
+            onArrive: () => {
+              const want = cap._comboWalk ? cap._comboWalk.n : 1;
+              cap._comboWalk = null;
+              cap._kickWalked = true; cap.dir = 'east'; playCaptainAction(action); cap._kickWalked = false;
+              if (isCombo && want > 1) setComboStage(cap, action, want);
+            },
           });
           if (ok) return;
+          cap._comboWalk = null;
         }
         const nearBag = Math.hypot(cap.x - BAG.cx, cap.y - BAG.cy) < 11.5;
         if (nearBag) {
           cap.dir = (cap.x <= BAG.cx) ? 'east' : 'west';
         }
-        const nowS = performance.now() / 1000;
         cap.fightKind = action;
         cap.kickStart = nowS;
-        cap.kickUntil = nowS + (isCombo ? 3.55 : (isPunch ? 2.55 : 2.35));
         if (cap.mode === 'idle') cap.mode = 'stand';
-        const say = isBaek
-          ? (nearBag ? '⚡ 백두산 10단 콤보!! 샌드백 폭파 10연타!' : '⚡ 백두산 태권도 10단 콤보 발차기!!')
-          : isCombo
-          ? (nearBag ? '🔥 화랑 10단 콤보!! 샌드백 폭파 10연타!' : '🔥 화랑 태권도 10단 콤보 발차기!!')
-          : (nearBag
-            ? (isPunch ? '🥊 샌드백 연타! 원투 훅 어퍼컷!' : '🥊 샌드백 강타! 회축 쾅!!')
-            : (isPunch ? '👊 원투! 연속 펀치!' : '🥋 얍! 이동 발차기!'));
+        if (isCombo) {
+          cap.comboStage = 0;
+          setComboStage(cap, action, 1);
+          log(isBaek ? '⚡ 캡틴이 백두산 태권도 콤보를 시작했습니다' : '🔥 캡틴이 화랑 태권도 콤보를 시작했습니다');
+          return;
+        }
+        cap.comboStage = 0;
+        cap.kickUntil = nowS + (isPunch ? 2.55 : 2.35);
         if (nearBag) {
-          // 샌드백 타격 타이밍에 맞춰 다단 히트 임팩트 발동! (10콤보 3.45초 고속 연타 + 10타 회오리 피니시!)
-          const timings = isCombo
-            ? [[260, false], [540, true], [840, false], [1140, false], [1440, true], [1740, false], [2060, true], [2380, false], [2720, true], [3100, true]]
-            : (isPunch ? [[220, false], [680, false], [1180, true]] : [[280, true], [920, true]]);
+          const timings = isPunch ? [[220, false], [680, false], [1180, true]] : [[280, true], [920, true]];
           timings.forEach(([ms, heavy]) => setTimeout(() => {
             if (Math.hypot(npcs.captain.x - BAG.cx, npcs.captain.y - BAG.cy) < 13.5) hitPunchingBag(heavy);
           }, ms));
         } else {
-          if (isCombo) {
-            [0.22, 0.52, 0.82, 1.12, 1.42, 1.72, 2.04, 2.36, 2.70, 3.08].forEach(d => noiseBurst(0.08, 0.055, d));
-            navigator.vibrate?.([15, 40, 15, 40, 15, 40, 35]);
-            spawnBurst(cap.x, cap.y - 4, '🔥 10단 콤보!! +80 EXP', 80);
-          } else {
-            if (isPunch) SFX.punch(); else SFX.kick();
-            spawnBurst(cap.x, cap.y - 4, isPunch ? '👊 퍽!' : '🥋 얍!', 0);
-          }
+          if (isPunch) SFX.punch(); else SFX.kick();
+          spawnBurst(cap.x, cap.y - 4, isPunch ? '👊 퍽!' : '🥋 얍!', 0);
         }
-        cap.bubble = say;
-        cap.bubbleType = 'ok';
-        log(isCombo
-          ? (nearBag ? '🔥 캡틴이 복싱 짐 샌드백에 화랑 10단 콤보 10연타를 작렬시켰습니다!' : '🔥 캡틴이 화랑 스타일 태권도 10단 콤보를 시전했습니다!')
-          : (nearBag ? `🥊 캡틴이 복싱 짐 샌드백을 ${isPunch ? '연속 펀치로' : '강력한 발차기로'} 타격했습니다!` : (isPunch ? '👊 캡틴이 주먹 격투(잽·스트레이트·훅·어퍼컷) 연속 공격을 시전했습니다' : '🥋 캡틴이 이동 중 태권도 발차기를 시전했습니다')));
-        setTimeout(() => { if (cap.bubble === say) cap.bubble = ''; }, isCombo ? 5100 : 2600);
+        log(nearBag ? `🥊 캡틴이 복싱 짐 샌드백을 ${isPunch ? '연속 펀치로' : '강력한 발차기로'} 타격했습니다!` : (isPunch ? '👊 캡틴이 주먹 격투(잽·스트레이트·훅·어퍼컷) 연속 공격을 시전했습니다' : '🥋 캡틴이 이동 중 태권도 발차기를 시전했습니다'));
         return;
       }
       cap.path = [];
@@ -2371,10 +2414,10 @@
         playCaptainAction('stamp');
       } else if (k === '7') {
         e.preventDefault();
-        playCaptainAction('combo');
+        if (!e.repeat) playCaptainAction('combo'); // 누를 때마다 1단씩(꾹 누름 자동 반복은 세지 않음)
       } else if (k === '8') {
         e.preventDefault();
-        playCaptainAction('baek');
+        if (!e.repeat) playCaptainAction('baek'); // 누를 때마다 1단씩(꾹 누름 자동 반복은 세지 않음)
       } else if (k === 'f' && nearActions.length) {
         e.preventDefault();
         runNearAction(0);
@@ -4005,16 +4048,18 @@
     [['[data-cap-kick]', 'kick'], ['[data-cap-punch]', 'punch'], ['[data-cap-combo]', 'combo'], ['[data-cap-baek]', 'baek']].forEach(([sel, act]) => {
       const btn = root.querySelector(sel);
       if (!btn) return;
-      let trigAt = 0;
-      const fire = e => {
+      // 연속 클릭 = 콤보 단 올리기: 누를 때마다 한 번씩. 같은 누름의 click(pointerdown 뒤 따라옴)만 걸러 냄
+      let downAt = -1e9;
+      btn.addEventListener('pointerdown', e => {
         e.preventDefault(); e.stopPropagation();
-        const nowMs = performance.now();
-        if (nowMs - trigAt < 250) return;
-        trigAt = nowMs;
+        downAt = performance.now();
         playCaptainAction(act);
-      };
-      btn.addEventListener('pointerdown', fire);
-      btn.addEventListener('click', fire);
+      });
+      btn.addEventListener('click', e => {
+        e.preventDefault(); e.stopPropagation();
+        if (performance.now() - downAt < 800) return;
+        playCaptainAction(act); // 키보드(Enter·Space)로 누른 경우
+      });
     });
     root.querySelector('[data-cap-sit]')?.addEventListener('click', sitCaptainBack);
     briefCofBtn.addEventListener('click', serveCoffee);
