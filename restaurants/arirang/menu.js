@@ -35,7 +35,7 @@ window.MENU = [
     "name": {
      "ko": "B 돼지고기 세트 (삼겹살·돼지목살·항정살·돼지불고기·계란말이 + 김치찌개 + 계란찜)",
      "en": "Pork Set (pork belly, collar, neck, pork bulgogi, egg roll + kimchi stew + steamed egg)",
-     "zh": "B 猪肉套餐（五花肉·猪颈肉·猪项肉·猪肉烤肉·鸡蛋卷 + 泡菜汤 + 蒸蛋）",
+     "zh": "B 猪肉套餐（五花肉·猪颈肉·猪颈脊肉·猪肉烤肉·鸡蛋卷 + 泡菜汤 + 蒸蛋）",
      "ja": "B 豚肉セット（サムギョプサル・豚首肉・豚トロ・豚プルコギ・卵焼き + キムチチゲ + 卵蒸し）",
      "vi": "Set thịt heo (ba chỉ, nạc vai, má heo, bulgogi heo, trứng cuộn + canh kim chi + trứng hấp)"
     },
@@ -45,7 +45,7 @@ window.MENU = [
     "name": {
      "ko": "C 소·돼지고기 세트 (소갈비주물럭·눈꽃살·삼겹살·항정살·잡채 + 순두부찌개 + 계란찜)",
      "en": "Beef & Pork Set (marinated beef rib, chuck flap tail, pork belly, pork neck, japchae + soft tofu stew + steamed egg)",
-     "zh": "C 牛猪肉套餐（腌牛排骨·雪花牛肉·五花肉·猪项肉·韩式炒粉丝 + 嫩豆腐汤 + 蒸蛋）",
+     "zh": "C 牛猪肉套餐（腌牛排骨·雪花牛肉·五花肉·猪颈脊肉·韩式炒粉丝 + 嫩豆腐汤 + 蒸蛋）",
      "ja": "C 牛・豚セット（味付けカルビ・雪花牛肉・サムギョプサル・豚トロ・チャプチェ + スンドゥブチゲ + 卵蒸し）",
      "vi": "Set bò & heo (sườn bò ướp, lườn hoa, ba chỉ, má heo, miến xào + canh đậu phụ non + trứng hấp)"
     },
@@ -55,7 +55,7 @@ window.MENU = [
     "name": {
      "ko": "가족 세트 (눈꽃살·우설구이·돼지목살·항정살·삼겹살·돼지갈비찜·부대전골 + 김치전 + 계란찜)",
      "en": "Family Set (chuck flap tail, ox tongue, pork collar, neck, belly, braised pork ribs, army stew + kimchi pancake + steamed egg)",
-     "zh": "家庭套餐（雪花牛肉·烤牛舌·猪颈肉·猪项肉·五花肉·炖猪排骨·部队锅 + 泡菜煎饼 + 蒸蛋）",
+     "zh": "家庭套餐（雪花牛肉·烤牛舌·猪颈肉·猪颈脊肉·五花肉·炖猪排骨·部队锅 + 泡菜煎饼 + 蒸蛋）",
      "ja": "ファミリーセット（雪花牛肉・牛タン焼き・豚首肉・豚トロ・サムギョプサル・豚カルビ煮・プデチゲ + キムチチヂミ + 卵蒸し）",
      "vi": "Set gia đình (lườn hoa, lưỡi bò, nạc vai, má heo, ba chỉ, sườn heo hầm, lẩu quân đội + bánh kim chi + trứng hấp)"
     },
@@ -143,7 +143,7 @@ window.MENU = [
      "en": "Vegetable Bibimbap + Seaweed Soup",
      "zh": "蔬菜拌饭 + 海带汤",
      "ja": "野菜ビビンバ + わかめスープ",
-     "vi": "Cơm trộn rau + trứng ốp + canh rong biển"
+     "vi": "Cơm trộn rau + canh rong biển"
     },
     "price": 95000
    },
@@ -530,7 +530,7 @@ window.MENU = [
      "en": "Pork Backbone Stew",
      "zh": "猪脊骨土豆汤",
      "ja": "カムジャタン（豚背骨スープ）",
-     "vi": "Canh xương khoai tây cay"
+     "vi": "Canh xương heo (gamjatang) cay"
     },
     "sizes": [
      [
@@ -710,7 +710,7 @@ window.MENU = [
     "name": {
      "ko": "돼지항정살",
      "en": "Pork Neck",
-     "zh": "猪项肉",
+     "zh": "猪颈脊肉",
      "ja": "豚トロ",
      "vi": "Má heo"
     },
@@ -1142,9 +1142,9 @@ window.MENU = [
     "name": {
      "ko": "물회",
      "en": "Cold Raw Fish Soup",
-     "zh": "冷鱼汤（物烩）",
+     "zh": "韩式冷生鱼片汤（물회）",
      "ja": "ムルフェ（冷たい刺身スープ）",
-     "vi": "Mì nước gỏi cá"
+     "vi": "Gỏi cá trộn nước lạnh"
     },
     "price": 328000
    },
@@ -1173,7 +1173,7 @@ window.MENU = [
     "name": {
      "ko": "잔치/비빔국수",
      "en": "Noodles in Hot Broth / Spicy Mixed Noodles",
-     "zh": "宴会面/拌面",
+     "zh": "韩式汤面（宴会面）/拌面",
      "ja": "チャンチ麺（温麺）/ビビン麺",
      "vi": "Mì sợi nước / mì sợi trộn cay"
     },
@@ -1249,7 +1249,7 @@ window.MENU = [
      "en": "Spicy Beef Soup with Rice in Cast-iron Pot",
      "zh": "辣牛肉汤石锅饭",
      "ja": "ユッケジャン釜飯",
-     "vi": "Cơm niêu bò sốt cay"
+     "vi": "Cơm niêu canh bò cay (yukgaejang)"
     },
     "price": 188000,
     "spicy": true
