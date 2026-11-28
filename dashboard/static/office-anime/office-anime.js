@@ -3102,7 +3102,62 @@
       modal.style.top = `${best.y}%`;
     }
 
+    let statusAnimTimer = null;
+    function stopStatusCharAnim() {
+      if (statusAnimTimer) { clearTimeout(statusAnimTimer); statusAnimTimer = null; }
+    }
+    const STATUS_ACT_ORDER = {
+      reader:     ['analyze', 'cheer', 'coffee', 'stretch', 'drink', 'snack'],
+      finder:     ['photo', 'drink', 'snack'],
+      agy:        ['inspect', 'drink', 'snack'],
+      translator: ['review', 'drink', 'snack'],
+      sorter:     ['water', 'drink', 'snack'],
+      staffing:   ['clean', 'drink', 'snack'],
+      inspector:  ['sideBow', 'dance', 'drink', 'snack'],
+      auditor:    ['drink', 'snack'],
+      captain:    ['greet', 'coffee', 'praise', 'drink'],
+      vip_jung:   ['greet', 'talk', 'thumb', 'coffee'],
+    };
+    function startStatusCharAnim(hit, imgEl, baseSrc) {
+      stopStatusCharAnim();
+      if (!imgEl) return;
+      const wset = imgs.walk[hit];
+      if (!wset) return;
+      const order = STATUS_ACT_ORDER[hit] || ['drink', 'snack'];
+      const clips = [];
+      for (const act of order) {
+        const arr = (wset[act] || []).filter(im => im && im.complete && im.naturalWidth > 0).map(im => im.src);
+        if (arr.length >= 2) clips.push({ act, frames: arr });
+      }
+      if (!clips.length) return;
+      let clipIdx = 0, frameIdx = 0, resting = true;
+      const step = () => {
+        if (modalBack.hidden || !document.body.contains(imgEl)) { stopStatusCharAnim(); return; }
+        if (resting) {
+          imgEl.src = baseSrc;
+          resting = false;
+          frameIdx = 0;
+          statusAnimTimer = setTimeout(step, 1500);
+          return;
+        }
+        const clip = clips[clipIdx % clips.length];
+        const isShort = clip.frames.length <= 4;
+        const totalFrames = isShort ? clip.frames.length * 2 : clip.frames.length;
+        if (frameIdx < totalFrames) {
+          imgEl.src = clip.frames[frameIdx % clip.frames.length];
+          frameIdx++;
+          statusAnimTimer = setTimeout(step, isShort ? 680 : 220);
+        } else {
+          clipIdx = (clipIdx + 1) % clips.length;
+          resting = true;
+          statusAnimTimer = setTimeout(step, 260);
+        }
+      };
+      statusAnimTimer = setTimeout(step, 1200);
+    }
+
     function closeTalkModal(keepOrderBubble = false) {
+      stopStatusCharAnim();
       if (!modalBack.hidden) SFX.close();
       modal.classList.remove('kbd-top');
       modalBack.hidden = true;
@@ -3317,6 +3372,11 @@
           <button type="submit">📣 지시 전달</button>
         </form>`;
       stripEmoji(modal);
+      if (!fb.bgVideo && !fb.video) {
+        startStatusCharAnim(hit, modal.querySelector('.oa-f-body'), bodyImg);
+      } else {
+        stopStatusCharAnim();
+      }
       if (!modal._noEmojiObs) {
         // 나중에 바뀌는 안내 글(지시 전달 결과 등)에도 이모지가 들어가지 않게
         modal._noEmojiObs = new MutationObserver(() => { if (modal.classList.contains('oa-full')) stripEmoji(modal); });
