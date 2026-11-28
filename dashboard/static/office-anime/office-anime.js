@@ -1148,7 +1148,7 @@
                <div class="oa-bub" data-bub="${id}" hidden></div>`
       ).join('') +
       `<button type="button" class="oa-cap-status" data-cap-status hidden title="캡틴 실시간 업무·결재 상태 (클릭 시 바로 이동)"></button>
-       <button type="button" class="oa-near-btn" data-cap-near hidden title="가까운 장소에서 행동 실행 (단축키 F)"></button>
+       <div class="oa-near-box" data-cap-near hidden></div>
        <div class="oa-cap-hp" data-cap-hp title="클로드 잔여량 · 위: 5시간(녹색) / 아래: 주간(파랑)">
          <div class="oa-hp-track"><div class="oa-hp-fill h5" data-hp-5h style="width:100%"></div></div>
          <div class="oa-hp-track"><div class="oa-hp-fill wk" data-hp-wk style="width:100%"></div></div>
@@ -1174,48 +1174,59 @@
     }
     const capStatusEl = hud.querySelector('[data-cap-status]');
     const capNearEl = hud.querySelector('[data-cap-near]');
-    let nearAction = null;
+    let nearActions = [];
+    let nearSig = '';
     const NEAR_ASK = {
-      conf_mid:        '대회의실 의자에 앉을까요?',
-      vip_sofa:        'VIP 소파에 앉을까요?',
-      lounge_top_sofa: '휴게실 소파에 앉을까요?',
-      lounge_r_sofa:   '창가 소파에 앉을까요?',
-      lounge_fridge:   '냉장고 음료 마실까요?',
-      lounge_snack:    '스낵바 커피·간식 챙길까요?',
+      conf_mid:        '대회의실 의자에 앉기',
+      vip_sofa:        'VIP 소파에 앉기',
+      lounge_top_sofa: '휴게실 소파에 앉기',
+      lounge_r_sofa:   '창가 소파에 앉기',
+      lounge_fridge:   '냉장고 캔 음료 마시기',
+      lounge_snack:    '스낵바 커피·간식 챙기기',
     };
-    function findNearestCapAction() {
+    function findNearbyCapActions() {
       const cap = npcs.captain;
-      if (!cap || briefingActive || !modalBack.hidden || capRingOpen) return null;
-      if (cap.mode === 'emote' || (cap.kickUntil && performance.now() / 1000 < cap.kickUntil)) return null;
+      if (!cap || briefingActive || !modalBack.hidden || capRingOpen) return [];
+      if (cap.mode === 'emote' || (cap.kickUntil && performance.now() / 1000 < cap.kickUntil)) return [];
       const cands = [];
       for (const sp of CAP_SPOTS) {
         if (cap.customSeat && cap.customSeat.id === sp.id) continue;
         const dStand = Math.hypot(cap.x - sp.stand[0], cap.y - sp.stand[1]);
         const dSpot  = Math.hypot(cap.x - sp.x, cap.y - sp.y);
         const d = Math.min(dStand, dSpot);
-        const maxR = (sp.kind === 'drink') ? 8.2 : 11.5;
-        if (d <= maxR) cands.push({ id: sp.id, d, label: NEAR_ASK[sp.id] || `${sp.name} 이용할까요?`, run: () => goCaptainSpot(sp) });
+        const maxR = (sp.kind === 'drink') ? 13.5 : 14.0;
+        if (d <= maxR) cands.push({ id: sp.id, d, label: NEAR_ASK[sp.id] || `${sp.name} 이용`, run: () => goCaptainSpot(sp) });
       }
-      // 복싱 짐 샌드백 근접 시
+      // 복싱 짐 샌드백 근접 시 3가지 타격 선택지 제공!
       const dBag = Math.hypot(cap.x - BAG.cx, cap.y - BAG.cy);
-      if (dBag <= 12.0) cands.push({ id: 'punch_bag', d: dBag, label: '샌드백 타격할까요?', run: () => playCaptainAction('punch') });
+      if (dBag <= 14.0) {
+        cands.push({ id: 'bag_combo', d: dBag,        label: '샌드백 10단 콤보',   run: () => playCaptainAction('combo') });
+        cands.push({ id: 'bag_kick',  d: dBag + 0.01, label: '샌드백 태권도 발차기', run: () => playCaptainAction('kick') });
+        cands.push({ id: 'bag_punch', d: dBag + 0.02, label: '샌드백 주먹 연타',   run: () => playCaptainAction('punch') });
+      }
       // 본관 캡틴 대표석 근접 시 (서 있을 때만)
       if (cap.mode !== 'idle') {
         const dDesk = Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]);
-        if (dDesk <= 9.0) cands.push({ id: 'cap_desk', d: dDesk, label: '대표석에 앉을까요?', run: () => sitCaptainBack() });
+        if (dDesk <= 10.0) cands.push({ id: 'cap_desk', d: dDesk, label: '대표석에 앉기', run: () => sitCaptainBack() });
       }
-      if (!cands.length) return null;
       cands.sort((a, b) => a.d - b.d);
-      return cands[0];
+      return cands.slice(0, 3);
+    }
+    function runNearAction(idx = 0) {
+      const item = nearActions[idx];
+      if (!item) return;
+      SFX.tap();
+      const fn = item.run;
+      nearActions = [];
+      nearSig = '';
+      if (capNearEl) capNearEl.hidden = true;
+      fn();
     }
     capNearEl?.addEventListener('click', e => {
       e.stopPropagation();
-      if (!nearAction) return;
-      SFX.tap();
-      const fn = nearAction.run;
-      nearAction = null;
-      capNearEl.hidden = true;
-      fn();
+      const btn = e.target.closest('[data-near-i]');
+      if (!btn) return;
+      runNearAction(Number(btn.dataset.nearI) || 0);
     });
     const capHpEl = hud.querySelector('[data-cap-hp]');
     const capHp5h = hud.querySelector('[data-hp-5h]');
@@ -2267,7 +2278,7 @@
       } else if (k === '3' || k === ' ') {
         e.preventDefault();
         playCaptainAction('kick');
-      } else if (k === '4' || k === 'f') {
+      } else if (k === '4') {
         e.preventDefault();
         playCaptainAction('punch');
       } else if (k === '5') {
@@ -2279,13 +2290,9 @@
       } else if (k === '7') {
         e.preventDefault();
         playCaptainAction('combo');
-      } else if (k === 'f' && nearAction) {
+      } else if (k === 'f' && nearActions.length) {
         e.preventDefault();
-        SFX.tap();
-        const fn = nearAction.run;
-        nearAction = null;
-        if (capNearEl) capNearEl.hidden = true;
-        fn();
+        runNearAction(0);
       }
     });
     window.addEventListener('keyup', e => {
@@ -2856,19 +2863,24 @@
           capStatusEl.style.top  = `${Math.max(0.8, hpTop - 4.0)}%`;
         }
         if (capNearEl) {
-          const found = findNearestCapAction();
-          if (found) {
-            if (!nearAction || nearAction.id !== found.id) {
-              capNearEl.innerHTML = `<span class="oa-near-k">F</span><span class="oa-near-t">${found.label}</span>`;
+          const list = findNearbyCapActions();
+          if (list.length) {
+            const sig = list.map(a => a.id).join('|');
+            if (sig !== nearSig) {
+              nearSig = sig;
+              capNearEl.innerHTML = list.map((a, i) =>
+                `<button type="button" class="oa-near-btn${i === 0 ? ' main' : ''}" data-near-i="${i}">${i === 0 ? '<span class="oa-near-k">F</span>' : '<span class="oa-near-dot"></span>'}<span class="oa-near-t">${a.label}</span></button>`
+              ).join('');
             }
-            nearAction = found;
+            nearActions = list;
             capNearEl.hidden = false;
-            const flipLeft = (cap.x > 184) || (cap.x > 84 && cap.x < 100);
+            const flipLeft = (cap.x > 180) || (cap.x > 82 && cap.x < 100);
             capNearEl.classList.toggle('flip-l', flipLeft);
             capNearEl.style.left = `${cap.x + (flipLeft ? -2.8 : 2.8)}%`;
-            capNearEl.style.top  = `${Math.max(6.0, cap.y - 10.5)}%`;
+            capNearEl.style.top  = `${Math.max(8.0, cap.y - 10.5)}%`;
           } else {
-            nearAction = null;
+            nearActions = [];
+            nearSig = '';
             capNearEl.hidden = true;
           }
         }
