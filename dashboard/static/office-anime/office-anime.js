@@ -134,7 +134,7 @@
     ];
     imgs.tvStores = TV_STORES;
     for (const [id, cfg] of Object.entries(CHARS)) {
-      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], photo: [], review: [], inspect: [], analyze: [], cheer: [], stretch: [], talk: [], thumb: [] };
+      imgs.walk[id] = { east: [], front: [], back: [], se: [], ne: [], greet: [], coffee: [], kick: [], praise: [], stamp: [], water: [], clean: [], dance: [], sweep: [], brew: [], carry: [], serve: [], bow: [], sideBow: [], photo: [], review: [], inspect: [], analyze: [], cheer: [], stretch: [], talk: [], thumb: [] };
       const dirs = id === 'captain' ? ['east', 'front', 'back', 'se', 'ne', 'greet', 'coffee', 'kick', 'praise', 'stamp']
         : id === 'claude' ? ['east', 'front', 'back', 'bow', 'sweep']
         : id === 'reader' ? ['east', 'front', 'back', 'se', 'ne', 'dance']
@@ -146,7 +146,7 @@
       const assetId = cfg.asset || id;
       for (const dir of dirs) {
         for (let i = 1; i <= 12; i++) {
-          const v = (id === 'claude' || id === 'inspector') ? 'swap1' : (id === 'vip_jung') ? 'vip3' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new2' : id === 'captain' ? (dir === 'kick' ? 'kick2' : 'cap8dir2') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
+          const v = (id === 'claude' && dir === 'bow') ? 'bow2' : (id === 'claude' || id === 'inspector') ? 'swap1' : (id === 'vip_jung') ? 'vip3' : (dir === 'praise' || dir === 'stamp' || dir === 'bow') ? 'new2' : id === 'captain' ? (dir === 'kick' ? 'kick2' : 'cap8dir2') : (dir === 'brew' || dir === 'carry' || dir === 'serve') ? 'cof3' : (dir === 'se' || dir === 'ne') ? 'diag1' : (dir === 'water' || dir === 'clean' || dir === 'dance' || dir === 'sweep') ? 'act3' : ((id === 'translator' && dir === 'east') || (id === 'sorter' && (dir === 'east' || dir === 'back'))) ? 'fix26' : 'orig2k';
           jobs.push(load(imgs.walk[id][dir], i - 1, `/static/office-anime/assets/walk/${assetId}-${dir}-${i}.webp?v=${v}_df4`));
         }
       }
@@ -169,8 +169,12 @@
       for (let i = 1; i <= 2; i++) jobs.push(load(imgs.walk[id].snack, i - 1, `/static/office-anime/assets/walk/${assetId}-snack-${i}.webp?v=${lngV}`));
       // 전 직원(캡틴·외부 손님 제외) 9명 정중 인사 12프레임 로드 (id 기준 파일명 — reader↔auditor 일치!)
       if (id !== 'captain' && id !== 'claude' && !cfg.guest) {
-        const bowV = (id === 'inspector') ? 'swap1' : 'bow1_df3';
+        const bowV = (id === 'inspector') ? 'bow2' : 'bow1_df3';
         for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].bow, i - 1, `/static/office-anime/assets/walk/${id}-bow-${i}.webp?v=${bowV}`));
+      }
+      // 운영 감찰관 옆으로 정중 인사 12프레임 (정은수 대표님 대화 후 전용; 보고해는 뒷모습 bow 사용)
+      if (id === 'inspector') {
+        for (let i = 1; i <= 12; i++) jobs.push(load(imgs.walk[id].sideBow, i - 1, `/static/office-anime/assets/walk/inspector-sidebow-${i}.webp?v=bow2`));
       }
       // 시각 정보 비서 스튜디오 카메라 촬영 12프레임
       if (id === 'finder') {
@@ -4619,8 +4623,8 @@
           npcSays: ['😊 감사합니다, 정은수 대표님! 꼼꼼하게 점검하겠습니다!', '😊 대표님, 늘 응원해 주셔서 큰 힘이 됩니다!', '😊 언제든 편하게 들러 주세요, 정은수 대표님!'],
         },
       ].map(s => ({ ...s, vipSay: pickOne(s.vipSays), npcSay: pickOne(s.npcSays) }));
-      // 옆으로 정중 인사(12프레임) 보유 직원: 운영 감찰관은 즉시 적용, 비서실장은 옆으로 인사 영상 적용 시 true로 켜면 동일 동작!
-      const HAS_SIDE_BOW = { inspector: true, claude: false };
+      // 옆으로 정중 인사(12프레임) 보유 직원: 운영 감찰관(sideBow)·비서실장(bow) 모두 정은수 대표님 대화 후 방향 맞춰 인사!
+      const HAS_SIDE_BOW = { inspector: true, claude: true };
       // 매 방문마다 2곳의 담당자 공간을 랜덤 선택해 순회 방문!
       const picked = [...tourStops].sort(() => Math.random() - 0.5).slice(0, 2);
 
@@ -4712,11 +4716,12 @@
           vipSetTimeout(() => {
             v.emote = null; v.emoteLoop = false;
             v.bubble = '';
-            const canSideBow = tn && HAS_SIDE_BOW[st.id] && imgs.walk[st.id]?.bow?.length === 12
+            const sideEmote = (st.id === 'inspector' && imgs.walk.inspector?.sideBow?.length === 12) ? 'sideBow' : 'bow';
+            const canSideBow = tn && HAS_SIDE_BOW[st.id] && imgs.walk[st.id]?.[sideEmote]?.length === 12
               && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id);
             if (canSideBow) {
               tn.dir = (v.x < tn.x) ? 'west' : 'east';
-              tn.mode = 'emote'; tn.emote = 'bow'; tn.emoteLoop = false;
+              tn.mode = 'emote'; tn.emote = sideEmote; tn.emoteLoop = false;
               tn.emoteStart = performance.now() / 1000;
               tn.bubble = '🙇 감사합니다, 정은수 대표님!';
               tn.bubbleType = 'ok';
@@ -4728,7 +4733,7 @@
                   seatNpc(st.id);
                 }
                 visitStop(idx + 1);
-              }, 1950);
+              }, 3000);
               return;
             }
             if (tn) {
