@@ -195,8 +195,8 @@
       // 전 직원 10명 책상 맞춤 앉은 업무 동작(외부 손님 제외)
       if (!cfg.guest) {
         imgs.walk[id].seat = [];
-        const seatCnt = (id === 'staffing') ? 8 : 4;
-        const seatV = (id === 'claude' || id === 'inspector') ? 'swap1' : 'seat2_df3';
+        const seatCnt = (id === 'claude') ? 24 : (id === 'staffing') ? 8 : 4;
+        const seatV = (id === 'claude') ? 'seatvid1' : (id === 'inspector') ? 'swap1' : 'seat2_df3';
         for (let i = 1; i <= seatCnt; i++) jobs.push(load(imgs.walk[id].seat, i - 1, `/static/office-anime/assets/walk/${id}-seat-${i}.webp?v=${seatV}`));
       }
       // 비서실장 댄스 36프레임 (구 운영감찰관 캐릭터 교체 반영!)
@@ -1692,7 +1692,7 @@
         seatPose = false;
       } else if (seated && !capSipping && activeSeat && wset.seat?.length >= 4 && wset.seat.every(Boolean)) {
         const cnt = wset.seat.length;
-        const stepSec = working ? 1.45 : (isConfSeat ? 2.2 : 2.85);
+        const stepSec = (cnt >= 12) ? (working ? 0.24 : 0.38) : (working ? 1.45 : (isConfSeat ? 2.2 : 2.85));
         const phase = (activeSeat.x * 0.37 + activeSeat.headTopY * 0.19);
         const k = Math.floor((t + phase) / stepSec) % cnt;
         im = wset.seat[k];
