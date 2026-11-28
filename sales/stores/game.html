@@ -660,6 +660,93 @@
 <script src="/stores/game-data.js"></script>
 <script>
 (function () {
+  /* ==================== 효과음 (Web Audio로 직접 합성 — 소리 파일 없음, 2026-11-28) ==================== */
+  const SFX = (function () {
+    let ctx = null, master = null;
+    function ac() {
+      try {
+        if (!ctx) {
+          const C = window.AudioContext || window.webkitAudioContext;
+          if (!C) return null;
+          ctx = new C();
+          master = ctx.createGain();
+          master.gain.value = 0.5;
+          master.connect(ctx.destination);
+        }
+        if (ctx.state === "suspended") ctx.resume();
+        return ctx;
+      } catch (e) { return null; }
+    }
+    // 첫 터치 때 소리 장치를 깨워 둔다(폰은 터치 전엔 소리를 막음)
+    ["pointerdown", "touchstart", "keydown"].forEach(function (ev) {
+      window.addEventListener(ev, function () { ac(); }, { passive: true });
+    });
+    function tone(freq, start, dur, opt) {
+      const c = ac(); if (!c) return;
+      opt = opt || {};
+      const t = c.currentTime + (start || 0);
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = opt.type || "sine";
+      o.frequency.setValueAtTime(freq, t);
+      if (opt.to) o.frequency.exponentialRampToValueAtTime(opt.to, t + dur);
+      const v = opt.vol == null ? 0.3 : opt.vol;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(v, t + Math.min(0.012, dur / 3));
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + dur + 0.02);
+    }
+    function noise(start, dur, opt) {
+      const c = ac(); if (!c) return;
+      opt = opt || {};
+      const t = c.currentTime + (start || 0);
+      const n = Math.max(1, Math.floor(c.sampleRate * dur));
+      const buf = c.createBuffer(1, n, c.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      const s = c.createBufferSource(); s.buffer = buf;
+      const f = c.createBiquadFilter(); f.type = opt.filter || "bandpass";
+      f.frequency.setValueAtTime(opt.freq || 2000, t);
+      if (opt.to) f.frequency.exponentialRampToValueAtTime(opt.to, t + dur);
+      f.Q.value = opt.q || 1;
+      const g = c.createGain();
+      const v = opt.vol == null ? 0.2 : opt.vol;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(v, t + Math.min(0.02, dur / 4));
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      s.connect(f); f.connect(g); g.connect(master);
+      s.start(t); s.stop(t + dur + 0.02);
+    }
+    return {
+      // 버튼 누름: 짧은 '톡'
+      tap: function () { tone(660, 0, 0.07, { type: "triangle", vol: 0.18, to: 880 }); },
+      // 룰렛 한 칸 넘어갈 때: '딸깍'
+      tick: function (p) { tone(1200 + (p || 0) * 500, 0, 0.035, { type: "square", vol: 0.07 }); noise(0, 0.025, { freq: 3500, q: 2, vol: 0.06 }); },
+      // 간판 룰렛 돌기 시작: '슈웅'
+      whoosh: function () { noise(0, 0.45, { freq: 600, to: 3000, q: 0.8, vol: 0.16 }); },
+      // 월드컵 카드 고름: '뽁'
+      pick: function () { tone(520, 0, 0.12, { type: "sine", vol: 0.32, to: 1040 }); tone(1560, 0.05, 0.08, { type: "triangle", vol: 0.08 }); },
+      // 당첨: '빠밤~'
+      win: function () {
+        [523, 659, 784].forEach(function (f, i) { tone(f, i * 0.09, 0.16, { type: "triangle", vol: 0.22 }); });
+        [523, 659, 784, 1047].forEach(function (f) { tone(f, 0.3, 0.7, { type: "triangle", vol: 0.12 }); });
+        tone(2093, 0.3, 0.5, { type: "sine", vol: 0.05 });
+      },
+      // 월드컵 우승: 팡파레 + 반짝
+      champion: function () {
+        const n = [392, 523, 659, 784, 659, 784, 1047];
+        const at = [0, 0.12, 0.24, 0.36, 0.52, 0.62, 0.74];
+        n.forEach(function (f, i) { tone(f, at[i], i === n.length - 1 ? 0.9 : 0.14, { type: "square", vol: 0.09 }); tone(f, at[i], i === n.length - 1 ? 0.9 : 0.14, { type: "triangle", vol: 0.14 }); });
+        for (let i = 0; i < 8; i++) tone(1800 + Math.random() * 1600, 0.8 + i * 0.07, 0.12, { type: "sine", vol: 0.05 });
+      },
+      // 사다리 출발: 짧게 올라가는 소리
+      ladderGo: function () { tone(330, 0, 0.18, { type: "triangle", vol: 0.2, to: 660 }); },
+      // 사다리 가로줄 지날 때: '통'
+      step: function (p) { tone(700 + (p || 0) * 400, 0, 0.05, { type: "sine", vol: 0.12 }); },
+      // 사다리 도착: '띠링'
+      arrive: function () { tone(880, 0, 0.12, { type: "triangle", vol: 0.2 }); tone(1319, 0.08, 0.35, { type: "triangle", vol: 0.18 }); }
+    };
+  })();
+
   const LANGS = [["ko", "한국어"], ["vi", "Tiếng Việt"], ["en", "English"], ["zh", "中文"], ["ja", "日本語"]];
   const SUPPORTED = LANGS.map(([c]) => c);
 
@@ -1187,6 +1274,7 @@
     if (!d0 || !d1) return;
 
     wc.busy = true;
+    SFX.pick();
     const chosen = slot === 0 ? d0 : d1;
     const other = slot === 0 ? d1 : d0;
 
@@ -1211,6 +1299,7 @@
         const clone = cf.cloneNode(true);
         cf.parentNode.replaceChild(clone, cf);
         render();
+        SFX.champion();
       } else {
         wc.round = wc.nextRound;
         wc.nextRound = [];
@@ -1304,6 +1393,7 @@
       card.classList.remove("tick");
       void card.offsetWidth;
       card.classList.add("tick");
+      SFX.tick(step / delays.length);
 
       step++;
       if (step < delays.length) {
@@ -1316,6 +1406,7 @@
         void card.offsetWidth;
         card.classList.add("sparkle");
         renderRlControls();
+        SFX.win();
       }
     }
     timerId = setTimeout(tick, delays[0]);
@@ -1414,8 +1505,22 @@
     seq.push(winner);
     srSetReel(seq, seq.length - 1, true);
     renderSr();
+    // 효과음: '슈웅' 후, 간판이 한 칸 넘어갈 때마다 '딸깍'(돌아가는 실제 위치를 읽어서)
+    SFX.whoosh();
+    (function () {
+      const reel = $("srReel"), win = $("srWindow"), t0 = performance.now();
+      let last = 0;
+      const iv = setInterval(function () {
+        if (!sr.spinning || performance.now() - t0 > 4050) { clearInterval(iv); return; }
+        const h = win.clientHeight || 1;
+        const m = new DOMMatrixReadOnly(getComputedStyle(reel).transform);
+        const idx = Math.floor(-m.m42 / h + 0.5);
+        if (idx > last) { last = idx; SFX.tick(idx / seq.length); }
+      }, 20);
+    })();
     timerId = setTimeout(function () {
       timerId = null;
+      SFX.win();
       sr.current = winner;
       sr.spinning = false;
       sr.done = true;
@@ -1568,10 +1673,23 @@
     el.style.transition = `stroke-dashoffset ${dur}ms linear`;
     el.style.strokeDashoffset = 0;
     renderLdRows();
+    // 효과음: 출발 → 가로줄 지날 때마다 '통' → 도착 '띠링'
+    SFX.ladderGo();
+    const pts = ldPoints(s, g);
+    let acc = 0, k = 0;
+    for (let i = 1; i < pts.length; i++) {
+      const horiz = pts[i][1] === pts[i - 1][1];
+      if (horiz && p.len > 0) {
+        const at = Math.round((acc / p.len) * dur), pitch = k++ % 2;
+        ld.timers.push(setTimeout(function () { SFX.step(pitch); }, at));
+      }
+      acc += Math.abs(pts[i][0] - pts[i - 1][0]) + Math.abs(pts[i][1] - pts[i - 1][1]);
+    }
     ld.timers.push(setTimeout(function () {
       ld.running.delete(s);
       ld.shown.add(s);
       renderLdRows();
+      SFX.arrive();
     }, dur + 50));
   }
 
@@ -1816,6 +1934,7 @@
     for (let s = 0; s < ld.n; s++) ld.shown.add(s);
     drawLadder();
     renderLdRows();
+    SFX.win();
   });
   $("ldShuffleBtn").addEventListener("click", makeLadder);
   $("ldEditBtn").addEventListener("click", function () { ldClearTimers(); ld.phase = "setup"; render(); });
