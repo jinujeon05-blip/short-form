@@ -826,10 +826,28 @@ CODEX_POSIX = "/" + str(Path(os.environ.get("APPDATA", "")) / "npm" / "codex").r
 CODEX_POSIX = CODEX_POSIX[0] + CODEX_POSIX[1].lower() + CODEX_POSIX[2:]  # /c/Users/.../npm/codex
 
 
+def find_deploy_ready(text):
+    """끝 보고에서 '배포준비: <가게id>' 줄을 찾아 실제 있는 가게 id 목록을 준다(없으면 None).
+    2026-11-28 자금성 건: 비서실장이 '배준비: zijincheng'(포 빠짐)로 써서 결재함에 배포 카드가 안 생기고 '끝남'만 보였다.
+    → 글자가 조금 틀려도(배포준비·배포 준비·배준비·배포대기·배포 가능) 읽고, 맨 끝 3줄이 '…: <가게id>' 꼴이면 그것도 배포 대기로 본다."""
+    def shops(s):
+        ids = [x for x in re.findall(r"[a-z0-9][a-z0-9-]*", s) if (ROOT / "restaurants" / x / "index.html").exists()]
+        return ids or None
+    d = re.search(r"^[\s*`>-]*배\s*포?\s*(?:준\s*비|대\s*기|가\s*능)\s*[:：]\s*(.+)$", text, re.M)
+    if d and shops(d.group(1)):
+        return shops(d.group(1))
+    tail = [ln.strip(" *`>-") for ln in text.strip().splitlines() if ln.strip()][-3:]
+    for ln in reversed(tail):
+        m = re.match(r"^([^:：]{1,12})[:：]\s*([a-z0-9][a-z0-9,\s-]*)$", ln)
+        if m and re.search(r"배|준비|deploy", m.group(1), re.I) and shops(m.group(2)):
+            return shops(m.group(2))
+    return None
+
+
 ORDER_RULES = """이 지시는 사용자(캡틴)가 대시보드 'Jinwoo 에이전트'에서 보낸 것이다. CLAUDE.md·docs 규칙을 그대로 따른다.
 - 사용자에게 되물을 수 없다. 결정이 필요하면 거기서 멈추고, 끝 보고에 번호 보기 2~3개(추천 표시)를 쓴다. 사용자가 결재함에서 답하면 이 대화가 이어진다.
 - 이 실행에는 외부 연결(Vercel·드라이브 커넥터)이 없다. 배포·git push·main 머지·결제·외부 발송·삭제는 하지 않는다. 드라이브 사진은 동기화 폴더 G:\\내 드라이브\\QR메뉴판 에서 읽는다.
-- 너는 배포하지 않는다. 가게가 점검(check-standard·check-listing·shot·reviewer)을 통과하고 커밋까지 끝나 배포만 남았으면, 결재 줄 대신 맨 끝 줄을 '배포준비: <가게id>'(여러 곳이면 쉼표)로 쓴다. 캡틴이 결재함에서 [배포 확정]을 누르면 대시보드가 직접 배포한다.
+- 너는 배포하지 않는다. 가게가 점검(check-standard·check-listing·shot·reviewer)을 통과하고 커밋까지 끝나 배포만 남았으면, 결재 줄 대신 맨 끝 줄을 정확히 '배포준비: <가게id>'(여러 곳이면 쉼표, 글자 하나도 빼지 않음)로 쓴다. 이 줄이 틀리면 결재함에 [배포 확정]이 안 생기고 '끝남'으로만 보인다(2026-11-28 자금성 '배준비' 건). 캡틴이 결재함에서 [배포 확정]을 누르면 대시보드가 직접 배포한다.
 - 너는 '비서실장'(지휘)이다. 일은 CLAUDE.md 5장 순서대로 담당에게 맡긴다: 사진 고르기·모음 이미지 = finder, 메뉴판 읽기 = 안티그래비티(`agy -p`, 계획 모드) → 안 되면 menu-reader, 가격 재확인 = 운영 감찰관(안티그래비티 안 Claude Sonnet, 아래 명령) → 2번 실패하면 reviewer, 꾸미기 = designer, 번역 = polisher, 마지막 점검 = reviewer. 직접 하지 않는다.
 - 담당이 막히지 않게(2026-10-29 토정삼계탕 건): finder 의 모음 이미지는 `python tools/photos.py sheet <사진폴더> .scratch/<가게>/sheet.jpg` 한 줄로(파일 쓰기 명령 `cat >` 금지). 안티그래비티는 먼저 `python tools/photos.py shrink <사진폴더> .scratch/<가게>/menus`로 줄인 뒤 `cd .scratch/<가게>/menus && agy --mode plan --model gemini-4-neon-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … menu_05.jpg …"`처럼 **한 번에 5장 이하**(기본 메뉴판 읽기 = Gemini 4 Neon, 2026-11-19 시험 합격. Hydrogen은 빠르지만 메뉴를 한 줄로 묶어 버려 쓰지 않는다). 가격·빠진 메뉴 재대조(2026-10-30 사용자 결정 '다-1')는 같은 줄인 사진 폴더에서 `cd .scratch/<가게>/menus && agy --mode plan --model claude-sonnet-5-5-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … menu_05.jpg 를 열어 아래 표와 대조해줘. 가격이 다른 것·빠진 메뉴만 짧게. 못 열면 '사진 못 봄'. <표>"`(5장 이하씩). "명령 도구는 쓰지 말고 파일 보기 도구로만"을 빼면 막힌다. 코덱스·GPT-OSS는 쓰지 않는다. 제미나이 4 Argon(2026-11-03 캡틴 결정 '가-1'): **정식(계약) 가게**의 메뉴판 읽기는 항상 Argon으로 한다 — `agy --mode plan --model gemini-4-argon-medium -p "명령(command·터미널) 도구는 절대 쓰지 말고, 파일 보기 도구로만 menu_01.jpg … 를 열어 …"`(5장 이하씩). 가게 찾기용은 캡틴이 [Argon 사용]을 체크했을 때(아래 'Argon 사용' 줄이 있을 때)나 지시문에 'Argon'이라고 썼을 때만 쓰고, 그 밖에는 기본 제미나이·Claude 한도가 다 찼을 때만 예비로 쓴다. Argon이 2번 실패하면 기본 agy → menu-reader 순서로 넘긴다. 가격 재대조(운영 감찰관)는 그대로 Claude Sonnet. 화면 꾸미기(index.html 스타일)는 designer 가 하고 비서실장은 직접 고치지 않는다. 담당이 실패하면 2번까지 다시 맡기고, 그래도 안 되면 보고에 이유를 쓴다.
 - 비서실장이 이미지를 직접 보는 것은 메뉴판·모음 이미지·최종 화면, 모두 3~4번까지다.
@@ -1327,8 +1345,7 @@ def run_order(o, prompt):
         # 캡처: 보고의 '캡처: <파일>.png' 줄 → 결재함에 그림으로 보여 준다(dashboard/out 안 파일만)
         shots = [Path(x).name for x in re.findall(r"^\s*캡처\s*[:：]\s*`?([^\s`]+\.png)", text, re.M)]
         o["images"] = sorted(set((o.get("images") or []) + [f for f in shots if (OUT / f).is_file()]))
-        d = re.search(r"^\s*배포\s*준비\s*[:：]\s*(.+)$", text, re.M)
-        o["deploy"] = [x for x in re.findall(r"[a-z0-9]+", d.group(1)) if (ROOT / "restaurants" / x / "index.html").exists()] if (d and o["status"] == "done") else None
+        o["deploy"] = find_deploy_ready(text) if o["status"] == "done" else None
         o["deployState"] = None
         if result:
             # 2 = 2026-10-28부터 다시 읽은 것(cache read)까지. 3 = 2026-11-10부터 담당 몫까지. '답하기'로 이어 돈 옛 지시는 앞부분이 옛 방식 그대로라 2로 둔다
