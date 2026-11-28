@@ -267,11 +267,11 @@
               <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v3M10 2v3M14 2v3"/></svg></i>
               <span>서빙</span>
             </button>
-            <button type="button" class="oa-sk sk-dance" data-brief-dance title="비서실장·자료해석 합동 댄스">
+            <button type="button" class="oa-sk sk-dance" data-brief-dance title="운영 감찰관·자료해석 합동 댄스">
               <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></i>
               <span>댄스</span>
             </button>
-            <button type="button" class="oa-sk sk-solo" data-inspector-dance title="운영 감찰관 솔로 댄스 (전용 BGM)">
+            <button type="button" class="oa-sk sk-solo" data-inspector-dance title="비서실장 솔로 댄스 (전용 BGM)">
               <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></i>
               <span>솔로</span>
             </button>
@@ -774,7 +774,7 @@
     const CLIP_BASE = '/static/office-anime/assets/';
     const clipRaw = {}, clipBuf = {};
     function fetchClip(path) {
-      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=6').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=7').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
       return clipRaw[path];
     }
     async function getClip(path) {
@@ -836,8 +836,8 @@
     }
     const VOICE_KINDS = {
       captain:    ['greet', 'brief', 'end', 'coffee', 'kick', 'punch', 'sit', 'approve', 'order', 'nice', 'walk', 'thanks'],
-      claude:     ['call', 'ok', 'done', 'greet', 'coffee', 'dance', 'brief', 'approval', 'work', 'ok2', 'yay', 'rest'],
-      inspector:  ['call', 'ok', 'done', 'greet', 'dance', 'sweep', 'chat', 'warn', 'nice', 'hmm', 'rest'],
+      claude:     ['call', 'ok', 'done', 'greet', 'dance', 'sweep', 'chat', 'warn', 'nice', 'hmm', 'rest'],
+      inspector:  ['call', 'ok', 'done', 'greet', 'coffee', 'dance', 'brief', 'approval', 'work', 'ok2', 'yay', 'rest', 'greet-vip'],
       finder:     ['call', 'ok', 'done', 'greet', 'studio', 'work', 'chat', 'snap', 'wow', 'yes'],
       translator: ['call', 'ok', 'done', 'greet', 'chat', 'work', 'fix', 'aha', 'yes', 'rest'],
       staffing:   ['call', 'ok', 'done', 'greet', 'clean', 'report', 'urgent', 'cheer', 'ok2', 'rest'],
@@ -850,8 +850,8 @@
     };
     const voiceKinds = id => VOICE_KINDS[id] || ['call', 'ok', 'done', 'greet'];
     const VOICE_PICK_MAP = {
-      ok:   { claude: ['ok', 'ok2'], finder: ['ok', 'yes'], translator: ['ok', 'yes'], staffing: ['ok', 'ok2'], sorter: ['ok', 'yes'], agy: ['ok', 'yes'], auditor: ['ok', 'ok2'] },
-      done: { claude: ['done', 'yay'], inspector: ['done', 'nice'], finder: ['done', 'snap', 'wow'], translator: ['done', 'aha'], staffing: ['done', 'cheer'], sorter: ['done', 'yay'], reader: ['done', 'yay', 'aha'], agy: ['done', 'wow'], auditor: ['done', 'approve', 'hmm'] },
+      ok:   { inspector: ['ok', 'ok2'], finder: ['ok', 'yes'], translator: ['ok', 'yes'], staffing: ['ok', 'ok2'], sorter: ['ok', 'yes'], agy: ['ok', 'yes'], auditor: ['ok', 'ok2'] },
+      done: { claude: ['done', 'nice'], inspector: ['done', 'yay'], finder: ['done', 'snap', 'wow'], translator: ['done', 'aha'], staffing: ['done', 'cheer'], sorter: ['done', 'yay'], reader: ['done', 'yay', 'aha'], agy: ['done', 'wow'], auditor: ['done', 'approve', 'hmm'] },
       call: { sorter: ['call', 'oh'], vip_jung: ['chat'] },
     };
     async function voice(id, kind, delay = 0, optsV = {}) {
@@ -1342,48 +1342,49 @@
 
     function serveCoffee() {
       if (briefingActive) return;
-      const cl = npcs.claude, cap = npcs.captain;
-      if (cl.mode === 'walk' || cl.mode === 'emote') return;
-      if (realBusySet.has('claude')) return;
+      const ins = npcs.inspector, cap = npcs.captain;
+      if (!ins || ins.mode === 'walk' || ins.mode === 'emote') return;
+      if (realBusySet.has('inspector')) return;
       SFX.coffee();
-      log('☕ 비서실장이 커피바에서 커피를 추출해 캡틴께 서빙합니다');
-      cl.walkOverride = null;
-      sendPath('claude', safeRoute(ROUTES.chiefToCof), {
+      log('☕ 운영 감찰관이 커피바에서 커피를 추출해 캡틴께 서빙합니다');
+      ins.walkOverride = null;
+      walkNpcSafe('inspector', 15.5, 22.0, {
+        force: true,
         bubble: '☕ 캡틴 커피 타러 가는 중…',
         onArrive: () => {
           if (briefingActive) return;
-          cl.dir = imgs.walk.claude.brew?.length ? 'back' : 'front';
-          cl.mode = 'emote'; cl.emote = imgs.walk.claude.brew?.length ? 'brew' : 'snack'; cl.emoteLoop = true;
-          cl.emoteStart = performance.now() / 1000;
-          cl.bubble = '☕ 원두 커피 추출 중…';
+          ins.dir = imgs.walk.inspector.brew?.length ? 'back' : 'front';
+          ins.mode = 'emote'; ins.emote = imgs.walk.inspector.brew?.length ? 'brew' : 'snack'; ins.emoteLoop = true;
+          ins.emoteStart = performance.now() / 1000;
+          ins.bubble = '☕ 원두 커피 추출 중…';
           SFX.coffee();
           setTimeout(() => {
             if (briefingActive) return;
-            cl.emote = null; cl.emoteLoop = false;
-            cl.walkOverride = imgs.walk.claude.carry?.length ? 'carry' : null;
-            sendPath('claude', safeRoute(ROUTES.cofToCap), {
+            ins.emote = null; ins.emoteLoop = false;
+            ins.walkOverride = imgs.walk.inspector.carry?.length ? 'carry' : null;
+            sendPath('inspector', safeRoute(ROUTES.cofToCap), {
               bubble: '☕ 캡틴, 커피 가져왔습니다!', bubbleType: 'ok',
               onArrive: () => {
-                voice('claude', 'coffee', 0.1);
+                voice('inspector', 'coffee', 0.1);
                 voice('captain', 'thanks', 2.6);
-                if (briefingActive) { cl.walkOverride = null; return; }
-                cl.walkOverride = null;
-                cl.x = 43.0; cl.y = 22.8; // 캡틴 책상 바로 앞 밀착!
-                cl.dir = imgs.walk.claude.serve?.length ? 'east' : 'front';
-                cl.mode = 'emote'; cl.emote = imgs.walk.claude.serve?.length ? 'serve' : 'snack'; cl.emoteLoop = false;
-                cl.emoteStart = performance.now() / 1000;
-                cl.bubble = '☕ 캡틴, 따뜻한 커피 내려놓았습니다!'; cl.bubbleType = 'ok';
+                if (briefingActive) { ins.walkOverride = null; return; }
+                ins.walkOverride = null;
+                ins.x = 43.0; ins.y = 22.8; // 캡틴 책상 바로 앞 밀착!
+                ins.dir = imgs.walk.inspector.serve?.length ? 'east' : 'front';
+                ins.mode = 'emote'; ins.emote = imgs.walk.inspector.serve?.length ? 'serve' : 'snack'; ins.emoteLoop = false;
+                ins.emoteStart = performance.now() / 1000;
+                ins.bubble = '☕ 캡틴, 따뜻한 커피 내려놓았습니다!'; ins.bubbleType = 'ok';
                 SFX.coffee();
                 setTimeout(() => {
                   cap.bubble = '☕ 고마워요! 잘 마실게요'; cap.bubbleType = 'ok';
                 }, 900);
                 setTimeout(() => {
                   if (briefingActive) return;
-                  cl.emote = null; cl.emoteLoop = false;
-                  sendPath('claude', safeRoute(ROUTES.capToChief), {
+                  ins.emote = null; ins.emoteLoop = false;
+                  walkNpcSafe('inspector', CHARS.inspector.home[0], CHARS.inspector.home[1], {
                     bubble: '',
                     onArrive: () => {
-                      seatNpc('claude');
+                      seatNpc('inspector');
                       setTimeout(() => { if (cap.bubble.includes('고마워요')) cap.bubble = ''; }, 2400);
                     },
                   });
@@ -1592,7 +1593,7 @@
         fIdx = Math.min(wset[fightKey].length - 1, Math.floor(elapsed * fpsK));
       } else if (emoting) {
         const elapsed = Math.max(0, t - (n.emoteStart || 0));
-        if (n.id === 'inspector' && n.emote === 'dance' && wset.dance?.length === 36) {
+        if (n.id === 'claude' && n.emote === 'dance' && wset.dance?.length === 36) {
           // 127 BPM 전용 BGM(17.35s) 칼박 싱크: 인트로 2.2s(0..5) → 메인 6.6s×2(6..29) → 엔딩 1.95s(30..35)
           if (elapsed < 2.20) {
             fIdx = Math.min(5, Math.floor((elapsed / 2.20) * 6));
@@ -4114,7 +4115,7 @@
             n.mode = 'emote'; n.emote = emoteKey; n.emoteLoop = true; n.emoteStart = performance.now() / 1000;
             if (emoteKey === 'water') { SFX.water(); if (id === 'sorter') voice('sorter', 'water', 0.25); }
             else if (emoteKey === 'clean') { SFX.sweep(); if (id === 'staffing') voice('staffing', 'clean', 0.25); }
-            else if (emoteKey === 'sweep') { SFX.sweep(); if (id === 'inspector') voice('inspector', 'sweep', 0.25); }
+            else if (emoteKey === 'sweep') { SFX.sweep(); if (id === 'claude') voice('claude', 'sweep', 0.25); }
             else if (emoteKey === 'photo') {
               n.emoteLoop = false;
               setTimeout(() => { if (!briefingActive && n.emote === 'photo') triggerCameraFlash(); }, 1050);
@@ -4181,19 +4182,19 @@
           '🪴 물뿌리개 들고 화분 관리 가는 중…', '💧 화분에 물 주는 중… 쑥쑥 자라라!', 3800, '', 'water',
           leftPlant ? [32.4, 37.4] : [67.7, 37.4]);
       },
-      // 2. 운영 감찰관: 복도 화분과 비서실장 책상 사이 공간 바닥 빗자루 청소
+      // 2. 비서실장: 복도 화분과 비서실장 책상 사이 공간 바닥 빗자루 청소
       () => {
         const leftSide = Math.random() < 0.5;
-        return doChore('inspector', leftSide ? 37.0 : 63.0, 41.2, 'front',
+        return doChore('claude', leftSide ? 37.0 : 63.0, 41.2, 'front',
           '🧹 화분 옆 복도 청소하러 나왔습니다!', '🧹 복도 바닥 빗자루질 중… 깔끔하게!', 3600, '', 'sweep');
       },
       // 3. 인력 공급팀 팀장: 캡틴 책상 먼지 털기 (책상 좌측 앞쪽 y=23.0 밀착 → 먼지털이가 책상 상판 위를 직접 닦음!)
       () => doChore('staffing', 41.0, 22.4, 'east',
         '🪶 캡틴 책상 정돈하러 올라가는 중…', '✨ 캡틴 책상 먼지 닦아드렸습니다!', 3600, '', 'clean',
         [43.8, 22.2]),
-      // 4. 비서실장: 캡틴 커피 서빙 & 안부 여쭙기
+      // 4. 운영 감찰관: 캡틴 커피 서빙 & 안부 여쭙기
       () => {
-        if (!isFree('claude')) return false;
+        if (!isFree('inspector')) return false;
         serveCoffee(); return true;
       },
       // 5. 시각 정보 비서: 스튜디오 카메라 촬영 (12프레임 + 하얀 플래시 + '찰칵! 완벽해요!')
@@ -4268,7 +4269,7 @@
       () => doChore('sorter', 85.4, 80.8, 'east',
         '📦 컨베이어 분류 상태 확인 중…', '✅ 포장 라인·분류함 이상 없음!', 2800),
       // 13. 비서실장 + 자료 해석 비서: 분산 무대 합동 아이돌 댄스 타임!
-      () => (isFree('claude') && isFree('reader')) ? danceParty() : false,
+      () => (isFree('inspector') && isFree('reader')) ? danceParty() : false,
       // 14. 신관 직원 휴게실 소파 휴식 (전 직원 9명 ChatGPT 12컷 sofa_front / sofa_left 활용!)
       () => {
         const pool = ['claude', 'finder', 'agy', 'translator', 'sorter', 'inspector', 'staffing', 'reader', 'auditor'].filter(id => isFree(id) && !npcs[id].customSeat);
@@ -4337,26 +4338,26 @@
     function stopInspectorSolo(returnHome = true) {
       if (soloDanceTimer) { clearTimeout(soloDanceTimer); soloDanceTimer = null; }
       soloBtn?.classList.remove('on');
-      const ins = npcs.inspector;
-      if (!ins) return;
-      if (ins.mode === 'emote' && ins.emote === 'dance') {
+      const cl = npcs.claude;
+      if (!cl) return;
+      if (cl.mode === 'emote' && cl.emote === 'dance') {
         stopDanceMusic();
-        ins.emote = null; ins.emoteLoop = false; ins.bubble = '';
-        if (returnHome && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === 'inspector')) {
-          walkNpcSafe('inspector', CHARS.inspector.home[0], CHARS.inspector.home[1], {
-            onArrive: () => seatNpc('inspector')
+        cl.emote = null; cl.emoteLoop = false; cl.bubble = '';
+        if (returnHome && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === 'claude')) {
+          walkNpcSafe('claude', CHARS.claude.home[0], CHARS.claude.home[1], {
+            onArrive: () => seatNpc('claude')
           });
         }
       }
     }
     function inspectorSoloDance() {
       if (briefingActive) return false;
-      const ins = npcs.inspector;
-      if (!ins) return false;
+      const cl = npcs.claude;
+      if (!cl) return false;
       // 이미 솔로 댄스 중이면 한 번 더 눌러서 깔끔하게 종료·복귀
-      if (soloDanceTimer || (ins.mode === 'emote' && ins.emote === 'dance')) {
+      if (soloDanceTimer || (cl.mode === 'emote' && cl.emote === 'dance')) {
         stopInspectorSolo(true);
-        log('👍 운영 감찰관 솔로 댄스 종료 — 자리로 복귀합니다.');
+        log('👍 비서실장 솔로 댄스 종료 — 자리로 복귀합니다.');
         return true;
       }
       const soloStages = [
@@ -4369,28 +4370,28 @@
       lastSoloStage = (lastSoloStage + 1) % soloStages.length;
       const st = soloStages[lastSoloStage];
       soloBtn?.classList.add('on');
-      ins.emote = null; ins.emoteLoop = false;
-      log(`👍 운영 감찰관 — ${st.name} 솔로 아이돌 댄스 무대!`);
-      walkNpcSafe('inspector', st.pos[0], st.pos[1], {
+      cl.emote = null; cl.emoteLoop = false;
+      log(`👍 비서실장 — ${st.name} 솔로 아이돌 댄스 무대!`);
+      walkNpcSafe('claude', st.pos[0], st.pos[1], {
         bubble: `👍 ${st.name} 솔로 무대로 이동 중…`,
         onArrive: () => {
           if (briefingActive) { soloBtn?.classList.remove('on'); return; }
-          ins.dir = 'front';
-          ins.mode = 'emote'; ins.emote = 'dance'; ins.emoteLoop = true;
-          ins.emoteStart = performance.now() / 1000;
-          ins.bubble = '👍✨ 운영 감찰관 솔로 댄스 타임!';
-          ins.bubbleType = 'meet';
+          cl.dir = 'front';
+          cl.mode = 'emote'; cl.emote = 'dance'; cl.emoteLoop = true;
+          cl.emoteStart = performance.now() / 1000;
+          cl.bubble = '👍✨ 비서실장 솔로 댄스 타임!';
+          cl.bubbleType = 'meet';
           playDanceMusic('inspector');
-          spawnBurst(st.pos[0], st.pos[1] - 1.8, '👍 감찰관 솔로 댄스! +25 EXP', 25);
+          spawnBurst(st.pos[0], st.pos[1] - 1.8, '👍 비서실장 솔로 댄스! +25 EXP', 25);
           soloDanceTimer = setTimeout(() => {
             soloDanceTimer = null;
             soloBtn?.classList.remove('on');
             stopDanceMusic();
-            if (briefingActive || (activeTalkNpc && activeTalkNpc.id === 'inspector')) return;
-            ins.emote = null; ins.emoteLoop = false; ins.bubble = '';
-            walkNpcSafe('inspector', CHARS.inspector.home[0], CHARS.inspector.home[1], {
+            if (briefingActive || (activeTalkNpc && activeTalkNpc.id === 'claude')) return;
+            cl.emote = null; cl.emoteLoop = false; cl.bubble = '';
+            walkNpcSafe('claude', CHARS.claude.home[0], CHARS.claude.home[1], {
               bubble: '😎 솔로 무대 끝! 자리로 복귀합니다.',
-              onArrive: () => seatNpc('inspector')
+              onArrive: () => seatNpc('claude')
             });
           }, 17350);
         }
@@ -4413,23 +4414,23 @@
       lastDanceStage = sIdx;
       const st = stages[sIdx];
       const dancers = [
-        { id: 'claude', tx: st.a[0], ty: st.a[1], go: `💃 ${st.name} 무대로 이동 중…`, msg: '💃✨ 신나는 아이돌 댄스 타임!' },
+        { id: 'inspector', tx: st.a[0], ty: st.a[1], go: `💃 ${st.name} 무대로 이동 중…`, msg: '💃✨ 신나는 아이돌 댄스 타임!' },
         { id: 'reader', tx: st.b[0], ty: st.b[1], go: '🎶 같이 춤추러 가요!', msg: '🎶 같이 춤춰요 캡틴! ✨' },
       ];
       // 2명 모두 도착 → 먼저 인트로 멘트("자, 음악 주세요!" 등) 끝까지 말함 → 멘트 끝나자마자 음악 + 2인 칼군무 동시 시작 + 7.2초 뒤 동시 종료!
       const validDancers = dancers.filter(d => npcs[d.id]);
       let arrivedCount = 0;
-      log(`💃 비서실장 · 자료 해석 비서 — ${st.name} 합동 아이돌 댄스 타임!`);
+      log(`💃 운영 감찰관 · 자료 해석 비서 — ${st.name} 합동 아이돌 댄스 타임!`);
       const startDuoSync = () => {
         if (briefingActive) return;
-        const theme = (danceThemeIdx++ % 2 === 0) ? 'claude' : 'reader';
+        const theme = (danceThemeIdx++ % 2 === 0) ? 'inspector' : 'reader';
         let launched = false;
         const launchMusicAndDance = () => {
           if (launched || briefingActive) return;
           launched = true;
           const syncStart = performance.now() / 1000;
-          playDanceMusic(theme);
-          spawnBurst(st.bx, st.by, theme === 'claude' ? '💃 비서실장 댄스! +20 EXP' : '🎶 자료해석 댄스! +20 EXP', 20);
+          playDanceMusic(theme === 'inspector' ? 'claude' : 'reader');
+          spawnBurst(st.bx, st.by, theme === 'inspector' ? '💃 운영 감찰관 댄스! +20 EXP' : '🎶 자료해석 댄스! +20 EXP', 20);
           for (const d of validDancers) {
             const dn = npcs[d.id];
             dn.dir = 'front';
@@ -4454,12 +4455,12 @@
           const dn = npcs[d.id];
           dn.dir = 'front'; dn.mode = 'stand';
           dn.bubble = (d.id === theme)
-            ? (theme === 'claude' ? '🎤 캡틴! 분위기 좀 띄워볼까요? 자, 음악 주세요!' : '🎤 자~ 신나게 같이 춤춰요, 캡틴!')
+            ? (theme === 'inspector' ? '🎤 캡틴! 분위기 좀 띄워볼까요? 자, 음악 주세요!' : '🎤 자~ 신나게 같이 춤춰요, 캡틴!')
             : '🎶 준비 완료! 큐 사인 대기 중…';
           dn.bubbleType = 'meet';
         }
         // 2) 멘트 음성이 끝나는 순간(onEnd) 즉시 음악과 춤 동시 시작! (안전 폴백 6.5초)
-        voice(theme === 'reader' ? 'reader' : 'claude', 'dance', 0, { interrupt: true, onEnd: launchMusicAndDance });
+        voice(theme === 'reader' ? 'reader' : 'inspector', 'dance', 0, { interrupt: true, onEnd: launchMusicAndDance });
         setTimeout(launchMusicAndDance, 6500);
       };
       for (const d of validDancers) {
