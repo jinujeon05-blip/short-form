@@ -267,6 +267,8 @@ window.DEMOS = [
     name: "니쿠쇼 肉昌 NIKUSHO", type: { ko: "일본식 와규 야키니쿠 · 우설 · 스테이크", vi: "Thịt nướng Wagyu kiểu Nhật · Lưỡi bò · Bít tết", en: "Japanese Wagyu BBQ · Beef tongue · Steak", zh: "日式和牛烧肉 · 牛舌 · 牛排", ja: "和牛焼肉・牛タン・ステーキ" } },
   { id: "phoquanbo", hidden: true, url: "https://phoquanbo.qrmenuasia.com", shot: "img/demo-phoquanbo.jpg", qr: "img/qr-phoquanbo.svg",
     name: "퍼 꾸언 보 Phở quân bò", type: { ko: "베트남식 · 소고기 쌀국수 · 와인 스튜", vi: "Phở bò · Phở sốt vang · Lẩu bò", en: "Vietnamese beef phở · Red-wine beef stew", zh: "越南牛肉河粉 · 红酒炖牛肉", ja: "ベトナム牛肉フォー・赤ワイン煮込み" } },
+  { id: "zijincheng", hidden: true, url: "https://zijincheng.qrmenuasia.com", shot: "img/demo-zijincheng.jpg", qr: "img/qr-zijincheng.svg",
+    name: "하노이 자금성 Jageumseong", type: { ko: "한국식 중화요리 · 짜장면 · 짬뽕 · 탕수육", vi: "Món Hoa kiểu Hàn · Mì tương đen · Mì hải sản cay · Thịt chiên chua ngọt", en: "Korean-Chinese restaurant · Jajangmyeon · Jjamppong · Tangsuyuk", zh: "韩式中餐 · 炸酱面 · 炒码面 · 糖醋肉", ja: "韓国式中華 · ジャジャン麺 · チャンポン · 酢豚" } },
 ];
 
 window.T = {

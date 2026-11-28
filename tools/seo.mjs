@@ -191,6 +191,7 @@ const SHOPS = {
   unatoto: { type: 'Restaurant', cuisine: ['Japanese', 'Izakaya', 'Eel', 'Yakitori', 'Sashimi'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   nikusho: { type: 'Restaurant', cuisine: ['Japanese', 'Yakiniku', 'Wagyu', 'Steak'], country: 'VN', currency: 'VND', og: 'img/yukke.jpg' },
   phoquanbo: { type: 'Restaurant', cuisine: ['Vietnamese', 'Phở', 'Beef'], country: 'VN', currency: 'VND', og: 'img/tai.jpg' },
+  zijincheng: { type: 'Restaurant', cuisine: ['Chinese', 'Korean-Chinese', 'Jajangmyeon', 'Jjamppong'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

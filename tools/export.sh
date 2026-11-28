@@ -136,6 +136,7 @@ name() {
     unatoto) echo "우나토토" ;;
     nikusho) echo "니쿠쇼" ;;
     phoquanbo) echo "퍼 꾸언 보" ;;
+    zijincheng) echo "하노이자금성" ;;
     *) echo "$1" ;;
   esac
 }

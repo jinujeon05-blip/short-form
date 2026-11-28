@@ -1007,6 +1007,12 @@ window.STORES = [
     type: { ko: "베트남식 · 소고기 쌀국수 · 와인 스튜", vi: "Phở bò · Phở sốt vang · Lẩu bò", en: "Vietnamese beef phở · Red-wine beef stew", zh: "越南牛肉河粉 · 红酒炖牛肉", ja: "ベトナム牛肉フォー・赤ワイン煮込み" },
     keywords: "퍼 꾸언 보 Phở quân bò Pho quan bo 박닌 쌀국수 소고기 쌀국수 퍼보 솟방 Sốt vang Bắc Ninh"
   },
+  { id: "zijincheng", name: "하노이 자금성 Jageumseong", sub: "짜장면 · 짬뽕 · 탕수육 · 반반 메뉴 · 코스 요리", url: "https://zijincheng.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["chinese","korean"], tags: ["photos"],
+    address: "LKC03, Khu đô thị Tây Hồ Tây, Xuân Đỉnh, Hà Nội", map: "https://www.google.com/maps/place/%ED%95%98%EB%85%B8%EC%9D%B4+%EC%9E%90%EA%B8%88%EC%84%B1/@21.0628815,105.7979057,19z/data=!4m6!3m5!1s0x313454aac7cfe405:0xcc03153dd23f414!8m2!3d21.0630691!4d105.7980076",
+    type: { ko: "한국식 중화요리 · 짜장면 · 짬뽕 · 탕수육", vi: "Món Hoa kiểu Hàn · Mì tương đen · Mì hải sản cay · Thịt chiên chua ngọt", en: "Korean-Chinese restaurant · Jajangmyeon · Jjamppong · Tangsuyuk", zh: "韩式中餐 · 炸酱面 · 炒码面 · 糖醋肉", ja: "韓国式中華 · ジャジャン麺 · チャンポン · 酢豚" },
+    keywords: "하노이 자금성 자금성 Jageumseong Zijincheng Hanoi 한국식 중식 짜장면 짬뽕 탕수육 반반 코스 Tây Hồ Tây Xuân Đỉnh"
+  },
 ];
 window.SI = {
   ko: {
