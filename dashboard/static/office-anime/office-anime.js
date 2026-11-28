@@ -3107,15 +3107,15 @@
       if (statusAnimTimer) { clearTimeout(statusAnimTimer); statusAnimTimer = null; }
     }
     const STATUS_ACT_ORDER = {
-      reader:     ['analyze', 'cheer', 'coffee', 'stretch', 'drink', 'snack'],
-      finder:     ['photo', 'drink', 'snack'],
-      agy:        ['inspect', 'drink', 'snack'],
-      translator: ['review', 'drink', 'snack'],
-      sorter:     ['water', 'drink', 'snack'],
-      staffing:   ['clean', 'drink', 'snack'],
-      inspector:  ['sideBow', 'dance', 'drink', 'snack'],
-      auditor:    ['drink', 'snack'],
-      captain:    ['greet', 'coffee', 'praise', 'drink'],
+      reader:     ['analyze', 'cheer', 'coffee', 'dance'],
+      finder:     ['photo'],
+      agy:        ['inspect'],
+      translator: [],
+      sorter:     [],
+      staffing:   [],
+      inspector:  ['sideBow', 'dance'],
+      auditor:    [],
+      captain:    ['greet', 'coffee', 'praise'],
       vip_jung:   ['greet', 'talk', 'thumb', 'coffee'],
     };
     function startStatusCharAnim(hit, imgEl, baseSrc) {
