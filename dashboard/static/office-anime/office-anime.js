@@ -239,7 +239,7 @@
     const dockHtml = DOCK_IDS.map(id => {
       const c = CHARS[id];
       return `<button type="button" class="oa-dock-btn" data-dock="${id}" title="${c.name}(${c.role}) 캡틴 앞으로 호출">
-        <img src="/static/office-anime/assets/portraits/${c.asset || id}.webp?v=swap1" alt="${c.name}">
+        <img src="/static/office-anime/assets/portraits/${c.asset || id}.webp?v=swap2" alt="${c.name}">
         <span>${DOCK_SHORT[id]}</span><i class="oa-dock-q" hidden></i>
       </button>`;
     }).join('');
@@ -346,12 +346,29 @@
     let camMode = 'follow';
     const cam = { z: 1.85, fx: CHARS.captain.home[0], fy: CHARS.captain.home[1] + 5, tx: 0, ty: 0 };
     let modalTargets = [], modalSlot = null, modalPlaceAt = 0; // 대화창 자리 정하기(placeModal)용
-    camBtn?.addEventListener('click', () => {
-      camMode = (camMode === 'follow') ? 'overview' : 'follow';
-      camBtn.classList.toggle('on', camMode === 'follow');
-      camBtn.textContent = camMode === 'follow' ? '🗺 전체 보기' : '🎥 추적 카메라';
+    function setCamMode(mode) {
+      if (camMode === mode) return;
+      camMode = mode;
+      if (camBtn) {
+        camBtn.classList.toggle('on', camMode === 'follow');
+        camBtn.textContent = camMode === 'follow' ? '🗺 전체 보기' : '🎥 추적 카메라';
+      }
       SFX.tap();
+    }
+    camBtn?.addEventListener('click', () => {
+      setCamMode(camMode === 'follow' ? 'overview' : 'follow');
     });
+    // 마우스 가운데 휠로 전체 보기 ↔ 추적 카메라 전환 (위로 굴리면 추적 카메라, 아래로 굴리면 전체 보기)
+    let wheelCamLock = 0;
+    stage.addEventListener('wheel', e => {
+      if (!modalBack.hidden || briefingActive) return;
+      if (Math.abs(e.deltaY) < 4) return;
+      e.preventDefault();
+      const now = performance.now();
+      if (now - wheelCamLock < 200) return;
+      wheelCamLock = now;
+      setCamMode(e.deltaY < 0 ? 'follow' : 'overview');
+    }, { passive: false });
     // 🛋️ 캡틴 신관 인터랙티브 착석·음료 스팟 (회의실 의자 · 상단 VIP 소파 · 휴게실 위/오른쪽 소파 · 스낵바/냉장고!)
     const CAP_SPOTS = [
       { id: 'conf_mid',        kind: 'seat',  name: '대회의실 의자',      x: 150.6, y: 23.0, headTopY: 14.5, clipY: 21.2, h: 225, facing: 'front', stand: [150.6, 33.5], box: [138, 16, 163, 25], say: '📋 대회의실 자리에서 브리핑 준비 중…' },
@@ -776,7 +793,7 @@
     const CLIP_BASE = '/static/office-anime/assets/';
     const clipRaw = {}, clipBuf = {};
     function fetchClip(path) {
-      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=8').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=9').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
       return clipRaw[path];
     }
     async function getClip(path) {
@@ -2845,11 +2862,12 @@
         tagEls[id].style.transform = tagTf; tagEls[id].style.transformOrigin = tagTf ? '50% 0' : '';
         bubEls[id].style.transform = bubTf; bubEls[id].style.transformOrigin = bubTf ? '50% 100%' : '';
         tagEls[id].style.left = `${n.x}%`;
+        const isStanding = (n.mode === 'walk' || n.mode === 'stand' || n.mode === 'emote');
         const tagTop = n.customSeat
           ? (n.y + 1.4)
           : ((id === 'captain' && n.mode === 'idle')
             ? 16.8
-            : (n.y + (walking ? 1.4 : (CHARS[id].facing === 'front' ? 4.8 : 1.5))));
+            : (n.y + (isStanding ? 1.2 : (CHARS[id].facing === 'front' ? 4.8 : 1.5))));
         tagEls[id].style.top  = `${tagTop}%`;
         // RPG 퀘스트 마커(! / ?) 머리 위 표시 (말풍선이 없을 때 깔끔하게 통통 뜀 — 착석·회의실·신관 소파 시 실측 headTopY 기준 머리 위로 띄움!)
         const q = activeQuests[id];
