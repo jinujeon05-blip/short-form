@@ -275,6 +275,8 @@ window.DEMOS = [
     name: "아리랑 ARIRANG", type: { ko: "한식 · 숯불구이 · 전골 · 솥밥", vi: "Nhà hàng Hàn Quốc · Thịt nướng · Lẩu · Cơm niêu", en: "Korean restaurant · BBQ · Hot pot · Stone-pot rice", zh: "韩餐 · 烤肉 · 火锅 · 石锅饭", ja: "韓国料理・焼肉・鍋・釜飯" } },
   { id: "nangmangui", hidden: true, url: "https://nangmangui.qrmenuasia.com", shot: "img/demo-nangmangui.jpg", qr: "img/qr-nangmangui.svg",
     name: "낭만구이 LANGMAN BBQ", type: { ko: "한식 · 고기구이 · 프리미엄 소고기 · A5 와규", vi: "Thịt nướng Hàn Quốc · Bò cao cấp · Wagyu A5", en: "Korean BBQ · Premium beef · A5 Wagyu", zh: "韩式烤肉 · 顶级牛肉 · A5和牛", ja: "韓国焼肉・プレミアム牛肉・A5和牛" } },
+  { id: "sosobunsik", hidden: true, url: "https://sosobunsik.qrmenuasia.com", shot: "img/demo-sosobunsik.jpg", qr: "img/qr-sosobunsik.svg",
+    name: "XOXO 소소분식 Sosobunsik", type: { ko: "한국 분식 · 김밥 · 떡볶이 · 덮밥", vi: "Quán ăn vặt Hàn Quốc · Kimbap · Tteokbokki · Cơm", en: "Korean snack bar · Kimbap · Tteokbokki · Rice bowls", zh: "韩式小吃店 · 紫菜包饭 · 炒年糕 · 盖饭", ja: "韓国式軽食・キンパ・トッポッキ・丼" } },
 ];
 
 window.T = {

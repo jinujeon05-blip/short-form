@@ -1031,6 +1031,12 @@ window.STORES = [
     type: { ko: "한식 · 고기구이 · 프리미엄 소고기 · A5 와규", vi: "Thịt nướng Hàn Quốc · Bò cao cấp · Wagyu A5", en: "Korean BBQ · Premium beef · A5 Wagyu", zh: "韩式烤肉 · 顶级牛肉 · A5和牛", ja: "韓国焼肉・プレミアム牛肉・A5和牛" },
     keywords: "낭만구이 Langman BBQ 랑만 하노이 한식 고기구이 소고기 와규 삼겹살 소곱창 냉면 Embassy Garden 서호 떠이호"
   },
+  { id: "sosobunsik", name: "XOXO 소소분식 Sosobunsik", sub: "김밥 · 떡볶이 · 덮밥 · 닭강정 · 순대", url: "https://sosobunsik.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean","noodle"], tags: ["photos"],
+    address: "Khu Ngoại giao đoàn, Xuân Đỉnh, Hà Nội", map: "https://www.google.com/maps/place/XOXO+%EC%86%8C%EC%86%8C%EB%B6%84%EC%8B%9D/@21.0644637,105.7996467,20z/data=!4m6!3m5!1s0x3135ab0046ee4beb:0xf6cd1e9adff5a2f!8m2!3d21.0642213!4d105.7999981!16s%2Fg%2F11whwv6hjs",
+    type: { ko: "한국 분식 · 김밥 · 떡볶이 · 덮밥", vi: "Quán ăn vặt Hàn Quốc · Kimbap · Tteokbokki · Cơm", en: "Korean snack bar · Kimbap · Tteokbokki · Rice bowls", zh: "韩式小吃店 · 紫菜包饭 · 炒年糕 · 盖饭", ja: "韓国式軽食・キンパ・トッポッキ・丼" },
+    keywords: "소소분식 XOXO 엑소엑소 sosobunsik 분식 김밥 키토김밥 떡볶이 로제떡볶이 닭강정 덮밥 주먹밥 순대 쫄면 하노이 외교단 Khu Ngoại giao đoàn Xuân Đỉnh Hà Nội kimbap tteokbokki korean snack 韩式小吃 紫菜包饭 炒年糕 韓国軽食 キンパ トッポッキ"
+  },
 ];
 window.SI = {
   ko: {
