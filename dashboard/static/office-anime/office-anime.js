@@ -156,6 +156,8 @@
         for (let i = 1; i <= 15; i++) jobs.push(load(imgs.walk[id].punch, i - 1, `/static/office-anime/assets/walk/captain-punch-${i}.webp?v=punch1_df3`));
         imgs.walk[id].combo = [];
         for (let i = 1; i <= 48; i++) jobs.push(load(imgs.walk[id].combo, i - 1, `/static/office-anime/assets/walk/captain-combo-${i}.webp?v=combo2`));
+        imgs.walk[id].baek = [];
+        for (let i = 1; i <= 48; i++) jobs.push(load(imgs.walk[id].baek, i - 1, `/static/office-anime/assets/walk/captain-baek-${i}.webp?v=baek1`));
       }
       // 전 캐릭터 11명(캡틴·직원 9명·정은수 대표님) 신관 ChatGPT 12컷(소파 정면4·측면4·음료2·스낵2)!
       const lngV = (id === 'claude' || id === 'inspector') ? 'swap1' : 'lng3';
@@ -261,7 +263,7 @@
             <button type="button" class="oa-snd-btn" data-bgm-btn title="사무실 BGM 켜기/끄기">🎵 BGM</button>
           </div>
           <div class="oa-dock" data-dock-bar aria-label="직원 빠른 호출">${dockHtml}</div>
-          <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 3 발차기 · 4 주먹 · 7 10콤보</div>
+          <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 3 발차기 · 4 주먹 · 7 화랑 · 8 백두산</div>
           <div class="oa-skills" aria-label="액션 스킬창">
             <button type="button" class="oa-sk sk-cof" data-brief-cof title="비서실장 커피 서빙">
               <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v3M10 2v3M14 2v3"/></svg></i>
@@ -1254,9 +1256,9 @@
       // 복싱 짐 샌드백 근접 시 3가지 타격 선택지 제공!
       const dBag = Math.hypot(cap.x - BAG.cx, cap.y - BAG.cy);
       if (dBag <= 14.0) {
-        cands.push({ id: 'bag_combo', d: dBag,        label: '샌드백 10단 콤보',   run: () => playCaptainAction('combo') });
-        cands.push({ id: 'bag_kick',  d: dBag + 0.01, label: '샌드백 태권도 발차기', run: () => playCaptainAction('kick') });
-        cands.push({ id: 'bag_punch', d: dBag + 0.02, label: '샌드백 주먹 연타',   run: () => playCaptainAction('punch') });
+        cands.push({ id: 'bag_baek',  d: dBag,        label: '샌드백 백두산 10콤보', run: () => playCaptainAction('baek') });
+        cands.push({ id: 'bag_combo', d: dBag + 0.01, label: '샌드백 화랑 10콤보',   run: () => playCaptainAction('combo') });
+        cands.push({ id: 'bag_punch', d: dBag + 0.02, label: '샌드백 주먹 연타',     run: () => playCaptainAction('punch') });
       }
       // 본관 캡틴 대표석 근접 시 (서 있을 때만)
       if (cap.mode !== 'idle') {
@@ -1632,13 +1634,13 @@
       const wset = imgs.walk[n.id];
       if (!wset) return;
       const walking = (n.mode === 'walk');
-      const fightKey = (n.fightKind === 'combo') ? 'combo' : (n.fightKind === 'punch') ? 'punch' : 'kick'; // 발차기·주먹·10단 콤보가 같은 타이머(kickUntil)를 씀
+      const fightKey = (n.fightKind === 'baek') ? 'baek' : (n.fightKind === 'combo') ? 'combo' : (n.fightKind === 'punch') ? 'punch' : 'kick'; // 발차기·주먹·화랑/백두산 10단 콤보
       const kicking = (n.id === 'captain' && n.kickUntil && t < n.kickUntil && wset[fightKey]?.length);
       const emoting = !kicking && (n.mode === 'emote' && n.emote && wset[n.emote]?.length);
       let fIdx = 0;
       if (kicking) {
         const elapsed = Math.max(0, t - (n.kickStart || 0));
-        const fpsK = (fightKey === 'combo') ? 14.0 : (fightKey === 'punch' ? 6.2 : 5.2);
+        const fpsK = (fightKey === 'combo' || fightKey === 'baek') ? 13.8 : (fightKey === 'punch' ? 6.2 : 5.2);
         fIdx = Math.min(wset[fightKey].length - 1, Math.floor(elapsed * fpsK));
       } else if (emoting) {
         const elapsed = Math.max(0, t - (n.emoteStart || 0));
@@ -1770,7 +1772,7 @@
 
       const cx = (n.x / 100) * W;
       const cy = (n.y / 100) * H;
-      const targetH = standPx(n.id) * ((kicking && fightKey === 'combo') ? 1.30 : 1.0);
+      const targetH = standPx(n.id) * ((kicking && (fightKey === 'combo' || fightKey === 'baek')) ? 1.28 : 1.0);
       const sizeK = targetH / 164; // 그림자 크기도 키에 맞춤
       const targetW = targetH * (im.naturalWidth / im.naturalHeight);
       const bob = walking ? Math.sin(n.walkDist * 1.1) * 1.8 : 0;
@@ -2169,14 +2171,15 @@
       touchCaptainInput();
       const cap = npcs.captain;
       // 발차기·주먹·10단 콤보는 다리가 책상에 가려지므로, 대표석(의자)에 있으면 단상 앞 바닥으로 걸어 나온 뒤 시전한다
-      if (action === 'kick' || action === 'punch' || action === 'combo') {
+      if (action === 'kick' || action === 'punch' || action === 'combo' || action === 'baek') {
         const isPunch = action === 'punch';
-        const isCombo = action === 'combo';
+        const isBaek  = action === 'baek';
+        const isCombo = (action === 'combo' || isBaek);
         // 캡틴 이동 중 발차기·주먹·10콤보 지원! 앉아 있을 때만 대표석 앞으로 나온 뒤 동작, 서 있거나 이동 중이면 멈추지 않고 바로 동작!
         if (!cap._kickWalked && cap.mode === 'idle' &&
             Math.hypot(cap.x - CHARS.captain.home[0], cap.y - CHARS.captain.home[1]) < 4.0) {
           const ok = walkCaptainSafe(KICK_SPOT[0], KICK_SPOT[1], {
-            bubble: isCombo ? '🔥 화랑 10단 콤보 시범 보일게요!' : (isPunch ? '👊 잠깐 몸 좀 풀게요!' : '🥋 잠깐 시범 보일게요!'),
+            bubble: isBaek ? '⚡ 백두산 10단 콤보 시범 보일게요!' : (isCombo ? '🔥 화랑 10단 콤보 시범 보일게요!' : (isPunch ? '👊 잠깐 몸 좀 풀게요!' : '🥋 잠깐 시범 보일게요!')),
             onArrive: () => { cap._kickWalked = true; cap.dir = 'east'; playCaptainAction(action); cap._kickWalked = false; },
           });
           if (ok) return;
@@ -2188,9 +2191,11 @@
         const nowS = performance.now() / 1000;
         cap.fightKind = action;
         cap.kickStart = nowS;
-        cap.kickUntil = nowS + (isCombo ? 3.45 : (isPunch ? 2.55 : 2.35));
+        cap.kickUntil = nowS + (isCombo ? 3.55 : (isPunch ? 2.55 : 2.35));
         if (cap.mode === 'idle') cap.mode = 'stand';
-        const say = isCombo
+        const say = isBaek
+          ? (nearBag ? '⚡ 백두산 10단 콤보!! 샌드백 폭파 10연타!' : '⚡ 백두산 태권도 10단 콤보 발차기!!')
+          : isCombo
           ? (nearBag ? '🔥 화랑 10단 콤보!! 샌드백 폭파 10연타!' : '🔥 화랑 태권도 10단 콤보 발차기!!')
           : (nearBag
             ? (isPunch ? '🥊 샌드백 연타! 원투 훅 어퍼컷!' : '🥊 샌드백 강타! 회축 쾅!!')
@@ -2345,6 +2350,9 @@
       } else if (k === '7') {
         e.preventDefault();
         playCaptainAction('combo');
+      } else if (k === '8') {
+        e.preventDefault();
+        playCaptainAction('baek');
       } else if (k === 'f' && nearActions.length) {
         e.preventDefault();
         runNearAction(0);
