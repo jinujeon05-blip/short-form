@@ -265,7 +265,7 @@
           <div class="oa-dock" data-dock-bar aria-label="직원 빠른 호출">${dockHtml}</div>
           <div class="oa-ctrl-hint">🎮 WASD·방향키 이동 · 바닥 클릭 · 1 인사 · 3 발차기 · 4 주먹 · 7 화랑 · 8 백두산</div>
           <div class="oa-skills" aria-label="액션 스킬창">
-            <button type="button" class="oa-sk sk-cof" data-brief-cof title="비서실장 커피 서빙">
+            <button type="button" class="oa-sk sk-cof" data-brief-cof title="운영 감찰관 커피 서빙">
               <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v3M10 2v3M14 2v3"/></svg></i>
               <span>서빙</span>
             </button>
@@ -277,10 +277,15 @@
               <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></i>
               <span>솔로</span>
             </button>
+            <button type="button" class="oa-sk sk-baek" data-cap-baek title="캡틴 백두산 태권도 10단 콤보(8)">
+              <em class="oa-key">8</em>
+              <i class="oa-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" opacity="0"/><path d="M13 2 4 14h7l-1 8 10-12h-7l1-8Z"/><path d="M18 4l2 2M4 18l2 2"/></svg></i>
+              <span>백두산</span>
+            </button>
             <button type="button" class="oa-sk sk-combo" data-cap-combo title="캡틴 화랑 태권도 10단 콤보(7)">
               <em class="oa-key">7</em>
               <i class="oa-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.7 2.3c.6 2.8-1 4.6-2.4 6.1-1.3 1.4-2.3 2.7-2.3 4.6a4 4 0 0 0 8 0c0-1.4-.6-2.7-1.5-3.7 1.9.7 4.5 2.7 4.5 6.2a7 7 0 1 1-14 0c0-4.2 3.1-7.4 5.4-9.8 1.2-1.2 2-2.2 2.3-3.4Z"/></svg></i>
-              <span>10콤보</span>
+              <span>화랑</span>
             </button>
             <button type="button" class="oa-sk sk-kick" data-cap-kick title="캡틴 태권도 발차기 시범(3)">
               <em class="oa-key">3</em>
@@ -3997,7 +4002,7 @@
     root.querySelector('[data-cap-greet]')?.addEventListener('click', () => playCaptainAction('greet'));
     root.querySelector('[data-cap-coffee]')?.addEventListener('click', () => playCaptainAction('coffee'));
     // 모바일 멀티터치(왼손 조이스틱 드래그 + 오른손 발차기 탭)에서 즉시 발동하도록 pointerdown 사용!
-    [['[data-cap-kick]', 'kick'], ['[data-cap-punch]', 'punch'], ['[data-cap-combo]', 'combo']].forEach(([sel, act]) => {
+    [['[data-cap-kick]', 'kick'], ['[data-cap-punch]', 'punch'], ['[data-cap-combo]', 'combo'], ['[data-cap-baek]', 'baek']].forEach(([sel, act]) => {
       const btn = root.querySelector(sel);
       if (!btn) return;
       let trigAt = 0;
