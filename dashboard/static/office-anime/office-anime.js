@@ -41,6 +41,7 @@
   // 캐릭터의 발 위치(y)가 sortY보다 위(뒤)면 가구가 다리를 가리고, 아래(앞)면 캐릭터가 가구 앞에 서게 됨!
   const PROPS = [
     { key: 'captain-desk',       x0: 42.77, y0: 12.26, x1: 57.78, y1: 22.01, sortY: 21.62 },
+    { key: 'claude-chair',       x0: 47.87, y0: 27.62, x1: 52.13, y1: 32.38, sortY: 31.50 },
     { key: 'claude-desk',        x0: 42.41, y0: 31.66, x1: 57.84, y1: 42.79, sortY: 42.37 },
     { key: 'finder-desk',        x0:  9.14, y0: 37.45, x1: 19.29, y1: 45.83, sortY: 45.44 },
     { key: 'red-left-desk',      x0: 78.04, y0: 37.28, x1: 86.78, y1: 44.50, sortY: 44.12 },
@@ -4612,7 +4613,14 @@
           vipSays: ['📦 선별팀이랑 방문 현황까지 완벽하군요!', '📦 오늘도 신규 가게 자료 엄청 많이 들어왔네요!', '✨ 방문 현황 실시간으로 챙기시느라 고생 많으세요!'],
           npcSays: ['😊 정은수 대표님 또 놀러 오세요!', '😄 감사합니다 대표님! 오늘 방문자도 쑥쑥 늘고 있어요!', '😊 다음에도 편하게 들러 주세요 대표님!'],
         },
+        {
+          id: 'inspector', pos: [15.8, 82.6], dir: 'west', voiceKey: 'chat',
+          vipSays: ['🛡️ 운영 감찰관님, 2차 교차 감찰까지 꼼꼼히 챙겨 주셔서 든든해요!', '✨ 감찰관님 덕분에 메뉴판 완성도가 확실히 다르네요!', '😊 오늘도 최종 점검하느라 고생 많으십니다!'],
+          npcSays: ['😊 감사합니다, 정은수 대표님! 꼼꼼하게 점검하겠습니다!', '😊 대표님, 늘 응원해 주셔서 큰 힘이 됩니다!', '😊 언제든 편하게 들러 주세요, 정은수 대표님!'],
+        },
       ].map(s => ({ ...s, vipSay: pickOne(s.vipSays), npcSay: pickOne(s.npcSays) }));
+      // 옆으로 정중 인사(12프레임) 보유 직원: 운영 감찰관은 즉시 적용, 비서실장은 옆으로 인사 영상 적용 시 true로 켜면 동일 동작!
+      const HAS_SIDE_BOW = { inspector: true, claude: false };
       // 매 방문마다 2곳의 담당자 공간을 랜덤 선택해 순회 방문!
       const picked = [...tourStops].sort(() => Math.random() - 0.5).slice(0, 2);
 
@@ -4676,7 +4684,7 @@
             v.mode = 'emote'; v.emote = 'talk'; v.emoteLoop = true; v.emoteStart = performance.now() / 1000;
           }
           v.bubble = st.vipSay; v.bubbleType = 'meet';
-          voice('vip_jung', st.id);
+          voice('vip_jung', st.voiceKey || st.id);
           if (tn && tc && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
             tn.bubble = ''; // 이전 "기다리는 중" 말풍선 제거해 겹침 방지
             if (tc.standPos) { tn.x = tc.standPos[0]; tn.y = tc.standPos[1]; }
@@ -4700,10 +4708,29 @@
             }
           }, 2200);
 
-          // 3) 4.5초 뒤: 대화 종료 → 담당자 착석 + 예약 해제, 대표님은 다음 담당자로!
+          // 3) 4.5초 뒤: 대화 종료 → 옆으로 인사 보유 직원(운영 감찰관·비서실장)은 정은수 대표님 방향으로 보고 정중 인사 후 착석!
           vipSetTimeout(() => {
             v.emote = null; v.emoteLoop = false;
             v.bubble = '';
+            const canSideBow = tn && HAS_SIDE_BOW[st.id] && imgs.walk[st.id]?.bow?.length === 12
+              && !briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id);
+            if (canSideBow) {
+              tn.dir = (v.x < tn.x) ? 'west' : 'east';
+              tn.mode = 'emote'; tn.emote = 'bow'; tn.emoteLoop = false;
+              tn.emoteStart = performance.now() / 1000;
+              tn.bubble = '🙇 감사합니다, 정은수 대표님!';
+              tn.bubbleType = 'ok';
+              vipSetTimeout(() => {
+                tn.vipReserved = false;
+                if (!briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
+                  tn.emote = null; tn.emoteLoop = false;
+                  tn.bubble = '';
+                  seatNpc(st.id);
+                }
+                visitStop(idx + 1);
+              }, 1950);
+              return;
+            }
             if (tn) {
               tn.vipReserved = false;
               if (!briefingActive && !(activeTalkNpc && activeTalkNpc.id === st.id)) {
