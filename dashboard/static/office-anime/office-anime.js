@@ -774,7 +774,7 @@
     const CLIP_BASE = '/static/office-anime/assets/';
     const clipRaw = {}, clipBuf = {};
     function fetchClip(path) {
-      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=7').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+      if (!clipRaw[path]) clipRaw[path] = fetch(CLIP_BASE + path + '?v=8').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
       return clipRaw[path];
     }
     async function getClip(path) {
@@ -836,8 +836,8 @@
     }
     const VOICE_KINDS = {
       captain:    ['greet', 'brief', 'end', 'coffee', 'kick', 'punch', 'sit', 'approve', 'order', 'nice', 'walk', 'thanks'],
-      claude:     ['call', 'ok', 'done', 'greet', 'dance', 'sweep', 'chat', 'warn', 'nice', 'hmm', 'rest'],
-      inspector:  ['call', 'ok', 'done', 'greet', 'coffee', 'dance', 'brief', 'approval', 'work', 'ok2', 'yay', 'rest', 'greet-vip'],
+      claude:     ['call', 'ok', 'done', 'greet', 'greet-vip', 'brief', 'approval', 'work', 'dance', 'sweep', 'chat', 'warn', 'nice', 'hmm', 'rest'],
+      inspector:  ['call', 'ok', 'done', 'greet', 'coffee', 'dance', 'brief', 'approval', 'work', 'ok2', 'yay', 'rest', 'greet-vip', 'chat', 'warn', 'hmm'],
       finder:     ['call', 'ok', 'done', 'greet', 'studio', 'work', 'chat', 'snap', 'wow', 'yes'],
       translator: ['call', 'ok', 'done', 'greet', 'chat', 'work', 'fix', 'aha', 'yes', 'rest'],
       staffing:   ['call', 'ok', 'done', 'greet', 'clean', 'report', 'urgent', 'cheer', 'ok2', 'rest'],
