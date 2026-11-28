@@ -375,12 +375,14 @@ body.oa-fs-lock > *:not(.oa-stage) { display: none !important; }
 .oa-full .oa-f-form input { font-size: 2.4cqh; }
 .oa-full .oa-f-form button { font-size: 2.8cqh; }
 
-/* ===== 모바일 스킬 휠(2026-11-28 캡틴 지시) — 인사 빼고 그 자리에 화랑, 보고해 줄에 백두산, 서빙은 화랑 옛자리로 ===== */
+/* ===== 모바일 스킬 휠(2026-11-28 캡틴 지시) — 화랑은 인사 옛자리, 백두산은 맨 오른쪽 아래(보고해 옛자리), 보고해는 백두산 옛자리,
+   서빙은 화랑 옛자리, 인사는 백두산 PC 자리(맨 위). 버튼 수는 PC와 같은 9개 ===== */
 @media (pointer: coarse), (max-width: 720px), (max-height: 540px) {
-  .oa-sk.sk-greet { display: none; }
   .oa-sk.sk-combo { right: 57px; bottom: 5px; width: 40px; height: 40px; }
-  .oa-sk.sk-baek  { right: 102px; bottom: 5px; width: 40px; height: 40px; }
+  .oa-sk.sk-baek  { right: 2px; bottom: 2px; width: 46px; height: 46px; }
+  .oa-sk.sk-main  { right: 100px; bottom: 2px; width: 48px; height: 48px; }
   .oa-sk.sk-cof   { right: 5px; bottom: 104px; }
+  .oa-sk.sk-greet { right: 5px; bottom: 150px; }
   /* 메뉴가 열려 스킬 휠이 보일 때 직원 얼굴 줄 끝이 백두산 밑에 깔리지 않게(얼굴 줄은 옆으로 밀어 봄) */
   .oa-stage.oa-menu-open .oa-dock { max-width: min(60%, calc(114% - 330px)); }
 }
