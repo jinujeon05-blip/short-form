@@ -141,6 +141,7 @@ name() {
     arirang) echo "아리랑" ;;
     nangmangui) echo "낭만구이" ;;
     sosobunsik) echo "소소분식" ;;
+    sunhuine) echo "순희네" ;;
     *) echo "$1" ;;
   esac
 }

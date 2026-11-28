@@ -277,6 +277,8 @@ window.DEMOS = [
     name: "낭만구이 LANGMAN BBQ", type: { ko: "한식 · 고기구이 · 프리미엄 소고기 · A5 와규", vi: "Thịt nướng Hàn Quốc · Bò cao cấp · Wagyu A5", en: "Korean BBQ · Premium beef · A5 Wagyu", zh: "韩式烤肉 · 顶级牛肉 · A5和牛", ja: "韓国焼肉・プレミアム牛肉・A5和牛" } },
   { id: "sosobunsik", hidden: true, url: "https://sosobunsik.qrmenuasia.com", shot: "img/demo-sosobunsik.jpg", qr: "img/qr-sosobunsik.svg",
     name: "XOXO 소소분식 Sosobunsik", type: { ko: "한국 분식 · 김밥 · 떡볶이 · 덮밥", vi: "Quán ăn vặt Hàn Quốc · Kimbap · Tteokbokki · Cơm", en: "Korean snack bar · Kimbap · Tteokbokki · Rice bowls", zh: "韩式小吃店 · 紫菜包饭 · 炒年糕 · 盖饭", ja: "韓国式軽食・キンパ・トッポッキ・丼" } },
+  { id: "sunhuine", hidden: true, url: "https://sunhuine.qrmenuasia.com", shot: "img/demo-sunhuine.jpg", qr: "img/qr-sunhuine.svg",
+    name: "순희네 SOONHEE", type: { ko: "한식당 · 숯불구이 · 전골 · 탕", vi: "Nhà hàng Hàn Quốc · Thịt nướng than · Lẩu · Canh", en: "Korean restaurant · Charcoal BBQ · Hot pots · Soups", zh: "韩国料理 · 炭火烤肉 · 火锅 · 汤", ja: "韓国料理・炭火焼肉・鍋・タン" } },
 ];
 
 window.T = {

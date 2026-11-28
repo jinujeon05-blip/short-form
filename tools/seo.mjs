@@ -196,6 +196,7 @@ const SHOPS = {
   arirang: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Hot Pot'], country: 'VN', currency: 'VND', og: 'img/sign.jpg' },
   nangmangui: { type: 'Restaurant', cuisine: ['Korean', 'Barbecue', 'Beef'], country: 'VN', currency: 'VND', og: 'img/wagyu.jpg' },
   sosobunsik: { type: 'Restaurant', cuisine: ['Korean', 'Kimbap', 'Tteokbokki', 'Snack'], country: 'VN', currency: 'VND', og: 'img/logo.png' },
+  sunhuine: { type: 'Restaurant', cuisine: ['Korean', 'BBQ', 'Hot Pot'], country: 'VN', currency: 'VND', og: 'img/yukhoe.jpg' },
 };
 
 const today = new Date().toISOString().slice(0, 10);

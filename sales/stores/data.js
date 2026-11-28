@@ -1037,6 +1037,12 @@ window.STORES = [
     type: { ko: "한국 분식 · 김밥 · 떡볶이 · 덮밥", vi: "Quán ăn vặt Hàn Quốc · Kimbap · Tteokbokki · Cơm", en: "Korean snack bar · Kimbap · Tteokbokki · Rice bowls", zh: "韩式小吃店 · 紫菜包饭 · 炒年糕 · 盖饭", ja: "韓国式軽食・キンパ・トッポッキ・丼" },
     keywords: "소소분식 XOXO 엑소엑소 sosobunsik 분식 김밥 키토김밥 떡볶이 로제떡볶이 닭강정 덮밥 주먹밥 순대 쫄면 하노이 외교단 Khu Ngoại giao đoàn Xuân Đỉnh Hà Nội kimbap tteokbokki korean snack 韩式小吃 紫菜包饭 炒年糕 韓国軽食 キンパ トッポッキ"
   },
+  { id: "sunhuine", name: "순희네 SOONHEE", sub: "소고기·돼지고기 숯불구이 · 전골 · 곰탕 · 냉면", url: "https://sunhuine.qrmenuasia.com", listing: true,
+    region: "hanoi", cats: ["korean","bbq"], tags: [],
+    address: "Golden Palace 1층 A동, Mễ Trì, Nam Từ Liêm, Hà Nội", map: "https://www.google.com/maps/place/%EC%88%9C%ED%9D%AC%EA%B0%80(%EC%88%9C%ED%9D%AC%EB%84%A4)/@21.0116981,105.7744404,17z",
+    type: { ko: "한식당 · 숯불구이 · 전골 · 탕", vi: "Nhà hàng Hàn Quốc · Thịt nướng than · Lẩu · Canh", en: "Korean restaurant · Charcoal BBQ · Hot pots · Soups", zh: "韩国料理 · 炭火烤肉 · 火锅 · 汤", ja: "韓国料理・炭火焼肉・鍋・タン" },
+    keywords: "순희네 순희 순희가 숯불구이 SOONHEE Soonhee 한식당 하노이 Golden Palace 갈비 곰탕 냉면 전골 Nhà hàng Hàn Quốc Hà Nội"
+  },
 ];
 window.SI = {
   ko: {
